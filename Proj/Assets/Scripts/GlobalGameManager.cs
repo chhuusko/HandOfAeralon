@@ -26,10 +26,8 @@ public class GlobalGameManager : MonoBehaviour
     {
         return instance;
     }
-    public void ChangeScene(int sceneIndex)
+    public void LoadGame(int slot)
     {
-        Debug.Log("Loaded" + SceneManager.GetSceneByBuildIndex(sceneIndex).name);
-        SceneManager.LoadScene(sceneIndex);
         
     }
     public void StartNewGame(int slot)
@@ -37,12 +35,8 @@ public class GlobalGameManager : MonoBehaviour
         currentGame = new GameData();
         currentGame.saveSlot = slot;
         currentGame.seed = Random.Range(0, 1000);
+        SceneManager.LoadScene(1);
     }
-    public void LoadGame(int slot)
-    {
-
-    }
-    
 }
 
 
