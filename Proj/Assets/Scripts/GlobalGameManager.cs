@@ -3,10 +3,10 @@ using UnityEngine.SceneManagement;
 
 public struct GameData
 {
-    int saveSlot;
-    string playTime;
-    int seed;
-    // seedInfo
+    public int saveSlot;
+    public string playTime;
+    public int seed;
+    int seedInfo; // seedInfo current nod index
     // heroList
     // cardList
     int coins;
@@ -16,7 +16,7 @@ public struct GameData
 public class GlobalGameManager : MonoBehaviour
 {
     private static GlobalGameManager instance;
-
+    private GameData currentGame;
     private void Awake()
     {
         instance = this;
@@ -32,7 +32,16 @@ public class GlobalGameManager : MonoBehaviour
         SceneManager.LoadScene(sceneIndex);
         
     }
-    
+    public void StartNewGame(int slot)
+    {
+        currentGame = new GameData();
+        currentGame.saveSlot = slot;
+        currentGame.seed = Random.Range(0, 1000);
+    }
+    public void LoadGame(int slot)
+    {
+
+    }
     
 }
 

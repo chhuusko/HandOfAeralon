@@ -6,9 +6,10 @@ public class Card : ScriptableObject
     [Header("Info")]
     public string title;
     public string description;
+    public int cost;
     public Sprite icon;
     
-    public void OnPlay()
+    public void PlayCard()
     {
         //när den spelas
     }
