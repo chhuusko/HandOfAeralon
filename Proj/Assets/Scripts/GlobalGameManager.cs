@@ -1,10 +1,21 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public struct GameData
+{
+    int saveSlot;
+    string playTime;
+    int seed;
+    // seedInfo
+    // heroList
+    // cardList
+    int coins;
+    // other
+}
+
 public class GlobalGameManager : MonoBehaviour
 {
     private static GlobalGameManager instance;
-    [SerializeField] private int saveSlot;
 
     private void Awake()
     {
@@ -15,10 +26,13 @@ public class GlobalGameManager : MonoBehaviour
     {
         return instance;
     }
-    public void ChangeScene(int scene)
+    public void ChangeScene(int sceneIndex)
     {
-        SceneManager.LoadScene(scene);
+        Debug.Log("Loaded" + SceneManager.GetSceneByBuildIndex(sceneIndex).name);
+        SceneManager.LoadScene(sceneIndex);
+        
     }
+    
     
 }
 
