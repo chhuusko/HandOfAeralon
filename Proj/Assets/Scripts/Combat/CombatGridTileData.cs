@@ -29,7 +29,10 @@ public class CombatGridTileData
 
 // NOTE (Calle): This is for saving to JSON in the GridEditor
 [System.Serializable]
-public class CombatGridTileSerializedSaveData
+public class CombatGridSerializedSaveData
 {
+    public int gridWidth;
+    public int gridHeight;
     public List<CombatGridTileData> tileData = new List<CombatGridTileData>();
 }
+

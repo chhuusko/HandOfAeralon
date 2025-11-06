@@ -10,7 +10,6 @@ public enum CombatState
     MakeTurn,
     EndTurn,
     EndCombat
-
 };
 
 [System.Serializable]
@@ -21,14 +20,42 @@ public enum CombatTurn
 };
 
 [System.Serializable]
+public class TilePrefabMap
+{
+    public TileType tileType;
+    public GameObject tilePrefab;
+};
+
+[System.Serializable]
 public class CombatGrid
 {
-    List<CombatGridTile> tiles = new List<CombatGridTile>();
+    [SerializeField] private TilePrefabMap[] tilePrefabMap;
+    CombatGridTile[,] tiles;
+    public int _width { get; private set; }
+    public int _height { get; private set; }
+    public void SetCombatGridSize(int w, int h)
+    {
+        _width  = w;
+        _height = h;
+        tiles   = new CombatGridTile[w, h];
+    } 
 
+    // TODO (Calle): Använd TilePrefabLibrary för att skapa 
+    // mappningar mellan TileType och Tile GO Prefabs.
     public void AddTile(CombatGridTileData tileData)
     {
         CombatGridTile tile = new CombatGridTile(tileData);
-        tiles.Add(tile);
+        Vector2 position = tileData.GetTilePosition();
+        tiles[(int)position.x, (int)position.y] = tile;
+
+        switch(tileData.GetTileType())
+        {
+            case TileType.Walkable:
+
+                break;
+
+        }
+
     }
 }
 
@@ -37,8 +64,8 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private CombatState combatState;
     [SerializeField] private CombatTurn currentTurn;
 
-    [SerializeField] private bool combatGridLoaded = false;
     [SerializeField] private CombatGrid combatGrid;
+    [SerializeField] private bool combatGridLoaded = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -148,14 +175,15 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        CombatGridTileSerializedSaveData tileData = JsonUtility.FromJson<CombatGridTileSerializedSaveData>(jsonFileData);
-        for(int i = 0; i < tileData.tileData.Count; i++)
-        {
-            Debug.Log("TileType : " + tileData.tileData[i].GetTileType() + 
-                      "\nTilePosition: " + tileData.tileData[i].GetTilePosition());
+        CombatGridSerializedSaveData tileGrid = JsonUtility.FromJson<CombatGridSerializedSaveData>(jsonFileData);
+        combatGrid.SetCombatGridSize(tileGrid.gridWidth, tileGrid.gridHeight);
 
-            combatGrid.AddTile(tileData.tileData[i]);
-            
+        for (int i = 0; i < tileGrid.tileData.Count; i++)
+        {
+            Debug.Log("TileType : " + tileGrid.tileData[i].GetTileType() + 
+                      "\nTilePosition: " + tileGrid.tileData[i].GetTilePosition());
+
+            combatGrid.AddTile(tileGrid.tileData[i]);
         }
         
     }
