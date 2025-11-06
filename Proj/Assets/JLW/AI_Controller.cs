@@ -50,7 +50,7 @@ public class AI_Controller : MonoBehaviour
     {
         combatGrid = combatManager.GetGridTiles();
         testGrid = CreateTestGrid();
-        startPos = new Vector2Int(0, 0);
+        startPos = new Vector2Int(4, 2);
         inputActions = new();
         inputActions.Enable();
         inputActions.Player.Jump.performed += OnJump;
@@ -93,8 +93,19 @@ public class AI_Controller : MonoBehaviour
         {
             Vector2Int current = queue.Dequeue();
 
+            // Debug draw
+            Color color;
+            if (current == start)
+            {
+                color = Color.green;
+            }
+            else
+            {
+                color = Color.red;
+            }
             UnityEngine.Vector3 debug = new UnityEngine.Vector3(current.x, 0, current.y);
-            Debug.DrawLine(debug, debug + UnityEngine.Vector3.up, Color.red, 3f);
+            Debug.DrawLine(debug, debug + UnityEngine.Vector3.up, color, 3f);
+            // End of debug draw
 
             foreach (var dir in directions)
             {
@@ -116,7 +127,7 @@ public class AI_Controller : MonoBehaviour
 
     private bool IsWalkable(Vector2Int pos)
     {
-        if (pos.x < 0 || pos.y < 0 || pos.x > 19 || pos.y > 19)
+        if (pos.x < 0 || pos.y < 0 || pos.x >= 8 || pos.y >= 8)
         {
             return false;
         }
