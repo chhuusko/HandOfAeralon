@@ -15,15 +15,23 @@ public class CombatGridTileData
 {
     [SerializeField] private TileType tileType;
     [SerializeField] private Vector2 position;
+    [SerializeField] private bool bWalkable;
 
     public CombatGridTileData(TileType tileType, Vector2 position)
     {
         this.tileType = tileType;
+        if (tileType == TileType.Impassable)
+            this.bWalkable = false;
+        else
+            this.bWalkable = true;
+
         this.position = position;
     }
 
     public TileType GetTileType() { return tileType; }
     public Vector2 GetTilePosition() { return position; }
+    public bool IsWalkable() { return bWalkable; }
+    public void SetWalkable(bool bWalkable) { this.bWalkable = bWalkable; }
 };
 
 

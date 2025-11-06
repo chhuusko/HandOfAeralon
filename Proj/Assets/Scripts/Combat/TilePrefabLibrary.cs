@@ -11,7 +11,7 @@ public class TilePrefabEntry
 [CreateAssetMenu(fileName = "TilePrefabLibrary", menuName = "Tiles/Tile Prefab Library")]
 public class TilePrefabLibrary : ScriptableObject
 {
-    public List<TilePrefabEntry> tilePrefabs;
+    public List<TilePrefabEntry> _tilePrefabs;
 
     private Dictionary<TileType, GameObject> _dictionary;
 
@@ -20,7 +20,7 @@ public class TilePrefabLibrary : ScriptableObject
         if (_dictionary == null)
         {
             _dictionary = new Dictionary<TileType, GameObject>();
-            foreach (var entry in tilePrefabs)
+            foreach (var entry in _tilePrefabs)
             {
                 _dictionary[entry.type] = entry.prefab;
             }

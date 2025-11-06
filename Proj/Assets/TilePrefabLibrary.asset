@@ -12,6 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38064ff27784d634fa258244122d9d4f, type: 3}
   m_Name: TilePrefabLibrary
   m_EditorClassIdentifier: Assembly-CSharp::TilePrefabLibrary
-  tilePrefabs:
+  _tilePrefabs:
   - type: 0
-    prefab: {fileID: 0}
+    prefab: {fileID: 5449705071566531640, guid: 9e12223366b44264e85f043940879d5d,
+      type: 3}
+  - type: 1
+    prefab: {fileID: 1673385613301263183, guid: 94e2028b2f25b694682a32d48ddbbdd1,
+      type: 3}
+  - type: 2
+    prefab: {fileID: 5414200790758428510, guid: e46bc80e6f05c764ead4976520facb92,
+      type: 3}
+  - type: 3
+    prefab: {fileID: 657621417652847252, guid: e9b867c52c87a804a99e21dba6b20f35, type: 3}

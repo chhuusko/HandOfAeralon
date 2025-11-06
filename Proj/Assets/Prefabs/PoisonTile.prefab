@@ -125,4 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cf8d5db87313a743adbfb1d2d02d56e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileType: 3
+  data:
+    tileType: 3
+    position: {x: 0, y: 0}

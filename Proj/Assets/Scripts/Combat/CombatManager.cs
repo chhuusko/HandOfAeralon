@@ -20,42 +20,39 @@ public enum CombatTurn
 };
 
 [System.Serializable]
-public class TilePrefabMap
-{
-    public TileType tileType;
-    public GameObject tilePrefab;
-};
-
-[System.Serializable]
 public class CombatGrid
 {
-    [SerializeField] private TilePrefabMap[] tilePrefabMap;
+    [SerializeField] private TilePrefabLibrary tilePrefabLibrary;
+
     CombatGridTile[,] tiles;
+    [SerializeField] private GameObject[] tilesGO;
+
+    public GameObject[] GetAllTiles() {  return tilesGO; }
+    public GameObject GetTileAtCoord(int x, int y) { return tilesGO[x + y * _width];  }
     public int _width { get; private set; }
     public int _height { get; private set; }
     public void SetCombatGridSize(int w, int h)
     {
         _width  = w;
         _height = h;
+        tilesGO = new GameObject[w * h];
         tiles   = new CombatGridTile[w, h];
     } 
 
-    // TODO (Calle): Använd TilePrefabLibrary för att skapa 
-    // mappningar mellan TileType och Tile GO Prefabs.
     public void AddTile(CombatGridTileData tileData)
     {
-        CombatGridTile tile = new CombatGridTile(tileData);
+        //CombatGridTile tile = new CombatGridTile(tileData);
         Vector2 position = tileData.GetTilePosition();
-        tiles[(int)position.x, (int)position.y] = tile;
+        //tiles[(int)position.x, (int)position.y] = tile;
 
-        switch(tileData.GetTileType())
-        {
-            case TileType.Walkable:
+        Vector3 instancePos = new Vector3(position.x, 0.0f, position.y);
+        Debug.Log("Is Walkable: " + tileData.IsWalkable());
+        GameObject tileObject = Object.Instantiate(tilePrefabLibrary.GetPrefab(tileData.GetTileType()), instancePos, Quaternion.identity);
 
-                break;
+        if(tileData.IsWalkable())
+            tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
 
-        }
-
+        tilesGO[(int)position.x + (int)position.y * _width] = tileObject;
     }
 }
 
@@ -159,7 +156,7 @@ public class CombatManager : MonoBehaviour
 
     private void LoadNextLevel()
     {
-        string fileName = "TileData";
+        string fileName = "BattleGridWithSize";
         string filePathToload = Application.dataPath + "\\JSON BattleGrids\\" + fileName + ".json";
 
         if (!System.IO.File.Exists(filePathToload))
@@ -176,6 +173,7 @@ public class CombatManager : MonoBehaviour
         }
 
         CombatGridSerializedSaveData tileGrid = JsonUtility.FromJson<CombatGridSerializedSaveData>(jsonFileData);
+
         combatGrid.SetCombatGridSize(tileGrid.gridWidth, tileGrid.gridHeight);
 
         for (int i = 0; i < tileGrid.tileData.Count; i++)
@@ -185,11 +183,20 @@ public class CombatManager : MonoBehaviour
 
             combatGrid.AddTile(tileGrid.tileData[i]);
         }
-        
     }
 
     private void EvaluateInitiativeOrder()
     {
 
+    }
+
+    public GameObject[] GetGridTiles()
+    {
+        return combatGrid.GetAllTiles();
+    }
+
+    public GameObject GetTileAtCoord(int x, int y)
+    {
+        return combatGrid.GetTileAtCoord(x, y);
     }
 }
