@@ -9,7 +9,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     //Performs mainly ui of card
     [SerializeField] private Card _containedCard;
     private bool _isDragging;
-    [SerializeField] private GameObject particleDrag, particleDrop;
+    [SerializeField] private GameObject _particleDrag, _particleDrop;
     InputController _controller;
     GameObject _spawnedParticle;
     private void Awake()
@@ -39,22 +39,19 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
         if (Physics.Raycast(ray, out hit))
         {
-            Vector3 worldPosition = hit.point;
-            _spawnedParticle.transform.position = worldPosition;
-            Debug.Log("Mouse hit world position: " + worldPosition);
-
+            _spawnedParticle.transform.position = hit.point;
         }
         
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        _spawnedParticle = Instantiate(particleDrag);  
+        _spawnedParticle = Instantiate(_particleDrag);  
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Instantiate(particleDrop, _spawnedParticle.transform.position, Quaternion.identity);
+        Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
         Destroy(_spawnedParticle);
     }
 }
