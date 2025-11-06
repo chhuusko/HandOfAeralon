@@ -150,6 +150,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   combatState: 0
   currentTurn: 0
+  combatGrid:
+    tilePrefabLibrary: {fileID: 11400000, guid: 04a120cb18f76f341b4fa433f2de3433,
+      type: 2}
   combatGridLoaded: 0
 --- !u!4 &185310556
 Transform:

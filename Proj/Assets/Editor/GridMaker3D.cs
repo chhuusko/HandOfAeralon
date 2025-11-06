@@ -350,18 +350,12 @@ public class GridMaker3D : EditorWindow
                     SerializedProperty newEntry = entriesProp.GetArrayElementAtIndex(entriesProp.arraySize - 1);
                     newEntry.FindPropertyRelative("position").vector2Value = new Vector2(x, y);
                     newEntry.FindPropertyRelative("tile").objectReferenceValue = null;
+                    newEntry.FindPropertyRelative("tileType").enumValueIndex = (int)TileType.Walkable;
                 }
             }
         }
 
         tileDictHolderSO.ApplyModifiedProperties();
-    }
-
-
-
-    private void RenderCurrentSelectedTile(Ray worldRay, Plane groundPlane, Event currentEvent)
-    {
-
     }
 
     private void ScrollSelectBrush(Event currentEvent)
@@ -419,7 +413,6 @@ public class GridMaker3D : EditorWindow
             Ray worldRay = HandleUtility.GUIPointToWorldRay(currentEvent.mousePosition);
             Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
             ScrollSelectBrush(currentEvent);
-            RenderCurrentSelectedTile(worldRay, groundPlane, currentEvent);
             PlaceTile(currentEvent, worldRay, groundPlane);
         }
     }
