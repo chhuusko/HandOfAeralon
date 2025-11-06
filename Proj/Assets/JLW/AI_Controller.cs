@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+using UnityEngine.InputSystem;
 
 public class AI_Controller : MonoBehaviour
 {
@@ -23,19 +24,111 @@ public class AI_Controller : MonoBehaviour
      * för varje möjligt drag (move+ability) räkna ut ett värde för det draget
      */
 
+    private class TestTile
+    {
+        public Vector2Int pos;
+        public bool bIsWalkable;
+        public bool bIsOccupied;
+
+        public TestTile(Vector2Int pos, bool bIsWalkable, bool bIsOccupied)
+        {
+            this.pos = pos;
+            this.bIsWalkable = bIsWalkable;
+            this.bIsOccupied = bIsOccupied;
+        }
+    }
+
     private GameObject _currentTroop;
+    private TestTile[,] testGrid;
+    private Vector2Int startPos;
+    private InputSystem_Actions inputActions;
+
+    void Start()
+    {
+        testGrid = CreateTestGrid();
+        startPos = new Vector2Int(0, 0);
+        inputActions = new();
+        inputActions.Enable();
+        inputActions.Player.Jump.performed += OnJump;
+    }
+
+    void OnJump(InputAction.CallbackContext context)
+    {
+        List<Vector2Int> reachableTiles = GetReachableTiles(startPos, 5);
+
+        Debug.Log($"AI_Controller started at {startPos}");
+        foreach (var vector in reachableTiles)
+        {
+            Debug.Log($"AI_Controller can reach {vector}");
+        }
+    }
 
     private int ManhattanDistance(Vector2Int a, Vector2Int b)
     {
         return Mathf.Abs((a.x - b.x) + (a.y - b.y));
     }
 
-    private List<Tile> FloodFill()
+    private List<Vector2Int> GetReachableTiles(Vector2Int start, int range)
     {
-        List<Tile> result = new();
+        List<Vector2Int> result = new();
+        
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            new Vector2Int(1, 0),
+            new Vector2Int(0, 1),
+            new Vector2Int(-1, 0),
+            new Vector2Int(0, -1)
+        };
 
-        // För varje tile, kolla närliggande tiles tills _currentTroop.movePoints är slut
+        Queue<Vector2Int> queue = new();
+        Dictionary<Vector2Int, int> cost = new();
+        queue.Enqueue(start);
+        cost[start] = 0;
+
+        while (queue.Count > 0)
+        {
+            Vector2Int current = queue.Dequeue();
+
+            foreach (var dir in directions)
+            {
+                Vector2Int next = current + dir;
+                int nextCost = cost[current] + 1;
+
+                if (!IsWalkable(next)) continue;
+                if (nextCost > range) continue;
+                if (cost.ContainsKey(next)) continue;
+
+                cost[next] = nextCost;
+                queue.Enqueue(next);
+                result.Add(next);
+            }
+        }
 
         return result;
+    }
+
+    private bool IsWalkable(Vector2Int pos)
+    {
+        if (pos.x < 0 || pos.y < 0 || pos.x > 19 || pos.y > 19)
+        {
+            return false;
+        }
+
+        return testGrid[pos.x, pos.y].bIsWalkable && !testGrid[pos.x, pos.y].bIsOccupied;
+    }
+
+    private TestTile[,] CreateTestGrid()
+    {
+        TestTile[,] testGrid = new TestTile[20, 20];
+
+        for (int y = 0; y < 20; y++)
+        {
+            for (int x = 0; x < 20; x++)
+            {
+                testGrid[x, y] = new TestTile(new Vector2Int(x, y), true, false);
+            }
+        }
+
+        return testGrid;
     }
 }
