@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.PlayerSettings;
 
 public class AI_Controller : MonoBehaviour
 {
@@ -42,9 +43,12 @@ public class AI_Controller : MonoBehaviour
     private TestTile[,] testGrid;
     private Vector2Int startPos;
     private InputSystem_Actions inputActions;
+    [SerializeField] private CombatManager combatManager;
+    private GameObject[] combatGrid;
 
     void Start()
     {
+        combatGrid = combatManager.GetGridTiles();
         testGrid = CreateTestGrid();
         startPos = new Vector2Int(0, 0);
         inputActions = new();
@@ -89,6 +93,9 @@ public class AI_Controller : MonoBehaviour
         {
             Vector2Int current = queue.Dequeue();
 
+            UnityEngine.Vector3 debug = new UnityEngine.Vector3(current.x, 0, current.y);
+            Debug.DrawLine(debug, debug + UnityEngine.Vector3.up, Color.red, 3f);
+
             foreach (var dir in directions)
             {
                 Vector2Int next = current + dir;
@@ -114,7 +121,7 @@ public class AI_Controller : MonoBehaviour
             return false;
         }
 
-        return testGrid[pos.x, pos.y].bIsWalkable && !testGrid[pos.x, pos.y].bIsOccupied;
+        return combatManager.GetTileAtCoord(pos.x, pos.y).GetComponent<CombatGridTile>().IsWalkable();
     }
 
     private TestTile[,] CreateTestGrid()
