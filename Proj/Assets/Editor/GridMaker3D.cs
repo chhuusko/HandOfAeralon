@@ -526,14 +526,12 @@ public class GridMaker3D : EditorWindow
  
     private void SaveBattleGridToJSON()
     {
-        /*
-        TileGridSaveFormat tileEntriesSave = new TileGridSaveFormat();
-        tileEntriesSave.tileEntries = new List<TileEntry>(tileDictHolder.tileEntries);
-        string strOutput = JsonUtility.ToJson(tileEntriesSave, true);
-        */
-        CombatGridTileSerializedSaveData tileSaveData = new CombatGridTileSerializedSaveData();
-
-        foreach(var entry in tileDictHolder.tileEntries)
+        CombatGridSerializedSaveData tileSaveData = new CombatGridSerializedSaveData();
+        
+        tileSaveData.gridWidth = battleGridWidth;
+        tileSaveData.gridHeight = battleGridHeight;
+        
+        foreach (var entry in tileDictHolder.tileEntries)
         {
             if(entry == null) continue;
 
