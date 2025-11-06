@@ -34,7 +34,7 @@ public class AI_Controller : MonoBehaviour
     {
         List<Tile> result = new();
 
-        // 
+        // För varje tile, kolla närliggande tiles tills _currentTroop.movePoints är slut
 
         return result;
     }
