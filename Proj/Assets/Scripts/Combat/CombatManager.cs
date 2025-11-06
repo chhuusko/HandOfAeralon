@@ -26,11 +26,12 @@ public class CombatGrid
 
     CombatGridTile[,] tiles;
     [SerializeField] private GameObject[] tilesGO;
-
+    [SerializeField] private int _height;
+    [SerializeField] private int _width;
     public GameObject[] GetAllTiles() {  return tilesGO; }
     public GameObject GetTileAtCoord(int x, int y) { return tilesGO[x + y * _width];  }
-    public int _width { get; private set; }
-    public int _height { get; private set; }
+    public int GetGridWidth() { return _width; }
+    public int GetGridHeight() { return _height; }
     public void SetCombatGridSize(int w, int h)
     {
         _width  = w;
@@ -58,6 +59,8 @@ public class CombatGrid
 
 public class CombatManager : MonoBehaviour
 {
+    [SerializeField] private CombatCamera _combatCamera;
+
     [SerializeField] private CombatState combatState;
     [SerializeField] private CombatTurn currentTurn;
 
@@ -67,7 +70,7 @@ public class CombatManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        combatState = CombatState.IntroCinematic;
+        combatState = CombatState.LoadCombatLevel;
     }
 
     // Update is called once per frame
@@ -75,13 +78,13 @@ public class CombatManager : MonoBehaviour
     {
         switch(combatState)
         {
-            case CombatState.IntroCinematic:
-                {
-                    HandleIntroCinematic();
-                } break;
             case CombatState.LoadCombatLevel:
                 {
                     HandleLoadCombatLevel();
+                }break;
+            case CombatState.IntroCinematic:
+                {
+                    HandleIntroCinematic();
                 } break;
             case CombatState.PlaceCharacters:
                 {
@@ -118,7 +121,11 @@ public class CombatManager : MonoBehaviour
 
     private void HandleIntroCinematic()
     {
-
+        
+        if (_combatCamera.IsIntroCinematicDone())
+            combatState = CombatState.PlaceCharacters;
+        else
+            _combatCamera.PlayIntroCinematic();
     }
 
     private void HandleLoadCombatLevel()
@@ -127,6 +134,7 @@ public class CombatManager : MonoBehaviour
         {
             combatGridLoaded = true;
             LoadNextLevel();
+            combatState = CombatState.IntroCinematic;
         }
     }
 
@@ -183,6 +191,7 @@ public class CombatManager : MonoBehaviour
 
             combatGrid.AddTile(tileGrid.tileData[i]);
         }
+
     }
 
     private void EvaluateInitiativeOrder()
