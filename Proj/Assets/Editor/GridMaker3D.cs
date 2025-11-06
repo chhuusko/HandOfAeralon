@@ -523,14 +523,26 @@ public class GridMaker3D : EditorWindow
         return null;
     }
 
-
+ 
     private void SaveBattleGridToJSON()
     {
+        /*
         TileGridSaveFormat tileEntriesSave = new TileGridSaveFormat();
         tileEntriesSave.tileEntries = new List<TileEntry>(tileDictHolder.tileEntries);
         string strOutput = JsonUtility.ToJson(tileEntriesSave, true);
+        */
+        CombatGridTileSerializedSaveData tileSaveData = new CombatGridTileSerializedSaveData();
+
+        foreach(var entry in tileDictHolder.tileEntries)
+        {
+            if(entry == null) continue;
+
+            tileSaveData.tileData.Add(new CombatGridTileData(entry.tileType, entry.position));
+        }
+        string strOutput = JsonUtility.ToJson(tileSaveData, true);   
 
         File.WriteAllText(Application.dataPath + "\\JSON BattleGrids\\" + fileNameJSON + ".json", strOutput);
+
 
     }
 }

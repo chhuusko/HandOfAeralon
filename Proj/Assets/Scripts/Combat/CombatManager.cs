@@ -2,12 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class CombatGrid
-{
-    List<CombatGridTile> combatGrid = new List<CombatGridTile>();
-}
-
-[System.Serializable]
 public enum CombatState
 {
     IntroCinematic,
@@ -26,12 +20,25 @@ public enum CombatTurn
     EnemyTurn
 };
 
+[System.Serializable]
+public class CombatGrid
+{
+    List<CombatGridTile> tiles = new List<CombatGridTile>();
+
+    public void AddTile(CombatGridTileData tileData)
+    {
+        CombatGridTile tile = new CombatGridTile(tileData);
+        tiles.Add(tile);
+    }
+}
+
 public class CombatManager : MonoBehaviour
 {
     [SerializeField] private CombatState combatState;
     [SerializeField] private CombatTurn currentTurn;
 
     [SerializeField] private bool combatGridLoaded = false;
+    [SerializeField] private CombatGrid combatGrid;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -125,6 +132,31 @@ public class CombatManager : MonoBehaviour
 
     private void LoadNextLevel()
     {
+        string fileName = "TileData";
+        string filePathToload = Application.dataPath + "\\JSON BattleGrids\\" + fileName + ".json";
+
+        if (!System.IO.File.Exists(filePathToload))
+        {
+            Debug.Log("Level File didn't exist or filepath was wrong!");
+            return;
+        }
+
+        string jsonFileData = System.IO.File.ReadAllText(filePathToload);
+        if(jsonFileData.Length == 0)
+        {
+            Debug.Log("json File Data was empty!");
+            return;
+        }
+
+        CombatGridTileSerializedSaveData tileData = JsonUtility.FromJson<CombatGridTileSerializedSaveData>(jsonFileData);
+        for(int i = 0; i < tileData.tileData.Count; i++)
+        {
+            Debug.Log("TileType : " + tileData.tileData[i].GetTileType() + 
+                      "\nTilePosition: " + tileData.tileData[i].GetTilePosition());
+
+            combatGrid.AddTile(tileData.tileData[i]);
+            
+        }
         
     }
 

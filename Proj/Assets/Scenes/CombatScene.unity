@@ -132,7 +132,7 @@ GameObject:
   m_Layer: 0
   m_Name: CombatManager
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -148,6 +148,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88fa36bad48de2f4eb63c68ee20133f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  combatState: 0
+  currentTurn: 0
+  combatGridLoaded: 0
 --- !u!4 &185310556
 Transform:
   m_ObjectHideFlags: 0
@@ -157,7 +160,7 @@ Transform:
   m_GameObject: {fileID: 185310554}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.6712699, y: -2.983508, z: 15.263295}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
