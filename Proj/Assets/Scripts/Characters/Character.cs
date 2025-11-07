@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public enum CharacterClass { Rogue, Wizard }
+public enum CharacterClass { Barbarian, Wizard, Rogue, Bard }
 
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour
