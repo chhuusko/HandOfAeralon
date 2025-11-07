@@ -20,6 +20,7 @@ public class GridMaker3D : EditorWindow
     int prevBattleGridHeight = 0;
     Vector2 tileDictScrollPos;
     Vector2 windowEditorScrollPos;
+    Vector3 tileSizeInMeters;
 
     [System.Serializable]
     public class TileEntry
@@ -56,7 +57,7 @@ public class GridMaker3D : EditorWindow
     SerializedObject      tileBrushPrefabHolderSO;
     SerializedProperty    tileBrushPrefabProperty;
 
-    GameObject tileToSpawn;
+    [SerializeField] GameObject defaultTile;
     TileEntry previewTile;
     int currentTileBrushIndex = 0;
 
@@ -103,10 +104,13 @@ public class GridMaker3D : EditorWindow
     {
         windowEditorScrollPos = EditorGUILayout.BeginScrollView(windowEditorScrollPos);
 
-        focusToggle = EditorGUILayout.Toggle("Focus Toggle for Draw", focusToggle);
-        battleGridWidth = EditorGUILayout.IntSlider("BattleGrid Width", battleGridWidth, 0, 30);
-        battleGridHeight = EditorGUILayout.IntSlider("BattleGrid Height", battleGridHeight, 0, 30);
-        fileNameJSON = EditorGUILayout.TextField("FileName: ", fileNameJSON);
+        focusToggle         = EditorGUILayout.Toggle("Focus Toggle for Draw", focusToggle);
+        battleGridWidth     = EditorGUILayout.IntSlider("BattleGrid Width", battleGridWidth, 0, 30);
+        battleGridHeight    = EditorGUILayout.IntSlider("BattleGrid Height", battleGridHeight, 0, 30);
+        defaultTile         = EditorGUILayout.ObjectField("Default Tile for Grid Generation", defaultTile, typeof(GameObject), false) as GameObject;
+        tileSizeInMeters    = EditorGUILayout.Vector3Field("Size of a tile in meters", tileSizeInMeters);
+        fileNameJSON        = EditorGUILayout.TextField("FileName: ", fileNameJSON);
+        
 
         if (prevBattleGridHeight != battleGridHeight || prevBattleGridWidth != battleGridWidth)
         {
@@ -121,6 +125,54 @@ public class GridMaker3D : EditorWindow
 
         EditorGUILayout.EndScrollView();
 
+        if (GUILayout.Button("Generate Default Grid", GUILayout.Height(50)))
+        {
+            // Gather context info
+            string message = $"No Default Prefab:\n";
+
+
+            if (defaultTile == null)
+            {
+                // Show Error Dialogue
+                EditorUtility.DisplayDialog(
+                    "Grid Generator Error",
+                    message,
+                    "OK"
+                );
+            }
+            else
+            {
+                if(battleGridWidth <= 0 || battleGridHeight <= 0)
+                {
+                    message = "Battle Grid Width or Height must be creater than 0";
+                    // Show Error Dialogue
+                    EditorUtility.DisplayDialog(
+                        "Grid Generator Error",
+                        message,
+                        "OK"
+                    );
+                }
+                else
+                {
+                    var parent = GenerateTilemapParentRootObject("-BATTLE GRID-");
+                    for (int y = 0; y < battleGridHeight; y++)
+                    {
+                        for (int x = 0; x < battleGridWidth; x++)
+                        {
+                            Vector3 pos = new Vector3((float)x + 0.5f, 0.0f, (float)y + 0.5f);
+                            TileEntry newTile = new TileEntry();
+                            newTile.tile = Instantiate(defaultTile);
+                            newTile.tile.transform.position = pos;
+                            newTile.tile.transform.SetParent(parent.transform);
+                            newTile.tileType = newTile.tile.GetComponent<CombatGridTile>().GetTileType();
+                            Undo.RegisterCreatedObjectUndo(newTile.tile, "Placed/Updated Tile");
+
+                            AddOrReplaceTile(x, y, newTile);
+                        }
+                    }
+                }
+            }   
+        }
 
         if (GUILayout.Button("Save Grid to JSON", GUILayout.Height(50)))
         {
@@ -149,10 +201,11 @@ public class GridMaker3D : EditorWindow
                 Debug.Log("Save cancelled.");
             }
         }
-
     }
     private void OnSceneGUI(SceneView sceneView)
     {
+
+        DrawPreviewGrid();
         Event currentEvent = Event.current;
 
         UpdateFocusDrawMode(currentEvent);
@@ -180,6 +233,32 @@ public class GridMaker3D : EditorWindow
         SceneView.RepaintAll();
         
 
+    }
+
+    private void DrawPreviewGrid()
+    {
+        Handles.color = Color.red;
+        Vector3 wirePos = new Vector3(0.5f, 0.0f, 0.5f);
+        Vector3 wireSize = new Vector3(battleGridWidth, 0.3f, battleGridHeight);
+        Handles.DrawWireCube(wirePos, wireSize);
+
+        for(int y = 0; y < battleGridHeight; y++)
+        {
+            for (int x = 0; x < battleGridHeight; x++)
+            {
+                // TODO (Calle) : 1. Add grid line via Solid Rects
+                //                2. Place and save Character Friendly and Enemy 
+                //                3. Load Characters from JSON into battlegrid
+                //Vector3 verts[] =
+                //{
+                //    new Vector3 (0.0f, 0.0f, 0.0f);
+                //    new Vector3 (0.0f, 0.0f, 0.0f);
+                //    new Vector3 (0.0f, 0.0f, 0.0f);
+                //    new Vector3 (0.0f, 0.0f, 0.0f);
+                //};
+                //Handles.DrawSolidRectangleWithOutline(verts, new Color(0.5f, 0.5f, 0.5f, 0.1f), new Color(0, 0, 0, 1));
+            }
+        }
     }
     private void UpdatePrefabArray()
     {

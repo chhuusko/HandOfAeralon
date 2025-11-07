@@ -42,10 +42,7 @@ public class CombatGrid
 
     public void AddTile(CombatGridTileData tileData)
     {
-        //CombatGridTile tile = new CombatGridTile(tileData);
         Vector2 position = tileData.GetTilePosition();
-        //tiles[(int)position.x, (int)position.y] = tile;
-
         Vector3 instancePos = new Vector3(position.x, 0.0f, position.y);
         Debug.Log("Is Walkable: " + tileData.IsWalkable());
         GameObject tileObject = Object.Instantiate(tilePrefabLibrary.GetPrefab(tileData.GetTileType()), instancePos, Quaternion.identity);
@@ -164,7 +161,7 @@ public class CombatManager : MonoBehaviour
 
     private void LoadNextLevel()
     {
-        string fileName = "BattleGridWithSize";
+        string fileName = "BATTLE";
         string filePathToload = Application.dataPath + "\\JSON BattleGrids\\" + fileName + ".json";
 
         if (!System.IO.File.Exists(filePathToload))
