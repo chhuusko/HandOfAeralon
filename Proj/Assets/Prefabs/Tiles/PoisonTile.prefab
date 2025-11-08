@@ -126,5 +126,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
-    tileType: 3
-    position: {x: 0, y: 0}
+    _tileType: 3
+    _tileIndex: {x: 0, y: 0}
+    _position: {x: 0, y: 0, z: 0}
+    _size: {x: 0, y: 0, z: 0}
+    bWalkable: 0

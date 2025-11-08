@@ -22,6 +22,7 @@ public enum CombatTurn
 [System.Serializable]
 public class CombatGrid
 {
+
     [SerializeField] private TilePrefabLibrary tilePrefabLibrary;
 
     CombatGridTile[,] tiles;
@@ -42,10 +43,12 @@ public class CombatGrid
 
     public void AddTile(CombatGridTileData tileData)
     {
-        Vector2 position = tileData.GetTilePosition();
-        Vector3 instancePos = new Vector3(position.x, 0.0f, position.y);
+        Vector2 position = tileData.GetTileIndex();
+        Vector3 instancePos = tileData.GetTilePosition();
         Debug.Log("Is Walkable: " + tileData.IsWalkable());
-        GameObject tileObject = Object.Instantiate(tilePrefabLibrary.GetPrefab(tileData.GetTileType()), instancePos, Quaternion.identity);
+        GameObject tilePrefab = tilePrefabLibrary.GetPrefab(tileData.GetTileType());
+        GameObject tileObject = Object.Instantiate(tilePrefab, instancePos, Quaternion.identity);
+        tileObject.transform.localScale = tileData.GetTileSize();
 
         if(tileData.IsWalkable())
             tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
@@ -56,6 +59,8 @@ public class CombatGrid
 
 public class CombatManager : MonoBehaviour
 {
+    [SerializeField] private string _fileToLoadDEBUG;
+
     [SerializeField] private CombatCamera _combatCamera;
 
     [SerializeField] private CombatState combatState;
@@ -161,8 +166,8 @@ public class CombatManager : MonoBehaviour
 
     private void LoadNextLevel()
     {
-        string fileName = "BATTLE";
-        string filePathToload = Application.dataPath + "\\JSON BattleGrids\\" + fileName + ".json";
+        
+        string filePathToload = Application.dataPath + "\\JSON BattleGrids\\" + _fileToLoadDEBUG + ".json";
 
         if (!System.IO.File.Exists(filePathToload))
         {
