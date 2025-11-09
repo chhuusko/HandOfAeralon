@@ -707,7 +707,7 @@ public class GridMaker3D : EditorWindow
             Ray worldRay = HandleUtility.GUIPointToWorldRay(currentEvent.mousePosition);
             Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 
-            PlaceCharacter(currentEvent, worldRay, groundPlane);
+            //PlaceCharacter(currentEvent, worldRay, groundPlane);
         }
     }
 
