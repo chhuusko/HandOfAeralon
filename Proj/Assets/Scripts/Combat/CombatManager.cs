@@ -27,10 +27,20 @@ public class CombatGrid
 
     CombatGridTile[,] tiles;
     [SerializeField] private GameObject[] tilesGO;
+    [SerializeField] private Vector3 _tileSize;
     [SerializeField] private int _height;
     [SerializeField] private int _width;
     public GameObject[] GetAllTiles() {  return tilesGO; }
-    public GameObject GetTileAtCoord(int x, int y) { return tilesGO[x + y * _width];  }
+    public GameObject GetTileAtCoord(int x, int y) 
+    {
+        int index = x + y * _width;
+        if (index < 0 || index >= _width * _height)
+            return null;
+
+        return tilesGO[index];  
+    }
+
+    public Vector3 GetTileSize() { return _tileSize; }
     public int GetGridWidth() { return _width; }
     public int GetGridHeight() { return _height; }
     public void SetCombatGridSize(int w, int h)
@@ -39,7 +49,11 @@ public class CombatGrid
         _height = h;
         tilesGO = new GameObject[w * h];
         tiles   = new CombatGridTile[w, h];
-    } 
+    }
+    public void SetTileSize(Vector3 tileSize)
+    {
+        _tileSize = tileSize;
+    }
 
     public void AddTile(CombatGridTileData tileData)
     {
@@ -184,14 +198,15 @@ public class CombatManager : MonoBehaviour
 
         CombatGridSerializedSaveData tileGrid = JsonUtility.FromJson<CombatGridSerializedSaveData>(jsonFileData);
 
-        combatGrid.SetCombatGridSize(tileGrid.gridWidth, tileGrid.gridHeight);
-
-        for (int i = 0; i < tileGrid.tileData.Count; i++)
+        combatGrid.SetCombatGridSize(tileGrid._gridWidth, tileGrid._gridHeight);
+        combatGrid.SetTileSize(tileGrid._tileSize);
+        Debug.Log("CombatGrid tileSize: " + tileGrid._tileSize);
+        for (int i = 0; i < tileGrid._tileData.Count; i++)
         {
-            Debug.Log("TileType : " + tileGrid.tileData[i].GetTileType() + 
-                      "\nTilePosition: " + tileGrid.tileData[i].GetTilePosition());
+            //Debug.Log("TileType : " + tileGrid._tileData[i].GetTileType() + 
+            //          "\nTilePosition: " + tileGrid._tileData[i].GetTilePosition());
 
-            combatGrid.AddTile(tileGrid.tileData[i]);
+            combatGrid.AddTile(tileGrid._tileData[i]);
         }
 
     }
@@ -199,6 +214,11 @@ public class CombatManager : MonoBehaviour
     private void EvaluateInitiativeOrder()
     {
 
+    }
+
+    public Vector3 GetTileSize()
+    {
+        return combatGrid.GetTileSize();
     }
 
     public int GetGridWidth()

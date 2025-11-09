@@ -57,7 +57,7 @@ public class GridMaker3D : EditorWindow
     [System.Serializable]
     public class TileEntry
     {
-        public Vector2 _tileIndex;
+        public Vector2Int _tileIndex;
         public Vector3 _position;
         public Vector3 _size;
         public TileType _tileType;
@@ -249,7 +249,7 @@ public class GridMaker3D : EditorWindow
                             );
 
                             // Pass grid coordinates as Vector2
-                            Vector2 gridPos = new Vector2(x, y);
+                            Vector2Int gridPos = new Vector2Int(x, y);
 
                             // Instantiate tile entry
                             TileEntry newTile = InstantiateAndSetTileEntry(pos, tileSizeInMeters, defaultTile, parent, gridPos);
@@ -265,7 +265,7 @@ public class GridMaker3D : EditorWindow
 
     }
 
-    private TileEntry InstantiateAndSetTileEntry(Vector3 goPos, Vector3 goSize, GameObject prefab, GameObject parent, Vector2 gridPos)
+    private TileEntry InstantiateAndSetTileEntry(Vector3 goPos, Vector3 goSize, GameObject prefab, GameObject parent, Vector2Int gridPos)
     {
         if (prefab == null) return null;
 
@@ -529,7 +529,7 @@ public class GridMaker3D : EditorWindow
         for (int i = 0; i < tileGridProperty.arraySize; i++)
         {
             SerializedProperty entryProp = tileGridProperty.GetArrayElementAtIndex(i);
-            Vector2 tileIndex = entryProp.FindPropertyRelative("_tileIndex").vector2Value;
+            Vector2 tileIndex = entryProp.FindPropertyRelative("_tileIndex").vector2IntValue;
 
             if ((int)tileIndex.x == gridX && (int)tileIndex.y == gridZ)
             {
@@ -557,7 +557,7 @@ public class GridMaker3D : EditorWindow
 
         newEntry.FindPropertyRelative("_size").vector3Value = tile._size;
         newEntry.FindPropertyRelative("_position").vector3Value = tile._position;
-        newEntry.FindPropertyRelative("_tileIndex").vector2Value = new Vector2(gridX, gridZ);
+        newEntry.FindPropertyRelative("_tileIndex").vector2IntValue = new Vector2Int(gridX, gridZ);
         newEntry.FindPropertyRelative("_tile").objectReferenceValue = tile._tile;
         newEntry.FindPropertyRelative("_tileType").enumValueIndex = (int)tile._tileType;
 
@@ -577,7 +577,7 @@ public class GridMaker3D : EditorWindow
             SerializedProperty posProp = entryProp.FindPropertyRelative("_tileIndex");
             SerializedProperty tileProp = entryProp.FindPropertyRelative("_tile");
 
-            Vector2 pos = posProp.vector2Value;
+            Vector2 pos = posProp.vector2IntValue;
 
             if (pos.x >= width || pos.y >= height)
             {
@@ -602,7 +602,7 @@ public class GridMaker3D : EditorWindow
                 for (int i = 0; i < entriesProp.arraySize; i++)
                 {
                     SerializedProperty entryProp = entriesProp.GetArrayElementAtIndex(i);
-                    Vector2 pos = entryProp.FindPropertyRelative("_tileIndex").vector2Value;
+                    Vector2 pos = entryProp.FindPropertyRelative("_tileIndex").vector2IntValue;
                     if ((int)pos.x == x && (int)pos.y == y)
                     {
                         exists = true;
@@ -614,7 +614,7 @@ public class GridMaker3D : EditorWindow
                 {
                     entriesProp.arraySize++;
                     SerializedProperty newEntry = entriesProp.GetArrayElementAtIndex(entriesProp.arraySize - 1);
-                    newEntry.FindPropertyRelative("_tileIndex").vector2Value = new Vector2(x, y);
+                    newEntry.FindPropertyRelative("_tileIndex").vector2IntValue = new Vector2Int(x, y);
                     newEntry.FindPropertyRelative("_tile").objectReferenceValue = null;
                     newEntry.FindPropertyRelative("_tileType").enumValueIndex = (int)TileType.Walkable;
                 }
@@ -753,7 +753,7 @@ public class GridMaker3D : EditorWindow
         if (!TileWithinGrid(gridX, gridZ))
             return;
 
-        Vector2 gridPos = new Vector2(gridX, gridZ);
+        Vector2Int gridPos = new Vector2Int(gridX, gridZ);
 
         GameObject existingTile = GetTileAtPosition(new Vector3Int(gridX, 0, gridZ));
         GameObject newTilePrefab = tileBrushPrefabHolder._tileBrushPrefabs[currentTileBrushIndex];
@@ -806,7 +806,7 @@ public class GridMaker3D : EditorWindow
         for (int i = 0; i < tileGridProperty.arraySize; i++)
         {
             SerializedProperty entryProp = tileGridProperty.GetArrayElementAtIndex(i);
-            Vector2 pos = entryProp.FindPropertyRelative("_tileIndex").vector2Value;
+            Vector2 pos = entryProp.FindPropertyRelative("_tileIndex").vector2IntValue;
             GameObject tile = entryProp.FindPropertyRelative("_tile").objectReferenceValue as GameObject;
 
             if ((int)pos.x == position.x && (int)pos.y == position.z && tile != null)
@@ -823,14 +823,14 @@ public class GridMaker3D : EditorWindow
     {
         CombatGridSerializedSaveData tileSaveData = new CombatGridSerializedSaveData();
         
-        tileSaveData.gridWidth = battleGridWidth;
-        tileSaveData.gridHeight = battleGridHeight;
-        
+        tileSaveData._gridWidth = battleGridWidth;
+        tileSaveData._gridHeight = battleGridHeight;
+        tileSaveData._tileSize = tileSizeInMeters;
         foreach (var entry in tileGridHolder._tileEntries)
         {
             if(entry == null) continue;
 
-            tileSaveData.tileData.Add(new CombatGridTileData(entry._tileType, entry._tileIndex, entry._position, entry._size));
+            tileSaveData._tileData.Add(new CombatGridTileData(entry._tileType, entry._tileIndex, entry._position, entry._size));
         }
         string strOutput = JsonUtility.ToJson(tileSaveData, true);   
 
