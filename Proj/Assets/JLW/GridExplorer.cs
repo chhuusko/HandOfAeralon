@@ -33,7 +33,7 @@ public class GridExplorer : MonoBehaviour
 
     public int ManhattanDistance(Vector2Int a, Vector2Int b)
     {
-        return Mathf.Abs((a.x - b.x) + (a.y - b.y));
+        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
     }
 
     public List<GameObject> GetReachableTiles(GameObject startTile, int range)
@@ -82,7 +82,7 @@ public class GridExplorer : MonoBehaviour
 
     private bool IsWalkable(Vector2Int pos)
     {
-        if (pos.x < 0 || pos.y < 0 || pos.x >= 12 || pos.y >= 10)
+        if (pos.x < 0 || pos.y < 0 || pos.x >= _combatManager.GetGridWidth() || pos.y >= _combatManager.GetGridHeight())
         {
             return false;
         }

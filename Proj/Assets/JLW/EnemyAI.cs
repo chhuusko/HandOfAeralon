@@ -23,7 +23,6 @@ public class EnemyAI : MonoBehaviour
      * för varje möjligt drag (move+ability) räkna ut ett värde för det draget
      */
 
-    private GameObject _currentTroop;
     private InputSystem_Actions inputActions;
 
     void Start()
@@ -39,7 +38,7 @@ public class EnemyAI : MonoBehaviour
         int randomIndex = Random.Range(0, tiles.Length);
         Debug.Log($"Random index: {randomIndex}");
 
-        List<GameObject> reachableTiles = GridExplorer.Instance.GetReachableTiles(tiles[randomIndex], 3);
+        List<GameObject> reachableTiles = GridExplorer.Instance.GetReachableTiles(tiles[randomIndex], 5);
 
         Debug.Log($"AI_Controller started at {tiles[randomIndex].transform.position}");
         foreach (var element in reachableTiles)
@@ -47,4 +46,23 @@ public class EnemyAI : MonoBehaviour
             Debug.Log($"AI_Controller can reach {element.transform.position}");
         }
     }
+
+    /*
+    private void OnCharacterTurn(GameObject troop)
+    {
+        if (troop.GetOwner() != this) return;
+
+        GameObject currentTile = troop.GetTile();
+        List<GameObject> reachableTiles = GridExplorer.Instance.GetReachableTiles(currentTile, troop.GetMoveRange());
+
+        List<AIAction> scoredActions = new();
+        foreach (var tile in reachableTiles)
+        {
+            ScoreAIActionOptions(tile);
+        }
+
+        randomTop5Index = Random.Range(scoredActions.Count - 5, scoredActions.Count);
+        PerformAIAction(scoredActions(randomTop5Index));
+    }
+    */
 }
