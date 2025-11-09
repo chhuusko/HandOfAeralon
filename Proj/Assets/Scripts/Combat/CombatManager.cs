@@ -201,6 +201,16 @@ public class CombatManager : MonoBehaviour
 
     }
 
+    public int GetGridWidth()
+    {
+        return combatGrid.GetGridWidth();
+    }
+
+    public int GetGridHeight()
+    {
+        return combatGrid.GetGridHeight();
+    }
+
     public GameObject[] GetGridTiles()
     {
         return combatGrid.GetAllTiles();
