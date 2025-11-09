@@ -14,12 +14,12 @@ public enum TileType
 public class CombatGridTileData
 {
     [SerializeField] private TileType _tileType;
-    [SerializeField] private Vector2 _tileIndex;
+    [SerializeField] private Vector2Int _tileIndex;
     [SerializeField] private Vector3 _position;
     [SerializeField] private Vector3 _size;
     [SerializeField] private bool bWalkable;
 
-    public CombatGridTileData(TileType tileType, Vector2 tileIndex, Vector3 pos, Vector3 size)
+    public CombatGridTileData(TileType tileType, Vector2Int tileIndex, Vector3 pos, Vector3 size)
     {
         this._tileType = tileType;
         if (tileType == TileType.Impassable)
@@ -33,7 +33,7 @@ public class CombatGridTileData
     }
 
     public TileType GetTileType() { return _tileType; }
-    public Vector2 GetTileIndex() { return _tileIndex; }
+    public Vector2Int GetTileIndex() { return _tileIndex; }
     public Vector3 GetTilePosition() { return _position; }
     public Vector3 GetTileSize() { return _size; }
     public bool IsWalkable() { return bWalkable; }
@@ -45,8 +45,9 @@ public class CombatGridTileData
 [System.Serializable]
 public class CombatGridSerializedSaveData
 {
-    public int gridWidth;
-    public int gridHeight;
-    public List<CombatGridTileData> tileData = new List<CombatGridTileData>();
+    public int _gridWidth;
+    public int _gridHeight;
+    public Vector3 _tileSize;
+    public List<CombatGridTileData> _tileData = new List<CombatGridTileData>();
 }
 

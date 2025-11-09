@@ -12,7 +12,7 @@ public class CombatGridTile : MonoBehaviour
                                       tileData.GetTileSize());
     }
     public TileType GetTileType() {  return data.GetTileType(); } 
-    public Vector2 GetTileIndex() { return data.GetTileIndex(); }
+    public Vector2Int GetTileIndex() { return data.GetTileIndex(); }
     public Vector3 GetTilePosition() { return data.GetTilePosition(); }
     public Vector3 GetTileSize() { return data.GetTileSize(); } 
     public bool IsWalkable() { return data.IsWalkable(); }
