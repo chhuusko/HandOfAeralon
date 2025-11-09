@@ -42,6 +42,7 @@ public class GridExplorer : MonoBehaviour
         List<GameObject> result = new();
 
         Vector2Int start = startTile.GetComponent<CombatGridTile>().GetTileIndex();
+        Debug.Log($"GridExplorer | startTile @ {start}");
 
         Vector2Int[] directions = new Vector2Int[]
         {
