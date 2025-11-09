@@ -7,10 +7,14 @@ public class CombatGridTile : MonoBehaviour
     public CombatGridTile(CombatGridTileData tileData)
     {
         data = new CombatGridTileData(tileData.GetTileType(), 
-                                      tileData.GetTilePosition());
+                                      tileData.GetTileIndex(),
+                                      tileData.GetTilePosition(),
+                                      tileData.GetTileSize());
     }
     public TileType GetTileType() {  return data.GetTileType(); } 
-    public Vector2 GetTilePosition() { return data.GetTilePosition(); }
+    public Vector2 GetTileIndex() { return data.GetTileIndex(); }
+    public Vector3 GetTilePosition() { return data.GetTilePosition(); }
+    public Vector3 GetTileSize() { return data.GetTileSize(); } 
     public bool IsWalkable() { return data.IsWalkable(); }
 
     public void SetWalkable(bool bWalkable) { data.SetWalkable(bWalkable); }

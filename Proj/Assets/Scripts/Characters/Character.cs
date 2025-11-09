@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public enum CharacterClass { Rogue, Wizard }
+public enum CharacterClass { Barbarian, Wizard, Rogue, Bard }
 
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour
@@ -40,8 +40,13 @@ public class Character : MonoBehaviour
 
     public void SetMoveTarget(CombatGridTile target)
     {
+        SetMoveTarget(target.GetTilePosition());
+    }
+
+    public void SetMoveTarget(Vector3 target)
+    {
         // Start moving.
-        _movePosition = target.GetTilePosition();
+        _movePosition = target;
         _bShouldMove = true;
         
         // Look toward goal.
