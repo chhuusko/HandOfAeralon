@@ -22,13 +22,14 @@ public class GridExplorer : MonoBehaviour
     private GameObject _debugStartTile;
 
     private CombatManager _combatManager;
-    private float _tileSize = 3.0f;
 
     void Start()
     {
         _combatManager = FindFirstObjectByType<CombatManager>();
         if (_combatManager == null)
+        {
             Debug.LogError("GridExplorer.combatManager not found in scene!");
+        }
     }
 
     public int ManhattanDistance(Vector2Int a, Vector2Int b)
@@ -40,8 +41,7 @@ public class GridExplorer : MonoBehaviour
     {
         List<GameObject> result = new();
 
-        Vector2 startVector2 = startTile.GetComponent<CombatGridTile>().GetTileIndex();
-        Vector2Int start = new Vector2Int((int)startVector2.x, (int)startVector2.y);
+        Vector2Int start = startTile.GetComponent<CombatGridTile>().GetTileIndex();
 
         Vector2Int[] directions = new Vector2Int[]
         {
@@ -100,10 +100,10 @@ public class GridExplorer : MonoBehaviour
         Gizmos.color = new Color(0, 1, 0, 0.5f);
         foreach (var element in _debugReachableTiles)
         {
-            Gizmos.DrawCube(element.transform.position, new Vector3(_tileSize * 0.9f, 0.1f, _tileSize * 0.9f));
+            Gizmos.DrawCube(element.transform.position, _combatManager.GetTileSize() * 0.9f);
         }
 
         Gizmos.color = new Color(1, 1, 1, 0.8f);
-        Gizmos.DrawCube(_debugStartTile.transform.position, new Vector3(_tileSize * 0.9f, 0.1f, _tileSize * 0.9f));
+        Gizmos.DrawCube(_debugStartTile.transform.position, _combatManager.GetTileSize() * 0.9f);
     }
 }
