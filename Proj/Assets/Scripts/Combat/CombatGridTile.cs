@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class CombatGridTile : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class CombatGridTile : MonoBehaviour
     public Vector3    GetTileSize()     { return _tileData.GetTileSize(); } 
     public bool       IsWalkable()      { return _tileData.IsWalkable(); }
 
-    public void SetWalkable(bool bWalkable)      { _tileData.SetWalkable(bWalkable); }
+    public void SetWalkable(bool bWalkable)        { _tileData.SetWalkable(bWalkable); }
+    public void SetTileIndex(Vector2Int tileIndex) { _tileData.SetTileIndex(tileIndex); }
+    public void SetTileType(TileType tileType)     { _tileData.SetTileType(tileType); }
     public void SetOccupant(GameObject occupant) { _occupant = occupant; }
 }

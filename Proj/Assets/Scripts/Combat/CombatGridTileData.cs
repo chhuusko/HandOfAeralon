@@ -38,6 +38,8 @@ public class CombatGridTileData
     public Vector3 GetTileSize() { return _size; }
     public bool IsWalkable() { return _bWalkable; }
     public void SetWalkable(bool bWalkable) { this._bWalkable = bWalkable; }
+    public void SetTileIndex(Vector2Int tileIndex) { this._tileIndex = tileIndex; }
+    public void SetTileType(TileType tileType) { this._tileType = tileType; }
 };
 
 
