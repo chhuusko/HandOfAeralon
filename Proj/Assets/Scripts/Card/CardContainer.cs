@@ -9,7 +9,8 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     //Performs mainly ui part of card
     [SerializeField] private Card _containedCard;
     [SerializeField] private GameObject _particleDrag, _particleDrop;
-    [SerializeField] private LayoutGroup layoutGroup; 
+    [SerializeField] private GameObject _spriteObj;
+    private RectTransform _spriteTransform;
     private InputController _controller;
     private GameObject _spawnedParticle;
     private RectTransform _rect;
@@ -19,13 +20,13 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private void Awake()
     {
         _controller = new InputController();
+        _spriteTransform = _spriteObj.GetComponent<RectTransform>();
     }
     private void Start()
     {
         _rect = GetComponent<RectTransform>();
         SetPos(_rect.position);
-        
-        gameObject.GetComponent<Image>().sprite=_containedCard.icon; 
+        _spriteObj.GetComponent<Image>().sprite = _containedCard.icon;
     }
     private void OnEnable()
     {
@@ -34,6 +35,11 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private void OnDisable()
     {
         _controller.Disable();
+    }
+    private void FixedUpdate()
+    {
+        //AnimationMabye
+
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -77,18 +83,18 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         float elapsed = 0f;
         if (isEnter)
         {
-            while (Vector3.Distance(_rect.position, _hoverEndPosition) != 0)
+            while (Vector3.Distance(_spriteTransform.position, _hoverEndPosition) != 0)
             {
-                _rect.position = Vector3.Lerp(_startPosition, _hoverEndPosition, elapsed/duration);
+                _spriteTransform.position = Vector3.Lerp(_startPosition, _hoverEndPosition, elapsed/duration);
                 elapsed += Time.deltaTime;
                 yield return null;
             }
         }
         else
         {
-            while (Vector3.Distance(_rect.position, _startPosition) != 0)
+            while (Vector3.Distance(_spriteTransform.position, _startPosition) != 0)
             {
-                _rect.position = Vector3.Lerp(_hoverEndPosition, _startPosition, elapsed / duration);
+                _spriteTransform.position = Vector3.Lerp(_hoverEndPosition, _startPosition, elapsed / duration);
                 elapsed += Time.deltaTime;
                 yield return null;
                 
