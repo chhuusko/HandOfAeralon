@@ -8,7 +8,7 @@ public class TilePrefabEntry
     public GameObject prefab;
 }
 
-[CreateAssetMenu(fileName = "TilePrefabLibrary", menuName = "Tiles/Tile Prefab Library")]
+[CreateAssetMenu(fileName = "TilePrefabLibrary", menuName = "Scriptable Objects/Tile Prefab Library")]
 public class TilePrefabLibrary : ScriptableObject
 {
     public List<TilePrefabEntry> _tilePrefabs;

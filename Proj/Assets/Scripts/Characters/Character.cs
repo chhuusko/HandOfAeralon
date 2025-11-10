@@ -1,33 +1,67 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public enum CharacterClass { Barbarian, Wizard, Rogue, Bard }
 
-[RequireComponent(typeof(Rigidbody))]
+public enum Faction { Friendly, Enemy }
+
+[RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
 public class Character : MonoBehaviour
 {
     private const float MOVE_SPEED = 5f;
-    private int _healthPoints;
-    private int _speed;
+    
+    [SerializeField] private CharacterClass _characterClass;
+    [SerializeField] private Faction _faction;
+    [SerializeField] private int _healthPoints;
+    [SerializeField] private int _initiative;
+    [SerializeField] private Vector2Int _currentTileIndex;
     // TODO: Traits.
     private Vector3 _movePosition;
     private bool _bShouldMove;
+    private List<Ability> _availableAbilities;
+    
     private Rigidbody _rigidbody;
-    private CharacterClass _characterClass;
+    private NavMeshAgent _navMeshAgent;
 
+    public CharacterClass GetCharacterClass()
+    {
+        return _characterClass;
+    }
+
+    public Faction GetFaction()
+    {
+        return _faction;
+    }
+
+    public int GetHealthPoints()
+    {
+        return _healthPoints;
+    }
+
+    public int GetInitiative()
+    {
+        return _initiative;
+    }
+
+    public void SetCurrentTileIndex(Vector2Int tileIndex)
+    {
+        _currentTileIndex = tileIndex;
+    }
+    
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        InitializeAbilities();
     }
 
-    private void FixedUpdate()
+    private void InitializeAbilities()
     {
-        if (_bShouldMove)
-        {
-            Move();
-        }
+        _availableAbilities = CombatManager._instance.GetClassAbilities(_characterClass);
     }
-
+    
     public void TakeDamage(int damage)
     {
         _healthPoints -= damage;
@@ -45,22 +79,6 @@ public class Character : MonoBehaviour
 
     public void SetMoveTarget(Vector3 target)
     {
-        // Start moving.
-        _movePosition = target;
-        _bShouldMove = true;
-        
-        // Look toward goal.
-        Vector3 lookDirection = _movePosition - transform.position;
-        transform.rotation = Quaternion.LookRotation(lookDirection);
-    }
-
-    private void Move()
-    {
-        // Moves toward goal.
-        Vector3 targetVelocity = transform.forward * MOVE_SPEED;
-        Vector3 currentVelocity = _rigidbody.linearVelocity;
-        Vector3 velocityChange = targetVelocity - currentVelocity;
-            
-        _rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
+        _navMeshAgent.SetDestination(target);
     }
 }
