@@ -82,6 +82,29 @@ public class CombatGrid
     }
 
     public List<GameObject> GetAllCharacters() { return _charactersGO; }
+
+    public List<GameObject> GetAllFriendlyCharacters()
+    {
+        List<GameObject> friendlyCharacters = new List<GameObject>();
+        foreach(GameObject character in _charactersGO)
+        {
+            if(character.GetComponent<Character>().GetFaction() == Faction.Friendly)
+                friendlyCharacters.Add(character);
+        }
+        return friendlyCharacters;
+    }
+
+    public List<GameObject> GetAllEnemyCharacters()
+    {
+        List<GameObject> enemyCharacters = new List<GameObject>();
+        foreach (GameObject character in _charactersGO)
+        {
+            if (character.GetComponent<Character>().GetFaction() == Faction.Enemy)
+                enemyCharacters.Add(character);
+        }
+        return enemyCharacters;
+    }
+
     public void AddCharacter(CombatGridCharacterData characterData)
     {
         Vector2Int tileIndex = characterData.GetTileIndex();
