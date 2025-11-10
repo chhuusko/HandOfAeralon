@@ -83,7 +83,7 @@ public class Selector : MonoBehaviour
         }
 
         bool bIsFriendly = character.GetFaction() == Faction.Friendly;
-        bool bIsCharactersTurn = character == CombatManager._instance.GetHighestInitiativeCharacter();
+        bool bIsCharactersTurn = character == CombatManager._instance.GetNextTurnCharacter();
 
         if (bIsFriendly && bIsCharactersTurn)
         {
