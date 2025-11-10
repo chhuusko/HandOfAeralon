@@ -37,11 +37,21 @@ public class GridExplorer : MonoBehaviour
         return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
     }
 
-    public List<GameObject> GetReachableTiles(GameObject startTile, int range)
+    public List<GameObject> GetWalkableTilesInRange(GameObject startTile, int range)
+    {
+        return BFS(startTile, range, true);
+    }
+
+    public List<GameObject> GetAllTilesInRange(GameObject startTile, int range)
+    {
+        return BFS(startTile, range, false);
+    }
+
+    private List<GameObject> BFS(GameObject origin, int range, bool checkWalkable)
     {
         List<GameObject> result = new();
 
-        Vector2Int start = startTile.GetComponent<CombatGridTile>().GetTileIndex();
+        Vector2Int start = origin.GetComponent<CombatGridTile>().GetTileIndex();
 
         Vector2Int[] directions = new Vector2Int[]
         {
@@ -65,22 +75,28 @@ public class GridExplorer : MonoBehaviour
                 Vector2Int next = current + dir;
                 int nextCost = cost[current] + 1;
 
-                if (!IsWalkable(next))
+                if (OutOfBounds(next))
                 {
                     if (_debug)
-                        Debug.Log("GridExplorer | continue: !IsWalkable");
+                        Debug.Log("GridExplorer.BFS() | continue: OutOfBounds(next)");
+                    continue;
+                }
+                if (checkWalkable && !IsWalkable(next))
+                {
+                    if (_debug)
+                        Debug.Log("GridExplorer.BFS() | continue: !IsWalkable");
                     continue;
                 }
                 if (nextCost > range)
                 {
                     if (_debug)
-                        Debug.Log("GridExplorer | continue: nextCost > range");
+                        Debug.Log("GridExplorer.BFS() | continue: nextCost > range");
                     continue;
                 }
                 if (cost.ContainsKey(next))
                 {
                     if (_debug)
-                        Debug.Log("GridExplorer | continue: cost.ContainsKey(next)");
+                        Debug.Log("GridExplorer.BFS() | continue: cost.ContainsKey(next)");
                     continue;
                 }
 
@@ -95,13 +111,18 @@ public class GridExplorer : MonoBehaviour
         return result;
     }
 
-    private bool IsWalkable(Vector2Int pos)
+    private bool OutOfBounds(Vector2Int pos)
     {
         if (pos.x < 0 || pos.y < 0 || pos.x >= _combatManager.GetGridWidth() || pos.y >= _combatManager.GetGridHeight())
         {
-            return false;
+            return true;
         }
 
+        return false;
+    }
+
+    private bool IsWalkable(Vector2Int pos)
+    {
         return _combatManager.GetTileAtCoord(pos.x, pos.y).GetComponent<CombatGridTile>().IsWalkable();
     }
 
