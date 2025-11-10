@@ -2,22 +2,18 @@ using UnityEngine;
 
 public class DummyCharacter : MonoBehaviour
 {
-    private GameObject _owner;
+    [SerializeField] private GameObject _owner;
     private int _moveRange = 3;
-    private int _attackRange = 1;
+    private int _attackRange = 5;
+    private CombatManager _combatManager;
 
     void Start()
     {
-        _owner = GameObject.FindGameObjectWithTag("EnemyAI");
-        if (_owner == null)
+        _combatManager = FindFirstObjectByType<CombatManager>();
+        if (_combatManager == null)
         {
-            Debug.LogError("DummyCharacter.owner NOT FOUND IN SCENE!");
+            Debug.LogError("DummyCharacter._combatManager NOT FOUND IN SCENE!");
         }
-    }
-
-    void Update()
-    {
-        
     }
 
     public void MoveTo(GameObject target)
@@ -27,10 +23,7 @@ public class DummyCharacter : MonoBehaviour
 
     public void Attack(GameObject target)
     {
-        if (GridExplorer.Instance.ManhattanDistance(this.gameObject, target) <= _attackRange)
-        {
-            Debug.Log($"{this.name} attacked {target.name}!");
-        }
+        Debug.Log($"{this.name} attacked {target.name}!");
     }
 
     public GameObject GetOwner()
@@ -50,6 +43,11 @@ public class DummyCharacter : MonoBehaviour
 
     public GameObject GetTile()
     {
-        return null;
+        Vector3 tileSize = _combatManager.GetTileSize();
+
+        int x = Mathf.FloorToInt(transform.position.x / tileSize.x);
+        int y = Mathf.FloorToInt(transform.position.z / tileSize.z);
+
+        return _combatManager.GetTileAtCoord(x, y);
     }
 }

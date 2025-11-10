@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -23,29 +25,87 @@ public class EnemyAI : MonoBehaviour
      * för varje möjligt drag (move+ability) räkna ut ett värde för det draget
      */
 
-    [SerializeField] private GameObject dummyTroop;
-    private DummyCharacter dummyScript;
-    private InputSystem_Actions inputActions;
+    [SerializeField] private GameObject _dummyTroop;
+    private DummyCharacter _dummyScript;
+    private InputSystem_Actions _inputActions;
+    private CombatManager _combatManager;
 
     void Start()
     {
-        dummyScript = dummyTroop.GetComponent<DummyCharacter>();
-        if (dummyScript == null)
+        _dummyScript = _dummyTroop.GetComponent<DummyCharacter>();
+        if (_dummyScript == null)
         {
             Debug.LogError("DummyCharacter script NOT FOUND!");
         }
 
-        inputActions = new();
-        inputActions.Enable();
-        inputActions.Player.Jump.performed += OnJump;
+        _combatManager = FindFirstObjectByType<CombatManager>();
+        if (_combatManager == null)
+        {
+            Debug.LogError("EnemyAI._combatManager NOT FOUND IN SCENE!");
+        }
+
+        _inputActions = new();
+        _inputActions.Enable();
+        _inputActions.Player.Jump.performed += OnJump;
     }
 
     void OnJump(InputAction.CallbackContext context)
     {
-        if (dummyScript.GetOwner() != this) return;
+        if (_dummyScript.GetOwner() != this.gameObject) return;
 
-        GameObject currentTile = dummyScript.GetTile();
-        List<GameObject> reachableTiles = GridExplorer.Instance.GetTilesInRange(currentTile, dummyScript.GetMoveRange(), true);
+        List<DummyCharacter> playerTroops = GameObject
+            .FindGameObjectsWithTag("Character")
+            .Select(obj => obj.GetComponent<DummyCharacter>())
+            .Where(dc => dc != null)
+            .ToList();
+
+        float min = 9999f;
+        DummyCharacter closestTroop = null;
+        foreach (var troop in playerTroops)
+        {
+            float distance = Vector3.Distance(transform.position, troop.transform.position);
+            if (distance < min)
+            {
+                min = distance;
+                closestTroop = troop;
+            }
+        }
+
+        Debug.Log($"Closest troop = {closestTroop.name}");
+
+        if (GridExplorer.Instance.ManhattanDistance(_dummyScript.GetTile(), closestTroop.GetTile()) <= _dummyScript.GetAttackRange())
+        {
+            _dummyScript.Attack(closestTroop.gameObject);
+            return;
+        }
+
+        Debug.Log($"{closestTroop.name} out of attack range.");
+
+        GameObject currentTile = _dummyScript.GetTile();
+        List<GameObject> reachableTiles = GridExplorer.Instance.GetTilesInRange(currentTile, _dummyScript.GetMoveRange(), true);
+
+        min = 9999f;
+        GameObject closestTile = null;
+        foreach (var tile in reachableTiles)
+        {
+            float distance = Vector3.Distance(tile.transform.position, closestTroop.transform.position);
+            if (distance < min)
+            {
+                min = distance;
+                closestTile = tile;
+            }
+        }
+
+        _dummyScript.MoveTo(closestTile);
+        Debug.Log($"Moving {_dummyTroop.name}");
+
+        if (GridExplorer.Instance.ManhattanDistance(_dummyScript.GetTile(), closestTroop.GetTile()) <= _dummyScript.GetAttackRange())
+        {
+            _dummyScript.Attack(closestTroop.gameObject);
+            return;
+        }
+
+        Debug.Log($"{closestTroop.name} out of attack range.");
 
         /*
         List<AIAction> scoredActions = new();
