@@ -20,7 +20,7 @@ public class CombatGridCharacterData
         _size = size;
     }
     public CharacterClass GetCharacterClass() { return _characterClass; }
-    public Vector2Int GetCharacterIndex() { return _tileIndex; }
+    public Vector2Int GetTileIndex() { return _tileIndex; }
     public Vector3 GetCharacterPosition() { return _position; }
     public Vector3 GetCharacterSize() { return _size; }
     public void SetTileIndex(Vector2Int tileIndex) { _tileIndex = tileIndex; }

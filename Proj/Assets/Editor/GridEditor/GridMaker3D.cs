@@ -152,6 +152,10 @@ public class GridMaker3D : EditorWindow
         if (parent != null)
             DestroyImmediate(parent);
 
+        parent = GameObject.Find("-CHARACTERS-");
+        if (parent != null)
+            DestroyImmediate(parent);
+
         SceneView.duringSceneGui -= OnSceneGUI;
     }
 
@@ -324,6 +328,7 @@ public class GridMaker3D : EditorWindow
         newTile._tileIndex = gridPos;
         newTile._position = goPos;
         newTile._size = goSize;
+        newTile._occupant = null;
 
         Undo.RegisterCreatedObjectUndo(newTile._tile, "Placed/Updated Tile");
 
