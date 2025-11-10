@@ -1,23 +1,28 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 public enum CharacterClass { Barbarian, Wizard, Rogue, Bard }
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
 public class Character : MonoBehaviour
 {
     private const float MOVE_SPEED = 5f;
+    
+    [SerializeField] private CharacterClass _characterClass;
     private int _healthPoints;
     private int _speed;
     // TODO: Traits.
     private Vector3 _movePosition;
     private bool _bShouldMove;
+    
     private Rigidbody _rigidbody;
-    [SerializeField] private CharacterClass _characterClass;
+    private NavMeshAgent _navMeshAgent;
 
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     private void FixedUpdate()
