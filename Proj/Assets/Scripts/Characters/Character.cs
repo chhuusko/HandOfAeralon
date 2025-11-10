@@ -10,8 +10,8 @@ public class Character : MonoBehaviour
     private const float MOVE_SPEED = 5f;
     
     [SerializeField] private CharacterClass _characterClass;
-    private int _healthPoints;
-    private int _speed;
+    [SerializeField] private int _healthPoints;
+    [SerializeField] private int _initiative;
     // TODO: Traits.
     private Vector3 _movePosition;
     private bool _bShouldMove;

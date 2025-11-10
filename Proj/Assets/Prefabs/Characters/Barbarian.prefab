@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -1880555200118490649}
   m_Layer: 0
   m_Name: Barbarian
-  m_TagString: Untagged
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -153,6 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterClass: 0
+  _healthPoints: 0
+  _initiative: 0
 --- !u!195 &-1880555200118490649
 NavMeshAgent:
   m_ObjectHideFlags: 0
