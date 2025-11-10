@@ -36,8 +36,7 @@ public class EnemyAI : MonoBehaviour
     {
         GameObject[] tiles = GameObject.FindGameObjectsWithTag("EditorTile");
         int randomIndex = Random.Range(0, tiles.Length);
-        //List<GameObject> reachableWalkableTiles = GridExplorer.Instance.GetWalkableTilesInRange(tiles[randomIndex], 5);
-        List<GameObject> reachableAllTiles = GridExplorer.Instance.GetAllTilesInRange(tiles[randomIndex], 5);
+        List<GameObject> reachableTiles = GridExplorer.Instance.GetTilesInRange(tiles[randomIndex], 5, true);
 
         /*
         Debug.Log($"Random index: {randomIndex}");

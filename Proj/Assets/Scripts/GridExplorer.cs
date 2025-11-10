@@ -32,22 +32,36 @@ public class GridExplorer : MonoBehaviour
         }
     }
 
-    public int ManhattanDistance(Vector2Int a, Vector2Int b)
+    public int ManhattanDistance(GameObject a, GameObject b)
     {
-        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+        Vector2Int c = a.GetComponent<CombatGridTile>().GetTileIndex();
+        Vector2Int d = b.GetComponent<CombatGridTile>().GetTileIndex();
+
+        return Mathf.Abs(c.x - d.x) + Mathf.Abs(c.y - d.y);
     }
 
-    public List<GameObject> GetWalkableTilesInRange(GameObject startTile, int range)
-    {
-        return BFS(startTile, range, true);
-    }
+    /// <summary>
+    /// Performs a breadth-first search (BFS) from the given origin tile to find all tiles within the specified range.
+    /// </summary>
+    /// <param name="origin">The starting tile GameObject used as the center of the search.</param>
+    /// <param name="range">The maximum Manhattan distance (in tiles) to search from the origin.</param>
+    /// <param name="checkWalkable">
+    /// If true, only walkable tiles are included in the result. 
+    /// If false, all tiles within range are returned regardless of walkability.
+    /// </param>
+    /// <returns>
+    /// A list of <see cref="GameObject"/> tiles that are within the specified range of the origin.
+    /// </returns>
+    /// <remarks>
+    /// This method uses a grid-based breadth-first search (BFS) algorithm to traverse the map in four cardinal directions. 
+    /// It stops expanding when the specified range limit is reached or when encountering tiles marked as non-walkable 
+    /// (if <paramref name="checkWalkable"/> is enabled). 
+    /// 
+    /// The method also updates internal debug fields (<c>_debugStartTile</c> and <c>_debugReachableTiles</c>) 
+    /// used for visualization in the editor.
+    /// </remarks>
 
-    public List<GameObject> GetAllTilesInRange(GameObject startTile, int range)
-    {
-        return BFS(startTile, range, false);
-    }
-
-    private List<GameObject> BFS(GameObject origin, int range, bool checkWalkable)
+    public List<GameObject> GetTilesInRange(GameObject origin, int range, bool checkWalkable)
     {
         List<GameObject> result = new();
 
@@ -78,25 +92,25 @@ public class GridExplorer : MonoBehaviour
                 if (OutOfBounds(next))
                 {
                     if (_debug)
-                        Debug.Log("GridExplorer.BFS() | continue: OutOfBounds(next)");
+                        Debug.Log("GridExplorer.GetTilesInRange() | continue: OutOfBounds(next)");
                     continue;
                 }
                 if (checkWalkable && !IsWalkable(next))
                 {
                     if (_debug)
-                        Debug.Log("GridExplorer.BFS() | continue: !IsWalkable");
+                        Debug.Log("GridExplorer.GetTilesInRange() | continue: !IsWalkable");
                     continue;
                 }
                 if (nextCost > range)
                 {
                     if (_debug)
-                        Debug.Log("GridExplorer.BFS() | continue: nextCost > range");
+                        Debug.Log("GridExplorer.GetTilesInRange() | continue: nextCost > range");
                     continue;
                 }
                 if (cost.ContainsKey(next))
                 {
                     if (_debug)
-                        Debug.Log("GridExplorer.BFS() | continue: cost.ContainsKey(next)");
+                        Debug.Log("GridExplorer.GetTilesInRange() | continue: cost.ContainsKey(next)");
                     continue;
                 }
 
