@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 [System.Serializable]
 public enum CombatState
@@ -22,13 +23,17 @@ public enum CombatTurn
 [System.Serializable]
 public class CombatGrid
 {
+    [SerializeField] private TilePrefabLibrary      tilePrefabLibrary;
+    [SerializeField] private CharacterPrefabLibrary characterPrefabLibrary;
 
-    [SerializeField] private TilePrefabLibrary tilePrefabLibrary;
-
-    [SerializeField] private GameObject[] tilesGO;
-    [SerializeField] private Vector3 _tileSize;
     [SerializeField] private int _height;
     [SerializeField] private int _width;
+    [SerializeField] private Vector3 _tileSize;
+    
+    [SerializeField] private GameObject[] tilesGO;
+    [SerializeField] private List<GameObject> _charactersGO;
+
+
     public GameObject[] GetAllTiles() {  return tilesGO; }
     public GameObject GetTileAtCoord(int x, int y) 
     {
@@ -55,7 +60,10 @@ public class CombatGrid
 
     public void AddTile(CombatGridTileData tileData)
     {
-        Vector2 position = tileData.GetTileIndex();
+        if (tileData.GetTileType() == TileType.UnInitialized)
+            return;
+
+        Vector2 tileIndex = tileData.GetTileIndex();
         Vector3 instancePos = tileData.GetTilePosition();
 
         GameObject tilePrefab = tilePrefabLibrary.GetPrefab(tileData.GetTileType());
@@ -68,7 +76,20 @@ public class CombatGrid
         if (tileData.IsWalkable())
             tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
 
-        tilesGO[(int)position.x + (int)position.y * _width] = tileObject;
+        tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
+    }
+
+    public List<GameObject> GetAllCharacters() { return _charactersGO; }
+    public void AddCharacter(CombatGridCharacterData characterData)
+    {
+        Vector2 tileIndex = characterData.GetTileIndex();
+        Vector3 instancePos = characterData.GetCharacterPosition();
+
+        GameObject characterPrefab = characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
+        GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, Quaternion.identity);
+
+        _charactersGO.Add(characterObject);
+        
     }
 }
 
@@ -197,19 +218,25 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        CombatGridSerializedSaveData tileGrid = JsonUtility.FromJson<CombatGridSerializedSaveData>(jsonFileData);
+        CombatGridSerializedSaveData combatGrid = JsonUtility.FromJson<CombatGridSerializedSaveData>(jsonFileData);
 
-        combatGrid.SetCombatGridSize(tileGrid._gridWidth, tileGrid._gridHeight);
-        combatGrid.SetTileSize(tileGrid._tileSize);
-        Debug.Log("CombatGrid tileSize: " + tileGrid._tileSize);
-        for (int i = 0; i < tileGrid._tileData.Count; i++)
+        this.combatGrid.SetCombatGridSize(combatGrid._gridWidth, combatGrid._gridHeight);
+        this.combatGrid.SetTileSize(combatGrid._tileSize);
+        Debug.Log("CombatGrid tileSize: " + combatGrid._tileSize);
+       
+        for (int i = 0; i < combatGrid._tileData.Count; i++)
         {
-            Debug.Log("tiled["+i+"]: " + "\tTileType : " + tileGrid._tileData[i].GetTileType() + 
-                      "\tTileIndex: " + tileGrid._tileData[i].GetTilePosition() + "\n");
+            Debug.Log("tiled["+i+"]: " + "\tTileType : " + combatGrid._tileData[i].GetTileType() + 
+                      "\tTileIndex: " + combatGrid._tileData[i].GetTilePosition() + "\n");
 
-            combatGrid.AddTile(tileGrid._tileData[i]);
+            this.combatGrid.AddTile(combatGrid._tileData[i]);
         }
-
+        
+        for(int i = 0; i < combatGrid._characterData.Count; i++)
+        {
+            this.combatGrid.AddCharacter(combatGrid._characterData[i]);
+        }
+        
     }
 
     private void EvaluateInitiativeOrder()

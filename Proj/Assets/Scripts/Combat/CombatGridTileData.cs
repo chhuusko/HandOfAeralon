@@ -4,6 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public enum TileType
 {
+    UnInitialized,
     Walkable,
     Impassable,
     Lava,
@@ -19,7 +20,10 @@ public class CombatGridTileData
     [SerializeField] private Vector3    _size;
     [SerializeField] private bool       _bWalkable;
 
-    public CombatGridTileData(TileType tileType, Vector2Int tileIndex, Vector3 pos, Vector3 size)
+    public CombatGridTileData(TileType tileType, 
+                              Vector2Int tileIndex, 
+                              Vector3 pos, 
+                              Vector3 size)
     {
         this._tileType = tileType;
         if (tileType == TileType.Impassable)
@@ -43,13 +47,5 @@ public class CombatGridTileData
 };
 
 
-// NOTE (Calle): This is for saving a CombatGrid to JSON in the GridEditor
-[System.Serializable]
-public class CombatGridSerializedSaveData
-{
-    public int _gridWidth;
-    public int _gridHeight;
-    public Vector3 _tileSize;
-    public List<CombatGridTileData> _tileData = new List<CombatGridTileData>();
-}
+
 
