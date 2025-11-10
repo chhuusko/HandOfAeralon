@@ -86,6 +86,8 @@ public class CombatGrid
     {
         Vector2 tileIndex = characterData.GetTileIndex();
         Vector3 instancePos = characterData.GetCharacterPosition();
+        Faction faction = characterData.GetFaction();
+        int healthPoints = characterData.GetHealthPoints();
 
         GameObject characterPrefab = characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
         GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, Quaternion.identity);

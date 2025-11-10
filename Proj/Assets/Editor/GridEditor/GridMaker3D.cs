@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.TerrainTools;
 using UnityEngine;
+using static GridMaker3D;
 using static UnityEditor.PlayerSettings;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
@@ -346,9 +347,10 @@ public class GridMaker3D : EditorWindow
         newCharacterEntry._character.transform.position = goPos;
         newCharacterEntry._character.transform.localScale = goSize;
         newCharacterEntry._character.transform.SetParent(parent.transform);
+        newCharacterEntry._character.GetComponent<Character>().SetCurrentTileIndex(gridPos);
 
         // Save/Load Specific
-        newCharacterEntry._characterClass= prefab.GetComponent<Character>().GetCharacterClass();
+        newCharacterEntry._characterClass = prefab.GetComponent<Character>().GetCharacterClass();
         newCharacterEntry._tileIndex = gridPos;
         newCharacterEntry._position = goPos;
         newCharacterEntry._size = goSize;
@@ -668,7 +670,7 @@ public class GridMaker3D : EditorWindow
     {
         characterListSO.Update();
 
-        // Try to find existing tile at grid position
+        // Try to find existing Character at grid position
         for (int i = 0; i < characterListProperty.arraySize; i++)
         {
             SerializedProperty entryProp = characterListProperty.GetArrayElementAtIndex(i);
@@ -676,7 +678,7 @@ public class GridMaker3D : EditorWindow
 
             if ((int)tileIndex.x == gridX && (int)tileIndex.y == gridZ)
             {
-                // Replace existing tile reference
+                // Replace existing Character reference
                 SerializedProperty oldCharacterProp = entryProp.FindPropertyRelative("_character");
                 GameObject oldCharacterGO = oldCharacterProp.objectReferenceValue as GameObject;
 
@@ -1056,6 +1058,20 @@ public class GridMaker3D : EditorWindow
                                                         entry._size));
         }
 
+        GameObject[] charactersInScene = GameObject.FindGameObjectsWithTag("Character");
+
+        // TODO (Calle): Behövs Size här och vilken size ska returneras, gäller tiles också, render.bounds.size eller transform.localScale?
+        foreach(GameObject character in  charactersInScene)
+        {
+            combatGridSaveData._characterData.Add(
+                              new CombatGridCharacterData(character.GetComponent<Character>().GetCharacterClass(),
+                                                          character.GetComponent<Character>().GetFaction(),
+                                                          character.GetComponent<Character>().GetHealthPoints(),
+                                                          character.GetComponent<Character>().GetCurrentTileIndex(),
+                                                          character.transform.position,
+                                                          character.GetComponent<Renderer>().bounds.size));
+        }
+        /*
         foreach(var characterEntry in characterList._characterList)
         {
             if (characterEntry == null)
@@ -1068,11 +1084,14 @@ public class GridMaker3D : EditorWindow
                                                             characterEntry._size));        
 
         }
+        */
         string strOutput = JsonUtility.ToJson(combatGridSaveData, true);   
 
         File.WriteAllText(Application.dataPath + "\\JSON BattleGrids\\" + fileNameJSON + ".json", strOutput);
 
 
     }
+
+    
 }
 
