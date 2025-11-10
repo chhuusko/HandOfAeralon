@@ -15,27 +15,36 @@ public struct GameData
 
 public class GlobalGameManager : MonoBehaviour
 {
-    private static GlobalGameManager instance;
-    private GameData currentGame;
+    private static GlobalGameManager _instance;
+    private GameData _currentGame;
     private void Awake()
     {
-        instance = this;
+        _instance = this;
         DontDestroyOnLoad(this.gameObject);
     }
     public static GlobalGameManager GetInstance()
     {
-        return instance;
+        return _instance;
     }
     public void LoadGame(int slot)
     {
         
     }
+    public void SaveGame()
+    {
+        // Update seedInfo etc
+
+    }
     public void StartNewGame(int slot)
     {
-        currentGame = new GameData();
-        currentGame.saveSlot = slot;
-        currentGame.seed = Random.Range(0, 1000);
+        _currentGame = new GameData();
+        _currentGame.saveSlot = slot;
+        _currentGame.seed = Random.Range(0, 1000);
         SceneManager.LoadScene(1);
+    }
+    public void JSONWrite()
+    {
+
     }
 }
 
