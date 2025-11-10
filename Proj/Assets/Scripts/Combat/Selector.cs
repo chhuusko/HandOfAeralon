@@ -1,4 +1,5 @@
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -23,10 +24,11 @@ public class Selector : MonoBehaviour
         NonActive,
         Idle,  
         CharacterSelected,
-        PendingCharacterAction
+        ActionTypeSelected,
     }
 
-    private SelectorState CurrentState = SelectorState.NonActive;
+    private SelectorState _currentState = SelectorState.NonActive;
+    private Character _selectedCharacter; 
 
     void Start()
     {
@@ -46,12 +48,12 @@ public class Selector : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             CombatGridTile clickedTile = GetTileUnderMouse();
-            switch (CurrentState)
+            switch (_currentState)
             {
                 case SelectorState.NonActive: break;
                 case SelectorState.Idle: TrySelectCharacter(clickedTile); break;
                 case SelectorState.CharacterSelected: break;
-                case SelectorState.PendingCharacterAction: break;
+                case SelectorState.ActionTypeSelected: HandlePendingCharacterAction(clickedTile); break;
             }
         }
     }
@@ -63,6 +65,7 @@ public class Selector : MonoBehaviour
     private CombatGridTile GetTileUnderMouse()
     {
         // Check mouse position, cast ray cast to detect tile and return it if found.
+        
         return null;
     }
 
@@ -71,9 +74,11 @@ public class Selector : MonoBehaviour
         if(tile.GetOccupant().TryGetComponent<Character>(out var character)){
             // check if it's the characters turn and the character is friendly
             // If so, enable UI
+            
             ShowCharacterOptions(character);
+            _currentState = SelectorState.CharacterSelected;
+            _selectedCharacter = character;
         }
-        CurrentState = SelectorState.CharacterSelected;
 
     }
 
@@ -81,6 +86,14 @@ public class Selector : MonoBehaviour
     {
         // Activate UI and place it to show over characters head.
     }
-    public SelectorState GetCurrentState() { return CurrentState; }
-    public void SetCurrentState(SelectorState state) {  CurrentState = state; }
+    private void HandlePendingCharacterAction(CombatGridTile tile)
+    {
+        // If Action type == move 
+        //_selectedCharacter.Move(tile);
+
+        // If Action type == Ability && _pendingAbility != null
+        // _selectedCharacter.AbilityHandler.UseAbility(_pendingAbility, tile);
+    }
+    public SelectorState GetCurrentState() { return _currentState; }
+    public void SetCurrentState(SelectorState state) {  _currentState = state; }
 }
