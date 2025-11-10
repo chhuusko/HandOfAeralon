@@ -4,6 +4,7 @@ using UnityEditor;
 
 public class CleanupEditorTiles
 {
+    /*
     [MenuItem("Custom Tools/Cleanup Ghost Grid Tiles")]
     static void CleanupGhostTiles()
     {
@@ -25,4 +26,5 @@ public class CleanupEditorTiles
         if (preview != null)
             Object.DestroyImmediate(preview);
     }
+    */
 }

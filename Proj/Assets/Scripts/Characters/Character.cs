@@ -40,8 +40,13 @@ public class Character : MonoBehaviour
 
     public void SetMoveTarget(CombatGridTile target)
     {
+        SetMoveTarget(target.GetTilePosition());
+    }
+
+    public void SetMoveTarget(Vector3 target)
+    {
         // Start moving.
-        _movePosition = target.GetTilePosition();
+        _movePosition = target;
         _bShouldMove = true;
         
         // Look toward goal.
