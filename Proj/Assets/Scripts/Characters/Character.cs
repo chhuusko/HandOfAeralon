@@ -25,14 +25,6 @@ public class Character : MonoBehaviour
         _navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
-    private void FixedUpdate()
-    {
-        if (_bShouldMove)
-        {
-            Move();
-        }
-    }
-
     public CharacterClass GetCharacterClass()
     {
         return _characterClass;
@@ -55,22 +47,6 @@ public class Character : MonoBehaviour
 
     public void SetMoveTarget(Vector3 target)
     {
-        // Start moving.
-        _movePosition = target;
-        _bShouldMove = true;
-        
-        // Look toward goal.
-        Vector3 lookDirection = _movePosition - transform.position;
-        transform.rotation = Quaternion.LookRotation(lookDirection);
-    }
-
-    private void Move()
-    {
-        // Moves toward goal.
-        Vector3 targetVelocity = transform.forward * MOVE_SPEED;
-        Vector3 currentVelocity = _rigidbody.linearVelocity;
-        Vector3 velocityChange = targetVelocity - currentVelocity;
-            
-        _rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
+        _navMeshAgent.SetDestination(target);
     }
 }
