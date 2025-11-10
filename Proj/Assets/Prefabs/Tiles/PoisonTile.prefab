@@ -125,9 +125,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cf8d5db87313a743adbfb1d2d02d56e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data:
-    _tileType: 3
+  _tileData:
+    _tileType: 0
     _tileIndex: {x: 0, y: 0}
     _position: {x: 0, y: 0, z: 0}
     _size: {x: 0, y: 0, z: 0}
-    bWalkable: 0
+    _bWalkable: 1
+  _occupant: {fileID: 0}

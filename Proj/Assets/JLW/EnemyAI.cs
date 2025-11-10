@@ -48,6 +48,7 @@ public class EnemyAI : MonoBehaviour
             Debug.Log($"AI_Controller can reach {element.transform.position}");
         }
         */
+        
     }
 
     /*
