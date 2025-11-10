@@ -39,7 +39,7 @@ public class CombatGridCharacterData
     
     public void SetCharacterClass(CharacterClass characterClass) { _characterClass = characterClass; }
     public void SetFaction(Faction faction) { _faction = faction; }
-    public void SetHealthPoints(int healtPoints) { _healthPoints = healtPoints; }
+    public void SetHealthPoints(int healthPoints) { _healthPoints = healthPoints; }
     public void SetInitiative(int initiative) {  _initiative = initiative; }
     public void SetTileIndex(Vector2Int tileIndex) { _tileIndex = tileIndex; }
 }
