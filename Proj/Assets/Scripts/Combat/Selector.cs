@@ -1,21 +1,18 @@
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class Selector : MonoBehaviour
 {
-    public static Selector Instance {  get; private set; }
+    public static Selector _instance {  get; private set; }
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if(_instance != null && _instance != this)
         {
             Destroy(this);
         }
         else
         {
-            Instance = this;
+            _instance = this;
         }
     }
 
@@ -28,7 +25,10 @@ public class Selector : MonoBehaviour
     }
 
     private SelectorState _currentState = SelectorState.NonActive;
-    private Character _selectedCharacter; 
+    private Character _selectedCharacter;
+    private Ability _pendingAbility;
+    // private ActionType _pendingActionType;
+    
 
     void Start()
     {
@@ -60,6 +60,11 @@ public class Selector : MonoBehaviour
     private void HandleTileHover()
     {
         // Show info about character.
+        CombatGridTile hoveredTile = GetTileUnderMouse();
+
+        if (hoveredTile.GetOccupant().TryGetComponent<Character>(out var character)){
+            // TODO: Call UIControll script to show character info on character position.
+        }
     }
 
     private CombatGridTile GetTileUnderMouse()
@@ -71,18 +76,27 @@ public class Selector : MonoBehaviour
 
     private void TrySelectCharacter(CombatGridTile tile)
     {
-        if(tile.GetOccupant().TryGetComponent<Character>(out var character)){
-            // check if it's the characters turn and the character is friendly
-            // If so, enable UI
-            if(character.GetFaction() == Faction.Friendly /* && character.IsCharactersTurn*/)
-            {
+       if(!tile.GetOccupant().TryGetComponent<Character>(out var character))
+        {
+            DeselectCharacter();
+            return;
+        }
 
-            }
+        bool bIsFriendly = character.GetFaction() == Faction.Friendly;
+        bool bIsCharactersTurn = character == CombatManager._instance.GetHighestInitiativeCharacter();
+
+        if (bIsFriendly && bIsCharactersTurn)
+        {
             ShowCharacterOptions(character);
             _currentState = SelectorState.CharacterSelected;
             _selectedCharacter = character;
         }
-
+    }
+    private void DeselectCharacter()
+    {
+        // Deactivate UI
+        _selectedCharacter = null;
+        _pendingAbility = null;
     }
 
     private void ShowCharacterOptions(Character Character)
