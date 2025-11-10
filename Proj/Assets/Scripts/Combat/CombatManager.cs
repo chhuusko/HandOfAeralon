@@ -25,7 +25,6 @@ public class CombatGrid
 
     [SerializeField] private TilePrefabLibrary tilePrefabLibrary;
 
-    CombatGridTile[,] tiles;
     [SerializeField] private GameObject[] tilesGO;
     [SerializeField] private Vector3 _tileSize;
     [SerializeField] private int _height;
@@ -48,7 +47,6 @@ public class CombatGrid
         _width  = w;
         _height = h;
         tilesGO = new GameObject[w * h];
-        tiles   = new CombatGridTile[w, h];
     }
     public void SetTileSize(Vector3 tileSize)
     {
@@ -59,12 +57,15 @@ public class CombatGrid
     {
         Vector2 position = tileData.GetTileIndex();
         Vector3 instancePos = tileData.GetTilePosition();
-        Debug.Log("Is Walkable: " + tileData.IsWalkable());
+
         GameObject tilePrefab = tilePrefabLibrary.GetPrefab(tileData.GetTileType());
         GameObject tileObject = Object.Instantiate(tilePrefab, instancePos, Quaternion.identity);
-        tileObject.transform.localScale = tileData.GetTileSize();
 
-        if(tileData.IsWalkable())
+        tileObject.transform.localScale = tileData.GetTileSize();
+        tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
+        tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
+
+        if (tileData.IsWalkable())
             tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
 
         tilesGO[(int)position.x + (int)position.y * _width] = tileObject;
@@ -203,8 +204,8 @@ public class CombatManager : MonoBehaviour
         Debug.Log("CombatGrid tileSize: " + tileGrid._tileSize);
         for (int i = 0; i < tileGrid._tileData.Count; i++)
         {
-            //Debug.Log("TileType : " + tileGrid._tileData[i].GetTileType() + 
-            //          "\nTilePosition: " + tileGrid._tileData[i].GetTilePosition());
+            Debug.Log("tiled["+i+"]: " + "\tTileType : " + tileGrid._tileData[i].GetTileType() + 
+                      "\tTileIndex: " + tileGrid._tileData[i].GetTilePosition() + "\n");
 
             combatGrid.AddTile(tileGrid._tileData[i]);
         }
