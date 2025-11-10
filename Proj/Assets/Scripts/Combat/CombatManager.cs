@@ -217,6 +217,23 @@ public class CombatManager : MonoBehaviour
         return _classAbilitiesDictionary.TryGetValue(characterClass, out var abilities) ? abilities : new List<Ability>();
     }
 
+    public GameObject GetHighestInitiativeCharacter()
+    {
+        int highestInitiative = Int32.MinValue;
+        GameObject nextCharacter = null;
+        foreach (var g in combatGrid.GetAllCharacters())
+        {
+            int initiative = g.GetComponent<Character>().GetInitiative();
+            if (initiative > highestInitiative)
+            {
+                highestInitiative = initiative;
+                nextCharacter = g;
+            }
+        }
+
+        return nextCharacter;
+    }
+
     private void HandleMakeTurn()
     {
         switch(currentTurn)
@@ -260,7 +277,9 @@ public class CombatManager : MonoBehaviour
 
     private void HandlePlayerTurn()
     {
-
+        GameObject nextCharacter = GetHighestInitiativeCharacter();
+        
+        // TODO: Call selector with character.
     }
 
     private void HandleEnemyTurn()
