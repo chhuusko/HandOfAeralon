@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5454089124614097973}
   m_Layer: 0
   m_Name: Bard
-  m_TagString: Untagged
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -153,6 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterClass: 3
+  _healthPoints: 0
+  _initiative: 0
 --- !u!195 &5454089124614097973
 NavMeshAgent:
   m_ObjectHideFlags: 0
