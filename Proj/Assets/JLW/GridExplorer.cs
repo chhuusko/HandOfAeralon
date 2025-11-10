@@ -17,7 +17,7 @@ public class GridExplorer : MonoBehaviour
         }
     }
 
-    [SerializeField] private bool _debug = true;
+    [SerializeField] private bool _debug = false;
     private List<GameObject> _debugReachableTiles = new();
     private GameObject _debugStartTile;
 
@@ -28,7 +28,7 @@ public class GridExplorer : MonoBehaviour
         _combatManager = FindFirstObjectByType<CombatManager>();
         if (_combatManager == null)
         {
-            Debug.LogError("GridExplorer.combatManager not found in scene!");
+            Debug.LogError("GridExplorer._combatManager not found in scene!");
         }
     }
 
@@ -43,9 +43,6 @@ public class GridExplorer : MonoBehaviour
 
         Vector2Int start = startTile.GetComponent<CombatGridTile>().GetTileIndex();
 
-        if (_debug)
-            Debug.Log($"GridExplorer | startTile @ {start}");
-
         Vector2Int[] directions = new Vector2Int[]
         {
             new Vector2Int(1, 0),
@@ -59,48 +56,37 @@ public class GridExplorer : MonoBehaviour
         queue.Enqueue(start);
         cost[start] = 0;
 
-        if (_debug)
-            Debug.Log($"Queue count: {queue.Count}");
-
         while (queue.Count > 0)
         {
-            if (_debug)
-                Debug.Log("Dequeue");
-
             Vector2Int current = queue.Dequeue();
 
             foreach (var dir in directions)
             {
-                if (_debug)
-                    Debug.Log("Directions loop");
-
                 Vector2Int next = current + dir;
                 int nextCost = cost[current] + 1;
 
                 if (!IsWalkable(next))
                 {
                     if (_debug)
-                        Debug.Log("!IsWalkable");
+                        Debug.Log("GridExplorer | continue: !IsWalkable");
                     continue;
                 }
                 if (nextCost > range)
                 {
                     if (_debug)
-                        Debug.Log("nextCost > range");
+                        Debug.Log("GridExplorer | continue: nextCost > range");
                     continue;
                 }
                 if (cost.ContainsKey(next))
                 {
                     if (_debug)
-                        Debug.Log("cost.ContainsKey(next)");
+                        Debug.Log("GridExplorer | continue: cost.ContainsKey(next)");
                     continue;
                 }
 
                 cost[next] = nextCost;
                 queue.Enqueue(next);
                 result.Add(_combatManager.GetTileAtCoord(next.x, next.y));
-                if (_debug)
-                    Debug.Log($"Result count: {result.Count}");
             }
         }
 
@@ -129,7 +115,6 @@ public class GridExplorer : MonoBehaviour
         Gizmos.color = new Color(0, 1, 0, 0.5f);
         foreach (var element in _debugReachableTiles)
         {
-            Debug.Log($"{element}");
             Gizmos.DrawCube(element.transform.position, _combatManager.GetTileSize() * 0.9f);
         }
 
