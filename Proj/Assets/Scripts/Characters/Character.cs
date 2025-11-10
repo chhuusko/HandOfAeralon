@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,21 +16,37 @@ public class Character : MonoBehaviour
     // TODO: Traits.
     private Vector3 _movePosition;
     private bool _bShouldMove;
+    private List<Ability> _availableAbilities;
     
     private Rigidbody _rigidbody;
     private NavMeshAgent _navMeshAgent;
-
-    private void Start()
-    {
-        _rigidbody = GetComponent<Rigidbody>();
-        _navMeshAgent = GetComponent<NavMeshAgent>();
-    }
 
     public CharacterClass GetCharacterClass()
     {
         return _characterClass;
     }
 
+    public int GetHealthPoints()
+    {
+        return _healthPoints;
+    }
+
+    public int GetInitiative()
+    {
+        return _initiative;
+    }
+    
+    private void Start()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+    }
+
+    private void InitializeAbilities()
+    {
+        // _availableAbilities = CombatManager.;
+    }
+    
     public void TakeDamage(int damage)
     {
         _healthPoints -= damage;
