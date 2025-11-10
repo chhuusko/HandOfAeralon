@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using Object = UnityEngine.Object;
 
 [System.Serializable]
 public enum CombatState
@@ -93,8 +95,17 @@ public class CombatGrid
     }
 }
 
+[System.Serializable]
+public struct ClassAbilities
+{
+    public CharacterClass characterClass;
+    public List<Ability> abilities;
+}
+
 public class CombatManager : MonoBehaviour
 {
+    public static CombatManager _instance;
+    
     [SerializeField] private string _fileToLoadDEBUG;
 
     [SerializeField] private CombatCamera _combatCamera;
@@ -104,6 +115,29 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] private CombatGrid combatGrid;
     [SerializeField] private bool combatGridLoaded = false;
+
+    [Header("Abilities")]
+    [SerializeField] private List<ClassAbilities> _classAbilities;
+    private Dictionary<CharacterClass, List<Ability>> _classAbilitiesDictionary;
+    
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
+        _classAbilitiesDictionary = new Dictionary<CharacterClass, List<Ability>>();
+        foreach (var pair in _classAbilities)
+        {
+            _classAbilitiesDictionary[pair.characterClass] = pair.abilities;
+        }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -142,7 +176,16 @@ public class CombatManager : MonoBehaviour
                 } break;
         }
     }
-
+    
+    /// <summary>
+    /// Gets all abilities available to the class.
+    /// </summary>
+    /// <param name="characterClass">The character class to get abilities for.</param>
+    /// <returns>A list of the class' available abilities.</returns>
+    public List<Ability> GetClassAbilities(CharacterClass characterClass)
+    {
+        return _classAbilitiesDictionary.TryGetValue(characterClass, out var abilities) ? abilities : new List<Ability>();
+    }
 
     private void HandleMakeTurn()
     {
