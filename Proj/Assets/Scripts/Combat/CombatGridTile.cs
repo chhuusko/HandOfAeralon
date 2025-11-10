@@ -25,4 +25,20 @@ public class CombatGridTile : MonoBehaviour
     public void SetTileIndex(Vector2Int tileIndex) { _tileData.SetTileIndex(tileIndex); }
     public void SetTileType(TileType tileType)     { _tileData.SetTileType(tileType); }
     public void SetOccupant(GameObject occupant) { _occupant = occupant; }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Character"))
+        {
+            _occupant = gameObject;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Character"))
+        {
+            _occupant = null;
+        }
+    }
 }

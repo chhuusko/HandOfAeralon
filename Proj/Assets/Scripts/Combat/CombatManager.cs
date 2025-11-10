@@ -79,7 +79,6 @@ public class CombatGrid
         tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
     }
 
-
     public List<GameObject> GetAllCharacters() { return _charactersGO; }
     public void AddCharacter(CombatGridCharacterData characterData)
     {
