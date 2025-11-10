@@ -30,6 +30,11 @@ public class Character : MonoBehaviour
         return _characterClass;
     }
 
+    public Faction GetFaction()
+    {
+        return _faction;
+    }
+
     public int GetHealthPoints()
     {
         return _healthPoints;
