@@ -44,7 +44,7 @@ public class Character : MonoBehaviour
     {
         return _initiative;
     }
-
+    
     public void SetCurrentTileIndex(Vector2Int tileIndex)
     {
         _currentTileIndex = tileIndex;
@@ -57,6 +57,9 @@ public class Character : MonoBehaviour
         InitializeAbilities();
     }
 
+    /// <summary>
+    /// Sets all the abilities available to the character.
+    /// </summary>
     private void InitializeAbilities()
     {
         _availableAbilities = CombatManager._instance.GetClassAbilities(_characterClass);
@@ -72,11 +75,19 @@ public class Character : MonoBehaviour
         _healthPoints += healAmount;
     }
 
+    /// <summary>
+    /// Sets a new target move location.
+    /// </summary>
+    /// <param name="target">The grid to move to.</param>
     public void SetMoveTarget(CombatGridTile target)
     {
         SetMoveTarget(target.GetTilePosition());
     }
 
+    /// <summary>
+    /// Sets a new target move location.
+    /// </summary>
+    /// <param name="target">The position to move to.</param>
     public void SetMoveTarget(Vector3 target)
     {
         _navMeshAgent.SetDestination(target);
