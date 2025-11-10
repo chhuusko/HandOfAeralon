@@ -2171,8 +2171,9 @@
     "_characterData": [
         {
             "_characterClass": 0,
-            "_faction": 0,
-            "_healthPoints": 1,
+            "_faction": 1,
+            "_healthPoints": 12,
+            "_initiative": 1,
             "_tileIndex": {
                 "x": 0,
                 "y": 0
@@ -2189,28 +2190,10 @@
             }
         },
         {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 2,
-            "_tileIndex": {
-                "x": 1,
-                "y": 0
-            },
-            "_position": {
-                "x": 3.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 1.0,
-                "y": 2.0,
-                "z": 1.0
-            }
-        },
-        {
             "_characterClass": 1,
-            "_faction": 1,
-            "_healthPoints": 3,
+            "_faction": 0,
+            "_healthPoints": 11,
+            "_initiative": 4,
             "_tileIndex": {
                 "x": 2,
                 "y": 0
@@ -2227,28 +2210,10 @@
             }
         },
         {
-            "_characterClass": 1,
-            "_faction": 0,
-            "_healthPoints": 4,
-            "_tileIndex": {
-                "x": 3,
-                "y": 0
-            },
-            "_position": {
-                "x": 7.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 1.0,
-                "y": 2.0,
-                "z": 1.0
-            }
-        },
-        {
             "_characterClass": 2,
             "_faction": 1,
-            "_healthPoints": 5,
+            "_healthPoints": 41,
+            "_initiative": 5,
             "_tileIndex": {
                 "x": 4,
                 "y": 0
@@ -2265,72 +2230,16 @@
             }
         },
         {
-            "_characterClass": 2,
-            "_faction": 0,
-            "_healthPoints": 123,
-            "_tileIndex": {
-                "x": 5,
-                "y": 0
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 1.0,
-                "y": 2.0,
-                "z": 1.0
-            }
-        },
-        {
             "_characterClass": 3,
-            "_faction": 0,
-            "_healthPoints": 0,
-            "_tileIndex": {
-                "x": 0,
-                "y": 0
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 1.0,
-                "y": 2.0,
-                "z": 1.0
-            }
-        },
-        {
-            "_characterClass": 3,
-            "_faction": 0,
-            "_healthPoints": 3425,
+            "_faction": 1,
+            "_healthPoints": 6,
+            "_initiative": 66,
             "_tileIndex": {
                 "x": 6,
                 "y": 0
             },
             "_position": {
                 "x": 13.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 1.0,
-                "y": 2.0,
-                "z": 1.0
-            }
-        },
-        {
-            "_characterClass": 3,
-            "_faction": 0,
-            "_healthPoints": 999,
-            "_tileIndex": {
-                "x": 7,
-                "y": 0
-            },
-            "_position": {
-                "x": 15.0,
                 "y": 1.0,
                 "z": 1.0
             },

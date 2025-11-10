@@ -84,13 +84,18 @@ public class CombatGrid
     public List<GameObject> GetAllCharacters() { return _charactersGO; }
     public void AddCharacter(CombatGridCharacterData characterData)
     {
-        Vector2 tileIndex = characterData.GetTileIndex();
+        Vector2Int tileIndex = characterData.GetTileIndex();
         Vector3 instancePos = characterData.GetCharacterPosition();
         Faction faction = characterData.GetFaction();
         int healthPoints = characterData.GetHealthPoints();
+        int initiative = characterData.GetInitiative();
 
         GameObject characterPrefab = characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
         GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, Quaternion.identity);
+        characterObject.GetComponent<Character>().SetCurrentTileIndex(tileIndex);
+        characterObject.GetComponent<Character>().SetHealthPoints(healthPoints);
+        characterObject.GetComponent<Character>().SetInitiative(initiative);
+        characterObject.GetComponent<Character>().SetFaction(faction);
 
         _charactersGO.Add(characterObject);
         

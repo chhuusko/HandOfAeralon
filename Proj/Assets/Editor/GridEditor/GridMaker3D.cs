@@ -1063,10 +1063,14 @@ public class GridMaker3D : EditorWindow
         // TODO (Calle): Behövs Size här och vilken size ska returneras, gäller tiles också, render.bounds.size eller transform.localScale?
         foreach(GameObject character in  charactersInScene)
         {
+            if (character.name.Equals("PreviewCharacter"))
+                continue;
+
             combatGridSaveData._characterData.Add(
                               new CombatGridCharacterData(character.GetComponent<Character>().GetCharacterClass(),
                                                           character.GetComponent<Character>().GetFaction(),
                                                           character.GetComponent<Character>().GetHealthPoints(),
+                                                          character.GetComponent<Character>().GetInitiative(),
                                                           character.GetComponent<Character>().GetCurrentTileIndex(),
                                                           character.transform.position,
                                                           character.GetComponent<Renderer>().bounds.size));
