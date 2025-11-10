@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewMonoBehaviourScript : Character
+public class Hero : Character
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
