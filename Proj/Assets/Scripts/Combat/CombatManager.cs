@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+using Object = UnityEngine.Object;
 
 [System.Serializable]
 public enum CombatState
@@ -22,13 +25,17 @@ public enum CombatTurn
 [System.Serializable]
 public class CombatGrid
 {
+    [SerializeField] private TilePrefabLibrary      tilePrefabLibrary;
+    [SerializeField] private CharacterPrefabLibrary characterPrefabLibrary;
 
-    [SerializeField] private TilePrefabLibrary tilePrefabLibrary;
-
-    [SerializeField] private GameObject[] tilesGO;
-    [SerializeField] private Vector3 _tileSize;
     [SerializeField] private int _height;
     [SerializeField] private int _width;
+    [SerializeField] private Vector3 _tileSize;
+    
+    [SerializeField] private GameObject[] tilesGO;
+    [SerializeField] private List<GameObject> _charactersGO;
+
+
     public GameObject[] GetAllTiles() {  return tilesGO; }
     public GameObject GetTileAtCoord(int x, int y) 
     {
@@ -55,7 +62,10 @@ public class CombatGrid
 
     public void AddTile(CombatGridTileData tileData)
     {
-        Vector2 position = tileData.GetTileIndex();
+        if (tileData.GetTileType() == TileType.UnInitialized)
+            return;
+
+        Vector2 tileIndex = tileData.GetTileIndex();
         Vector3 instancePos = tileData.GetTilePosition();
 
         GameObject tilePrefab = tilePrefabLibrary.GetPrefab(tileData.GetTileType());
@@ -68,12 +78,64 @@ public class CombatGrid
         if (tileData.IsWalkable())
             tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
 
-        tilesGO[(int)position.x + (int)position.y * _width] = tileObject;
+        tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
     }
+
+    public List<GameObject> GetAllCharacters() { return _charactersGO; }
+
+    public List<GameObject> GetAllFriendlyCharacters()
+    {
+        List<GameObject> friendlyCharacters = new List<GameObject>();
+        foreach(GameObject character in _charactersGO)
+        {
+            if(character.GetComponent<Character>().GetFaction() == Faction.Friendly)
+                friendlyCharacters.Add(character);
+        }
+        return friendlyCharacters;
+    }
+
+    public List<GameObject> GetAllEnemyCharacters()
+    {
+        List<GameObject> enemyCharacters = new List<GameObject>();
+        foreach (GameObject character in _charactersGO)
+        {
+            if (character.GetComponent<Character>().GetFaction() == Faction.Enemy)
+                enemyCharacters.Add(character);
+        }
+        return enemyCharacters;
+    }
+
+    public void AddCharacter(CombatGridCharacterData characterData)
+    {
+        Vector2Int tileIndex = characterData.GetTileIndex();
+        Vector3 instancePos = characterData.GetCharacterPosition();
+        Faction faction = characterData.GetFaction();
+        int healthPoints = characterData.GetHealthPoints();
+        int initiative = characterData.GetInitiative();
+
+        GameObject characterPrefab = characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
+        GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, Quaternion.identity);
+        characterObject.GetComponent<Character>().SetCurrentTileIndex(tileIndex);
+        characterObject.GetComponent<Character>().SetBaseHealthPoints(healthPoints);
+        characterObject.GetComponent<Character>().SetBaseSpeed(initiative);
+        characterObject.GetComponent<Character>().SetFaction(faction);
+
+        _charactersGO.Add(characterObject);
+        
+    }
+}
+
+[System.Serializable]
+public struct ClassAbilities
+{
+    public CharacterClass characterClass;
+    public List<Ability> abilities;
 }
 
 public class CombatManager : MonoBehaviour
 {
+    public static CombatManager _instance;
+    
     [SerializeField] private string _fileToLoadDEBUG;
 
     [SerializeField] private CombatCamera _combatCamera;
@@ -83,6 +145,29 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] private CombatGrid combatGrid;
     [SerializeField] private bool combatGridLoaded = false;
+
+    [Header("Abilities")]
+    [SerializeField] private List<ClassAbilities> _classAbilities;
+    private Dictionary<CharacterClass, List<Ability>> _classAbilitiesDictionary;
+    
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
+        _classAbilitiesDictionary = new Dictionary<CharacterClass, List<Ability>>();
+        foreach (var pair in _classAbilities)
+        {
+            _classAbilitiesDictionary[pair.characterClass] = pair.abilities;
+        }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -121,7 +206,33 @@ public class CombatManager : MonoBehaviour
                 } break;
         }
     }
+    
+    /// <summary>
+    /// Gets all abilities available to the class.
+    /// </summary>
+    /// <param name="characterClass">The character class to get abilities for.</param>
+    /// <returns>A list of the class' available abilities.</returns>
+    public List<Ability> GetClassAbilities(CharacterClass characterClass)
+    {
+        return _classAbilitiesDictionary.TryGetValue(characterClass, out var abilities) ? abilities : new List<Ability>();
+    }
 
+    public GameObject GetNextTurnCharacter()
+    {
+        int highestInitiative = Int32.MinValue;
+        GameObject nextCharacter = null;
+        foreach (var g in combatGrid.GetAllCharacters())
+        {
+            int initiative = g.GetComponent<Character>().GetSpeed();
+            if (initiative > highestInitiative)
+            {
+                highestInitiative = initiative;
+                nextCharacter = g;
+            }
+        }
+
+        return nextCharacter;
+    }
 
     private void HandleMakeTurn()
     {
@@ -166,7 +277,9 @@ public class CombatManager : MonoBehaviour
 
     private void HandlePlayerTurn()
     {
-
+        GameObject nextCharacter = GetNextTurnCharacter();
+        
+        // TODO: Call selector with character.
     }
 
     private void HandleEnemyTurn()
@@ -197,19 +310,25 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        CombatGridSerializedSaveData tileGrid = JsonUtility.FromJson<CombatGridSerializedSaveData>(jsonFileData);
+        CombatGridSerializedSaveData combatGrid = JsonUtility.FromJson<CombatGridSerializedSaveData>(jsonFileData);
 
-        combatGrid.SetCombatGridSize(tileGrid._gridWidth, tileGrid._gridHeight);
-        combatGrid.SetTileSize(tileGrid._tileSize);
-        Debug.Log("CombatGrid tileSize: " + tileGrid._tileSize);
-        for (int i = 0; i < tileGrid._tileData.Count; i++)
+        this.combatGrid.SetCombatGridSize(combatGrid._gridWidth, combatGrid._gridHeight);
+        this.combatGrid.SetTileSize(combatGrid._tileSize);
+        Debug.Log("CombatGrid tileSize: " + combatGrid._tileSize);
+       
+        for (int i = 0; i < combatGrid._tileData.Count; i++)
         {
-            Debug.Log("tiled["+i+"]: " + "\tTileType : " + tileGrid._tileData[i].GetTileType() + 
-                      "\tTileIndex: " + tileGrid._tileData[i].GetTilePosition() + "\n");
+            Debug.Log("tiled["+i+"]: " + "\tTileType : " + combatGrid._tileData[i].GetTileType() + 
+                      "\tTileIndex: " + combatGrid._tileData[i].GetTilePosition() + "\n");
 
-            combatGrid.AddTile(tileGrid._tileData[i]);
+            this.combatGrid.AddTile(combatGrid._tileData[i]);
         }
-
+        
+        for(int i = 0; i < combatGrid._characterData.Count; i++)
+        {
+            this.combatGrid.AddCharacter(combatGrid._characterData[i]);
+        }
+        
     }
 
     private void EvaluateInitiativeOrder()

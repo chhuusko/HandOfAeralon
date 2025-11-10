@@ -15,9 +15,10 @@ GameObject:
   - component: {fileID: 4364113584426369600}
   - component: {fileID: 8856714353871331608}
   - component: {fileID: -3886465435983619482}
+  - component: {fileID: 1283547092218368676}
   m_Layer: 0
   m_Name: Rogue
-  m_TagString: Untagged
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -68,7 +69,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e7266cb7206c0e14b9b7a3e4da77098f, type: 2}
+  - {fileID: 2100000, guid: f329c046550652c45ba7e60c2ba2629d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -153,6 +154,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterClass: 2
+  _healthPoints: 0
+  _initiative: 0
+  _currentTileIndex: {x: 0, y: 0}
 --- !u!195 &-3886465435983619482
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -175,3 +179,24 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!65 &1283547092218368676
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4723980006632172988}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5, y: 1, z: 0.5}
+  m_Center: {x: 0, y: -1, z: 0}
