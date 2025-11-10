@@ -13,10 +13,9 @@ GameObject:
   - component: {fileID: 7526753860999703696}
   - component: {fileID: 3121170392611899513}
   - component: {fileID: 4364113584426369600}
-  - component: {fileID: 8660581163751392593}
   - component: {fileID: 8856714353871331608}
   m_Layer: 0
-  m_Name: Hero
+  m_Name: Wizard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,18 +139,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8660581163751392593
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4723980006632172988}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bb23da498682694c8f1e21f067bb52a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8856714353871331608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,3 +151,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4956f9c9bdd9845aef1f5ec39d41f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _characterClass: 1
