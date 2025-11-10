@@ -49,6 +49,26 @@ public class Character : MonoBehaviour
     {
         return _currentTileIndex;
     }
+
+    public void SetCharacterClass(CharacterClass characterClass)
+    {
+        _characterClass = characterClass;
+    }
+
+    public void SetFaction(Faction faction)
+    {
+        _faction = faction;
+    }
+
+    public void SetHealthPoints(int healthPoints)
+    {
+        _healthPoints = healthPoints;
+    }
+
+    public void SetInitiative(int initiative)
+    {
+        _initiative = initiative;
+    }
     
     public void SetCurrentTileIndex(Vector2Int tileIndex)
     {
