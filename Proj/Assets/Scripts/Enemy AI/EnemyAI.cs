@@ -23,10 +23,18 @@ public class EnemyAI : MonoBehaviour
      * för varje möjligt drag (move+ability) räkna ut ett värde för det draget
      */
 
+    [SerializeField] private GameObject dummyTroop;
+    private DummyCharacter dummyScript;
     private InputSystem_Actions inputActions;
 
     void Start()
     {
+        dummyScript = dummyTroop.GetComponent<DummyCharacter>();
+        if (dummyScript == null)
+        {
+            Debug.LogError("DummyCharacter script NOT FOUND!");
+        }
+
         inputActions = new();
         inputActions.Enable();
         inputActions.Player.Jump.performed += OnJump;
@@ -34,11 +42,21 @@ public class EnemyAI : MonoBehaviour
 
     void OnJump(InputAction.CallbackContext context)
     {
-        GameObject[] tiles = GameObject.FindGameObjectsWithTag("EditorTile");
-        int randomIndex = Random.Range(0, tiles.Length);
-        List<GameObject> reachableTiles = GridExplorer.Instance.GetTilesInRange(tiles[randomIndex], 5, true);
+        if (dummyScript.GetOwner() != this) return;
+
+        GameObject currentTile = dummyScript.GetTile();
+        List<GameObject> reachableTiles = GridExplorer.Instance.GetTilesInRange(currentTile, dummyScript.GetMoveRange(), true);
 
         /*
+        List<AIAction> scoredActions = new();
+        foreach (var tile in reachableTiles)
+        {
+            ScoreAIActionOptions(tile);
+        }
+
+        randomTop5Index = Random.Range(scoredActions.Count - 5, scoredActions.Count);
+        PerformAIAction(scoredActions(randomTop5Index));
+
         Debug.Log($"Random index: {randomIndex}");
         Debug.Log($"tiles[randomIndex]: {tiles[randomIndex]}");
         Debug.DrawLine(tiles[randomIndex].transform.position, tiles[randomIndex].transform.position + Vector3.up * 3f, Color.red, 5f);
@@ -50,23 +68,4 @@ public class EnemyAI : MonoBehaviour
         */
 
     }
-
-    /*
-    private void OnCharacterTurn(GameObject troop)
-    {
-        if (troop.GetOwner() != this) return;
-
-        GameObject currentTile = troop.GetTile();
-        List<GameObject> reachableTiles = GridExplorer.Instance.GetReachableTiles(currentTile, troop.GetMoveRange());
-
-        List<AIAction> scoredActions = new();
-        foreach (var tile in reachableTiles)
-        {
-            ScoreAIActionOptions(tile);
-        }
-
-        randomTop5Index = Random.Range(scoredActions.Count - 5, scoredActions.Count);
-        PerformAIAction(scoredActions(randomTop5Index));
-    }
-    */
 }
