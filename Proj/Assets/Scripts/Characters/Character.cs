@@ -13,7 +13,7 @@ public class Character : MonoBehaviour
     private Vector3 _movePosition;
     private bool _bShouldMove;
     private Rigidbody _rigidbody;
-    private CharacterClass _characterClass;
+    [SerializeField] private CharacterClass _characterClass;
 
     private void Start()
     {
@@ -26,6 +26,11 @@ public class Character : MonoBehaviour
         {
             Move();
         }
+    }
+
+    public CharacterClass GetCharacterClass()
+    {
+        return _characterClass;
     }
 
     public void TakeDamage(int damage)
