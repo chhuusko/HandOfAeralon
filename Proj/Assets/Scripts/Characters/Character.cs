@@ -44,6 +44,11 @@ public class Character : MonoBehaviour
     {
         return _initiative;
     }
+
+    public Vector2Int GetCurrentTileIndex()
+    {
+        return _currentTileIndex;
+    }
     
     public void SetCurrentTileIndex(Vector2Int tileIndex)
     {
