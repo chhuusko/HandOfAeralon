@@ -74,7 +74,10 @@ public class Selector : MonoBehaviour
         if(tile.GetOccupant().TryGetComponent<Character>(out var character)){
             // check if it's the characters turn and the character is friendly
             // If so, enable UI
-            
+            if(character.GetFaction() == Faction.Friendly /* && character.IsCharactersTurn*/)
+            {
+
+            }
             ShowCharacterOptions(character);
             _currentState = SelectorState.CharacterSelected;
             _selectedCharacter = character;
@@ -89,7 +92,7 @@ public class Selector : MonoBehaviour
     private void HandlePendingCharacterAction(CombatGridTile tile)
     {
         // If Action type == move 
-        //_selectedCharacter.Move(tile);
+        //_selectedCharacter.SetMoveTarget(tile);
 
         // If Action type == Ability && _pendingAbility != null
         // _selectedCharacter.AbilityHandler.UseAbility(_pendingAbility, tile);
