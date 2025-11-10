@@ -9,19 +9,24 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     //Performs mainly ui part of card
     [SerializeField] private Card _containedCard;
     [SerializeField] private GameObject _particleDrag, _particleDrop;
+    [SerializeField] private GameObject _spriteObj;
+    private RectTransform _spriteTransform;
     private InputController _controller;
     private GameObject _spawnedParticle;
+    private RectTransform _rect;
     Vector3 _startPosition, _hoverEndPosition;
     float _hoverDistance = 50f;
     private bool _isDragging;
     private void Awake()
     {
         _controller = new InputController();
-
-        _startPosition = transform.position;
-        _hoverEndPosition = transform.position + new Vector3(0, _hoverDistance, 0);
-        
-        gameObject.GetComponent<Image>().sprite=_containedCard.icon; 
+        _spriteTransform = _spriteObj.GetComponent<RectTransform>();
+    }
+    private void Start()
+    {
+        _rect = GetComponent<RectTransform>();
+        SetPos(_rect.position);
+        _spriteObj.GetComponent<Image>().sprite = _containedCard.icon;
     }
     private void OnEnable()
     {
@@ -30,6 +35,11 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private void OnDisable()
     {
         _controller.Disable();
+    }
+    private void FixedUpdate()
+    {
+        //AnimationMabye
+
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -53,7 +63,8 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
         Destroy(_spawnedParticle);
         // TODO GetGrid and do the Card thing
-        Destroy(gameObject);
+        _containedCard.PlayCard();
+        CardHandManager.GetInstance().RemoveCard(this);   
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -67,31 +78,39 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     }
     IEnumerator OnHover(bool isEnter)
     {
+
         float duration = 0.1f; 
         float elapsed = 0f;
-
         if (isEnter)
-        {   
-            while (Vector3.Distance(transform.position, _hoverEndPosition) != 0)
+        {
+            while (Vector3.Distance(_spriteTransform.position, _hoverEndPosition) != 0)
             {
-                transform.position = Vector3.Lerp(_startPosition, _hoverEndPosition, elapsed/duration);
+                _spriteTransform.position = Vector3.Lerp(_startPosition, _hoverEndPosition, elapsed/duration);
                 elapsed += Time.deltaTime;
                 yield return null;
             }
-            
-            
-            
-
         }
         else
         {
-            while (Vector3.Distance(transform.position, _startPosition) != 0)
+            while (Vector3.Distance(_spriteTransform.position, _startPosition) != 0)
             {
-                transform.position = Vector3.Lerp(_hoverEndPosition, _startPosition, elapsed / duration);
+                _spriteTransform.position = Vector3.Lerp(_hoverEndPosition, _startPosition, elapsed / duration);
                 elapsed += Time.deltaTime;
                 yield return null;
+                
             }
             
         }
+    }
+    public void AddCard(Card newCard)
+    {
+        _containedCard = newCard;
+    }
+    public void SetPos(Vector3 newStarterPoint)
+    {
+        _startPosition = newStarterPoint;
+        transform.position = _startPosition;
+        _hoverEndPosition = _startPosition + new Vector3(0, _hoverDistance, 0);
+        
     }
 }
