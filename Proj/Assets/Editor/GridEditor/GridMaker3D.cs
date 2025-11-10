@@ -343,8 +343,7 @@ public class GridMaker3D : EditorWindow
         newCharacterEntry._character.transform.SetParent(parent.transform);
 
         // Save/Load Specific
-        //newCharacterEntry._characterClass= prefab.GetComponent<CombatGridTile>().GetTileType();
-        newCharacterEntry._characterClass = CharacterClass.Barbarian;
+        newCharacterEntry._characterClass= prefab.GetComponent<Character>().GetCharacterClass();
         newCharacterEntry._tileIndex = gridPos;
         newCharacterEntry._position = goPos;
         newCharacterEntry._size = goSize;
