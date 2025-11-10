@@ -13,6 +13,7 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterClass _characterClass;
     [SerializeField] private int _healthPoints;
     [SerializeField] private int _initiative;
+    [SerializeField] private Vector2Int _currentTileIndex;
     // TODO: Traits.
     private Vector3 _movePosition;
     private bool _bShouldMove;
@@ -35,16 +36,22 @@ public class Character : MonoBehaviour
     {
         return _initiative;
     }
+
+    public void SetCurrentTileIndex(Vector2Int tileIndex)
+    {
+        _currentTileIndex = tileIndex;
+    }
     
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        InitializeAbilities();
     }
 
     private void InitializeAbilities()
     {
-        // _availableAbilities = CombatManager.;
+        _availableAbilities = CombatManager._instance.GetClassAbilities(_characterClass);
     }
     
     public void TakeDamage(int damage)
