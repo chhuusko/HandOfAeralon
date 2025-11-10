@@ -3,21 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum CharacterClass { Barbarian, Wizard, Rogue, Bard }
+
 
 public enum Faction { Friendly, Enemy }
 
 [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
 public class Character : MonoBehaviour
 {
-    private const float MOVE_SPEED = 5f;
-    
+    [Header("Base stats")]
+    [SerializeField] private ClassData _classData;
     [SerializeField] private CharacterClass _characterClass;
     [SerializeField] private Faction _faction;
-    [SerializeField] private int _healthPoints;
-    [SerializeField] private int _initiative;
-    [SerializeField] private Vector2Int _currentTileIndex;
+    [SerializeField] private int _baseHealthPoints;
+    [SerializeField] private int _baseInitiative;
     // TODO: Traits.
+    
+    [Header("Current stats")]
+    [SerializeField] private int _currentHealthPoints;
+    [SerializeField] private int _currentInitiative;
+    
+    [SerializeField] private Vector2Int _currentTileIndex;
+    
     private Vector3 _movePosition;
     private bool _bShouldMove;
     private List<Ability> _availableAbilities;
@@ -37,12 +43,12 @@ public class Character : MonoBehaviour
 
     public int GetHealthPoints()
     {
-        return _healthPoints;
+        return _currentHealthPoints;
     }
 
     public int GetInitiative()
     {
-        return _initiative;
+        return _currentInitiative;
     }
 
     public Vector2Int GetCurrentTileIndex()
@@ -60,14 +66,14 @@ public class Character : MonoBehaviour
         _faction = faction;
     }
 
-    public void SetHealthPoints(int healthPoints)
+    public void SetBaseHealthPoints(int healthPoints)
     {
-        _healthPoints = healthPoints;
+        _baseHealthPoints = healthPoints;
     }
 
-    public void SetInitiative(int initiative)
+    public void SetBaseInitiative(int initiative)
     {
-        _initiative = initiative;
+        _baseInitiative = initiative;
     }
     
     public void SetCurrentTileIndex(Vector2Int tileIndex)
@@ -79,7 +85,17 @@ public class Character : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        
+        InitializeClassData();
         InitializeAbilities();
+    }
+    
+    private void InitializeClassData()
+    {
+        // Set values from class data.
+        _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(_classData.minHealthPoints, _classData.maxHealthPoints);
+        _currentInitiative = _baseInitiative =  UnityEngine.Random.Range(_classData.minInitiative, _classData.maxInitiative);
+        _characterClass = _classData.characterClass;
     }
 
     /// <summary>
@@ -92,12 +108,12 @@ public class Character : MonoBehaviour
     
     public void TakeDamage(int damage)
     {
-        _healthPoints -= damage;
+        _currentHealthPoints -= damage;
     }
 
     public void Heal(int healAmount)
     {
-        _healthPoints += healAmount;
+        _currentHealthPoints += Mathf.Max(_currentHealthPoints + healAmount, _baseHealthPoints);
     }
 
     /// <summary>
