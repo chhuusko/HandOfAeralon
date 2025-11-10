@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bded9f9cfcd7f36499942bd29fde2d69, type: 3}
   m_Name: Rogue
   m_EditorClassIdentifier: 
-  characterClass: 0
-  minHealthPoints: 0
-  maxHealthPoints: 0
-  minInitiative: 0
-  maxInitiative: 0
+  characterClass: 2
+  minHealthPoints: 7
+  maxHealthPoints: 11
+  minSpeed: 4
+  maxSpeed: 6
+  minDamage: 4
+  maxDamage: 6
   abilities: []
-  classPrefab: {fileID: 4723980006632172988, guid: 539a8eb09a8ddee4ea40c0f9a6e89435,
-    type: 3}

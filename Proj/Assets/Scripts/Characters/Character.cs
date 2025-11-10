@@ -15,12 +15,14 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterClass _characterClass;
     [SerializeField] private Faction _faction;
     [SerializeField] private int _baseHealthPoints;
-    [SerializeField] private int _baseInitiative;
+    [SerializeField] private int _baseSpeed;
+    [SerializeField] private int _baseDamage;
     // TODO: Traits.
     
     [Header("Current stats")]
     [SerializeField] private int _currentHealthPoints;
-    [SerializeField] private int _currentInitiative;
+    [SerializeField] private int _currentSpeed;
+    [SerializeField] private int _currentDamage;
     
     [SerializeField] private Vector2Int _currentTileIndex;
     
@@ -46,9 +48,14 @@ public class Character : MonoBehaviour
         return _currentHealthPoints;
     }
 
-    public int GetInitiative()
+    public int GetSpeed()
     {
-        return _currentInitiative;
+        return _currentSpeed;
+    }
+
+    public int GetDamage()
+    {
+        return _currentDamage;
     }
 
     public Vector2Int GetCurrentTileIndex()
@@ -71,9 +78,14 @@ public class Character : MonoBehaviour
         _baseHealthPoints = healthPoints;
     }
 
-    public void SetBaseInitiative(int initiative)
+    public void SetBaseSpeed(int initiative)
     {
-        _baseInitiative = initiative;
+        _baseSpeed = initiative;
+    }
+
+    public void SetBaseDamage(int damage)
+    {
+        _baseDamage = damage;
     }
     
     public void SetCurrentTileIndex(Vector2Int tileIndex)
@@ -93,8 +105,9 @@ public class Character : MonoBehaviour
     private void InitializeClassData()
     {
         // Set values from class data.
-        _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(_classData.minHealthPoints, _classData.maxHealthPoints);
-        _currentInitiative = _baseInitiative =  UnityEngine.Random.Range(_classData.minInitiative, _classData.maxInitiative);
+        _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(_classData.minHealthPoints, _classData.maxHealthPoints + 1);
+        _currentSpeed = _baseSpeed =  UnityEngine.Random.Range(_classData.minSpeed, _classData.maxSpeed + 1);
+        _currentDamage = _baseDamage = UnityEngine.Random.Range(_classData.minDamage, _classData.maxDamage + 1);
         _characterClass = _classData.characterClass;
     }
 
@@ -109,11 +122,15 @@ public class Character : MonoBehaviour
     public void TakeDamage(int damage)
     {
         _currentHealthPoints -= damage;
+        if (_currentHealthPoints <= 0)
+        {
+            // TODO: Character dies.
+        }
     }
 
     public void Heal(int healAmount)
     {
-        _currentHealthPoints += Mathf.Max(_currentHealthPoints + healAmount, _baseHealthPoints);
+        _currentHealthPoints = Mathf.Min(_currentHealthPoints + healAmount, _baseHealthPoints);
     }
 
     /// <summary>

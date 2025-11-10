@@ -15,8 +15,8 @@ MonoBehaviour:
   characterClass: 0
   minHealthPoints: 8
   maxHealthPoints: 12
-  minInitiative: 3
-  maxInitiative: 5
+  minSpeed: 3
+  maxSpeed: 5
+  minDamage: 5
+  maxDamage: 7
   abilities: []
-  classPrefab: {fileID: 4723980006632172988, guid: 164b6938a219cd24a901c0e970296021,
-    type: 3}

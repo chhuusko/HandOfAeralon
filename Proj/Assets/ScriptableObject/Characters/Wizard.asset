@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Wizard
   m_EditorClassIdentifier: 
   characterClass: 0
-  minHealthPoints: 0
-  maxHealthPoints: 0
-  minInitiative: 0
-  maxInitiative: 0
+  minHealthPoints: 6
+  maxHealthPoints: 10
+  minSpeed: 3
+  maxSpeed: 5
+  minDamage: 4
+  maxDamage: 6
   abilities: []
-  classPrefab: {fileID: 4723980006632172988, guid: 44870adf68b732f478f26b38a400ce24,
-    type: 3}

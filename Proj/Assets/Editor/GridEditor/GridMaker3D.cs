@@ -1060,7 +1060,7 @@ public class GridMaker3D : EditorWindow
 
         GameObject[] charactersInScene = GameObject.FindGameObjectsWithTag("Character");
 
-        // TODO (Calle): Behövs Size här och vilken size ska returneras, gäller tiles också, render.bounds.size eller transform.localScale?
+        // TODO (Calle): Behï¿½vs Size hï¿½r och vilken size ska returneras, gï¿½ller tiles ocksï¿½, render.bounds.size eller transform.localScale?
         foreach(GameObject character in  charactersInScene)
         {
             if (character.name.Equals("PreviewCharacter"))
@@ -1070,7 +1070,7 @@ public class GridMaker3D : EditorWindow
                               new CombatGridCharacterData(character.GetComponent<Character>().GetCharacterClass(),
                                                           character.GetComponent<Character>().GetFaction(),
                                                           character.GetComponent<Character>().GetHealthPoints(),
-                                                          character.GetComponent<Character>().GetInitiative(),
+                                                          character.GetComponent<Character>().GetSpeed(),
                                                           character.GetComponent<Character>().GetCurrentTileIndex(),
                                                           character.transform.position,
                                                           character.GetComponent<Renderer>().bounds.size));

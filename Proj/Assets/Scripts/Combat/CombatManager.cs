@@ -117,7 +117,7 @@ public class CombatGrid
         GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, Quaternion.identity);
         characterObject.GetComponent<Character>().SetCurrentTileIndex(tileIndex);
         characterObject.GetComponent<Character>().SetBaseHealthPoints(healthPoints);
-        characterObject.GetComponent<Character>().SetBaseInitiative(initiative);
+        characterObject.GetComponent<Character>().SetBaseSpeed(initiative);
         characterObject.GetComponent<Character>().SetFaction(faction);
 
         _charactersGO.Add(characterObject);
@@ -217,13 +217,13 @@ public class CombatManager : MonoBehaviour
         return _classAbilitiesDictionary.TryGetValue(characterClass, out var abilities) ? abilities : new List<Ability>();
     }
 
-    public GameObject GetHighestInitiativeCharacter()
+    public GameObject GetNextTurnCharacter()
     {
         int highestInitiative = Int32.MinValue;
         GameObject nextCharacter = null;
         foreach (var g in combatGrid.GetAllCharacters())
         {
-            int initiative = g.GetComponent<Character>().GetInitiative();
+            int initiative = g.GetComponent<Character>().GetSpeed();
             if (initiative > highestInitiative)
             {
                 highestInitiative = initiative;
@@ -277,7 +277,7 @@ public class CombatManager : MonoBehaviour
 
     private void HandlePlayerTurn()
     {
-        GameObject nextCharacter = GetHighestInitiativeCharacter();
+        GameObject nextCharacter = GetNextTurnCharacter();
         
         // TODO: Call selector with character.
     }
