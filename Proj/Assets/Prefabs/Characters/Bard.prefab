@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4364113584426369600}
   - component: {fileID: 8856714353871331608}
   - component: {fileID: 5454089124614097973}
+  - component: {fileID: 7624825441498677647}
   m_Layer: 0
   m_Name: Bard
   m_TagString: Character
@@ -155,6 +156,7 @@ MonoBehaviour:
   _characterClass: 3
   _healthPoints: 0
   _initiative: 0
+  _currentTileIndex: {x: 0, y: 0}
 --- !u!195 &5454089124614097973
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -177,3 +179,24 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!65 &7624825441498677647
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4723980006632172988}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5, y: 1, z: 0.5}
+  m_Center: {x: 0, y: -1, z: 0}
