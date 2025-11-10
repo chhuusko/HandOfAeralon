@@ -177,6 +177,11 @@ public class CombatManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Gets all abilities available to the class.
+    /// </summary>
+    /// <param name="characterClass">The character class to get abilities for.</param>
+    /// <returns>A list of the class' available abilities.</returns>
     public List<Ability> GetClassAbilities(CharacterClass characterClass)
     {
         return _classAbilitiesDictionary.TryGetValue(characterClass, out var abilities) ? abilities : new List<Ability>();

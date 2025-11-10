@@ -5,12 +5,15 @@ using UnityEngine.AI;
 
 public enum CharacterClass { Barbarian, Wizard, Rogue, Bard }
 
+public enum Faction { Friendly, Enemy }
+
 [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
 public class Character : MonoBehaviour
 {
     private const float MOVE_SPEED = 5f;
     
     [SerializeField] private CharacterClass _characterClass;
+    [SerializeField] private Faction _faction;
     [SerializeField] private int _healthPoints;
     [SerializeField] private int _initiative;
     [SerializeField] private Vector2Int _currentTileIndex;
