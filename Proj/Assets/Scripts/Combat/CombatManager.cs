@@ -31,7 +31,7 @@ public class CombatGrid
     [SerializeField] private Vector3 _tileSize;
     
     [SerializeField] private GameObject[] tilesGO;
-    [SerializeField] private GameObject[] _charactersGO;
+    [SerializeField] private List<GameObject> _charactersGO;
 
 
     public GameObject[] GetAllTiles() {  return tilesGO; }
@@ -79,6 +79,8 @@ public class CombatGrid
         tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
     }
 
+
+    public List<GameObject> GetAllCharacters() { return _charactersGO; }
     public void AddCharacter(CombatGridCharacterData characterData)
     {
         Vector2 tileIndex = characterData.GetTileIndex();
@@ -87,6 +89,8 @@ public class CombatGrid
         GameObject characterPrefab = characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
         GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, Quaternion.identity);
 
+        _charactersGO.Add(characterObject);
+        
     }
 }
 
