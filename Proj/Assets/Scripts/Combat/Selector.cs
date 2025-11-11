@@ -78,7 +78,7 @@ public class Selector : MonoBehaviour
             {
                 case SelectorState.NonActive: break;
                 case SelectorState.Idle: TrySelectCharacter(clickedTile); break;
-                case SelectorState.CharacterSelected: break;
+                case SelectorState.CharacterSelected: DeselectCharacter(); break;
                 case SelectorState.ActionTypeSelected: HandlePendingCharacterAction(clickedTile); break;
             }
         }
