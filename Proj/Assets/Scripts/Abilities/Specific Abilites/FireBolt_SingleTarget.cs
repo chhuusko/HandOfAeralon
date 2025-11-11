@@ -7,6 +7,7 @@ public class FireBolt_SingleTarget : SingleTargetAbility
 
     protected override void ApplyEffectOnTile(CombatGridTile tileToEffect)
     {
+       
 
     }
 }
