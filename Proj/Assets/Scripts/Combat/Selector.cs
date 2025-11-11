@@ -47,6 +47,16 @@ public class Selector : MonoBehaviour
     private void HandleTileClick()
     {
         // Execute different actions based on current state when clicking on tiles.
+        if (Camera.main == null)
+        {
+            Debug.LogError("No MainCamera found! Tag your camera as 'MainCamera'.");
+            return;
+        }
+        if (EventSystem.current == null)
+        {
+            Debug.LogError("No EventSystem in scene!");
+            return;
+        }
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
         if (Input.GetMouseButtonDown(0))
@@ -77,6 +87,8 @@ public class Selector : MonoBehaviour
 
     private CombatGridTile GetTileUnderMouse()
     {
+        
+
         // Cast ray cast from mouse to detect tile and return it if found.
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         int tileMask = LayerMask.GetMask("Tile");
