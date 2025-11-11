@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Selector : MonoBehaviour
 {
@@ -27,12 +28,13 @@ public class Selector : MonoBehaviour
     private SelectorState _currentState = SelectorState.NonActive;
     private Character _selectedCharacter;
     private Ability _pendingAbility;
+    private bool _bDebugSelector = false;
     // private ActionType _pendingActionType;
     
 
     void Start()
     {
-        
+        _bDebugSelector = true;
     }
 
     
@@ -43,11 +45,17 @@ public class Selector : MonoBehaviour
     }
 
     private void HandleTileClick()
-    {   
+    {
         // Execute different actions based on current state when clicking on tiles.
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             CombatGridTile clickedTile = GetTileUnderMouse();
+            if (_bDebugSelector && clickedTile != null)
+            {
+                Debug.Log("Clicked on tile " + clickedTile.gameObject);
+            }
             switch (_currentState)
             {
                 case SelectorState.NonActive: break;
@@ -69,8 +77,16 @@ public class Selector : MonoBehaviour
 
     private CombatGridTile GetTileUnderMouse()
     {
-        // Check mouse position, cast ray cast to detect tile and return it if found.
-        
+        // Cast ray cast from mouse to detect tile and return it if found.
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        int tileMask = LayerMask.GetMask("Tile");
+
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, tileMask))
+        {
+            // Check for tile script on gameobject.
+            if (hit.collider.TryGetComponent(out CombatGridTile tile)) return tile;
+        }
+
         return null;
     }
 

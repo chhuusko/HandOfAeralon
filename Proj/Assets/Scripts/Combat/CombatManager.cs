@@ -280,6 +280,7 @@ public class CombatManager : MonoBehaviour
         GameObject nextCharacter = GetNextTurnCharacter();
         
         // TODO: Call selector with character.
+
     }
 
     private void HandleEnemyTurn()
