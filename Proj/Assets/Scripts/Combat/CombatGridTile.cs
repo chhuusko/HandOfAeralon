@@ -38,7 +38,7 @@ public class CombatGridTile : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Character"))
         {
-            _occupant = gameObject;
+            _occupant = other.gameObject;
             _occupant.GetComponent<Character>().SetCurrentTileIndex(GetTileIndex());
         }
     }
