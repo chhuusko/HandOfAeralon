@@ -1,5 +1,7 @@
+using NUnit.Framework.Internal;
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using Object = UnityEngine.Object;
@@ -74,6 +76,10 @@ public class CombatGrid
         tileObject.transform.localScale = tileData.GetTileSize();
         tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
         tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
+        MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
+        Material inCombatTileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Shaders/CJ Test Shaders/TileShaderGraph.shadergraph");
+        if( inCombatTileMaterial != null )
+            meshRend.material = inCombatTileMaterial;
 
         if (tileData.IsWalkable())
             tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
