@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Rendering.Universal;
 using Object = UnityEngine.Object;
 
@@ -82,9 +83,12 @@ public class CombatGrid
                 tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
             else
             {
-                var modifier = tileObject.AddComponent<NavMeshModifier>();
-                modifier.overrideArea = true;
-                modifier.area = UnityEngine.AI.NavMesh.GetAreaFromName("Not Walkable");
+                var volume = tileObject.AddComponent<NavMeshModifierVolume>();
+                volume.area = NavMesh.GetAreaFromName("Not Walkable");
+            
+                Vector3 tileSize = tileData.GetTileSize();
+                volume.size = new Vector3(tileSize.x, 1.0f, tileSize.z);
+                volume.center = new Vector3(0, 0.5f, 0);
             }
 
             tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
