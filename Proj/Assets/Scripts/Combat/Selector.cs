@@ -65,6 +65,8 @@ public class Selector : MonoBehaviour
             return;
         }
 
+        // Return early if mouse is over UI element or current state is NonActive.
+        if (_currentState == SelectorState.NonActive) return;
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
         if (Input.GetMouseButtonDown(0))
@@ -129,12 +131,19 @@ public class Selector : MonoBehaviour
     private void DeselectCharacter()
     {
         // if ui is active Deactivate UI
-
         _selectedCharacter = null;
         _pendingAbility = null;
-        
 
-        if (_bDebugSelector) Debug.Log("DeselectCharacter was run");
+        //if (CombatManager._instance.GetCurrentTurn() == CombatTurn.PlayerTurn)
+        //{
+        //    _currentState = SelectorState.Idle;
+        //}
+        //else
+        //{
+        //    _currentState = SelectorState.NonActive;
+        //}
+
+        if (_bDebugSelector) Debug.Log("Deselect Character");
     }
 
     private void ShowCharacterOptions(Character Character)
