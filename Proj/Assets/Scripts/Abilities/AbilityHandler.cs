@@ -17,10 +17,7 @@ public class AbilityHandler : MonoBehaviour
             Debug.LogError("AbilityHandler is missing Character component!");
             return;
         }
-        GameObject tileObject = _characterCaster.GetCurrentTile();
-        if (tileObject == null) return;
-        _casterTile = tileObject.GetComponent<CombatGridTile>();
-
+        CombatGridTile _casterTile = _characterCaster.GetCurrentTileComponent();
     }
     public void UseAbility(Ability ability, CombatGridTile targetTile)
     {
