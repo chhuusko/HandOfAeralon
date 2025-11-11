@@ -56,13 +56,11 @@ public class Selector : MonoBehaviour
         // Execute different actions based on current state when clicking on tiles.
         if (Camera.main == null)
         {
-            Debug.LogError("No MainCamera found! Tag your camera as 'MainCamera'.");
-            return;
+            Debug.LogError("No MainCamera found! Tag your camera as 'MainCamera'."); return;
         }
         if (EventSystem.current == null)
         {
-            Debug.LogError("No EventSystem in scene!");
-            return;
+            Debug.LogError("No EventSystem in scene!"); return;
         }
 
         // Return early if mouse is over UI element or current state is NonActive.
@@ -126,6 +124,11 @@ public class Selector : MonoBehaviour
             ShowCharacterOptions(character);
             _currentState = SelectorState.CharacterSelected;
             _selectedCharacter = character;
+
+            if (_bDebugSelector)
+            {
+                Debug.Log(character.GetCharacterClass().ToString() + " on tile index: " + character.GetCurrentTileIndex().ToString());
+            }
         }
     }
     private void DeselectCharacter()
@@ -133,15 +136,16 @@ public class Selector : MonoBehaviour
         // if ui is active Deactivate UI
         _selectedCharacter = null;
         _pendingAbility = null;
+        _pendingCharacterActionType = CharacterActionType.Null;
 
-        //if (CombatManager._instance.GetCurrentTurn() == CombatTurn.PlayerTurn)
-        //{
-        //    _currentState = SelectorState.Idle;
-        //}
-        //else
-        //{
-        //    _currentState = SelectorState.NonActive;
-        //}
+        if (CombatManager._instance.GetCombatTurn() == CombatTurn.PlayerTurn)
+        {
+            _currentState = SelectorState.Idle;
+        }
+        else
+        {
+            _currentState = SelectorState.NonActive;
+        }
 
         if (_bDebugSelector) Debug.Log("Deselect Character");
     }
@@ -155,10 +159,18 @@ public class Selector : MonoBehaviour
         if(_pendingCharacterActionType == CharacterActionType.Movevement)
         {
             _selectedCharacter.SetMoveTarget(tile);
+            if (_bDebugSelector)
+            {
+                Debug.Log(_selectedCharacter.GetCharacterClass()+ " on tile: " + _selectedCharacter.GetCurrentTileIndex().ToString() + " is set to move to: " + tile.GetComponentIndex().ToString());
+            }
         }
-        if(_pendingCharacterActionType == CharacterActionType.AbilityCasting && _pendingAbility != null)
+        if (_pendingCharacterActionType == CharacterActionType.AbilityCasting && _pendingAbility != null)
         {
             _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_pendingAbility, tile);
+            if (_bDebugSelector)
+            {  
+                Debug.Log(_selectedCharacter.GetCharacterClass() + " used ability: " + _pendingAbility.GetAbilityName.ToString());
+            }
         }
     }
     private void DebugCurrentState()
