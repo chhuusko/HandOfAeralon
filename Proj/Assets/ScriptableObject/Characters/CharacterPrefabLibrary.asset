@@ -13,15 +13,19 @@ MonoBehaviour:
   m_Name: CharacterPrefabLibrary
   m_EditorClassIdentifier: 
   _characterPrefabs:
-  - classType: 0
-    prefab: {fileID: 5632698098917217084, guid: 3afcb21cb19686245930db6bbb5f85aa,
-      type: 3}
-  - classType: 3
-    prefab: {fileID: 5632698098917217084, guid: 30729e42bd26bf8488c6fbe582e62e35,
-      type: 3}
-  - classType: 2
-    prefab: {fileID: 5632698098917217084, guid: 066fe6a29fc17dd43bd043628c63eac9,
-      type: 3}
-  - classType: 1
-    prefab: {fileID: 5632698098917217084, guid: a6585f5c6d2820c48ad0d7eca02ff076,
-      type: 3}
+  - _classType: 0
+    _prefabList:
+    - {fileID: 6582541483011876841, guid: 411eba179c936b74e89d2c4328c96569, type: 3}
+    - {fileID: 5632698098917217084, guid: 3afcb21cb19686245930db6bbb5f85aa, type: 3}
+  - _classType: 1
+    _prefabList:
+    - {fileID: 6582541483011876841, guid: 4d6451fb515a0494f93438bc6da7704c, type: 3}
+    - {fileID: 5632698098917217084, guid: a6585f5c6d2820c48ad0d7eca02ff076, type: 3}
+  - _classType: 2
+    _prefabList:
+    - {fileID: 6582541483011876841, guid: a88e732fa5973d04cae0f439e4940aa6, type: 3}
+    - {fileID: 5632698098917217084, guid: 066fe6a29fc17dd43bd043628c63eac9, type: 3}
+  - _classType: 3
+    _prefabList:
+    - {fileID: 6582541483011876841, guid: 9494e6f4a3cac3f40b3791341b006602, type: 3}
+    - {fileID: 5632698098917217084, guid: 30729e42bd26bf8488c6fbe582e62e35, type: 3}

@@ -1,19 +1,20 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-
-
 
 public enum Faction { Friendly, Enemy }
 
 [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
 public class Character : MonoBehaviour
 {
-    [Header("Base stats")]
+    [Header("Character")]
     [SerializeField] private ClassData _classData;
     [SerializeField] private CharacterClass _characterClass;
     [SerializeField] private Faction _faction;
+    
+    [Header("Base stats")]
     [SerializeField] private int _baseHealthPoints;
     [SerializeField] private int _baseSpeed;
     [SerializeField] private int _baseDamage;
@@ -24,13 +25,9 @@ public class Character : MonoBehaviour
     [SerializeField] private int _currentSpeed;
     [SerializeField] private int _currentDamage;
     
+    [Header("Misc")]
     [SerializeField] private Vector2Int _currentTileIndex;
-    
-    private Vector3 _movePosition;
-    private bool _bShouldMove;
     private List<Ability> _availableAbilities;
-    
-    private Rigidbody _rigidbody;
     private NavMeshAgent _navMeshAgent;
 
     public CharacterClass GetCharacterClass()
@@ -63,6 +60,11 @@ public class Character : MonoBehaviour
         return _currentTileIndex;
     }
 
+    public GameObject GetCurrentTile()
+    {
+        return CombatManager._instance.GetTileAtCoord(_currentTileIndex.x, _currentTileIndex.y);
+    }
+
     public void SetCharacterClass(CharacterClass characterClass)
     {
         _characterClass = characterClass;
@@ -93,17 +95,28 @@ public class Character : MonoBehaviour
         _currentTileIndex = tileIndex;
     }
     
-    private void Start()
+    private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
-        
-        InitializeClassData();
-        InitializeAbilities();
+
+        // Only set class values for friendlies.
+        if (_faction == Faction.Friendly)
+        {
+            InitializeClassData();
+            InitializeAbilities();
+        }
     }
     
+    /// <summary>
+    /// Generates a new friendly character based on the class data.
+    /// </summary>
     private void InitializeClassData()
     {
+        if (_classData == null)
+        {
+            return;
+        }
+            
         // Set values from class data.
         _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(_classData.minHealthPoints, _classData.maxHealthPoints + 1);
         _currentSpeed = _baseSpeed =  UnityEngine.Random.Range(_classData.minSpeed, _classData.maxSpeed + 1);
@@ -116,7 +129,18 @@ public class Character : MonoBehaviour
     /// </summary>
     private void InitializeAbilities()
     {
+        if (CombatManager._instance == null)
+        {
+            return;
+        }
+        _availableAbilities = new List<Ability>();
         _availableAbilities = CombatManager._instance.GetClassAbilities(_characterClass);
+    }
+
+    private IEnumerator WaitForCombatManager()
+    {
+        yield return new WaitUntil(() => CombatManager._instance != null);
+        InitializeAbilities();
     }
     
     public void TakeDamage(int damage)
