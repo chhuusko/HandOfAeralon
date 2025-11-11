@@ -840,6 +840,34 @@ public class GridMaker3D : EditorWindow
         _characterListSO.ApplyModifiedProperties();
     }
 
+    private void RemoveCharacterEntry(int gridX, int gridZ, CharacterEntry characterEntry)
+    {
+        _characterListSO.Update();
+        for (int i = 0; i < _characterListProperty.arraySize; i++)
+        {
+            SerializedProperty entryProp = _characterListProperty.GetArrayElementAtIndex(i);
+            Vector2 tileIndex = entryProp.FindPropertyRelative("_tileIndex").vector2IntValue;
+
+            if ((int)tileIndex.x == gridX && (int)tileIndex.y == gridZ)
+            {
+                // Remove existing Character reference
+                SerializedProperty oldCharacterProp = entryProp.FindPropertyRelative("_character");
+                GameObject oldCharacterGO = oldCharacterProp.objectReferenceValue as GameObject;
+
+                if (oldCharacterGO != null)
+                    Undo.DestroyObjectImmediate(oldCharacterGO);
+
+                entryProp.FindPropertyRelative("_characterClass").enumValueIndex = (int)CharacterClass.None; 
+                entryProp.FindPropertyRelative("_position").vector3Value = Vector3.zero;
+                entryProp.FindPropertyRelative("_size").vector3Value = Vector3.one;
+                
+                _characterListProperty.DeleteArrayElementAtIndex(i);
+                _characterListSO.ApplyModifiedProperties();
+                return;
+            }
+        }
+
+    }
     private void SetGridSize(int width, int height)
     {
         SerializedProperty entriesProp = _tileGridHolderSO.FindProperty("_tileEntries");
@@ -1093,13 +1121,12 @@ public class GridMaker3D : EditorWindow
             return;
         }
 
-        if(existingTileEntry._occupant == null)
-            existingTileEntry._occupant = newCharacterPrefab;
-        else
-        {
-            Undo.DestroyObjectImmediate(existingTileEntry._occupant);
-            //return;
-        }
+        //if(existingTileEntry._occupant == null)
+        //    existingTileEntry._occupant = newCharacterPrefab;
+        //else
+        //{
+        //    Undo.DestroyObjectImmediate(existingTileEntry._occupant);
+        //}
 
         // Compute world-space position
         Renderer ren = newCharacterPrefab.GetComponent<Renderer>();
@@ -1121,7 +1148,16 @@ public class GridMaker3D : EditorWindow
         CharacterEntry newCharacterEntry = new CharacterEntry(worldPos, Vector3.one, newCharacterPrefab, parent, gridPos);
         Undo.RegisterCreatedObjectUndo(newCharacterEntry._character, "Placed/Created Character");
 
-        AddOrReplaceCharacterEntry(gridX, gridZ, newCharacterEntry);
+        if(newCharacterEntry._character.CompareTag("DeleteCharacterBrush"))
+        {
+            RemoveCharacterEntry(gridX, gridZ,  newCharacterEntry);
+            DestroyImmediate(newCharacterEntry._character);
+        }
+        else
+        {
+            AddOrReplaceCharacterEntry(gridX, gridZ, newCharacterEntry);
+        }
+            
     }
 
 
@@ -1242,11 +1278,13 @@ public class GridMaker3D : EditorWindow
         {
             GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
             Debug.Log($"Loading character: {characterPrefab.name}");
-            _characterList._characterList.Add(new CharacterEntry(characterData.GetCharacterPosition(),
+            CharacterEntry characterEntry = new CharacterEntry(characterData.GetCharacterPosition(),
+
                                                                  Vector3.one, // TODO (Calle): The Size is saved based on the renderer.bounds.size i think, so saving and loading multiple time will make characters bigger each time HAHA! XD
                                                                  characterPrefab,
                                                                  parent,
-                                                                 characterData.GetTileIndex()));
+                                                                 characterData.GetTileIndex());
+            _characterList._characterList.Add(characterEntry);
         }
         _characterListSO.Update();
 
