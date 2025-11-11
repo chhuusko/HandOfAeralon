@@ -1,16 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public struct GameData
 {
     public int saveSlot;
-    public string playTime;
     public int seed;
-    int seedInfo; // seedInfo current nod index
-    // heroList
-    // cardList
-    int coins;
-    // other
+    public int level; 
+    public int coins;
+
+    public List<Character> heroList;
+    public List<Card> cardList;
+
 }
 
 public class GlobalGameManager : MonoBehaviour
@@ -28,11 +29,14 @@ public class GlobalGameManager : MonoBehaviour
     }
     public void LoadGame(int slot)
     {
-        
+        //TODO
     }
-    public void SaveGame()
+    public void SaveGame(List<Character> heroList, List<Card> cardList, int level, int coins)
     {
-        // Update seedInfo etc
+        _currentGame.heroList = heroList;
+        _currentGame.cardList = cardList;
+        _currentGame.level = level;
+        _currentGame.coins = coins;
 
     }
     public void StartNewGame(int slot)
@@ -40,11 +44,12 @@ public class GlobalGameManager : MonoBehaviour
         _currentGame = new GameData();
         _currentGame.saveSlot = slot;
         _currentGame.seed = Random.Range(0, 1000);
-        SceneManager.LoadScene(1);
+        _currentGame.coins = 0;
+        SceneManager.LoadScene(1); //TODO
     }
     public void JSONWrite()
     {
-
+        //TODO
     }
 }
 
