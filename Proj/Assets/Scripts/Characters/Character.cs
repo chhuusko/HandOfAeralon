@@ -68,6 +68,11 @@ public class Character : MonoBehaviour
         return _currentTileIndex;
     }
 
+    public GameObject GetCurrentTile()
+    {
+        return CombatManager._instance.GetTileAtCoord(_currentTileIndex.x, _currentTileIndex.y);
+    }
+
     public void SetCharacterClass(CharacterClass characterClass)
     {
         _characterClass = characterClass;
