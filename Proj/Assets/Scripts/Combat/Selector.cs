@@ -149,7 +149,6 @@ public class Selector : MonoBehaviour
         }
         if(_pendingCharacterActionType == CharacterActionType.AbilityCasting && _pendingAbility != null)
         {
-            //_selectedCharacter.AbilityHandler.UseAbility(_pendingAbility, tile);
             _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_pendingAbility, tile);
         }
     }
