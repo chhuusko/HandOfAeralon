@@ -13,6 +13,7 @@ public class CardHandManager : MonoBehaviour
     [SerializeField] private List<CardContainer> _cardsInHand;
     [SerializeField] private int _maxHand = 3;
     [SerializeField] private CardList _cardList;
+    private int _mana = 0;
 
     private void Awake()
     {
@@ -69,6 +70,14 @@ public class CardHandManager : MonoBehaviour
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
         drawHand();
+    }
+    public void ChangeMana(int change)
+    {
+
+    }
+    public void SetUIActive(bool isActive)
+    {
+        gameObject.SetActive(isActive);
     }
 
 
