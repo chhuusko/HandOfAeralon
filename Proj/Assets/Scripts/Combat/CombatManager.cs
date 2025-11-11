@@ -69,23 +69,31 @@ public class CombatGrid
         Vector2 tileIndex = tileData.GetTileIndex();
         Vector3 instancePos = tileData.GetTilePosition();
 
-        GameObject tilePrefab = _tilePrefabLibrary.GetPrefab(tileData.GetTileType());
-        GameObject tileObject = Object.Instantiate(tilePrefab, instancePos, Quaternion.identity);
+        if(_tilePrefabLibrary != null)
+        {
+            GameObject tilePrefab = _tilePrefabLibrary.GetPrefab(tileData.GetTileType());
+            GameObject tileObject = Object.Instantiate(tilePrefab, instancePos, Quaternion.identity);
 
-        tileObject.transform.localScale = tileData.GetTileSize();
-        tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
-        tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
+            tileObject.transform.localScale = tileData.GetTileSize();
+            tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
+            tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
 
-        if (tileData.IsWalkable())
-            tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
+            if (tileData.IsWalkable())
+                tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
+            else
+            {
+                var modifier = tileObject.AddComponent<NavMeshModifier>();
+                modifier.overrideArea = true;
+                modifier.area = UnityEngine.AI.NavMesh.GetAreaFromName("Not Walkable");
+            }
+
+            tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
+        }
         else
         {
-            var modifier = tileObject.AddComponent<NavMeshModifier>();
-            modifier.overrideArea = true;
-            modifier.area = UnityEngine.AI.NavMesh.GetAreaFromName("Not Walkable");
+            Debug.Log("No TilePrefabLibrary assigned in inspector!");
         }
-
-        tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
+       
     }
 
     public List<GameObject> GetAllCharacters() { return _charactersGO; }

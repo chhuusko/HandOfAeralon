@@ -149,13 +149,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88fa36bad48de2f4eb63c68ee20133f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fileToLoadDEBUG: map2
+  _fileToLoadDEBUG: Map2
   _combatCamera: {fileID: 369287419}
   _combatState: 0
   _currentTurn: 0
   _combatGrid:
-    _tilePrefabLibrary: {fileID: 0}
-    _characterPrefabLibrary: {fileID: 0}
+    _tilePrefabLibrary: {fileID: 11400000, guid: 04a120cb18f76f341b4fa433f2de3433,
+      type: 2}
+    _characterPrefabLibrary: {fileID: 11400000, guid: f195d2af34a2acb49b53403b1e543287,
+      type: 2}
     _height: 0
     _width: 0
     _tileSize: {x: 0, y: 0, z: 0}
@@ -600,7 +602,7 @@ Transform:
   m_GameObject: {fileID: 834902871}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.36898196, z: -0, w: 0.9294366}
-  m_LocalPosition: {x: 3.33, y: 0.79, z: 7.1}
+  m_LocalPosition: {x: 3.14, y: 0.79, z: 7.28}
   m_LocalScale: {x: 6.486432, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -664,7 +666,7 @@ Transform:
   m_GameObject: {fileID: 896936057}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -39.18, y: -88.4, z: 34.2}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
