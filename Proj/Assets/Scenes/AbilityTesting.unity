@@ -1160,7 +1160,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &448174313
 Transform:
   m_ObjectHideFlags: 0
@@ -3631,7 +3631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88fa36bad48de2f4eb63c68ee20133f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fileToLoadDEBUG: map4
+  _fileToLoadDEBUG: map1
   _combatCamera: {fileID: 0}
   combatState: 1
   currentTurn: 0
