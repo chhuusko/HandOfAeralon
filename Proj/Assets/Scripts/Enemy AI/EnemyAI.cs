@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.TextCore.Text;
+using static UnityEngine.GraphicsBuffer;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -22,64 +24,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (!_bDebug) return;
 
-        Character currentCharacter = CombatManager._instance.GetNextTurnCharacter().GetComponent<Character>();
-        if (currentCharacter == null || currentCharacter.GetFaction() != Faction.Enemy)
-        {
-            if (_bDebug) Debug.Log($"EnemyAI.cs | Not my turn...");
-            return;
-        }
-
-        if (_bDebug) Debug.Log($"EnemyAI.cs | currentCharacter == {currentCharacter.name}");
-
-        List<Character> playerCharacters = CombatManager
-            ._instance.GetAllFriendlyCharacters()
-            .Select(obj => obj.GetComponent<Character>())
-            .Where(ch => ch != null)
-            .ToList();
-
-        Character closestPlayerCharacter = _testCharacter;
-
-        if (_bDebug) Debug.Log($"EnemyAI.cs | closestPlayerCharacter == {closestPlayerCharacter.name}");
-
-        if (GridExplorer._instance.ManhattanDistance(
-            CombatManager._instance.GetTileAtCoord(currentCharacter.GetCurrentTileIndex().x, currentCharacter.GetCurrentTileIndex().y),
-            CombatManager._instance.GetTileAtCoord(closestPlayerCharacter.GetCurrentTileIndex().x, closestPlayerCharacter.GetCurrentTileIndex().y))
-            <= 2) // Bör vara -> currentCharacter.GetAttackRange()
-        {
-            closestPlayerCharacter.TakeDamage(currentCharacter.GetDamage()); // Bör vara -> currentCharacter.Attack(closestPlayerCharacter);
-            return;
-        }
-
-        if (_bDebug) Debug.Log($"EnemyAI.cs | {closestPlayerCharacter.name} outside attack range.");
-
-        GameObject currentTile = currentCharacter.GetCurrentTileComponent().gameObject;
-        List<GameObject> reachableTiles = GridExplorer._instance.GetTilesInRange(currentTile, 10, true); // Bör vara -> currentCharacter.GetMoveRange()
-
-        float min = float.MaxValue;
-        GameObject closestTileToTarget = null;
-        foreach (var tile in reachableTiles)
-        {
-            float distance = Vector3.Distance(tile.transform.position, closestPlayerCharacter.transform.position);
-            if (distance < min)
-            {
-                min = distance;
-                closestTileToTarget = tile;
-            }
-        }
-
-        currentCharacter.SetMoveTarget(closestTileToTarget.transform.position);
-        if (_bDebug) Debug.Log($"EnemyAI.cs | Moving {currentCharacter.name} to {currentCharacter.GetCurrentTileIndex()}");
-
-        if (GridExplorer._instance.ManhattanDistance(
-            CombatManager._instance.GetTileAtCoord(currentCharacter.GetCurrentTileIndex().x, currentCharacter.GetCurrentTileIndex().y),
-            CombatManager._instance.GetTileAtCoord(closestPlayerCharacter.GetCurrentTileIndex().x, closestPlayerCharacter.GetCurrentTileIndex().y))
-            <= 2) // Bör vara -> currentCharacter.GetAttackRange()
-        {
-            closestPlayerCharacter.TakeDamage(currentCharacter.GetDamage()); // Bör vara -> currentCharacter.Attack(closestPlayerCharacter);
-            return;
-        }
-
-        if (_bDebug) Debug.Log($"EnemyAI.cs | {closestPlayerCharacter.name} outside attack range.");
+        OnEnemyTurnStart();
     }
 
     private void OnEnemyTurnStart()
@@ -90,9 +35,39 @@ public class EnemyAI : MonoBehaviour
             if (_bDebug) Debug.Log($"EnemyAI.cs | Not my turn...");
             return;
         }
-
+        GameObject currentTile = currentCharacter.GetCurrentTileComponent().gameObject;
         if (_bDebug) Debug.Log($"EnemyAI.cs | currentCharacter == {currentCharacter.name}");
 
+        Character closestPlayerCharacter = GetClosestPlayerCharacter(currentCharacter);
+        if (_bDebug && _testCharacter != null) closestPlayerCharacter = _testCharacter;
+        if (closestPlayerCharacter == null)
+        {
+            Debug.LogError($"EnemyAI.cs | closestPlayerCharacter NOT FOUND IN SCENE!");
+            return;
+        }
+        GameObject closestPlayerCharacterTile = closestPlayerCharacter.GetCurrentTileComponent().gameObject;
+        if (_bDebug) Debug.Log($"EnemyAI.cs | closestPlayerCharacter == {closestPlayerCharacter.name}");
+
+        if (TryAttack(currentTile, closestPlayerCharacterTile))
+        {
+            return;
+        }
+        if (_bDebug) Debug.Log($"EnemyAI.cs | {closestPlayerCharacter.name} outside attack range.");
+
+        GameObject chosenTile = FindPath(currentTile, closestPlayerCharacterTile);
+        if (chosenTile == null) return;
+        currentCharacter.SetMoveTarget(chosenTile.transform.position);
+        if (_bDebug) Debug.Log($"EnemyAI.cs | Moving {currentCharacter.name} to {chosenTile.GetComponent<CombatGridTile>().GetTileIndex()}");
+
+        if (TryAttack(chosenTile, closestPlayerCharacterTile))
+        {
+            return;
+        }
+        if (_bDebug) Debug.Log($"EnemyAI.cs | {closestPlayerCharacter.name} outside attack range.");
+    }
+
+    private Character GetClosestPlayerCharacter(Character currentCharacter)
+    {
         List<Character> playerCharacters = CombatManager
             ._instance.GetAllFriendlyCharacters()
             .Select(obj => obj.GetComponent<Character>())
@@ -111,46 +86,49 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        if (_bDebug) Debug.Log($"EnemyAI.cs | closestPlayerCharacter == {closestPlayerCharacter.name}");
+        return closestPlayerCharacter;
+    }
+
+    private bool TryAttack(GameObject fromTile, GameObject toTile)
+    {
+        Character myCharacter = fromTile.GetComponent<CombatGridTile>().GetOccupantCharacter();
+        Character target = toTile.GetComponent<CombatGridTile>().GetOccupantCharacter();
 
         if (GridExplorer._instance.ManhattanDistance(
-            currentCharacter.GetCurrentTileComponent().gameObject, 
-            closestPlayerCharacter.GetCurrentTileComponent().gameObject) 
+            fromTile,
+            toTile)
             <= 2) // Bör vara -> currentCharacter.GetAttackRange()
         {
-            closestPlayerCharacter.TakeDamage(currentCharacter.GetDamage()); // Bör vara -> currentCharacter.Attack(closestPlayerCharacter);
-            return;
+            target.TakeDamage(myCharacter.GetDamage()); // Bör vara -> currentCharacter.Attack(closestPlayerCharacter);
+            if (_bDebug) Debug.Log($"EnemyAI.cs | {myCharacter.name} strikes {target.name} for {myCharacter.GetDamage()} damage.");
+            return true;
         }
 
-        if (_bDebug) Debug.Log($"EnemyAI.cs | {closestPlayerCharacter.name} outside attack range.");
+        return false;
+    }
 
-        GameObject currentTile = currentCharacter.GetCurrentTileComponent().gameObject;
-        List<GameObject> reachableTiles = GridExplorer._instance.GetTilesInRange(currentTile, 3, true); // Bör vara -> currentCharacter.GetMoveRange()
+    private GameObject FindPath(GameObject currentTile, GameObject closestPlayerCharacterTile)
+    {
+        List<GameObject> pathToTarget = GridExplorer._instance.FindPath(currentTile, closestPlayerCharacterTile);
+        int moveRange = 3; // Bör vara -> currentCharacter.GetMoveRange()
 
-        min = float.MaxValue;
-        GameObject closestTileToTarget = null;
-        foreach (var tile in reachableTiles)
+        if (pathToTarget == null || pathToTarget.Count <= 1)
         {
-            float distance = Vector3.Distance(tile.transform.position, closestPlayerCharacter.transform.position);
-            if (distance < min)
+            Debug.LogError("EnemyAI.cs | No path found to target!");
+            return currentTile;
+        }
+
+        int targetIndex = Mathf.Min(moveRange, pathToTarget.Count - 1);
+        GameObject chosenTile = pathToTarget[targetIndex];
+
+        for (int i = 1; i <= moveRange && i < pathToTarget.Count; i++)
+        {
+            if (GridExplorer._instance.ManhattanDistance(pathToTarget[i], closestPlayerCharacterTile) > 2) // Bör vara -> currentCharacter.GetAttackRange()
             {
-                min = distance;
-                closestTileToTarget = tile;
+                chosenTile = pathToTarget[i];
             }
         }
 
-        currentCharacter.SetMoveTarget(closestTileToTarget.transform.position);
-        if (_bDebug) Debug.Log($"EnemyAI.cs | Moving {currentCharacter.name} to {currentCharacter.GetCurrentTileIndex()}");
-
-        if (GridExplorer._instance.ManhattanDistance(
-            currentCharacter.GetCurrentTileComponent().gameObject,
-            closestPlayerCharacter.GetCurrentTileComponent().gameObject)
-            <= 2) // Bör vara -> currentCharacter.GetAttackRange()
-        {
-            closestPlayerCharacter.TakeDamage(currentCharacter.GetDamage()); // Bör vara -> currentCharacter.Attack(closestPlayerCharacter);
-            return;
-        }
-
-        if (_bDebug) Debug.Log($"EnemyAI.cs | {closestPlayerCharacter.name} outside attack range.");
+        return chosenTile;
     }
 }

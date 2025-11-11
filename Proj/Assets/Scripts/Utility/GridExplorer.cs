@@ -19,6 +19,7 @@ public class GridExplorer : MonoBehaviour
 
     [SerializeField] private bool _bDebug = false;
     private List<GameObject> _debugReachableTiles = new();
+    private List<GameObject> _debugPath = new();
     private GameObject _debugStartTile;
 
     /// <summary>
@@ -36,9 +37,89 @@ public class GridExplorer : MonoBehaviour
     }
 
     /// <summary>
+    /// Performs a breadth-first search (BFS) from the given start tile to find a path from 'startTile' to 'goalTile'.
+    /// </summary>
+    /// <param name="startTile">The starting tile <see cref="GameObject"/> used as the origin of the search.</param>
+    /// <param name="goalTile">The tile <see cref="GameObject"/> used as the goal of the search.</param>
+    /// <returns>
+    /// A list of <see cref="GameObject"/> tiles that represent the path taken from 'startTile' to 'goalTile'.
+    /// </returns>
+    /// <remarks>
+    /// This method uses a grid-based breadth-first search (BFS) algorithm to traverse the map in four cardinal directions. 
+    /// It steps back when it can't find any more neighbours to explore (either already visited or unwalkable) and finds a different path.
+    /// It stops and returns the resulting path when it reaches the goal.
+    /// The method also updates internal debug fields (_debugStartTile and _debugPath) 
+    /// used for visualization in the editor.
+    /// </remarks>
+    public List<GameObject> FindPath(GameObject startTile, GameObject goalTile)
+    {
+        List<GameObject> result = new();
+
+        Vector2Int start = startTile.GetComponent<CombatGridTile>().GetTileIndex();
+        Vector2Int goal = goalTile.GetComponent<CombatGridTile>().GetTileIndex();
+
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            new Vector2Int(1, 0),
+            new Vector2Int(0, 1),
+            new Vector2Int(-1, 0),
+            new Vector2Int(0, -1)
+        };
+
+        Queue<Vector2Int> queue = new();
+        Dictionary<Vector2Int, Vector2Int> connection = new();
+        HashSet<Vector2Int> visited = new();
+        queue.Enqueue(start);
+        visited.Add(start);
+
+        while (queue.Count > 0)
+        {
+            Vector2Int current = queue.Dequeue();
+
+            if (current == goal)
+            {
+                result = BuildPath(connection, start, goal);
+                if (_bDebug) _debugStartTile = startTile;
+                if (_bDebug) _debugPath = result;
+                return result;
+            }
+
+            foreach (var dir in directions)
+            {
+                Vector2Int next = current + dir;
+
+                if (OutOfBounds(next)) continue;
+                if (!IsWalkable(next)) continue;
+                if (visited.Contains(next)) continue;
+
+                queue.Enqueue(next);
+                visited.Add(next);
+                connection[next] = current;
+            }
+        }
+
+        return new List<GameObject>(); // No path found
+    }
+
+    private List<GameObject> BuildPath(Dictionary<Vector2Int, Vector2Int> connection, Vector2Int start, Vector2Int goal)
+    {
+        List<GameObject> result = new();
+        Vector2Int current = goal;
+
+        while (connection.ContainsKey(current))
+        {
+            result.Insert(0, CombatManager._instance.GetTileAtCoord(current.x, current.y));
+            current = connection[current];
+        }
+
+        result.Insert(0, CombatManager._instance.GetTileAtCoord(start.x, start.y));
+        return result;
+    }
+
+    /// <summary>
     /// Performs a breadth-first search (BFS) from the given origin tile to find all tiles within the specified range.
     /// </summary>
-    /// <param name="origin">The starting tile GameObject used as the center of the search.</param>
+    /// <param name="origin">The starting tile <see cref="GameObject"/> used as the center of the search.</param>
     /// <param name="range">The maximum Manhattan distance (in tiles) to search from the origin.</param>
     /// <param name="checkWalkable">
     /// If true, only walkable tiles are included in the result. 
@@ -52,7 +133,7 @@ public class GridExplorer : MonoBehaviour
     /// It stops expanding when the specified range limit is reached or when encountering tiles marked as non-walkable 
     /// (if <paramref name="checkWalkable"/> is enabled). 
     /// 
-    /// The method also updates internal debug fields (<c>_debugStartTile</c> and <c>_debugReachableTiles</c>) 
+    /// The method also updates internal debug fields (_debugStartTile and _debugReachableTiles) 
     /// used for visualization in the editor.
     /// </remarks>
     public List<GameObject> GetTilesInRange(GameObject origin, int range, bool checkWalkable)
@@ -132,13 +213,19 @@ public class GridExplorer : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (!_bDebug || _debugReachableTiles == null || _debugReachableTiles.Count == 0)
+        if (!_bDebug || _debugStartTile == null)
         {
             return;
         }
 
         Gizmos.color = new Color(0, 1, 0, 0.5f);
         foreach (var element in _debugReachableTiles)
+        {
+            Gizmos.DrawCube(element.transform.position, CombatManager._instance.GetTileSize() * 0.9f);
+        }
+
+        Gizmos.color = new Color(1, 0, 1, 0.5f);
+        foreach (var element in _debugPath)
         {
             Gizmos.DrawCube(element.transform.position, CombatManager._instance.GetTileSize() * 0.9f);
         }
