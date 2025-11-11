@@ -361,4 +361,11 @@ public class CombatManager : MonoBehaviour
     {
         return combatGrid.GetTileAtCoord(x, y);
     }
+    public CombatGridTile GetTileComponent(int x, int y)
+    {
+        GameObject tileObject = GetTileAtCoord(x, y);
+        if (tileObject == null) return null;
+
+        return tileObject.GetComponent<CombatGridTile>();
+    }
 }

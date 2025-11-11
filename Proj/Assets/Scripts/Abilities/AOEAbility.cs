@@ -38,12 +38,11 @@ public abstract class AOEAbility : Ability
                 int checkX = (int)targetIndex.x + offsetX;
                 int checkY = (int)targetIndex.y + offsetY;
 
-                GameObject tileObject = CombatManager._instance.GetTileAtCoord(checkX, checkY);
-                if (tileObject == null) continue;
-
-                CombatGridTile nearbyTile = tileObject.GetComponent<CombatGridTile>();
+                CombatGridTile nearbyTile = CombatManager._instance.GetTileComponent(checkX, checkY);
                 if (nearbyTile != null)
+                {
                     tilesToEffect.Add(nearbyTile);
+                }
             }
         }
         return tilesToEffect;
