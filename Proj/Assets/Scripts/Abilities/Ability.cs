@@ -10,6 +10,8 @@ public abstract class Ability : ScriptableObject
 
     public abstract void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile);
 
+    protected abstract void ApplyEffectOnTile(CombatGridTile targetTile);
+
     public string GetAbilityName => _abilityName;
     public Sprite GetIcon => _icon;
     public float GetRange => _range;
