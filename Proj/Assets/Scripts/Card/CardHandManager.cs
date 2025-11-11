@@ -75,14 +75,19 @@ public class CardHandManager : MonoBehaviour
         _mana += change;
         ManaChanged();
     }
-    public int GetMaxMana()
-    {
-        return _maxMana;
-    }
     public void SetUIActive(bool isActive)
     {
         gameObject.SetActive(isActive);
     }
+    public int GetMana()
+    {
+        return _mana;
+    }
+    public int GetMaxMana()
+    {
+        return _maxMana;
+    }
+    
 
 
 }
