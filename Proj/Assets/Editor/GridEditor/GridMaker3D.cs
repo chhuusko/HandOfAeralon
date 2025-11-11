@@ -1279,11 +1279,10 @@ public class GridMaker3D : EditorWindow
             GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
             Debug.Log($"Loading character: {characterPrefab.name}");
             CharacterEntry characterEntry = new CharacterEntry(characterData.GetCharacterPosition(),
-
-                                                                 Vector3.one, // TODO (Calle): The Size is saved based on the renderer.bounds.size i think, so saving and loading multiple time will make characters bigger each time HAHA! XD
-                                                                 characterPrefab,
-                                                                 parent,
-                                                                 characterData.GetTileIndex());
+                                                               Vector3.one, // TODO (Calle): The Size is saved based on the renderer.bounds.size i think, so saving and loading multiple time will make characters bigger each time HAHA! XD
+                                                               characterPrefab,
+                                                               parent,
+                                                               characterData.GetTileIndex());
             _characterList._characterList.Add(characterEntry);
         }
         _characterListSO.Update();

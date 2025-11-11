@@ -108,10 +108,10 @@ public class CombatGrid
     public void AddCharacter(CombatGridCharacterData characterData)
     {
         Vector2Int tileIndex = characterData.GetTileIndex();
-        Vector3 instancePos = characterData.GetCharacterPosition();
-        Faction faction = characterData.GetFaction();
-        int healthPoints = characterData.GetHealthPoints();
-        int initiative = characterData.GetInitiative();
+        Vector3 instancePos  = characterData.GetCharacterPosition();
+        Faction faction      = characterData.GetFaction();
+        int healthPoints     = characterData.GetHealthPoints();
+        int initiative       = characterData.GetInitiative();
 
         GameObject characterPrefab = characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
         GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, Quaternion.identity);
@@ -336,6 +336,21 @@ public class CombatManager : MonoBehaviour
 
     }
 
+    public List<GameObject> GetAllCharacters()
+    {
+        return combatGrid.GetAllCharacters();
+
+    }
+
+    public List<GameObject> GetEnemyCharacters()
+    {
+        return combatGrid.GetAllEnemyCharacters();
+    }
+
+    public List<GameObject> GetAllFriendlyCharacters()
+    {
+        return combatGrid.GetAllFriendlyCharacters();
+    }
     public Vector3 GetTileSize()
     {
         return combatGrid.GetTileSize();
