@@ -6,8 +6,6 @@ using UnityEngine.AI;
 
 public enum Faction { Friendly, Enemy }
 
-public enum BodyType { Masculine, Feminine }
-
 [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
 public class Character : MonoBehaviour
 {
@@ -15,7 +13,6 @@ public class Character : MonoBehaviour
     [SerializeField] private ClassData _classData;
     [SerializeField] private CharacterClass _characterClass;
     [SerializeField] private Faction _faction;
-    [SerializeField] private BodyType _bodyType;
     
     [Header("Base stats")]
     [SerializeField] private int _baseHealthPoints;
@@ -43,11 +40,6 @@ public class Character : MonoBehaviour
         return _faction;
     }
 
-    public BodyType GetBodyType()
-    {
-        return _bodyType;
-    }
-
     public int GetHealthPoints()
     {
         return _currentHealthPoints;
@@ -68,6 +60,11 @@ public class Character : MonoBehaviour
         return _currentTileIndex;
     }
 
+    public CombatGridTile GetCurrentTileComponent()
+    {
+        return CombatManager._instance.GetTileComponent(_currentTileIndex.x, _currentTileIndex.y);
+    }
+
     public void SetCharacterClass(CharacterClass characterClass)
     {
         _characterClass = characterClass;
@@ -76,11 +73,6 @@ public class Character : MonoBehaviour
     public void SetFaction(Faction faction)
     {
         _faction = faction;
-    }
-
-    public void SetBodyType(BodyType bodyType)
-    {
-        _bodyType = bodyType;
     }
 
     public void SetBaseHealthPoints(int healthPoints)
