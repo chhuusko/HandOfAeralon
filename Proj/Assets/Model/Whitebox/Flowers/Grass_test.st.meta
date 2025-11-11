@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 733c1a13c2b823b469ee88a96d98e3fc
+guid: 052939507b922f34c887d6fc0abdb1d5
 SpeedTreeImporter:
   externalObjects: {}
   serializedVersion: 7
@@ -18,6 +18,26 @@ SpeedTreeImporter:
   hasBillboard: 0
   lODSettings:
   - enableSettingOverride: 0
+    height: 0.5
+    castShadows: 1
+    receiveShadows: 1
+    useLightProbes: 1
+    reflectionProbeUsage: 1
+    enableBump: 1
+    enableHue: 0
+    enableSubsurface: 1
+    windQuality: 0
+  - enableSettingOverride: 0
+    height: 0.25
+    castShadows: 1
+    receiveShadows: 1
+    useLightProbes: 1
+    reflectionProbeUsage: 1
+    enableBump: 1
+    enableHue: 0
+    enableSubsurface: 1
+    windQuality: 0
+  - enableSettingOverride: 0
     height: 0.01
     castShadows: 1
     receiveShadows: 1
@@ -31,8 +51,8 @@ SpeedTreeImporter:
   animateCrossFading: 1
   billboardTransitionCrossFadeWidth: 0.25
   fadeOutWidth: 0.25
-  scaleFactor: 1
-  unitConversionEnumValue: 1
+  scaleFactor: 0.05
+  unitConversionEnumValue: 4
   motionVectorModeEnumValue: 1
   generateColliders: 1
   generateRigidbody: 1

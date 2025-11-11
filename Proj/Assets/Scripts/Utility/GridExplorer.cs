@@ -91,26 +91,22 @@ public class GridExplorer : MonoBehaviour
 
                 if (OutOfBounds(next))
                 {
-                    if (_debug)
-                        Debug.Log("GridExplorer.GetTilesInRange() | continue: OutOfBounds(next)");
+                    //Debug.Log("GridExplorer.GetTilesInRange() | continue: OutOfBounds(next)");
                     continue;
                 }
                 if (checkWalkable && !IsWalkable(next))
                 {
-                    if (_debug)
-                        Debug.Log("GridExplorer.GetTilesInRange() | continue: !IsWalkable");
+                    //Debug.Log("GridExplorer.GetTilesInRange() | continue: !IsWalkable");
                     continue;
                 }
                 if (nextCost > range)
                 {
-                    if (_debug)
-                        Debug.Log("GridExplorer.GetTilesInRange() | continue: nextCost > range");
+                    //Debug.Log("GridExplorer.GetTilesInRange() | continue: nextCost > range");
                     continue;
                 }
                 if (cost.ContainsKey(next))
                 {
-                    if (_debug)
-                        Debug.Log("GridExplorer.GetTilesInRange() | continue: cost.ContainsKey(next)");
+                    //Debug.Log("GridExplorer.GetTilesInRange() | continue: cost.ContainsKey(next)");
                     continue;
                 }
 

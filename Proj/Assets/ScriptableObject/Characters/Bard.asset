@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bded9f9cfcd7f36499942bd29fde2d69, type: 3}
   m_Name: Bard
   m_EditorClassIdentifier: 
-  characterClass: 0
-  minHealthPoints: 0
-  maxHealthPoints: 0
-  minInitiative: 0
-  maxInitiative: 0
+  characterClass: 3
+  minHealthPoints: 5
+  maxHealthPoints: 9
+  minSpeed: 2
+  maxSpeed: 4
+  minDamage: 3
+  maxDamage: 5
   abilities: []
-  classPrefab: {fileID: 4723980006632172988, guid: 08c53dfd7725ef647bb669a5fd9ed596,
-    type: 3}

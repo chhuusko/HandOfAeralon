@@ -11,8 +11,10 @@ public class ClassData : ScriptableObject
     [Header("Base Stats")] 
     public int minHealthPoints;
     public int maxHealthPoints;
-    public int minInitiative;
-    public int maxInitiative;
+    public int minSpeed;
+    public int maxSpeed;
+    public int minDamage;
+    public int maxDamage;
     
     [Header("Abilities")]
     public List<Ability> abilities;

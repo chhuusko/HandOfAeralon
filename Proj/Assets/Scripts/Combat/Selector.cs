@@ -1,21 +1,19 @@
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.EventSystems;
 
 public class Selector : MonoBehaviour
 {
-    public static Selector Instance {  get; private set; }
+    public static Selector _instance {  get; private set; }
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if(_instance != null && _instance != this)
         {
             Destroy(this);
         }
         else
         {
-            Instance = this;
+            _instance = this;
         }
     }
 
@@ -28,11 +26,15 @@ public class Selector : MonoBehaviour
     }
 
     private SelectorState _currentState = SelectorState.NonActive;
-    private Character _selectedCharacter; 
+    private Character _selectedCharacter;
+    private Ability _pendingAbility;
+    private bool _bDebugSelector = false;
+    // private ActionType _pendingActionType;
+    
 
     void Start()
     {
-        
+        _bDebugSelector = true;
     }
 
     
@@ -43,11 +45,27 @@ public class Selector : MonoBehaviour
     }
 
     private void HandleTileClick()
-    {   
+    {
         // Execute different actions based on current state when clicking on tiles.
+        if (Camera.main == null)
+        {
+            Debug.LogError("No MainCamera found! Tag your camera as 'MainCamera'.");
+            return;
+        }
+        if (EventSystem.current == null)
+        {
+            Debug.LogError("No EventSystem in scene!");
+            return;
+        }
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             CombatGridTile clickedTile = GetTileUnderMouse();
+            if (_bDebugSelector && clickedTile != null)
+            {
+                Debug.Log("Clicked on tile " + clickedTile.gameObject);
+            }
             switch (_currentState)
             {
                 case SelectorState.NonActive: break;
@@ -60,29 +78,53 @@ public class Selector : MonoBehaviour
     private void HandleTileHover()
     {
         // Show info about character.
+        CombatGridTile hoveredTile = GetTileUnderMouse();
+
+        if (hoveredTile.GetOccupant().TryGetComponent<Character>(out var character)){
+            // TODO: Call UIControll script to show character info on character position.
+        }
     }
 
     private CombatGridTile GetTileUnderMouse()
     {
-        // Check mouse position, cast ray cast to detect tile and return it if found.
         
+
+        // Cast ray cast from mouse to detect tile and return it if found.
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        int tileMask = LayerMask.GetMask("Tile");
+
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, tileMask))
+        {
+            // Check for tile script on gameobject.
+            if (hit.collider.TryGetComponent(out CombatGridTile tile)) return tile;
+        }
+
         return null;
     }
 
     private void TrySelectCharacter(CombatGridTile tile)
     {
-        if(tile.GetOccupant().TryGetComponent<Character>(out var character)){
-            // check if it's the characters turn and the character is friendly
-            // If so, enable UI
-            if(character.GetFaction() == Faction.Friendly /* && character.IsCharactersTurn*/)
-            {
+       if(!tile.GetOccupant().TryGetComponent<Character>(out var character))
+        {
+            DeselectCharacter();
+            return;
+        }
 
-            }
+        bool bIsFriendly = character.GetFaction() == Faction.Friendly;
+        bool bIsCharactersTurn = character == CombatManager._instance.GetNextTurnCharacter();
+
+        if (bIsFriendly && bIsCharactersTurn)
+        {
             ShowCharacterOptions(character);
             _currentState = SelectorState.CharacterSelected;
             _selectedCharacter = character;
         }
-
+    }
+    private void DeselectCharacter()
+    {
+        // Deactivate UI
+        _selectedCharacter = null;
+        _pendingAbility = null;
     }
 
     private void ShowCharacterOptions(Character Character)
