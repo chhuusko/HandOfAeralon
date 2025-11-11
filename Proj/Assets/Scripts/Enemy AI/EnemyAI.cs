@@ -13,6 +13,13 @@ public class EnemyAI : MonoBehaviour
         _inputActions = new();
         _inputActions.Enable();
         _inputActions.Player.Jump.performed += OnJump;
+
+        CombatManager._instance.EnemyTurnStart.AddListener(OnEnemyTurnStart);
+    }
+
+    private void OnEnemyTurnStart()
+    {
+
     }
 
     void OnJump(InputAction.CallbackContext context) // Byt ut mot "OnTurnStart"
@@ -55,7 +62,7 @@ public class EnemyAI : MonoBehaviour
         */
 
         GameObject currentTile = currentCharacter.GetCurrentTileComponent().gameObject;
-        List<GameObject> reachableTiles = GridExplorer._instance.GetTilesInRange(currentTile, currentCharacter.GetMoveRange(), true);
+        List<GameObject> reachableTiles = GridExplorer._instance.GetTilesInRange(currentTile, 3, true); // Bör vara -> currentCharacter.GetMoveRange()
 
         min = float.MaxValue;
         GameObject closestTileToTarget = null;

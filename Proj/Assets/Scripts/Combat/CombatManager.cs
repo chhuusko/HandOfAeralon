@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
 using Object = UnityEngine.Object;
 
@@ -167,6 +168,8 @@ public class CombatManager : MonoBehaviour
     [Header("Abilities")]
     [SerializeField] private List<ClassAbilities> _classAbilities;
     private Dictionary<CharacterClass, List<Ability>> _classAbilitiesDictionary;
+
+    public UnityEvent EnemyTurnStart = new();
     
     private void Awake()
     {
@@ -305,7 +308,7 @@ public class CombatManager : MonoBehaviour
 
     private void HandleEnemyTurn()
     {
-
+        EnemyTurnStart.Invoke();
     }
 
     private void HandleEndCombat()
