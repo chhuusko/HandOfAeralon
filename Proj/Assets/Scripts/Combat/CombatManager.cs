@@ -298,9 +298,9 @@ public class CombatManager : MonoBehaviour
     private void HandlePlayerTurn()
     {
         GameObject nextCharacter = GetNextTurnCharacter();
-        
-        // TODO: Call selector with character.
 
+        // TODO: Call selector with character.
+        Selector._instance.SetCurrentState(Selector.SelectorState.Idle);
     }
 
     private void HandleEnemyTurn()
