@@ -1,31 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class EnemyAI : MonoBehaviour
 {
-    // Måste ha en bild av game state (i.e vart står alla units)
-    // Ge kommandon åt sina trupper
-    // Attackera närmaste fiende
-    // Retirera om låg hälsa
-    // Flytta närmre om inget annat vettigt drag kan göras
-
-    /* Nice-to-haves:
-     * Olika targets värderas olika -> låg hälsa hög prio, healer hög prio, tank låg prio, inom lethal range superhög prio
-     * rng för att slumpa drag
-     * olika spelstilar
-     * använder olika trupp-klasser på olika sätt
-     */
-
-    /* Hur den ska fungera:
-     * Loopa igenom alla möjliga tiles att gå till,
-     * för varje tile -> kolla om någon attack eller ability kan nå en spelare
-     * för varje möjligt drag (move+ability) räkna ut ett värde för det draget
-     */
-
     private InputSystem_Actions _inputActions;
+    [SerializeField] private bool _debug = false;
 
     void Start()
     {
@@ -39,84 +20,66 @@ public class EnemyAI : MonoBehaviour
         Character currentCharacter = CombatManager._instance.GetNextTurnCharacter().GetComponent<Character>();
         if (currentCharacter == null || currentCharacter.GetFaction() != Faction.Enemy)
         {
+            if (_debug) Debug.Log($"EnemyAI.cs | Not my turn...");
             return;
         }
 
-        List<Character> playerTroops = 
-
-        List<DummyCharacter> playerTroops = GameObject
-            .FindGameObjectsWithTag("Character")
-            .Select(obj => obj.GetComponent<DummyCharacter>())
-            .Where(dc => dc != null)
+        List<Character> playerCharacters = CombatManager
+            ._instance.GetAllFriendlyCharacters()
+            .Select(obj => obj.GetComponent<Character>())
+            .Where(ch => ch != null)
             .ToList();
 
         float min = float.MaxValue;
-        DummyCharacter closestTroop = null;
-        foreach (var troop in playerTroops)
+        Character closestPlayerCharacter = null;
+        foreach (var playerCharacter in playerCharacters)
         {
-            float distance = Vector3.Distance(transform.position, troop.transform.position);
+            float distance = Vector3.Distance(currentCharacter.transform.position, playerCharacter.transform.position);
             if (distance < min)
             {
                 min = distance;
-                closestTroop = troop;
+                closestPlayerCharacter = playerCharacter;
             }
         }
 
-        Debug.Log($"Closest troop = {closestTroop.name}");
+        if (_debug) Debug.Log($"EnemyAI.cs | closestPlayerCharacter == {closestPlayerCharacter.name}");
 
-        if (GridExplorer._instance.ManhattanDistance(_dummyScript.GetTile(), closestTroop.GetTile()) <= _dummyScript.GetAttackRange())
+        /* Attempt attack
+        if (GridExplorer._instance.ManhattanDistance(currentCharacter.GetCurrentTileComponent().gameObject, closestPlayerCharacter.GetCurrentTileComponent().gameObject) <= currentCharacter.GetAttackRange())
         {
-            _dummyScript.Attack(closestTroop.gameObject);
+            currentCharacter.Attack(closestPlayerCharacter);
             return;
         }
 
-        Debug.Log($"{closestTroop.name} out of attack range.");
-
-        GameObject currentTile = _dummyScript.GetTile();
-        List<GameObject> reachableTiles = GridExplorer._instance.GetTilesInRange(currentTile, _dummyScript.GetMoveRange(), true);
-
-        min = 9999f;
-        GameObject closestTile = null;
-        foreach (var tile in reachableTiles)
-        {
-            float distance = Vector3.Distance(tile.transform.position, closestTroop.transform.position);
-            if (distance < min)
-            {
-                min = distance;
-                closestTile = tile;
-            }
-        }
-
-        _dummyScript.MoveTo(closestTile);
-        Debug.Log($"Moving {_dummyTroop.name}");
-
-        if (GridExplorer._instance.ManhattanDistance(_dummyScript.GetTile(), closestTroop.GetTile()) <= _dummyScript.GetAttackRange())
-        {
-            _dummyScript.Attack(closestTroop.gameObject);
-            return;
-        }
-
-        Debug.Log($"{closestTroop.name} out of attack range.");
-
-        /*
-        List<AIAction> scoredActions = new();
-        foreach (var tile in reachableTiles)
-        {
-            ScoreAIActionOptions(tile);
-        }
-
-        randomTop5Index = Random.Range(scoredActions.Count - 5, scoredActions.Count);
-        PerformAIAction(scoredActions(randomTop5Index));
-
-        Debug.Log($"Random index: {randomIndex}");
-        Debug.Log($"tiles[randomIndex]: {tiles[randomIndex]}");
-        Debug.DrawLine(tiles[randomIndex].transform.position, tiles[randomIndex].transform.position + Vector3.up * 3f, Color.red, 5f);
-        Debug.Log($"AI_Controller started at {tiles[randomIndex].transform.position}");
-        foreach (var element in reachableTiles)
-        {
-            Debug.Log($"AI_Controller can reach {element.transform.position}");
-        }
+        if (_debug) Debug.Log($"EnemyAI.cs | {closestPlayerCharacter.name} out of attack range.");
         */
 
+        GameObject currentTile = currentCharacter.GetCurrentTileComponent().gameObject;
+        List<GameObject> reachableTiles = GridExplorer._instance.GetTilesInRange(currentTile, currentCharacter.GetMoveRange(), true);
+
+        min = float.MaxValue;
+        GameObject closestTileToTarget = null;
+        foreach (var tile in reachableTiles)
+        {
+            float distance = Vector3.Distance(tile.transform.position, closestPlayerCharacter.transform.position);
+            if (distance < min)
+            {
+                min = distance;
+                closestTileToTarget = tile;
+            }
+        }
+
+        currentCharacter.SetMoveTarget(closestTileToTarget.transform.position);
+        Debug.Log($"EnemyAI.cs | Moving {currentCharacter.name} to {currentCharacter.GetCurrentTileIndex()}");
+
+        /* Attempt attack
+        if (GridExplorer._instance.ManhattanDistance(currentCharacter.GetCurrentTileComponent().gameObject, closestPlayerCharacter.GetCurrentTileComponent().gameObject) <= currentCharacter.GetAttackRange())
+        {
+            currentCharacter.Attack(closestPlayerCharacter);
+            return;
+        }
+
+        if (_debug) Debug.Log($"EnemyAI.cs | {closestPlayerCharacter.name} out of attack range.");
+        */
     }
 }
