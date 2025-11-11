@@ -6,7 +6,8 @@ using UnityEngine;
 public class CharacterPrefabEntry
 {
     public CharacterClass _classType;
-    public List<GameObject> _prefabList;
+    public GameObject _prefab;
+    //public List<GameObject> _prefabList; // NOTE (Calle): For multiple models
 }
 
 [CreateAssetMenu(fileName = "CharacterPrefabLibrary", menuName = "Scriptable Objects/Character Prefab Library")]
@@ -14,26 +15,42 @@ public class CharacterPrefabLibrary : ScriptableObject
 {
     public List<CharacterPrefabEntry> _characterPrefabs;
 
-    private Dictionary<CharacterClass, List<GameObject>> _dictionary;
+    //private Dictionary<CharacterClass, List<GameObject>> _dictionary; // Note (Calle): For Multiple Models
+    private Dictionary<CharacterClass, GameObject> _dictionary;
 
     public GameObject GetPrefab(CharacterClass classType)
     {
-        if (_dictionary == null)
-        {
-            _dictionary = new Dictionary<CharacterClass, List<GameObject>>();
-            foreach (CharacterPrefabEntry entry in _characterPrefabs)
-            {
-                List<GameObject> list = _dictionary[entry._classType];
-                list.Add(entry._prefabList[0]);
-            }
-        }
 
-        // TODO (Calle): Wait to loop over the list untill we have a gender! :D
+        // NOTE (Calle): Use this if there are more different models to load based on BodyType or something else besides ClassType
+        //if (_dictionary == null)
+        //{
+        //    _dictionary = new Dictionary<CharacterClass, List<GameObject>>();
+        //    foreach (CharacterPrefabEntry entry in _characterPrefabs)
+        //    {
+        //        List<GameObject> list = _dictionary[entry._classType];
+        //        list.Add(entry._prefabList[0]);
+        //    }
+        //}
+
+        // TODO (Calle): Loop over the list based on secondary model identification! :D
         //foreach(GameObject character in _dictionary[classType])
         //{
         //    if(character.GetComponent<Character>().GetGender() == _dictionary[])
         //}
-        List<GameObject> characterListOfClass = _dictionary[classType];
-        return characterListOfClass[0];
+
+        if(_dictionary == null)
+        {
+            _dictionary = new Dictionary<CharacterClass, GameObject>();
+            foreach (CharacterPrefabEntry characterEntry in _characterPrefabs)
+            {
+                _dictionary[characterEntry._classType] = characterEntry._prefab;
+            }
+        }
+
+        // NOTE (Calle): For multiple models
+        //GameObject characterListOfClass = _dictionary[classType];
+        //return characterListOfClass[0];
+
+        return _dictionary[classType];
     }
 }
