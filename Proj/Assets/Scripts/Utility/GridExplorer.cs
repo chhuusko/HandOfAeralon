@@ -17,10 +17,16 @@ public class GridExplorer : MonoBehaviour
         }
     }
 
-    [SerializeField] private bool _debug = false;
+    [SerializeField] private bool _bDebug = false;
     private List<GameObject> _debugReachableTiles = new();
     private GameObject _debugStartTile;
 
+    /// <summary>
+    /// Calculates the ManhattanDistance between two tile objects (a.x - b.x + a.y - b.y).
+    /// </summary>
+    /// <param name="a">The GameObject of a GridTile.</param>
+    /// <param name="b">The GameObject of a GridTile.</param>
+    /// <returns>An int containing the ManhattanDistance value between object 'a' and object 'b'.</returns>
     public int ManhattanDistance(GameObject a, GameObject b)
     {
         Vector2Int c = a.GetComponent<CombatGridTile>().GetTileIndex();
@@ -49,7 +55,6 @@ public class GridExplorer : MonoBehaviour
     /// The method also updates internal debug fields (<c>_debugStartTile</c> and <c>_debugReachableTiles</c>) 
     /// used for visualization in the editor.
     /// </remarks>
-
     public List<GameObject> GetTilesInRange(GameObject origin, int range, bool checkWalkable)
     {
         List<GameObject> result = new();
@@ -80,22 +85,22 @@ public class GridExplorer : MonoBehaviour
 
                 if (OutOfBounds(next))
                 {
-                    //Debug.Log("GridExplorer.GetTilesInRange() | continue: OutOfBounds(next)");
+                    if (_bDebug) Debug.Log("GridExplorer.GetTilesInRange() | continue: OutOfBounds(next)");
                     continue;
                 }
                 if (checkWalkable && !IsWalkable(next))
                 {
-                    //Debug.Log("GridExplorer.GetTilesInRange() | continue: !IsWalkable");
+                    if (_bDebug) Debug.Log("GridExplorer.GetTilesInRange() | continue: !IsWalkable");
                     continue;
                 }
                 if (nextCost > range)
                 {
-                    //Debug.Log("GridExplorer.GetTilesInRange() | continue: nextCost > range");
+                    if (_bDebug) Debug.Log("GridExplorer.GetTilesInRange() | continue: nextCost > range");
                     continue;
                 }
                 if (cost.ContainsKey(next))
                 {
-                    //Debug.Log("GridExplorer.GetTilesInRange() | continue: cost.ContainsKey(next)");
+                    if (_bDebug) Debug.Log("GridExplorer.GetTilesInRange() | continue: cost.ContainsKey(next)");
                     continue;
                 }
 
@@ -105,8 +110,8 @@ public class GridExplorer : MonoBehaviour
             }
         }
 
-        _debugStartTile = CombatManager._instance.GetTileAtCoord(start.x, start.y);
-        _debugReachableTiles = result;
+        if (_bDebug) _debugStartTile = CombatManager._instance.GetTileAtCoord(start.x, start.y);
+        if (_bDebug) _debugReachableTiles = result;
         return result;
     }
 
@@ -127,7 +132,7 @@ public class GridExplorer : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (!_debug || _debugReachableTiles == null || _debugReachableTiles.Count == 0)
+        if (!_bDebug || _debugReachableTiles == null || _debugReachableTiles.Count == 0)
         {
             return;
         }
