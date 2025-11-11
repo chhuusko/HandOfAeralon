@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-
-
 public enum Faction { Friendly, Enemy }
 
 [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
@@ -25,13 +23,9 @@ public class Character : MonoBehaviour
     [SerializeField] private int _currentSpeed;
     [SerializeField] private int _currentDamage;
     
+    [Header("Misc")]
     [SerializeField] private Vector2Int _currentTileIndex;
-    
-    private Vector3 _movePosition;
-    private bool _bShouldMove;
     private List<Ability> _availableAbilities;
-    
-    private Rigidbody _rigidbody;
     private NavMeshAgent _navMeshAgent;
 
     public CharacterClass GetCharacterClass()
@@ -96,7 +90,6 @@ public class Character : MonoBehaviour
     
     private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
 
         // Only set class values for friendlies.
@@ -107,6 +100,9 @@ public class Character : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Generates a new friendly character based on the class data.
+    /// </summary>
     private void InitializeClassData()
     {
         if (_classData == null)
