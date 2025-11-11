@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -49,7 +50,7 @@ public class EnemyAI : MonoBehaviour
             .Where(dc => dc != null)
             .ToList();
 
-        float min = 9999f;
+        float min = float.MaxValue;
         DummyCharacter closestTroop = null;
         foreach (var troop in playerTroops)
         {
