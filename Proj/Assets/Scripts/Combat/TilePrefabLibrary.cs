@@ -6,6 +6,7 @@ public class TilePrefabEntry
 {
     public TileType type;
     public GameObject prefab;
+    //
 }
 
 [CreateAssetMenu(fileName = "TilePrefabLibrary", menuName = "Scriptable Objects/Tile Prefab Library")]

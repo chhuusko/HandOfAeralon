@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 [System.Serializable]
@@ -82,9 +83,18 @@ public class CombatGrid
             tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
             
             MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
-            Material inCombatTileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Shaders/CJ Test Shaders/TileShaderGraph.shadergraph");
+            Material inCombatTileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Shaders/CJ Test Shaders/TileMaterial.mat");
             if (inCombatTileMaterial != null)
-                meshRend.material = inCombatTileMaterial;
+            {
+                //meshRend.material = inCombatTileMaterial;
+
+                meshRend.sharedMaterials = new Material[] { inCombatTileMaterial };
+                meshRend.material.color = Color.white;
+                var block = new MaterialPropertyBlock();
+                meshRend.SetPropertyBlock(block);
+            }
+            
+
 
             if (tileData.IsWalkable())
                 tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
