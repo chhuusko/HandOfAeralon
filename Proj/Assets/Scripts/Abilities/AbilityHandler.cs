@@ -3,35 +3,44 @@ using UnityEngine;
 
 public class AbilityHandler : MonoBehaviour
 {
-    //[SerializeField] private List<Ability> _abilities;
-    //[SerializeField] private CombatGrid _combatGrid;
+    [SerializeField] private List<Ability> _abilities;
 
-    //List<CombatGridTile> _availableAbilityTargets;
+    List<CombatGridTile> _availableAbilityTargets = new List<CombatGridTile>();
 
-    ////characterCaster referens
+    Character _characterCaster;
+    CombatGridTile _casterTile;
 
-    //private void Start()
-    //{
-    //    // Character characterCaster = GetComponent<Character>
-    //}
-    //private void UseAbility(Ability ability /*, targetTile */)
-    //{
-    //    if (!CanCastAbility())
-    //    {
-    //        Debug.Log("Tried casting ability on inaccaptable target.");
-    //        return;
-    //    }
+    private void Start()
+    {
+        if (!TryGetComponent(out _characterCaster))
+        {
+            Debug.LogError("AbilityHandler is missing Character component!");
+            return;
+        }
+        GameObject tileObject = _characterCaster.GetCurrentTile();
+        if (tileObject == null) return;
+        _casterTile = tileObject.GetComponent<CombatGridTile>();
 
-    //    ability.RunAbility(characterCaster.currentTile, targetTile);
-    //}
-    
-    //private bool CanCastAbility(/* targetTile */)
-    //{
-    //    return _availableAbilityTargets.Contains(targetTile);
-    //}
-    
-    //private void CheckAbilityTargets(Ability ability)
-    //{
-    //    //_availableAbilityTargets = ability.targetingPattern.GetVaildTiles(characterCaster.currentTile)
-    //} 
+    }
+    public void UseAbility(Ability ability, CombatGridTile targetTile)
+    {
+        if (!CanCastAbility(targetTile))
+        {
+            Debug.Log("Tried casting ability on inaccaptable target.");
+            return;
+        }
+
+        ability.RunAbility(_casterTile, targetTile);
+    }
+
+    private bool CanCastAbility(CombatGridTile targetTile)
+    {
+        return _availableAbilityTargets.Contains(targetTile);
+    }
+
+    private List<CombatGridTile> CheckAbilityTargets(Ability ability)
+    {
+        //return ability.targetingPattern.GetValidTiles(_casterTile);
+        return null;
+    }
 }
