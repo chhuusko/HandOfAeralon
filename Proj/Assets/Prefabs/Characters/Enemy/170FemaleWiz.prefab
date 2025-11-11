@@ -111,7 +111,6 @@ MonoBehaviour:
   _classData: {fileID: 11400000, guid: c1990ae7986a8e4408509c2834db17ca, type: 2}
   _characterClass: 1
   _faction: 1
-  _bodyType: 1
   _baseHealthPoints: 0
   _baseSpeed: 0
   _baseDamage: 0
@@ -165,6 +164,6 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 3.4286952
-  m_BaseOffset: 1.7143476
+  m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4

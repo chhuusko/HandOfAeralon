@@ -9,38 +9,56 @@ public class CardHandManager : MonoBehaviour
     //Controlls hand 
 
     public static CardHandManager _instance;
+
     [SerializeField] private GameObject _CardContainer;
-    [SerializeField] private List<CardContainer> _cardsInHand;
-    [SerializeField] private int _maxHand = 3;
     [SerializeField] private CardList _cardList;
+    [SerializeField] private List<CardContainer> _cardsInHand;
+    [SerializeField] private List<Card> _cardsInDeck;
+    [SerializeField] private int _maxHand = 3;
+    
+    private int _maxMana = 5;
     private int _mana = 0;
 
+    public static Action<int> onManaChange;
+    public static CardHandManager GetInstance() {return _instance;}
+    public void ManaChanged(){ onManaChange?.Invoke(_mana); }
     private void Awake()
     {
         _instance = this;
+        AddRandomCardsToDeck();
         drawHand();
     }
-    public static CardHandManager GetInstance() {  return _instance; }
+    private void AddRandomCardsToDeck()
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            _cardsInDeck.Add(_cardList.GetRandomCard());
+        }
+    }
     public void drawHand()
     {
         _cardsInHand.RemoveAll(o => o == null);
+        if (_cardsInDeck.Count == 0)
+        {
+            AddRandomCardsToDeck();
+        }
         while (_maxHand > _cardsInHand.Count)
         {
-            AddCard();
+            AddCardFromDeck();
         }
+        
         AddSpaceing();
     }
-    public void AddCard()
+    public void AddCardFromDeck()
     {
         CardContainer newCardContainer = Instantiate(_CardContainer, transform).GetComponent<CardContainer>();
         _cardsInHand.Add(newCardContainer);
-        newCardContainer.AddCard(_cardList.GetRandomCard());
-        
+        newCardContainer.AddCard(_cardsInDeck[0]);
+        _cardsInDeck.RemoveAt(0);
     }
 
     public void AddSpaceing()
     {
-        
         for (int i = 0; i < _cardsInHand.Count; i++)
         {
             Vector3 position = transform.position + new Vector3(-(150f * (_cardsInHand.Count - 1)) / 2f, 0, 0) + new Vector3(i * 150f, 0, 0);
@@ -61,24 +79,31 @@ public class CardHandManager : MonoBehaviour
             _cardsInHand.Clear();
             drawHand();
         }
-        
-        
     }
     public void RemoveCard(CardContainer cardContainer)
     {
-        
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
         drawHand();
     }
     public void ChangeMana(int change)
     {
-
+        _mana += change;
+        ManaChanged();
     }
     public void SetUIActive(bool isActive)
     {
         gameObject.SetActive(isActive);
     }
+    public int GetMana()
+    {
+        return _mana;
+    }
+    public int GetMaxMana()
+    {
+        return _maxMana;
+    }
+    
 
 
 }
