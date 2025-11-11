@@ -121,7 +121,6 @@ public class CombatGrid
         characterObject.GetComponent<Character>().SetFaction(faction);
 
         _charactersGO.Add(characterObject);
-        
     }
 }
 

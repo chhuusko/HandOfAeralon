@@ -210,7 +210,7 @@ public class GridMaker3D : EditorWindow
             _tileBrushPrefabHolderSO.Update();
         }
 
-        string folderPathCharacterPrefabs = "Assets/Prefabs/Characters";
+        string folderPathCharacterPrefabs = "Assets/Prefabs/Characters/Enemy";
         string[] strCharacterPrefabGUIS = AssetDatabase.FindAssets("t:prefab", new string[] { folderPathCharacterPrefabs });
         foreach(string guid in strCharacterPrefabGUIS)
         {
@@ -1061,7 +1061,6 @@ public class GridMaker3D : EditorWindow
         AddOrReplaceTileEntry(gridX, gridZ, newTileEntry);
     }
 
-    // TODO (Calle): Implement PlaceCharacter!
     private void PlaceCharacter(Event currentEvent, Ray worldRay, Plane groundPlane)
     {
         var parent = GenerateParentRootObject(_strRootObjectForCharacters);

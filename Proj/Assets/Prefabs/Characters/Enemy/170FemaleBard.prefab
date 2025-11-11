@@ -62,11 +62,11 @@ PrefabInstance:
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: e7266cb7206c0e14b9b7a3e4da77098f, type: 2}
+      objectReference: {fileID: 2100000, guid: f6375975eae111f41b3c242cbde6917d, type: 2}
     - target: {fileID: 919132149155446097, guid: 5966de9a1cba28d45a4b7dbf0ddb2277,
         type: 3}
       propertyPath: m_Name
-      value: 170FemaleBarb
+      value: 170FemaleBard
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5966de9a1cba28d45a4b7dbf0ddb2277,
         type: 3}
@@ -108,9 +108,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4956f9c9bdd9845aef1f5ec39d41f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _classData: {fileID: 11400000, guid: 2d7e8f713be7ea34f9cd6d6ebad08875, type: 2}
-  _characterClass: 0
+  _classData: {fileID: 11400000, guid: 3a2b7892e63d2734288bb6a6d6712813, type: 2}
+  _characterClass: 3
   _faction: 1
+  _bodyType: 1
   _baseHealthPoints: 0
   _baseSpeed: 0
   _baseDamage: 0
