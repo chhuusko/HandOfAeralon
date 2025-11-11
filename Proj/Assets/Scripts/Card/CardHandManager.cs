@@ -9,10 +9,13 @@ public class CardHandManager : MonoBehaviour
     //Controlls hand 
 
     public static CardHandManager _instance;
+
     [SerializeField] private GameObject _CardContainer;
-    [SerializeField] private List<CardContainer> _cardsInHand;
-    [SerializeField] private int _maxHand = 3;
     [SerializeField] private CardList _cardList;
+    [SerializeField] private List<CardContainer> _cardsInHand;
+    [SerializeField] private List<Card> _cardsInDeck;
+    [SerializeField] private int _maxHand = 3;
+    
     private int _maxMana = 5;
     private int _mana = 0;
 
@@ -22,23 +25,36 @@ public class CardHandManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        AddRandomCardsToDeck();
         drawHand();
+    }
+    private void AddRandomCardsToDeck()
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            _cardsInDeck.Add(_cardList.GetRandomCard());
+        }
     }
     public void drawHand()
     {
         _cardsInHand.RemoveAll(o => o == null);
+        if (_cardsInDeck.Count == 0)
+        {
+            AddRandomCardsToDeck();
+        }
         while (_maxHand > _cardsInHand.Count)
         {
-            AddCard();
+            AddCardFromDeck();
         }
+        
         AddSpaceing();
     }
-    public void AddCard()
+    public void AddCardFromDeck()
     {
         CardContainer newCardContainer = Instantiate(_CardContainer, transform).GetComponent<CardContainer>();
         _cardsInHand.Add(newCardContainer);
-        newCardContainer.AddCard(_cardList.GetRandomCard());
-        
+        newCardContainer.AddCard(_cardsInDeck[0]);
+        _cardsInDeck.RemoveAt(0);
     }
 
     public void AddSpaceing()
