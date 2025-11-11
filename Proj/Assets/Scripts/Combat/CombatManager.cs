@@ -121,7 +121,6 @@ public class CombatGrid
         characterObject.GetComponent<Character>().SetFaction(faction);
 
         _charactersGO.Add(characterObject);
-        
     }
 }
 
@@ -360,5 +359,12 @@ public class CombatManager : MonoBehaviour
     public GameObject GetTileAtCoord(int x, int y)
     {
         return combatGrid.GetTileAtCoord(x, y);
+    }
+    public CombatGridTile GetTileComponent(int x, int y)
+    {
+        GameObject tileObject = GetTileAtCoord(x, y);
+        if (tileObject == null) return null;
+
+        return tileObject.GetComponent<CombatGridTile>();
     }
 }

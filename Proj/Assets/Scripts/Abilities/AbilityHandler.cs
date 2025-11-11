@@ -4,17 +4,20 @@ using UnityEngine;
 public class AbilityHandler : MonoBehaviour
 {
     [SerializeField] private List<Ability> _abilities;
-    [SerializeField] private CombatGrid _combatGrid;
 
-    List<CombatGridTile> _availableAbilityTargets;
+    List<CombatGridTile> _availableAbilityTargets = new List<CombatGridTile>();
 
-    Character characterCaster;
+    Character _characterCaster;
+    CombatGridTile _casterTile;
 
     private void Start()
     {
-        if(TryGetComponent<Character>(out var character)){
-            characterCaster = character;
+        if (!TryGetComponent(out _characterCaster))
+        {
+            Debug.LogError("AbilityHandler is missing Character component!");
+            return;
         }
+        CombatGridTile _casterTile = _characterCaster.GetCurrentTileComponent();
     }
     public void UseAbility(Ability ability, CombatGridTile targetTile)
     {
@@ -24,7 +27,7 @@ public class AbilityHandler : MonoBehaviour
             return;
         }
 
-        //ability.RunAbility(characterCaster.currentTile, targetTile);
+        ability.RunAbility(_casterTile, targetTile);
     }
 
     private bool CanCastAbility(CombatGridTile targetTile)
@@ -32,8 +35,9 @@ public class AbilityHandler : MonoBehaviour
         return _availableAbilityTargets.Contains(targetTile);
     }
 
-    private void CheckAbilityTargets(Ability ability)
+    private List<CombatGridTile> CheckAbilityTargets(Ability ability)
     {
-       // _availableAbilityTargets = ability.targetingPattern.GetVaildTiles(characterCaster.currentTile)
+        //return ability.targetingPattern.GetValidTiles(_casterTile);
+        return null;
     }
 }
