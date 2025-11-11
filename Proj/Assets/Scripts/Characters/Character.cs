@@ -9,10 +9,12 @@ public enum Faction { Friendly, Enemy }
 [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
 public class Character : MonoBehaviour
 {
-    [Header("Base stats")]
+    [Header("Character")]
     [SerializeField] private ClassData _classData;
     [SerializeField] private CharacterClass _characterClass;
     [SerializeField] private Faction _faction;
+    
+    [Header("Base stats")]
     [SerializeField] private int _baseHealthPoints;
     [SerializeField] private int _baseSpeed;
     [SerializeField] private int _baseDamage;
@@ -56,6 +58,11 @@ public class Character : MonoBehaviour
     public Vector2Int GetCurrentTileIndex()
     {
         return _currentTileIndex;
+    }
+
+    public GameObject GetCurrentTile()
+    {
+        return CombatManager._instance.GetTileAtCoord(_currentTileIndex.x, _currentTileIndex.y);
     }
 
     public void SetCharacterClass(CharacterClass characterClass)
