@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -25,33 +24,24 @@ public class EnemyAI : MonoBehaviour
      * för varje möjligt drag (move+ability) räkna ut ett värde för det draget
      */
 
-    [SerializeField] private GameObject _dummyTroop;
-    private DummyCharacter _dummyScript;
     private InputSystem_Actions _inputActions;
-    private CombatManager _combatManager;
 
     void Start()
     {
-        _dummyScript = _dummyTroop.GetComponent<DummyCharacter>();
-        if (_dummyScript == null)
-        {
-            Debug.LogError("DummyCharacter script NOT FOUND!");
-        }
-
-        _combatManager = FindFirstObjectByType<CombatManager>();
-        if (_combatManager == null)
-        {
-            Debug.LogError("EnemyAI._combatManager NOT FOUND IN SCENE!");
-        }
-
         _inputActions = new();
         _inputActions.Enable();
         _inputActions.Player.Jump.performed += OnJump;
     }
 
-    void OnJump(InputAction.CallbackContext context)
+    void OnJump(InputAction.CallbackContext context) // Byt ut mot "OnTurnStart"
     {
-        if (_dummyScript.GetOwner() != this.gameObject) return;
+        Character currentCharacter = CombatManager._instance.GetNextTurnCharacter().GetComponent<Character>();
+        if (currentCharacter == null || currentCharacter.GetFaction() != Faction.Enemy)
+        {
+            return;
+        }
+
+        List<Character> playerTroops = 
 
         List<DummyCharacter> playerTroops = GameObject
             .FindGameObjectsWithTag("Character")
@@ -73,7 +63,7 @@ public class EnemyAI : MonoBehaviour
 
         Debug.Log($"Closest troop = {closestTroop.name}");
 
-        if (GridExplorer.Instance.ManhattanDistance(_dummyScript.GetTile(), closestTroop.GetTile()) <= _dummyScript.GetAttackRange())
+        if (GridExplorer._instance.ManhattanDistance(_dummyScript.GetTile(), closestTroop.GetTile()) <= _dummyScript.GetAttackRange())
         {
             _dummyScript.Attack(closestTroop.gameObject);
             return;
@@ -82,7 +72,7 @@ public class EnemyAI : MonoBehaviour
         Debug.Log($"{closestTroop.name} out of attack range.");
 
         GameObject currentTile = _dummyScript.GetTile();
-        List<GameObject> reachableTiles = GridExplorer.Instance.GetTilesInRange(currentTile, _dummyScript.GetMoveRange(), true);
+        List<GameObject> reachableTiles = GridExplorer._instance.GetTilesInRange(currentTile, _dummyScript.GetMoveRange(), true);
 
         min = 9999f;
         GameObject closestTile = null;
@@ -99,7 +89,7 @@ public class EnemyAI : MonoBehaviour
         _dummyScript.MoveTo(closestTile);
         Debug.Log($"Moving {_dummyTroop.name}");
 
-        if (GridExplorer.Instance.ManhattanDistance(_dummyScript.GetTile(), closestTroop.GetTile()) <= _dummyScript.GetAttackRange())
+        if (GridExplorer._instance.ManhattanDistance(_dummyScript.GetTile(), closestTroop.GetTile()) <= _dummyScript.GetAttackRange())
         {
             _dummyScript.Attack(closestTroop.gameObject);
             return;
