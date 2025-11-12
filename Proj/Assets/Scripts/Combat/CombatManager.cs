@@ -218,6 +218,7 @@ public class CombatManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         foreach (GameObject tile in _combatGrid.GetAllTiles())
         {
             if (tile.GetComponent<CombatGridTile>().IsMouseHovering())
@@ -234,7 +235,7 @@ public class CombatManager : MonoBehaviour
                 tile.GetComponent<CombatGridTile>().SetTileColor(Color.white);
             }
         }
-
+        */
         switch (_combatState)
         {
             case CombatState.LoadCombatLevel:

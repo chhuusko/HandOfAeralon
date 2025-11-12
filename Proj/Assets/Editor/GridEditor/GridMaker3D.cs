@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.TerrainTools;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using static GridMaker3D;
 using static UnityEditor.PlayerSettings;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
@@ -190,12 +191,12 @@ public class GridMaker3D : EditorWindow
         _characterListProperty = _characterListSO.FindProperty("_characterList");
 
         // Note (Calle): Preloading some default editor values, for the same reason as preloading the defaultTile.
-        _tileSizeInMeters = new Vector3(2.0f, 1.0f, 2.0f);
+        _tileSizeInMeters = new Vector3(2.0f, 0.01f, 2.0f);
         _battleGridHeight = 10;
         _battleGridWidth = 12;
 
         // Note (Calle): Preloading the default tile so we don't have to manually assign it every time we open the editor
-        string defaultTileFilePath = "Assets/Prefabs/Tiles/Walkable.prefab";
+        string defaultTileFilePath = "Assets/Prefabs/Tiles/BattleGridTile_Walkable.prefab";
         _defaultTile = AssetDatabase.LoadAssetAtPath<GameObject>(defaultTileFilePath);
 
         // Note (Calle): Must be done after the SerializeObject Array has been Created. Preloading all tile brushes
@@ -220,6 +221,9 @@ public class GridMaker3D : EditorWindow
             _characterBrushPrefabHolder._characterBrushPrefabs.Add(characterObject);
             _characterBrushPrefabHolderSO.Update();
         }
+
+        _characterPrefabLibrary = AssetDatabase.LoadAssetAtPath<CharacterPrefabLibrary>("Assets/ScriptableObject/Characters/CharacterPrefabLibrary.asset");
+        _tilePrefabLibrary      = AssetDatabase.LoadAssetAtPath<TilePrefabLibrary>("Assets/ScriptableObject/Tiles/TilePrefabLibrary.asset");
 
     }
 
