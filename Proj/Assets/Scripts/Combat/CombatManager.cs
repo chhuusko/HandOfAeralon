@@ -87,11 +87,13 @@ public class CombatGrid
             if (inCombatTileMaterial != null)
             {
                 meshRend.material = inCombatTileMaterial;
-                meshRend.sharedMaterials = new Material[] { inCombatTileMaterial };
-                meshRend.material.color = Color.white;
-                var block = new MaterialPropertyBlock();
-                block.SetColor("_BaseColor", Color.white);
-                meshRend.SetPropertyBlock(block);
+                if (tileObject.GetComponent<CombatGridTile>().GetTileIndex().x == 0)
+                    meshRend.material.SetColor("_TileColor", Color.green);
+                //meshRend.sharedMaterials = new Material[] { inCombatTileMaterial };
+                //meshRend.material.color = Color.white;
+                //var block = new MaterialPropertyBlock();
+                //block.SetColor("_BaseColor", Color.white);
+                //meshRend.SetPropertyBlock(block);
             }
             
 
@@ -212,10 +214,28 @@ public class CombatManager : MonoBehaviour
         _combatState = CombatState.LoadCombatLevel;
     }
 
+    
     // Update is called once per frame
     void Update()
     {
-        switch(_combatState)
+        foreach (GameObject tile in _combatGrid.GetAllTiles())
+        {
+            if (tile.GetComponent<CombatGridTile>().IsMouseHovering())
+            {
+                tile.GetComponent<CombatGridTile>().SetTileColor(Color.yellow);
+            }
+            else if (tile.GetComponent<CombatGridTile>().GetOccupant())
+            {
+                tile.GetComponent<CombatGridTile>().SetTileColor(Color.green);
+            }
+           
+            else
+            {
+                tile.GetComponent<CombatGridTile>().SetTileColor(Color.white);
+            }
+        }
+
+        switch (_combatState)
         {
             case CombatState.LoadCombatLevel:
                 {
@@ -242,6 +262,7 @@ public class CombatManager : MonoBehaviour
                     HandleEndCombat();
                 } break;
         }
+
     }
     
     /// <summary>

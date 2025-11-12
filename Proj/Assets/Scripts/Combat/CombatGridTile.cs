@@ -25,6 +25,29 @@ public class CombatGridTile : MonoBehaviour
     public void SetTileIndex(Vector2Int tileIndex) { _tileData.SetTileIndex(tileIndex); }
     public void SetTileType(TileType tileType)     { _tileData.SetTileType(tileType); }
     public void SetOccupant(GameObject occupant) { _occupant = occupant; }
+    public bool IsMouseHovering()
+    {
+        // Get a ray from the camera through the mouse position
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        // Raycast against this tile’s collider
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Tile")))
+        {
+            // Check if the hit object is this tile
+            return hitInfo.collider.gameObject == gameObject;
+        }
+
+        return false;
+    }
+
+    public void SetTileColor(Color color)
+    {
+        MeshRenderer meshRend = GetComponent<MeshRenderer>();
+        if(meshRend != null)
+        {
+            meshRend.material.SetColor("_TileColor", color);
+        }
+    }
 
     public Character GetOccupantCharacter()
     {
