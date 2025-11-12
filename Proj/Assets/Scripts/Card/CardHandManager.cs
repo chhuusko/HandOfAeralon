@@ -85,10 +85,15 @@ public class CardHandManager : MonoBehaviour
     {
         CardViewUI.GetInstance().UpdateCards(_cardsInDeck);
     }
+    public void OpenDiscardPile()
+    {
+        CardViewUI.GetInstance().UpdateCards(_cardsInDiscardPile);
+    }
     public void RemoveCard(CardContainer cardContainer)
     {
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
+        _cardsInDiscardPile.Add(cardContainer.GetCard());
         drawHand();
     }
     public void ChangeMana(int change)
