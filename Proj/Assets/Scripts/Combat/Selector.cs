@@ -24,12 +24,18 @@ public class Selector : MonoBehaviour
         CharacterSelected,
         ActionTypeSelected,
     }
+    public enum CharacterActionType
+    {
+        Null,
+        Movevement,
+        AbilityCasting
+    } 
 
     private SelectorState _currentState = SelectorState.NonActive;
+    private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
     private Character _selectedCharacter;
     private Ability _pendingAbility;
     private bool _bDebugSelector = false;
-    // private ActionType _pendingActionType;
     
 
     void Start()
@@ -42,6 +48,7 @@ public class Selector : MonoBehaviour
     {
         HandleTileClick();
         HandleTileHover();
+        DebugCurrentState();
     }
 
     private void HandleTileClick()
@@ -49,14 +56,15 @@ public class Selector : MonoBehaviour
         // Execute different actions based on current state when clicking on tiles.
         if (Camera.main == null)
         {
-            Debug.LogError("No MainCamera found! Tag your camera as 'MainCamera'.");
-            return;
+            Debug.LogError("No MainCamera found! Tag your camera as 'MainCamera'."); return;
         }
         if (EventSystem.current == null)
         {
-            Debug.LogError("No EventSystem in scene!");
-            return;
+            Debug.LogError("No EventSystem in scene!"); return;
         }
+
+        // Return early if mouse is over UI element or current state is NonActive.
+        if (_currentState == SelectorState.NonActive) return;
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
         if (Input.GetMouseButtonDown(0))
@@ -70,7 +78,7 @@ public class Selector : MonoBehaviour
             {
                 case SelectorState.NonActive: break;
                 case SelectorState.Idle: TrySelectCharacter(clickedTile); break;
-                case SelectorState.CharacterSelected: break;
+                case SelectorState.CharacterSelected: DeselectCharacter(); break;
                 case SelectorState.ActionTypeSelected: HandlePendingCharacterAction(clickedTile); break;
             }
         }
@@ -79,16 +87,18 @@ public class Selector : MonoBehaviour
     {
         // Show info about character.
         CombatGridTile hoveredTile = GetTileUnderMouse();
+        if (hoveredTile == null) return;
 
-        if (hoveredTile.GetOccupant().TryGetComponent<Character>(out var character)){
+        if (hoveredTile.GetOccupant() == null && hoveredTile.GetOccupant().TryGetComponent<Character>(out var character)){
             // TODO: Call UIControll script to show character info on character position.
         }
+
+        // TODO: Change state on tiles (with matching color) to indicate aoe abilities effected area.
+        // if _currentState = SelectorState.ActionTypeSelected && hovoredTile = in range
     }
 
     private CombatGridTile GetTileUnderMouse()
     {
-        
-
         // Cast ray cast from mouse to detect tile and return it if found.
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         int tileMask = LayerMask.GetMask("Tile");
@@ -98,7 +108,6 @@ public class Selector : MonoBehaviour
             // Check for tile script on gameobject.
             if (hit.collider.TryGetComponent(out CombatGridTile tile)) return tile;
         }
-
         return null;
     }
 
@@ -118,13 +127,30 @@ public class Selector : MonoBehaviour
             ShowCharacterOptions(character);
             _currentState = SelectorState.CharacterSelected;
             _selectedCharacter = character;
+
+            if (_bDebugSelector)
+            {
+                Debug.Log(character.GetCharacterClass().ToString() + " on tile index: " + character.GetCurrentTileIndex().ToString());
+            }
         }
     }
     private void DeselectCharacter()
     {
-        // Deactivate UI
+        // if ui is active Deactivate UI
         _selectedCharacter = null;
         _pendingAbility = null;
+        _pendingCharacterActionType = CharacterActionType.Null;
+
+        if (CombatManager._instance.GetCombatTurn() == CombatTurn.PlayerTurn)
+        {
+            _currentState = SelectorState.Idle;
+        }
+        else
+        {
+            _currentState = SelectorState.NonActive;
+        }
+
+        if (_bDebugSelector) Debug.Log("Deselect Character");
     }
 
     private void ShowCharacterOptions(Character Character)
@@ -133,12 +159,31 @@ public class Selector : MonoBehaviour
     }
     private void HandlePendingCharacterAction(CombatGridTile tile)
     {
-        // If Action type == move 
-        //_selectedCharacter.SetMoveTarget(tile);
-
-        // If Action type == Ability && _pendingAbility != null
-        // _selectedCharacter.AbilityHandler.UseAbility(_pendingAbility, tile);
+        if(_pendingCharacterActionType == CharacterActionType.Movevement)
+        {
+            _selectedCharacter.SetMoveTarget(tile);
+            if (_bDebugSelector)
+            {
+                Debug.Log(_selectedCharacter.GetCharacterClass()+ " on tile: " + _selectedCharacter.GetCurrentTileIndex().ToString() + " is set to move to: " + tile.GetComponentIndex().ToString());
+            }
+        }
+        if (_pendingCharacterActionType == CharacterActionType.AbilityCasting && _pendingAbility != null)
+        {
+            _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_pendingAbility, tile);
+            if (_bDebugSelector)
+            {  
+                Debug.Log(_selectedCharacter.GetCharacterClass() + " used ability: " + _pendingAbility.GetAbilityName.ToString());
+            }
+        }
+    }
+    private void DebugCurrentState()
+    {
+        if(_bDebugSelector) Debug.Log("The current state is: " + GetCurrentState().ToString());
     }
     public SelectorState GetCurrentState() { return _currentState; }
     public void SetCurrentState(SelectorState state) {  _currentState = state; }
+    public void SetPendingAbility(Ability ability)
+    {
+        _pendingAbility = ability;
+    }
 }

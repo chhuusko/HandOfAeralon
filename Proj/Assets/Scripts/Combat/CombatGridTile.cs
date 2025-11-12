@@ -26,11 +26,19 @@ public class CombatGridTile : MonoBehaviour
     public void SetTileType(TileType tileType)     { _tileData.SetTileType(tileType); }
     public void SetOccupant(GameObject occupant) { _occupant = occupant; }
 
+    public Character GetOccupantCharacter()
+    {
+        if (_occupant == null) return null;
+
+        _occupant.TryGetComponent(out Character character);
+        return character;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Character"))
         {
-            _occupant = gameObject;
+            _occupant = other.gameObject;
             _occupant.GetComponent<Character>().SetCurrentTileIndex(GetTileIndex());
         }
     }
