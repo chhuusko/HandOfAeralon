@@ -65,6 +65,11 @@ public class Character : MonoBehaviour
         return CombatManager._instance.GetTileComponent(_currentTileIndex.x, _currentTileIndex.y);
     }
 
+    public List<Ability> GetAvailableAbilities()
+    {
+        return _availableAbilities;
+    }
+
     public void SetCharacterClass(CharacterClass characterClass)
     {
         _characterClass = characterClass;

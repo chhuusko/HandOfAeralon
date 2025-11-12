@@ -4,7 +4,8 @@ public class CombatUI : MonoBehaviour
 {
     public enum PanelType { Card, Ability }
     
-    [SerializeField] private GameObject AbilityPanel;
+    [SerializeField] private GameObject _abilityPanel;
+    [SerializeField] private GameObject _abilityButtonPrefab;
 
     public void ShowCardPanel()
     {
@@ -20,11 +21,15 @@ public class CombatUI : MonoBehaviour
     private void ShowPanel(PanelType panelType)
     {
         CardHandManager._instance.SetUIActive(panelType == PanelType.Card);
-        AbilityPanel.SetActive(panelType == PanelType.Ability);
+        _abilityPanel.SetActive(panelType == PanelType.Ability);
     }
 
     private void LoadAbilities()
     {
-        
+        var selectedCharacter = Selector._instance.GetSelectedCharacter();
+        foreach (var ability in selectedCharacter.GetAvailableAbilities())
+        {
+            GameObject abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
+        }
     }
 }
