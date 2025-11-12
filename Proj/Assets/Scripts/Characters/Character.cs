@@ -30,6 +30,18 @@ public class Character : MonoBehaviour
     private List<Ability> _availableAbilities;
     private NavMeshAgent _navMeshAgent;
 
+
+    public void Update()
+    {
+        if(IsMoving())
+        {
+            GetComponent<Animator>().SetBool("IsMoving", true);
+        }
+        else
+        {
+            GetComponent<Animator>().SetBool("IsMoving", false);
+        }
+    }
     public CharacterClass GetCharacterClass()
     {
         return _characterClass;
@@ -159,7 +171,12 @@ public class Character : MonoBehaviour
 
     public bool IsMoving()
     {
-        return !_navMeshAgent.isStopped;
+        if (_navMeshAgent.pathPending)
+            return true; // still calculating path
+
+        // Agent is considered moving if it has velocity and hasn't reached destination
+        return _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance
+               || _navMeshAgent.velocity.sqrMagnitude > 0.01f;
     }
 
     /// <summary>
