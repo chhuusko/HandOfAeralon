@@ -46,4 +46,25 @@ public class AbilityHandler : MonoBehaviour
     {
         return ability.GetAvailableTiles(_casterTile);
     }
+
+    private bool IsValidTargetForAbility(Ability ability, CombatGridTile tile)
+    {
+        var occupant = tile.GetOccupant();
+        Character character = occupant.GetComponent<Character>();
+
+        switch (ability.GetAbilityTargetType())
+        {
+            case Ability.AbilityTargetType.Any:
+                 return true;
+            case Ability.AbilityTargetType.CharacterOccupiedTile:
+                 return occupant != null;
+            case Ability.AbilityTargetType.Enemy:
+                 return character != null && character.GetFaction() == Faction.Enemy;
+            case Ability.AbilityTargetType.Friendly:
+                return character != null && character.GetFaction() == Faction.Friendly;
+
+            default: return false;
+        }
+     
+    }
 }
