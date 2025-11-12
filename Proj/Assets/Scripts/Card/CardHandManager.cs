@@ -14,6 +14,7 @@ public class CardHandManager : MonoBehaviour
     [SerializeField] private CardList _cardList;
     [SerializeField] private List<CardContainer> _cardsInHand;
     [SerializeField] private List<Card> _cardsInDeck;
+    [SerializeField] private List<Card> _cardsInDiscardPile;
     [SerializeField] private int _maxHand = 3;
     
     private int _maxMana = 5;
@@ -80,6 +81,10 @@ public class CardHandManager : MonoBehaviour
             drawHand();
         }
     }
+    public void OpenDeck()
+    {
+        CardViewUI.GetInstance().UpdateCards(_cardsInDeck);
+    }
     public void RemoveCard(CardContainer cardContainer)
     {
         _cardsInHand.Remove(cardContainer);
@@ -103,7 +108,14 @@ public class CardHandManager : MonoBehaviour
     {
         return _maxMana;
     }
-    
+    public List<Card> GetDeck()
+    {
+        return _cardsInDeck;
+    }
+    private List<Card> GetDiscardPile()
+    {
+        return _cardsInDiscardPile;
+    }
 
 
 }
