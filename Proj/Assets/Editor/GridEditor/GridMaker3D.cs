@@ -33,6 +33,7 @@ public class GridMaker3D : EditorWindow
     int _battleGridHeight= 0;
     int _prevBattleGridWidth = 0;
     int _prevBattleGridHeight = 0;
+    int _defaultDeployZoneWidth = 0;
 
     Vector2 _windowEditorScrollPos;
     Vector3 _tileSizeInMeters;
@@ -43,12 +44,13 @@ public class GridMaker3D : EditorWindow
     {
         public Vector3 _position;
         public Vector3 _size;
+        public Quaternion _rotation;
         public Vector2Int _tileIndex;
         public CharacterClass _characterClass;
         public GameObject _character;
 
         public CharacterEntry() { }
-        public CharacterEntry(Vector3 goPos, Vector3 goSize, GameObject prefab, GameObject parent, Vector2Int gridPos)
+        public CharacterEntry(Vector3 goPos, Vector3 goSize, Quaternion rotation, GameObject prefab, GameObject parent, Vector2Int gridPos)
         {
             if (prefab != null)
             {
@@ -56,11 +58,13 @@ public class GridMaker3D : EditorWindow
                 this._character = Instantiate(prefab);
                 this._character.transform.position = goPos;
                 this._character.transform.localScale = goSize;
+                this._character.transform.rotation = rotation;
+                this._character.GetComponent<Character>().SetCurrentTileIndex(gridPos);
 
-                if(parent != null)
+                if (parent != null)
                     this._character.transform.SetParent(parent.transform);
 
-                this._character.GetComponent<Character>().SetCurrentTileIndex(gridPos);
+               
 
                 // Save/Load Specific
                 this._characterClass = prefab.GetComponent<Character>().GetCharacterClass();
@@ -110,7 +114,7 @@ public class GridMaker3D : EditorWindow
                 this._tile = Instantiate(prefab);
                 this._tile.transform.position = goPos;
                 this._tile.transform.localScale = goSize;
-
+                this._tile.GetComponent<CombatGridTile>().SetTileIndex(gridPos);
                 if(parent != null)
                     this._tile.transform.SetParent(parent.transform);
 
@@ -145,7 +149,8 @@ public class GridMaker3D : EditorWindow
     SerializedProperty    _tileBrushPrefabProperty;
 
     [SerializeField] GameObject _defaultTile;
-    
+    [SerializeField] GameObject _defaultDeployTile;
+
     TileEntry _previewTile;
     CharacterEntry _previewCharacter;
     
@@ -194,10 +199,14 @@ public class GridMaker3D : EditorWindow
         _tileSizeInMeters = new Vector3(2.0f, 0.01f, 2.0f);
         _battleGridHeight = 10;
         _battleGridWidth = 12;
+        _defaultDeployZoneWidth = 3;
 
         // Note (Calle): Preloading the default tile so we don't have to manually assign it every time we open the editor
         string defaultTileFilePath = "Assets/Prefabs/Tiles/BattleGridTile_Walkable.prefab";
         _defaultTile = AssetDatabase.LoadAssetAtPath<GameObject>(defaultTileFilePath);
+
+        string defaultDeployTilePath = "Assets/Prefabs/Tiles/BattleGridTile_Deploy.prefab"; ;
+        _defaultDeployTile = AssetDatabase.LoadAssetAtPath<GameObject>(defaultDeployTilePath);
 
         // Note (Calle): Must be done after the SerializeObject Array has been Created. Preloading all tile brushes
         string folderPathTilePrefabs = "Assets/Prefabs/Tiles";
@@ -293,15 +302,17 @@ public class GridMaker3D : EditorWindow
             false
         ) as TilePrefabLibrary;
 
-        _bFocusToggle = EditorGUILayout.Toggle("Focus Toggle for Draw", _bFocusToggle);
-        _bDrawPreviewGrid    = EditorGUILayout.Toggle("Draw Grid Lines", _bDrawPreviewGrid);
-        _drawMode           = GUILayout.SelectionGrid(_drawMode, new[] { "Draw Tiles", "Draw Characters" }, 1);
-        _battleGridWidth     = EditorGUILayout.IntSlider("BattleGrid Width", _battleGridWidth, 0, 30);
-        _battleGridHeight    = EditorGUILayout.IntSlider("BattleGrid Height", _battleGridHeight, 0, 30);
-        _defaultTile         = EditorGUILayout.ObjectField("Default Tile for Grid Generation", _defaultTile, typeof(GameObject), false) as GameObject;
-        _tileSizeInMeters    = EditorGUILayout.Vector3Field("Size of a tile in meters", _tileSizeInMeters);
-        _fileNameToSaveJSON  = EditorGUILayout.TextField("Save To: ", _fileNameToSaveJSON);
-        _fileNameToLoadJSON  = EditorGUILayout.TextField("Load From: ", _fileNameToLoadJSON);
+        _bFocusToggle           = EditorGUILayout.Toggle("Focus Toggle for Draw", _bFocusToggle);
+        _bDrawPreviewGrid       = EditorGUILayout.Toggle("Draw Grid Lines", _bDrawPreviewGrid);
+        _drawMode               = GUILayout.SelectionGrid(_drawMode, new[] { "Draw Tiles", "Draw Characters" }, 1);
+        _battleGridWidth        = EditorGUILayout.IntSlider("BattleGrid Width", _battleGridWidth, 0, 30);
+        _battleGridHeight       = EditorGUILayout.IntSlider("BattleGrid Height", _battleGridHeight, 0, 30);
+        _defaultDeployZoneWidth = EditorGUILayout.IntSlider("BattleGrid Width", _defaultDeployZoneWidth, 0, 30);
+        _defaultTile            = EditorGUILayout.ObjectField("Default Tile for Grid Generation", _defaultTile, typeof(GameObject), false) as GameObject;
+        _defaultDeployTile      = EditorGUILayout.ObjectField("Default Deploy Tile for Deploy Zone Generation", _defaultDeployTile, typeof(GameObject), false) as GameObject;
+        _tileSizeInMeters       = EditorGUILayout.Vector3Field("Size of a tile in meters", _tileSizeInMeters);
+        _fileNameToSaveJSON     = EditorGUILayout.TextField("Save To: ", _fileNameToSaveJSON);
+        _fileNameToLoadJSON     = EditorGUILayout.TextField("Load From: ", _fileNameToLoadJSON);
 
 
         if (_prevBattleGridHeight != _battleGridHeight || _prevBattleGridWidth != _battleGridWidth)
@@ -321,7 +332,8 @@ public class GridMaker3D : EditorWindow
         HandleButtonLoadFromJSON();
         HandleButtonSaveToJSON();
         HandleButtonGenerateDefaultGrid();
-        
+        HandleButtonGenerateDefaultDeployZone();
+
     }
 
     private void HandleButtonLoadFromJSON()
@@ -405,7 +417,6 @@ public class GridMaker3D : EditorWindow
             // Gather context info
             string message = $"No Default Prefab:\n";
 
-
             if (_defaultTile == null)
             {
                 // Show Error Dialogue
@@ -461,6 +472,91 @@ public class GridMaker3D : EditorWindow
                             Vector2Int gridPos = new Vector2Int(x, y);
 
                             TileEntry newTileEntry = new TileEntry(pos, _tileSizeInMeters, _defaultTile, parent, gridPos);
+                            Undo.RegisterCreatedObjectUndo(newTileEntry._tile, "Placed/Updated Tile");
+                            // Add or replace in tile dictionary
+                            AddOrReplaceTileEntry(x, y, newTileEntry);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void HandleButtonGenerateDefaultDeployZone()
+    {
+
+        if (GUILayout.Button("Generate Default Deploy Zone", GUILayout.Height(50)))
+        {
+            // Gather context info
+            string message = $"No Default Prefab for DeployTile\n";
+
+            if (_defaultTile == null)
+            {
+                // Show Error Dialogue
+                EditorUtility.DisplayDialog(
+                    "Deploy Zone Generator Error",
+                    message,
+                    "OK"
+                );
+            }
+            else
+            {
+                if (_battleGridWidth <= 0 || _battleGridHeight <= 0)
+                {
+                    message = "Battle Grid Width or Height must be creater than 0";
+                    // Show Error Dialogue
+                    EditorUtility.DisplayDialog(
+                        "Deploy Zone Generator Error",
+                        message,
+                        "OK"
+                    );
+                }
+                else
+                {
+                    int deployZoneWidth = _defaultDeployZoneWidth;
+                    if(_defaultDeployZoneWidth > _battleGridWidth)
+                        deployZoneWidth = _defaultDeployZoneWidth - _battleGridWidth;
+
+                    var parent = GenerateParentRootObject(_strRootObjectForTiles);
+                    // NOTE (Calle): Clear Tiles in the Deploy Zone
+                    _tileGridHolderSO.Update();
+                    SerializedProperty tileEntries = _tileGridHolderSO.FindProperty("_tileEntries");
+                    for(int y = 0; y < _battleGridHeight; y++)
+                    {
+
+                    }
+                    for (int x = 0; x < deployZoneWidth; x++)
+                    {
+                        // Get the tile entry property in the entry list property
+                        SerializedProperty tileEntryProp = tileEntries.GetArrayElementAtIndex(x);
+                        // Get the tile property in the tile entry property
+                        SerializedProperty tileProp = tileEntryProp.FindPropertyRelative("_tile");
+                        // Get the reference to actual tile GameObject
+                        GameObject tileGO = tileProp.objectReferenceValue as GameObject;
+                        if (tileGO != null)
+                            DestroyImmediate(tileGO);
+                    }
+                    //for (int i = 0; i < tileEntries.arraySize; i++)
+                    //{
+                    //    
+                    //}
+                    _tileGridHolderSO.ApplyModifiedProperties();
+
+                    for (int y = 0; y < _battleGridHeight; y++)
+                    {
+                        for (int x = 0; x < deployZoneWidth; x++)
+                        {
+                            // World-space position of the tile's center
+                            Vector3 pos = new Vector3(
+                                x * _tileSizeInMeters.x + _tileSizeInMeters.x / 2f,
+                                0f,
+                                y * _tileSizeInMeters.z + _tileSizeInMeters.z / 2f
+                            );
+
+                            // Pass grid coordinates as Vector2
+                            Vector2Int gridPos = new Vector2Int(x, y);
+
+                            TileEntry newTileEntry = new TileEntry(pos, _tileSizeInMeters, _defaultDeployTile, parent, gridPos);
                             Undo.RegisterCreatedObjectUndo(newTileEntry._tile, "Placed/Updated Tile");
                             // Add or replace in tile dictionary
                             AddOrReplaceTileEntry(x, y, newTileEntry);
@@ -1149,7 +1245,7 @@ public class GridMaker3D : EditorWindow
 
         // Create a CharacterEntry and 
         //CharacterEntry characterEntry = InstantiateAndSetCharacterEntry(worldPos, Vector3.one, newCharacterPrefab, parent, gridPos);
-        CharacterEntry newCharacterEntry = new CharacterEntry(worldPos, Vector3.one, newCharacterPrefab, parent, gridPos);
+        CharacterEntry newCharacterEntry = new CharacterEntry(worldPos, Vector3.one, Quaternion.identity, newCharacterPrefab, parent, gridPos);
         Undo.RegisterCreatedObjectUndo(newCharacterEntry._character, "Placed/Created Character");
 
         if(newCharacterEntry._character.CompareTag("DeleteCharacterBrush"))
@@ -1284,6 +1380,7 @@ public class GridMaker3D : EditorWindow
             Debug.Log($"Loading character: {characterPrefab.name}");
             CharacterEntry characterEntry = new CharacterEntry(characterData.GetCharacterPosition(),
                                                                Vector3.one, // TODO (Calle): The Size is saved based on the renderer.bounds.size i think, so saving and loading multiple time will make characters bigger each time HAHA! XD
+                                                               characterData.GetRotation(),
                                                                characterPrefab,
                                                                parent,
                                                                characterData.GetTileIndex());
@@ -1326,7 +1423,8 @@ public class GridMaker3D : EditorWindow
                                                           character.GetComponent<Character>().GetSpeed(),
                                                           character.GetComponent<Character>().GetCurrentTileIndex(),
                                                           character.transform.position,
-                                                          character.GetComponent<Renderer>().bounds.size));
+                                                          character.GetComponent<Renderer>().bounds.size,
+                                                          character.transform.rotation));
         }
         /*
         foreach(var characterEntry in characterList._characterList)

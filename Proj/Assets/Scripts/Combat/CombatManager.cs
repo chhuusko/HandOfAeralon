@@ -37,18 +37,18 @@ public class CombatGrid
     [SerializeField] private int _width;
     [SerializeField] private Vector3 _tileSize;
     
-    [SerializeField] private GameObject[] tilesGO;
+    [SerializeField] private GameObject[] _tilesGO;
     [SerializeField] private List<GameObject> _charactersGO;
 
 
-    public GameObject[] GetAllTiles() {  return tilesGO; }
+    public GameObject[] GetAllTiles() {  return _tilesGO; }
     public GameObject GetTileAtCoord(int x, int y) 
     {
         int index = x + y * _width;
         if (index < 0 || index >= _width * _height)
             return null;
 
-        return tilesGO[index];  
+        return _tilesGO[index];  
     }
 
     public Vector3 GetTileSize() { return _tileSize; }
@@ -58,7 +58,7 @@ public class CombatGrid
     {
         _width  = w;
         _height = h;
-        tilesGO = new GameObject[w * h];
+        _tilesGO = new GameObject[w * h];
     }
     public void SetTileSize(Vector3 tileSize)
     {
@@ -82,22 +82,29 @@ public class CombatGrid
             tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
             tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
             
-            MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
-            Material inCombatTileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Shaders/CJ Test Shaders/TileMaterial.mat");
-            if (inCombatTileMaterial != null)
+            switch(tileData.GetTileType())
             {
-                meshRend.material = inCombatTileMaterial;
-                if (tileObject.GetComponent<CombatGridTile>().GetTileIndex().x == 0)
-                    meshRend.material.SetColor("_TileColor", Color.green);
-                //meshRend.sharedMaterials = new Material[] { inCombatTileMaterial };
-                //meshRend.material.color = Color.white;
-                //var block = new MaterialPropertyBlock();
-                //block.SetColor("_BaseColor", Color.white);
-                //meshRend.SetPropertyBlock(block);
+                case TileType.Deploy:
+                    {
+
+                    }break;
+                default:
+                    {
+                        MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
+                        Material inCombatTileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Shaders/CJ Test Shaders/TileMaterial.mat");
+                        if (inCombatTileMaterial != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            if (tileObject.GetComponent<CombatGridTile>().GetTileIndex().x == 0)
+                                meshRend.material.SetColor("_TileColor", Color.green);
+                        }
+                        else
+                        {
+                            Debug.Log("Failed to load TileMaterial.mat");
+                        }
+                    } break;
             }
-            
-
-
+           
             if (tileData.IsWalkable())
                 tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
             else
@@ -110,13 +117,12 @@ public class CombatGrid
                 volume.center = new Vector3(0, 0.5f, 0);
             }
 
-            tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
+            _tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
         }
         else
         {
             Debug.Log("No TilePrefabLibrary assigned in inspector!");
         }
-       
     }
 
     public List<GameObject> GetAllCharacters() { return _charactersGO; }
@@ -145,14 +151,16 @@ public class CombatGrid
 
     public void AddCharacter(CombatGridCharacterData characterData)
     {
-        Vector2Int tileIndex = characterData.GetTileIndex();
-        Vector3 instancePos  = characterData.GetCharacterPosition();
-        Faction faction      = characterData.GetFaction();
-        int healthPoints     = characterData.GetHealthPoints();
-        int initiative       = characterData.GetInitiative();
+        Vector2Int tileIndex    = characterData.GetTileIndex();
+        Vector3    instancePos  = characterData.GetCharacterPosition();
+        Quaternion rotation     = characterData.GetRotation();
+        Faction    faction      = characterData.GetFaction();
+        int        healthPoints = characterData.GetHealthPoints();
+        int        initiative   = characterData.GetInitiative();
 
         GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
-        GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, Quaternion.identity);
+        GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, rotation);
+
         characterObject.GetComponent<Character>().SetCurrentTileIndex(tileIndex);
         characterObject.GetComponent<Character>().SetBaseHealthPoints(healthPoints);
         characterObject.GetComponent<Character>().SetBaseSpeed(initiative);
@@ -308,6 +316,7 @@ public class CombatManager : MonoBehaviour
         {
             _combatGridLoaded = true;
             LoadNextLevel();
+            //LoadCurrentPlayerParty();
             GameObject NavMesh = GameObject.Find("NavMesh Surface");
             NavMesh.GetComponent<NavMeshSurface>().BuildNavMesh();
             _combatState = CombatState.IntroCinematic;
@@ -380,6 +389,11 @@ public class CombatManager : MonoBehaviour
         {
             this._combatGrid.AddCharacter(combatGrid._characterData[i]);
         }
+        
+    }
+
+    private void LoadCurrentPlayerParty()
+    {
         
     }
 

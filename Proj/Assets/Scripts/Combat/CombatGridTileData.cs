@@ -8,7 +8,8 @@ public enum TileType
     Walkable,
     Impassable,
     Lava,
-    Poison
+    Poison,
+    Deploy
 };
 
 [System.Serializable]
