@@ -200,7 +200,7 @@ public class Selector : MonoBehaviour
         bool success = _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_pendingAbility, tile);
         if (_bDebugSelector && success)
         {
-            Debug.Log(_selectedCharacter.GetCharacterClass() + " used ability: " + _pendingAbility.GetAbilityName.ToString());
+            Debug.Log(_selectedCharacter.GetCharacterClass() + " used ability: " + _pendingAbility.GetAbilityName().ToString());
         }
         if (!success)
         {

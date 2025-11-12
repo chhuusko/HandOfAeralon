@@ -4,19 +4,31 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Ability", menuName = "Scriptable Objects/Ability")]
 public abstract class Ability : ScriptableObject
 {
-    [Header("General")]
+    [Header("- General -")]
     [SerializeField] private string _abilityName;
     [SerializeField] private Sprite _icon;
     [SerializeField] private int _range;
+
+    [Header("- Targeting -")]
     [SerializeField] private RangeCalculation _rangeCalculation;
+    [SerializeField] private AbilityTargetType _targetType;
+
+    public enum AbilityTargetType
+    {
+        Any,
+        CharacterOccupiedTile,
+        Friendly,
+        Enemy
+    }
 
     public abstract void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile);
 
     protected abstract void ApplyEffectOnTile(CombatGridTile targetTile);
 
-    public string GetAbilityName => _abilityName;
-    public Sprite GetIcon => _icon;
-    public float GetRange => _range;
+    public string GetAbilityName() => _abilityName;
+    public Sprite GetIcon() => _icon;
+    public float GetRange() => _range;
+    public AbilityTargetType GetAbilityTargetType() => _targetType;
 
     public RangeCalculation GetRangeCalculation => _rangeCalculation;
 
