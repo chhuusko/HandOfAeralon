@@ -86,11 +86,11 @@ public class CombatGrid
             Material inCombatTileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Shaders/CJ Test Shaders/TileMaterial.mat");
             if (inCombatTileMaterial != null)
             {
-                //meshRend.material = inCombatTileMaterial;
-
+                meshRend.material = inCombatTileMaterial;
                 meshRend.sharedMaterials = new Material[] { inCombatTileMaterial };
                 meshRend.material.color = Color.white;
                 var block = new MaterialPropertyBlock();
+                block.SetColor("_BaseColor", Color.white);
                 meshRend.SetPropertyBlock(block);
             }
             
@@ -104,8 +104,8 @@ public class CombatGrid
                 volume.area = NavMesh.GetAreaFromName("Not Walkable");
             
                 Vector3 tileSize = tileData.GetTileSize();
-                volume.size = new Vector3(.6f, 1.0f, .6f);
-                volume.center = new Vector3(0, 0, 0);
+                volume.size = new Vector3(1.0f, 2.0f, 1.0f);
+                volume.center = new Vector3(0, 0.5f, 0);
             }
 
             tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
