@@ -11,6 +11,7 @@ public class CardHandManager : MonoBehaviour
     public static CardHandManager _instance;
 
     [SerializeField] private GameObject _CardContainer;
+    [SerializeField] private Transform _Hand;
     [SerializeField] private CardList _cardList;
     [SerializeField] private List<CardContainer> _cardsInHand;
     [SerializeField] private List<Card> _cardsInDeck;
@@ -52,7 +53,7 @@ public class CardHandManager : MonoBehaviour
     }
     public void AddCardFromDeck()
     {
-        CardContainer newCardContainer = Instantiate(_CardContainer, transform).GetComponent<CardContainer>();
+        CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
         _cardsInHand.Add(newCardContainer);
         newCardContainer.AddCard(_cardsInDeck[0]);
         _cardsInDeck.RemoveAt(0);
@@ -85,10 +86,15 @@ public class CardHandManager : MonoBehaviour
     {
         CardViewUI.GetInstance().UpdateCards(_cardsInDeck);
     }
+    public void OpenDiscardPile()
+    {
+        CardViewUI.GetInstance().UpdateCards(_cardsInDiscardPile);
+    }
     public void RemoveCard(CardContainer cardContainer)
     {
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
+        _cardsInDiscardPile.Add(cardContainer.GetCard());
         drawHand();
     }
     public void ChangeMana(int change)

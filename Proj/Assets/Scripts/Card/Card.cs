@@ -19,6 +19,8 @@ public class Card : ScriptableObject
     public void PlayCard()
     {
         //när den spelas
+
+
     }
 }
 
