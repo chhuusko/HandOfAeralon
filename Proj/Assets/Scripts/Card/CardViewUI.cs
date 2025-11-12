@@ -44,6 +44,7 @@ public class CardViewUI : MonoBehaviour
 
     public void ExitUI()
     {
+        ClearUI();
         gameObject.SetActive(false);
     }
 
