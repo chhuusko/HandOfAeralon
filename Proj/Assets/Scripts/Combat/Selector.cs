@@ -87,11 +87,14 @@ public class Selector : MonoBehaviour
     {
         // Show info about character.
         CombatGridTile hoveredTile = GetTileUnderMouse();
-        if (hoveredTile == null || hoveredTile.GetOccupant() == null) return;
+        if (hoveredTile == null) return;
 
-        if (hoveredTile.GetOccupant().TryGetComponent<Character>(out var character)){
+        if (hoveredTile.GetOccupant() == null && hoveredTile.GetOccupant().TryGetComponent<Character>(out var character)){
             // TODO: Call UIControll script to show character info on character position.
         }
+
+        // TODO: Change state on tiles (with matching color) to indicate aoe abilities effected area.
+        // if _currentState = SelectorState.ActionTypeSelected && hovoredTile = in range
     }
 
     private CombatGridTile GetTileUnderMouse()

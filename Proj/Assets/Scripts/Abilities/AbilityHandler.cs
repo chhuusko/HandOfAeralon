@@ -29,6 +29,10 @@ public class AbilityHandler : MonoBehaviour
 
         ability.RunAbility(_casterTile, targetTile);
     }
+    public void ClearAbilityTargets()
+    {
+        _availableAbilityTargets.Clear();
+    }
 
     private bool CanCastAbility(CombatGridTile targetTile)
     {
@@ -37,7 +41,6 @@ public class AbilityHandler : MonoBehaviour
 
     private List<CombatGridTile> CheckAbilityTargets(Ability ability)
     {
-        //return ability.targetingPattern.GetValidTiles(_casterTile);
         return null;
     }
 }
