@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 005f7ec5d08a0284789b1365171b0702, type: 3}
   m_Name: Firebolt
   m_EditorClassIdentifier: 
-  _abilityName: 
-  _icon: {fileID: 0}
-  _range: 0
-  _damage: 0
+  _abilityName: Firebolt
+  _icon: {fileID: 21300000, guid: 0d60c81fc09c691479d16cd31231b677, type: 3}
+  _range: 5
+  _rangeCalculation: {fileID: 11400000, guid: c582227474edfeb4e9f0206e0e4fcc31, type: 2}
+  _targetType: 3
+  _damage: 10

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "AOEAbility", menuName = "Scriptable Objects/Abilities/AOE")]
 public abstract class AOEAbility : Ability
 {
+    [Header("- Type Specific values - ")]
     [SerializeField] private int _radius = 1;
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)

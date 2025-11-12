@@ -9,6 +9,7 @@ public class AbilityHandler : MonoBehaviour
 
     Character _characterCaster;
     CombatGridTile _casterTile;
+    bool _bDebugAbilityHandler = false;
 
     private void Start()
     {
@@ -22,10 +23,11 @@ public class AbilityHandler : MonoBehaviour
     public bool UseAbility(Ability ability, CombatGridTile targetTile)
     {
         GetTilesInRange(ability);
-        if (!CanCastAbility(targetTile))
+        if (!CanCastAbility(ability, targetTile))
         {
             ClearAbilityTargets();
-            Debug.Log("Tried casting ability on inaccaptable target.");
+            if (_bDebugAbilityHandler)
+            Debug.Log("Tried casting ability, but it failed");
             return false; ;
         }
 
@@ -37,13 +39,34 @@ public class AbilityHandler : MonoBehaviour
         _availableAbilityTargets.Clear();
     }
 
-    private bool CanCastAbility(CombatGridTile targetTile)
+    private bool CanCastAbility(Ability ability, CombatGridTile targetTile)
     {
-        return _availableAbilityTargets.Contains(targetTile);
+        return IsValidTargetForAbility(ability, targetTile) && _availableAbilityTargets.Contains(targetTile);
     }
 
     private List<CombatGridTile> GetTilesInRange(Ability ability)
     {
         return ability.GetAvailableTiles(_casterTile);
+    }
+
+    private bool IsValidTargetForAbility(Ability ability, CombatGridTile tile)
+    {
+        var occupant = tile.GetOccupant();
+        Character character = occupant.GetComponent<Character>();
+
+        switch (ability.GetAbilityTargetType())
+        {
+            case Ability.AbilityTargetType.Any:
+                 return true;
+            case Ability.AbilityTargetType.CharacterOccupiedTile:
+                 return occupant != null;
+            case Ability.AbilityTargetType.Enemy:
+                 return character != null && character.GetFaction() == Faction.Enemy;
+            case Ability.AbilityTargetType.Friendly:
+                return character != null && character.GetFaction() == Faction.Friendly;
+
+            default: return false;
+        }
+     
     }
 }
