@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -93,7 +94,7 @@ public class Selector : MonoBehaviour
         CombatGridTile hoveredTile = GetTileUnderMouse();
         if (hoveredTile == null) return;
 
-        if (hoveredTile.GetOccupant() == null && hoveredTile.GetOccupant().TryGetComponent<Character>(out var character)){
+        if (hoveredTile.GetOccupant() != null && hoveredTile.GetOccupant().TryGetComponent<Character>(out var character)){
             // TODO: Call UIControll script to show character info on character position.
         }
 
@@ -238,6 +239,17 @@ public class Selector : MonoBehaviour
     private void DebugCurrentState()
     {
         if(_bDebugSelector) Debug.Log("The current state is: " + GetCurrentState().ToString());
+    }
+
+    private void SetColorOfTiles(List<CombatGridTile> tiles, Color color)
+    {
+        foreach (CombatGridTile tile in tiles)
+        {
+            if (tile != null)
+            {
+                tile.SetTileColor(color);
+            }
+        }
     }
     public SelectorState GetCurrentState() { return _currentState; }
     public void SetCurrentState(SelectorState state) {  _currentState = state; }
