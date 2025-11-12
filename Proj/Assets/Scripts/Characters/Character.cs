@@ -181,7 +181,7 @@ public class Character : MonoBehaviour
 
         // Agent is considered moving if it has velocity and hasn't reached destination
         return _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance
-               || _navMeshAgent.velocity.sqrMagnitude > 0.01f;
+               || _navMeshAgent.velocity.sqrMagnitude > 0.1f;
     }
 
     /// <summary>
