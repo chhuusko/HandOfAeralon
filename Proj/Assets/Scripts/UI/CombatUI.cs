@@ -19,7 +19,7 @@ public class CombatUI : MonoBehaviour
 
     private void ShowPanel(PanelType panelType)
     {
-        CardPanel.SetActive(panelType == PanelType.Card);
+        CardHandManager._instance.SetUIActive(panelType == PanelType.Card);
         AbilityPanel.SetActive(panelType == PanelType.Ability);
     }
 }
