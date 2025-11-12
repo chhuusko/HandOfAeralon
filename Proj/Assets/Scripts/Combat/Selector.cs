@@ -101,7 +101,7 @@ public class Selector : MonoBehaviour
         // if _currentState = SelectorState.ActionTypeSelected && hovoredTile = in range
     }
 
-    private CombatGridTile GetTileUnderMouse()
+    public CombatGridTile GetTileUnderMouse()
     {
         // Cast ray cast from mouse to detect tile and return it if found.
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -113,6 +113,13 @@ public class Selector : MonoBehaviour
             if (hit.collider.TryGetComponent(out CombatGridTile tile)) return tile;
         }
         return null;
+    }
+    public CombatGridTile GetTileClicked()
+    {
+        // Get clicked tile.
+        if(!Input.GetMouseButtonDown(0)) return null;
+
+        return GetTileUnderMouse();
     }
 
     private void TrySelectCharacter(CombatGridTile tile)

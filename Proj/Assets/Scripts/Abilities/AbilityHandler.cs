@@ -9,6 +9,7 @@ public class AbilityHandler : MonoBehaviour
 
     Character _characterCaster;
     CombatGridTile _casterTile;
+    bool _bDebugAbilityHandler = false;
 
     private void Start()
     {
@@ -22,10 +23,11 @@ public class AbilityHandler : MonoBehaviour
     public bool UseAbility(Ability ability, CombatGridTile targetTile)
     {
         GetTilesInRange(ability);
-        if (!CanCastAbility(targetTile))
+        if (!CanCastAbility(ability, targetTile))
         {
             ClearAbilityTargets();
-            Debug.Log("Tried casting ability on inaccaptable target.");
+            if (_bDebugAbilityHandler)
+            Debug.Log("Tried casting ability, but it failed");
             return false; ;
         }
 
@@ -37,9 +39,9 @@ public class AbilityHandler : MonoBehaviour
         _availableAbilityTargets.Clear();
     }
 
-    private bool CanCastAbility(CombatGridTile targetTile)
+    private bool CanCastAbility(Ability ability, CombatGridTile targetTile)
     {
-        return _availableAbilityTargets.Contains(targetTile);
+        return IsValidTargetForAbility(ability, targetTile) && _availableAbilityTargets.Contains(targetTile);
     }
 
     private List<CombatGridTile> GetTilesInRange(Ability ability)
