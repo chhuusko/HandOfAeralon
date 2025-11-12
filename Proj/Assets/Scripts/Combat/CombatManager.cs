@@ -172,7 +172,8 @@ public struct ClassAbilities
 public class CombatManager : MonoBehaviour
 {
     public static CombatManager _instance;
-    
+    private Selector _selector;
+
     [SerializeField] private string _fileToLoadDEBUG;
 
     [SerializeField] private CombatCamera _combatCamera;
@@ -212,30 +213,16 @@ public class CombatManager : MonoBehaviour
     void Start()
     {
         _combatState = CombatState.LoadCombatLevel;
+        _selector = GetComponent<Selector>();
     }
 
     
     // Update is called once per frame
     void Update()
     {
-        /*
-        foreach (GameObject tile in _combatGrid.GetAllTiles())
-        {
-            if (tile.GetComponent<CombatGridTile>().IsMouseHovering())
-            {
-                tile.GetComponent<CombatGridTile>().SetTileColor(Color.yellow);
-            }
-            else if (tile.GetComponent<CombatGridTile>().GetOccupant())
-            {
-                tile.GetComponent<CombatGridTile>().SetTileColor(Color.green);
-            }
-           
-            else
-            {
-                tile.GetComponent<CombatGridTile>().SetTileColor(Color.white);
-            }
-        }
-        */
+
+   
+
         switch (_combatState)
         {
             case CombatState.LoadCombatLevel:
@@ -329,7 +316,10 @@ public class CombatManager : MonoBehaviour
 
     private void HandlePlaceCharacters()
     {
-
+        if(_selector)
+        {
+            _selector.UpdatePlaceCharacter(_combatGrid.GetAllTiles());
+        }
     }
     private void HandleEndTurn()
     {

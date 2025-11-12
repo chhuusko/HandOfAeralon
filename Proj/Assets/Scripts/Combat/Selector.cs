@@ -145,6 +145,26 @@ public class Selector : MonoBehaviour
             }
         }
     }
+
+    public void UpdatePlaceCharacter(GameObject[] tiles)
+    {
+
+        foreach (GameObject tile in tiles)
+        {
+            if (tile.GetComponent<CombatGridTile>().IsMouseHovering())
+            {
+                tile.GetComponent<CombatGridTile>().SetTileColor(Color.yellow);
+            }
+            else if (tile.GetComponent<CombatGridTile>().GetOccupant())
+            {
+                tile.GetComponent<CombatGridTile>().SetTileColor(Color.green);
+            }
+            else
+            {
+                tile.GetComponent<CombatGridTile>().SetTileColor(Color.white);
+            }
+        }
+    }
     private void DeselectCharacter()
     {
         // if ui is active Deactivate UI
