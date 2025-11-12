@@ -116,6 +116,7 @@ public class Selector : MonoBehaviour
     }
     public CombatGridTile GetTileClicked()
     {
+        // Get clicked tile.
         if(!Input.GetMouseButtonDown(0)) return null;
 
         return GetTileUnderMouse();
