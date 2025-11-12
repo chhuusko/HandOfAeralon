@@ -1,16 +1,12 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Net.NetworkInformation;
 
-public class RC_NonBlock : MonoBehaviour
+public class RC_NonBlock : RangeCalculation
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override List<CombatGridTile> GetTilesInRange(CombatGridTile tile, int range)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        List<GameObject> objects = GridExplorer._instance.GetTilesInRange(tile.gameObject, range, false);
+        return ConvertToGridTiles(objects);
     }
 }
