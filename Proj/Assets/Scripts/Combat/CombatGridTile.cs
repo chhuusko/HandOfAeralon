@@ -21,6 +21,7 @@ public class CombatGridTile : MonoBehaviour
     public Vector3    GetTileSize()     { return _tileData.GetTileSize(); } 
     public bool       IsWalkable()      { return _tileData.IsWalkable(); }
 
+    public void SetTilePosition(Vector3 position) { _tileData.SetTilePosition(position); }
     public void SetWalkable(bool bWalkable)        { _tileData.SetWalkable(bWalkable); }
     public void SetTileIndex(Vector2Int tileIndex) { _tileData.SetTileIndex(tileIndex); }
     public void SetTileType(TileType tileType)     { _tileData.SetTileType(tileType); }

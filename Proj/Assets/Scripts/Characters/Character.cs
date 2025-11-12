@@ -34,14 +34,14 @@ public class Character : MonoBehaviour
     public void Update()
     {
         // NOTE (CJ & Carl): Testkod för animationer
-        if(IsMoving())
-        {
-            GetComponent<Animator>().SetBool("IsMoving", true);
-        }
-        else
-        {
-            GetComponent<Animator>().SetBool("IsMoving", false);
-        }
+        //if(IsMoving())
+        //{
+        //    GetComponent<Animator>().SetBool("IsMoving", true);
+        //}
+        //else
+        //{
+        //    GetComponent<Animator>().SetBool("IsMoving", false);
+        //}
     }
     public CharacterClass GetCharacterClass()
     {

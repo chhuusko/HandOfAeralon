@@ -79,6 +79,7 @@ public class CombatGrid
             GameObject tileObject = Object.Instantiate(tilePrefab, instancePos, Quaternion.identity);
 
             tileObject.transform.localScale = tileData.GetTileSize();
+            tileObject.GetComponent<CombatGridTile>().SetTilePosition(tileData.GetTilePosition());
             tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
             tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
             
@@ -185,6 +186,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private string _fileToLoadDEBUG;
 
     [SerializeField] private CombatCamera _combatCamera;
+    [SerializeField] private float _cameraSpeed;
 
     [SerializeField] private CombatState _combatState;
     [SerializeField] private CombatTurn _currentTurn;
@@ -229,7 +231,8 @@ public class CombatManager : MonoBehaviour
     void Update()
     {
 
-   
+
+        MoveCamera();
 
         switch (_combatState)
         {
@@ -260,7 +263,29 @@ public class CombatManager : MonoBehaviour
         }
 
     }
-    
+
+    private void MoveCamera()
+    {
+        Vector3 cameraMovement = Vector3.zero;
+        Vector3 cameraSpeedVector = new Vector3(_cameraSpeed, _cameraSpeed, _cameraSpeed);
+        
+        if (Input.GetKey(KeyCode.D))
+            cameraMovement += Vector3.right;
+        if (Input.GetKey(KeyCode.A))
+            cameraMovement += Vector3.left;
+        if (Input.GetKey(KeyCode.W))
+            cameraMovement += Vector3.forward;
+        if (Input.GetKey(KeyCode.S))
+            cameraMovement += Vector3.back;
+
+        cameraMovement = Vector3.Scale(cameraMovement, cameraSpeedVector);
+        
+        cameraMovement *= Time.deltaTime;
+
+        if(cameraMovement != Vector3.zero)
+            _combatCamera.transform.position = cameraMovement + _combatCamera.transform.position;
+    }
+
     /// <summary>
     /// Gets all abilities available to the class.
     /// </summary>
@@ -328,6 +353,31 @@ public class CombatManager : MonoBehaviour
         if(_selector)
         {
             _selector.UpdatePlaceCharacter(_combatGrid.GetAllTiles());
+            CombatGridTile tile = _selector.GetTileClicked();
+            if(tile && tile.GetTileType() == TileType.Deploy && tile.GetOccupant() == null)
+            {
+                Vector2Int tileIndex = tile.GetTileIndex();
+                Vector3 tilePosition = tile.GetTilePosition();
+                Vector3 slitghtlyRaisedPosition = new Vector3(tilePosition.x, tilePosition.y + 0.05f, tilePosition.z);
+
+                // TODO (Calle): Get the actuall characterData from GameStateManager
+                //               For now spawn a stub character.
+
+                CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
+                                                                                    Faction.Friendly,
+                                                                                    10,
+                                                                                    1,
+                                                                                    tileIndex,
+                                                                                    tilePosition,
+                                                                                    Vector3.one,
+                                                                                    Quaternion.identity);
+                _combatGrid.AddCharacter(characterData);
+
+            }
+            else
+            {
+                Debug.Log("Show ERROR UI to place on a deploy tile.");
+            }
         }
     }
     private void HandleEndTurn()
