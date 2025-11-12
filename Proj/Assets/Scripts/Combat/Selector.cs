@@ -36,7 +36,11 @@ public class Selector : MonoBehaviour
     private Character _selectedCharacter;
     private Ability _pendingAbility;
     private bool _bDebugSelector = false;
-    
+
+    public Character GetSelectedCharacter()
+    {
+        return _selectedCharacter;
+    }
 
     void Start()
     {

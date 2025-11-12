@@ -157,6 +157,11 @@ public class Character : MonoBehaviour
         _currentHealthPoints = Mathf.Min(_currentHealthPoints + healAmount, _baseHealthPoints);
     }
 
+    public bool IsMoving()
+    {
+        return !_navMeshAgent.isStopped;
+    }
+
     /// <summary>
     /// Sets a new target move location.
     /// </summary>
