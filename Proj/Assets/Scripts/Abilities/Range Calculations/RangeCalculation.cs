@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public abstract class RangeCalculation : ScriptableObject
 {
-    public abstract List<CombatGridTile> GetTilesInRange(CombatGridTile tile, int range);
+    public abstract List<CombatGridTile> CalculateTilesInRange(CombatGridTile tile, int range);
 
     protected List<CombatGridTile> ConvertToGridTiles(List<GameObject> tileObjects)
     {

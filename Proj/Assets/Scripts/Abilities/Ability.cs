@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Ability", menuName = "Scriptable Objects/Ability")]
@@ -6,7 +7,8 @@ public abstract class Ability : ScriptableObject
     [Header("General")]
     [SerializeField] private string _abilityName;
     [SerializeField] private Sprite _icon;
-    [SerializeField] private float _range;
+    [SerializeField] private int _range;
+    [SerializeField] private RangeCalculation _rangeCalculation;
 
     public abstract void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile);
 
@@ -16,5 +18,12 @@ public abstract class Ability : ScriptableObject
     public Sprite GetIcon => _icon;
     public float GetRange => _range;
 
-    
+    public RangeCalculation GetRangeCalculation => _rangeCalculation;
+
+    public List<CombatGridTile> GetAvailableTiles(CombatGridTile casterTile)
+    {
+        return _rangeCalculation.CalculateTilesInRange(casterTile, _range);
+    }
+
+
 }

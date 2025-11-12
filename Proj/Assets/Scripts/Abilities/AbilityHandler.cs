@@ -19,15 +19,18 @@ public class AbilityHandler : MonoBehaviour
         }
         CombatGridTile _casterTile = _characterCaster.GetCurrentTileComponent();
     }
-    public void UseAbility(Ability ability, CombatGridTile targetTile)
+    public bool UseAbility(Ability ability, CombatGridTile targetTile)
     {
+        GetTilesInRange(ability);
         if (!CanCastAbility(targetTile))
         {
+            ClearAbilityTargets();
             Debug.Log("Tried casting ability on inaccaptable target.");
-            return;
+            return false; ;
         }
 
         ability.RunAbility(_casterTile, targetTile);
+        return true;
     }
     public void ClearAbilityTargets()
     {
@@ -39,8 +42,8 @@ public class AbilityHandler : MonoBehaviour
         return _availableAbilityTargets.Contains(targetTile);
     }
 
-    private List<CombatGridTile> CheckAbilityTargets(Ability ability)
+    private List<CombatGridTile> GetTilesInRange(Ability ability)
     {
-        return null;
+        return ability.GetAvailableTiles(_casterTile);
     }
 }

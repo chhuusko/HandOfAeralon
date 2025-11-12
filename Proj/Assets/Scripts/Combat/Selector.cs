@@ -159,21 +159,49 @@ public class Selector : MonoBehaviour
     }
     private void HandlePendingCharacterAction(CombatGridTile tile)
     {
-        if(_pendingCharacterActionType == CharacterActionType.Movevement)
+        if (_selectedCharacter == null)
         {
-            _selectedCharacter.SetMoveTarget(tile);
-            if (_bDebugSelector)
-            {
-                Debug.Log(_selectedCharacter.GetCharacterClass()+ " on tile: " + _selectedCharacter.GetCurrentTileIndex().ToString() + " is set to move to: " + tile.GetComponentIndex().ToString());
-            }
+            Debug.LogWarning("Tried to handle action with no selected character");
+            return;
+        }
+
+        if (_pendingCharacterActionType == CharacterActionType.Movevement)
+        {
+            HandleMovement(tile);
+            return;
         }
         if (_pendingCharacterActionType == CharacterActionType.AbilityCasting && _pendingAbility != null)
         {
-            _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_pendingAbility, tile);
-            if (_bDebugSelector)
-            {  
-                Debug.Log(_selectedCharacter.GetCharacterClass() + " used ability: " + _pendingAbility.GetAbilityName.ToString());
-            }
+            HandleAbilityCast(tile);
+            return;
+        }
+
+        if (_bDebugSelector)
+        {
+            Debug.Log("Pending character action: " + _currentState.ToString() + " failed");
+        }
+        DeselectCharacter();
+    }
+    private void HandleMovement(CombatGridTile tile)
+    {
+        _selectedCharacter.SetMoveTarget(tile);
+        if (_bDebugSelector)
+        {
+            Debug.Log(_selectedCharacter.GetCharacterClass() + " on tile: " + _selectedCharacter.GetCurrentTileIndex().ToString() + " is set to move to: " + tile.GetComponentIndex().ToString());
+        }
+    }
+
+    private void HandleAbilityCast(CombatGridTile tile)
+    {
+        bool success = _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_pendingAbility, tile);
+        if (_bDebugSelector && success)
+        {
+            Debug.Log(_selectedCharacter.GetCharacterClass() + " used ability: " + _pendingAbility.GetAbilityName.ToString());
+        }
+        if (!success)
+        {
+            DeselectCharacter();
+            _currentState = SelectorState.Idle;
         }
     }
     private void DebugCurrentState()
