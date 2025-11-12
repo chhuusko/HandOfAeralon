@@ -180,7 +180,7 @@ public class Character : MonoBehaviour
             return true; 
 
         return _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance
-               || _navMeshAgent.velocity.sqrMagnitude > 0.2f;
+               || _navMeshAgent.velocity.sqrMagnitude > 0.3f;
     }
 
     /// <summary>
