@@ -56,15 +56,15 @@ public class Selector : MonoBehaviour
         // Execute different actions based on current state when clicking on tiles.
         if (Camera.main == null)
         {
-            Debug.LogError("No MainCamera found! Tag your camera as 'MainCamera'.");
-            return;
+            Debug.LogError("No MainCamera found! Tag your camera as 'MainCamera'."); return;
         }
         if (EventSystem.current == null)
         {
-            Debug.LogError("No EventSystem in scene!");
-            return;
+            Debug.LogError("No EventSystem in scene!"); return;
         }
 
+        // Return early if mouse is over UI element or current state is NonActive.
+        if (_currentState == SelectorState.NonActive) return;
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
         if (Input.GetMouseButtonDown(0))
@@ -78,7 +78,7 @@ public class Selector : MonoBehaviour
             {
                 case SelectorState.NonActive: break;
                 case SelectorState.Idle: TrySelectCharacter(clickedTile); break;
-                case SelectorState.CharacterSelected: break;
+                case SelectorState.CharacterSelected: DeselectCharacter(); break;
                 case SelectorState.ActionTypeSelected: HandlePendingCharacterAction(clickedTile); break;
             }
         }
@@ -87,11 +87,14 @@ public class Selector : MonoBehaviour
     {
         // Show info about character.
         CombatGridTile hoveredTile = GetTileUnderMouse();
-        if (hoveredTile == null || hoveredTile.GetOccupant() == null) return;
+        if (hoveredTile == null) return;
 
-        if (hoveredTile.GetOccupant().TryGetComponent<Character>(out var character)){
+        if (hoveredTile.GetOccupant() == null && hoveredTile.GetOccupant().TryGetComponent<Character>(out var character)){
             // TODO: Call UIControll script to show character info on character position.
         }
+
+        // TODO: Change state on tiles (with matching color) to indicate aoe abilities effected area.
+        // if _currentState = SelectorState.ActionTypeSelected && hovoredTile = in range
     }
 
     private CombatGridTile GetTileUnderMouse()
@@ -124,17 +127,30 @@ public class Selector : MonoBehaviour
             ShowCharacterOptions(character);
             _currentState = SelectorState.CharacterSelected;
             _selectedCharacter = character;
+
+            if (_bDebugSelector)
+            {
+                Debug.Log(character.GetCharacterClass().ToString() + " on tile index: " + character.GetCurrentTileIndex().ToString());
+            }
         }
     }
     private void DeselectCharacter()
     {
         // if ui is active Deactivate UI
-
         _selectedCharacter = null;
         _pendingAbility = null;
-        
+        _pendingCharacterActionType = CharacterActionType.Null;
 
-        if (_bDebugSelector) Debug.Log("DeselectCharacter was run");
+        if (CombatManager._instance.GetCombatTurn() == CombatTurn.PlayerTurn)
+        {
+            _currentState = SelectorState.Idle;
+        }
+        else
+        {
+            _currentState = SelectorState.NonActive;
+        }
+
+        if (_bDebugSelector) Debug.Log("Deselect Character");
     }
 
     private void ShowCharacterOptions(Character Character)
@@ -146,10 +162,18 @@ public class Selector : MonoBehaviour
         if(_pendingCharacterActionType == CharacterActionType.Movevement)
         {
             _selectedCharacter.SetMoveTarget(tile);
+            if (_bDebugSelector)
+            {
+                Debug.Log(_selectedCharacter.GetCharacterClass()+ " on tile: " + _selectedCharacter.GetCurrentTileIndex().ToString() + " is set to move to: " + tile.GetComponentIndex().ToString());
+            }
         }
-        if(_pendingCharacterActionType == CharacterActionType.AbilityCasting && _pendingAbility != null)
+        if (_pendingCharacterActionType == CharacterActionType.AbilityCasting && _pendingAbility != null)
         {
             _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_pendingAbility, tile);
+            if (_bDebugSelector)
+            {  
+                Debug.Log(_selectedCharacter.GetCharacterClass() + " used ability: " + _pendingAbility.GetAbilityName.ToString());
+            }
         }
     }
     private void DebugCurrentState()
