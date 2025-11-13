@@ -222,10 +222,10 @@ public class Selector : MonoBehaviour
         if (_bDebugSelector) Debug.Log("Deselect Character");
     }
 
-    private void ShowCharacterUIOptions(Character Character)
+    private void ShowCharacterUIOptions(Character character)
     {
         // Activate UI and place it to show over characters head.
-        GameObject.Find("CombatCanvas")?.GetComponent<CombatUI>()?.LoadAbilities();
+        GameObject.Find("CombatCanvas")?.GetComponent<CombatUI>()?.LoadAbilities(character);
     }
     public void PreviewTilesWithinReach(Character character, Ability ability)
     {

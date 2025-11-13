@@ -42,20 +42,25 @@ public class CombatUI : MonoBehaviour
         _abilityPanel.color = active ? new Color(1, 1, 1, 0.5f) : new Color(1, 1, 1, 1);
     }
 
-    public void LoadAbilities()
+    public void LoadAbilities(Character character)
     {
-        var selectedCharacter = Selector._instance.GetSelectedCharacter();
+        Debug.Log("Loading Abilities");
 
-        if (selectedCharacter == null)
+        if (character == null)
         {
+            DebugLog.JoppaLog("No selected character");
             return;
         }
+        
+        DebugLog.JoppaLog($"Number of abilities: {character.GetAvailableAbilities().Count}");
 
-        for (int i = 0; i < selectedCharacter.GetAvailableAbilities().Count; i++)
+        for (int i = 0; i < character.GetAvailableAbilities().Count; i++)
         {
             Button abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
             
-            var ability = selectedCharacter.GetAvailableAbilities()[i];
+            var ability = character.GetAvailableAbilities()[i];
+            abilityButton.GetComponentInChildren<TextMeshProUGUI>().text = ability.name;
+            abilityButton.image.sprite = ability.GetIcon();
         }
     }
 }
