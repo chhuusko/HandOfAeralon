@@ -126,7 +126,7 @@ public class CombatGrid
         }
         else
         {
-            Debug.Log("No TilePrefabLibrary assigned in inspector!");
+            DebugLog.CJLog("No TilePrefabLibrary assigned in inspector!");
         }
     }
 
@@ -401,6 +401,8 @@ public class CombatManager : MonoBehaviour
                 DebugLog.AlexLog("Show ERROR UI to place on a deploy tile.");
             }
         }
+
+        _selector.ResetSelectedCharacter();
     }
 
     private void HandleEndTurn()
@@ -433,14 +435,14 @@ public class CombatManager : MonoBehaviour
 
         if (!System.IO.File.Exists(filePathToload))
         {
-            Debug.Log("Level File didn't exist or filepath was wrong!");
+            DebugLog.CJLog("Level File didn't exist or filepath was wrong!");
             return;
         }
 
         string jsonFileData = System.IO.File.ReadAllText(filePathToload);
         if(jsonFileData.Length == 0)
         {
-            Debug.Log("json File Data was empty!");
+            DebugLog.CJLog("json File Data was empty!");
             return;
         }
 
@@ -448,11 +450,11 @@ public class CombatManager : MonoBehaviour
 
         this._combatGrid.SetCombatGridSize(combatGrid._gridWidth, combatGrid._gridHeight);
         this._combatGrid.SetTileSize(combatGrid._tileSize);
-        Debug.Log("CombatGrid tileSize: " + combatGrid._tileSize);
+        DebugLog.CJLog("CombatGrid tileSize: " + combatGrid._tileSize);
        
         for (int i = 0; i < combatGrid._tileData.Count; i++)
         {
-            Debug.Log("tiled["+i+"]: " + "\tTileType : " + combatGrid._tileData[i].GetTileType() + 
+            DebugLog.CJLog("tiled["+i+"]: " + "\tTileType : " + combatGrid._tileData[i].GetTileType() + 
                       "\tTileIndex: " + combatGrid._tileData[i].GetTilePosition() + "\n");
 
             this._combatGrid.AddTile(combatGrid._tileData[i]);
@@ -475,6 +477,10 @@ public class CombatManager : MonoBehaviour
 
     }
 
+    public CombatGrid GetCombatGrid()
+    {
+        return this._combatGrid;
+    }
     public List<GameObject> GetAllCharacters()
     {
         return _combatGrid.GetAllCharacters();

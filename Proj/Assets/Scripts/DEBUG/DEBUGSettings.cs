@@ -4,11 +4,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "DEBUGSettings", menuName = "Scriptable Objects/DEBUGSettings")]
 public class DEBUGSettings : ScriptableObject
 {
-    public bool CJLog;
-    public bool MGLog;
-    public bool JLWLog;
-    public bool AlexLog;
-    public bool JoppaLog;
+    public bool CJLog = true;
+    public bool MGLog = true;
+    public bool JLWLog = true;
+    public bool AlexLog = true;
+    public bool JoppaLog = true;
 }
 
 
