@@ -2,8 +2,8 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
-public class LevelManager : MonoBehaviour
+[CreateAssetMenu(fileName = "LevelManager", menuName = "Manager/LevelManager")]
+public class LevelManager : ScriptableObject
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private static LevelManager _instance;
@@ -13,13 +13,19 @@ public class LevelManager : MonoBehaviour
     private int gameLevels = 10;
 
     private CombatGrid _combatGrid;
-    public static LevelManager GetInstance() {  return _instance; }
+    public static LevelManager GetInstance()
+    {
+        if (_instance == null)
+        {
+            _instance = Resources.Load<LevelManager>("LevelManager");
+        }
+        return _instance;
+    }
     private void Awake()
     {
         _instance = this;
         _combatList = Directory.GetFiles("Assets/JSON BattleGrids").Where(f => !f.EndsWith(".meta")).ToArray(); 
         _generatedList = new string[10];
-        DontDestroyOnLoad(gameObject);
     }
     public void GenerateMap(int seed)
     {

@@ -13,29 +13,19 @@ public struct GameData
     public List<Card> cardList;
 
 }
+[CreateAssetMenu(fileName = "GlobalGameManager", menuName = "Manager/GlobalGameManager")]
 
-public class GlobalGameManager : MonoBehaviour
+public class GlobalGameManager : ScriptableObject
 {
     [SerializeField] private DeckPreset _deckPreset;
-    private LevelManager _levelManager;
     private static GlobalGameManager _instance;
     private GameData _currentGame;
-
-    private void Awake()
+    public static GlobalGameManager GetInstance()
     {
         if (_instance == null)
         {
-            _instance = this;
+            _instance = Resources.Load<GlobalGameManager>("GlobalGameManager");
         }
-        else
-        {
-            Destroy(gameObject);
-        }
-        _levelManager = GetComponent<LevelManager>();
-        DontDestroyOnLoad(this.gameObject);
-    }
-    public static GlobalGameManager GetInstance()
-    {
         return _instance;
     }
     public GameData GetGameData()
@@ -59,9 +49,10 @@ public class GlobalGameManager : MonoBehaviour
         _currentGame = new GameData();
         _currentGame.saveSlot = slot;
         _currentGame.seed = Random.Range(0, 1000);
-        _levelManager.GenerateMap(_currentGame.seed);
+        LevelManager.GetInstance().GenerateMap(_currentGame.seed);
         _currentGame.heroList = new List<Character>();
         _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
+        Debug.Log(_currentGame.cardList.Count);
         _currentGame.coins = 50;
         SceneManager.LoadScene("ShopScene"); //TODO
     }

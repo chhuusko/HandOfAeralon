@@ -15,14 +15,15 @@ public class CardViewUI : MonoBehaviour
     private void Awake()
     {
         _cardListUI = new List<GameObject>();
-
         _instance = this;
         gameObject.SetActive(false);
     }
     public void UpdateCards(List<Card> newCardList)
     {
         gameObject.SetActive(true);
+
         if (_cardListUI.Count > 0 ) { ClearUI(); }
+        if(newCardList ==  null ) { Debug.Log("Nothing");}
 
         for (int i = 0; i < newCardList.Count; i++)
         {
