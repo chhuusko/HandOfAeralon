@@ -87,7 +87,7 @@ public class Selector : MonoBehaviour
             switch (_currentState)
             {
                 case SelectorState.NonActive: break;
-                case SelectorState.PlacingCharacters: break;
+                case SelectorState.PlacingCharacters: SetSelectedCharacterForPlacement(); break;
                 case SelectorState.Idle: TrySelectCharacter(clickedTile); break;
                 case SelectorState.CharacterSelected: DeselectCharacter(); break;
                 case SelectorState.ActionTypeSelected: HandlePendingCharacterAction(clickedTile); break;
@@ -138,6 +138,19 @@ public class Selector : MonoBehaviour
         else
         {
             return null;
+        }
+    }
+    public void ResetSelectedCharacter()
+    {
+        _selectedCharacter = null;
+    }
+
+    private void SetSelectedCharacterForPlacement()
+    {
+        CombatGridTile tile = GetTileUnderMouse();
+        if(tile && tile.GetOccupantCharacter() != null)
+        {
+            _selectedCharacter = tile.GetOccupantCharacter();
         }
     }
 
