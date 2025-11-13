@@ -7,6 +7,7 @@ using UnityEditor.Playables;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
@@ -378,6 +379,8 @@ public class CombatManager : MonoBehaviour
     {
         if(_selector)
         {
+            // Return early if mouse is over UI element.
+            if (EventSystem.current.IsPointerOverGameObject()) return;
             _selector.SetCurrentState(SelectorState.PlacingCharacters);
 
             _selector.UpdatePlaceCharacter(_combatGrid.GetAllTiles());

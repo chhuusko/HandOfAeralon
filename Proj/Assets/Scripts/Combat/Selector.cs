@@ -14,6 +14,8 @@ using UnityEngine.EventSystems;
 public class Selector : MonoBehaviour
 {
     public static Selector _instance {  get; private set; }
+    
+    [SerializeField] private CombatUI _combatUI;
 
     private void Awake()
     {
@@ -35,10 +37,10 @@ public class Selector : MonoBehaviour
     } 
 
     [SerializeField] private SelectorState _currentState = SelectorState.NonActive;
-    private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
-    private Character _selectedCharacter;
-    private Ability _pendingAbility;
-    private bool _bDebugSelector = false;
+    [SerializeField] private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
+    [SerializeField] private Character _selectedCharacter;
+    [SerializeField] private Ability _pendingAbility;
+    [SerializeField] private bool _bDebugSelector = false;
 
     public Character GetSelectedCharacter()
     {
@@ -48,12 +50,6 @@ public class Selector : MonoBehaviour
     {
         _selectedCharacter = selectedCharacter;
     }
-
-    void Start()
-    {
-        _bDebugSelector = true;
-    }
-
     
     void Update()
     {
@@ -97,6 +93,9 @@ public class Selector : MonoBehaviour
     }
     private void HandleTileHover()
     {
+        // Return early if mouse is over UI element.
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         // Show info about character.
         CombatGridTile hoveredTile = GetTileUnderMouse();
         if (hoveredTile == null) return;
@@ -225,9 +224,10 @@ public class Selector : MonoBehaviour
         if (_bDebugSelector) Debug.Log("Deselect Character");
     }
 
-    private void ShowCharacterUIOptions(Character Character)
+    private void ShowCharacterUIOptions(Character character)
     {
         // Activate UI and place it to show over characters head.
+        _combatUI.LoadAbilities(character);
     }
     public void PreviewTilesWithinReach(Character character, Ability ability)
     {
