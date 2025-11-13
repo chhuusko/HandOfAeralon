@@ -34,6 +34,10 @@ public class AbilityHandler : MonoBehaviour
         ability.RunAbility(_casterTile, targetTile);
         return true;
     }
+    public List<CombatGridTile> GetAvailableAbilityTargets()
+    {
+        return _availableAbilityTargets;
+    }
     public void ClearAbilityTargets()
     {
         _availableAbilityTargets.Clear();

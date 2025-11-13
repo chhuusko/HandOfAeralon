@@ -130,21 +130,7 @@ public class Selector : MonoBehaviour
             DeselectCharacter();
             return;
         }
-
-        bool bIsFriendly = character.GetFaction() == Faction.Friendly;
-        bool bIsCharactersTurn = character == CombatManager._instance.GetNextTurnCharacter();
-
-        if (bIsFriendly && bIsCharactersTurn)
-        {
-            ShowCharacterOptions(character);
-            _currentState = SelectorState.CharacterSelected;
-            _selectedCharacter = character;
-
-            if (_bDebugSelector)
-            {
-                Debug.Log(character.GetCharacterClass().ToString() + " on tile index: " + character.GetCurrentTileIndex().ToString());
-            }
-        }
+        SelectCharacter(character);
     }
 
     public void UpdatePlaceCharacter(GameObject[] tiles)
@@ -165,10 +151,30 @@ public class Selector : MonoBehaviour
                 tile.GetComponent<CombatGridTile>().SetTileColor(Color.white);
             }
         }
+    } 
+    private void SelectCharacter(Character character)
+    {
+        bool bIsFriendly = character.GetFaction() == Faction.Friendly;
+        bool bIsCharactersTurn = character == CombatManager._instance.GetNextTurnCharacter();
+
+        if (bIsFriendly && bIsCharactersTurn)
+        {
+            ShowCharacterUIOptions(character);
+            _currentState = SelectorState.CharacterSelected;
+            _selectedCharacter = character;
+
+            if (_bDebugSelector)
+            {
+                Debug.Log(character.GetCharacterClass().ToString() + " on tile index: " + character.GetCurrentTileIndex().ToString());
+            }
+        }
     }
     private void DeselectCharacter()
     {
         // if ui is active Deactivate UI
+        HideCharacterOptions(_selectedCharacter);
+
+
         _selectedCharacter = null;
         _pendingAbility = null;
         _pendingCharacterActionType = CharacterActionType.Null;
@@ -185,9 +191,26 @@ public class Selector : MonoBehaviour
         if (_bDebugSelector) Debug.Log("Deselect Character");
     }
 
-    private void ShowCharacterOptions(Character Character)
+    private void ShowCharacterUIOptions(Character Character)
     {
         // Activate UI and place it to show over characters head.
+    }
+    public void PreviewTilesWithinReach(Character character, Ability ability)
+    {
+
+        if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
+        {
+            SetColorOfTiles(abilityHandler.GetAvailableAbilityTargets(), Color.green);
+        }
+    }
+    private void HideCharacterOptions(Character Character)
+    {
+        // Deactivate UI and reset tile color.
+        if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
+        {
+            SetColorOfTiles(abilityHandler.GetAvailableAbilityTargets(), Color.white);
+            abilityHandler.ClearAbilityTargets();
+        }
     }
     private void HandlePendingCharacterAction(CombatGridTile tile)
     {
