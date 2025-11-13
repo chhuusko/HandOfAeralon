@@ -14,6 +14,8 @@ using UnityEngine.EventSystems;
 public class Selector : MonoBehaviour
 {
     public static Selector _instance {  get; private set; }
+    
+    [SerializeField] private CombatUI _combatUI;
 
     private void Awake()
     {
@@ -225,7 +227,7 @@ public class Selector : MonoBehaviour
     private void ShowCharacterUIOptions(Character character)
     {
         // Activate UI and place it to show over characters head.
-        GameObject.Find("CombatCanvas")?.GetComponent<CombatUI>()?.LoadAbilities(character);
+        _combatUI.LoadAbilities(character);
     }
     public void PreviewTilesWithinReach(Character character, Ability ability)
     {

@@ -126,6 +126,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 956fe0b39b4df8d40b7e2e49a9a50ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _combatUI: {fileID: 8001903329062285493, guid: 1ded389e7cf27fd4babb4879d5fddb91,
+    type: 3}
+  _currentState: 0
+  _pendingCharacterActionType: 0
+  _selectedCharacter: {fileID: 0}
+  _pendingAbility: {fileID: 0}
+  _bDebugSelector: 0
 --- !u!1 &5646201288826643845
 GameObject:
   m_ObjectHideFlags: 0
