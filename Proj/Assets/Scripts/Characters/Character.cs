@@ -28,9 +28,12 @@ public class Character : MonoBehaviour
     [SerializeField] private int _currentDamage;
     [SerializeField] private int _currentMovementPoints;
     
+    [Header("Abilities")]
+    private List<Ability> _availableAbilities;
+    private Dictionary<Ability, int> _currentCooldowns = new();
+    
     [Header("Misc")]
     [SerializeField] private Vector2Int _currentTileIndex;
-    private List<Ability> _availableAbilities;
     private NavMeshAgent _navMeshAgent;
 
     public void Update()
@@ -124,6 +127,43 @@ public class Character : MonoBehaviour
     public void SetCurrentTileIndex(Vector2Int tileIndex)
     {
         _currentTileIndex = tileIndex;
+    }
+
+    public void StartAbilityCooldown(Ability ability)
+    {
+        if (_availableAbilities.Contains(ability) && !_currentCooldowns.ContainsKey(ability))
+        {
+            _currentCooldowns.Add(ability, ability.GetCooldown());
+        }
+    }
+
+    public void UpdateAbilityCooldowns()
+    {
+        var finishedAbilities = new List<Ability>();
+        
+        foreach (var ability in _currentCooldowns.Keys)
+        {
+            _currentCooldowns[ability]--;
+            if (_currentCooldowns[ability] <= 0)
+            {
+                finishedAbilities.Add(ability);
+            }
+        }
+
+        foreach (var ability in finishedAbilities)
+        {
+            _currentCooldowns.Remove(ability);
+        }
+    }
+
+    public bool IsAbilityCooldownActive(Ability ability)
+    {
+        return _currentCooldowns.ContainsKey(ability);
+    }
+
+    public int GetCurrentCooldown(Ability ability)
+    {
+        return _currentCooldowns.GetValueOrDefault(ability, 0);
     }
     
     private void Awake()

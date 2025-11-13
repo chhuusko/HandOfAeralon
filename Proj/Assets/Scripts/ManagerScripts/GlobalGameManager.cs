@@ -49,6 +49,7 @@ public class GlobalGameManager : MonoBehaviour
         _currentGame.seed = Random.Range(0, 1000);
         _levelManager.GenerateMap(_currentGame.seed);
         _currentGame.coins = 0;
+        DebugLog.AlexLog("Seed: " + _currentGame.seed);
         SceneManager.LoadScene(1); //TODO
     }
     public void JSONWrite()
