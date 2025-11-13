@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 4507742186203835684}
   - component: {fileID: 5214052760565589202}
   - component: {fileID: 202866365263357265}
+  - component: {fileID: 7779772476383623154}
   m_Layer: 0
   m_Name: CombatManager
   m_TagString: Untagged
@@ -80,20 +81,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fileToLoadDEBUG: map4
   _combatCamera: {fileID: 4903069864833392983}
-  combatState: 1
-  currentTurn: 0
-  combatGrid:
-    tilePrefabLibrary: {fileID: 11400000, guid: 04a120cb18f76f341b4fa433f2de3433,
-      type: 2}
-    characterPrefabLibrary: {fileID: 11400000, guid: f195d2af34a2acb49b53403b1e543287,
-      type: 2}
+  _cameraSpeed: 0
+  _combatState: 0
+  _currentTurn: 0
+  _combatGrid:
+    _tilePrefabLibrary: {fileID: 0}
+    _characterPrefabLibrary: {fileID: 0}
     _height: 0
     _width: 0
     _tileSize: {x: 0, y: 0, z: 0}
-    tilesGO: []
+    _tilesGO: []
     _charactersGO: []
-  combatGridLoaded: 0
+  _combatGridLoaded: 0
   _classAbilities: []
+  EnemyTurnStart:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!320 &202866365263357265
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -111,6 +114,18 @@ PlayableDirector:
   m_SceneBindings: []
   m_ExposedReferences:
     m_References: []
+--- !u!114 &7779772476383623154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5509309102200414660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 956fe0b39b4df8d40b7e2e49a9a50ac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5646201288826643845
 GameObject:
   m_ObjectHideFlags: 0
