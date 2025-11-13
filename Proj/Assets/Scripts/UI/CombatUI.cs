@@ -26,11 +26,6 @@ public class CombatUI : MonoBehaviour
         _mana.text = $"Mana\n{mana}/10";
     }
 
-    // private void Start()
-    // {
-    //     _abilityPanel.SetActive(false);
-    // }
-
     public void ShowDeck()
     {
         CardHandManager._instance.OpenDeck();
@@ -40,22 +35,11 @@ public class CombatUI : MonoBehaviour
     {
         CardHandManager._instance.OpenDiscardPile();
     }
-    
-    public void ShowCardPanel()
-    {
-        ShowPanel(PanelType.Card);
-    }
 
-    public void ShowAbilityPanel()
+    public void SetCardsActive(bool active)
     {
-        ShowPanel(PanelType.Ability);
-        LoadAbilities();
-    }
-
-    private void ShowPanel(PanelType panelType)
-    {
-        CardHandManager._instance.SetUIActive(panelType == PanelType.Card);
-        _abilityPanel.color = panelType == PanelType.Ability ? new Color(1, 1, 1, 1) :  new Color(1, 1, 1, 0.5f);
+        CardHandManager._instance.SetUIActive(active);
+        _abilityPanel.color = active ? new Color(1, 1, 1, 0.5f) : new Color(1, 1, 1, 1);
     }
 
     private void LoadAbilities()
