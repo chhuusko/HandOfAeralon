@@ -9,6 +9,8 @@ public enum Faction { Friendly, Enemy }
 [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
 public class Character : MonoBehaviour
 {
+    public const int MOVEMENT_POINTS = 5;
+    
     [Header("Character")]
     [SerializeField] private ClassData _classData;
     [SerializeField] private CharacterClass _characterClass;
@@ -24,6 +26,7 @@ public class Character : MonoBehaviour
     [SerializeField] private int _currentHealthPoints;
     [SerializeField] private int _currentSpeed;
     [SerializeField] private int _currentDamage;
+    [SerializeField] private int _currentMovementPoints;
     
     [Header("Misc")]
     [SerializeField] private Vector2Int _currentTileIndex;
@@ -33,7 +36,7 @@ public class Character : MonoBehaviour
 
     public void Update()
     {
-        // NOTE (CJ & Carl): Testkod för animationer
+        // NOTE (CJ & Carl): Testkod fï¿½r animationer
         //if(IsMoving())
         //{
         //    GetComponent<Animator>().SetBool("IsMoving", true);
@@ -43,6 +46,7 @@ public class Character : MonoBehaviour
         //    GetComponent<Animator>().SetBool("IsMoving", false);
         //}
     }
+    
     public CharacterClass GetCharacterClass()
     {
         return _characterClass;
@@ -66,6 +70,11 @@ public class Character : MonoBehaviour
     public int GetDamage()
     {
         return _currentDamage;
+    }
+
+    public int GetMovementPoints()
+    {
+        return _currentMovementPoints;
     }
 
     public Vector2Int GetCurrentTileIndex()
@@ -106,6 +115,11 @@ public class Character : MonoBehaviour
     public void SetBaseDamage(int damage)
     {
         _baseDamage = damage;
+    }
+
+    public void SetMovementPoints(int movementPoints)
+    {
+        _currentMovementPoints = movementPoints;
     }
     
     public void SetCurrentTileIndex(Vector2Int tileIndex)
@@ -178,7 +192,9 @@ public class Character : MonoBehaviour
     public bool IsMoving()
     {
         if (_navMeshAgent.pathPending)
+        {
             return true; 
+        }
 
         return _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance
                || _navMeshAgent.velocity.sqrMagnitude > 0.01f;
