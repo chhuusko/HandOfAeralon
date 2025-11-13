@@ -254,7 +254,7 @@ public class CombatManager : MonoBehaviour
                     Vector2Int tileIndex = new Vector2Int(5, 0);
                     Vector3 position = new Vector3(1.0f + tileIndex.x * 2.0f, 0.0f, 1.0f + tileIndex.y * 2.0f);
                     CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
-                                                                                       Faction.Friendly,
+                                                                                       Faction.Enemy,
                                                                                        10,
                                                                                        1,
                                                                                        tileIndex,
@@ -378,6 +378,8 @@ public class CombatManager : MonoBehaviour
     {
         if(_selector)
         {
+            _selector.SetCurrentState(Selector.SelectorState.PlacingCharacters);
+
             _selector.UpdatePlaceCharacter(_combatGrid.GetAllTiles());
             
             CombatGridTile tile = _selector.GetDeployTileClicked();
@@ -412,7 +414,7 @@ public class CombatManager : MonoBehaviour
             
         }
 
-        _selector.ResetSelectedCharacter();
+        //_selector.ResetSelectedCharacter();
     }
 
     private void HandleEndTurn()
