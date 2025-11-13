@@ -289,6 +289,16 @@ public class CombatManager : MonoBehaviour
 
     }
 
+    public void ChangeState(CombatState newState)
+    {
+        _combatState = newState;
+    }
+
+    public CombatState GetCombatState()
+    {
+        return _combatState;
+    }
+
     private void MoveCamera()
     {
         Vector3 cameraMovement = Vector3.zero;
@@ -366,7 +376,7 @@ public class CombatManager : MonoBehaviour
         {
             _combatGridLoaded = true;
            
-            // TODO (Calle): Detta ska göra i LevelManagern
+            // TODO (Calle): Detta ska gï¿½ra i LevelManagern
             LoadNextLevel();
             //LoadCurrentPlayerParty();
             GameObject NavMesh = GameObject.Find("NavMesh Surface");
@@ -423,22 +433,22 @@ public class CombatManager : MonoBehaviour
             }
             
         }
-
+        
         //_selector.ResetSelectedCharacter();
     }
 
-    private void HandleEndTurn()
+    public void HandleEndTurn()
     {
-
+        
     }
 
     private void HandlePlayerTurn()
     {
         // TODO (Calle): 
-        //  Vid starten av varje hero karaktärs turn sker dessa saker: 
-        //  - Spelarens mana ökar med 1 -> I CardHandManager()
-        //  - Hero karaktärens ability cooldowns minskar med 1 -> WIP (MG/JOPPA)
-        //  - Spelarens "cooldown" / timer för att dra ett till kort minskar med 1 -> WIP 
+        //  Vid starten av varje hero karaktï¿½rs turn sker dessa saker: 
+        //  - Spelarens mana ï¿½kar med 1 -> I CardHandManager()
+        //  - Hero karaktï¿½rens ability cooldowns minskar med 1 -> WIP (MG/JOPPA)
+        //  - Spelarens "cooldown" / timer fï¿½r att dra ett till kort minskar med 1 -> WIP 
         
         GameObject nextCharacter = GetNextTurnCharacter();
 

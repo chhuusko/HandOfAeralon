@@ -29,12 +29,22 @@ public class Character : MonoBehaviour
     [SerializeField] private int _currentMovementPoints;
     
     [Header("Abilities")]
+    private AbilityHandler _abilityHandler;
     private List<Ability> _availableAbilities;
     private Dictionary<Ability, int> _currentCooldowns = new();
     
     [Header("Misc")]
     [SerializeField] private Vector2Int _currentTileIndex;
     private NavMeshAgent _navMeshAgent;
+
+    private void Start()
+    {
+        if (!TryGetComponent(out _abilityHandler))
+        {
+            Debug.LogError("Character is missing AbilityHandler component!");
+            return;
+        }
+    }
 
     public void Update()
     {
@@ -47,6 +57,10 @@ public class Character : MonoBehaviour
         //{
         //    GetComponent<Animator>().SetBool("IsMoving", false);
         //}
+    }
+    public AbilityHandler GetAbilityHandler()
+    {
+        return _abilityHandler;
     }
     
     public CharacterClass GetCharacterClass()
