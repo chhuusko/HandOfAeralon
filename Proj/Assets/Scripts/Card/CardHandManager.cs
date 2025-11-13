@@ -64,7 +64,7 @@ public class CardHandManager : MonoBehaviour
     {
         for (int i = 0; i < _cardsInHand.Count; i++)
         {
-            Vector3 position = transform.position + new Vector3(-(150f * (_cardsInHand.Count - 1)) / 2f, 0, 0) + new Vector3(i * 150f, 0, 0);
+            Vector3 position = _Hand.position + new Vector3(-(150f * (_cardsInHand.Count - 1)) / 2f, 0, 0) + new Vector3(i * 150f, 0, 0);
             _cardsInHand[i].transform.position = position;
             _cardsInHand[i].SetPos(position);
         }

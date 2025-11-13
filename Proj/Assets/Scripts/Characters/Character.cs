@@ -33,7 +33,6 @@ public class Character : MonoBehaviour
     private List<Ability> _availableAbilities;
     private NavMeshAgent _navMeshAgent;
 
-
     public void Update()
     {
         // NOTE (CJ & Carl): Testkod f�r animationer
