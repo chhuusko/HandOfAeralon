@@ -30,6 +30,8 @@ public class GlobalGameManager : ScriptableObject
     }
     public GameData GetGameData()
     {
+        _currentGame = new GameData();
+        _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
         return _currentGame;
     }
     public void LoadGame(int slot)
