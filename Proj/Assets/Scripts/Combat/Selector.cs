@@ -21,6 +21,7 @@ public class Selector : MonoBehaviour
     public enum SelectorState
     {
         NonActive,
+        PlacingCharacters,
         Idle,  
         CharacterSelected,
         ActionTypeSelected,
@@ -41,6 +42,10 @@ public class Selector : MonoBehaviour
     public Character GetSelectedCharacter()
     {
         return _selectedCharacter;
+    }
+    public void SetSelectedCharacter(Character selectedCharacter)
+    {
+        _selectedCharacter = selectedCharacter;
     }
 
     void Start()
@@ -82,6 +87,7 @@ public class Selector : MonoBehaviour
             switch (_currentState)
             {
                 case SelectorState.NonActive: break;
+                case SelectorState.PlacingCharacters: break;
                 case SelectorState.Idle: TrySelectCharacter(clickedTile); break;
                 case SelectorState.CharacterSelected: DeselectCharacter(); break;
                 case SelectorState.ActionTypeSelected: HandlePendingCharacterAction(clickedTile); break;
@@ -121,6 +127,18 @@ public class Selector : MonoBehaviour
         if(!Input.GetMouseButtonDown(0)) return null;
 
         return GetTileUnderMouse();
+    }
+    public CombatGridTile GetDeployTileClicked()
+    {
+        CombatGridTile tile = GetTileUnderMouse();
+        if (tile && tile.GetTileType() == TileType.Deploy && tile.GetOccupant() == null)
+        {
+            return tile;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private void TrySelectCharacter(CombatGridTile tile)
