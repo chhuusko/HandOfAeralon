@@ -158,7 +158,8 @@ public class Selector : MonoBehaviour
 
     private void TrySelectCharacter(CombatGridTile tile)
     {
-       if(!tile.GetOccupant().TryGetComponent<Character>(out var character))
+        Character character = tile?.GetOccupantCharacter();
+        if(character == null)
         {
             DeselectCharacter();
             return;
