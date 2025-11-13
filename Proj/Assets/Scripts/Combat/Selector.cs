@@ -5,6 +5,14 @@ using UnityEngine.EventSystems;
 public class Selector : MonoBehaviour
 {
     public static Selector _instance {  get; private set; }
+    public enum SelectorState
+    {
+        NonActive,
+        PlacingCharacters,
+        Idle,  
+        CharacterSelected,
+        ActionTypeSelected,
+    }
 
     private void Awake()
     {
@@ -18,14 +26,6 @@ public class Selector : MonoBehaviour
         }
     }
 
-    public enum SelectorState
-    {
-        NonActive,
-        PlacingCharacters,
-        Idle,  
-        CharacterSelected,
-        ActionTypeSelected,
-    }
     public enum CharacterActionType
     {
         Null,
@@ -128,7 +128,7 @@ public class Selector : MonoBehaviour
 
         return GetTileUnderMouse();
     }
-    public CombatGridTile GetDeployTileClicked()
+    public CombatGridTile GetUnoccupiedDeployTileClicked()
     {
         CombatGridTile tile = GetTileUnderMouse();
         if (tile && tile.GetTileType() == TileType.Deploy && tile.GetOccupant() == null)

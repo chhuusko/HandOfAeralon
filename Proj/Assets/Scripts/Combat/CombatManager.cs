@@ -254,7 +254,7 @@ public class CombatManager : MonoBehaviour
                     Vector2Int tileIndex = new Vector2Int(5, 0);
                     Vector3 position = new Vector3(1.0f + tileIndex.x * 2.0f, 0.0f, 1.0f + tileIndex.y * 2.0f);
                     CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
-                                                                                       Faction.Friendly,
+                                                                                       Faction.Enemy,
                                                                                        10,
                                                                                        1,
                                                                                        tileIndex,
@@ -378,31 +378,40 @@ public class CombatManager : MonoBehaviour
     {
         if(_selector)
         {
+            _selector.SetCurrentState(Selector.SelectorState.PlacingCharacters);
+
             _selector.UpdatePlaceCharacter(_combatGrid.GetAllTiles());
             
-            CombatGridTile tile = _selector.GetDeployTileClicked();
-            Character character = _selector.GetSelectedCharacter();
+            CombatGridTile unoccupiedDeployTile = _selector.GetUnoccupiedDeployTileClicked();
+            Character selectedCharacter = _selector.GetSelectedCharacter();
             
-            if(character)
+            if(selectedCharacter)
             {
-                if (tile)
+                if (unoccupiedDeployTile)
                 {
-                    Vector2Int tileIndex = tile.GetTileIndex();
-                    Vector3 tilePosition = tile.GetTilePosition();
-                    Vector3 slitghtlyRaisedPosition = new Vector3(tilePosition.x, tilePosition.y + 0.05f, tilePosition.z);
+                    if(_combatGrid.ContainsCharacter(selectedCharacter.gameObject))
+                    {
 
-                    // TODO (Calle): Get the actuall characterData from GameStateManager
-                    //               For now spawn a stub character.
+                    }
+                    else
+                    {
+                        Vector2Int tileIndex = unoccupiedDeployTile.GetTileIndex();
+                        Vector3 tilePosition = unoccupiedDeployTile.GetTilePosition();
+                        Vector3 slitghtlyRaisedPosition = new Vector3(tilePosition.x, tilePosition.y + 0.05f, tilePosition.z);
 
-                    CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
-                                                                                        Faction.Friendly,
-                                                                                        10,
-                                                                                        1,
-                                                                                        tileIndex,
-                                                                                        tilePosition,
-                                                                                        Vector3.one,
-                                                                                        Quaternion.identity);
-                    _combatGrid.AddCharacter(characterData);
+                        // TODO (Calle): Get the actuall characterData from GameStateManager
+                        //               For now spawn a stub character.
+
+                        CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
+                                                                                            Faction.Friendly,
+                                                                                            10,
+                                                                                            1,
+                                                                                            tileIndex,
+                                                                                            tilePosition,
+                                                                                            Vector3.one,
+                                                                                            Quaternion.identity);
+                        _combatGrid.AddCharacter(characterData);
+                    }
                 }
                 else
                 {
@@ -412,7 +421,7 @@ public class CombatManager : MonoBehaviour
             
         }
 
-        _selector.ResetSelectedCharacter();
+        //_selector.ResetSelectedCharacter();
     }
 
     private void HandleEndTurn()

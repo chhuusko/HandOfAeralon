@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 201890759823954834}
   - component: {fileID: 962823390380687645}
   - component: {fileID: 6711793867523767747}
+  - component: {fileID: 5732170096945638700}
   m_Layer: 5
   m_Name: AbilityPanel
   m_TagString: Untagged
@@ -211,6 +212,32 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5732170096945638700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 392044348795341489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1109855201221273929
 GameObject:
   m_ObjectHideFlags: 0
@@ -1491,7 +1518,7 @@ PrefabInstance:
     - target: {fileID: 3412063049492297272, guid: fe889341b342836419584d2ddf0bdfcd,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4900675660030671799, guid: fe889341b342836419584d2ddf0bdfcd,
         type: 3}
