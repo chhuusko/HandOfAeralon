@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
+using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Playables;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -68,6 +70,8 @@ public class CombatGrid
     {
         _tileSize = tileSize;
     }
+
+    public bool ContainsCharacter(GameObject chracter) { return _charactersGO.Contains(chracter); }
 
     public void AddTile(CombatGridTileData tileData)
     {
@@ -246,7 +250,20 @@ public class CombatManager : MonoBehaviour
             case CombatState.LoadCombatLevel:
                 {
                     HandleLoadCombatLevel();
-                }break;
+
+                    Vector2Int tileIndex = new Vector2Int(5, 0);
+                    Vector3 position = new Vector3(1.0f + tileIndex.x * 2.0f, 0.0f, 1.0f + tileIndex.y * 2.0f);
+                    CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
+                                                                                       Faction.Friendly,
+                                                                                       10,
+                                                                                       1,
+                                                                                       tileIndex,
+                                                                                       position,
+                                                                                       Vector3.one,
+                                                                                       Quaternion.identity);
+                    _combatGrid.AddCharacter(characterData);
+                }
+                break;
             case CombatState.IntroCinematic:
                 {
                     HandleIntroCinematic();
@@ -347,6 +364,8 @@ public class CombatManager : MonoBehaviour
         if(!_combatGridLoaded)
         {
             _combatGridLoaded = true;
+           
+            // TODO (Calle): Detta ska göra i LevelManagern
             LoadNextLevel();
             //LoadCurrentPlayerParty();
             GameObject NavMesh = GameObject.Find("NavMesh Surface");
@@ -364,17 +383,17 @@ public class CombatManager : MonoBehaviour
             CombatGridTile tile = _selector.GetDeployTileClicked();
             Character character = _selector.GetSelectedCharacter();
             
-            if (tile && tile.GetTileType() == TileType.Deploy)
-            {   
-                if (tile.GetOccupant() == null)
+            if(character)
+            {
+                if (tile)
                 {
                     Vector2Int tileIndex = tile.GetTileIndex();
                     Vector3 tilePosition = tile.GetTilePosition();
                     Vector3 slitghtlyRaisedPosition = new Vector3(tilePosition.x, tilePosition.y + 0.05f, tilePosition.z);
-            
+
                     // TODO (Calle): Get the actuall characterData from GameStateManager
                     //               For now spawn a stub character.
-            
+
                     CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
                                                                                         Faction.Friendly,
                                                                                         10,
@@ -387,19 +406,10 @@ public class CombatManager : MonoBehaviour
                 }
                 else
                 {
-                    _combatGrid.RemoveCharacter(tile.GetOccupant());
-                    Destroy(tile.GetOccupant());
+                    DebugLog.CJLog("Show ERROR UI to place on a deploy tile.");
                 }
             }
-            else
-            {
-                
-                DebugLog.CJLog("Show ERROR UI to place on a deploy tile.");
-                DebugLog.MGLog("Show ERROR UI to place on a deploy tile.");
-                DebugLog.JLWLog("Show ERROR UI to place on a deploy tile.");
-                DebugLog.JoppaLog("Show ERROR UI to place on a deploy tile.");
-                DebugLog.AlexLog("Show ERROR UI to place on a deploy tile.");
-            }
+            
         }
 
         _selector.ResetSelectedCharacter();
@@ -412,6 +422,12 @@ public class CombatManager : MonoBehaviour
 
     private void HandlePlayerTurn()
     {
+        // TODO (Calle): 
+        //  Vid starten av varje hero karaktärs turn sker dessa saker: 
+        //  - Spelarens mana ökar med 1 -> I CardHandManager()
+        //  - Hero karaktärens ability cooldowns minskar med 1 -> WIP (MG/JOPPA)
+        //  - Spelarens "cooldown" / timer för att dra ett till kort minskar med 1 -> WIP 
+        
         GameObject nextCharacter = GetNextTurnCharacter();
 
         // TODO: Call selector with character.
@@ -430,7 +446,8 @@ public class CombatManager : MonoBehaviour
 
     private void LoadNextLevel()
     {
-        
+        CombatGrid combatGrid1 = CombatManager._instance.GetCombatGrid();
+
         string filePathToload = Application.dataPath + "\\JSON BattleGrids\\" + _fileToLoadDEBUG + ".json";
 
         if (!System.IO.File.Exists(filePathToload))

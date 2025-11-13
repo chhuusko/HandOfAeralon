@@ -160,6 +160,7 @@ public class GridMaker3D : EditorWindow
     private bool _bIsHoldingF  = false, _bIsHoldingCtrl = false, _bInFocusMode = false;
     private bool _bFocusToggle = false;
     private bool _bDrawPreviewGrid = true;
+    private bool _bPrevFocusMode;
 
     [MenuItem("Custom Tools/GridMaker 3D")]
     public static void ShowWindow()
@@ -284,6 +285,8 @@ public class GridMaker3D : EditorWindow
 
     private void OnGUI()
     {
+        Event currentEvent = Event.current;
+
         _windowEditorScrollPos = EditorGUILayout.BeginScrollView(_windowEditorScrollPos);
 
         EditorGUILayout.LabelField("Character Prefab Library", EditorStyles.boldLabel);
@@ -302,8 +305,14 @@ public class GridMaker3D : EditorWindow
             false
         ) as TilePrefabLibrary;
 
-        _bFocusToggle           = EditorGUILayout.Toggle("Focus Toggle for Draw", _bFocusToggle);
-        _bDrawPreviewGrid       = EditorGUILayout.Toggle("Draw Grid Lines", _bDrawPreviewGrid);
+        _bPrevFocusMode = IsInFocusDrawMode();
+        _bInFocusMode           = EditorGUILayout.Toggle(new GUIContent("Focus Toggle for Draw", "Use \"Ctrl + f\" to toggle on/off"), _bInFocusMode);
+        if (!_bPrevFocusMode && IsInFocusDrawMode())
+            DisplaySceneNoteForDrawMode("Draw Mode: On");
+        else if(_bPrevFocusMode && !IsInFocusDrawMode())
+            DisplaySceneNoteForDrawMode("Draw Mode: Off");
+
+        _bDrawPreviewGrid = EditorGUILayout.Toggle("Draw Grid Lines", _bDrawPreviewGrid);
         _drawMode               = GUILayout.SelectionGrid(_drawMode, new[] { "Draw Tiles", "Draw Characters" }, 1);
         _battleGridWidth        = EditorGUILayout.IntSlider("BattleGrid Width", _battleGridWidth, 0, 30);
         _battleGridHeight       = EditorGUILayout.IntSlider("BattleGrid Height", _battleGridHeight, 0, 30);
@@ -323,6 +332,7 @@ public class GridMaker3D : EditorWindow
 
         }
 
+        UpdateFocusDrawMode(currentEvent);
         UpdatePrefabLists();
         UpdateTileGrid();
         UpdateCharacterList();
@@ -1075,9 +1085,15 @@ public class GridMaker3D : EditorWindow
             if (_bIsHoldingCtrl && _bIsHoldingF)
             {
                 if (!_bInFocusMode)
+                {
                     _bInFocusMode = true;
+                    DisplaySceneNoteForDrawMode("Draw Mode: On");
+                }
                 else
+                {
+                    DisplaySceneNoteForDrawMode("Draw Mode: Off");
                     _bInFocusMode = false;
+                }
             }
         }
 
@@ -1089,6 +1105,17 @@ public class GridMaker3D : EditorWindow
                 _bIsHoldingCtrl = false;
         }
     }
+
+
+    private void DisplaySceneNoteForDrawMode(string message)
+    {
+        SceneView sceneView = SceneView.lastActiveSceneView;
+        if (sceneView)
+        {
+            sceneView.ShowNotification(new GUIContent(message));
+        }
+    }
+
     private void DrawTiles(Event currentEvent)
     {
         
@@ -1163,10 +1190,10 @@ public class GridMaker3D : EditorWindow
        GameObject newTilePrefab = _tileBrushPrefabHolder._tileBrushPrefabs[_currentTileBrushIndex];
 
         // If tile already exists and is same type, skip
-       if (existingTileEntry._tile != null && PrefabUtility.GetCorrespondingObjectFromSource(existingTileEntry._tile) == newTilePrefab)
-        {
-            return;
-        }
+       //if (PrefabUtility.GetCorrespondingObjectFromSource(existingTileEntry._tile) == newTilePrefab)
+       // {
+       //     return;
+       // }
 
         // Destroy old tile if exists
         if (existingTileEntry._tile != null)
