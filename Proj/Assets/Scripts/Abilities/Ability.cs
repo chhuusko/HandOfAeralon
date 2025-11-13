@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Ability", menuName = "Scriptable Objects/Ability")]
@@ -30,6 +31,11 @@ public abstract class Ability : ScriptableObject
     public Sprite GetIcon() => _icon;
     public float GetRange() => _range;
     public int GetCooldown() => _cooldown;
+
+    public void SetCooldown(int cooldown)
+    {
+        _cooldown = cooldown;
+    }
     public AbilityTargetType GetAbilityTargetType() => _targetType;
 
     public RangeCalculation GetRangeCalculation => _rangeCalculation;
