@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CombatUI : MonoBehaviour
@@ -6,6 +7,11 @@ public class CombatUI : MonoBehaviour
     
     [SerializeField] private GameObject _abilityPanel;
     [SerializeField] private GameObject _abilityButtonPrefab;
+
+    private void Start()
+    {
+        _abilityPanel.SetActive(false);
+    }
 
     public void ShowDeck()
     {
@@ -37,6 +43,12 @@ public class CombatUI : MonoBehaviour
     private void LoadAbilities()
     {
         var selectedCharacter = Selector._instance.GetSelectedCharacter();
+
+        if (selectedCharacter == null)
+        {
+            return;
+        }
+        
         foreach (var ability in selectedCharacter.GetAvailableAbilities())
         {
             GameObject abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
