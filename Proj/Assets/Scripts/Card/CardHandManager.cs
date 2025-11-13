@@ -105,8 +105,8 @@ public class CardHandManager : MonoBehaviour
     }
     public void SetUIActive(bool isActive)
     {
-        _Hand.gameObject.SetActive(isActive);
-        _mulligan.gameObject.SetActive(isActive);
+        // _Hand.gameObject.SetActive(isActive);
+        // _mulligan.gameObject.SetActive(isActive);
     }
     public int GetMana()
     {

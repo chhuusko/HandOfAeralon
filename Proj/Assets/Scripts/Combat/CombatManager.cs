@@ -382,29 +382,36 @@ public class CombatManager : MonoBehaviour
 
             _selector.UpdatePlaceCharacter(_combatGrid.GetAllTiles());
             
-            CombatGridTile tile = _selector.GetUnoccupiedDeployTileClicked();
-            Character character = _selector.GetSelectedCharacter();
+            CombatGridTile unoccupiedDeployTile = _selector.GetUnoccupiedDeployTileClicked();
+            Character selectedCharacter = _selector.GetSelectedCharacter();
             
-            if(character)
+            if(selectedCharacter)
             {
-                if (tile)
+                if (unoccupiedDeployTile)
                 {
-                    Vector2Int tileIndex = tile.GetTileIndex();
-                    Vector3 tilePosition = tile.GetTilePosition();
-                    Vector3 slitghtlyRaisedPosition = new Vector3(tilePosition.x, tilePosition.y + 0.05f, tilePosition.z);
+                    if(_combatGrid.ContainsCharacter(selectedCharacter.gameObject))
+                    {
 
-                    // TODO (Calle): Get the actuall characterData from GameStateManager
-                    //               For now spawn a stub character.
+                    }
+                    else
+                    {
+                        Vector2Int tileIndex = unoccupiedDeployTile.GetTileIndex();
+                        Vector3 tilePosition = unoccupiedDeployTile.GetTilePosition();
+                        Vector3 slitghtlyRaisedPosition = new Vector3(tilePosition.x, tilePosition.y + 0.05f, tilePosition.z);
 
-                    CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
-                                                                                        Faction.Friendly,
-                                                                                        10,
-                                                                                        1,
-                                                                                        tileIndex,
-                                                                                        tilePosition,
-                                                                                        Vector3.one,
-                                                                                        Quaternion.identity);
-                    _combatGrid.AddCharacter(characterData);
+                        // TODO (Calle): Get the actuall characterData from GameStateManager
+                        //               For now spawn a stub character.
+
+                        CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
+                                                                                            Faction.Friendly,
+                                                                                            10,
+                                                                                            1,
+                                                                                            tileIndex,
+                                                                                            tilePosition,
+                                                                                            Vector3.one,
+                                                                                            Quaternion.identity);
+                        _combatGrid.AddCharacter(characterData);
+                    }
                 }
                 else
                 {

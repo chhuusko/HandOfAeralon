@@ -78,7 +78,9 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     }
     IEnumerator OnHover(bool isEnter)
     {
-
+        CombatUI combatCanvas = GameObject.Find("CombatCanvas")?.GetComponent<CombatUI>();
+        combatCanvas?.SetCardsActive(isEnter);
+        
         float duration = 0.1f; 
         float elapsed = 0f;
         if (isEnter)
