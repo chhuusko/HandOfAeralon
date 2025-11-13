@@ -1,19 +1,15 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatUI : MonoBehaviour
 {
     public enum PanelType { Card, Ability }
     
-    [SerializeField] private GameObject _abilityPanel;
+    [SerializeField] private Image _abilityPanel;
     [SerializeField] private GameObject _abilityButtonPrefab;
     [SerializeField] private TextMeshProUGUI _mana;
-
-    public void UpdateManaText(int mana)
-    {
-        _mana.text = $"Mana\n{mana}/10";
-    }
 
     private void OnEnable()
     {
@@ -24,11 +20,16 @@ public class CombatUI : MonoBehaviour
     {
         CardHandManager.onManaChange -= UpdateManaText;
     }
-
-    private void Start()
+    
+    private void UpdateManaText(int mana)
     {
-        _abilityPanel.SetActive(false);
+        _mana.text = $"Mana\n{mana}/10";
     }
+
+    // private void Start()
+    // {
+    //     _abilityPanel.SetActive(false);
+    // }
 
     public void ShowDeck()
     {
@@ -54,7 +55,7 @@ public class CombatUI : MonoBehaviour
     private void ShowPanel(PanelType panelType)
     {
         CardHandManager._instance.SetUIActive(panelType == PanelType.Card);
-        _abilityPanel.SetActive(panelType == PanelType.Ability);
+        _abilityPanel.color = panelType == PanelType.Ability ? new Color(1, 1, 1, 1) :  new Color(1, 1, 1, 0.5f);
     }
 
     private void LoadAbilities()
