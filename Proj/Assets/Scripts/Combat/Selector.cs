@@ -48,12 +48,6 @@ public class Selector : MonoBehaviour
     {
         _selectedCharacter = selectedCharacter;
     }
-
-    void Start()
-    {
-        _bDebugSelector = true;
-    }
-
     
     void Update()
     {
