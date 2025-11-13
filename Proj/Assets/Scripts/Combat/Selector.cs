@@ -228,6 +228,7 @@ public class Selector : MonoBehaviour
     private void ShowCharacterUIOptions(Character Character)
     {
         // Activate UI and place it to show over characters head.
+        GameObject.Find("CombatCanvas")?.GetComponent<CombatUI>()?.LoadAbilities();
     }
     public void PreviewTilesWithinReach(Character character, Ability ability)
     {

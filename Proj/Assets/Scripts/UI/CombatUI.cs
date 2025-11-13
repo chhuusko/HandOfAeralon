@@ -42,7 +42,7 @@ public class CombatUI : MonoBehaviour
         _abilityPanel.color = active ? new Color(1, 1, 1, 0.5f) : new Color(1, 1, 1, 1);
     }
 
-    private void LoadAbilities()
+    public void LoadAbilities()
     {
         var selectedCharacter = Selector._instance.GetSelectedCharacter();
 
