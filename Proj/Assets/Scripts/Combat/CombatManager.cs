@@ -382,7 +382,7 @@ public class CombatManager : MonoBehaviour
 
             _selector.UpdatePlaceCharacter(_combatGrid.GetAllTiles());
             
-            CombatGridTile tile = _selector.GetDeployTileClicked();
+            CombatGridTile tile = _selector.GetUnoccupiedDeployTileClicked();
             Character character = _selector.GetSelectedCharacter();
             
             if(character)

@@ -128,7 +128,7 @@ public class Selector : MonoBehaviour
 
         return GetTileUnderMouse();
     }
-    public CombatGridTile GetDeployTileClicked()
+    public CombatGridTile GetUnoccupiedDeployTileClicked()
     {
         CombatGridTile tile = GetTileUnderMouse();
         if (tile && tile.GetTileType() == TileType.Deploy && tile.GetOccupant() == null)
