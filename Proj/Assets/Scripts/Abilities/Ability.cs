@@ -8,6 +8,7 @@ public abstract class Ability : ScriptableObject
     [SerializeField] private string _abilityName;
     [SerializeField] private Sprite _icon;
     [SerializeField] private int _range;
+    [SerializeField] private int _cooldown;
 
     [Header("- Targeting -")]
     [SerializeField] private RangeCalculation _rangeCalculation;
@@ -28,6 +29,7 @@ public abstract class Ability : ScriptableObject
     public string GetAbilityName() => _abilityName;
     public Sprite GetIcon() => _icon;
     public float GetRange() => _range;
+    public int GetCooldown() => _cooldown;
     public AbilityTargetType GetAbilityTargetType() => _targetType;
 
     public RangeCalculation GetRangeCalculation => _rangeCalculation;
