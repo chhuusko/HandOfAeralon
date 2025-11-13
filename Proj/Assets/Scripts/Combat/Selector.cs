@@ -35,10 +35,10 @@ public class Selector : MonoBehaviour
     } 
 
     [SerializeField] private SelectorState _currentState = SelectorState.NonActive;
-    private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
-    private Character _selectedCharacter;
-    private Ability _pendingAbility;
-    private bool _bDebugSelector = false;
+    [SerializeField] private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
+    [SerializeField] private Character _selectedCharacter;
+    [SerializeField] private Ability _pendingAbility;
+    [SerializeField] private bool _bDebugSelector = false;
 
     public Character GetSelectedCharacter()
     {
@@ -97,6 +97,9 @@ public class Selector : MonoBehaviour
     }
     private void HandleTileHover()
     {
+        // Return early if mouse is over UI element.
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         // Show info about character.
         CombatGridTile hoveredTile = GetTileUnderMouse();
         if (hoveredTile == null) return;
