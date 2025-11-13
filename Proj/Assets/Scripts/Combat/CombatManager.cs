@@ -378,7 +378,7 @@ public class CombatManager : MonoBehaviour
     {
         if(_selector)
         {
-            _selector.SetCurrentState(Selector.SelectorState.PlacingCharacters);
+            _selector.SetCurrentState(SelectorState.PlacingCharacters);
 
             _selector.UpdatePlaceCharacter(_combatGrid.GetAllTiles());
             
@@ -440,7 +440,7 @@ public class CombatManager : MonoBehaviour
         GameObject nextCharacter = GetNextTurnCharacter();
 
         // TODO: Call selector with character.
-        Selector._instance.SetCurrentState(Selector.SelectorState.Idle);
+        Selector._instance.SetCurrentState(SelectorState.Idle);
     }
 
     private void HandleEnemyTurn()
