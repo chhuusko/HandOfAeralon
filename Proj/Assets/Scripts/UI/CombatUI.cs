@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class CombatUI : MonoBehaviour
@@ -7,6 +8,22 @@ public class CombatUI : MonoBehaviour
     
     [SerializeField] private GameObject _abilityPanel;
     [SerializeField] private GameObject _abilityButtonPrefab;
+    [SerializeField] private TextMeshProUGUI _mana;
+
+    public void UpdateManaText(int mana)
+    {
+        _mana.text = $"Mana\n{mana}/10";
+    }
+
+    private void OnEnable()
+    {
+        CardHandManager.onManaChange += UpdateManaText;
+    }
+
+    private void OnDisable()
+    {
+        CardHandManager.onManaChange -= UpdateManaText;
+    }
 
     private void Start()
     {
