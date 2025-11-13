@@ -165,7 +165,7 @@ public class Selector : MonoBehaviour
         SelectCharacter(character);
     }
 
-    public void UpdatePlaceCharacter(GameObject[] tiles)
+    public void UpdateTileColors(GameObject[] tiles)
     {
 
         foreach (GameObject tile in tiles)
