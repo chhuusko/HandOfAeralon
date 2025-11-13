@@ -1,0 +1,35 @@
+using UnityEngine;
+
+public class CombatUI : MonoBehaviour
+{
+    public enum PanelType { Card, Ability }
+    
+    [SerializeField] private GameObject _abilityPanel;
+    [SerializeField] private GameObject _abilityButtonPrefab;
+
+    public void ShowCardPanel()
+    {
+        ShowPanel(PanelType.Card);
+    }
+
+    public void ShowAbilityPanel()
+    {
+        ShowPanel(PanelType.Ability);
+        LoadAbilities();
+    }
+
+    private void ShowPanel(PanelType panelType)
+    {
+        CardHandManager._instance.SetUIActive(panelType == PanelType.Card);
+        _abilityPanel.SetActive(panelType == PanelType.Ability);
+    }
+
+    private void LoadAbilities()
+    {
+        var selectedCharacter = Selector._instance.GetSelectedCharacter();
+        foreach (var ability in selectedCharacter.GetAvailableAbilities())
+        {
+            GameObject abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
+        }
+    }
+}

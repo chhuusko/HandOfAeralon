@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 [System.Serializable]
@@ -78,6 +81,22 @@ public class CombatGrid
             tileObject.transform.localScale = tileData.GetTileSize();
             tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
             tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
+            
+            MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
+            Material inCombatTileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Shaders/CJ Test Shaders/TileMaterial.mat");
+            if (inCombatTileMaterial != null)
+            {
+                meshRend.material = inCombatTileMaterial;
+                if (tileObject.GetComponent<CombatGridTile>().GetTileIndex().x == 0)
+                    meshRend.material.SetColor("_TileColor", Color.green);
+                //meshRend.sharedMaterials = new Material[] { inCombatTileMaterial };
+                //meshRend.material.color = Color.white;
+                //var block = new MaterialPropertyBlock();
+                //block.SetColor("_BaseColor", Color.white);
+                //meshRend.SetPropertyBlock(block);
+            }
+            
+
 
             if (tileData.IsWalkable())
                 tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
@@ -87,7 +106,7 @@ public class CombatGrid
                 volume.area = NavMesh.GetAreaFromName("Not Walkable");
             
                 Vector3 tileSize = tileData.GetTileSize();
-                volume.size = new Vector3(tileSize.x, 1.0f, tileSize.z);
+                volume.size = new Vector3(1.0f, 2.0f, 1.0f);
                 volume.center = new Vector3(0, 0.5f, 0);
             }
 
@@ -167,6 +186,8 @@ public class CombatManager : MonoBehaviour
     [Header("Abilities")]
     [SerializeField] private List<ClassAbilities> _classAbilities;
     private Dictionary<CharacterClass, List<Ability>> _classAbilitiesDictionary;
+
+    public UnityEvent EnemyTurnStart = new();
     
     private void Awake()
     {
@@ -193,10 +214,29 @@ public class CombatManager : MonoBehaviour
         _combatState = CombatState.LoadCombatLevel;
     }
 
+    
     // Update is called once per frame
     void Update()
     {
-        switch(_combatState)
+        /*
+        foreach (GameObject tile in _combatGrid.GetAllTiles())
+        {
+            if (tile.GetComponent<CombatGridTile>().IsMouseHovering())
+            {
+                tile.GetComponent<CombatGridTile>().SetTileColor(Color.yellow);
+            }
+            else if (tile.GetComponent<CombatGridTile>().GetOccupant())
+            {
+                tile.GetComponent<CombatGridTile>().SetTileColor(Color.green);
+            }
+           
+            else
+            {
+                tile.GetComponent<CombatGridTile>().SetTileColor(Color.white);
+            }
+        }
+        */
+        switch (_combatState)
         {
             case CombatState.LoadCombatLevel:
                 {
@@ -223,6 +263,7 @@ public class CombatManager : MonoBehaviour
                     HandleEndCombat();
                 } break;
         }
+
     }
     
     /// <summary>
@@ -298,14 +339,14 @@ public class CombatManager : MonoBehaviour
     private void HandlePlayerTurn()
     {
         GameObject nextCharacter = GetNextTurnCharacter();
-        
-        // TODO: Call selector with character.
 
+        // TODO: Call selector with character.
+        Selector._instance.SetCurrentState(Selector.SelectorState.Idle);
     }
 
     private void HandleEnemyTurn()
     {
-
+        EnemyTurnStart.Invoke();
     }
 
     private void HandleEndCombat()

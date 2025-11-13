@@ -11,10 +11,11 @@ public class CardHandManager : MonoBehaviour
     public static CardHandManager _instance;
 
     [SerializeField] private GameObject _CardContainer;
+    [SerializeField] private Transform _Hand;
     [SerializeField] private CardList _cardList;
     [SerializeField] private List<CardContainer> _cardsInHand;
     [SerializeField] private List<Card> _cardsInDeck;
-    [SerializeField] private List<Card> _cardsInDiscard;
+    [SerializeField] private List<Card> _cardsInDiscardPile;
     [SerializeField] private int _maxHand = 3;
     
     private int _maxMana = 5;
@@ -52,7 +53,7 @@ public class CardHandManager : MonoBehaviour
     }
     public void AddCardFromDeck()
     {
-        CardContainer newCardContainer = Instantiate(_CardContainer, transform).GetComponent<CardContainer>();
+        CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
         _cardsInHand.Add(newCardContainer);
         newCardContainer.AddCard(_cardsInDeck[0]);
         _cardsInDeck.RemoveAt(0);
@@ -81,10 +82,19 @@ public class CardHandManager : MonoBehaviour
             drawHand();
         }
     }
+    public void OpenDeck()
+    {
+        CardViewUI.GetInstance().UpdateCards(_cardsInDeck);
+    }
+    public void OpenDiscardPile()
+    {
+        CardViewUI.GetInstance().UpdateCards(_cardsInDiscardPile);
+    }
     public void RemoveCard(CardContainer cardContainer)
     {
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
+        _cardsInDiscardPile.Add(cardContainer.GetCard());
         drawHand();
     }
     public void ChangeMana(int change)
@@ -108,9 +118,9 @@ public class CardHandManager : MonoBehaviour
     {
         return _cardsInDeck;
     }
-    private List<Card> GetDiscard()
+    private List<Card> GetDiscardPile()
     {
-        return _cardsInDiscard;
+        return _cardsInDiscardPile;
     }
 
 

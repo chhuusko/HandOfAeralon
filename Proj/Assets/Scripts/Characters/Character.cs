@@ -30,6 +30,18 @@ public class Character : MonoBehaviour
     private List<Ability> _availableAbilities;
     private NavMeshAgent _navMeshAgent;
 
+
+    public void Update()
+    {
+        if(IsMoving())
+        {
+            GetComponent<Animator>().SetBool("IsMoving", true);
+        }
+        else
+        {
+            GetComponent<Animator>().SetBool("IsMoving", false);
+        }
+    }
     public CharacterClass GetCharacterClass()
     {
         return _characterClass;
@@ -63,6 +75,11 @@ public class Character : MonoBehaviour
     public CombatGridTile GetCurrentTileComponent()
     {
         return CombatManager._instance.GetTileComponent(_currentTileIndex.x, _currentTileIndex.y);
+    }
+
+    public List<Ability> GetAvailableAbilities()
+    {
+        return _availableAbilities;
     }
 
     public void SetCharacterClass(CharacterClass characterClass)
@@ -155,6 +172,15 @@ public class Character : MonoBehaviour
     public void Heal(int healAmount)
     {
         _currentHealthPoints = Mathf.Min(_currentHealthPoints + healAmount, _baseHealthPoints);
+    }
+
+    public bool IsMoving()
+    {
+        if (_navMeshAgent.pathPending)
+            return true; 
+
+        return _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance
+               || _navMeshAgent.velocity.sqrMagnitude > 0.01f;
     }
 
     /// <summary>
