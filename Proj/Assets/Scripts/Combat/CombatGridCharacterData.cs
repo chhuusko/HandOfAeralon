@@ -11,14 +11,16 @@ public class CombatGridCharacterData
     [SerializeField] private Vector2Int _tileIndex;
     [SerializeField] private Vector3 _position;
     [SerializeField] private Vector3 _size;
-    
+    [SerializeField] private Quaternion _rotation;
+
     public CombatGridCharacterData(CharacterClass characterClass, 
                                    Faction faction,        
                                    int healthPoints,
                                    int initiative,
                                    Vector2Int tileIndex, 
                                    Vector3 position,
-                                   Vector3 size)
+                                   Vector3 size,
+                                   Quaternion rotation)
     {
         _characterClass = characterClass;
         _faction = faction;
@@ -27,6 +29,7 @@ public class CombatGridCharacterData
         _tileIndex = tileIndex;
         _position = position;
         _size = size;
+        _rotation = rotation;
     }
     public CharacterClass GetCharacterClass() { return _characterClass; }
     public Faction GetFaction() {  return _faction; }
@@ -35,11 +38,12 @@ public class CombatGridCharacterData
     public Vector2Int GetTileIndex() { return _tileIndex; }
     public Vector3 GetCharacterPosition() { return _position; }
     public Vector3 GetCharacterSize() { return _size; }
+    public Quaternion GetRotation() { return _rotation; }   
     
     
     public void SetCharacterClass(CharacterClass characterClass) { _characterClass = characterClass; }
     public void SetFaction(Faction faction) { _faction = faction; }
-    public void SetHealthPoints(int healtPoints) { _healthPoints = healtPoints; }
+    public void SetHealthPoints(int healthPoints) { _healthPoints = healthPoints; }
     public void SetInitiative(int initiative) {  _initiative = initiative; }
     public void SetTileIndex(Vector2Int tileIndex) { _tileIndex = tileIndex; }
 }

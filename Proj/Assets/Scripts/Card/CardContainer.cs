@@ -113,4 +113,8 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         _hoverEndPosition = _startPosition + new Vector3(0, _hoverDistance, 0);
         
     }
+    public Card GetCard()
+    {
+        return _containedCard;
+    }
 }

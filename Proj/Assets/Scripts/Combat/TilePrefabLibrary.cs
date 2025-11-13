@@ -6,6 +6,7 @@ public class TilePrefabEntry
 {
     public TileType type;
     public GameObject prefab;
+    ////
 }
 
 [CreateAssetMenu(fileName = "TilePrefabLibrary", menuName = "Scriptable Objects/Tile Prefab Library")]
@@ -14,7 +15,6 @@ public class TilePrefabLibrary : ScriptableObject
     public List<TilePrefabEntry> _tilePrefabs;
 
     private Dictionary<TileType, GameObject> _dictionary;
-
     public GameObject GetPrefab(TileType type)
     {
         if (_dictionary == null)

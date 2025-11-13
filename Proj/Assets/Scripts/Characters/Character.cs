@@ -1,30 +1,48 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-
-public enum CharacterClass { Barbarian, Wizard, Rogue, Bard }
 
 public enum Faction { Friendly, Enemy }
 
 [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
 public class Character : MonoBehaviour
 {
-    private const float MOVE_SPEED = 5f;
-    
+    [Header("Character")]
+    [SerializeField] private ClassData _classData;
     [SerializeField] private CharacterClass _characterClass;
     [SerializeField] private Faction _faction;
-    [SerializeField] private int _healthPoints;
-    [SerializeField] private int _initiative;
-    [SerializeField] private Vector2Int _currentTileIndex;
-    // TODO: Traits.
-    private Vector3 _movePosition;
-    private bool _bShouldMove;
-    private List<Ability> _availableAbilities;
     
-    private Rigidbody _rigidbody;
+    [Header("Base stats")]
+    [SerializeField] private int _baseHealthPoints;
+    [SerializeField] private int _baseSpeed;
+    [SerializeField] private int _baseDamage;
+    // TODO: Traits.
+    
+    [Header("Current stats")]
+    [SerializeField] private int _currentHealthPoints;
+    [SerializeField] private int _currentSpeed;
+    [SerializeField] private int _currentDamage;
+    
+    [Header("Misc")]
+    [SerializeField] private Vector2Int _currentTileIndex;
+    private List<Ability> _availableAbilities;
     private NavMeshAgent _navMeshAgent;
 
+
+    public void Update()
+    {
+        // NOTE (CJ & Carl): Testkod för animationer
+        //if(IsMoving())
+        //{
+        //    GetComponent<Animator>().SetBool("IsMoving", true);
+        //}
+        //else
+        //{
+        //    GetComponent<Animator>().SetBool("IsMoving", false);
+        //}
+    }
     public CharacterClass GetCharacterClass()
     {
         return _characterClass;
@@ -37,17 +55,32 @@ public class Character : MonoBehaviour
 
     public int GetHealthPoints()
     {
-        return _healthPoints;
+        return _currentHealthPoints;
     }
 
-    public int GetInitiative()
+    public int GetSpeed()
     {
-        return _initiative;
+        return _currentSpeed;
+    }
+
+    public int GetDamage()
+    {
+        return _currentDamage;
     }
 
     public Vector2Int GetCurrentTileIndex()
     {
         return _currentTileIndex;
+    }
+
+    public CombatGridTile GetCurrentTileComponent()
+    {
+        return CombatManager._instance.GetTileComponent(_currentTileIndex.x, _currentTileIndex.y);
+    }
+
+    public List<Ability> GetAvailableAbilities()
+    {
+        return _availableAbilities;
     }
 
     public void SetCharacterClass(CharacterClass characterClass)
@@ -60,14 +93,19 @@ public class Character : MonoBehaviour
         _faction = faction;
     }
 
-    public void SetHealthPoints(int healthPoints)
+    public void SetBaseHealthPoints(int healthPoints)
     {
-        _healthPoints = healthPoints;
+        _baseHealthPoints = healthPoints;
     }
 
-    public void SetInitiative(int initiative)
+    public void SetBaseSpeed(int initiative)
     {
-        _initiative = initiative;
+        _baseSpeed = initiative;
+    }
+
+    public void SetBaseDamage(int damage)
+    {
+        _baseDamage = damage;
     }
     
     public void SetCurrentTileIndex(Vector2Int tileIndex)
@@ -75,11 +113,33 @@ public class Character : MonoBehaviour
         _currentTileIndex = tileIndex;
     }
     
-    private void Start()
+    private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
-        InitializeAbilities();
+
+        // Only set class values for friendlies.
+        if (_faction == Faction.Friendly)
+        {
+            InitializeClassData();
+            InitializeAbilities();
+        }
+    }
+    
+    /// <summary>
+    /// Generates a new friendly character based on the class data.
+    /// </summary>
+    private void InitializeClassData()
+    {
+        if (_classData == null)
+        {
+            return;
+        }
+            
+        // Set values from class data.
+        _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(_classData.minHealthPoints, _classData.maxHealthPoints + 1);
+        _currentSpeed = _baseSpeed =  UnityEngine.Random.Range(_classData.minSpeed, _classData.maxSpeed + 1);
+        _currentDamage = _baseDamage = UnityEngine.Random.Range(_classData.minDamage, _classData.maxDamage + 1);
+        _characterClass = _classData.characterClass;
     }
 
     /// <summary>
@@ -87,17 +147,41 @@ public class Character : MonoBehaviour
     /// </summary>
     private void InitializeAbilities()
     {
+        if (CombatManager._instance == null)
+        {
+            return;
+        }
+        _availableAbilities = new List<Ability>();
         _availableAbilities = CombatManager._instance.GetClassAbilities(_characterClass);
+    }
+
+    private IEnumerator WaitForCombatManager()
+    {
+        yield return new WaitUntil(() => CombatManager._instance != null);
+        InitializeAbilities();
     }
     
     public void TakeDamage(int damage)
     {
-        _healthPoints -= damage;
+        _currentHealthPoints -= damage;
+        if (_currentHealthPoints <= 0)
+        {
+            // TODO: Character dies.
+        }
     }
 
     public void Heal(int healAmount)
     {
-        _healthPoints += healAmount;
+        _currentHealthPoints = Mathf.Min(_currentHealthPoints + healAmount, _baseHealthPoints);
+    }
+
+    public bool IsMoving()
+    {
+        if (_navMeshAgent.pathPending)
+            return true; 
+
+        return _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance
+               || _navMeshAgent.velocity.sqrMagnitude > 0.01f;
     }
 
     /// <summary>
