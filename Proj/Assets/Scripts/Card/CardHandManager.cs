@@ -19,6 +19,7 @@ public class CardHandManager : MonoBehaviour
     [SerializeField] private List<Card> _cardsInDiscardPile;
     [SerializeField] private int _maxHand = 3;
     
+    [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
     private int _maxMana = 5;
     private int _mana = 0;
 
@@ -28,25 +29,25 @@ public class CardHandManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-        AddRandomCardsToDeck();
-        drawHand();
-    }
-    private void AddRandomCardsToDeck()
-    {
-        for (int i = 0; i < 30; i++)
+        if (GlobalGameManager.GetInstance() != null)
         {
-            _cardsInDeck.Add(_cardList.GetRandomCard());
+            _cardsInDeck = GlobalGameManager.GetInstance().GetGameData().cardList;
         }
+        else
+        {
+            _cardsInDeck = new List<Card>(_deckPreset.GetCards());
+        }
+        drawHand();
     }
     public void drawHand()
     {
         _cardsInHand.RemoveAll(o => o == null);
-        if (_cardsInDeck.Count == 0)
-        {
-            AddRandomCardsToDeck();
-        }
         while (_maxHand > _cardsInHand.Count)
         {
+            if(_cardsInDeck.Count == 0)
+            {
+                _cardsInDeck = _cardsInDiscardPile;
+            }
             AddCardFromDeck();
         }
         

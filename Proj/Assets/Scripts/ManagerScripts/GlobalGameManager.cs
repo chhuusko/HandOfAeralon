@@ -16,19 +16,31 @@ public struct GameData
 
 public class GlobalGameManager : MonoBehaviour
 {
+    [SerializeField] private DeckPreset _deckPreset;
     private LevelManager _levelManager;
     private static GlobalGameManager _instance;
     private GameData _currentGame;
 
     private void Awake()
     {
-        _instance = this;
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         _levelManager = GetComponent<LevelManager>();
         DontDestroyOnLoad(this.gameObject);
     }
     public static GlobalGameManager GetInstance()
     {
         return _instance;
+    }
+    public GameData GetGameData()
+    {
+        return _currentGame;
     }
     public void LoadGame(int slot)
     {
@@ -48,8 +60,10 @@ public class GlobalGameManager : MonoBehaviour
         _currentGame.saveSlot = slot;
         _currentGame.seed = Random.Range(0, 1000);
         _levelManager.GenerateMap(_currentGame.seed);
-        _currentGame.coins = 0;
-        SceneManager.LoadScene("MainScene"); //TODO
+        _currentGame.heroList = new List<Character>();
+        _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
+        _currentGame.coins = 50;
+        SceneManager.LoadScene("ShopScene"); //TODO
     }
     public void JSONWrite()
     {
