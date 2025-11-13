@@ -16,12 +16,14 @@ public struct GameData
 
 public class GlobalGameManager : MonoBehaviour
 {
+    private LevelManager _levelManager;
     private static GlobalGameManager _instance;
     private GameData _currentGame;
 
     private void Awake()
     {
         _instance = this;
+        _levelManager = GetComponent<LevelManager>();
         DontDestroyOnLoad(this.gameObject);
     }
     public static GlobalGameManager GetInstance()
@@ -45,6 +47,7 @@ public class GlobalGameManager : MonoBehaviour
         _currentGame = new GameData();
         _currentGame.saveSlot = slot;
         _currentGame.seed = Random.Range(0, 1000);
+        _levelManager.GenerateMap(_currentGame.seed);
         _currentGame.coins = 0;
         SceneManager.LoadScene(1); //TODO
     }
