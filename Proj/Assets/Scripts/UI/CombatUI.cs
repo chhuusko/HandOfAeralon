@@ -8,7 +8,7 @@ public class CombatUI : MonoBehaviour
     public enum PanelType { Card, Ability }
     
     [SerializeField] private Image _abilityPanel;
-    [SerializeField] private GameObject _abilityButtonPrefab;
+    [SerializeField] private Button _abilityButtonPrefab;
     [SerializeField] private TextMeshProUGUI _mana;
 
     private void OnEnable()
@@ -50,10 +50,12 @@ public class CombatUI : MonoBehaviour
         {
             return;
         }
-        
-        foreach (var ability in selectedCharacter.GetAvailableAbilities())
+
+        for (int i = 0; i < selectedCharacter.GetAvailableAbilities().Count; i++)
         {
-            GameObject abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
+            Button abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
+            
+            var ability = selectedCharacter.GetAvailableAbilities()[i];
         }
     }
 }
