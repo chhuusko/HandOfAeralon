@@ -9,6 +9,9 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
+
+
+
 [System.Serializable]
 public enum CombatState
 {
@@ -19,6 +22,7 @@ public enum CombatState
     EndTurn,
     EndCombat
 };
+
 
 [System.Serializable]
 public enum CombatTurn
@@ -101,10 +105,10 @@ public class CombatGrid
                         }
                         else
                         {
-                            Debug.Log("Failed to load TileMaterial.mat");
+                            DebugLog.CJLog("Failed to load TileMaterial.mat");
+
                         }
-                    } break;
-            }
+                    } break;}
            
             if (tileData.IsWalkable())
                 tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
@@ -122,7 +126,7 @@ public class CombatGrid
         }
         else
         {
-            Debug.Log("No TilePrefabLibrary assigned in inspector!");
+            DebugLog.CJLog("No TilePrefabLibrary assigned in inspector!");
         }
     }
 
@@ -149,7 +153,7 @@ public class CombatGrid
         }
         return enemyCharacters;
     }
-
+        
     public void AddCharacter(CombatGridCharacterData characterData)
     {
         Vector2Int tileIndex    = characterData.GetTileIndex();
@@ -168,6 +172,11 @@ public class CombatGrid
         characterObject.GetComponent<Character>().SetFaction(faction);
 
         _charactersGO.Add(characterObject);
+    }
+
+    public void RemoveCharacter(GameObject character)
+    {
+        _charactersGO.Remove(character);
     }
 }
 
@@ -230,8 +239,6 @@ public class CombatManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
         MoveCamera();
 
         switch (_combatState)
@@ -353,33 +360,51 @@ public class CombatManager : MonoBehaviour
         if(_selector)
         {
             _selector.UpdatePlaceCharacter(_combatGrid.GetAllTiles());
-            CombatGridTile tile = _selector.GetTileClicked();
-            if(tile && tile.GetTileType() == TileType.Deploy && tile.GetOccupant() == null)
-            {
-                Vector2Int tileIndex = tile.GetTileIndex();
-                Vector3 tilePosition = tile.GetTilePosition();
-                Vector3 slitghtlyRaisedPosition = new Vector3(tilePosition.x, tilePosition.y + 0.05f, tilePosition.z);
-
-                // TODO (Calle): Get the actuall characterData from GameStateManager
-                //               For now spawn a stub character.
-
-                CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
-                                                                                    Faction.Friendly,
-                                                                                    10,
-                                                                                    1,
-                                                                                    tileIndex,
-                                                                                    tilePosition,
-                                                                                    Vector3.one,
-                                                                                    Quaternion.identity);
-                _combatGrid.AddCharacter(characterData);
-
+            
+            CombatGridTile tile = _selector.GetDeployTileClicked();
+            Character character = _selector.GetSelectedCharacter();
+            
+            if (tile && tile.GetTileType() == TileType.Deploy)
+            {   
+                if (tile.GetOccupant() == null)
+                {
+                    Vector2Int tileIndex = tile.GetTileIndex();
+                    Vector3 tilePosition = tile.GetTilePosition();
+                    Vector3 slitghtlyRaisedPosition = new Vector3(tilePosition.x, tilePosition.y + 0.05f, tilePosition.z);
+            
+                    // TODO (Calle): Get the actuall characterData from GameStateManager
+                    //               For now spawn a stub character.
+            
+                    CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
+                                                                                        Faction.Friendly,
+                                                                                        10,
+                                                                                        1,
+                                                                                        tileIndex,
+                                                                                        tilePosition,
+                                                                                        Vector3.one,
+                                                                                        Quaternion.identity);
+                    _combatGrid.AddCharacter(characterData);
+                }
+                else
+                {
+                    _combatGrid.RemoveCharacter(tile.GetOccupant());
+                    Destroy(tile.GetOccupant());
+                }
             }
             else
             {
-                Debug.Log("Show ERROR UI to place on a deploy tile.");
+                
+                DebugLog.CJLog("Show ERROR UI to place on a deploy tile.");
+                DebugLog.MGLog("Show ERROR UI to place on a deploy tile.");
+                DebugLog.JLWLog("Show ERROR UI to place on a deploy tile.");
+                DebugLog.JoppaLog("Show ERROR UI to place on a deploy tile.");
+                DebugLog.AlexLog("Show ERROR UI to place on a deploy tile.");
             }
         }
+
+        _selector.ResetSelectedCharacter();
     }
+
     private void HandleEndTurn()
     {
 
@@ -410,14 +435,14 @@ public class CombatManager : MonoBehaviour
 
         if (!System.IO.File.Exists(filePathToload))
         {
-            Debug.Log("Level File didn't exist or filepath was wrong!");
+            DebugLog.CJLog("Level File didn't exist or filepath was wrong!");
             return;
         }
 
         string jsonFileData = System.IO.File.ReadAllText(filePathToload);
         if(jsonFileData.Length == 0)
         {
-            Debug.Log("json File Data was empty!");
+            DebugLog.CJLog("json File Data was empty!");
             return;
         }
 
@@ -425,11 +450,11 @@ public class CombatManager : MonoBehaviour
 
         this._combatGrid.SetCombatGridSize(combatGrid._gridWidth, combatGrid._gridHeight);
         this._combatGrid.SetTileSize(combatGrid._tileSize);
-        Debug.Log("CombatGrid tileSize: " + combatGrid._tileSize);
+        DebugLog.CJLog("CombatGrid tileSize: " + combatGrid._tileSize);
        
         for (int i = 0; i < combatGrid._tileData.Count; i++)
         {
-            Debug.Log("tiled["+i+"]: " + "\tTileType : " + combatGrid._tileData[i].GetTileType() + 
+            DebugLog.CJLog("tiled["+i+"]: " + "\tTileType : " + combatGrid._tileData[i].GetTileType() + 
                       "\tTileIndex: " + combatGrid._tileData[i].GetTilePosition() + "\n");
 
             this._combatGrid.AddTile(combatGrid._tileData[i]);
@@ -452,6 +477,10 @@ public class CombatManager : MonoBehaviour
 
     }
 
+    public CombatGrid GetCombatGrid()
+    {
+        return this._combatGrid;
+    }
     public List<GameObject> GetAllCharacters()
     {
         return _combatGrid.GetAllCharacters();
@@ -508,4 +537,5 @@ public class CombatManager : MonoBehaviour
     { 
         _currentTurn = turn; 
     }
+
 }

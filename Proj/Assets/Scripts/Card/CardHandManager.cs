@@ -12,6 +12,7 @@ public class CardHandManager : MonoBehaviour
 
     [SerializeField] private GameObject _CardContainer;
     [SerializeField] private Transform _Hand;
+    [SerializeField] private Transform _mulligan;
     [SerializeField] private CardList _cardList;
     [SerializeField] private List<CardContainer> _cardsInHand;
     [SerializeField] private List<Card> _cardsInDeck;
@@ -104,7 +105,8 @@ public class CardHandManager : MonoBehaviour
     }
     public void SetUIActive(bool isActive)
     {
-        gameObject.SetActive(isActive);
+        _Hand.gameObject.SetActive(isActive);
+        _mulligan.gameObject.SetActive(isActive);
     }
     public int GetMana()
     {

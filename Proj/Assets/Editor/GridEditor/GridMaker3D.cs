@@ -215,7 +215,7 @@ public class GridMaker3D : EditorWindow
         {
             string assetPath = AssetDatabase.GUIDToAssetPath(guid);
             GameObject tileObject = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
-            Debug.Log("TileName: " + tileObject.name);
+            DebugLog.CJLog("TileName: " + tileObject.name);
             _tileBrushPrefabHolder._tileBrushPrefabs.Add(tileObject);
             _tileBrushPrefabHolderSO.Update();
         }
@@ -226,7 +226,7 @@ public class GridMaker3D : EditorWindow
         {
             string assetPath = AssetDatabase.GUIDToAssetPath (guid);
             GameObject characterObject = AssetDatabase.LoadAssetAtPath<GameObject> (assetPath);
-            Debug.Log("CharacterName" + characterObject.name);
+            DebugLog.CJLog("CharacterName" + characterObject.name);
             _characterBrushPrefabHolder._characterBrushPrefabs.Add(characterObject);
             _characterBrushPrefabHolderSO.Update();
         }
@@ -370,11 +370,11 @@ public class GridMaker3D : EditorWindow
             if (confirm)
             {
                 LoadBattleGridFromJSON();
-                Debug.Log($"Battle grid loaded!");
+                DebugLog.CJLog($"Battle grid loaded!");
             }
             else
             {
-                Debug.Log("Load cancelled.");
+                DebugLog.CJLog("Load cancelled.");
             }
         }
     }
@@ -401,11 +401,11 @@ public class GridMaker3D : EditorWindow
             if (confirm)
             {
                 SaveBattleGridToJSON();
-                Debug.Log($"Battle grid saved! {_tileGridProperty.arraySize} tiles exported.");
+                DebugLog.CJLog($"Battle grid saved! {_tileGridProperty.arraySize} tiles exported.");
             }
             else
             {
-                Debug.Log("Save cancelled.");
+                DebugLog.CJLog("Save cancelled.");
             }
         }
     }
@@ -1377,7 +1377,7 @@ public class GridMaker3D : EditorWindow
         foreach(CombatGridCharacterData characterData in combatGridSaveData._characterData)
         {
             GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
-            Debug.Log($"Loading character: {characterPrefab.name}");
+            DebugLog.CJLog($"Loading character: {characterPrefab.name}");
             CharacterEntry characterEntry = new CharacterEntry(characterData.GetCharacterPosition(),
                                                                Vector3.one, // TODO (Calle): The Size is saved based on the renderer.bounds.size i think, so saving and loading multiple time will make characters bigger each time HAHA! XD
                                                                characterData.GetRotation(),

@@ -1,3 +1,5 @@
+using System;
+using TMPro;
 using UnityEngine;
 
 public class CombatUI : MonoBehaviour
@@ -6,6 +8,27 @@ public class CombatUI : MonoBehaviour
     
     [SerializeField] private GameObject _abilityPanel;
     [SerializeField] private GameObject _abilityButtonPrefab;
+    [SerializeField] private TextMeshProUGUI _mana;
+
+    public void UpdateManaText(int mana)
+    {
+        _mana.text = $"Mana\n{mana}/10";
+    }
+
+    private void OnEnable()
+    {
+        CardHandManager.onManaChange += UpdateManaText;
+    }
+
+    private void OnDisable()
+    {
+        CardHandManager.onManaChange -= UpdateManaText;
+    }
+
+    private void Start()
+    {
+        _abilityPanel.SetActive(false);
+    }
 
     public void ShowDeck()
     {
@@ -37,6 +60,12 @@ public class CombatUI : MonoBehaviour
     private void LoadAbilities()
     {
         var selectedCharacter = Selector._instance.GetSelectedCharacter();
+
+        if (selectedCharacter == null)
+        {
+            return;
+        }
+        
         foreach (var ability in selectedCharacter.GetAvailableAbilities())
         {
             GameObject abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
