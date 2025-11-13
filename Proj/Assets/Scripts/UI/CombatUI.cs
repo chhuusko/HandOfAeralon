@@ -9,6 +9,7 @@ public class CombatUI : MonoBehaviour
     
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Button _abilityButtonPrefab;
+    [SerializeField] private Button _nextPhaseButton;
     [SerializeField] private TextMeshProUGUI _mana;
 
     private void OnEnable()
@@ -24,6 +25,30 @@ public class CombatUI : MonoBehaviour
     private void UpdateManaText(int mana)
     {
         _mana.text = $"Mana\n{mana}/10";
+    }
+
+    public void StartNextPhase()
+    {
+        switch (CombatManager._instance.GetCombatState())
+        {
+            case CombatState.MakeTurn:
+                CombatManager._instance.ChangeState(CombatState.EndTurn);
+                CombatManager._instance.HandleEndTurn();
+                break;
+            case CombatState.PlaceCharacters:
+                CombatManager._instance.ChangeState(CombatState.MakeTurn);
+                break;
+        }
+        
+        SetNextPhaseButtonText();
+    }
+
+    public void SetNextPhaseButtonText()
+    {
+        if (CombatManager._instance.GetCombatState() == CombatState.MakeTurn)
+        {
+            _nextPhaseButton.GetComponentInChildren<TextMeshProUGUI>().text = "End Turn";
+        }
     }
 
     public void ShowDeck()
