@@ -149,7 +149,7 @@ public class CombatGrid
         }
         return enemyCharacters;
     }
-
+        
     public void AddCharacter(CombatGridCharacterData characterData)
     {
         Vector2Int tileIndex    = characterData.GetTileIndex();
@@ -168,6 +168,11 @@ public class CombatGrid
         characterObject.GetComponent<Character>().SetFaction(faction);
 
         _charactersGO.Add(characterObject);
+    }
+
+    public void RemoveCharacter(GameObject character)
+    {
+        _charactersGO.Remove(character);
     }
 }
 
@@ -230,8 +235,6 @@ public class CombatManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
         MoveCamera();
 
         switch (_combatState)
@@ -353,33 +356,44 @@ public class CombatManager : MonoBehaviour
         if(_selector)
         {
             _selector.UpdatePlaceCharacter(_combatGrid.GetAllTiles());
-            CombatGridTile tile = _selector.GetTileClicked();
-            if(tile && tile.GetTileType() == TileType.Deploy && tile.GetOccupant() == null)
-            {
-                Vector2Int tileIndex = tile.GetTileIndex();
-                Vector3 tilePosition = tile.GetTilePosition();
-                Vector3 slitghtlyRaisedPosition = new Vector3(tilePosition.x, tilePosition.y + 0.05f, tilePosition.z);
-
-                // TODO (Calle): Get the actuall characterData from GameStateManager
-                //               For now spawn a stub character.
-
-                CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
-                                                                                    Faction.Friendly,
-                                                                                    10,
-                                                                                    1,
-                                                                                    tileIndex,
-                                                                                    tilePosition,
-                                                                                    Vector3.one,
-                                                                                    Quaternion.identity);
-                _combatGrid.AddCharacter(characterData);
-
-            }
-            else
-            {
-                Debug.Log("Show ERROR UI to place on a deploy tile.");
-            }
+            
+            //CombatGridTile tile = _selector.GetDeployTileClicked();
+            //Character character = _selector.GetCurrentCharacterClicked();
+            //
+            //if (tile && tile.GetTileType() == TileType.Deploy)
+            //{   
+            //    if (tile.GetOccupant() == null)
+            //    {
+            //        Vector2Int tileIndex = tile.GetTileIndex();
+            //        Vector3 tilePosition = tile.GetTilePosition();
+            //        Vector3 slitghtlyRaisedPosition = new Vector3(tilePosition.x, tilePosition.y + 0.05f, tilePosition.z);
+            //
+            //        // TODO (Calle): Get the actuall characterData from GameStateManager
+            //        //               For now spawn a stub character.
+            //
+            //        CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
+            //                                                                            Faction.Friendly,
+            //                                                                            10,
+            //                                                                            1,
+            //                                                                            tileIndex,
+            //                                                                            tilePosition,
+            //                                                                            Vector3.one,
+            //                                                                            Quaternion.identity);
+            //        _combatGrid.AddCharacter(characterData);
+            //    }
+            //    else
+            //    {
+            //        _combatGrid.RemoveCharacter(tile.GetOccupant());
+            //        Destroy(tile.GetOccupant());
+            //    }
+            //}
+            //else
+            //{
+            //    Debug.Log("Show ERROR UI to place on a deploy tile.");
+            //}
         }
     }
+
     private void HandleEndTurn()
     {
 
