@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,20 +17,25 @@ public class LevelManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-        _combatList = Directory.GetFiles("Assets/JSON BattleGrids");
+        _combatList = Directory.GetFiles("Assets/JSON BattleGrids").Where(f => !f.EndsWith(".meta")).ToArray(); 
+        _generatedList = new string[10];
         DontDestroyOnLoad(gameObject);
     }
     public void GenerateMap(int seed)
     {
-        Random.InitState(50);
+        Random.InitState(seed);
+
         for (int i = 0; i < gameLevels; i++)
         {
-            _generatedList[i] = _combatList[Random.Range(0, _combatList.Length)];
+            _generatedList[i] = _combatList[Random.Range(0,_combatList.Length)];
+            Debug.Log(_generatedList[i]);
         }
         
+        
     }
-    public void StartNextLevel()
+    public void StartNextLevel() 
     {
+        level++;
         if (level % 2 == 0)
         {
             GetCombatLevel();
@@ -39,6 +45,7 @@ public class LevelManager : MonoBehaviour
         {
             SceneManager.LoadScene("ShopScene");
         }
+        
     }
     public CombatGrid GetCombatLevel()
     {
