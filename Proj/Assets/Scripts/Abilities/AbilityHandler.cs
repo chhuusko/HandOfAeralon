@@ -27,8 +27,8 @@ public class AbilityHandler : MonoBehaviour
         {
             ClearAbilityTargets();
             if (_bDebugAbilityHandler)
-            Debug.Log("Tried casting ability, but it failed");
-            return false; ;
+                DebugLog.MGLog("Tried casting ability, but it failed");
+            return false;
         }
 
         ability.RunAbility(_casterTile, targetTile);

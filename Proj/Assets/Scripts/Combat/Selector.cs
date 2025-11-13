@@ -79,7 +79,7 @@ public class Selector : MonoBehaviour
             CombatGridTile clickedTile = GetTileUnderMouse();
             if (_bDebugSelector && clickedTile != null)
             {
-                Debug.Log("Clicked on tile " + clickedTile.gameObject);
+                DebugLog.MGLog("Clicked on tile " + clickedTile.gameObject);
             }
             switch (_currentState)
             {
@@ -198,7 +198,7 @@ public class Selector : MonoBehaviour
 
             if (_bDebugSelector)
             {
-                Debug.Log(character.GetCharacterClass().ToString() + " on tile index: " + character.GetCurrentTileIndex().ToString());
+                DebugLog.MGLog(character.GetCharacterClass().ToString() + " on tile index: " + character.GetCurrentTileIndex().ToString());
             }
         }
     }
@@ -221,7 +221,7 @@ public class Selector : MonoBehaviour
             _currentState = SelectorState.NonActive;
         }
 
-        if (_bDebugSelector) Debug.Log("Deselect Character");
+        if (_bDebugSelector) DebugLog.MGLog("Deselect Character");
     }
 
     private void ShowCharacterUIOptions(Character character)
@@ -267,7 +267,7 @@ public class Selector : MonoBehaviour
 
         if (_bDebugSelector)
         {
-            Debug.Log("Pending character action: " + _currentState.ToString() + " failed");
+            DebugLog.MGLog("Pending character action: " + _currentState.ToString() + " failed");
         }
         DeselectCharacter();
     }
@@ -276,7 +276,7 @@ public class Selector : MonoBehaviour
         _selectedCharacter.SetMoveTarget(tile);
         if (_bDebugSelector)
         {
-            Debug.Log(_selectedCharacter.GetCharacterClass() + " on tile: " + _selectedCharacter.GetCurrentTileIndex().ToString() + " is set to move to: " + tile.GetComponentIndex().ToString());
+            DebugLog.MGLog(_selectedCharacter.GetCharacterClass() + " on tile: " + _selectedCharacter.GetCurrentTileIndex().ToString() + " is set to move to: " + tile.GetComponentIndex().ToString());
         }
     }
 
@@ -285,7 +285,7 @@ public class Selector : MonoBehaviour
         bool success = _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_pendingAbility, tile);
         if (_bDebugSelector && success)
         {
-            Debug.Log(_selectedCharacter.GetCharacterClass() + " used ability: " + _pendingAbility.GetAbilityName().ToString());
+            DebugLog.MGLog(_selectedCharacter.GetCharacterClass() + " used ability: " + _pendingAbility.GetAbilityName().ToString());
         }
         if (!success)
         {
@@ -295,7 +295,7 @@ public class Selector : MonoBehaviour
     }
     private void DebugCurrentState()
     {
-        if(_bDebugSelector) Debug.Log("The current state is: " + GetCurrentState().ToString());
+        if(_bDebugSelector) DebugLog.MGLog("The current state is: " + GetCurrentState().ToString());
     }
 
     private void SetColorOfTiles(List<CombatGridTile> tiles, Color color)
