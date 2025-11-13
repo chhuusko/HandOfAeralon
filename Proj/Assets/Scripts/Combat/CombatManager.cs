@@ -37,18 +37,18 @@ public class CombatGrid
     [SerializeField] private int _width;
     [SerializeField] private Vector3 _tileSize;
     
-    [SerializeField] private GameObject[] tilesGO;
+    [SerializeField] private GameObject[] _tilesGO;
     [SerializeField] private List<GameObject> _charactersGO;
 
 
-    public GameObject[] GetAllTiles() {  return tilesGO; }
+    public GameObject[] GetAllTiles() {  return _tilesGO; }
     public GameObject GetTileAtCoord(int x, int y) 
     {
         int index = x + y * _width;
         if (index < 0 || index >= _width * _height)
             return null;
 
-        return tilesGO[index];  
+        return _tilesGO[index];  
     }
 
     public Vector3 GetTileSize() { return _tileSize; }
@@ -58,7 +58,7 @@ public class CombatGrid
     {
         _width  = w;
         _height = h;
-        tilesGO = new GameObject[w * h];
+        _tilesGO = new GameObject[w * h];
     }
     public void SetTileSize(Vector3 tileSize)
     {
@@ -79,25 +79,33 @@ public class CombatGrid
             GameObject tileObject = Object.Instantiate(tilePrefab, instancePos, Quaternion.identity);
 
             tileObject.transform.localScale = tileData.GetTileSize();
+            tileObject.GetComponent<CombatGridTile>().SetTilePosition(tileData.GetTilePosition());
             tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
             tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
             
-            MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
-            Material inCombatTileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Shaders/CJ Test Shaders/TileMaterial.mat");
-            if (inCombatTileMaterial != null)
+            switch(tileData.GetTileType())
             {
-                meshRend.material = inCombatTileMaterial;
-                if (tileObject.GetComponent<CombatGridTile>().GetTileIndex().x == 0)
-                    meshRend.material.SetColor("_TileColor", Color.green);
-                //meshRend.sharedMaterials = new Material[] { inCombatTileMaterial };
-                //meshRend.material.color = Color.white;
-                //var block = new MaterialPropertyBlock();
-                //block.SetColor("_BaseColor", Color.white);
-                //meshRend.SetPropertyBlock(block);
+                case TileType.Deploy:
+                    {
+
+                    }break;
+                default:
+                    {
+                        MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
+                        Material inCombatTileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Shaders/CJ Test Shaders/TileMaterial.mat");
+                        if (inCombatTileMaterial != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            if (tileObject.GetComponent<CombatGridTile>().GetTileIndex().x == 0)
+                                meshRend.material.SetColor("_TileColor", Color.green);
+                        }
+                        else
+                        {
+                            Debug.Log("Failed to load TileMaterial.mat");
+                        }
+                    } break;
             }
-            
-
-
+           
             if (tileData.IsWalkable())
                 tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
             else
@@ -110,13 +118,12 @@ public class CombatGrid
                 volume.center = new Vector3(0, 0.5f, 0);
             }
 
-            tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
+            _tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
         }
         else
         {
             Debug.Log("No TilePrefabLibrary assigned in inspector!");
         }
-       
     }
 
     public List<GameObject> GetAllCharacters() { return _charactersGO; }
@@ -145,14 +152,16 @@ public class CombatGrid
 
     public void AddCharacter(CombatGridCharacterData characterData)
     {
-        Vector2Int tileIndex = characterData.GetTileIndex();
-        Vector3 instancePos  = characterData.GetCharacterPosition();
-        Faction faction      = characterData.GetFaction();
-        int healthPoints     = characterData.GetHealthPoints();
-        int initiative       = characterData.GetInitiative();
+        Vector2Int tileIndex    = characterData.GetTileIndex();
+        Vector3    instancePos  = characterData.GetCharacterPosition();
+        Quaternion rotation     = characterData.GetRotation();
+        Faction    faction      = characterData.GetFaction();
+        int        healthPoints = characterData.GetHealthPoints();
+        int        initiative   = characterData.GetInitiative();
 
         GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
-        GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, Quaternion.identity);
+        GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, rotation);
+
         characterObject.GetComponent<Character>().SetCurrentTileIndex(tileIndex);
         characterObject.GetComponent<Character>().SetBaseHealthPoints(healthPoints);
         characterObject.GetComponent<Character>().SetBaseSpeed(initiative);
@@ -172,10 +181,12 @@ public struct ClassAbilities
 public class CombatManager : MonoBehaviour
 {
     public static CombatManager _instance;
-    
+    private Selector _selector;
+
     [SerializeField] private string _fileToLoadDEBUG;
 
     [SerializeField] private CombatCamera _combatCamera;
+    [SerializeField] private float _cameraSpeed;
 
     [SerializeField] private CombatState _combatState;
     [SerializeField] private CombatTurn _currentTurn;
@@ -212,30 +223,17 @@ public class CombatManager : MonoBehaviour
     void Start()
     {
         _combatState = CombatState.LoadCombatLevel;
+        _selector = GetComponent<Selector>();
     }
 
     
     // Update is called once per frame
     void Update()
     {
-        /*
-        foreach (GameObject tile in _combatGrid.GetAllTiles())
-        {
-            if (tile.GetComponent<CombatGridTile>().IsMouseHovering())
-            {
-                tile.GetComponent<CombatGridTile>().SetTileColor(Color.yellow);
-            }
-            else if (tile.GetComponent<CombatGridTile>().GetOccupant())
-            {
-                tile.GetComponent<CombatGridTile>().SetTileColor(Color.green);
-            }
-           
-            else
-            {
-                tile.GetComponent<CombatGridTile>().SetTileColor(Color.white);
-            }
-        }
-        */
+
+
+        MoveCamera();
+
         switch (_combatState)
         {
             case CombatState.LoadCombatLevel:
@@ -265,7 +263,29 @@ public class CombatManager : MonoBehaviour
         }
 
     }
-    
+
+    private void MoveCamera()
+    {
+        Vector3 cameraMovement = Vector3.zero;
+        Vector3 cameraSpeedVector = new Vector3(_cameraSpeed, _cameraSpeed, _cameraSpeed);
+        
+        if (Input.GetKey(KeyCode.D))
+            cameraMovement += Vector3.right;
+        if (Input.GetKey(KeyCode.A))
+            cameraMovement += Vector3.left;
+        if (Input.GetKey(KeyCode.W))
+            cameraMovement += Vector3.forward;
+        if (Input.GetKey(KeyCode.S))
+            cameraMovement += Vector3.back;
+
+        cameraMovement = Vector3.Scale(cameraMovement, cameraSpeedVector);
+        
+        cameraMovement *= Time.deltaTime;
+
+        if(cameraMovement != Vector3.zero)
+            _combatCamera.transform.position = cameraMovement + _combatCamera.transform.position;
+    }
+
     /// <summary>
     /// Gets all abilities available to the class.
     /// </summary>
@@ -321,6 +341,7 @@ public class CombatManager : MonoBehaviour
         {
             _combatGridLoaded = true;
             LoadNextLevel();
+            //LoadCurrentPlayerParty();
             GameObject NavMesh = GameObject.Find("NavMesh Surface");
             NavMesh.GetComponent<NavMeshSurface>().BuildNavMesh();
             _combatState = CombatState.IntroCinematic;
@@ -329,7 +350,35 @@ public class CombatManager : MonoBehaviour
 
     private void HandlePlaceCharacters()
     {
+        if(_selector)
+        {
+            _selector.UpdatePlaceCharacter(_combatGrid.GetAllTiles());
+            CombatGridTile tile = _selector.GetTileClicked();
+            if(tile && tile.GetTileType() == TileType.Deploy && tile.GetOccupant() == null)
+            {
+                Vector2Int tileIndex = tile.GetTileIndex();
+                Vector3 tilePosition = tile.GetTilePosition();
+                Vector3 slitghtlyRaisedPosition = new Vector3(tilePosition.x, tilePosition.y + 0.05f, tilePosition.z);
 
+                // TODO (Calle): Get the actuall characterData from GameStateManager
+                //               For now spawn a stub character.
+
+                CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
+                                                                                    Faction.Friendly,
+                                                                                    10,
+                                                                                    1,
+                                                                                    tileIndex,
+                                                                                    tilePosition,
+                                                                                    Vector3.one,
+                                                                                    Quaternion.identity);
+                _combatGrid.AddCharacter(characterData);
+
+            }
+            else
+            {
+                Debug.Log("Show ERROR UI to place on a deploy tile.");
+            }
+        }
     }
     private void HandleEndTurn()
     {
@@ -390,6 +439,11 @@ public class CombatManager : MonoBehaviour
         {
             this._combatGrid.AddCharacter(combatGrid._characterData[i]);
         }
+        
+    }
+
+    private void LoadCurrentPlayerParty()
+    {
         
     }
 

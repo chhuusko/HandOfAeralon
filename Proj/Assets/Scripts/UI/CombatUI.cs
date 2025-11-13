@@ -7,6 +7,16 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _abilityPanel;
     [SerializeField] private GameObject _abilityButtonPrefab;
 
+    public void ShowDeck()
+    {
+        CardHandManager._instance.OpenDeck();
+    }
+
+    public void ShowDiscardPile()
+    {
+        CardHandManager._instance.OpenDiscardPile();
+    }
+    
     public void ShowCardPanel()
     {
         ShowPanel(PanelType.Card);

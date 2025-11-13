@@ -18,6 +18,7 @@ public class GlobalGameManager : MonoBehaviour
 {
     private static GlobalGameManager _instance;
     private GameData _currentGame;
+
     private void Awake()
     {
         _instance = this;

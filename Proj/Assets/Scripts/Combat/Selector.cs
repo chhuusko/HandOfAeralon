@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -20,6 +21,7 @@ public class Selector : MonoBehaviour
     public enum SelectorState
     {
         NonActive,
+        PlacingCharacters,
         Idle,  
         CharacterSelected,
         ActionTypeSelected,
@@ -40,6 +42,10 @@ public class Selector : MonoBehaviour
     public Character GetSelectedCharacter()
     {
         return _selectedCharacter;
+    }
+    public void SetSelectedCharacter(Character selectedCharacter)
+    {
+        _selectedCharacter = selectedCharacter;
     }
 
     void Start()
@@ -81,6 +87,7 @@ public class Selector : MonoBehaviour
             switch (_currentState)
             {
                 case SelectorState.NonActive: break;
+                case SelectorState.PlacingCharacters: break;
                 case SelectorState.Idle: TrySelectCharacter(clickedTile); break;
                 case SelectorState.CharacterSelected: DeselectCharacter(); break;
                 case SelectorState.ActionTypeSelected: HandlePendingCharacterAction(clickedTile); break;
@@ -93,7 +100,7 @@ public class Selector : MonoBehaviour
         CombatGridTile hoveredTile = GetTileUnderMouse();
         if (hoveredTile == null) return;
 
-        if (hoveredTile.GetOccupant() == null && hoveredTile.GetOccupant().TryGetComponent<Character>(out var character)){
+        if (hoveredTile.GetOccupant() != null && hoveredTile.GetOccupant().TryGetComponent<Character>(out var character)){
             // TODO: Call UIControll script to show character info on character position.
         }
 
@@ -121,6 +128,18 @@ public class Selector : MonoBehaviour
 
         return GetTileUnderMouse();
     }
+    public CombatGridTile GetDeployTileClicked()
+    {
+        CombatGridTile tile = GetTileUnderMouse();
+        if (tile && tile.GetTileType() == TileType.Deploy && tile.GetOccupant() == null)
+        {
+            return tile;
+        }
+        else
+        {
+            return null;
+        }
+    }
 
     private void TrySelectCharacter(CombatGridTile tile)
     {
@@ -129,13 +148,36 @@ public class Selector : MonoBehaviour
             DeselectCharacter();
             return;
         }
+        SelectCharacter(character);
+    }
 
+    public void UpdatePlaceCharacter(GameObject[] tiles)
+    {
+
+        foreach (GameObject tile in tiles)
+        {
+            if (tile.GetComponent<CombatGridTile>().IsMouseHovering())
+            {
+                tile.GetComponent<CombatGridTile>().SetTileColor(Color.yellow);
+            }
+            else if (tile.GetComponent<CombatGridTile>().GetOccupant())
+            {
+                tile.GetComponent<CombatGridTile>().SetTileColor(Color.green);
+            }
+            else
+            {
+                tile.GetComponent<CombatGridTile>().SetTileColor(Color.white);
+            }
+        }
+    } 
+    private void SelectCharacter(Character character)
+    {
         bool bIsFriendly = character.GetFaction() == Faction.Friendly;
         bool bIsCharactersTurn = character == CombatManager._instance.GetNextTurnCharacter();
 
         if (bIsFriendly && bIsCharactersTurn)
         {
-            ShowCharacterOptions(character);
+            ShowCharacterUIOptions(character);
             _currentState = SelectorState.CharacterSelected;
             _selectedCharacter = character;
 
@@ -148,6 +190,9 @@ public class Selector : MonoBehaviour
     private void DeselectCharacter()
     {
         // if ui is active Deactivate UI
+        HideCharacterOptions(_selectedCharacter);
+
+
         _selectedCharacter = null;
         _pendingAbility = null;
         _pendingCharacterActionType = CharacterActionType.Null;
@@ -164,9 +209,26 @@ public class Selector : MonoBehaviour
         if (_bDebugSelector) Debug.Log("Deselect Character");
     }
 
-    private void ShowCharacterOptions(Character Character)
+    private void ShowCharacterUIOptions(Character Character)
     {
         // Activate UI and place it to show over characters head.
+    }
+    public void PreviewTilesWithinReach(Character character, Ability ability)
+    {
+
+        if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
+        {
+            SetColorOfTiles(abilityHandler.GetAvailableAbilityTargets(), Color.green);
+        }
+    }
+    private void HideCharacterOptions(Character Character)
+    {
+        // Deactivate UI and reset tile color.
+        if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
+        {
+            SetColorOfTiles(abilityHandler.GetAvailableAbilityTargets(), Color.white);
+            abilityHandler.ClearAbilityTargets();
+        }
     }
     private void HandlePendingCharacterAction(CombatGridTile tile)
     {
@@ -218,6 +280,17 @@ public class Selector : MonoBehaviour
     private void DebugCurrentState()
     {
         if(_bDebugSelector) Debug.Log("The current state is: " + GetCurrentState().ToString());
+    }
+
+    private void SetColorOfTiles(List<CombatGridTile> tiles, Color color)
+    {
+        foreach (CombatGridTile tile in tiles)
+        {
+            if (tile != null)
+            {
+                tile.SetTileColor(color);
+            }
+        }
     }
     public SelectorState GetCurrentState() { return _currentState; }
     public void SetCurrentState(SelectorState state) {  _currentState = state; }
