@@ -5,10 +5,11 @@ public class AbilityHandler : MonoBehaviour
 {
     [SerializeField] private List<Ability> _abilities;
 
-    List<CombatGridTile> _availableAbilityTargets = new List<CombatGridTile>();
+    private List<CombatGridTile> _availableAbilityTargets = new List<CombatGridTile>();
+    private Character _characterCaster;
+    private CombatGridTile _casterTile;
+    [SerializeField] private Ability _pendingAbility;
 
-    Character _characterCaster;
-    CombatGridTile _casterTile;
     bool _bDebugAbilityHandler = false;
 
     private void Start()
@@ -18,7 +19,7 @@ public class AbilityHandler : MonoBehaviour
             Debug.LogError("AbilityHandler is missing Character component!");
             return;
         }
-        CombatGridTile _casterTile = _characterCaster.GetCurrentTileComponent();
+        _casterTile = _characterCaster.GetCurrentTileComponent();
     }
     public bool UseAbility(Ability ability, CombatGridTile targetTile)
     {
@@ -34,6 +35,10 @@ public class AbilityHandler : MonoBehaviour
         ability.RunAbility(_casterTile, targetTile);
         return true;
     }
+    public Character GetCharacterCaster()
+    {
+        return _characterCaster;
+    }
     public List<CombatGridTile> GetAvailableAbilityTargets()
     {
         return _availableAbilityTargets;
@@ -41,6 +46,15 @@ public class AbilityHandler : MonoBehaviour
     public void ClearAbilityTargets()
     {
         _availableAbilityTargets.Clear();
+    }
+
+    public void SetPendingAbility(Ability ability)
+    {
+        _pendingAbility = ability;
+    }
+    public Ability GetPendingAbility()
+    {
+        return _pendingAbility;
     }
 
     private bool CanCastAbility(Ability ability, CombatGridTile targetTile)

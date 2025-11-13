@@ -96,6 +96,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -7673303688563307670}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 997788ee48202fb449707aee8fa8ea94,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -4082496484367721701}
   m_SourcePrefab: {fileID: 100100000, guid: 997788ee48202fb449707aee8fa8ea94, type: 3}
 --- !u!1 &3104298640036701326 stripped
 GameObject:
@@ -216,6 +220,7 @@ MonoBehaviour:
   _currentHealthPoints: 0
   _currentSpeed: 0
   _currentDamage: 0
+  _currentMovementPoints: 0
   _currentTileIndex: {x: 0, y: 0}
 --- !u!23 &-7673303688563307670
 MeshRenderer:
@@ -262,3 +267,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-4082496484367721701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3104298640036701326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15ee2f2b8b09ad849b99d2ac5ea01dbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _abilities: []
+  _pendingAbility: {fileID: 0}

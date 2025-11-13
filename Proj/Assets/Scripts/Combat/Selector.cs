@@ -16,6 +16,16 @@ public class Selector : MonoBehaviour
     public static Selector _instance {  get; private set; }
     
     [SerializeField] private CombatUI _combatUI;
+    [SerializeField] private SelectorState _currentState = SelectorState.NonActive;
+    [SerializeField] private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
+    [SerializeField] private Character _selectedCharacter;
+    [SerializeField] private bool _bDebugSelector = false;
+    public enum CharacterActionType
+    {
+        Null,
+        Movevement,
+        AbilityCasting
+    } 
 
     private void Awake()
     {
@@ -29,18 +39,12 @@ public class Selector : MonoBehaviour
         }
     }
 
-    public enum CharacterActionType
+    void Update()
     {
-        Null,
-        Movevement,
-        AbilityCasting
-    } 
-
-    [SerializeField] private SelectorState _currentState = SelectorState.NonActive;
-    [SerializeField] private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
-    [SerializeField] private Character _selectedCharacter;
-    [SerializeField] private Ability _pendingAbility;
-    [SerializeField] private bool _bDebugSelector = false;
+        HandleTileClick();
+        HandleTileHover();
+        DebugCurrentState();
+    }
 
     public Character GetSelectedCharacter()
     {
@@ -51,12 +55,6 @@ public class Selector : MonoBehaviour
         _selectedCharacter = selectedCharacter;
     }
     
-    void Update()
-    {
-        HandleTileClick();
-        HandleTileHover();
-        DebugCurrentState();
-    }
 
     private void HandleTileClick()
     {
@@ -208,10 +206,11 @@ public class Selector : MonoBehaviour
         // if ui is active Deactivate UI
         HideCharacterOptions(_selectedCharacter);
 
-
+        StopPreviewAbilityRange(_selectedCharacter);
+        _selectedCharacter.GetAbilityHandler().SetPendingAbility(null);
         _selectedCharacter = null;
-        _pendingAbility = null;
         _pendingCharacterActionType = CharacterActionType.Null;
+        
 
         if (CombatManager._instance.GetCombatTurn() == CombatTurn.PlayerTurn)
         {
@@ -230,12 +229,18 @@ public class Selector : MonoBehaviour
         // Activate UI and place it to show over characters head.
         _combatUI.LoadAbilities(character);
     }
-    public void PreviewTilesWithinReach(Character character, Ability ability)
+    public void PreviewAbilityRange(Character character, Ability ability)
     {
-
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
             SetColorOfTiles(abilityHandler.GetAvailableAbilityTargets(), Color.green);
+        }
+    }
+    public void StopPreviewAbilityRange(Character character)
+    {
+        if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
+        {
+            SetColorOfTiles(abilityHandler.GetAvailableAbilityTargets(), Color.white);
         }
     }
     private void HideCharacterOptions(Character Character)
@@ -260,7 +265,7 @@ public class Selector : MonoBehaviour
             HandleMovement(tile);
             return;
         }
-        if (_pendingCharacterActionType == CharacterActionType.AbilityCasting && _pendingAbility != null)
+        if (_pendingCharacterActionType == CharacterActionType.AbilityCasting && _selectedCharacter.GetAbilityHandler().GetPendingAbility() != null)
         {
             HandleAbilityCast(tile);
             return;
@@ -283,10 +288,10 @@ public class Selector : MonoBehaviour
 
     private void HandleAbilityCast(CombatGridTile tile)
     {
-        bool success = _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_pendingAbility, tile);
+        bool success = _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_selectedCharacter.GetAbilityHandler().GetPendingAbility(), tile);
         if (_bDebugSelector && success)
         {
-            DebugLog.MGLog(_selectedCharacter.GetCharacterClass() + " used ability: " + _pendingAbility.GetAbilityName().ToString());
+            DebugLog.MGLog(_selectedCharacter.GetCharacterClass() + " used ability: " + _selectedCharacter.GetAbilityHandler().GetPendingAbility().GetAbilityName().ToString());
         }
         if (!success)
         {
@@ -311,8 +316,4 @@ public class Selector : MonoBehaviour
     }
     public SelectorState GetCurrentState() { return _currentState; }
     public void SetCurrentState(SelectorState state) {  _currentState = state; }
-    public void SetPendingAbility(Ability ability)
-    {
-        _pendingAbility = ability;
-    }
 }
