@@ -2,9 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Selector : MonoBehaviour
-{
-    public static Selector _instance {  get; private set; }
     public enum SelectorState
     {
         NonActive,
@@ -13,6 +10,10 @@ public class Selector : MonoBehaviour
         CharacterSelected,
         ActionTypeSelected,
     }
+
+public class Selector : MonoBehaviour
+{
+    public static Selector _instance {  get; private set; }
 
     private void Awake()
     {
@@ -33,7 +34,7 @@ public class Selector : MonoBehaviour
         AbilityCasting
     } 
 
-    private SelectorState _currentState = SelectorState.NonActive;
+    [SerializeField] private SelectorState _currentState = SelectorState.NonActive;
     private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
     private Character _selectedCharacter;
     private Ability _pendingAbility;
@@ -130,6 +131,8 @@ public class Selector : MonoBehaviour
     }
     public CombatGridTile GetUnoccupiedDeployTileClicked()
     {
+        if (!Input.GetMouseButtonDown(0)) return null;
+
         CombatGridTile tile = GetTileUnderMouse();
         if (tile && tile.GetTileType() == TileType.Deploy && tile.GetOccupant() == null)
         {
