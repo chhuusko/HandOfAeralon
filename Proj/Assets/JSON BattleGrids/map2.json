@@ -1,6 +1,6 @@
 {
-    "_gridWidth": 12,
-    "_gridHeight": 10,
+    "_gridWidth": 4,
+    "_gridHeight": 16,
     "_tileSize": {
         "x": 2.0,
         "y": 1.0,
@@ -44,7 +44,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 4,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 2,
                 "y": 0
@@ -62,157 +62,13 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 4,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 3,
                 "y": 0
             },
             "_position": {
                 "x": 7.0,
-                "y": 0.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 4,
-                "y": 0
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 2,
-            "_tileIndex": {
-                "x": 5,
-                "y": 0
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 0.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": false
-        },
-        {
-            "_tileType": 2,
-            "_tileIndex": {
-                "x": 6,
-                "y": 0
-            },
-            "_position": {
-                "x": 13.0,
-                "y": 0.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": false
-        },
-        {
-            "_tileType": 2,
-            "_tileIndex": {
-                "x": 7,
-                "y": 0
-            },
-            "_position": {
-                "x": 15.0,
-                "y": 0.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": false
-        },
-        {
-            "_tileType": 2,
-            "_tileIndex": {
-                "x": 8,
-                "y": 0
-            },
-            "_position": {
-                "x": 17.0,
-                "y": 0.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": false
-        },
-        {
-            "_tileType": 2,
-            "_tileIndex": {
-                "x": 9,
-                "y": 0
-            },
-            "_position": {
-                "x": 19.0,
-                "y": 0.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": false
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 10,
-                "y": 0
-            },
-            "_position": {
-                "x": 21.0,
-                "y": 0.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 11,
-                "y": 0
-            },
-            "_position": {
-                "x": 23.0,
                 "y": 0.0,
                 "z": 1.0
             },
@@ -278,157 +134,13 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 4,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 3,
                 "y": 1
             },
             "_position": {
                 "x": 7.0,
-                "y": 0.0,
-                "z": 3.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 2,
-            "_tileIndex": {
-                "x": 4,
-                "y": 1
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 3.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": false
-        },
-        {
-            "_tileType": 2,
-            "_tileIndex": {
-                "x": 5,
-                "y": 1
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 0.0,
-                "z": 3.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": false
-        },
-        {
-            "_tileType": 2,
-            "_tileIndex": {
-                "x": 6,
-                "y": 1
-            },
-            "_position": {
-                "x": 13.0,
-                "y": 0.0,
-                "z": 3.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": false
-        },
-        {
-            "_tileType": 2,
-            "_tileIndex": {
-                "x": 7,
-                "y": 1
-            },
-            "_position": {
-                "x": 15.0,
-                "y": 0.0,
-                "z": 3.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": false
-        },
-        {
-            "_tileType": 2,
-            "_tileIndex": {
-                "x": 8,
-                "y": 1
-            },
-            "_position": {
-                "x": 17.0,
-                "y": 0.0,
-                "z": 3.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": false
-        },
-        {
-            "_tileType": 2,
-            "_tileIndex": {
-                "x": 9,
-                "y": 1
-            },
-            "_position": {
-                "x": 19.0,
-                "y": 0.0,
-                "z": 3.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": false
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 10,
-                "y": 1
-            },
-            "_position": {
-                "x": 21.0,
-                "y": 0.0,
-                "z": 3.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 11,
-                "y": 1
-            },
-            "_position": {
-                "x": 23.0,
                 "y": 0.0,
                 "z": 3.0
             },
@@ -476,103 +188,13 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 2,
             "_tileIndex": {
                 "x": 2,
                 "y": 2
             },
             "_position": {
                 "x": 5.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 3,
-                "y": 2
-            },
-            "_position": {
-                "x": 7.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 4,
-                "y": 2
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 4,
-            "_tileIndex": {
-                "x": 5,
-                "y": 2
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 6,
-                "y": 2
-            },
-            "_position": {
-                "x": 13.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 2,
-            "_tileIndex": {
-                "x": 7,
-                "y": 2
-            },
-            "_position": {
-                "x": 15.0,
                 "y": 0.0,
                 "z": 5.0
             },
@@ -586,65 +208,11 @@
         {
             "_tileType": 1,
             "_tileIndex": {
-                "x": 8,
+                "x": 3,
                 "y": 2
             },
             "_position": {
-                "x": 17.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 9,
-                "y": 2
-            },
-            "_position": {
-                "x": 19.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 10,
-                "y": 2
-            },
-            "_position": {
-                "x": 21.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 11,
-                "y": 2
-            },
-            "_position": {
-                "x": 23.0,
+                "x": 7.0,
                 "y": 0.0,
                 "z": 5.0
             },
@@ -674,7 +242,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 2,
             "_tileIndex": {
                 "x": 1,
                 "y": 3
@@ -689,10 +257,10 @@
                 "y": 1.0,
                 "z": 2.0
             },
-            "_bWalkable": true
+            "_bWalkable": false
         },
         {
-            "_tileType": 1,
+            "_tileType": 2,
             "_tileIndex": {
                 "x": 2,
                 "y": 3
@@ -707,7 +275,7 @@
                 "y": 1.0,
                 "z": 2.0
             },
-            "_bWalkable": true
+            "_bWalkable": false
         },
         {
             "_tileType": 1,
@@ -728,151 +296,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 4,
-                "y": 3
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 5,
-                "y": 3
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 6,
-                "y": 3
-            },
-            "_position": {
-                "x": 13.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 7,
-                "y": 3
-            },
-            "_position": {
-                "x": 15.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 8,
-                "y": 3
-            },
-            "_position": {
-                "x": 17.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 9,
-                "y": 3
-            },
-            "_position": {
-                "x": 19.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 10,
-                "y": 3
-            },
-            "_position": {
-                "x": 21.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 11,
-                "y": 3
-            },
-            "_position": {
-                "x": 23.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
+            "_tileType": 2,
             "_tileIndex": {
                 "x": 0,
                 "y": 4
@@ -887,10 +311,10 @@
                 "y": 1.0,
                 "z": 2.0
             },
-            "_bWalkable": true
+            "_bWalkable": false
         },
         {
-            "_tileType": 1,
+            "_tileType": 2,
             "_tileIndex": {
                 "x": 1,
                 "y": 4
@@ -905,7 +329,7 @@
                 "y": 1.0,
                 "z": 2.0
             },
-            "_bWalkable": true
+            "_bWalkable": false
         },
         {
             "_tileType": 1,
@@ -933,150 +357,6 @@
             },
             "_position": {
                 "x": 7.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 4,
-                "y": 4
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 5,
-                "y": 4
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 6,
-                "y": 4
-            },
-            "_position": {
-                "x": 13.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 7,
-                "y": 4
-            },
-            "_position": {
-                "x": 15.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 8,
-                "y": 4
-            },
-            "_position": {
-                "x": 17.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 9,
-                "y": 4
-            },
-            "_position": {
-                "x": 19.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 10,
-                "y": 4
-            },
-            "_position": {
-                "x": 21.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 11,
-                "y": 4
-            },
-            "_position": {
-                "x": 23.0,
                 "y": 0.0,
                 "z": 9.0
             },
@@ -1162,150 +442,6 @@
         {
             "_tileType": 1,
             "_tileIndex": {
-                "x": 4,
-                "y": 5
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 11.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 5,
-                "y": 5
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 0.0,
-                "z": 11.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 6,
-                "y": 5
-            },
-            "_position": {
-                "x": 13.0,
-                "y": 0.0,
-                "z": 11.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 7,
-                "y": 5
-            },
-            "_position": {
-                "x": 15.0,
-                "y": 0.0,
-                "z": 11.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 8,
-                "y": 5
-            },
-            "_position": {
-                "x": 17.0,
-                "y": 0.0,
-                "z": 11.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 9,
-                "y": 5
-            },
-            "_position": {
-                "x": 19.0,
-                "y": 0.0,
-                "z": 11.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 10,
-                "y": 5
-            },
-            "_position": {
-                "x": 21.0,
-                "y": 0.0,
-                "z": 11.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 11,
-                "y": 5
-            },
-            "_position": {
-                "x": 23.0,
-                "y": 0.0,
-                "z": 11.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
                 "x": 0,
                 "y": 6
             },
@@ -1365,150 +501,6 @@
             },
             "_position": {
                 "x": 7.0,
-                "y": 0.0,
-                "z": 13.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 4,
-                "y": 6
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 13.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 5,
-                "y": 6
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 0.0,
-                "z": 13.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 6,
-                "y": 6
-            },
-            "_position": {
-                "x": 13.0,
-                "y": 0.0,
-                "z": 13.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 7,
-                "y": 6
-            },
-            "_position": {
-                "x": 15.0,
-                "y": 0.0,
-                "z": 13.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 8,
-                "y": 6
-            },
-            "_position": {
-                "x": 17.0,
-                "y": 0.0,
-                "z": 13.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 9,
-                "y": 6
-            },
-            "_position": {
-                "x": 19.0,
-                "y": 0.0,
-                "z": 13.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 10,
-                "y": 6
-            },
-            "_position": {
-                "x": 21.0,
-                "y": 0.0,
-                "z": 13.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 11,
-                "y": 6
-            },
-            "_position": {
-                "x": 23.0,
                 "y": 0.0,
                 "z": 13.0
             },
@@ -1594,150 +586,6 @@
         {
             "_tileType": 1,
             "_tileIndex": {
-                "x": 4,
-                "y": 7
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 15.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 5,
-                "y": 7
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 0.0,
-                "z": 15.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 6,
-                "y": 7
-            },
-            "_position": {
-                "x": 13.0,
-                "y": 0.0,
-                "z": 15.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 7,
-                "y": 7
-            },
-            "_position": {
-                "x": 15.0,
-                "y": 0.0,
-                "z": 15.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 8,
-                "y": 7
-            },
-            "_position": {
-                "x": 17.0,
-                "y": 0.0,
-                "z": 15.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 9,
-                "y": 7
-            },
-            "_position": {
-                "x": 19.0,
-                "y": 0.0,
-                "z": 15.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 10,
-                "y": 7
-            },
-            "_position": {
-                "x": 21.0,
-                "y": 0.0,
-                "z": 15.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 11,
-                "y": 7
-            },
-            "_position": {
-                "x": 23.0,
-                "y": 0.0,
-                "z": 15.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
                 "x": 0,
                 "y": 8
             },
@@ -1797,150 +645,6 @@
             },
             "_position": {
                 "x": 7.0,
-                "y": 0.0,
-                "z": 17.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 4,
-                "y": 8
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 17.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 5,
-                "y": 8
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 0.0,
-                "z": 17.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 6,
-                "y": 8
-            },
-            "_position": {
-                "x": 13.0,
-                "y": 0.0,
-                "z": 17.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 7,
-                "y": 8
-            },
-            "_position": {
-                "x": 15.0,
-                "y": 0.0,
-                "z": 17.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 8,
-                "y": 8
-            },
-            "_position": {
-                "x": 17.0,
-                "y": 0.0,
-                "z": 17.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 9,
-                "y": 8
-            },
-            "_position": {
-                "x": 19.0,
-                "y": 0.0,
-                "z": 17.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 10,
-                "y": 8
-            },
-            "_position": {
-                "x": 21.0,
-                "y": 0.0,
-                "z": 17.0
-            },
-            "_size": {
-                "x": 2.0,
-                "y": 1.0,
-                "z": 2.0
-            },
-            "_bWalkable": true
-        },
-        {
-            "_tileType": 1,
-            "_tileIndex": {
-                "x": 11,
-                "y": 8
-            },
-            "_position": {
-                "x": 23.0,
                 "y": 0.0,
                 "z": 17.0
             },
@@ -2026,13 +730,13 @@
         {
             "_tileType": 1,
             "_tileIndex": {
-                "x": 4,
-                "y": 9
+                "x": 0,
+                "y": 10
             },
             "_position": {
-                "x": 9.0,
+                "x": 1.0,
                 "y": 0.0,
-                "z": 19.0
+                "z": 21.0
             },
             "_size": {
                 "x": 2.0,
@@ -2044,13 +748,13 @@
         {
             "_tileType": 1,
             "_tileIndex": {
-                "x": 5,
-                "y": 9
+                "x": 1,
+                "y": 10
             },
             "_position": {
-                "x": 11.0,
+                "x": 3.0,
                 "y": 0.0,
-                "z": 19.0
+                "z": 21.0
             },
             "_size": {
                 "x": 2.0,
@@ -2062,13 +766,13 @@
         {
             "_tileType": 1,
             "_tileIndex": {
-                "x": 6,
-                "y": 9
+                "x": 2,
+                "y": 10
             },
             "_position": {
-                "x": 13.0,
+                "x": 5.0,
                 "y": 0.0,
-                "z": 19.0
+                "z": 21.0
             },
             "_size": {
                 "x": 2.0,
@@ -2080,13 +784,13 @@
         {
             "_tileType": 1,
             "_tileIndex": {
-                "x": 7,
-                "y": 9
+                "x": 3,
+                "y": 10
             },
             "_position": {
-                "x": 15.0,
+                "x": 7.0,
                 "y": 0.0,
-                "z": 19.0
+                "z": 21.0
             },
             "_size": {
                 "x": 2.0,
@@ -2098,13 +802,13 @@
         {
             "_tileType": 1,
             "_tileIndex": {
-                "x": 8,
-                "y": 9
+                "x": 0,
+                "y": 11
             },
             "_position": {
-                "x": 17.0,
+                "x": 1.0,
                 "y": 0.0,
-                "z": 19.0
+                "z": 23.0
             },
             "_size": {
                 "x": 2.0,
@@ -2116,13 +820,13 @@
         {
             "_tileType": 1,
             "_tileIndex": {
-                "x": 9,
-                "y": 9
+                "x": 1,
+                "y": 11
             },
             "_position": {
-                "x": 19.0,
+                "x": 3.0,
                 "y": 0.0,
-                "z": 19.0
+                "z": 23.0
             },
             "_size": {
                 "x": 2.0,
@@ -2134,13 +838,13 @@
         {
             "_tileType": 1,
             "_tileIndex": {
-                "x": 10,
-                "y": 9
+                "x": 2,
+                "y": 11
             },
             "_position": {
-                "x": 21.0,
+                "x": 5.0,
                 "y": 0.0,
-                "z": 19.0
+                "z": 23.0
             },
             "_size": {
                 "x": 2.0,
@@ -2152,13 +856,301 @@
         {
             "_tileType": 1,
             "_tileIndex": {
-                "x": 11,
-                "y": 9
+                "x": 3,
+                "y": 11
             },
             "_position": {
-                "x": 23.0,
+                "x": 7.0,
                 "y": 0.0,
-                "z": 19.0
+                "z": 23.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 0,
+                "y": 12
+            },
+            "_position": {
+                "x": 1.0,
+                "y": 0.0,
+                "z": 25.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 1,
+                "y": 12
+            },
+            "_position": {
+                "x": 3.0,
+                "y": 0.0,
+                "z": 25.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 2,
+                "y": 12
+            },
+            "_position": {
+                "x": 5.0,
+                "y": 0.0,
+                "z": 25.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 3,
+                "y": 12
+            },
+            "_position": {
+                "x": 7.0,
+                "y": 0.0,
+                "z": 25.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 0,
+                "y": 13
+            },
+            "_position": {
+                "x": 1.0,
+                "y": 0.0,
+                "z": 27.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 1,
+                "y": 13
+            },
+            "_position": {
+                "x": 3.0,
+                "y": 0.0,
+                "z": 27.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 2,
+                "y": 13
+            },
+            "_position": {
+                "x": 5.0,
+                "y": 0.0,
+                "z": 27.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 3,
+                "y": 13
+            },
+            "_position": {
+                "x": 7.0,
+                "y": 0.0,
+                "z": 27.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 0,
+                "y": 14
+            },
+            "_position": {
+                "x": 1.0,
+                "y": 0.0,
+                "z": 29.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 1,
+                "y": 14
+            },
+            "_position": {
+                "x": 3.0,
+                "y": 0.0,
+                "z": 29.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 2,
+                "y": 14
+            },
+            "_position": {
+                "x": 5.0,
+                "y": 0.0,
+                "z": 29.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 3,
+                "y": 14
+            },
+            "_position": {
+                "x": 7.0,
+                "y": 0.0,
+                "z": 29.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 0,
+                "y": 15
+            },
+            "_position": {
+                "x": 1.0,
+                "y": 0.0,
+                "z": 31.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 1,
+                "y": 15
+            },
+            "_position": {
+                "x": 3.0,
+                "y": 0.0,
+                "z": 31.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 2,
+                "y": 15
+            },
+            "_position": {
+                "x": 5.0,
+                "y": 0.0,
+                "z": 31.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 3,
+                "y": 15
+            },
+            "_position": {
+                "x": 7.0,
+                "y": 0.0,
+                "z": 31.0
             },
             "_size": {
                 "x": 2.0,
@@ -2175,38 +1167,18 @@
             "_healthPoints": 0,
             "_initiative": 0,
             "_tileIndex": {
-                "x": 2,
-                "y": 0
+                "x": 1,
+                "y": 1
             },
             "_position": {
-                "x": 5.0,
+                "x": 3.0,
                 "y": 0.0,
-                "z": 1.0
+                "z": 3.0
             },
             "_size": {
                 "x": 1.051649570465088,
                 "y": 1.8666642904281617,
                 "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 3,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 2,
-                "y": 4
-            },
-            "_position": {
-                "x": 5.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 0.8385530710220337,
-                "y": 1.7150310277938843,
-                "z": 0.3163578510284424
             }
         },
         {
@@ -2215,26 +1187,6 @@
             "_healthPoints": 0,
             "_initiative": 0,
             "_tileIndex": {
-                "x": 9,
-                "y": 1
-            },
-            "_position": {
-                "x": 19.0,
-                "y": 0.0,
-                "z": 3.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
                 "x": 3,
                 "y": 1
             },
@@ -2255,31 +1207,11 @@
             "_healthPoints": 0,
             "_initiative": 0,
             "_tileIndex": {
-                "x": 4,
-                "y": 1
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 3.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 5,
+                "x": 1,
                 "y": 0
             },
             "_position": {
-                "x": 11.0,
+                "x": 3.0,
                 "y": 0.0,
                 "z": 1.0
             },
@@ -2295,333 +1227,13 @@
             "_healthPoints": 0,
             "_initiative": 0,
             "_tileIndex": {
-                "x": 7,
-                "y": 2
-            },
-            "_position": {
-                "x": 15.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 4,
-                "y": 2
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 5,
-                "y": 3
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 6,
-                "y": 3
-            },
-            "_position": {
-                "x": 13.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 6,
-                "y": 4
-            },
-            "_position": {
-                "x": 13.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 3,
-                "y": 3
-            },
-            "_position": {
-                "x": 7.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 4,
-                "y": 3
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 4,
-                "y": 4
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 5,
-                "y": 4
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 5,
-                "y": 5
-            },
-            "_position": {
-                "x": 11.0,
-                "y": 0.0,
-                "z": 11.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 4,
-                "y": 5
-            },
-            "_position": {
-                "x": 9.0,
-                "y": 0.0,
-                "z": 11.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 3,
-                "y": 4
-            },
-            "_position": {
-                "x": 7.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
                 "x": 2,
-                "y": 3
+                "y": 0
             },
             "_position": {
                 "x": 5.0,
                 "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 1,
-                "y": 3
-            },
-            "_position": {
-                "x": 3.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 1,
-                "y": 2
-            },
-            "_position": {
-                "x": 3.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 2,
-                "y": 2
-            },
-            "_position": {
-                "x": 5.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_initiative": 0,
-            "_tileIndex": {
-                "x": 3,
-                "y": 2
-            },
-            "_position": {
-                "x": 7.0,
-                "y": 0.0,
-                "z": 5.0
+                "z": 1.0
             },
             "_size": {
                 "x": 1.051649570465088,
