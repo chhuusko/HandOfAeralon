@@ -40,7 +40,7 @@ public class CombatGridCharacterData
     public Vector3 GetCharacterSize() { return _size; }
     public Quaternion GetRotation() { return _rotation; }   
     
-    
+    public void SetPosition(Vector3 position) { _position = position; }
     public void SetCharacterClass(CharacterClass characterClass) { _characterClass = characterClass; }
     public void SetFaction(Faction faction) { _faction = faction; }
     public void SetHealthPoints(int healthPoints) { _healthPoints = healthPoints; }

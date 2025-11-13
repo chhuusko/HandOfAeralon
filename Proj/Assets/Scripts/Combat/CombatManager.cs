@@ -263,6 +263,12 @@ public class CombatManager : MonoBehaviour
                                                                                        Vector3.one,
                                                                                        Quaternion.identity);
                     _combatGrid.AddCharacter(characterData);
+
+                    tileIndex.x = 6;
+                    position.x += 2.0f;
+                    characterData.SetTileIndex(tileIndex);
+                    characterData.SetPosition(position);
+                    _combatGrid.AddCharacter(characterData);
                 }
                 break;
             case CombatState.IntroCinematic:
@@ -402,18 +408,19 @@ public class CombatManager : MonoBehaviour
             {
                 if (unoccupiedDeployTile)
                 {
-                    if(_combatGrid.ContainsCharacter(selectedCharacter.gameObject))
-                    {
+                    Vector2Int tileIndex = unoccupiedDeployTile.GetTileIndex();
+                    Vector3 tilePosition = unoccupiedDeployTile.GetTilePosition();
 
+                    if (_combatGrid.ContainsCharacter(selectedCharacter.gameObject))
+                    {
+                        selectedCharacter.gameObject.transform.position = tilePosition;
+                        selectedCharacter.SetCurrentTileIndex(tileIndex);
                     }
                     else
-                    {
-                        Vector2Int tileIndex = unoccupiedDeployTile.GetTileIndex();
-                        Vector3 tilePosition = unoccupiedDeployTile.GetTilePosition();
+                    {                     
+                        // NOTE (Calle): Test for solving rendering problem with tile flicker infront of animated character,
+                        //               didn't solve it though.
                         Vector3 slitghtlyRaisedPosition = new Vector3(tilePosition.x, tilePosition.y + 0.05f, tilePosition.z);
-
-                        // TODO (Calle): Get the actuall characterData from GameStateManager
-                        //               For now spawn a stub character.
 
                         CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
                                                                                             Faction.Friendly,

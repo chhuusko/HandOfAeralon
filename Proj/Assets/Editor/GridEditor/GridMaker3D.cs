@@ -150,6 +150,7 @@ public class GridMaker3D : EditorWindow
 
     [SerializeField] GameObject _defaultTile;
     [SerializeField] GameObject _defaultDeployTile;
+    [SerializeField] GameObject _currentBrushPrefab; // NOTE (Calle): Only use to display in the inspector window
 
     TileEntry _previewTile;
     CharacterEntry _previewCharacter;
@@ -158,7 +159,6 @@ public class GridMaker3D : EditorWindow
     int _currentCharacterBrushIndex = 0;
 
     private bool _bIsHoldingF  = false, _bIsHoldingCtrl = false, _bInFocusMode = false;
-    private bool _bFocusToggle = false;
     private bool _bDrawPreviewGrid = true;
     private bool _bPrevFocusMode;
 
@@ -319,6 +319,10 @@ public class GridMaker3D : EditorWindow
         _defaultDeployZoneWidth = EditorGUILayout.IntSlider("BattleGrid Width", _defaultDeployZoneWidth, 0, 30);
         _defaultTile            = EditorGUILayout.ObjectField("Default Tile for Grid Generation", _defaultTile, typeof(GameObject), false) as GameObject;
         _defaultDeployTile      = EditorGUILayout.ObjectField("Default Deploy Tile for Deploy Zone Generation", _defaultDeployTile, typeof(GameObject), false) as GameObject;
+        
+        EditorGUILayout.ObjectField("Curren Brush Object", _currentBrushPrefab, typeof(GameObject), true);
+        
+
         _tileSizeInMeters       = EditorGUILayout.Vector3Field("Size of a tile in meters", _tileSizeInMeters);
         _fileNameToSaveJSON     = EditorGUILayout.TextField("Save To: ", _fileNameToSaveJSON);
         _fileNameToLoadJSON     = EditorGUILayout.TextField("Load From: ", _fileNameToLoadJSON);
@@ -618,7 +622,6 @@ public class GridMaker3D : EditorWindow
         {
             int controlID = GUIUtility.GetControlID(FocusType.Passive);
             HandleUtility.AddDefaultControl(controlID);
-            _bFocusToggle = true;
             switch(_drawMode)
             {
                 case DRAWMODE_TILE:
@@ -632,10 +635,6 @@ public class GridMaker3D : EditorWindow
                     DrawCharacters(currentEvent);
                     break;
             }
-        }
-        else
-        {
-            _bFocusToggle = false;
         }
 
         Repaint();
@@ -752,6 +751,9 @@ public class GridMaker3D : EditorWindow
         GameObject prefab = _tileBrushPrefabHolder._tileBrushPrefabs[_currentTileBrushIndex];
         if (prefab == null)
             return;
+        
+        // NOTE (Calle): Only for display in inspector
+        _currentBrushPrefab = prefab;
 
         // Destroy previous preview
         if (_previewTile._tile != null)
@@ -787,7 +789,10 @@ public class GridMaker3D : EditorWindow
         GameObject prefab = _characterBrushPrefabHolder._characterBrushPrefabs[_currentCharacterBrushIndex];
         if (prefab == null)
             return;
-
+        
+        // NOTE (Calle): Only for display in inspector
+        _currentBrushPrefab = prefab;
+        
         // Destroy previous preview
         if (_previewCharacter._character != null)
             DestroyImmediate(_previewCharacter._character);
