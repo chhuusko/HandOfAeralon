@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,7 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Button _endTurnButton;
     [SerializeField] private Button _abilityButtonPrefab;
     [SerializeField] private Button _characterPortraitButtonPrefab;
+    [SerializeField] private GameObject _hand;
     [SerializeField] private TextMeshProUGUI _mana;
 
     private void OnEnable()
@@ -41,12 +43,21 @@ public class CombatUI : MonoBehaviour
             Destroy(gameObject);
         }
 
+        _hand.SetActive(false);
         UpdateCharacterPortraits();
     }
 
     private void UpdateCharacterPortraits()
     {
-        foreach (Character c in GlobalGameManager.GetInstance().GetGameData().heroList)
+        GameData gameData = GlobalGameManager.GetInstance().GetGameData();
+        List<Character> heroList = gameData.heroList;
+
+        if (heroList == null)
+        {
+            return;
+        }
+        
+        foreach (Character c in heroList)
         {
             Button characterPortraitButton = Instantiate(_characterPortraitButtonPrefab, _characterPortraitButtonPrefab.transform.parent);
             characterPortraitButton.image.sprite = c.GetClassData().classImage;
@@ -63,6 +74,7 @@ public class CombatUI : MonoBehaviour
         OnStartCombatButtonPressed?.Invoke();
         _startCombatButton.enabled = false;
         _endTurnButton.enabled = true;
+        _hand.SetActive(true);
     }
 
     public void EndTurn()
