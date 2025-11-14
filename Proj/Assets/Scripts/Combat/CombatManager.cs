@@ -21,7 +21,7 @@ public enum CombatState
     IntroCinematic,
     LoadCombatLevel,
     PlaceCharacters,
-    TakeTurns,
+    TakeTurn,
     EndTurn,
     EndCombat
 };
@@ -200,13 +200,14 @@ public struct ClassAbilities
     public List<Ability> abilities;
 }
 
+
+
 public class CombatManager : MonoBehaviour
 {
     public static CombatManager _instance;
     private Selector _selector;
 
     public event Action<CombatState> OnUpdateCombatState;
-    
     
     [SerializeField] private string _fileToLoadDEBUG;
 
@@ -215,14 +216,14 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] private CombatState _combatState;
     [SerializeField] private CombatTurn _currentTurn;
+    [SerializeField] private GameObject _activeCharacter;
 
     [SerializeField] private CombatGrid _combatGrid;
     [SerializeField] private bool _combatGridLoaded = false;
 
-    private GameObject _activeCharacter;
-    private GameObject friendlyCharacterRoot;
-    private GameObject enemyCharacterRoot;
-    private GameObject tileRoot;
+    private GameObject _friendlyCharacterRoot;
+    private GameObject _enemyCharacterRoot;
+    private GameObject _tileRoot;
 
 
     [Header("Abilities")]
@@ -269,12 +270,12 @@ public class CombatManager : MonoBehaviour
     {
         _combatState = CombatState.LoadCombatLevel;
         _selector = GetComponent<Selector>();
-        friendlyCharacterRoot = new GameObject();
-        friendlyCharacterRoot.name = "-PLAYER PARTY-";
-        enemyCharacterRoot= new GameObject();
-        enemyCharacterRoot.name = "-ENEMY CHARACTERS-";
-        tileRoot = new GameObject();
-        tileRoot.name = "-GRID TILES-";
+        _friendlyCharacterRoot = new GameObject();
+        _friendlyCharacterRoot.name = "-PLAYER PARTY-";
+        _enemyCharacterRoot= new GameObject();
+        _enemyCharacterRoot.name = "-ENEMY CHARACTERS-";
+        _tileRoot = new GameObject();
+        _tileRoot.name = "-GRID TILES-";
     }
 
     
@@ -300,13 +301,13 @@ public class CombatManager : MonoBehaviour
                                                                                        Vector3.one,
                                                                                        Quaternion.identity);
 
-                    _combatGrid.AddCharacter(characterData).transform.SetParent(friendlyCharacterRoot.transform);
+                    _combatGrid.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
 
                     tileIndex.x = 6;
                     position.x += 2.0f;
                     characterData.SetTileIndex(tileIndex);
                     characterData.SetPosition(position);
-                    _combatGrid.AddCharacter(characterData).transform.SetParent(friendlyCharacterRoot.transform);
+                    _combatGrid.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
                     
                 }
                 break;
@@ -317,11 +318,10 @@ public class CombatManager : MonoBehaviour
             case CombatState.PlaceCharacters:
                 {
                     HandlePlaceCharacters();
-                    
                 } break;
-            case CombatState.TakeTurns:
+            case CombatState.TakeTurn:
                 {
-                    HandleTakeTurns();
+                    HandleTakeTurn();
                 } break;
             case CombatState.EndTurn:
                 {
@@ -432,7 +432,7 @@ public class CombatManager : MonoBehaviour
                                                                                             Vector3.one,
                                                                                             Quaternion.identity);
 
-                        _combatGrid.AddCharacter(characterData).transform.SetParent(friendlyCharacterRoot.transform);
+                        _combatGrid.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
                     }
                 }
                 else
@@ -476,7 +476,7 @@ public class CombatManager : MonoBehaviour
             _currentTurn -= CombatTurn.PlayerTurn;
     }
 
-    private void HandleTakeTurns()
+    private void HandleTakeTurn()
     {
         // NOTE (Calle): Only wan't to set the _activeCharacter once each turn
         if(_activeCharacter == null)
@@ -526,13 +526,26 @@ public class CombatManager : MonoBehaviour
         {
             enemyDoingStuff = true;
             TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandlePlayerTurn() för att AI ska kunna spela båda factions.
+            _activeCharacter = null;
+            UpdateCombatState(CombatState.EndTurn);
         }
-            
     }
 
     public void HandleEndTurn()
     {
+        // TODO (Calle): If all characters are dead, either friendly or enemies or Quit Game?
+        //               transition to EndCombat State.
+        //               If not, transition to TakeTurn again
 
+        // NOTE (Calle): Check End Combat conditions
+        if(GetCombatGrid().GetAllCharacters().Count > 0)
+        {
+            UpdateCombatState(CombatState.TakeTurn);
+        }            
+        else
+        {
+            UpdateCombatState(CombatState.EndCombat);
+        }
     }
 
     private void HandleEndCombat()
@@ -570,7 +583,7 @@ public class CombatManager : MonoBehaviour
             DebugLog.CJLog("tiled["+i+"]: " + "\tTileType : " + combatGrid._tileData[i].GetTileType() + 
                       "\tTileIndex: " + combatGrid._tileData[i].GetTilePosition() + "\n");
 
-            this._combatGrid.AddTile(combatGrid._tileData[i]).transform.SetParent(tileRoot.transform);
+            this._combatGrid.AddTile(combatGrid._tileData[i]).transform.SetParent(_tileRoot.transform);
             
         }
 
@@ -579,14 +592,14 @@ public class CombatManager : MonoBehaviour
 
         for (int i = 0; i < combatGrid._characterData.Count; i++)
         {
-            this._combatGrid.AddCharacter(combatGrid._characterData[i]).transform.SetParent(enemyCharacterRoot.transform); ;
+            this._combatGrid.AddCharacter(combatGrid._characterData[i]).transform.SetParent(_enemyCharacterRoot.transform); ;
         }
         
     }
 
     private void StartTakingTurns()
     {
-        OnUpdateCombatState?.Invoke(CombatState.TakeTurns);
+        OnUpdateCombatState?.Invoke(CombatState.TakeTurn);
     }
 
     private void LoadCurrentPlayerParty()
