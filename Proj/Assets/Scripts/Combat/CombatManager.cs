@@ -206,6 +206,7 @@ public class CombatManager : MonoBehaviour
     private Selector _selector;
 
     public event Action<CombatState> OnUpdateCombatState;
+    
 
     [SerializeField] private string _fileToLoadDEBUG;
 
@@ -319,11 +320,6 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    public void ChangeState(CombatState newState)
-    {
-        _combatState = newState;
-    }
-
     public CombatState GetCombatState()
     {
         return _combatState;
@@ -365,7 +361,7 @@ public class CombatManager : MonoBehaviour
     private void HandleIntroCinematic()
     {   
         if (_combatCamera.IsIntroCinematicDone())
-            _combatState = CombatState.PlaceCharacters;
+            UpdateCombatState(CombatState.PlaceCharacters);
         else
             _combatCamera.PlayIntroCinematic();
     }
@@ -379,8 +375,7 @@ public class CombatManager : MonoBehaviour
             // TODO (Calle): Detta ska g�ra i LevelManagern
             LoadNextLevel();
             //LoadCurrentPlayerParty();
-
-            _combatState = CombatState.IntroCinematic;
+            UpdateCombatState(CombatState.IntroCinematic);
         }
     }
 
@@ -614,4 +609,10 @@ public class CombatManager : MonoBehaviour
         _currentTurn = turn; 
     }
 
+    public void UpdateCombatState(CombatState state)
+    {
+        if(_combatState != state) {
+            _combatState = state;
+            OnUpdateCombatState?.Invoke(_combatState);
+    }
 }
