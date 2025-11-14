@@ -53,7 +53,6 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private GameObject _activeCharacter;
 
-    //[SerializeField] private CombatGrid _combatGrid;
     [SerializeField] private bool _combatGridLoaded = false;
 
     private GameObject _friendlyCharacterRoot;
@@ -87,15 +86,13 @@ public class CombatManager : MonoBehaviour
     }
 
     private void OnEnable()
-    {
-        OnUpdateCombatState += UpdateCombatState;
+    {   
         CombatUI.Instance.OnStartCombatButtonPressed += StartTakingTurns;
         CombatUI.Instance.OnEndTurnButtonPressed += ChangeCurrentTurn;
     }
 
     private void OnDisable()
     {
-        OnUpdateCombatState -= UpdateCombatState;
         CombatUI.Instance.OnStartCombatButtonPressed -= StartTakingTurns;
         CombatUI.Instance.OnEndTurnButtonPressed -= ChangeCurrentTurn;
     }
@@ -125,24 +122,6 @@ public class CombatManager : MonoBehaviour
                 {
                     HandleLoadCombatLevel();
 
-                    Vector2Int tileIndex = new Vector2Int(5, 0);
-                    Vector3 position = new Vector3(1.0f + tileIndex.x * 2.0f, 0.0f, 1.0f + tileIndex.y * 2.0f);
-                    CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
-                                                                                       Faction.Friendly,
-                                                                                       10,
-                                                                                       1,
-                                                                                       tileIndex,
-                                                                                       position,
-                                                                                       Vector3.one,
-                                                                                       Quaternion.identity);
-
-                    //_combatGrid.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
-                    CombatGrid._instance.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
-                    tileIndex.x = 6;
-                    position.x += 2.0f;
-                    characterData.SetTileIndex(tileIndex);
-                    characterData.SetPosition(position);
-                    CombatGrid._instance.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
                     
                 }
                 break;
@@ -224,7 +203,28 @@ public class CombatManager : MonoBehaviour
             LoadNextLevel();
             //LoadCurrentPlayerParty();
             UpdateCombatState(CombatState.IntroCinematic);
+
+            Vector2Int tileIndex = new Vector2Int(5, 0);
+            Vector3 position = new Vector3(1.0f + tileIndex.x * 2.0f, 0.0f, 1.0f + tileIndex.y * 2.0f);
+            CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
+                                                                               Faction.Friendly,
+                                                                               10,
+                                                                               1,
+                                                                               tileIndex,
+                                                                               position,
+                                                                               Vector3.one,
+                                                                               Quaternion.identity);
+
+            //_combatGrid.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
+            CombatGrid._instance.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
+            tileIndex.x = 6;
+            position.x += 2.0f;
+            characterData.SetTileIndex(tileIndex);
+            characterData.SetPosition(position);
+            CombatGrid._instance.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
+
         }
+
     }
 
     private void HandlePlaceCharacters()
@@ -300,6 +300,7 @@ public class CombatManager : MonoBehaviour
     private void SetCurrentTurn(CombatTurn turn)
     {
         _currentTurn = turn;
+        CombatEventManager.CombatTurnChanged(turn);
     }
 
     private void ChangeCurrentTurn()
@@ -317,13 +318,12 @@ public class CombatManager : MonoBehaviour
         {
             // NOTE (Calle): Set current turn based on initiative and Faction
             _activeCharacter = GetNextTurnCharacter();
-            if(_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Friendly)
+            if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Friendly)
             {
                 SetCurrentTurn(CombatTurn.PlayerTurn);
                 CardHandManager._instance.ChangeMana(1);
             }
-                
-            else if(_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Enemy)
+            else if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Enemy)
                 SetCurrentTurn(CombatTurn.EnemyTurn);
  
         }
@@ -371,13 +371,20 @@ public class CombatManager : MonoBehaviour
         //               If not, transition to TakeTurn again
 
         // NOTE (Calle): Check End Combat conditions
-        if(CombatGrid._instance.GetAllCharacters().Count > 0)
+        if(CombatGrid._instance.GetAllEnemyCharacters().Count == 0)
         {
-            UpdateCombatState(CombatState.TakeTurn);
-        }            
+            // TODO (Calle): All enemies killed, do something specific to that.
+            UpdateCombatState(CombatState.EndCombat);
+        }
+        else if(CombatGrid._instance.GetAllFriendlyCharacters().Count == 0)
+        {
+            // TODO (Calle): All heroes killed, do something specific to that.
+            UpdateCombatState(CombatState.EndCombat);
+        }
         else
         {
-            UpdateCombatState(CombatState.EndCombat);
+            // TODO (Calle): Continue with next turn, do we need to do anything else specific?
+            UpdateCombatState(CombatState.TakeTurn);
         }
     }
 
@@ -512,7 +519,7 @@ public class CombatManager : MonoBehaviour
         if (_combatState != state)
         {
             _combatState = state;
-            OnUpdateCombatState?.Invoke(_combatState);
+            CombatEventManager.CombatStateChanged(state);
         }
     }
 }
