@@ -205,6 +205,8 @@ public class CombatManager : MonoBehaviour
     public static CombatManager _instance;
     private Selector _selector;
 
+    public event Action OnUpdateCombatState;
+
     [SerializeField] private string _fileToLoadDEBUG;
 
     [SerializeField] private CombatCamera _combatCamera;
@@ -215,7 +217,6 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] private CombatGrid _combatGrid;
     [SerializeField] private bool _combatGridLoaded = false;
-
 
     private GameObject _activeCharacter;
     private GameObject friendlyCharacterRoot;
@@ -291,6 +292,7 @@ public class CombatManager : MonoBehaviour
                     characterData.SetTileIndex(tileIndex);
                     characterData.SetPosition(position);
                     _combatGrid.AddCharacter(characterData).transform.SetParent(friendlyCharacterRoot.transform);
+                    
                 }
                 break;
             case CombatState.IntroCinematic:
@@ -300,6 +302,7 @@ public class CombatManager : MonoBehaviour
             case CombatState.PlaceCharacters:
                 {
                     HandlePlaceCharacters();
+                    
                 } break;
             case CombatState.MakeTurn:
                 {
@@ -314,7 +317,6 @@ public class CombatManager : MonoBehaviour
                     HandleEndCombat();
                 } break;
         }
-
     }
 
     public void ChangeState(CombatState newState)
@@ -361,8 +363,7 @@ public class CombatManager : MonoBehaviour
 
 
     private void HandleIntroCinematic()
-    {
-        
+    {   
         if (_combatCamera.IsIntroCinematicDone())
             _combatState = CombatState.PlaceCharacters;
         else
@@ -431,7 +432,6 @@ public class CombatManager : MonoBehaviour
                     DebugLog.CJLog("Show ERROR UI to place on a deploy tile.");
                 }
             }
-            
         }
         
         //_selector.ResetSelectedCharacter();
@@ -457,6 +457,7 @@ public class CombatManager : MonoBehaviour
 
     private void HandleMakeTurn()
     {
+        // NOTE (Calle): Only wan't to set the _activeCharacter once each turn
         if(_activeCharacter == null)
             _activeCharacter = GetNextTurnCharacter();
 
@@ -470,7 +471,6 @@ public class CombatManager : MonoBehaviour
                 break;
         }
     }
-
 
     private void HandlePlayerTurn()
     {
