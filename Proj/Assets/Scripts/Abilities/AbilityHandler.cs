@@ -5,7 +5,7 @@ public class AbilityHandler : MonoBehaviour
 {
     [SerializeField] private List<Ability> _abilities;
 
-    private List<CombatGridTile> _availableAbilityTargets = new List<CombatGridTile>();
+    private List<CombatGridTile> _tilesInRange = new List<CombatGridTile>();
     private Character _characterCaster;
     private CombatGridTile _casterTile;
     [SerializeField] private Ability _pendingAbility;
@@ -23,7 +23,7 @@ public class AbilityHandler : MonoBehaviour
     }
     public bool UseAbility(Ability ability, CombatGridTile targetTile)
     {
-        GetTilesInRange(ability);
+        GetAvailableTargets(ability);
         if (!CanCastAbility(ability, targetTile))
         {
             ClearAbilityTargets();
@@ -39,13 +39,13 @@ public class AbilityHandler : MonoBehaviour
     {
         return _characterCaster;
     }
-    public List<CombatGridTile> GetAvailableAbilityTargets()
+    public List<CombatGridTile> GetTilesInRange()
     {
-        return _availableAbilityTargets;
+        return _tilesInRange;
     }
     public void ClearAbilityTargets()
     {
-        _availableAbilityTargets.Clear();
+        _tilesInRange.Clear();
     }
 
     public void SetPendingAbility(Ability ability)
@@ -57,14 +57,19 @@ public class AbilityHandler : MonoBehaviour
         return _pendingAbility;
     }
 
-    private bool CanCastAbility(Ability ability, CombatGridTile targetTile)
+    public void CalculateAbilityRange()
     {
-        return IsValidTargetForAbility(ability, targetTile) && _availableAbilityTargets.Contains(targetTile);
+
     }
 
-    private List<CombatGridTile> GetTilesInRange(Ability ability)
+    private bool CanCastAbility(Ability ability, CombatGridTile targetTile)
     {
-        return ability.GetAvailableTiles(_casterTile);
+        return IsValidTargetForAbility(ability, targetTile) && _tilesInRange.Contains(targetTile);
+    }
+
+    private List<CombatGridTile> GetAvailableTargets(Ability ability)
+    {
+        return ability.GetAvailableTargets(_casterTile);
     }
 
     private bool IsValidTargetForAbility(Ability ability, CombatGridTile tile)

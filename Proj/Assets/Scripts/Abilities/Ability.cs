@@ -40,7 +40,7 @@ public abstract class Ability : ScriptableObject
 
     public RangeCalculation GetRangeCalculation => _rangeCalculation;
 
-    public List<CombatGridTile> GetAvailableTiles(CombatGridTile casterTile)
+    public List<CombatGridTile> GetAvailableTargets(CombatGridTile casterTile)
     {
         return _rangeCalculation.CalculateTilesInRange(casterTile, _range);
     }
