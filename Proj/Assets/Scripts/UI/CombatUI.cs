@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,11 +8,17 @@ public class CombatUI : MonoBehaviour
 {
     public enum PanelType { Card, Ability }
 
-    public event Action OnNextTurnButtonPressed;
+    public event Action OnStartCombatButtonPressed;
+    public event Action OnEndTurnButtonPressed;
+    public static CombatUI Instance;
     
     [SerializeField] private Image _abilityPanel;
+    [SerializeField] private Image _characterPortraitPanel;
+    [SerializeField] private Button _startCombatButton;
+    [SerializeField] private Button _endTurnButton;
     [SerializeField] private Button _abilityButtonPrefab;
-    [SerializeField] private Button _nextTurnButton;
+    [SerializeField] private Button _characterPortraitButtonPrefab;
+    [SerializeField] private GameObject _hand;
     [SerializeField] private TextMeshProUGUI _mana;
 
     private void OnEnable()
@@ -23,36 +30,56 @@ public class CombatUI : MonoBehaviour
     {
         CardHandManager.onManaChange -= UpdateManaText;
     }
-    
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        _hand.SetActive(false);
+        UpdateCharacterPortraits();
+    }
+
+    private void UpdateCharacterPortraits()
+    {
+        GameData gameData = GlobalGameManager.GetInstance().GetGameData();
+        List<Character> heroList = gameData.heroList;
+
+        if (heroList == null)
+        {
+            return;
+        }
+        
+        foreach (Character c in heroList)
+        {
+            Button characterPortraitButton = Instantiate(_characterPortraitButtonPrefab, _characterPortraitButtonPrefab.transform.parent);
+            characterPortraitButton.image.sprite = c.GetClassData().classImage;
+        }
+    }
+
     private void UpdateManaText(int mana)
     {
         _mana.text = $"Mana\n{mana}/10";
     }
 
-    public void StartNextPhase()
+    public void StartCombat()
     {
-        // switch (CombatManager._instance.GetCombatState())
-        // {
-        //     case CombatState.MakeTurn:
-        //         CombatManager._instance.ChangeState(CombatState.EndTurn);
-        //         CombatManager._instance.HandleEndTurn();
-        //         break;
-        //     case CombatState.PlaceCharacters:
-        //         CombatManager._instance.ChangeState(CombatState.MakeTurn);
-        //         break;
-        // }
-        //
-        // SetNextPhaseButtonText();
-        
-        OnNextTurnButtonPressed?.Invoke();
+        OnStartCombatButtonPressed?.Invoke();
+        _startCombatButton.gameObject.SetActive(false);
+        _endTurnButton.gameObject.SetActive(true);
+        _hand.SetActive(true);
     }
 
-    public void SetNextPhaseButtonText()
+    public void EndTurn()
     {
-        if (CombatManager._instance.GetCombatState() == CombatState.MakeTurn)
-        {
-            _nextTurnButton.GetComponentInChildren<TextMeshProUGUI>().text = "End Turn";
-        }
+        OnEndTurnButtonPressed?.Invoke();
     }
 
     public void ShowDeck()

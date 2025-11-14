@@ -13,9 +13,14 @@ public class ClassData : ScriptableObject
     public int maxHealthPoints;
     public int minSpeed;
     public int maxSpeed;
+    public int minMovmementPoints;
+    public int maxMovmentPoints;
     public int minDamage;
     public int maxDamage;
     
     [Header("Abilities")]
     public List<Ability> abilities;
+
+    [Header("Misc")]
+    public Sprite classImage;
 }

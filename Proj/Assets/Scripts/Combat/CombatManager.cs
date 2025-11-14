@@ -21,7 +21,7 @@ public enum CombatState
     IntroCinematic,
     LoadCombatLevel,
     PlaceCharacters,
-    MakeTurn,
+    TakeTurns,
     EndTurn,
     EndCombat
 };
@@ -165,7 +165,7 @@ public class CombatGrid
     public GameObject AddCharacter(CombatGridCharacterData characterData)
     {
         GameObject result = null;
-
+        
         Vector2Int tileIndex    = characterData.GetTileIndex();
         Vector3    instancePos  = characterData.GetCharacterPosition();
         Quaternion rotation     = characterData.GetRotation();
@@ -205,6 +205,9 @@ public class CombatManager : MonoBehaviour
     public static CombatManager _instance;
     private Selector _selector;
 
+    public event Action<CombatState> OnUpdateCombatState;
+    
+    
     [SerializeField] private string _fileToLoadDEBUG;
 
     [SerializeField] private CombatCamera _combatCamera;
@@ -216,7 +219,6 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private CombatGrid _combatGrid;
     [SerializeField] private bool _combatGridLoaded = false;
 
-
     private GameObject _activeCharacter;
     private GameObject friendlyCharacterRoot;
     private GameObject enemyCharacterRoot;
@@ -227,7 +229,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private List<ClassAbilities> _classAbilities;
     private Dictionary<CharacterClass, List<Ability>> _classAbilitiesDictionary;
 
-    public UnityEvent EnemyTurnStart = new();
+    public UnityEvent TurnStart = new();
     
     private void Awake()
     {
@@ -246,6 +248,20 @@ public class CombatManager : MonoBehaviour
         {
             _classAbilitiesDictionary[pair.characterClass] = pair.abilities;
         }
+    }
+
+    private void OnEnable()
+    {
+        OnUpdateCombatState += UpdateCombatState;
+        CombatUI.Instance.OnStartCombatButtonPressed += StartTakingTurns;
+        CombatUI.Instance.OnEndTurnButtonPressed += ChangeCurrentTurn;
+    }
+
+    private void OnDisable()
+    {
+        OnUpdateCombatState -= UpdateCombatState;
+        CombatUI.Instance.OnStartCombatButtonPressed -= StartTakingTurns;
+        CombatUI.Instance.OnEndTurnButtonPressed -= ChangeCurrentTurn;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -291,6 +307,7 @@ public class CombatManager : MonoBehaviour
                     characterData.SetTileIndex(tileIndex);
                     characterData.SetPosition(position);
                     _combatGrid.AddCharacter(characterData).transform.SetParent(friendlyCharacterRoot.transform);
+                    
                 }
                 break;
             case CombatState.IntroCinematic:
@@ -300,10 +317,11 @@ public class CombatManager : MonoBehaviour
             case CombatState.PlaceCharacters:
                 {
                     HandlePlaceCharacters();
+                    
                 } break;
-            case CombatState.MakeTurn:
+            case CombatState.TakeTurns:
                 {
-                    HandleMakeTurn();
+                    HandleTakeTurns();
                 } break;
             case CombatState.EndTurn:
                 {
@@ -314,12 +332,6 @@ public class CombatManager : MonoBehaviour
                     HandleEndCombat();
                 } break;
         }
-
-    }
-
-    public void ChangeState(CombatState newState)
-    {
-        _combatState = newState;
     }
 
     public CombatState GetCombatState()
@@ -359,12 +371,10 @@ public class CombatManager : MonoBehaviour
         return _classAbilitiesDictionary.TryGetValue(characterClass, out var abilities) ? abilities : new List<Ability>();
     }
 
-
     private void HandleIntroCinematic()
-    {
-        
+    {   
         if (_combatCamera.IsIntroCinematicDone())
-            _combatState = CombatState.PlaceCharacters;
+            UpdateCombatState(CombatState.PlaceCharacters);
         else
             _combatCamera.PlayIntroCinematic();
     }
@@ -378,8 +388,7 @@ public class CombatManager : MonoBehaviour
             // TODO (Calle): Detta ska g�ra i LevelManagern
             LoadNextLevel();
             //LoadCurrentPlayerParty();
-
-            _combatState = CombatState.IntroCinematic;
+            UpdateCombatState(CombatState.IntroCinematic);
         }
     }
 
@@ -431,7 +440,6 @@ public class CombatManager : MonoBehaviour
                     DebugLog.CJLog("Show ERROR UI to place on a deploy tile.");
                 }
             }
-            
         }
         
         //_selector.ResetSelectedCharacter();
@@ -455,8 +463,17 @@ public class CombatManager : MonoBehaviour
         return nextCharacter;
     }
 
-    private void HandleMakeTurn()
+    private void ChangeCurrentTurn()
     {
+        if (_currentTurn == CombatTurn.PlayerTurn)
+            _currentTurn = CombatTurn.EnemyTurn;
+        else
+            _currentTurn -= CombatTurn.PlayerTurn;
+    }
+
+    private void HandleTakeTurns()
+    {
+        // NOTE (Calle): Only wan't to set the _activeCharacter once each turn
         if(_activeCharacter == null)
             _activeCharacter = GetNextTurnCharacter();
 
@@ -471,7 +488,6 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-
     private void HandlePlayerTurn()
     {
         // TODO (Calle): 
@@ -481,12 +497,13 @@ public class CombatManager : MonoBehaviour
         //  - Spelarens "cooldown" / timer f�r att dra ett till kort minskar med 1 -> WIP 
 
         // TODO: Call selector with character.
+        TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandleEnemyTurn() för att AI ska kunna spela båda factions.
         Selector._instance.SetCurrentState(SelectorState.Idle);
     }
 
     private void HandleEnemyTurn()
     {
-        EnemyTurnStart.Invoke();
+        TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandlePlayerTurn() för att AI ska kunna spela båda factions.
     }
 
     public void HandleEndTurn()
@@ -543,6 +560,11 @@ public class CombatManager : MonoBehaviour
         
     }
 
+    private void StartTakingTurns()
+    {
+        OnUpdateCombatState?.Invoke(CombatState.TakeTurns);
+    }
+
     private void LoadCurrentPlayerParty()
     {
         
@@ -563,7 +585,7 @@ public class CombatManager : MonoBehaviour
 
     }
 
-    public List<GameObject> GetEnemyCharacters()
+    public List<GameObject> GetAllEnemyCharacters()
     {
         return _combatGrid.GetAllEnemyCharacters();
     }
@@ -614,4 +636,12 @@ public class CombatManager : MonoBehaviour
         _currentTurn = turn; 
     }
 
+    public void UpdateCombatState(CombatState state)
+    {
+        if (_combatState != state)
+        {
+            _combatState = state;
+            OnUpdateCombatState?.Invoke(_combatState);
+        }
+    }
 }
