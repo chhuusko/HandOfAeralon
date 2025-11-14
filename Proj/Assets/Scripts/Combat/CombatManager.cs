@@ -252,12 +252,14 @@ public class CombatManager : MonoBehaviour
 
     private void OnEnable()
     {
+        OnUpdateCombatState += UpdateCombatState;
         CombatUI.Instance.OnStartCombatButtonPressed += StartTakingTurns;
         CombatUI.Instance.OnEndTurnButtonPressed += ChangeCurrentTurn;
     }
 
     private void OnDisable()
     {
+        OnUpdateCombatState -= UpdateCombatState;
         CombatUI.Instance.OnStartCombatButtonPressed -= StartTakingTurns;
         CombatUI.Instance.OnEndTurnButtonPressed -= ChangeCurrentTurn;
     }
