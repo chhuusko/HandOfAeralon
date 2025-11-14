@@ -499,7 +499,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8001903329062285493}
         m_TargetAssemblyTypeName: CombatUI, Assembly-CSharp
-        m_MethodName: StartNextPhase
+        m_MethodName: EndTurn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1012,6 +1012,7 @@ MonoBehaviour:
     type: 3}
   _characterPortraitButtonPrefab: {fileID: 3320840960465630, guid: e0604acf35576954bb8b49405d849ce8,
     type: 3}
+  _hand: {fileID: 3650385346247062174}
   _mana: {fileID: 4826794601199300524}
 --- !u!1 &4785057601845566282
 GameObject:
@@ -1408,7 +1409,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8001903329062285493}
         m_TargetAssemblyTypeName: CombatUI, Assembly-CSharp
-        m_MethodName: StartNextPhase
+        m_MethodName: StartCombat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1928,7 +1929,7 @@ PrefabInstance:
     - target: {fileID: 8067438011519287914, guid: fe889341b342836419584d2ddf0bdfcd,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8117799210593407533, guid: fe889341b342836419584d2ddf0bdfcd,
         type: 3}
@@ -1941,6 +1942,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe889341b342836419584d2ddf0bdfcd, type: 3}
+--- !u!1 &3650385346247062174 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8117799210593407533, guid: fe889341b342836419584d2ddf0bdfcd,
+    type: 3}
+  m_PrefabInstance: {fileID: 4756066732136014003}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &5597996309582197595 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1130652569201087464, guid: fe889341b342836419584d2ddf0bdfcd,
