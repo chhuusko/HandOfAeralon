@@ -8,6 +8,7 @@ public class CombatUI : MonoBehaviour
     public enum PanelType { Card, Ability }
 
     public event Action OnNextTurnButtonPressed;
+    public static CombatUI Instance;
     
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Button _abilityButtonPrefab;
@@ -23,7 +24,20 @@ public class CombatUI : MonoBehaviour
     {
         CardHandManager.onManaChange -= UpdateManaText;
     }
-    
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void UpdateManaText(int mana)
     {
         _mana.text = $"Mana\n{mana}/10";
