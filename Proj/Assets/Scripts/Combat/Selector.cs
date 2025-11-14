@@ -207,7 +207,7 @@ public class Selector : MonoBehaviour
         HideCharacterOptions(_selectedCharacter);
 
         StopPreviewAbilityRange(_selectedCharacter);
-        _selectedCharacter.GetAbilityHandler().SetPendingAbility(null);
+        _selectedCharacter?.GetAbilityHandler().SetPendingAbility(null);
         _selectedCharacter = null;
         _pendingCharacterActionType = CharacterActionType.Null;
         
@@ -233,14 +233,14 @@ public class Selector : MonoBehaviour
     {
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
-            SetColorOfTiles(abilityHandler.GetAvailableAbilityTargets(), Color.green);
+            SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.green);
         }
     }
     public void StopPreviewAbilityRange(Character character)
     {
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
-            SetColorOfTiles(abilityHandler.GetAvailableAbilityTargets(), Color.white);
+            SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.white);
         }
     }
     private void HideCharacterOptions(Character Character)
@@ -248,7 +248,7 @@ public class Selector : MonoBehaviour
         // Deactivate UI and reset tile color.
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
-            SetColorOfTiles(abilityHandler.GetAvailableAbilityTargets(), Color.white);
+            SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.white);
             abilityHandler.ClearAbilityTargets();
         }
     }

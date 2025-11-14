@@ -18,6 +18,7 @@ public struct GameData
 public class GlobalGameManager : ScriptableObject
 {
     [SerializeField] private DeckPreset _deckPreset;
+    [SerializeField] private CharacterPrefabLibrary _characterLibrary;
     private static GlobalGameManager _instance;
     private GameData _currentGame;
     public static GlobalGameManager GetInstance()
@@ -30,8 +31,7 @@ public class GlobalGameManager : ScriptableObject
     }
     public GameData GetGameData()
     {
-        _currentGame = new GameData();
-        _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
+        Temp();
         return _currentGame;
     }
     public void LoadGame(int slot)
@@ -61,6 +61,26 @@ public class GlobalGameManager : ScriptableObject
     public void JSONWrite()
     {
         //TODO
+    }
+    /// <summary>
+    /// Temporary function so that same data exist regardless of scene and order of scene load
+    /// </summary>
+    private void Temp()
+    {
+        _currentGame = new GameData();
+        _currentGame.saveSlot = 1;
+        _currentGame.seed = 67;
+        LevelManager.GetInstance().GenerateMap(_currentGame.seed);
+        _currentGame.heroList = new List<Character>
+        {
+            _characterLibrary.GetPrefab(CharacterClass.Barbarian).GetComponent<Character>(),
+            _characterLibrary.GetPrefab(CharacterClass.Wizard).GetComponent<Character>(),
+            _characterLibrary.GetPrefab(CharacterClass.Rogue).GetComponent<Character>(),
+            _characterLibrary.GetPrefab(CharacterClass.Bard).GetComponent<Character>()
+        };
+        _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
+        Debug.Log(_currentGame.cardList.Count);
+        _currentGame.coins = 50;
     }
 }
 
