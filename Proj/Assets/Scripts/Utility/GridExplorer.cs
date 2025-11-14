@@ -21,6 +21,7 @@ public class GridExplorer : MonoBehaviour
     private List<GameObject> _debugReachableTiles = new();
     private List<GameObject> _debugPath = new();
     private GameObject _debugStartTile;
+    private GameObject _debugGoalTile;
 
     /// <summary>
     /// Calculates the ManhattanDistance between two tile objects (a.x - b.x + a.y - b.y).
@@ -48,7 +49,7 @@ public class GridExplorer : MonoBehaviour
     /// This method uses a grid-based breadth-first search (BFS) algorithm to traverse the map in four cardinal directions. 
     /// It steps back when it can't find any more neighbours to explore (either already visited or unwalkable) and finds a different path.
     /// It stops and returns the resulting path when it reaches the goal.
-    /// The method also updates internal debug fields (_debugStartTile and _debugPath) 
+    /// The method also updates internal debug fields (_debugStartTile, _debugPath and _debugGoalTile) 
     /// used for visualization in the editor.
     /// </remarks>
     public List<GameObject> FindPath(GameObject startTile, GameObject goalTile)
@@ -81,6 +82,7 @@ public class GridExplorer : MonoBehaviour
                 result = BuildPath(connection, start, goal);
                 if (_bDebug) _debugStartTile = startTile;
                 if (_bDebug) _debugPath = result;
+                if (_bDebug) _debugGoalTile = goalTile;
                 return result;
             }
 
@@ -90,6 +92,7 @@ public class GridExplorer : MonoBehaviour
 
                 if (OutOfBounds(next)) continue;
                 if (!IsWalkable(next)) continue;
+                if (IsOccupied(next) && next != goal) continue;
                 if (visited.Contains(next)) continue;
 
                 queue.Enqueue(next);
@@ -166,22 +169,27 @@ public class GridExplorer : MonoBehaviour
 
                 if (OutOfBounds(next))
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.GetTilesInRange() | continue: OutOfBounds(next)");
+                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: next OutOfBounds");
                     continue;
                 }
                 if (checkWalkable && !IsWalkable(next))
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.GetTilesInRange() | continue: !IsWalkable");
+                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: next !IsWalkable");
+                    continue;
+                }
+                if (checkWalkable && IsOccupied(next))
+                {
+                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: next IsOccupied");
                     continue;
                 }
                 if (nextCost > range)
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.GetTilesInRange() | continue: nextCost > range");
+                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: nextCost > range");
                     continue;
                 }
                 if (cost.ContainsKey(next))
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.GetTilesInRange() | continue: cost.ContainsKey(next)");
+                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: cost.ContainsKey(next)");
                     continue;
                 }
 
@@ -211,6 +219,11 @@ public class GridExplorer : MonoBehaviour
         return CombatGrid._instance.GetTileAtCoord(pos.x, pos.y).GetComponent<CombatGridTile>().IsWalkable();
     }
 
+    private bool IsOccupied(Vector2Int pos)
+    {
+        return CombatGrid._instance.GetTileAtCoord(pos.x, pos.y).GetComponent<CombatGridTile>().GetOccupant() != null;
+    }
+
     private void OnDrawGizmos()
     {
         if (!_bDebug || _debugStartTile == null)
@@ -232,5 +245,8 @@ public class GridExplorer : MonoBehaviour
 
         Gizmos.color = new Color(1, 1, 1, 0.8f);
         Gizmos.DrawCube(_debugStartTile.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
+
+        Gizmos.color = new Color(1, 0, 0, 0.8f);
+        Gizmos.DrawCube(_debugGoalTile.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
     }
 }

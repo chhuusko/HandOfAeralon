@@ -48,6 +48,14 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void ResetCharacter() // Endast för testkörning (JLW)
+    {
+        _currentHealthPoints = _baseHealthPoints;
+        _currentSpeed = _baseSpeed;
+        _currentDamage = _baseDamage;
+        _currentMovementPoints = _baseMovementPoints;
+    }
+
     public void Update()
     {
         // NOTE (CJ & Carl): Testkod f�r animationer
