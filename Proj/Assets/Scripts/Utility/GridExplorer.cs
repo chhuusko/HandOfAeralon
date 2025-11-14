@@ -108,11 +108,11 @@ public class GridExplorer : MonoBehaviour
 
         while (connection.ContainsKey(current))
         {
-            result.Insert(0, CombatManager._instance.GetTileAtCoord(current.x, current.y));
+            result.Insert(0, CombatGrid._instance.GetTileAtCoord(current.x, current.y));
             current = connection[current];
         }
 
-        result.Insert(0, CombatManager._instance.GetTileAtCoord(start.x, start.y));
+        result.Insert(0, CombatGrid._instance.GetTileAtCoord(start.x, start.y));
         return result;
     }
 
@@ -187,18 +187,18 @@ public class GridExplorer : MonoBehaviour
 
                 cost[next] = nextCost;
                 queue.Enqueue(next);
-                result.Add(CombatManager._instance.GetTileAtCoord(next.x, next.y));
+                result.Add(CombatGrid._instance.GetTileAtCoord(next.x, next.y));
             }
         }
 
-        if (_bDebug) _debugStartTile = CombatManager._instance.GetTileAtCoord(start.x, start.y);
+        if (_bDebug) _debugStartTile = CombatGrid._instance.GetTileAtCoord(start.x, start.y);
         if (_bDebug) _debugReachableTiles = result;
         return result;
     }
 
     private bool OutOfBounds(Vector2Int pos)
     {
-        if (pos.x < 0 || pos.y < 0 || pos.x >= CombatManager._instance.GetGridWidth() || pos.y >= CombatManager._instance.GetGridHeight())
+        if (pos.x < 0 || pos.y < 0 || pos.x >= CombatGrid._instance.GetGridWidth() || pos.y >= CombatGrid._instance.GetGridHeight())
         {
             return true;
         }
@@ -208,7 +208,7 @@ public class GridExplorer : MonoBehaviour
 
     private bool IsWalkable(Vector2Int pos)
     {
-        return CombatManager._instance.GetTileAtCoord(pos.x, pos.y).GetComponent<CombatGridTile>().IsWalkable();
+        return CombatGrid._instance.GetTileAtCoord(pos.x, pos.y).GetComponent<CombatGridTile>().IsWalkable();
     }
 
     private void OnDrawGizmos()
@@ -221,16 +221,16 @@ public class GridExplorer : MonoBehaviour
         Gizmos.color = new Color(0, 1, 0, 0.5f);
         foreach (var element in _debugReachableTiles)
         {
-            Gizmos.DrawCube(element.transform.position, CombatManager._instance.GetTileSize() * 0.9f);
+            Gizmos.DrawCube(element.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
         }
 
         Gizmos.color = new Color(1, 0, 1, 0.5f);
         foreach (var element in _debugPath)
         {
-            Gizmos.DrawCube(element.transform.position, CombatManager._instance.GetTileSize() * 0.9f);
+            Gizmos.DrawCube(element.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
         }
 
         Gizmos.color = new Color(1, 1, 1, 0.8f);
-        Gizmos.DrawCube(_debugStartTile.transform.position, CombatManager._instance.GetTileSize() * 0.9f);
+        Gizmos.DrawCube(_debugStartTile.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
     }
 }

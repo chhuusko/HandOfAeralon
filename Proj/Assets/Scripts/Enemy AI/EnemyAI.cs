@@ -76,7 +76,7 @@ public class EnemyAI : MonoBehaviour
 
         if (controlledFaction == Faction.Enemy)
         {
-            opponentCharacters = CombatManager
+            opponentCharacters = CombatGrid
             ._instance.GetAllFriendlyCharacters()
             .Select(obj => obj.GetComponent<Character>())
             .Where(ch => ch != null)
@@ -84,7 +84,7 @@ public class EnemyAI : MonoBehaviour
         }
         else if (controlledFaction == Faction.Friendly)
         {
-            opponentCharacters = CombatManager
+            opponentCharacters = CombatGrid
             ._instance.GetAllEnemyCharacters()
             .Select(obj => obj.GetComponent<Character>())
             .Where(ch => ch != null)
