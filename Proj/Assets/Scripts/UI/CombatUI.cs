@@ -12,9 +12,11 @@ public class CombatUI : MonoBehaviour
     public static CombatUI Instance;
     
     [SerializeField] private Image _abilityPanel;
-    [SerializeField] private Button _abilityButtonPrefab;
+    [SerializeField] private Image _characterPortraitPanel;
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
+    [SerializeField] private Button _abilityButtonPrefab;
+    [SerializeField] private Button _characterPortraitButtonPrefab;
     [SerializeField] private TextMeshProUGUI _mana;
 
     private void OnEnable()
@@ -46,7 +48,8 @@ public class CombatUI : MonoBehaviour
     {
         foreach (Character c in GlobalGameManager.GetInstance().GetGameData().heroList)
         {
-            
+            Button characterPortraitButton = Instantiate(_characterPortraitButtonPrefab, _characterPortraitButtonPrefab.transform.parent);
+            characterPortraitButton.image.sprite = c.GetClassData().classImage;
         }
     }
 
@@ -65,14 +68,6 @@ public class CombatUI : MonoBehaviour
     public void EndTurn()
     {
         OnEndTurnButtonPressed?.Invoke();
-    }
-
-    public void SetNextPhaseButtonText()
-    {
-        if (CombatManager._instance.GetCombatState() == CombatState.MakeTurn)
-        {
-            // _nextTurnButton.GetComponentInChildren<TextMeshProUGUI>().text = "End Turn";
-        }
     }
 
     public void ShowDeck()

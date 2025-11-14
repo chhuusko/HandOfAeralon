@@ -62,6 +62,11 @@ public class Character : MonoBehaviour
     {
         return _abilityHandler;
     }
+
+    public ClassData GetClassData()
+    {
+        return _classData;
+    }
     
     public CharacterClass GetCharacterClass()
     {
