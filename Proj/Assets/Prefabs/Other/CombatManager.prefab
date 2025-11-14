@@ -28,10 +28,11 @@ Transform:
   m_GameObject: {fileID: 3338464434817600166}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1424.8424, y: 1266.2505, z: 1476.8098}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1066770049747366293}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &616073620153778492
@@ -47,24 +48,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fileToLoadDEBUG: battle1
-  _combatCamera: {fileID: 8700939102808587917, guid: 2757f80d6f2eac24cb5a719251a32771,
-    type: 3}
+  _combatCamera: {fileID: 0}
   _cameraSpeed: 10
   _combatState: 0
   _currentTurn: 0
-  _combatGrid:
-    _tilePrefabLibrary: {fileID: 11400000, guid: 04a120cb18f76f341b4fa433f2de3433,
-      type: 2}
-    _characterPrefabLibrary: {fileID: 11400000, guid: f195d2af34a2acb49b53403b1e543287,
-      type: 2}
-    _height: 0
-    _width: 0
-    _tileSize: {x: 0, y: 0, z: 0}
-    _tilesGO: []
-    _charactersGO: []
+  _activeCharacter: {fileID: 0}
   _combatGridLoaded: 0
   _classAbilities: []
-  EnemyTurnStart:
+  TurnStart:
     m_PersistentCalls:
       m_Calls: []
 --- !u!320 &5951504651251208821
@@ -102,3 +93,54 @@ MonoBehaviour:
   _pendingCharacterActionType: 0
   _selectedCharacter: {fileID: 0}
   _bDebugSelector: 0
+--- !u!1 &8445614807586532933
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1066770049747366293}
+  - component: {fileID: 261140580672474249}
+  m_Layer: 0
+  m_Name: CombatGrid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1066770049747366293
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8445614807586532933}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5288347990569714036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &261140580672474249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8445614807586532933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df3538e2548779b4b840270fc1985e8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tilePrefabLibrary: {fileID: 0}
+  _characterPrefabLibrary: {fileID: 0}
+  _height: 0
+  _width: 0
+  _tileSize: {x: 0, y: 0, z: 0}
+  _tilesGO: []
+  _charactersGO: []
