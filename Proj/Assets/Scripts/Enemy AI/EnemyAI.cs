@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class EnemyAI : MonoBehaviour
 {
+    public UnityEvent AIEndTurn = new();
+
     [SerializeField] private Faction controlledFaction = Faction.Enemy;
     [SerializeField] private Character _testCharacter;
     [SerializeField] private bool _bDebug = false;
@@ -63,6 +66,8 @@ public class EnemyAI : MonoBehaviour
             return;
         }
         if (_bDebug) Debug.Log($"EnemyAI.cs | {closestOpponentCharacter.name} outside attack range.");
+
+        AIEndTurn.Invoke();
     }
 
     private Character GetClosestOpponentCharacter(Character currentCharacter)
@@ -122,7 +127,10 @@ public class EnemyAI : MonoBehaviour
     private GameObject FindPath(GameObject currentTile, GameObject closestOpponentCharacterTile)
     {
         List<GameObject> pathToTarget = GridExplorer._instance.FindPath(currentTile, closestOpponentCharacterTile);
-        int moveRange = 3; // Bör vara -> currentCharacter.GetMoveRange()
+
+        int moveRange = currentTile.GetComponent<CombatGridTile>().GetOccupantCharacter().GetMovementPoints();
+
+        CombatGridTile currentTileScript = currentTile.GetComponent<CombatGridTile>();
 
         if (pathToTarget == null || pathToTarget.Count <= 1)
         {
