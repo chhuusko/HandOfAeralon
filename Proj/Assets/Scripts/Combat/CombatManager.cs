@@ -292,7 +292,7 @@ public class CombatManager : MonoBehaviour
                     Vector2Int tileIndex = new Vector2Int(5, 0);
                     Vector3 position = new Vector3(1.0f + tileIndex.x * 2.0f, 0.0f, 1.0f + tileIndex.y * 2.0f);
                     CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
-                                                                                       Faction.Enemy,
+                                                                                       Faction.Friendly,
                                                                                        10,
                                                                                        1,
                                                                                        tileIndex,
@@ -463,6 +463,11 @@ public class CombatManager : MonoBehaviour
         return nextCharacter;
     }
 
+    private void SetCurrentTurn(CombatTurn turn)
+    {
+        _currentTurn = turn;
+    }
+
     private void ChangeCurrentTurn()
     {
         if (_currentTurn == CombatTurn.PlayerTurn)
@@ -475,8 +480,20 @@ public class CombatManager : MonoBehaviour
     {
         // NOTE (Calle): Only wan't to set the _activeCharacter once each turn
         if(_activeCharacter == null)
+        {
+            // NOTE (Calle): Set current turn based on initiative and Faction
             _activeCharacter = GetNextTurnCharacter();
-
+            if(_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Friendly)
+            {
+                SetCurrentTurn(CombatTurn.PlayerTurn);
+                CardHandManager._instance.ChangeMana(1);
+            }
+                
+            else if(_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Enemy)
+                SetCurrentTurn(CombatTurn.EnemyTurn);
+ 
+        }
+         
         switch (_currentTurn)
         {
             case CombatTurn.PlayerTurn:
@@ -497,13 +514,20 @@ public class CombatManager : MonoBehaviour
         //  - Spelarens "cooldown" / timer f�r att dra ett till kort minskar med 1 -> WIP 
 
         // TODO: Call selector with character.
-        TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandleEnemyTurn() för att AI ska kunna spela båda factions.
+        
+        //TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandleEnemyTurn() för att AI ska kunna spela båda factions.
         Selector._instance.SetCurrentState(SelectorState.Idle);
     }
 
+    bool enemyDoingStuff = false;
     private void HandleEnemyTurn()
     {
-        TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandlePlayerTurn() för att AI ska kunna spela båda factions.
+        if(!enemyDoingStuff)
+        {
+            enemyDoingStuff = true;
+            TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandlePlayerTurn() för att AI ska kunna spela båda factions.
+        }
+            
     }
 
     public void HandleEndTurn()
