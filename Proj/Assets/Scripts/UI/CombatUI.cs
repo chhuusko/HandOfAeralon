@@ -72,8 +72,8 @@ public class CombatUI : MonoBehaviour
     public void StartCombat()
     {
         OnStartCombatButtonPressed?.Invoke();
-        _startCombatButton.enabled = false;
-        _endTurnButton.enabled = true;
+        _startCombatButton.gameObject.SetActive(false);
+        _endTurnButton.gameObject.SetActive(true);
         _hand.SetActive(true);
     }
 
