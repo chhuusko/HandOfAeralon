@@ -63,6 +63,7 @@ public class CombatUI : MonoBehaviour
             DebugLog.JoppaLog($"Generating portrait for: {c.name}");
             Button characterPortraitButton = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
             characterPortraitButton.image.sprite = c.GetClassData().classImage;
+            characterPortraitButton.GetComponent<PortraitButton>().SetCharacter(c);
         }
     }
 
