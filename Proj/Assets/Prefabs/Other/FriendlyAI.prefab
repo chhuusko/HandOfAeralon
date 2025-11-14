@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3951877536032253496}
   - component: {fileID: 8379955821282121603}
   m_Layer: 0
-  m_Name: EnemyAI
+  m_Name: FriendlyAI
   m_TagString: EnemyAI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 454555ab5cf54d048bbd04741d20bcde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controlsFaction: 1
+  controlledFaction: 0
   _testCharacter: {fileID: 0}
   _bDebug: 0
