@@ -2,11 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.TextCore.Text;
-using static UnityEngine.GraphicsBuffer;
 
 public class EnemyAI : MonoBehaviour
 {
+    [SerializeField] private Faction controlsFaction;
     [SerializeField] private Character _testCharacter;
     [SerializeField] private bool _bDebug = false;
     private InputSystem_Actions _inputActions;
@@ -30,7 +29,7 @@ public class EnemyAI : MonoBehaviour
     private void OnEnemyTurnStart()
     {
         Character currentCharacter = CombatManager._instance.GetNextTurnCharacter().GetComponent<Character>();
-        if (currentCharacter == null || currentCharacter.GetFaction() != Faction.Enemy)
+        if (currentCharacter == null || currentCharacter.GetFaction() != Faction.Friendly)
         {
             if (_bDebug) Debug.Log($"EnemyAI.cs | Not my turn...");
             return;
@@ -38,7 +37,7 @@ public class EnemyAI : MonoBehaviour
         GameObject currentTile = currentCharacter.GetCurrentTileComponent().gameObject;
         if (_bDebug) Debug.Log($"EnemyAI.cs | currentCharacter == {currentCharacter.name}");
 
-        Character closestPlayerCharacter = GetClosestPlayerCharacter(currentCharacter);
+        Character closestPlayerCharacter = GetClosestOpponentCharacter(currentCharacter);
         if (_bDebug && _testCharacter != null) closestPlayerCharacter = _testCharacter;
         if (closestPlayerCharacter == null)
         {
@@ -66,23 +65,36 @@ public class EnemyAI : MonoBehaviour
         if (_bDebug) Debug.Log($"EnemyAI.cs | {closestPlayerCharacter.name} outside attack range.");
     }
 
-    private Character GetClosestPlayerCharacter(Character currentCharacter)
+    private Character GetClosestOpponentCharacter(Character currentCharacter)
     {
-        List<Character> playerCharacters = CombatManager
+        List<Character> opponentCharacters = new();
+
+        if (controlsFaction == Faction.Enemy)
+        {
+            opponentCharacters = CombatManager
             ._instance.GetAllFriendlyCharacters()
             .Select(obj => obj.GetComponent<Character>())
             .Where(ch => ch != null)
             .ToList();
-
-        float min = float.MaxValue;
-        Character closestPlayerCharacter = null;
-        foreach (var playerCharacter in playerCharacters)
+        }
+        else if (controlsFaction == Faction.Friendly)
         {
-            float distance = Vector3.Distance(currentCharacter.transform.position, playerCharacter.transform.position);
+            opponentCharacters = CombatManager
+            ._instance.GetEnemyCharacters()
+            .Select(obj => obj.GetComponent<Character>())
+            .Where(ch => ch != null)
+            .ToList();
+        }
+
+            float min = float.MaxValue;
+        Character closestPlayerCharacter = null;
+        foreach (var opponentCharacter in opponentCharacters)
+        {
+            float distance = Vector3.Distance(currentCharacter.transform.position, opponentCharacter.transform.position);
             if (distance < min)
             {
                 min = distance;
-                closestPlayerCharacter = playerCharacter;
+                closestPlayerCharacter = opponentCharacter;
             }
         }
 
@@ -107,9 +119,9 @@ public class EnemyAI : MonoBehaviour
         return false;
     }
 
-    private GameObject FindPath(GameObject currentTile, GameObject closestPlayerCharacterTile)
+    private GameObject FindPath(GameObject currentTile, GameObject closestOpponentCharacterTile)
     {
-        List<GameObject> pathToTarget = GridExplorer._instance.FindPath(currentTile, closestPlayerCharacterTile);
+        List<GameObject> pathToTarget = GridExplorer._instance.FindPath(currentTile, closestOpponentCharacterTile);
         int moveRange = 3; // Bör vara -> currentCharacter.GetMoveRange()
 
         if (pathToTarget == null || pathToTarget.Count <= 1)
@@ -123,7 +135,7 @@ public class EnemyAI : MonoBehaviour
 
         for (int i = 1; i <= moveRange && i < pathToTarget.Count; i++)
         {
-            if (GridExplorer._instance.ManhattanDistance(pathToTarget[i], closestPlayerCharacterTile) > 2) // Bör vara -> currentCharacter.GetAttackRange()
+            if (GridExplorer._instance.ManhattanDistance(pathToTarget[i], closestOpponentCharacterTile) > 2) // Bör vara -> currentCharacter.GetAttackRange()
             {
                 chosenTile = pathToTarget[i];
             }
