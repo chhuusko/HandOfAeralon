@@ -463,6 +463,11 @@ public class CombatManager : MonoBehaviour
         return nextCharacter;
     }
 
+    private void SetCurrentTurn(CombatTurn turn)
+    {
+        _currentTurn = turn;
+    }
+
     private void ChangeCurrentTurn()
     {
         if (_currentTurn == CombatTurn.PlayerTurn)
@@ -475,7 +480,14 @@ public class CombatManager : MonoBehaviour
     {
         // NOTE (Calle): Only wan't to set the _activeCharacter once each turn
         if(_activeCharacter == null)
+        {
             _activeCharacter = GetNextTurnCharacter();
+            if(_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Friendly)
+                SetCurrentTurn(CombatTurn.PlayerTurn);
+            else if(_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Enemy)
+                SetCurrentTurn(CombatTurn.EnemyTurn);
+        }
+         
 
         switch (_currentTurn)
         {
