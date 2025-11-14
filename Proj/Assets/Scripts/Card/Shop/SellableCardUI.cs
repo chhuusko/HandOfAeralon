@@ -8,27 +8,31 @@ public class SellableCardUI : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     private Card _card;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created'
-    private bool isHeldDown;
-    private float sellTime = 3f;
-    private float timeHeld = 0;
+    private bool _isHeldDown;
+    private bool _isSold;
+    private float _sellTime = 2f;
+    private float _timeHeld = 0;
+    private Image _image;
+    [SerializeField] Image _fillImage;
+    [SerializeField] GameObject _soldText;
     private void Awake()
     {
-        if (Shop.GetInstance() == null)
-        {
-            
-        }
+        _fillImage.fillAmount = 0;
+        _image = GetComponent<Image>();
 
     }
     private void Update()
     {
-        if (isHeldDown)
+        if (_isHeldDown)
         {
-            timeHeld += Time.deltaTime;
-            Debug.Log(timeHeld);
-            if (timeHeld > sellTime)
+            _timeHeld += Time.deltaTime;
+            _fillImage.fillAmount = 1-(_sellTime-_timeHeld)/_sellTime;
+            if (_timeHeld > _sellTime)
             {
                 GlobalGameManager.GetInstance().GetGameData().cardList.Remove(_card);
-                Destroy(gameObject);   
+                GlobalGameManager.GetInstance().ChangeCoins(10);
+                _soldText.SetActive(true);
+                Destroy(this);
             }
         }
     }
@@ -39,12 +43,16 @@ public class SellableCardUI : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        isHeldDown = true;
+        _isHeldDown = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        isHeldDown = false;
-        timeHeld = 0;
+      
+        _isHeldDown = false;
+        _fillImage.fillAmount = 0;
+        _timeHeld = 0;
+        
+        
     }
 }
