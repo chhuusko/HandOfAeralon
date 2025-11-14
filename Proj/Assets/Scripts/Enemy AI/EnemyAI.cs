@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] private Faction controlsFaction = Faction.Enemy;
+    [SerializeField] private Faction controlledFaction = Faction.Enemy;
     [SerializeField] private Character _testCharacter;
     [SerializeField] private bool _bDebug = false;
     private InputSystem_Actions _inputActions;
@@ -29,7 +29,7 @@ public class EnemyAI : MonoBehaviour
     private void OnTurnStart()
     {
         Character currentCharacter = CombatManager._instance.GetNextTurnCharacter().GetComponent<Character>();
-        if (currentCharacter == null || currentCharacter.GetFaction() != Faction.Friendly)
+        if (currentCharacter == null || currentCharacter.GetFaction() != controlledFaction)
         {
             if (_bDebug) Debug.Log($"EnemyAI.cs | Not my turn...");
             return;
@@ -69,7 +69,7 @@ public class EnemyAI : MonoBehaviour
     {
         List<Character> opponentCharacters = new();
 
-        if (controlsFaction == Faction.Enemy)
+        if (controlledFaction == Faction.Enemy)
         {
             opponentCharacters = CombatManager
             ._instance.GetAllFriendlyCharacters()
@@ -77,7 +77,7 @@ public class EnemyAI : MonoBehaviour
             .Where(ch => ch != null)
             .ToList();
         }
-        else if (controlsFaction == Faction.Friendly)
+        else if (controlledFaction == Faction.Friendly)
         {
             opponentCharacters = CombatManager
             ._instance.GetAllEnemyCharacters()
