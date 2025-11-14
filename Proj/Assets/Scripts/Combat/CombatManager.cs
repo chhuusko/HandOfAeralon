@@ -41,8 +41,6 @@ public class CombatManager : MonoBehaviour
 {
     public static CombatManager _instance;
     private Selector _selector;
-
-    public event Action<CombatState> OnUpdateCombatState;
     
     [SerializeField] private string _fileToLoadDEBUG;
 
@@ -439,7 +437,7 @@ public class CombatManager : MonoBehaviour
 
     private void StartTakingTurns()
     {
-        OnUpdateCombatState?.Invoke(CombatState.TakeTurn);
+        UpdateCombatState(CombatState.TakeTurn);
     }
 
     private void LoadCurrentPlayerParty()
