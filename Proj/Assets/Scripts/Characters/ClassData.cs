@@ -18,4 +18,7 @@ public class ClassData : ScriptableObject
     
     [Header("Abilities")]
     public List<Ability> abilities;
+
+    [Header("Misc")]
+    public Sprite classImage;
 }

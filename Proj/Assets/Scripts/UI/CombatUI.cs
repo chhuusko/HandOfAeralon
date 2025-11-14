@@ -36,6 +36,16 @@ public class CombatUI : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        UpdateCharacterPortraits();
+    }
+
+    private void UpdateCharacterPortraits()
+    {
+        foreach (Character c in GlobalGameManager.GetInstance().GetGameData().heroList)
+        {
+            
+        }
     }
 
     private void UpdateManaText(int mana)
