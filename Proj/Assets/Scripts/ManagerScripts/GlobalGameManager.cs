@@ -31,7 +31,10 @@ public class GlobalGameManager : ScriptableObject
     }
     public GameData GetGameData()
     {
-        Temp();
+        if (_currentGame.cardList == null)
+        {
+            GetTemp();
+        }
         return _currentGame;
     }
     public void LoadGame(int slot)
@@ -65,7 +68,7 @@ public class GlobalGameManager : ScriptableObject
     /// <summary>
     /// Temporary function so that same data exist regardless of scene and order of scene load
     /// </summary>
-    private void Temp()
+    private void GetTemp()
     {
         _currentGame = new GameData();
         _currentGame.saveSlot = 1;
