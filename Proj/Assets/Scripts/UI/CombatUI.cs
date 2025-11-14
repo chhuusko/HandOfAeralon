@@ -54,12 +54,14 @@ public class CombatUI : MonoBehaviour
 
         if (heroList == null)
         {
+            DebugLog.JoppaLog("No HeroList");
             return;
         }
         
         foreach (Character c in heroList)
         {
-            Button characterPortraitButton = Instantiate(_characterPortraitButtonPrefab, _characterPortraitButtonPrefab.transform.parent);
+            DebugLog.JoppaLog($"Generating portrait for: {c.name}");
+            Button characterPortraitButton = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
             characterPortraitButton.image.sprite = c.GetClassData().classImage;
         }
     }
