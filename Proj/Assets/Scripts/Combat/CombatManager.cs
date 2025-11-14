@@ -21,7 +21,7 @@ public enum CombatState
     IntroCinematic,
     LoadCombatLevel,
     PlaceCharacters,
-    MakeTurn,
+    TakeTurns,
     EndTurn,
     EndCombat
 };
@@ -252,12 +252,14 @@ public class CombatManager : MonoBehaviour
 
     private void OnEnable()
     {
-        //CombatUI.Instance.OnNextTurnButtonPressed += Handle;
+        CombatUI.Instance.OnStartCombatButtonPressed += StartTakingTurns;
+        CombatUI.Instance.OnEndTurnButtonPressed += ChangeCurrentTurn;
     }
 
     private void OnDisable()
     {
-        //CombatUI.Instance.OnNextTurnButtonPressed -= HandleEndTurn;
+        CombatUI.Instance.OnStartCombatButtonPressed -= StartTakingTurns;
+        CombatUI.Instance.OnEndTurnButtonPressed -= ChangeCurrentTurn;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -315,9 +317,9 @@ public class CombatManager : MonoBehaviour
                     HandlePlaceCharacters();
                     
                 } break;
-            case CombatState.MakeTurn:
+            case CombatState.TakeTurns:
                 {
-                    HandleMakeTurn();
+                    HandleTakeTurns();
                 } break;
             case CombatState.EndTurn:
                 {
@@ -366,7 +368,6 @@ public class CombatManager : MonoBehaviour
     {
         return _classAbilitiesDictionary.TryGetValue(characterClass, out var abilities) ? abilities : new List<Ability>();
     }
-
 
     private void HandleIntroCinematic()
     {   
@@ -460,7 +461,15 @@ public class CombatManager : MonoBehaviour
         return nextCharacter;
     }
 
-    private void HandleMakeTurn()
+    private void ChangeCurrentTurn()
+    {
+        if (_currentTurn == CombatTurn.PlayerTurn)
+            _currentTurn = CombatTurn.EnemyTurn;
+        else
+            _currentTurn -= CombatTurn.PlayerTurn;
+    }
+
+    private void HandleTakeTurns()
     {
         // NOTE (Calle): Only wan't to set the _activeCharacter once each turn
         if(_activeCharacter == null)
@@ -548,6 +557,11 @@ public class CombatManager : MonoBehaviour
         
     }
 
+    private void StartTakingTurns()
+    {
+        OnUpdateCombatState?.Invoke(CombatState.TakeTurns);
+    }
+
     private void LoadCurrentPlayerParty()
     {
         
@@ -568,7 +582,7 @@ public class CombatManager : MonoBehaviour
 
     }
 
-    public List<GameObject> GetEnemyCharacters()
+    public List<GameObject> GetAllEnemyCharacters()
     {
         return _combatGrid.GetAllEnemyCharacters();
     }
