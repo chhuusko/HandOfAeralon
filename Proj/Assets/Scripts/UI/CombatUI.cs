@@ -69,7 +69,7 @@ public class CombatUI : MonoBehaviour
 
     public void SetNextPhaseButtonText()
     {
-        if (CombatManager._instance.GetCombatState() == CombatState.MakeTurn)
+        if (CombatManager._instance.GetCombatState() == CombatState.TakeTurns)
         {
             // _nextTurnButton.GetComponentInChildren<TextMeshProUGUI>().text = "End Turn";
         }
