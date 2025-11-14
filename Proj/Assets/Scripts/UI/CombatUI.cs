@@ -7,12 +7,14 @@ public class CombatUI : MonoBehaviour
 {
     public enum PanelType { Card, Ability }
 
-    public event Action OnNextTurnButtonPressed;
+    public event Action OnStartCombatButtonPressed;
+    public event Action OnEndTurnButtonPressed;
     public static CombatUI Instance;
     
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Button _abilityButtonPrefab;
-    [SerializeField] private Button _nextTurnButton;
+    [SerializeField] private Button _startCombatButton;
+    [SerializeField] private Button _endTurnButton;
     [SerializeField] private TextMeshProUGUI _mana;
 
     private void OnEnable()
@@ -53,29 +55,23 @@ public class CombatUI : MonoBehaviour
         _mana.text = $"Mana\n{mana}/10";
     }
 
-    public void StartNextPhase()
+    public void StartCombat()
     {
-        // switch (CombatManager._instance.GetCombatState())
-        // {
-        //     case CombatState.MakeTurn:
-        //         CombatManager._instance.ChangeState(CombatState.EndTurn);
-        //         CombatManager._instance.HandleEndTurn();
-        //         break;
-        //     case CombatState.PlaceCharacters:
-        //         CombatManager._instance.ChangeState(CombatState.MakeTurn);
-        //         break;
-        // }
-        //
-        // SetNextPhaseButtonText();
-        
-        OnNextTurnButtonPressed?.Invoke();
+        OnStartCombatButtonPressed?.Invoke();
+        _startCombatButton.enabled = false;
+        _endTurnButton.enabled = true;
+    }
+
+    public void EndTurn()
+    {
+        OnEndTurnButtonPressed?.Invoke();
     }
 
     public void SetNextPhaseButtonText()
     {
         if (CombatManager._instance.GetCombatState() == CombatState.MakeTurn)
         {
-            _nextTurnButton.GetComponentInChildren<TextMeshProUGUI>().text = "End Turn";
+            // _nextTurnButton.GetComponentInChildren<TextMeshProUGUI>().text = "End Turn";
         }
     }
 
