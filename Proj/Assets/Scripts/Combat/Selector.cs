@@ -42,7 +42,8 @@ public class Selector : MonoBehaviour
     }
     private void Start()
     {
-        CombatManager._instance.OnUpdateCombatState += HandleCombatStateUpdated;
+        CombatEventManager.OnCombatStateChange += HandleCombatStateUpdated;
+        CombatEventManager.OnCombatTurnChange += HandleCombatTurnChanged;
     }
 
     void Update()
@@ -57,19 +58,19 @@ public class Selector : MonoBehaviour
         {
             case CombatState.IntroCinematic: _currentState = SelectorState.NonActive; break;
             case CombatState.PlaceCharacters: _currentState = SelectorState.PlacingCharacters;break;
-            case CombatState.TakeTurn:
-                { 
-                    if (CombatManager._instance.GetCombatTurn() == CombatTurn.PlayerTurn)
-                    {
-                        _currentState = SelectorState.Idle;
-                    }
-                    else
-                    {
-                        _currentState = SelectorState.NonActive;
-                    }
-                    break;
-                }
+            case CombatState.TakeTurn: break;
             case CombatState.EndCombat: _currentState = SelectorState.NonActive; break;
+        }
+    }
+    private void HandleCombatTurnChanged(CombatTurn turn)
+    {
+        if (turn == CombatTurn.PlayerTurn)
+        {
+            _currentState = SelectorState.Idle;
+        }
+        else
+        {
+            _currentState = SelectorState.NonActive;
         }
     }
 
@@ -109,8 +110,8 @@ public class Selector : MonoBehaviour
             switch (_currentState)
             {
                 case SelectorState.NonActive: break;
-                case SelectorState.PlacingCharacters: SetSelectedCharacterForPlacement(); break;
-                case SelectorState.Idle: TrySelectCharacter(clickedTile); break;
+                case SelectorState.PlacingCharacters: SelectCharacter(clickedTile); break;
+                case SelectorState.Idle: SelectCharacter(clickedTile); break;
                 case SelectorState.CharacterSelected: DeselectCharacter(); break;
                 case SelectorState.ActionTypeSelected: HandlePendingCharacterAction(clickedTile); break;
             }
@@ -172,16 +173,40 @@ public class Selector : MonoBehaviour
         _selectedCharacter = null;
     }
 
-    private void SetSelectedCharacterForPlacement()
+    public void SelectCharacter(CombatGridTile tile)
     {
-        CombatGridTile tile = GetTileUnderMouse();
+        switch (_currentState)
+        {
+            case SelectorState.PlacingCharacters: SetSelectedCharacterPlacement(tile); break;
+            case SelectorState.Idle: TrySelectCharacterIdle(tile); break;
+        }
+    }
+    public void SelectCharacterUI(Character character)
+    {
+        switch (_currentState)
+        {
+            case SelectorState.PlacingCharacters: SetSelectedCharacterPlacementUI(character); break;
+            case SelectorState.Idle: SelectCharacterIdle(character); break;
+        }
+    }
+    private void SetSelectedCharacterPlacement(CombatGridTile tile)
+    {
         if(tile && tile.GetOccupantCharacter() != null)
         {
             _selectedCharacter = tile.GetOccupantCharacter();
         }
     }
 
-    private void TrySelectCharacter(CombatGridTile tile)
+    private void SetSelectedCharacterPlacementUI(Character character)
+    {
+        if (_selectedCharacter != null && _currentState == SelectorState.Idle)
+        {
+            DeselectCharacter();
+        }
+        _selectedCharacter = character;
+    }
+
+    private void TrySelectCharacterIdle(CombatGridTile tile)
     {
         Character character = tile?.GetOccupantCharacter();
         if(character == null)
@@ -189,8 +214,26 @@ public class Selector : MonoBehaviour
             DeselectCharacter();
             return;
         }
-        SelectCharacter(character);
+        SelectCharacterIdle(character);
     }
+    private void SelectCharacterIdle(Character character)
+    {
+        bool bIsFriendly = character.GetFaction() == Faction.Friendly;
+        bool bIsCharactersTurn = character == CombatManager._instance.GetNextTurnCharacter();
+
+        if (bIsFriendly && bIsCharactersTurn)
+        {
+            ShowCharacterUIOptions(character);
+            _currentState = SelectorState.CharacterSelected;
+            _selectedCharacter = character;
+
+            if (_bDebugSelector)
+            {
+                DebugLog.MGLog(character.GetCharacterClass().ToString() + " on tile index: " + character.GetCurrentTileIndex().ToString());
+            }
+        }
+    }
+
 
     public void UpdateTileColors(GameObject[] tiles)
     {
@@ -211,23 +254,6 @@ public class Selector : MonoBehaviour
             }
         }
     } 
-    private void SelectCharacter(Character character)
-    {
-        bool bIsFriendly = character.GetFaction() == Faction.Friendly;
-        bool bIsCharactersTurn = character == CombatManager._instance.GetNextTurnCharacter();
-
-        if (bIsFriendly && bIsCharactersTurn)
-        {
-            ShowCharacterUIOptions(character);
-            _currentState = SelectorState.CharacterSelected;
-            _selectedCharacter = character;
-
-            if (_bDebugSelector)
-            {
-                DebugLog.MGLog(character.GetCharacterClass().ToString() + " on tile index: " + character.GetCurrentTileIndex().ToString());
-            }
-        }
-    }
     private void DeselectCharacter()
     {
         // if ui is active Deactivate UI
@@ -339,6 +365,9 @@ public class Selector : MonoBehaviour
             }
         }
     }
+ 
     public SelectorState GetCurrentState() { return _currentState; }
     public void SetCurrentState(SelectorState state) {  _currentState = state; }
+
+    public void SetCharacterActionType(CharacterActionType actionType) { _pendingCharacterActionType = actionType;  }
 }
