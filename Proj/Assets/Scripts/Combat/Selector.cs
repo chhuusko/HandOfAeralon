@@ -204,9 +204,9 @@ public class Selector : MonoBehaviour
     private void DeselectCharacter()
     {
         // if ui is active Deactivate UI
-        HideCharacterOptions(_selectedCharacter);
+        HideCharacterOptions();
 
-        StopPreviewAbilityRange(_selectedCharacter);
+        StopPreviewAbilityRange();
         _selectedCharacter?.GetAbilityHandler().SetPendingAbility(null);
         _selectedCharacter = null;
         _pendingCharacterActionType = CharacterActionType.Null;
@@ -229,27 +229,29 @@ public class Selector : MonoBehaviour
         // Activate UI and place it to show over characters head.
         _combatUI.LoadAbilities(character);
     }
-    public void PreviewAbilityRange(Character character, Ability ability)
+    public void PreviewAbilityRange(Ability ability)
     {
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
+            abilityHandler.SetPendingAbility(ability);
+            abilityHandler.CalculateAbilityRange();
             SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.green);
         }
     }
-    public void StopPreviewAbilityRange(Character character)
+    public void StopPreviewAbilityRange()
     {
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
             SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.white);
         }
     }
-    private void HideCharacterOptions(Character Character)
+    private void HideCharacterOptions()
     {
         // Deactivate UI and reset tile color.
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
             SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.white);
-            abilityHandler.ClearAbilityTargets();
+            abilityHandler.ClearAbilityTargetRange();
         }
     }
     private void HandlePendingCharacterAction(CombatGridTile tile)

@@ -26,7 +26,7 @@ public class AbilityHandler : MonoBehaviour
         GetAvailableTargets(ability);
         if (!CanCastAbility(ability, targetTile))
         {
-            ClearAbilityTargets();
+            ClearAbilityTargetRange();
             if (_bDebugAbilityHandler)
                 DebugLog.MGLog("Tried casting ability, but it failed");
             return false;
@@ -43,7 +43,7 @@ public class AbilityHandler : MonoBehaviour
     {
         return _tilesInRange;
     }
-    public void ClearAbilityTargets()
+    public void ClearAbilityTargetRange()
     {
         _tilesInRange.Clear();
     }
@@ -59,7 +59,14 @@ public class AbilityHandler : MonoBehaviour
 
     public void CalculateAbilityRange()
     {
+        ClearAbilityTargetRange();
 
+        if(_pendingAbility == null)
+        {
+            Debug.LogError("No pending ability selected, but is still trying to calculate range");
+            return;
+        }
+        _tilesInRange = GetAvailableTargets(_pendingAbility);
     }
 
     private bool CanCastAbility(Ability ability, CombatGridTile targetTile)
