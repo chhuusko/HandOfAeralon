@@ -85,6 +85,10 @@ public class GlobalGameManager : ScriptableObject
         Debug.Log(_currentGame.cardList.Count);
         _currentGame.coins = 50;
     }
+    public void SaveCards(List<Card> cards)
+    {
+        _currentGame.cardList = cards;
+    }
 }
 
 

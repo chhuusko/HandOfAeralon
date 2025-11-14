@@ -339,8 +339,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2103794655}
-        m_TargetAssemblyTypeName: CardViewUI, Assembly-CSharp
+      - m_Target: {fileID: 2103794659}
+        m_TargetAssemblyTypeName: CardViewUIShop, Assembly-CSharp
         m_MethodName: ExitUI
         m_Mode: 1
         m_Arguments:
@@ -1561,7 +1561,7 @@ GameObject:
   - component: {fileID: 1606287441}
   - component: {fileID: 1606287443}
   m_Layer: 5
-  m_Name: ShopPanel
+  m_Name: Shop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1919,9 +1919,9 @@ GameObject:
   - component: {fileID: 2103794658}
   - component: {fileID: 2103794657}
   - component: {fileID: 2103794656}
-  - component: {fileID: 2103794655}
+  - component: {fileID: 2103794659}
   m_Layer: 5
-  m_Name: CardListView
+  m_Name: CardListViewShop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1948,20 +1948,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2103794655
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2103794653}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdb0ec4db1c30eb418e14258aee0a0f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cardUI: {fileID: 1859725070732834603, guid: 55eceab18eeb51745ad812abebf3751c, type: 3}
-  _cardContent: {fileID: 1021295173}
 --- !u!114 &2103794656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2030,6 +2016,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2103794653}
   m_CullTransparentMesh: 1
+--- !u!114 &2103794659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103794653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec1b8aacd2392b54c8997a49f6cf0d22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardUI: {fileID: 1859725070732834603, guid: 8487ebdb2d2dedd4db9d211202989ca2, type: 3}
+  _cardContent: {fileID: 1021295173}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
