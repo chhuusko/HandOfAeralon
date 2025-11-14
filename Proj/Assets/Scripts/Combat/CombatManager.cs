@@ -207,7 +207,7 @@ public class CombatManager : MonoBehaviour
 
     public event Action<CombatState> OnUpdateCombatState;
     
-
+    
     [SerializeField] private string _fileToLoadDEBUG;
 
     [SerializeField] private CombatCamera _combatCamera;
@@ -248,6 +248,16 @@ public class CombatManager : MonoBehaviour
         {
             _classAbilitiesDictionary[pair.characterClass] = pair.abilities;
         }
+    }
+
+    private void OnEnable()
+    {
+        //CombatUI.Instance.OnNextTurnButtonPressed += Handle;
+    }
+
+    private void OnDisable()
+    {
+        //CombatUI.Instance.OnNextTurnButtonPressed -= HandleEndTurn;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -611,8 +621,10 @@ public class CombatManager : MonoBehaviour
 
     public void UpdateCombatState(CombatState state)
     {
-        if(_combatState != state) {
+        if (_combatState != state)
+        {
             _combatState = state;
             OnUpdateCombatState?.Invoke(_combatState);
+        }
     }
 }
