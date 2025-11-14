@@ -20,6 +20,8 @@ public class Character : MonoBehaviour
     [SerializeField] private int _baseHealthPoints;
     [SerializeField] private int _baseSpeed;
     [SerializeField] private int _baseDamage;
+
+    [SerializeField] private int _baseMovementPoints;
     // TODO: Traits.
     
     [Header("Current stats")]
@@ -211,6 +213,7 @@ public class Character : MonoBehaviour
         _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(_classData.minHealthPoints, _classData.maxHealthPoints + 1);
         _currentSpeed = _baseSpeed =  UnityEngine.Random.Range(_classData.minSpeed, _classData.maxSpeed + 1);
         _currentDamage = _baseDamage = UnityEngine.Random.Range(_classData.minDamage, _classData.maxDamage + 1);
+        _currentMovementPoints = _baseMovementPoints = UnityEngine.Random.Range(_classData.minMovmementPoints, _classData.maxMovmentPoints + 1);
         _characterClass = _classData.characterClass;
     }
 
