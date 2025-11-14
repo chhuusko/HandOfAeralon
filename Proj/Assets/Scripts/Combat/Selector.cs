@@ -260,7 +260,7 @@ public class Selector : MonoBehaviour
         HideCharacterOptions();
 
         StopPreviewAbilityRange();
-        _selectedCharacter?.GetAbilityHandler().SetPendingAbility(null);
+        _selectedCharacter?.GetAbilityHandler()?.SetPendingAbility(null);
         _selectedCharacter = null;
         _pendingCharacterActionType = CharacterActionType.Null;
         
