@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -38,12 +40,37 @@ public class Selector : MonoBehaviour
             _instance = this;
         }
     }
+    private void Start()
+    {
+        CombatManager._instance.OnUpdateCombatState += HandleCombatStateUpdated;
+    }
 
     void Update()
     {
         HandleTileClick();
         HandleTileHover();
-        DebugCurrentState();
+    }
+
+    private void HandleCombatStateUpdated(CombatState state)
+    {
+        switch (state)
+        {
+            case CombatState.IntroCinematic: _currentState = SelectorState.NonActive; break;
+            case CombatState.PlaceCharacters: _currentState = SelectorState.PlacingCharacters;break;
+            case CombatState.TakeTurn:
+                { 
+                    if (CombatManager._instance.GetCombatTurn() == CombatTurn.PlayerTurn)
+                    {
+                        _currentState = SelectorState.Idle;
+                    }
+                    else
+                    {
+                        _currentState = SelectorState.NonActive;
+                    }
+                    break;
+                }
+            case CombatState.EndCombat: _currentState = SelectorState.NonActive; break;
+        }
     }
 
     public Character GetSelectedCharacter()
@@ -300,10 +327,6 @@ public class Selector : MonoBehaviour
             DeselectCharacter();
             _currentState = SelectorState.Idle;
         }
-    }
-    private void DebugCurrentState()
-    {
-        if(_bDebugSelector) DebugLog.MGLog("The current state is: " + GetCurrentState().ToString());
     }
 
     private void SetColorOfTiles(List<CombatGridTile> tiles, Color color)
