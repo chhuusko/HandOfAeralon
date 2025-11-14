@@ -165,7 +165,7 @@ public class CombatGrid
     public GameObject AddCharacter(CombatGridCharacterData characterData)
     {
         GameObject result = null;
-
+        
         Vector2Int tileIndex    = characterData.GetTileIndex();
         Vector3    instancePos  = characterData.GetCharacterPosition();
         Quaternion rotation     = characterData.GetRotation();
@@ -205,7 +205,7 @@ public class CombatManager : MonoBehaviour
     public static CombatManager _instance;
     private Selector _selector;
 
-    public event Action OnUpdateCombatState;
+    public event Action<CombatState> OnUpdateCombatState;
 
     [SerializeField] private string _fileToLoadDEBUG;
 
