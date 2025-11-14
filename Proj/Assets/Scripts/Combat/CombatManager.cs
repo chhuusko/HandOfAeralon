@@ -582,7 +582,7 @@ public class CombatManager : MonoBehaviour
 
     }
 
-    public List<GameObject> GetEnemyCharacters()
+    public List<GameObject> GetAllEnemyCharacters()
     {
         return _combatGrid.GetAllEnemyCharacters();
     }
