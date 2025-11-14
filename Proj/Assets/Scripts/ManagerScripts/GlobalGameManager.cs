@@ -89,6 +89,10 @@ public class GlobalGameManager : ScriptableObject
     {
         _currentGame.cardList = cards;
     }
+    public void ChangeCoins(int amount)
+    {
+        _currentGame.coins += amount;
+    }
 }
 
 
