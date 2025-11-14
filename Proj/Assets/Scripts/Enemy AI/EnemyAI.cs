@@ -12,7 +12,7 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
-        CombatManager._instance.EnemyTurnStart.AddListener(OnEnemyTurnStart);
+        CombatManager._instance.TurnStart.AddListener(OnTurnStart);
 
         _inputActions = new();
         _inputActions.Enable();
@@ -23,10 +23,10 @@ public class EnemyAI : MonoBehaviour
     {
         if (!_bDebug) return;
 
-        OnEnemyTurnStart();
+        OnTurnStart();
     }
 
-    private void OnEnemyTurnStart()
+    private void OnTurnStart()
     {
         Character currentCharacter = CombatManager._instance.GetNextTurnCharacter().GetComponent<Character>();
         if (currentCharacter == null || currentCharacter.GetFaction() != Faction.Friendly)

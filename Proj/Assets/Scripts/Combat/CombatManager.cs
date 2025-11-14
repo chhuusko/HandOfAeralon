@@ -229,7 +229,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private List<ClassAbilities> _classAbilities;
     private Dictionary<CharacterClass, List<Ability>> _classAbilitiesDictionary;
 
-    public UnityEvent EnemyTurnStart = new();
+    public UnityEvent TurnStart = new();
     
     private void Awake()
     {
@@ -252,12 +252,14 @@ public class CombatManager : MonoBehaviour
 
     private void OnEnable()
     {
+        OnUpdateCombatState += UpdateCombatState;
         CombatUI.Instance.OnStartCombatButtonPressed += StartTakingTurns;
         CombatUI.Instance.OnEndTurnButtonPressed += ChangeCurrentTurn;
     }
 
     private void OnDisable()
     {
+        OnUpdateCombatState -= UpdateCombatState;
         CombatUI.Instance.OnStartCombatButtonPressed -= StartTakingTurns;
         CombatUI.Instance.OnEndTurnButtonPressed -= ChangeCurrentTurn;
     }
@@ -495,12 +497,13 @@ public class CombatManager : MonoBehaviour
         //  - Spelarens "cooldown" / timer f�r att dra ett till kort minskar med 1 -> WIP 
 
         // TODO: Call selector with character.
+        TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandleEnemyTurn() för att AI ska kunna spela båda factions.
         Selector._instance.SetCurrentState(SelectorState.Idle);
     }
 
     private void HandleEnemyTurn()
     {
-        EnemyTurnStart.Invoke();
+        TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandlePlayerTurn() för att AI ska kunna spela båda factions.
     }
 
     public void HandleEndTurn()
