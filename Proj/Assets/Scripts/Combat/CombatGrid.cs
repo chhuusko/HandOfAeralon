@@ -25,7 +25,9 @@ public class CombatGrid : MonoBehaviour
     {
         if (_instance == null)
         {
+            Debug.Log("CombatGrid Awake(), instance = " + CombatGrid._instance);
             _instance = this;
+            Debug.Log("CombatGrid instance now = " + CombatGrid._instance);
             DontDestroyOnLoad(gameObject);
             // #if UNITY_EDITOR
             // _tilePrefabLibrary      = AssetDatabase.LoadAssetAtPath<TilePrefabLibrary>("Assets/ScriptableObject/Tiles/TilePrefabLibrary.asset");
@@ -40,15 +42,38 @@ public class CombatGrid : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
     }
 
     public GameObject[] GetAllTiles() { return _tilesGO; }
     public GameObject GetTileAtCoord(int x, int y)
     {
         int index = x + y * _width;
-        if (index < 0 || index >= _width * _height)
+        // if (index < 0 || index >= _width * _height)
+        //     return null;
+        
+        if (_tilesGO == null)
+        {
+            Debug.LogError("GetTileAtCoord FAILED: _tilesGO is NULL!");
             return null;
+        }
+
+        if (_tilesGO.Length == 0)
+        {
+            Debug.LogError("GetTileAtCoord FAILED: _tilesGO is EMPTY!");
+            return null;
+        }
+
+        if (index < 0 || index >= _tilesGO.Length)
+        {
+            Debug.LogError($"GetTileAtCoord FAILED: index {index} OUT OF RANGE (length={_tilesGO.Length})");
+            return null;
+        }
+
+        if (_tilesGO[index] == null)
+        {
+            Debug.LogError($"GetTileAtCoord FAILED: tile at index {index} is NULL!");
+            return null;
+        }
 
         return _tilesGO[index];
     }

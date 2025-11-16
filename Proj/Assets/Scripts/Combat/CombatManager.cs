@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Unity.AI.Navigation;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -67,6 +68,7 @@ public class CombatManager : MonoBehaviour
     {
         if (_instance == null)
         {
+            Debug.Log("CombatManager Awake()");
             _instance = this;
             DontDestroyOnLoad(gameObject);
         }
@@ -394,15 +396,16 @@ public class CombatManager : MonoBehaviour
     {
 
 
-        string filePathToload = Application.dataPath + "\\JSON BattleGrids\\" + _fileToLoadDEBUG + ".json";
+        // string filePathToload = Application.dataPath + "\\JSON BattleGrids\\" + _fileToLoadDEBUG + ".json";
+        string filePathToLoad = Application.streamingAssetsPath + "\\JSON BattleGrids\\" + _fileToLoadDEBUG + ".json";
 
-        if (!System.IO.File.Exists(filePathToload))
+        if (!System.IO.File.Exists(filePathToLoad))
         {
             DebugLog.CJLog("Level File didn't exist or filepath was wrong!");
             return;
         }
 
-        string jsonFileData = System.IO.File.ReadAllText(filePathToload);
+        string jsonFileData = System.IO.File.ReadAllText(filePathToLoad);
         if(jsonFileData.Length == 0)
         {
             DebugLog.CJLog("json File Data was empty!");
