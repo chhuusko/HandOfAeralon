@@ -732,9 +732,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GlobalGameManager, Assembly-CSharp
-        m_MethodName: StartNewGame
+      - m_Target: {fileID: 399396034}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: SelectGameSlot
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -875,9 +875,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 7f406c23f2a93ee4282facbf2c8bf858, type: 2}
-        m_TargetAssemblyTypeName: GlobalGameManager, Assembly-CSharp
-        m_MethodName: StartNewGame
+      - m_Target: {fileID: 399396034}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: SelectGameSlot
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1512,9 +1512,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GlobalGameManager, Assembly-CSharp
-        m_MethodName: StartNewGame
+      - m_Target: {fileID: 399396034}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: SelectGameSlot
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
