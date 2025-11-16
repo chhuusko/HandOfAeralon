@@ -69012,6 +69012,11 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
+      propertyPath: inCombatTileMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 45cc862a2ec7a7842aa80f0b9bdeb563, type: 2}
+    - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
+        type: 3}
       propertyPath: _characterPrefabLibrary
       value: 
       objectReference: {fileID: 11400000, guid: f195d2af34a2acb49b53403b1e543287,

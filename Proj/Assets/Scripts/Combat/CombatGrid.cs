@@ -18,6 +18,8 @@ public class CombatGrid : MonoBehaviour
 
     [SerializeField] private GameObject[] _tilesGO;
     [SerializeField] private List<GameObject> _charactersGO;
+    
+    [SerializeField] private Material inCombatTileMaterial;
 
     private void Awake()
     {
@@ -97,7 +99,7 @@ public class CombatGrid : MonoBehaviour
                 default:
                     {
                         MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
-                        Material inCombatTileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Shaders/CJ Test Shaders/TileMaterial.mat");
+                        // Material inCombatTileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Shaders/CJ Test Shaders/TileMaterial.mat");
                         if (inCombatTileMaterial != null)
                         {
                             meshRend.material = inCombatTileMaterial;
