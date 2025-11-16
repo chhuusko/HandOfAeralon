@@ -28,10 +28,13 @@ public class CombatGrid : MonoBehaviour
             Debug.Log("CombatGrid Awake(), instance = " + CombatGrid._instance);
             _instance = this;
             Debug.Log("CombatGrid instance now = " + CombatGrid._instance);
-            DontDestroyOnLoad(gameObject);
+
+            // NOTE (Calle): Can't be a Dont' destroy on load if its a child to the Combat Manager, (So maybe make it root for itself?)
+            //DontDestroyOnLoad(gameObject);
+
             // #if UNITY_EDITOR
-            // _tilePrefabLibrary      = AssetDatabase.LoadAssetAtPath<TilePrefabLibrary>("Assets/ScriptableObject/Tiles/TilePrefabLibrary.asset");
-            // _characterPrefabLibrary = AssetDatabase.LoadAssetAtPath<CharacterPrefabLibrary>("Assets/ScriptableObject/Characters/CharacterPrefabLibrary.asset");
+            _tilePrefabLibrary      = Resources.Load<TilePrefabLibrary>("Tiles/TilePrefabLibrary");
+            _characterPrefabLibrary = Resources.Load<CharacterPrefabLibrary>("Characters/CharacterPrefabLibrary");
             // #endif
             if (_tilePrefabLibrary == null)
                 DebugLog.CJLog("CombatGrid failed to load TilePrefabLibrary.");
@@ -124,7 +127,7 @@ public class CombatGrid : MonoBehaviour
                 default:
                     {
                         MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
-                        // Material inCombatTileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Shaders/CJ Test Shaders/TileMaterial.mat");
+                        Material inCombatTileMaterial = Resources.Load<Material>("Shaders/Tiles/TileMaterial");
                         if (inCombatTileMaterial != null)
                         {
                             meshRend.material = inCombatTileMaterial;

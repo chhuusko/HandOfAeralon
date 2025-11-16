@@ -253,10 +253,6 @@ public class CombatManager : MonoBehaviour
                     }
                     else
                     {                     
-                        // NOTE (Calle): Test for solving rendering problem with tile flicker infront of animated character,
-                        //               didn't solve it though.
-                        Vector3 slitghtlyRaisedPosition = new Vector3(tilePosition.x, tilePosition.y + 0.05f, tilePosition.z);
-
                         CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
                                                                                             Faction.Friendly,
                                                                                             10,
@@ -394,9 +390,6 @@ public class CombatManager : MonoBehaviour
 
     private void LoadNextLevel()
     {
-
-
-        // string filePathToload = Application.dataPath + "\\JSON BattleGrids\\" + _fileToLoadDEBUG + ".json";
         string filePathToLoad = Application.streamingAssetsPath + "\\JSON BattleGrids\\" + _fileToLoadDEBUG + ".json";
 
         if (!System.IO.File.Exists(filePathToLoad))
@@ -451,51 +444,6 @@ public class CombatManager : MonoBehaviour
     {
 
     }
-
-    //public CombatGrid GetCombatGrid()
-    //{
-    //    return this._combatGrid;
-    //}
-    //public List<GameObject> GetAllCharacters()
-    //{
-    //    return _combatGrid.GetAllCharacters();
-
-    //}
-
-    //public List<GameObject> GetAllEnemyCharacters()
-    //{
-    //    return _combatGrid.GetAllEnemyCharacters();
-    //}
-
-    //public List<GameObject> GetAllFriendlyCharacters()
-    //{
-    //    return _combatGrid.GetAllFriendlyCharacters();
-    //}
-    //public Vector3 GetTileSize()
-    //{
-    //    return _combatGrid.GetTileSize();
-    //}
-
-    //public int GetGridWidth()
-    //{
-    //    return _combatGrid.GetGridWidth();
-    //}
-
-    //public int GetGridHeight()
-    //{
-    //    return _combatGrid.GetGridHeight();
-    //}
-
-    //public GameObject[] GetGridTiles()
-    //{
-    //    return _combatGrid.GetAllTiles();
-    //}
-
-    //public GameObject GetTileAtCoord(int x, int y)
-    //{
-    //    return _combatGrid.GetTileAtCoord(x, y);
-    //}
-
     public CombatGridTile GetTileComponent(int x, int y)
     {
         GameObject tileObject = CombatGrid._instance.GetTileAtCoord(x, y);

@@ -1519,7 +1519,7 @@ public class GridMaker3D : EditorWindow
         }
         */
         string strOutput = JsonUtility.ToJson(combatGridSaveData, true);   
-
+        
         File.WriteAllText(Application.dataPath + "\\JSON BattleGrids\\" + _fileNameToSaveJSON + ".json", strOutput);
 
 
