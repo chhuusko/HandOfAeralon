@@ -24,18 +24,18 @@ public class LevelManager : ScriptableObject
     private void Awake()
     {
         _instance = this;
-        _combatList = Directory.GetFiles("Assets/JSON BattleGrids").Where(f => !f.EndsWith(".meta")).ToArray(); 
-        _generatedList = new string[10];
+        //_combatList = Directory.GetFiles("Assets/JSON BattleGrids").Where(f => !f.EndsWith(".meta")).ToArray(); 
+        //_generatedList = new string[10];
     }
     public void GenerateMap(int seed)
     {
-        Random.InitState(seed);
+        //Random.InitState(seed);
 
-        for (int i = 0; i < gameLevels; i++)
-        {
-            _generatedList[i] = _combatList[Random.Range(0,_combatList.Length)];
-            Debug.Log(_generatedList[i]);
-        }
+        //for (int i = 0; i < gameLevels; i++)
+        //{
+        //    _generatedList[i] = _combatList[Random.Range(0,_combatList.Length)];
+        //    Debug.Log(_generatedList[i]);
+        //}
         
         
     }
@@ -44,7 +44,7 @@ public class LevelManager : ScriptableObject
         level++;
         if (level % 2 == 0)
         {
-            GetCombatLevel();
+            //GetCombatLevel();
             SceneManager.LoadScene("Graveyard12x10_Easy");
         }
         else
