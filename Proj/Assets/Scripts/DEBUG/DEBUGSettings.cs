@@ -18,8 +18,10 @@ public static class DebugLog
 
     private static void LoadSettings()
     {
+        #if UNITY_EDITOR
         if (_settings == null)
             _settings = AssetDatabase.LoadAssetAtPath<DEBUGSettings>("Assets/ScriptableObject/DEBUG/DEBUGSettings.asset");
+        #endif
     }
     public static void CJLog(string message)
     {

@@ -971,6 +971,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
+        type: 3}
+      propertyPath: _tilePrefabLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 04a120cb18f76f341b4fa433f2de3433,
+        type: 2}
+    - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
+        type: 3}
+      propertyPath: _characterPrefabLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: f195d2af34a2acb49b53403b1e543287,
+        type: 2}
     - target: {fileID: 616073620153778492, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
       propertyPath: _combatCamera

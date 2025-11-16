@@ -45,7 +45,7 @@ public class LevelManager : ScriptableObject
         if (level % 2 == 0)
         {
             GetCombatLevel();
-            SceneManager.LoadScene("CombatScene");
+            SceneManager.LoadScene("Graveyard12x10_Easy");
         }
         else
         {
