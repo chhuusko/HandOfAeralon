@@ -62,6 +62,7 @@ public class Character : MonoBehaviour
         Animator animator = GetComponent<Animator>();
         if(animator)
         {
+            animator.GetBool("IsMoving");
             if (IsMoving())
             {
                 animator.SetBool("IsMoving", true);

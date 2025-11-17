@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 [System.Serializable]
 public enum TileType
@@ -35,6 +37,19 @@ public class CombatGridTileData
         this._tileIndex = tileIndex;
         this._position = pos;
         this._size = size;
+    }
+
+    public CombatGridTileData(TileEntry tileEntry)
+    {
+        _tileType = tileEntry._tileType;
+        if (tileEntry._tileType == TileType.Impassable)
+            _bWalkable = false;
+        else
+            _bWalkable = true;
+
+        _tileIndex = tileEntry._tileIndex;
+        _position = tileEntry._position;
+        _size = tileEntry._size;
     }
 
     public TileType GetTileType() { return _tileType; }

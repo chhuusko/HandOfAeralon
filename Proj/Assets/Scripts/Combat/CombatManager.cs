@@ -391,7 +391,7 @@ public class CombatManager : MonoBehaviour
 
     private void LoadNextLevel()
     {
-        string filePathToLoad = Application.streamingAssetsPath + "/JSON/BattleGrids/" + _fileToLoadDEBUG + ".json";
+        string filePathToLoad = Application.streamingAssetsPath + "/JSON/CombatGrids/" + _fileToLoadDEBUG + ".json";
 
         if (!System.IO.File.Exists(filePathToLoad))
         {
@@ -414,8 +414,8 @@ public class CombatManager : MonoBehaviour
 
         for (int i = 0; i < combatGridSaveData._tileData.Count; i++)
         {
-            DebugLog.CJLog("tiled["+i+"]: " + "\tTileType : " + combatGridSaveData._tileData[i].GetTileType() + 
-                      "\tTileIndex: " + combatGridSaveData._tileData[i].GetTilePosition() + "\n");
+            //DebugLog.CJLog("tiled["+i+"]: " + "\tTileType : " + combatGridSaveData._tileData[i].GetTileType() + 
+            //          "\tTileIndex: " + combatGridSaveData._tileData[i].GetTilePosition() + "\n");
 
             CombatGrid._instance.AddTile(combatGridSaveData._tileData[i]).transform.SetParent(_tileRoot.transform);
             

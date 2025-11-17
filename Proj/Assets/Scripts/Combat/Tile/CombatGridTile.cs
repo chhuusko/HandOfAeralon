@@ -62,8 +62,13 @@ public class CombatGridTile : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Character"))
         {
-            _occupant = other.gameObject;
-            _occupant.GetComponent<Character>().SetCurrentTileIndex(GetTileIndex());
+            // NOTE (Calle): Only set it as occupant if the tile was empty.
+            if(!_occupant)
+            {
+                _occupant = other.gameObject;
+                _occupant.GetComponent<Character>().SetCurrentTileIndex(GetTileIndex());
+            }
+            
         }
     }
 
@@ -71,7 +76,9 @@ public class CombatGridTile : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Character"))
         {
-            _occupant = null;
+            // NOTE (Calle): If a character leaves a tile which it didn't occupy originally, don't set it to null.
+            if(_occupant == other.gameObject)
+                _occupant = null;
         }
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8235279195098966187}
   - component: {fileID: 5111750605719670512}
   m_Layer: 6
-  m_Name: BattleGridTile_Uninitialized
+  m_Name: CombatGridTile_Deploy
   m_TagString: EditorTile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 30e93cf171aee32438891649465f9f0f, type: 2}
+  - {fileID: 2100000, guid: 27292f3f9adba3e41aed6fe468a183b8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tileData:
-    _tileType: 0
+    _tileType: 5
     _tileIndex: {x: 0, y: 0}
     _position: {x: 0, y: 0, z: 0}
     _size: {x: 0, y: 0, z: 0}
