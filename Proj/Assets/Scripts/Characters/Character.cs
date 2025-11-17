@@ -59,14 +59,14 @@ public class Character : MonoBehaviour
     public void Update()
     {
         // NOTE (CJ & Carl): Testkod f�r animationer
-        //if(IsMoving())
-        //{
-        //    GetComponent<Animator>().SetBool("IsMoving", true);
-        //}
-        //else
-        //{
-        //    GetComponent<Animator>().SetBool("IsMoving", false);
-        //}
+        if(IsMoving())
+        {
+            GetComponent<Animator>().SetBool("IsMoving", true);
+        }
+        else
+        {
+            GetComponent<Animator>().SetBool("IsMoving", false);
+        }
     }
     public AbilityHandler GetAbilityHandler()
     {
@@ -266,7 +266,7 @@ public class Character : MonoBehaviour
         }
 
         return _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance
-               || _navMeshAgent.velocity.sqrMagnitude > 0.01f;
+               || _navMeshAgent.velocity.sqrMagnitude > 0.03f;
     }
 
     /// <summary>

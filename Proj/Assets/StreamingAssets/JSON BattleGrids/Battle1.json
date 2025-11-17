@@ -2172,34 +2172,8 @@
         {
             "_characterClass": 2,
             "_faction": 1,
-            "_healthPoints": 5,
-            "_initiative": 6,
-            "_tileIndex": {
-                "x": 11,
-                "y": 2
-            },
-            "_position": {
-                "x": 23.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "_rotation": {
-                "x": 0.0,
-                "y": -0.7071068286895752,
-                "z": 0.0,
-                "w": 0.7071068286895752
-            }
-        },
-        {
-            "_characterClass": 2,
-            "_faction": 1,
-            "_healthPoints": 5,
-            "_initiative": 6,
+            "_healthPoints": 0,
+            "_speed": 0,
             "_tileIndex": {
                 "x": 11,
                 "y": 4
@@ -2224,8 +2198,8 @@
         {
             "_characterClass": 1,
             "_faction": 1,
-            "_healthPoints": 5,
-            "_initiative": 6,
+            "_healthPoints": 0,
+            "_speed": 0,
             "_tileIndex": {
                 "x": 11,
                 "y": 6
@@ -2250,8 +2224,8 @@
         {
             "_characterClass": 2,
             "_faction": 1,
-            "_healthPoints": 5,
-            "_initiative": 6,
+            "_healthPoints": 0,
+            "_speed": 0,
             "_tileIndex": {
                 "x": 11,
                 "y": 7
@@ -2271,6 +2245,32 @@
                 "y": -0.7071068286895752,
                 "z": 0.0,
                 "w": 0.7071068286895752
+            }
+        },
+        {
+            "_characterClass": 2,
+            "_faction": 1,
+            "_healthPoints": 0,
+            "_speed": 0,
+            "_tileIndex": {
+                "x": 9,
+                "y": 2
+            },
+            "_position": {
+                "x": 19.0,
+                "y": 0.0,
+                "z": 5.0
+            },
+            "_size": {
+                "x": 1.051649570465088,
+                "y": 1.8666642904281617,
+                "z": 0.3393089175224304
+            },
+            "_rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
             }
         }
     ]
