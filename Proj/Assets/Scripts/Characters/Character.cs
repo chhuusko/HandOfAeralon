@@ -59,13 +59,18 @@ public class Character : MonoBehaviour
     public void Update()
     {
         // NOTE (CJ & Carl): Testkod f�r animationer
-        if(IsMoving())
+        Animator animator = GetComponent<Animator>();
+        if(animator)
         {
-            GetComponent<Animator>().SetBool("IsMoving", true);
-        }
-        else
-        {
-            GetComponent<Animator>().SetBool("IsMoving", false);
+            if (IsMoving())
+            {
+                animator.SetBool("IsMoving", true);
+            }
+            else
+            {
+                animator.SetBool("IsMoving", false);
+            }
+
         }
     }
     public AbilityHandler GetAbilityHandler()

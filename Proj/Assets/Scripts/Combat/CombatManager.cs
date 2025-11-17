@@ -313,6 +313,7 @@ public class CombatManager : MonoBehaviour
         {
             // NOTE (Calle): Set current turn based on initiative and Faction
             _activeCharacter = GetNextTurnCharacter();
+            //if(IsCharacterFriendly)
             if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Friendly)
             {
                 SetCurrentTurn(CombatTurn.PlayerTurn);
@@ -390,7 +391,7 @@ public class CombatManager : MonoBehaviour
 
     private void LoadNextLevel()
     {
-        string filePathToLoad = Application.streamingAssetsPath + "\\JSON BattleGrids\\" + _fileToLoadDEBUG + ".json";
+        string filePathToLoad = Application.streamingAssetsPath + "/JSON/BattleGrids/" + _fileToLoadDEBUG + ".json";
 
         if (!System.IO.File.Exists(filePathToLoad))
         {

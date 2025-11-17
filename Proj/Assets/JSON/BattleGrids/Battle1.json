@@ -134,7 +134,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 3,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 7,
                 "y": 0
@@ -350,7 +350,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 2,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 7,
                 "y": 1
@@ -365,10 +365,10 @@
                 "y": 0.009999999776482582,
                 "z": 2.0
             },
-            "_bWalkable": false
+            "_bWalkable": true
         },
         {
-            "_tileType": 2,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 8,
                 "y": 1
@@ -383,7 +383,7 @@
                 "y": 0.009999999776482582,
                 "z": 2.0
             },
-            "_bWalkable": false
+            "_bWalkable": true
         },
         {
             "_tileType": 1,
@@ -584,7 +584,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 2,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 8,
                 "y": 2
@@ -599,7 +599,7 @@
                 "y": 0.009999999776482582,
                 "z": 2.0
             },
-            "_bWalkable": false
+            "_bWalkable": true
         },
         {
             "_tileType": 1,
@@ -1664,7 +1664,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 2,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 8,
                 "y": 7
@@ -1679,7 +1679,7 @@
                 "y": 0.009999999776482582,
                 "z": 2.0
             },
-            "_bWalkable": false
+            "_bWalkable": true
         },
         {
             "_tileType": 1,
@@ -1862,7 +1862,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 2,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 7,
                 "y": 8
@@ -1877,10 +1877,10 @@
                 "y": 0.009999999776482582,
                 "z": 2.0
             },
-            "_bWalkable": false
+            "_bWalkable": true
         },
         {
-            "_tileType": 2,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 8,
                 "y": 8
@@ -1895,7 +1895,7 @@
                 "y": 0.009999999776482582,
                 "z": 2.0
             },
-            "_bWalkable": false
+            "_bWalkable": true
         },
         {
             "_tileType": 1,
@@ -2078,7 +2078,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 3,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 7,
                 "y": 9
@@ -2170,85 +2170,59 @@
     ],
     "_characterData": [
         {
-            "_characterClass": 2,
-            "_faction": 1,
-            "_healthPoints": 0,
-            "_speed": 0,
-            "_tileIndex": {
-                "x": 11,
-                "y": 4
-            },
-            "_position": {
-                "x": 23.0,
-                "y": 0.0,
-                "z": 9.0
-            },
-            "_size": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "_rotation": {
-                "x": 0.0,
-                "y": -0.7071068286895752,
-                "z": 0.0,
-                "w": 0.7071068286895752
-            }
-        },
-        {
             "_characterClass": 1,
             "_faction": 1,
             "_healthPoints": 0,
             "_speed": 0,
             "_tileIndex": {
-                "x": 11,
-                "y": 6
+                "x": 9,
+                "y": 1
             },
             "_position": {
-                "x": 23.0,
+                "x": 19.0,
                 "y": 0.0,
-                "z": 13.0
+                "z": 3.0
             },
             "_size": {
-                "x": 0.31635797023773196,
+                "x": 0.8385530710220337,
                 "y": 1.7150310277938843,
-                "z": 0.838553249835968
+                "z": 0.3163578510284424
             },
             "_rotation": {
                 "x": 0.0,
-                "y": -0.7071068286895752,
+                "y": 0.0,
                 "z": 0.0,
-                "w": 0.7071068286895752
+                "w": 1.0
             }
         },
         {
-            "_characterClass": 2,
+            "_characterClass": 3,
             "_faction": 1,
             "_healthPoints": 0,
             "_speed": 0,
             "_tileIndex": {
-                "x": 11,
-                "y": 7
+                "x": 9,
+                "y": 3
             },
             "_position": {
-                "x": 23.0,
+                "x": 19.0,
                 "y": 0.0,
-                "z": 15.0
+                "z": 7.0
             },
             "_size": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
+                "x": 0.8385530710220337,
+                "y": 1.7150310277938843,
+                "z": 0.3163578510284424
             },
             "_rotation": {
                 "x": 0.0,
-                "y": -0.7071068286895752,
+                "y": 0.0,
                 "z": 0.0,
-                "w": 0.7071068286895752
+                "w": 1.0
             }
         },
         {
-            "_characterClass": 2,
+            "_characterClass": 1,
             "_faction": 1,
             "_healthPoints": 0,
             "_speed": 0,
@@ -2262,9 +2236,87 @@
                 "z": 5.0
             },
             "_size": {
-                "x": 1.051649570465088,
-                "y": 1.8666642904281617,
-                "z": 0.3393089175224304
+                "x": 0.8385530710220337,
+                "y": 1.7150310277938843,
+                "z": 0.3163578510284424
+            },
+            "_rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+            }
+        },
+        {
+            "_characterClass": 3,
+            "_faction": 1,
+            "_healthPoints": 0,
+            "_speed": 0,
+            "_tileIndex": {
+                "x": 9,
+                "y": 5
+            },
+            "_position": {
+                "x": 19.0,
+                "y": 0.0,
+                "z": 11.0
+            },
+            "_size": {
+                "x": 0.8385530710220337,
+                "y": 1.7150310277938843,
+                "z": 0.3163578510284424
+            },
+            "_rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+            }
+        },
+        {
+            "_characterClass": 2,
+            "_faction": 1,
+            "_healthPoints": 0,
+            "_speed": 0,
+            "_tileIndex": {
+                "x": 9,
+                "y": 7
+            },
+            "_position": {
+                "x": 19.0,
+                "y": 0.0,
+                "z": 15.0
+            },
+            "_size": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "_rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+            }
+        },
+        {
+            "_characterClass": 2,
+            "_faction": 1,
+            "_healthPoints": 0,
+            "_speed": 0,
+            "_tileIndex": {
+                "x": 9,
+                "y": 0
+            },
+            "_position": {
+                "x": 19.0,
+                "y": 0.0,
+                "z": 1.0
+            },
+            "_size": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "_rotation": {
                 "x": 0.0,

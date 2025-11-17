@@ -988,6 +988,11 @@ PrefabInstance:
       propertyPath: _combatCamera
       value: 
       objectReference: {fileID: 653518533}
+    - target: {fileID: 616073620153778492, guid: 85800cd360de6f54f9b4f93a19564c85,
+        type: 3}
+      propertyPath: _fileToLoadDEBUG
+      value: Battle1
+      objectReference: {fileID: 0}
     - target: {fileID: 3338464434817600166, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
       propertyPath: m_Name
