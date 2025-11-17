@@ -101,27 +101,27 @@ public class CombatManager : MonoBehaviour
     {
         _combatState = CombatState.LoadCombatLevel;
         _selector = GetComponent<Selector>();
+
         _friendlyCharacterRoot = new GameObject();
         _friendlyCharacterRoot.name = "-PLAYER PARTY-";
+
         _enemyCharacterRoot= new GameObject();
         _enemyCharacterRoot.name = "-ENEMY CHARACTERS-";
+
         _tileRoot = new GameObject();
         _tileRoot.name = "-GRID TILES-";
+
     }
 
     
     // Update is called once per frame
     void Update()
     {
-        MoveCamera();
-
         switch (_combatState)
         {
             case CombatState.LoadCombatLevel:
                 {
                     HandleLoadCombatLevel();
-
-                    
                 }
                 break;
             case CombatState.IntroCinematic:
@@ -152,27 +152,6 @@ public class CombatManager : MonoBehaviour
         return _combatState;
     }
 
-    private void MoveCamera()
-    {
-        Vector3 cameraMovement = Vector3.zero;
-        Vector3 cameraSpeedVector = new Vector3(_cameraSpeed, _cameraSpeed, _cameraSpeed);
-        
-        if (Input.GetKey(KeyCode.D))
-            cameraMovement += Vector3.right;
-        if (Input.GetKey(KeyCode.A))
-            cameraMovement += Vector3.left;
-        if (Input.GetKey(KeyCode.W))
-            cameraMovement += Vector3.forward;
-        if (Input.GetKey(KeyCode.S))
-            cameraMovement += Vector3.back;
-
-        cameraMovement = Vector3.Scale(cameraMovement, cameraSpeedVector);
-        
-        cameraMovement *= Time.deltaTime;
-
-        if(cameraMovement != Vector3.zero)
-            _combatCamera.transform.position = cameraMovement + _combatCamera.transform.position;
-    }
 
     /// <summary>
     /// Gets all abilities available to the class.
@@ -200,6 +179,8 @@ public class CombatManager : MonoBehaviour
            
             // TODO (Calle): Detta ska g�ra i LevelManagern
             LoadNextLevel();
+
+
             //LoadCurrentPlayerParty();
             UpdateCombatState(CombatState.IntroCinematic);
 
