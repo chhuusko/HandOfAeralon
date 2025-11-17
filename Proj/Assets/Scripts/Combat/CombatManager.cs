@@ -31,6 +31,13 @@ public enum CombatTurn
 };
 
 [System.Serializable]
+public enum PlayerTurnMode
+{
+    CharacterMode,
+    CardMode
+};
+
+[System.Serializable]
 public struct ClassAbilities
 {
     public CharacterClass characterClass;
@@ -49,6 +56,7 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] private CombatState _combatState;
     [SerializeField] private CombatTurn _currentTurn;
+    [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
     [SerializeField] private GameObject _activeCharacter;
 
     [SerializeField] private bool _combatGridLoaded = false;
@@ -202,7 +210,6 @@ public class CombatManager : MonoBehaviour
             characterData.SetCurrentTileIndex(tileIndex);
             characterData.SetPosition(position);
             CombatGrid._instance.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
-
         }
 
     }
@@ -327,6 +334,13 @@ public class CombatManager : MonoBehaviour
         // TODO: Call selector with character.
         
         //TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandleEnemyTurn() för att AI ska kunna spela båda factions.
+        switch(_currentPlayerTurnMode)
+        {
+            case PlayerTurnMode.CharacterMode:
+                break;
+            case PlayerTurnMode.CardMode:
+                break;
+        }
     }
 
     bool enemyDoingStuff = false;
