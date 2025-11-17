@@ -1,3 +1,4 @@
+using System.Drawing;
 using UnityEngine;
 
 [System.Serializable]
@@ -30,5 +31,31 @@ public class TileEntry
             this._size = goSize;
             this._occupant = null;
         }
+    }
+
+    public TileEntry(CombatGridTileData tileData, GameObject prefab, GameObject parent)
+    {
+        if (tileData == null)
+            return;
+
+        if (prefab == null)
+            return;
+        
+        // GameObject specific
+        _tile = GameObject.Instantiate(prefab);
+        _tile.transform.position = tileData.GetTilePosition();
+        _tile.transform.localScale = tileData.GetTileSize();
+        _tile.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
+        
+        if (parent != null)
+            this._tile.transform.SetParent(parent.transform);
+
+        // Save/Load Data Specific
+        _tileType = prefab.GetComponent<CombatGridTile>().GetTileType();
+        _tileIndex = tileData.GetTileIndex();
+        _position = tileData.GetTilePosition();
+        _size = tileData.GetTileSize();
+        _occupant = null;
+
     }
 };

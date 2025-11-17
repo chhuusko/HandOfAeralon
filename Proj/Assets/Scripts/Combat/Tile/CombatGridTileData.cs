@@ -42,6 +42,7 @@ public class CombatGridTileData
     public CombatGridTileData(TileEntry tileEntry)
     {
         _tileType = tileEntry._tileType;
+
         if (tileEntry._tileType == TileType.Impassable)
             _bWalkable = false;
         else

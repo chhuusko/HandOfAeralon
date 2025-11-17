@@ -1288,17 +1288,14 @@ public class GridMaker3D : EditorWindow
         _tileSizeInMeters = combatGridSaveData._tileSize;
 
         var parent = GenerateParentRootObject(_strRootObjectForTiles);
+
         foreach(CombatGridTileData tileData in combatGridSaveData._tileData)
         {
             GameObject tilePrefab = _tilePrefabLibrary.GetPrefab(tileData.GetTileType());
-            // TODO (Calle): Must find a way to fetch the correct prefab based on the tileDatas TileType.
-            _tileGridHolder._tileEntries.Add(new TileEntry(tileData.GetTilePosition(),
-                                                           tileData.GetTileSize(),
-                                                           tilePrefab,
-                                                           parent,
-                                                           tileData.GetTileIndex()
-                                                           ));
+
+            _tileGridHolder._tileEntries.Add(new TileEntry(tileData, tilePrefab, parent));
         }
+
         _tileGridHolderSO.Update();
 
         // NOTE (Calle): LOADING CHARACTERS
@@ -1311,14 +1308,11 @@ public class GridMaker3D : EditorWindow
         foreach(CombatGridCharacterData characterData in combatGridSaveData._characterData)
         {
             GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
+
             DebugLog.CJLog($"Loading character: {characterPrefab.name}");
-            //CharacterEntry characterEntry = new CharacterEntry(characterData.GetCharacterPosition(),
-            //                                                   Vector3.one, // TODO (Calle): The Size is saved based on the renderer.bounds.size i think, so saving and loading multiple time will make characters bigger each time HAHA! XD
-            //                                                   characterData.GetRotation(),
-            //                                                   characterPrefab,
-            //                                                   parent,
-            //                                                   characterData.GetCurrentTileIndex());
+
             CharacterEntry characterEntry = new CharacterEntry(characterData, characterPrefab, parent);
+
             _characterList._characterList.Add(characterEntry);
         }
         _characterListSO.Update();
@@ -1332,15 +1326,12 @@ public class GridMaker3D : EditorWindow
         combatGridSaveData._gridWidth = _combatGridWidth;
         combatGridSaveData._gridHeight = _combatGridHeight;
         combatGridSaveData._tileSize = _tileSizeInMeters;
-        foreach (var entry in _tileGridHolder._tileEntries)
+        foreach (var tileEntry in _tileGridHolder._tileEntries)
         {
-            if(entry == null) continue;
+            if(tileEntry == null) continue;
 
             combatGridSaveData._tileData.Add(
-                                 new CombatGridTileData(entry._tileType, 
-                                                        entry._tileIndex,
-                                                        entry._position, 
-                                                        entry._size));
+                                 new CombatGridTileData(tileEntry));
         }
 
         GameObject[] charactersInScene = GameObject.FindGameObjectsWithTag("Character");
@@ -1353,15 +1344,6 @@ public class GridMaker3D : EditorWindow
 
             combatGridSaveData._characterData.Add(new CombatGridCharacterData(character));
 
-            //combatGridSaveData._characterData.Add(
-            //                  new CombatGridCharacterData(character.GetComponent<Character>().GetCharacterClass(),
-            //                                              character.GetComponent<Character>().GetFaction(),
-            //                                              character.GetComponent<Character>().GetHealthPoints(),
-            //                                              character.GetComponent<Character>().GetSpeed(),
-            //                                              character.GetComponent<Character>().GetCurrentTileIndex(),
-            //                                              character.transform.position,
-            //                                              character.GetComponent<Renderer>().bounds.size,
-            //                                              character.transform.rotation));
         }
 
         string strOutput = JsonUtility.ToJson(combatGridSaveData, true);   
