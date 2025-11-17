@@ -61,7 +61,7 @@ public class EnemyAI : MonoBehaviour
                 character.SetBaseSpeed(Random.Range(0, 5));
                 character.SetBaseDamage(Random.Range(0, 5));
                 character.ResetCharacter();
-                character.SetMovementPoints(2);
+                character.SetCurrentMovementPoints(2);
             }
 
             Debug.Log($"EnemyAI.cs | All character stats randomized!");

@@ -511,32 +511,6 @@ public class GridMaker3D : EditorWindow
         }
     }
 
-    private CharacterEntry InstantiateAndSetCharacterEntry(Vector3 goPos, Vector3 goSize, GameObject prefab, GameObject parent, Vector2Int gridPos)
-    {
-        if (prefab == null) return null;
-
-        CharacterEntry newCharacterEntry= new CharacterEntry();
-        
-        // GameObject Specific
-        newCharacterEntry._character = Instantiate(prefab);
-        newCharacterEntry._character.transform.position = goPos;
-        newCharacterEntry._character.transform.localScale = goSize;
-        newCharacterEntry._character.transform.SetParent(parent.transform);
-        newCharacterEntry._character.GetComponent<Character>().SetCurrentTileIndex(gridPos);
-
-        // Save/Load Specific
-        newCharacterEntry._characterClass = prefab.GetComponent<Character>().GetCharacterClass();
-        newCharacterEntry._tileIndex = gridPos;
-        newCharacterEntry._position = goPos;
-        newCharacterEntry._size = goSize;
-
-         Undo.RegisterCreatedObjectUndo(newCharacterEntry._character, "Placed/Updated Character");
-        
-        return newCharacterEntry;
-    }
-
-
-
     private void OnSceneGUI(SceneView sceneView)
     {
 
@@ -850,7 +824,7 @@ public class GridMaker3D : EditorWindow
         for (int i = 0; i < _characterListProperty.arraySize; i++)
         {
             SerializedProperty entryProp = _characterListProperty.GetArrayElementAtIndex(i);
-            Vector2 tileIndex = entryProp.FindPropertyRelative("_tileIndex").vector2IntValue;
+            Vector2 tileIndex = entryProp.FindPropertyRelative("_currentTileIndex").vector2IntValue;
 
             if ((int)tileIndex.x == gridX && (int)tileIndex.y == gridZ)
             {
@@ -878,7 +852,7 @@ public class GridMaker3D : EditorWindow
 
         newEntry.FindPropertyRelative("_size").vector3Value = characterEntry._size;
         newEntry.FindPropertyRelative("_position").vector3Value = characterEntry._position;
-        newEntry.FindPropertyRelative("_tileIndex").vector2IntValue = new Vector2Int(gridX, gridZ);
+        newEntry.FindPropertyRelative("_currentTileIndex").vector2IntValue = new Vector2Int(gridX, gridZ);
         newEntry.FindPropertyRelative("_character").objectReferenceValue = characterEntry._character;
         newEntry.FindPropertyRelative("_characterClass").enumValueIndex = (int)characterEntry._characterClass;
 
@@ -891,7 +865,7 @@ public class GridMaker3D : EditorWindow
         for (int i = 0; i < _characterListProperty.arraySize; i++)
         {
             SerializedProperty entryProp = _characterListProperty.GetArrayElementAtIndex(i);
-            Vector2 tileIndex = entryProp.FindPropertyRelative("_tileIndex").vector2IntValue;
+            Vector2 tileIndex = entryProp.FindPropertyRelative("_currentTileIndex").vector2IntValue;
 
             if ((int)tileIndex.x == gridX && (int)tileIndex.y == gridZ)
             {
@@ -1205,8 +1179,6 @@ public class GridMaker3D : EditorWindow
             gridZ * _tileSizeInMeters.z + _tileSizeInMeters.z / 2f
         );
 
-        // Create a CharacterEntry and 
-        //CharacterEntry characterEntry = InstantiateAndSetCharacterEntry(worldPos, Vector3.one, newCharacterPrefab, parent, gridPos);
         CharacterEntry newCharacterEntry = new CharacterEntry(worldPos, Vector3.one, Quaternion.identity, newCharacterPrefab, parent, gridPos);
         Undo.RegisterCreatedObjectUndo(newCharacterEntry._character, "Placed/Created Character");
 
@@ -1340,12 +1312,13 @@ public class GridMaker3D : EditorWindow
         {
             GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
             DebugLog.CJLog($"Loading character: {characterPrefab.name}");
-            CharacterEntry characterEntry = new CharacterEntry(characterData.GetCharacterPosition(),
-                                                               Vector3.one, // TODO (Calle): The Size is saved based on the renderer.bounds.size i think, so saving and loading multiple time will make characters bigger each time HAHA! XD
-                                                               characterData.GetRotation(),
-                                                               characterPrefab,
-                                                               parent,
-                                                               characterData.GetTileIndex());
+            //CharacterEntry characterEntry = new CharacterEntry(characterData.GetCharacterPosition(),
+            //                                                   Vector3.one, // TODO (Calle): The Size is saved based on the renderer.bounds.size i think, so saving and loading multiple time will make characters bigger each time HAHA! XD
+            //                                                   characterData.GetRotation(),
+            //                                                   characterPrefab,
+            //                                                   parent,
+            //                                                   characterData.GetCurrentTileIndex());
+            CharacterEntry characterEntry = new CharacterEntry(characterData, characterPrefab, parent);
             _characterList._characterList.Add(characterEntry);
         }
         _characterListSO.Update();
@@ -1378,17 +1351,19 @@ public class GridMaker3D : EditorWindow
             if (character.name.Equals("PreviewCharacter"))
                 continue;
 
-            combatGridSaveData._characterData.Add(
-                              new CombatGridCharacterData(character.GetComponent<Character>().GetCharacterClass(),
-                                                          character.GetComponent<Character>().GetFaction(),
-                                                          character.GetComponent<Character>().GetHealthPoints(),
-                                                          character.GetComponent<Character>().GetSpeed(),
-                                                          character.GetComponent<Character>().GetCurrentTileIndex(),
-                                                          character.transform.position,
-                                                          character.GetComponent<Renderer>().bounds.size,
-                                                          character.transform.rotation));
+            combatGridSaveData._characterData.Add(new CombatGridCharacterData(character));
+
+            //combatGridSaveData._characterData.Add(
+            //                  new CombatGridCharacterData(character.GetComponent<Character>().GetCharacterClass(),
+            //                                              character.GetComponent<Character>().GetFaction(),
+            //                                              character.GetComponent<Character>().GetHealthPoints(),
+            //                                              character.GetComponent<Character>().GetSpeed(),
+            //                                              character.GetComponent<Character>().GetCurrentTileIndex(),
+            //                                              character.transform.position,
+            //                                              character.GetComponent<Renderer>().bounds.size,
+            //                                              character.transform.rotation));
         }
- 
+
         string strOutput = JsonUtility.ToJson(combatGridSaveData, true);   
         
         // NOTE (Calle): Save to dataPath which is utilized by the Editor and cannot be accessed ingame during runtime

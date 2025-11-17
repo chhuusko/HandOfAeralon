@@ -94,6 +94,26 @@ public class Character : MonoBehaviour
         return _faction;
     }
 
+    public int GetBaseHealthPoints()
+    {
+        return _baseHealthPoints;
+    }
+
+    public int GetBaseSpeed()
+    {
+        return _baseSpeed;
+    }
+
+    public int GetBaseDamage()
+    {
+        return _baseDamage;
+    }
+
+    public int GetBaseMovementPoints()
+    {
+        return _baseMovementPoints; 
+    }
+
     public int GetHealthPoints()
     {
         return _currentHealthPoints;
@@ -153,12 +173,30 @@ public class Character : MonoBehaviour
     {
         _baseDamage = damage;
     }
+    public void SetBaseMovementPoints(int movementPoints)
+    {
+        _baseMovementPoints = movementPoints;
+    }
+    public void SetCurrentHealthPoints(int healthPoints)
+    {
+        _currentHealthPoints = healthPoints;
+    }
 
-    public void SetMovementPoints(int movementPoints)
+    public void SetCurrentSpeed(int speed)
+    {
+        _currentSpeed = speed;
+    }
+
+    public void SetCurrentDamage(int damage)
+    {
+        _currentDamage = damage;    
+    }
+
+    public void SetCurrentMovementPoints(int movementPoints)
     {
         _currentMovementPoints = movementPoints;
     }
-    
+
     public void SetCurrentTileIndex(Vector2Int tileIndex)
     {
         _currentTileIndex = tileIndex;

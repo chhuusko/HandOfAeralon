@@ -218,7 +218,7 @@ public class CombatManager : MonoBehaviour
             CombatGrid._instance.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
             tileIndex.x = 6;
             position.x += 2.0f;
-            characterData.SetTileIndex(tileIndex);
+            characterData.SetCurrentTileIndex(tileIndex);
             characterData.SetPosition(position);
             CombatGrid._instance.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
 

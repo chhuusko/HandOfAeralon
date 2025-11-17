@@ -193,24 +193,45 @@ public class CombatGrid : MonoBehaviour
     {
         GameObject result = null;
 
-        Vector2Int tileIndex = characterData.GetTileIndex();
-        Vector3 instancePos = characterData.GetCharacterPosition();
-        Quaternion rotation = characterData.GetRotation();
-        Faction faction = characterData.GetFaction();
-        int healthPoints = characterData.GetHealthPoints();
-        int initiative = characterData.GetInitiative();
+        Vector3        instancePos           = characterData.GetCharacterPosition();
+        Quaternion     rotation              = characterData.GetRotation();
+        Vector2Int     tileIndex             = characterData.GetCurrentTileIndex();
+        Faction        faction               = characterData.GetFaction();
+        CharacterClass characterClass        = characterData.GetCharacterClass();
+
+        int            currentHealtPoints    = characterData.GetHealthPoints();
+        int            currentSpeed          = characterData.GetInitiative();
+        int            currentDamage         = characterData.GetDamage();
+        int            currentMovementPoints = characterData.GetMovementPoints();
+
+        int            baseHealtPoints       = characterData.GetBaseHealthPoints();
+        int            baseSpeed             = characterData.GetBaseInitiative();
+        int            baseDamage            = characterData.GetBaseDamage();
+        int            baseMovementPoints    = characterData.GetBaseMovementPoints();
+
 
         GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
         GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, rotation);
-        result = characterObject;
+       
 
-        characterObject.GetComponent<Character>().SetCurrentTileIndex(tileIndex);
-        characterObject.GetComponent<Character>().SetBaseHealthPoints(healthPoints);
-        characterObject.GetComponent<Character>().SetBaseSpeed(initiative);
+        characterObject.GetComponent<Character>().SetCharacterClass(characterClass);
         characterObject.GetComponent<Character>().SetFaction(faction);
+        characterObject.GetComponent<Character>().SetCurrentTileIndex(tileIndex);
+
+        characterObject.GetComponent<Character>().SetCurrentHealthPoints(currentHealtPoints);
+        characterObject.GetComponent<Character>().SetCurrentSpeed(currentSpeed);
+        characterObject.GetComponent<Character>().SetCurrentDamage(currentDamage);
+        characterObject.GetComponent<Character>().SetCurrentMovementPoints(currentMovementPoints);
+
+        characterObject.GetComponent<Character>().SetBaseHealthPoints(baseHealtPoints);
+        characterObject.GetComponent<Character>().SetBaseSpeed(baseSpeed);
+        characterObject.GetComponent<Character>().SetBaseDamage(baseDamage);
+        characterObject.GetComponent<Character>().SetBaseMovementPoints(baseMovementPoints);
 
         _charactersGO.Add(characterObject);
-
+        
+        result = characterObject;
+        
         return result;
     }
 
