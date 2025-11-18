@@ -102,7 +102,6 @@ public class CombatUI : MonoBehaviour
 
     public void UpdateSelectedPortrait(CharacterData character)
     {
-        DebugLog.JoppaLog("Called");
         _selectedCharacterPortrait.sprite = character.ClassData.classImage;
     }
     
@@ -118,12 +117,16 @@ public class CombatUI : MonoBehaviour
     /// <param name="character">The character of which's abilities to display.</param>
     public void LoadAbilities(CharacterData character)
     {
-        DebugLog.JoppaLog("Loading Abilities");
-
         if (character == null)
         {
             DebugLog.JoppaLog("No selected character");
             return;
+        }
+
+        // Remove all current buttons.
+        for (int i = 0; i < _abilityPanel.transform.childCount; i++)
+        {
+            Destroy(_abilityPanel.transform.GetChild(i).gameObject);
         }
         
         DebugLog.JoppaLog($"Number of abilities: {character.AvailableAbilities.Count}");
@@ -135,6 +138,7 @@ public class CombatUI : MonoBehaviour
             var ability = character.AvailableAbilities[i];
             abilityButton.GetComponentInChildren<TextMeshProUGUI>().text = ability.name;
             abilityButton.image.sprite = ability.GetIcon();
+            abilityButton.GetComponent<AbilityButton>().SetAbility(ability);
         }
     }
 }
