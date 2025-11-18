@@ -59,6 +59,12 @@ public class GridExplorer : MonoBehaviour
         Vector2Int start = startTile.GetComponent<CombatGridTile>().GetTileIndex();
         Vector2Int goal = goalTile.GetComponent<CombatGridTile>().GetTileIndex();
 
+        if (start == goal)
+        {
+            DebugLog.JLWLog($"GridExplorer.cs | start {start} == goal {goal}");
+            return new List<GameObject>();
+        }
+
         Vector2Int[] directions = new Vector2Int[]
         {
             new Vector2Int(1, 0),
@@ -169,27 +175,27 @@ public class GridExplorer : MonoBehaviour
 
                 if (OutOfBounds(next))
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: next OutOfBounds");
+                    DebugLog.JLWLog("GridExplorer.cs | continue: next OutOfBounds");
                     continue;
                 }
                 if (checkWalkable && !IsWalkable(next))
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: next !IsWalkable");
+                    DebugLog.JLWLog("GridExplorer.cs | continue: next !IsWalkable");
                     continue;
                 }
                 if (checkWalkable && IsOccupied(next))
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: next IsOccupied");
+                    DebugLog.JLWLog("GridExplorer.cs | continue: next IsOccupied");
                     continue;
                 }
                 if (nextCost > range)
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: nextCost > range");
+                    DebugLog.JLWLog("GridExplorer.cs | continue: nextCost > range");
                     continue;
                 }
                 if (cost.ContainsKey(next))
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: cost.ContainsKey(next)");
+                    DebugLog.JLWLog("GridExplorer.cs | continue: cost.ContainsKey(next)");
                     continue;
                 }
 

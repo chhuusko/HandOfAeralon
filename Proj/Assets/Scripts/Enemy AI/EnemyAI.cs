@@ -1,40 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 public class EnemyAI : MonoBehaviour
 {
     public UnityEvent AIEndTurn = new();
 
     [SerializeField] private Faction controlledFaction = Faction.Enemy;
+    private Character _currentCharacter = null;
+    private int _currentMoveRange = 0;
+    private int _currentAttackRange = 0;
+
+    // Only for testing
     [SerializeField] private bool _bDebug = false;
     [SerializeField] private bool _bAutoPlay = false;
-    private Character currentCharacter;
-    private InputSystem_Actions _inputActions;
+    // End of only for testing
 
-    void Start() // Only for testing
+    void Start()
     {
         CombatManager._instance.TurnStart.AddListener(OnTurnStart);
 
-        _inputActions = new();
-        _inputActions.Enable();
-        _inputActions.Player.Jump.performed += OnJump;
-
+        // Only for testing
         if (_bAutoPlay)
         {
             StartCoroutine(Autoplay());
         }
-    }
-
-    void OnJump(InputAction.CallbackContext context) // Only for testing
-    {
-        if (!_bDebug) return;
-
-        RunDebugTurn();
     }
 
     private IEnumerator Autoplay() // Only for testing
@@ -42,70 +34,92 @@ public class EnemyAI : MonoBehaviour
         while (_bAutoPlay)
         {
             yield return new WaitForSeconds(2f);
-            RunDebugTurn();
-        }
-    }
 
-    void RunDebugTurn() // Only for testing
-    {
-        if (controlledFaction == Faction.Enemy)
-        {
-            List<Character> allCharacters = CombatGrid._instance.GetAllCharacters()
-            .Select(obj => obj.GetComponent<Character>())
-            .Where(ch => ch != null)
-            .ToList();
-
-            foreach (var character in allCharacters)
+            if (controlledFaction == Faction.Enemy)
             {
-                character.SetBaseHealthPoints(Random.Range(1, 4));
-                character.SetBaseSpeed(Random.Range(0, 5));
-                character.SetBaseDamage(Random.Range(0, 5));
-                character.ResetCharacter();
-                character.SetCurrentMovementPoints(2);
+                List<Character> allCharacters = CombatGrid._instance.GetAllCharacters()
+                .Select(obj => obj.GetComponent<Character>())
+                .Where(ch => ch != null)
+                .ToList();
+
+                foreach (var character in allCharacters)
+                {
+                    character.SetBaseHealthPoints(Random.Range(1, 4));
+                    character.SetBaseSpeed(Random.Range(1, 5));
+                    character.SetBaseDamage(Random.Range(1, 5));
+                    character.ResetCharacter();
+                    character.SetCurrentMovementPoints(2);
+                }
+
+                if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | All character stats randomized!");
             }
 
-            Debug.Log($"EnemyAI.cs | All character stats randomized!");
+            OnTurnStart();
         }
-
-        OnTurnStart();
     }
 
     private void OnTurnStart()
     {
-        currentCharacter = CombatManager._instance.GetNextTurnCharacter().GetComponent<Character>();
-        if (currentCharacter == null || currentCharacter.GetFaction() != controlledFaction)
+        // Initialization & null checks
+        _currentCharacter = CombatManager._instance.GetNextTurnCharacter().GetComponent<Character>();
+        if (_currentCharacter == null || _currentCharacter.GetFaction() != controlledFaction)
         {
-            if (_bDebug) Debug.Log($"EnemyAI.cs | Not my turn...");
+            if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | Not {this.name}'s turn...");
             return;
         }
-        GameObject currentTile = currentCharacter.GetCurrentTileComponent().gameObject;
-        if (_bDebug) Debug.Log($"EnemyAI.cs | currentCharacter == {currentCharacter.name}");
+        DebugLog.JLWLog($"EnemyAI.cs | {this.name}'s turn.");
+        if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | _currentCharacter: {_currentCharacter.name}");
+        _currentMoveRange = _currentCharacter.GetMovementPoints();
+        _currentAttackRange = 1; // Bör vara -> occupantCharacter.GetAttackRange()
+        if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | _currentMoveRange: {_currentMoveRange}, _currentAttackRange: {_currentAttackRange}");
 
-        Character closestOpponentCharacter = GetClosestOpponentCharacter(currentCharacter);
+        GameObject currentTile = _currentCharacter.GetCurrentTileComponent().gameObject;
+        if (currentTile == null)
+        {
+            DebugLog.JLWLog($"EnemyAI.cs | currentTile NOT FOUND!");
+            return;
+        }
+
+        Character closestOpponentCharacter = GetClosestOpponentCharacter(_currentCharacter);
         if (closestOpponentCharacter == null)
         {
-            Debug.LogError($"EnemyAI.cs | closestPlayerCharacter NOT FOUND IN SCENE!");
+            DebugLog.JLWLog($"EnemyAI.cs | closestOpponentCharacter NOT FOUND IN SCENE!");
             return;
         }
-        GameObject closestOpponentCharacterTile = closestOpponentCharacter.GetCurrentTileComponent().gameObject;
-        if (_bDebug) Debug.Log($"EnemyAI.cs | closestPlayerCharacter == {closestOpponentCharacter.name}");
+        if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | closestOpponentCharacter: {closestOpponentCharacter.name}");
 
-        GameObject chosenTile = FindPath(currentTile, closestOpponentCharacterTile);
-        if (chosenTile == null) return;
-        currentCharacter.SetMoveTarget(chosenTile.transform.position);
-        if (_bDebug) Debug.Log($"EnemyAI.cs | Moving {currentCharacter.name} to {chosenTile.GetComponent<CombatGridTile>().GetTileIndex()}");
-
-        if (TryAttack(chosenTile, closestOpponentCharacterTile))
+        GameObject closestOpponentTile = closestOpponentCharacter.GetCurrentTileComponent().gameObject;
+        if (closestOpponentTile == null)
         {
+            DebugLog.JLWLog($"EnemyAI.cs | closestOpponentTile NOT FOUND!");
             return;
         }
-        if (_bDebug) Debug.Log($"EnemyAI.cs | {closestOpponentCharacter.name} outside attack range.");
 
+        // Move and attack
+        GameObject targetTile = FindPath(currentTile, closestOpponentTile);
+        if (targetTile == null)
+        {
+            DebugLog.JLWLog($"EnemyAI.cs | targetTile NOT FOUND!");
+        }
+        _currentCharacter.SetMoveTarget(targetTile.transform.position);
+        if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | Moving {_currentCharacter.name} to {targetTile.GetComponent<CombatGridTile>().GetTileIndex()}");
+
+        if (!TryAttack(targetTile, closestOpponentTile))
+        {
+            if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | {closestOpponentCharacter.name} outside attack range.");
+            return;
+        }
+
+        // End turn
+        _currentCharacter = null;
+        _currentMoveRange = 0;
+        _currentAttackRange = 0;
         AIEndTurn.Invoke();
     }
 
     private Character GetClosestOpponentCharacter(Character currentCharacter)
     {
+        Character result = null;
         List<Character> opponentCharacters = new();
 
         if (controlledFaction == Faction.Enemy)
@@ -126,28 +140,27 @@ public class EnemyAI : MonoBehaviour
         }
 
         float min = float.MaxValue;
-        Character closestOpponentCharacter = null;
         foreach (var opponentCharacter in opponentCharacters)
         {
             float distance = Vector3.Distance(currentCharacter.transform.position, opponentCharacter.transform.position);
             if (distance < min)
             {
                 min = distance;
-                closestOpponentCharacter = opponentCharacter;
+                result = opponentCharacter;
             }
         }
 
-        return closestOpponentCharacter;
+        return result;
     }
 
     private bool TryAttack(GameObject fromTile, GameObject toTile)
     {
         Character target = toTile.GetComponent<CombatGridTile>().GetOccupantCharacter();
 
-        if (GridExplorer._instance.ManhattanDistance(fromTile, toTile) <= 1) // Bör vara -> currentCharacter.GetAttackRange()
+        if (GridExplorer._instance.ManhattanDistance(fromTile, toTile) <= _currentAttackRange)
         {
-            target.TakeDamage(currentCharacter.GetDamage()); // Bör vara -> currentCharacter.Attack(closestPlayerCharacter);
-            if (_bDebug) Debug.Log($"EnemyAI.cs | {currentCharacter.name} strikes {target.name} for {currentCharacter.GetDamage()} damage.");
+            target.TakeDamage(_currentCharacter.GetDamage()); // Bör använda en ability istället
+            if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name} strikes {target.name} for {_currentCharacter.GetDamage()} damage.");
             return true;
         }
 
@@ -156,37 +169,31 @@ public class EnemyAI : MonoBehaviour
 
     private GameObject FindPath(GameObject currentTile, GameObject opponentTile)
     {
+        GameObject result = currentTile;
         List<GameObject> path = GridExplorer._instance.FindPath(currentTile, opponentTile);
-
-        int moveRange = currentTile.GetComponent<CombatGridTile>().GetOccupantCharacter().GetMovementPoints();
-        int attackRange = 1; // Bör vara -> currentCharacter.GetAttackRange()
-
-        CombatGridTile currentTileScript = currentTile.GetComponent<CombatGridTile>();
 
         if (path == null || path.Count <= 1)
         {
-            Debug.Log("EnemyAI.cs | No path found!");
+            DebugLog.JLWLog($"EnemyAI.cs | No path found from {currentTile.GetComponent<CombatGridTile>().GetTileIndex()} to {opponentTile.GetComponent<CombatGridTile>().GetTileIndex()}");
             return currentTile;
         }
 
-        GameObject bestTile = currentTile;
-
-        for (int i = 1; i < path.Count && i <= moveRange; i++)
+        for (int i = 1; i < path.Count && i <= _currentMoveRange; i++)
         {
             GameObject tile = path[i];
             int distToEnemy = GridExplorer._instance.ManhattanDistance(tile, opponentTile);
 
-            if (distToEnemy == attackRange)
+            if (distToEnemy == _currentAttackRange)
             {
                 return tile;
             }
 
             if (distToEnemy > 0)
             {
-                bestTile = tile;
+                result = tile;
             }
         }
 
-        return bestTile;
+        return result;
     }
 }
