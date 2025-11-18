@@ -245,7 +245,7 @@ public class CombatGrid : MonoBehaviour
         characterObject.GetComponent<Character>().SetCurrentMovementPoints(currentMovementPoints);
 
         characterObject.GetComponent<Character>().SetBaseHealthPoints(baseHealtPoints);
-        characterObject.GetComponent<Character>().SetBaseSpeed(baseSpeed);
+        characterObject.GetComponent<Character>().SetBaseInitiative(baseSpeed);
         characterObject.GetComponent<Character>().SetBaseDamage(baseDamage);
         characterObject.GetComponent<Character>().SetBaseMovementPoints(baseMovementPoints);
 
