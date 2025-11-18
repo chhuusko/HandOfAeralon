@@ -6,22 +6,59 @@ using UnityEngine.AI;
 
 public enum Faction { Friendly, Enemy }
 
+public class CharacterData
+{
+    public ClassData ClassData;
+    public CharacterClass CharacterClass;
+    public Faction Faction;
+    
+    public int BaseHealthPoints;
+    public int BaseSpeed;
+    public int BaseDamage;
+    public int BaseMovementPoints;
+    
+    public List<Ability> AvailableAbilities;
+
+    public CharacterData(ClassData classData, Faction faction)
+    {
+        ClassData = classData;
+        Faction = faction;
+        InitializeClassData();
+        InitializeAbilities();
+    }
+    
+    /// <summary>
+    /// Generates a new friendly character based on the class data.
+    /// </summary>
+    private void InitializeClassData()
+    {
+        if (ClassData == null)
+        {
+            return;
+        }
+            
+        // Set values from class data.
+        BaseHealthPoints = UnityEngine.Random.Range(ClassData.minHealthPoints, ClassData.maxHealthPoints + 1);
+        BaseSpeed =  UnityEngine.Random.Range(ClassData.minSpeed, ClassData.maxSpeed + 1);
+        BaseDamage = UnityEngine.Random.Range(ClassData.minDamage, ClassData.maxDamage + 1);
+        BaseMovementPoints = UnityEngine.Random.Range(ClassData.minMovementPoints, ClassData.maxMovementPoints + 1);
+        CharacterClass = ClassData.characterClass;
+    }
+
+    /// <summary>
+    /// Sets all the abilities available to the character.
+    /// </summary>
+    private void InitializeAbilities()
+    {
+        AvailableAbilities = ClassData.abilities;
+    }
+}
+
 [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
 public class Character : MonoBehaviour
 {
     public const int MOVEMENT_POINTS = 5;
     
-    [Header("Character")]
-    [SerializeField] private ClassData _classData;
-    [SerializeField] private CharacterClass _characterClass;
-    [SerializeField] private Faction _faction;
-    
-    [Header("Base stats")]
-    [SerializeField] private int _baseHealthPoints;
-    [SerializeField] private int _baseSpeed;
-    [SerializeField] private int _baseDamage;
-
-    [SerializeField] private int _baseMovementPoints;
     // TODO: Traits.
     
     [Header("Current stats")]
@@ -36,9 +73,15 @@ public class Character : MonoBehaviour
     private Dictionary<Ability, int> _currentCooldowns = new();
     
     [Header("Misc")]
+    private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
     private NavMeshAgent _navMeshAgent;
-
+    
+    private void Awake()
+    {
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+    }
+    
     private void Start()
     {
         if (!TryGetComponent(out _abilityHandler))
@@ -50,10 +93,10 @@ public class Character : MonoBehaviour
 
     public void ResetCharacter() // Endast för testkörning (JLW)
     {
-        _currentHealthPoints = _baseHealthPoints;
-        _currentSpeed = _baseSpeed;
-        _currentDamage = _baseDamage;
-        _currentMovementPoints = _baseMovementPoints;
+        _currentHealthPoints = _data.BaseHealthPoints;
+        _currentSpeed = _data.BaseSpeed;
+        _currentDamage = _data.BaseDamage;
+        _currentMovementPoints = _data.BaseMovementPoints;
     }
 
     public void Update()
@@ -74,6 +117,7 @@ public class Character : MonoBehaviour
 
         }
     }
+    
     public AbilityHandler GetAbilityHandler()
     {
         return _abilityHandler;
@@ -81,37 +125,37 @@ public class Character : MonoBehaviour
 
     public ClassData GetClassData()
     {
-        return _classData;
+        return _data.ClassData;
     }
     
     public CharacterClass GetCharacterClass()
     {
-        return _characterClass;
+        return _data.CharacterClass;
     }
 
     public Faction GetFaction()
     {
-        return _faction;
+        return _data.Faction;
     }
 
     public int GetBaseHealthPoints()
     {
-        return _baseHealthPoints;
+        return _data.BaseHealthPoints;
     }
 
     public int GetBaseSpeed()
     {
-        return _baseSpeed;
+        return _data.BaseSpeed;
     }
 
     public int GetBaseDamage()
     {
-        return _baseDamage;
+        return _data.BaseDamage;
     }
 
     public int GetBaseMovementPoints()
     {
-        return _baseMovementPoints; 
+        return _data.BaseMovementPoints; 
     }
 
     public int GetHealthPoints()
@@ -151,31 +195,31 @@ public class Character : MonoBehaviour
 
     public void SetCharacterClass(CharacterClass characterClass)
     {
-        _characterClass = characterClass;
+        _data.CharacterClass = characterClass;
     }
 
     public void SetFaction(Faction faction)
     {
-        _faction = faction;
+        _data.Faction = faction;
     }
 
     public void SetBaseHealthPoints(int healthPoints)
     {
-        _baseHealthPoints = healthPoints;
+        _data.BaseHealthPoints = healthPoints;
     }
 
     public void SetBaseSpeed(int initiative)
     {
-        _baseSpeed = initiative;
+        _data.BaseSpeed = initiative;
     }
 
     public void SetBaseDamage(int damage)
     {
-        _baseDamage = damage;
+        _data.BaseDamage = damage;
     }
     public void SetBaseMovementPoints(int movementPoints)
     {
-        _baseMovementPoints = movementPoints;
+        _data.BaseMovementPoints = movementPoints;
     }
     public void SetCurrentHealthPoints(int healthPoints)
     {
@@ -238,54 +282,26 @@ public class Character : MonoBehaviour
     {
         return _currentCooldowns.GetValueOrDefault(ability, 0);
     }
-    
-    private void Awake()
-    {
-        _navMeshAgent = GetComponent<NavMeshAgent>();
 
-        // Only set class values for friendlies.
-        if (_faction == Faction.Friendly)
-        {
-            InitializeClassData();
-            InitializeAbilities();
-        }
-    }
-    
     /// <summary>
-    /// Generates a new friendly character based on the class data.
+    /// Generates a new friendly character based on the character data.
     /// </summary>
-    private void InitializeClassData()
+    /// <param name="data">The character data to generate from.</param>
+    public void Initialize(CharacterData data)
     {
-        if (_classData == null)
+        _data = data;
+        
+        if (_data.ClassData == null)
         {
             return;
         }
             
         // Set values from class data.
-        _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(_classData.minHealthPoints, _classData.maxHealthPoints + 1);
-        _currentSpeed = _baseSpeed =  UnityEngine.Random.Range(_classData.minSpeed, _classData.maxSpeed + 1);
-        _currentDamage = _baseDamage = UnityEngine.Random.Range(_classData.minDamage, _classData.maxDamage + 1);
-        _currentMovementPoints = _baseMovementPoints = UnityEngine.Random.Range(_classData.minMovmementPoints, _classData.maxMovmentPoints + 1);
-        _characterClass = _classData.characterClass;
-    }
-
-    /// <summary>
-    /// Sets all the abilities available to the character.
-    /// </summary>
-    private void InitializeAbilities()
-    {
-        if (CombatManager._instance == null)
-        {
-            return;
-        }
-        _availableAbilities = new List<Ability>();
-        _availableAbilities = CombatManager._instance.GetClassAbilities(_characterClass);
-    }
-
-    private IEnumerator WaitForCombatManager()
-    {
-        yield return new WaitUntil(() => CombatManager._instance != null);
-        InitializeAbilities();
+        _currentHealthPoints = _data.BaseHealthPoints;
+        _currentSpeed = _data.BaseSpeed;
+        _currentDamage = _data.BaseDamage;
+        _currentMovementPoints = _data.BaseMovementPoints;
+        _availableAbilities = new List<Ability>(data.AvailableAbilities);
     }
     
     public void TakeDamage(int damage)
@@ -299,7 +315,7 @@ public class Character : MonoBehaviour
 
     public void Heal(int healAmount)
     {
-        _currentHealthPoints = Mathf.Min(_currentHealthPoints + healAmount, _baseHealthPoints);
+        _currentHealthPoints = Mathf.Min(_currentHealthPoints + healAmount, _data.BaseHealthPoints);
     }
 
     public bool IsMoving()

@@ -23,6 +23,6 @@ public class PortraitButton : MonoBehaviour
 
     public void OnClick()
     {
-        Selector._instance.SetSelectedCharacter(_character);
+        CombatUI.Instance.LoadAbilities(_character);
     }
 }
