@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
+
+[CreateAssetMenu(fileName = "RC_NonBlock", menuName = "Scriptable Objects/Abilities/Range Calculations/Non-Blocking")]
 
 public class RC_NonBlock : RangeCalculation
 {

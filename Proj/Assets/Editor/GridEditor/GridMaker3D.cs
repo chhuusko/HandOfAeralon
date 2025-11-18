@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.TerrainTools;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using static GridMaker3D;
 using static UnityEditor.PlayerSettings;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
@@ -28,47 +29,14 @@ public class GridMaker3D : EditorWindow
     string _fileNameToLoadJSON;
 
     int _drawMode = 0;
-    int _battleGridWidth = 0;
-    int _battleGridHeight= 0;
-    int _prevBattleGridWidth = 0;
-    int _prevBattleGridHeight = 0;
+    int _combatGridWidth = 0;
+    int _combatGridHeight= 0;
+    int _prevCombatGridWidth = 0;
+    int _prevCombatGridHeight = 0;
+    int _defaultDeployZoneWidth = 0;
 
     Vector2 _windowEditorScrollPos;
     Vector3 _tileSizeInMeters;
-
-
-    [System.Serializable]
-    public class CharacterEntry
-    {
-        public Vector3 _position;
-        public Vector3 _size;
-        public Vector2Int _tileIndex;
-        public CharacterClass _characterClass;
-        public GameObject _character;
-
-        public CharacterEntry() { }
-        public CharacterEntry(Vector3 goPos, Vector3 goSize, GameObject prefab, GameObject parent, Vector2Int gridPos)
-        {
-            if (prefab != null)
-            {
-                // GameObject Specific
-                this._character = Instantiate(prefab);
-                this._character.transform.position = goPos;
-                this._character.transform.localScale = goSize;
-
-                if(parent != null)
-                    this._character.transform.SetParent(parent.transform);
-
-                this._character.GetComponent<Character>().SetCurrentTileIndex(gridPos);
-
-                // Save/Load Specific
-                this._characterClass = prefab.GetComponent<Character>().GetCharacterClass();
-                this._tileIndex = gridPos;
-                this._position = goPos;
-                this._size = goSize;
-            }
-        }
-    };
 
     [System.Serializable]
     public class CharacterList : ScriptableObject
@@ -91,39 +59,6 @@ public class GridMaker3D : EditorWindow
     SerializedProperty         _characterBrushPrefabProperty;
 
     [System.Serializable]
-    public class TileEntry
-    {
-        public Vector2Int _tileIndex;
-        public Vector3 _position;
-        public Vector3 _size;
-        public TileType _tileType;
-        public GameObject _tile;
-        public GameObject _occupant;
-
-        public TileEntry() { }
-        public TileEntry(Vector3 goPos, Vector3 goSize, GameObject prefab, GameObject parent, Vector2Int gridPos)
-        {
-            if(prefab != null)
-            {
-                // GameObject specific
-                this._tile = Instantiate(prefab);
-                this._tile.transform.position = goPos;
-                this._tile.transform.localScale = goSize;
-
-                if(parent != null)
-                    this._tile.transform.SetParent(parent.transform);
-
-                // Save/Load Data Specific
-                this._tileType = prefab.GetComponent<CombatGridTile>().GetTileType();
-                this._tileIndex = gridPos;
-                this._position = goPos;
-                this._size = goSize;
-                this._occupant = null;
-            }
-        }
-    };
-
-    [System.Serializable]
     public class TileGrid : ScriptableObject
     {
         public List<TileEntry> _tileEntries = new List<TileEntry>();
@@ -144,7 +79,9 @@ public class GridMaker3D : EditorWindow
     SerializedProperty    _tileBrushPrefabProperty;
 
     [SerializeField] GameObject _defaultTile;
-    
+    [SerializeField] GameObject _defaultDeployTile;
+    [SerializeField] GameObject _currentBrushPrefab; // NOTE (Calle): Only use to display in the inspector window
+
     TileEntry _previewTile;
     CharacterEntry _previewCharacter;
     
@@ -152,8 +89,8 @@ public class GridMaker3D : EditorWindow
     int _currentCharacterBrushIndex = 0;
 
     private bool _bIsHoldingF  = false, _bIsHoldingCtrl = false, _bInFocusMode = false;
-    private bool _bFocusToggle = false;
     private bool _bDrawPreviewGrid = true;
+    private bool _bPrevFocusMode;
 
     [MenuItem("Custom Tools/GridMaker 3D")]
     public static void ShowWindow()
@@ -190,13 +127,17 @@ public class GridMaker3D : EditorWindow
         _characterListProperty = _characterListSO.FindProperty("_characterList");
 
         // Note (Calle): Preloading some default editor values, for the same reason as preloading the defaultTile.
-        _tileSizeInMeters = new Vector3(2.0f, 1.0f, 2.0f);
-        _battleGridHeight = 10;
-        _battleGridWidth = 12;
+        _tileSizeInMeters = new Vector3(2.0f, 0.01f, 2.0f);
+        _combatGridHeight = 10;
+        _combatGridWidth = 12;
+        _defaultDeployZoneWidth = 3;
 
         // Note (Calle): Preloading the default tile so we don't have to manually assign it every time we open the editor
-        string defaultTileFilePath = "Assets/Prefabs/Tiles/Walkable.prefab";
+        string defaultTileFilePath = "Assets/Prefabs/Tiles/CombatGridTile_Walkable.prefab";
         _defaultTile = AssetDatabase.LoadAssetAtPath<GameObject>(defaultTileFilePath);
+
+        string defaultDeployTilePath = "Assets/Prefabs/Tiles/CombatGridTile_Deploy.prefab"; ;
+        _defaultDeployTile = AssetDatabase.LoadAssetAtPath<GameObject>(defaultDeployTilePath);
 
         // Note (Calle): Must be done after the SerializeObject Array has been Created. Preloading all tile brushes
         string folderPathTilePrefabs = "Assets/Prefabs/Tiles";
@@ -205,7 +146,7 @@ public class GridMaker3D : EditorWindow
         {
             string assetPath = AssetDatabase.GUIDToAssetPath(guid);
             GameObject tileObject = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
-            Debug.Log("TileName: " + tileObject.name);
+            DebugLog.CJLog("TileName: " + tileObject.name);
             _tileBrushPrefabHolder._tileBrushPrefabs.Add(tileObject);
             _tileBrushPrefabHolderSO.Update();
         }
@@ -216,10 +157,13 @@ public class GridMaker3D : EditorWindow
         {
             string assetPath = AssetDatabase.GUIDToAssetPath (guid);
             GameObject characterObject = AssetDatabase.LoadAssetAtPath<GameObject> (assetPath);
-            Debug.Log("CharacterName" + characterObject.name);
+            DebugLog.CJLog("CharacterName" + characterObject.name);
             _characterBrushPrefabHolder._characterBrushPrefabs.Add(characterObject);
             _characterBrushPrefabHolderSO.Update();
         }
+
+        _characterPrefabLibrary = AssetDatabase.LoadAssetAtPath<CharacterPrefabLibrary>("Assets/ScriptableObject/Characters/CharacterPrefabLibrary.asset");
+        _tilePrefabLibrary      = AssetDatabase.LoadAssetAtPath<TilePrefabLibrary>("Assets/ScriptableObject/Tiles/TilePrefabLibrary.asset");
 
     }
 
@@ -271,6 +215,8 @@ public class GridMaker3D : EditorWindow
 
     private void OnGUI()
     {
+        Event currentEvent = Event.current;
+
         _windowEditorScrollPos = EditorGUILayout.BeginScrollView(_windowEditorScrollPos);
 
         EditorGUILayout.LabelField("Character Prefab Library", EditorStyles.boldLabel);
@@ -289,25 +235,38 @@ public class GridMaker3D : EditorWindow
             false
         ) as TilePrefabLibrary;
 
-        _bFocusToggle = EditorGUILayout.Toggle("Focus Toggle for Draw", _bFocusToggle);
-        _bDrawPreviewGrid    = EditorGUILayout.Toggle("Draw Grid Lines", _bDrawPreviewGrid);
-        _drawMode           = GUILayout.SelectionGrid(_drawMode, new[] { "Draw Tiles", "Draw Characters" }, 1);
-        _battleGridWidth     = EditorGUILayout.IntSlider("BattleGrid Width", _battleGridWidth, 0, 30);
-        _battleGridHeight    = EditorGUILayout.IntSlider("BattleGrid Height", _battleGridHeight, 0, 30);
-        _defaultTile         = EditorGUILayout.ObjectField("Default Tile for Grid Generation", _defaultTile, typeof(GameObject), false) as GameObject;
-        _tileSizeInMeters    = EditorGUILayout.Vector3Field("Size of a tile in meters", _tileSizeInMeters);
-        _fileNameToSaveJSON  = EditorGUILayout.TextField("Save To: ", _fileNameToSaveJSON);
-        _fileNameToLoadJSON  = EditorGUILayout.TextField("Load From: ", _fileNameToLoadJSON);
+        _bPrevFocusMode = IsInFocusDrawMode();
+        _bInFocusMode           = EditorGUILayout.Toggle(new GUIContent("Focus Toggle for Draw", "Use \"Ctrl + f\" to toggle on/off"), _bInFocusMode);
+        if (!_bPrevFocusMode && IsInFocusDrawMode())
+            DisplaySceneNoteForDrawMode("Draw Mode: On");
+        else if(_bPrevFocusMode && !IsInFocusDrawMode())
+            DisplaySceneNoteForDrawMode("Draw Mode: Off");
+
+        _bDrawPreviewGrid = EditorGUILayout.Toggle("Draw Grid Lines", _bDrawPreviewGrid);
+        _drawMode               = GUILayout.SelectionGrid(_drawMode, new[] { "Draw Tiles", "Draw Characters" }, 1);
+        _combatGridWidth        = EditorGUILayout.IntSlider("CombatGrid Width", _combatGridWidth, 0, 30);
+        _combatGridHeight       = EditorGUILayout.IntSlider("CombatGrid Height", _combatGridHeight, 0, 30);
+        _defaultDeployZoneWidth = EditorGUILayout.IntSlider("CombatGrid Width", _defaultDeployZoneWidth, 0, 30);
+        _defaultTile            = EditorGUILayout.ObjectField("Default Tile for Grid Generation", _defaultTile, typeof(GameObject), false) as GameObject;
+        _defaultDeployTile      = EditorGUILayout.ObjectField("Default Deploy Tile for Deploy Zone Generation", _defaultDeployTile, typeof(GameObject), false) as GameObject;
+        
+        EditorGUILayout.ObjectField("Curren Brush Object", _currentBrushPrefab, typeof(GameObject), true);
+        
+
+        _tileSizeInMeters       = EditorGUILayout.Vector3Field("Size of a tile in meters", _tileSizeInMeters);
+        _fileNameToSaveJSON     = EditorGUILayout.TextField("Save To: ", _fileNameToSaveJSON);
+        _fileNameToLoadJSON     = EditorGUILayout.TextField("Load From: ", _fileNameToLoadJSON);
 
 
-        if (_prevBattleGridHeight != _battleGridHeight || _prevBattleGridWidth != _battleGridWidth)
+        if (_prevCombatGridHeight != _combatGridHeight || _prevCombatGridWidth != _combatGridWidth)
         {
-            SetGridSize(_battleGridWidth, _battleGridHeight);
-            _prevBattleGridWidth = _battleGridWidth;
-            _prevBattleGridHeight = _battleGridHeight;
+            SetGridSize(_combatGridWidth, _combatGridHeight);
+            _prevCombatGridWidth = _combatGridWidth;
+            _prevCombatGridHeight = _combatGridHeight;
 
         }
 
+        UpdateFocusDrawMode(currentEvent);
         UpdatePrefabLists();
         UpdateTileGrid();
         UpdateCharacterList();
@@ -317,7 +276,8 @@ public class GridMaker3D : EditorWindow
         HandleButtonLoadFromJSON();
         HandleButtonSaveToJSON();
         HandleButtonGenerateDefaultGrid();
-        
+        HandleButtonGenerateDefaultDeployZone();
+
     }
 
     private void HandleButtonLoadFromJSON()
@@ -332,7 +292,7 @@ public class GridMaker3D : EditorWindow
                     "Confirm Load Battle Grid",
                     "Please enter a filename to load in the\n\"Load From:\" slot!\n\n" +
                     "Example: \n" +
-                    "Load From: MyBattleGrid\n\n" +
+                    "Load From: MyCombatGrid\n\n" +
                     "Note: DON'T enter file extension (.json)",
                     "OK"
                 );
@@ -353,12 +313,12 @@ public class GridMaker3D : EditorWindow
 
             if (confirm)
             {
-                LoadBattleGridFromJSON();
-                Debug.Log($"Battle grid loaded!");
+                LoadCombatGridFromJSON();
+                DebugLog.CJLog($"Battle grid loaded!");
             }
             else
             {
-                Debug.Log("Load cancelled.");
+                DebugLog.CJLog("Load cancelled.");
             }
         }
     }
@@ -369,7 +329,7 @@ public class GridMaker3D : EditorWindow
         {
             // Gather context info
             string message = $"You are about to save the current battle grid:\n" +
-                             $"Width: {_battleGridWidth}, Height: {_battleGridHeight}\n" +
+                             $"Width: {_combatGridWidth}, Height: {_combatGridHeight}\n" +
                              $"Tiles in grid: {_tileGridProperty.arraySize}\n\n" +
                              $"At location: " + _fileNameToSaveJSON + ".json\n\n" +
                              "Do you want to proceed?";
@@ -384,12 +344,12 @@ public class GridMaker3D : EditorWindow
 
             if (confirm)
             {
-                SaveBattleGridToJSON();
-                Debug.Log($"Battle grid saved! {_tileGridProperty.arraySize} tiles exported.");
+                SaveCombatGridToJSON();
+                DebugLog.CJLog($"Battle grid saved! {_tileGridProperty.arraySize} tiles exported.");
             }
             else
             {
-                Debug.Log("Save cancelled.");
+                DebugLog.CJLog("Save cancelled.");
             }
         }
     }
@@ -400,7 +360,6 @@ public class GridMaker3D : EditorWindow
         {
             // Gather context info
             string message = $"No Default Prefab:\n";
-
 
             if (_defaultTile == null)
             {
@@ -413,7 +372,7 @@ public class GridMaker3D : EditorWindow
             }
             else
             {
-                if (_battleGridWidth <= 0 || _battleGridHeight <= 0)
+                if (_combatGridWidth <= 0 || _combatGridHeight <= 0)
                 {
                     message = "Battle Grid Width or Height must be creater than 0";
                     // Show Error Dialogue
@@ -442,9 +401,9 @@ public class GridMaker3D : EditorWindow
                     }
                     _tileGridHolderSO.ApplyModifiedProperties();
 
-                    for (int y = 0; y < _battleGridHeight; y++)
+                    for (int y = 0; y < _combatGridHeight; y++)
                     {
-                        for (int x = 0; x < _battleGridWidth; x++)
+                        for (int x = 0; x < _combatGridWidth; x++)
                         {
                             // World-space position of the tile's center
                             Vector3 pos = new Vector3(
@@ -467,31 +426,90 @@ public class GridMaker3D : EditorWindow
         }
     }
 
-    private CharacterEntry InstantiateAndSetCharacterEntry(Vector3 goPos, Vector3 goSize, GameObject prefab, GameObject parent, Vector2Int gridPos)
+    private void HandleButtonGenerateDefaultDeployZone()
     {
-        if (prefab == null) return null;
 
-        CharacterEntry newCharacterEntry= new CharacterEntry();
-        
-        // GameObject Specific
-        newCharacterEntry._character = Instantiate(prefab);
-        newCharacterEntry._character.transform.position = goPos;
-        newCharacterEntry._character.transform.localScale = goSize;
-        newCharacterEntry._character.transform.SetParent(parent.transform);
-        newCharacterEntry._character.GetComponent<Character>().SetCurrentTileIndex(gridPos);
+        if (GUILayout.Button("Generate Default Deploy Zone", GUILayout.Height(50)))
+        {
+            // Gather context info
+            string message = $"No Default Prefab for DeployTile\n";
 
-        // Save/Load Specific
-        newCharacterEntry._characterClass = prefab.GetComponent<Character>().GetCharacterClass();
-        newCharacterEntry._tileIndex = gridPos;
-        newCharacterEntry._position = goPos;
-        newCharacterEntry._size = goSize;
+            if (_defaultTile == null)
+            {
+                // Show Error Dialogue
+                EditorUtility.DisplayDialog(
+                    "Deploy Zone Generator Error",
+                    message,
+                    "OK"
+                );
+            }
+            else
+            {
+                if (_combatGridWidth <= 0 || _combatGridHeight <= 0)
+                {
+                    message = "Battle Grid Width or Height must be creater than 0";
+                    // Show Error Dialogue
+                    EditorUtility.DisplayDialog(
+                        "Deploy Zone Generator Error",
+                        message,
+                        "OK"
+                    );
+                }
+                else
+                {
+                    int deployZoneWidth = _defaultDeployZoneWidth;
+                    if(_defaultDeployZoneWidth > _combatGridWidth)
+                        deployZoneWidth = _defaultDeployZoneWidth - _combatGridWidth;
 
-         Undo.RegisterCreatedObjectUndo(newCharacterEntry._character, "Placed/Updated Character");
-        
-        return newCharacterEntry;
+                    var parent = GenerateParentRootObject(_strRootObjectForTiles);
+                    // NOTE (Calle): Clear Tiles in the Deploy Zone
+                    _tileGridHolderSO.Update();
+                    SerializedProperty tileEntries = _tileGridHolderSO.FindProperty("_tileEntries");
+                    for(int y = 0; y < _combatGridHeight; y++)
+                    {
+
+                    }
+                    for (int x = 0; x < deployZoneWidth; x++)
+                    {
+                        // Get the tile entry property in the entry list property
+                        SerializedProperty tileEntryProp = tileEntries.GetArrayElementAtIndex(x);
+                        // Get the tile property in the tile entry property
+                        SerializedProperty tileProp = tileEntryProp.FindPropertyRelative("_tile");
+                        // Get the reference to actual tile GameObject
+                        GameObject tileGO = tileProp.objectReferenceValue as GameObject;
+                        if (tileGO != null)
+                            DestroyImmediate(tileGO);
+                    }
+                    //for (int i = 0; i < tileEntries.arraySize; i++)
+                    //{
+                    //    
+                    //}
+                    _tileGridHolderSO.ApplyModifiedProperties();
+
+                    for (int y = 0; y < _combatGridHeight; y++)
+                    {
+                        for (int x = 0; x < deployZoneWidth; x++)
+                        {
+                            // World-space position of the tile's center
+                            Vector3 pos = new Vector3(
+                                x * _tileSizeInMeters.x + _tileSizeInMeters.x / 2f,
+                                0f,
+                                y * _tileSizeInMeters.z + _tileSizeInMeters.z / 2f
+                            );
+
+                            // Pass grid coordinates as Vector2
+                            Vector2Int gridPos = new Vector2Int(x, y);
+
+                            TileEntry newTileEntry = new TileEntry(pos, _tileSizeInMeters, _defaultDeployTile, parent, gridPos);
+                            Undo.RegisterCreatedObjectUndo(newTileEntry._tile, "Placed/Updated Tile");
+                            // Add or replace in tile dictionary
+                            AddOrReplaceTileEntry(x, y, newTileEntry);
+                        }
+                    }
+                }
+            }
+        }
     }
-
-
 
     private void OnSceneGUI(SceneView sceneView)
     {
@@ -508,7 +526,6 @@ public class GridMaker3D : EditorWindow
         {
             int controlID = GUIUtility.GetControlID(FocusType.Passive);
             HandleUtility.AddDefaultControl(controlID);
-            _bFocusToggle = true;
             switch(_drawMode)
             {
                 case DRAWMODE_TILE:
@@ -523,10 +540,6 @@ public class GridMaker3D : EditorWindow
                     break;
             }
         }
-        else
-        {
-            _bFocusToggle = false;
-        }
 
         Repaint();
         SceneView.RepaintAll();
@@ -536,8 +549,8 @@ public class GridMaker3D : EditorWindow
     {
         Handles.color = Color.yellow;
 
-        Vector3 wireSize = new Vector3(_battleGridWidth*_tileSizeInMeters.x, 0.05f, _battleGridHeight*_tileSizeInMeters.z);
-        Vector3 wirePos = new Vector3((_battleGridWidth * _tileSizeInMeters.x) / 2.0f , 0.0f, (_battleGridHeight * _tileSizeInMeters.z) / 2.0f);
+        Vector3 wireSize = new Vector3(_combatGridWidth*_tileSizeInMeters.x, 0.05f, _combatGridHeight*_tileSizeInMeters.z);
+        Vector3 wirePos = new Vector3((_combatGridWidth * _tileSizeInMeters.x) / 2.0f , 0.0f, (_combatGridHeight * _tileSizeInMeters.z) / 2.0f);
         Handles.DrawWireCube(wirePos, wireSize);
         Handles.DrawWireDisc(Vector3.zero, Vector3.up, 0.3f, 2.0f);
 
@@ -550,20 +563,20 @@ public class GridMaker3D : EditorWindow
         Handles.DrawLine(Vector3.zero, Vector3.Scale(Vector3.up, _tileSizeInMeters), lineRadius);
 
 
-        for (int y = 0; y < _battleGridHeight; y++)
+        for (int y = 0; y < _combatGridHeight; y++)
         {
             Vector3 p1 = new Vector3(0.0f, 0.0f, y * _tileSizeInMeters.z);
-            Vector3 p2 = new Vector3(_battleGridWidth * _tileSizeInMeters.x, 0.0f, y * _tileSizeInMeters.z);
+            Vector3 p2 = new Vector3(_combatGridWidth * _tileSizeInMeters.x, 0.0f, y * _tileSizeInMeters.z);
             Handles.DrawLine(p1, p2, 1.0f);
         }
 
-        for (int x = 0; x < _battleGridWidth; x++)
+        for (int x = 0; x < _combatGridWidth; x++)
         {
             // TODO (Calle) : 1. Place and save Character Friendly and Enemy 
             //                2. Load Characters from JSON into battlegrid
 
             Vector3 p1 = new Vector3(x * _tileSizeInMeters.x, 0.0f, 0.0f);
-            Vector3 p2 = new Vector3(x * _tileSizeInMeters.x, 0.0f, _battleGridHeight * _tileSizeInMeters.z);
+            Vector3 p2 = new Vector3(x * _tileSizeInMeters.x, 0.0f, _combatGridHeight * _tileSizeInMeters.z);
             Handles.DrawLine(p1, p2, 1.0f);
         }
     }
@@ -642,6 +655,9 @@ public class GridMaker3D : EditorWindow
         GameObject prefab = _tileBrushPrefabHolder._tileBrushPrefabs[_currentTileBrushIndex];
         if (prefab == null)
             return;
+        
+        // NOTE (Calle): Only for display in inspector
+        _currentBrushPrefab = prefab;
 
         // Destroy previous preview
         if (_previewTile._tile != null)
@@ -677,7 +693,10 @@ public class GridMaker3D : EditorWindow
         GameObject prefab = _characterBrushPrefabHolder._characterBrushPrefabs[_currentCharacterBrushIndex];
         if (prefab == null)
             return;
-
+        
+        // NOTE (Calle): Only for display in inspector
+        _currentBrushPrefab = prefab;
+        
         // Destroy previous preview
         if (_previewCharacter._character != null)
             DestroyImmediate(_previewCharacter._character);
@@ -805,7 +824,7 @@ public class GridMaker3D : EditorWindow
         for (int i = 0; i < _characterListProperty.arraySize; i++)
         {
             SerializedProperty entryProp = _characterListProperty.GetArrayElementAtIndex(i);
-            Vector2 tileIndex = entryProp.FindPropertyRelative("_tileIndex").vector2IntValue;
+            Vector2 tileIndex = entryProp.FindPropertyRelative("_currentTileIndex").vector2IntValue;
 
             if ((int)tileIndex.x == gridX && (int)tileIndex.y == gridZ)
             {
@@ -833,7 +852,7 @@ public class GridMaker3D : EditorWindow
 
         newEntry.FindPropertyRelative("_size").vector3Value = characterEntry._size;
         newEntry.FindPropertyRelative("_position").vector3Value = characterEntry._position;
-        newEntry.FindPropertyRelative("_tileIndex").vector2IntValue = new Vector2Int(gridX, gridZ);
+        newEntry.FindPropertyRelative("_currentTileIndex").vector2IntValue = new Vector2Int(gridX, gridZ);
         newEntry.FindPropertyRelative("_character").objectReferenceValue = characterEntry._character;
         newEntry.FindPropertyRelative("_characterClass").enumValueIndex = (int)characterEntry._characterClass;
 
@@ -846,7 +865,7 @@ public class GridMaker3D : EditorWindow
         for (int i = 0; i < _characterListProperty.arraySize; i++)
         {
             SerializedProperty entryProp = _characterListProperty.GetArrayElementAtIndex(i);
-            Vector2 tileIndex = entryProp.FindPropertyRelative("_tileIndex").vector2IntValue;
+            Vector2 tileIndex = entryProp.FindPropertyRelative("_currentTileIndex").vector2IntValue;
 
             if ((int)tileIndex.x == gridX && (int)tileIndex.y == gridZ)
             {
@@ -975,9 +994,15 @@ public class GridMaker3D : EditorWindow
             if (_bIsHoldingCtrl && _bIsHoldingF)
             {
                 if (!_bInFocusMode)
+                {
                     _bInFocusMode = true;
+                    DisplaySceneNoteForDrawMode("Draw Mode: On");
+                }
                 else
+                {
+                    DisplaySceneNoteForDrawMode("Draw Mode: Off");
                     _bInFocusMode = false;
+                }
             }
         }
 
@@ -989,6 +1014,17 @@ public class GridMaker3D : EditorWindow
                 _bIsHoldingCtrl = false;
         }
     }
+
+
+    private void DisplaySceneNoteForDrawMode(string message)
+    {
+        SceneView sceneView = SceneView.lastActiveSceneView;
+        if (sceneView)
+        {
+            sceneView.ShowNotification(new GUIContent(message));
+        }
+    }
+
     private void DrawTiles(Event currentEvent)
     {
         
@@ -1034,8 +1070,8 @@ public class GridMaker3D : EditorWindow
 
     private bool IndexWithiGrid(int x, int y)
     {
-        if ((x >= 0 && x < _battleGridWidth) &&
-            (y >= 0 && y < _battleGridHeight))
+        if ((x >= 0 && x < _combatGridWidth) &&
+            (y >= 0 && y < _combatGridHeight))
             return true;
 
         return false;
@@ -1063,10 +1099,10 @@ public class GridMaker3D : EditorWindow
        GameObject newTilePrefab = _tileBrushPrefabHolder._tileBrushPrefabs[_currentTileBrushIndex];
 
         // If tile already exists and is same type, skip
-       if (existingTileEntry._tile != null && PrefabUtility.GetCorrespondingObjectFromSource(existingTileEntry._tile) == newTilePrefab)
-        {
-            return;
-        }
+       //if (PrefabUtility.GetCorrespondingObjectFromSource(existingTileEntry._tile) == newTilePrefab)
+       // {
+       //     return;
+       // }
 
         // Destroy old tile if exists
         if (existingTileEntry._tile != null)
@@ -1143,9 +1179,7 @@ public class GridMaker3D : EditorWindow
             gridZ * _tileSizeInMeters.z + _tileSizeInMeters.z / 2f
         );
 
-        // Create a CharacterEntry and 
-        //CharacterEntry characterEntry = InstantiateAndSetCharacterEntry(worldPos, Vector3.one, newCharacterPrefab, parent, gridPos);
-        CharacterEntry newCharacterEntry = new CharacterEntry(worldPos, Vector3.one, newCharacterPrefab, parent, gridPos);
+        CharacterEntry newCharacterEntry = new CharacterEntry(worldPos, Vector3.one, Quaternion.identity, newCharacterPrefab, parent, gridPos);
         Undo.RegisterCreatedObjectUndo(newCharacterEntry._character, "Placed/Created Character");
 
         if(newCharacterEntry._character.CompareTag("DeleteCharacterBrush"))
@@ -1211,9 +1245,9 @@ public class GridMaker3D : EditorWindow
         return null;
     }
  
-    private void LoadBattleGridFromJSON()
+    private void LoadCombatGridFromJSON()
     {
-        string fileContent = Application.dataPath + "\\JSON BattleGrids\\" + _fileNameToLoadJSON + ".json";
+        string fileContent = Application.dataPath + "/JSON/CombatGrids/" + _fileNameToLoadJSON + ".json";
 
         if(!System.IO.File.Exists(fileContent))
         {
@@ -1249,22 +1283,19 @@ public class GridMaker3D : EditorWindow
 
         CombatGridSerializedSaveData combatGridSaveData = JsonUtility.FromJson<CombatGridSerializedSaveData>(jsonFileData);
 
-        _battleGridWidth = combatGridSaveData._gridWidth;
-        _battleGridHeight = combatGridSaveData._gridHeight;
+        _combatGridWidth = combatGridSaveData._gridWidth;
+        _combatGridHeight = combatGridSaveData._gridHeight;
         _tileSizeInMeters = combatGridSaveData._tileSize;
 
         var parent = GenerateParentRootObject(_strRootObjectForTiles);
+
         foreach(CombatGridTileData tileData in combatGridSaveData._tileData)
         {
             GameObject tilePrefab = _tilePrefabLibrary.GetPrefab(tileData.GetTileType());
-            // TODO (Calle): Must find a way to fetch the correct prefab based on the tileDatas TileType.
-            _tileGridHolder._tileEntries.Add(new TileEntry(tileData.GetTilePosition(),
-                                                           tileData.GetTileSize(),
-                                                           tilePrefab,
-                                                           parent,
-                                                           tileData.GetTileIndex()
-                                                           ));
+
+            _tileGridHolder._tileEntries.Add(new TileEntry(tileData, tilePrefab, parent));
         }
+
         _tileGridHolderSO.Update();
 
         // NOTE (Calle): LOADING CHARACTERS
@@ -1277,34 +1308,30 @@ public class GridMaker3D : EditorWindow
         foreach(CombatGridCharacterData characterData in combatGridSaveData._characterData)
         {
             GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
-            Debug.Log($"Loading character: {characterPrefab.name}");
-            CharacterEntry characterEntry = new CharacterEntry(characterData.GetCharacterPosition(),
-                                                               Vector3.one, // TODO (Calle): The Size is saved based on the renderer.bounds.size i think, so saving and loading multiple time will make characters bigger each time HAHA! XD
-                                                               characterPrefab,
-                                                               parent,
-                                                               characterData.GetTileIndex());
+
+            DebugLog.CJLog($"Loading character: {characterPrefab.name}");
+
+            CharacterEntry characterEntry = new CharacterEntry(characterData, characterPrefab, parent);
+
             _characterList._characterList.Add(characterEntry);
         }
         _characterListSO.Update();
 
     }
 
-    private void SaveBattleGridToJSON()
+    private void SaveCombatGridToJSON()
     {
         CombatGridSerializedSaveData combatGridSaveData = new CombatGridSerializedSaveData();
         
-        combatGridSaveData._gridWidth = _battleGridWidth;
-        combatGridSaveData._gridHeight = _battleGridHeight;
+        combatGridSaveData._gridWidth = _combatGridWidth;
+        combatGridSaveData._gridHeight = _combatGridHeight;
         combatGridSaveData._tileSize = _tileSizeInMeters;
-        foreach (var entry in _tileGridHolder._tileEntries)
+        foreach (var tileEntry in _tileGridHolder._tileEntries)
         {
-            if(entry == null) continue;
+            if(tileEntry == null) continue;
 
             combatGridSaveData._tileData.Add(
-                                 new CombatGridTileData(entry._tileType, 
-                                                        entry._tileIndex,
-                                                        entry._position, 
-                                                        entry._size));
+                                 new CombatGridTileData(tileEntry));
         }
 
         GameObject[] charactersInScene = GameObject.FindGameObjectsWithTag("Character");
@@ -1315,32 +1342,17 @@ public class GridMaker3D : EditorWindow
             if (character.name.Equals("PreviewCharacter"))
                 continue;
 
-            combatGridSaveData._characterData.Add(
-                              new CombatGridCharacterData(character.GetComponent<Character>().GetCharacterClass(),
-                                                          character.GetComponent<Character>().GetFaction(),
-                                                          character.GetComponent<Character>().GetHealthPoints(),
-                                                          character.GetComponent<Character>().GetSpeed(),
-                                                          character.GetComponent<Character>().GetCurrentTileIndex(),
-                                                          character.transform.position,
-                                                          character.GetComponent<Renderer>().bounds.size));
-        }
-        /*
-        foreach(var characterEntry in characterList._characterList)
-        {
-            if (characterEntry == null)
-                continue;
-
-            combatGridSaveData._characterData.Add(
-                                new CombatGridCharacterData(characterEntry._characterClass, 
-                                                            characterEntry._tileIndex, 
-                                                            characterEntry._position, 
-                                                            characterEntry._size));        
+            combatGridSaveData._characterData.Add(new CombatGridCharacterData(character));
 
         }
-        */
+
         string strOutput = JsonUtility.ToJson(combatGridSaveData, true);   
-
-        File.WriteAllText(Application.dataPath + "\\JSON BattleGrids\\" + _fileNameToSaveJSON + ".json", strOutput);
+        
+        // NOTE (Calle): Save to dataPath which is utilized by the Editor and cannot be accessed ingame during runtime
+        File.WriteAllText(Application.dataPath + "/JSON/CombatGrids/" + _fileNameToSaveJSON + ".json", strOutput);
+        
+        // NOTE (Calle): Save to streamingAssetsPath which is utilized ingame during runtime
+        File.WriteAllText(Application.streamingAssetsPath + "/JSON/CombatGrids/" + _fileNameToSaveJSON + ".json", strOutput);
 
 
     }

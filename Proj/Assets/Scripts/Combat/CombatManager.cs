@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Unity.AI.Navigation;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
@@ -15,7 +18,7 @@ public enum CombatState
     IntroCinematic,
     LoadCombatLevel,
     PlaceCharacters,
-    MakeTurn,
+    TakeTurn,
     EndTurn,
     EndCombat
 };
@@ -28,139 +31,11 @@ public enum CombatTurn
 };
 
 [System.Serializable]
-public class CombatGrid
+public enum PlayerTurnMode
 {
-    [SerializeField] private TilePrefabLibrary      _tilePrefabLibrary;
-    [SerializeField] private CharacterPrefabLibrary _characterPrefabLibrary;
-
-    [SerializeField] private int _height;
-    [SerializeField] private int _width;
-    [SerializeField] private Vector3 _tileSize;
-    
-    [SerializeField] private GameObject[] tilesGO;
-    [SerializeField] private List<GameObject> _charactersGO;
-
-
-    public GameObject[] GetAllTiles() {  return tilesGO; }
-    public GameObject GetTileAtCoord(int x, int y) 
-    {
-        int index = x + y * _width;
-        if (index < 0 || index >= _width * _height)
-            return null;
-
-        return tilesGO[index];  
-    }
-
-    public Vector3 GetTileSize() { return _tileSize; }
-    public int GetGridWidth() { return _width; }
-    public int GetGridHeight() { return _height; }
-    public void SetCombatGridSize(int w, int h)
-    {
-        _width  = w;
-        _height = h;
-        tilesGO = new GameObject[w * h];
-    }
-    public void SetTileSize(Vector3 tileSize)
-    {
-        _tileSize = tileSize;
-    }
-
-    public void AddTile(CombatGridTileData tileData)
-    {
-        if (tileData.GetTileType() == TileType.UnInitialized)
-            return;
-
-        Vector2 tileIndex = tileData.GetTileIndex();
-        Vector3 instancePos = tileData.GetTilePosition();
-
-        if(_tilePrefabLibrary != null)
-        {
-            GameObject tilePrefab = _tilePrefabLibrary.GetPrefab(tileData.GetTileType());
-            GameObject tileObject = Object.Instantiate(tilePrefab, instancePos, Quaternion.identity);
-
-            tileObject.transform.localScale = tileData.GetTileSize();
-            tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
-            tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
-            
-            MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
-            Material inCombatTileMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Shaders/CJ Test Shaders/TileMaterial.mat");
-            if (inCombatTileMaterial != null)
-            {
-                meshRend.material = inCombatTileMaterial;
-                if (tileObject.GetComponent<CombatGridTile>().GetTileIndex().x == 0)
-                    meshRend.material.SetColor("_TileColor", Color.green);
-                //meshRend.sharedMaterials = new Material[] { inCombatTileMaterial };
-                //meshRend.material.color = Color.white;
-                //var block = new MaterialPropertyBlock();
-                //block.SetColor("_BaseColor", Color.white);
-                //meshRend.SetPropertyBlock(block);
-            }
-            
-
-
-            if (tileData.IsWalkable())
-                tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
-            else
-            {
-                var volume = tileObject.AddComponent<NavMeshModifierVolume>();
-                volume.area = NavMesh.GetAreaFromName("Not Walkable");
-            
-                Vector3 tileSize = tileData.GetTileSize();
-                volume.size = new Vector3(1.0f, 2.0f, 1.0f);
-                volume.center = new Vector3(0, 0.5f, 0);
-            }
-
-            tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
-        }
-        else
-        {
-            Debug.Log("No TilePrefabLibrary assigned in inspector!");
-        }
-       
-    }
-
-    public List<GameObject> GetAllCharacters() { return _charactersGO; }
-
-    public List<GameObject> GetAllFriendlyCharacters()
-    {
-        List<GameObject> friendlyCharacters = new List<GameObject>();
-        foreach(GameObject character in _charactersGO)
-        {
-            if(character.GetComponent<Character>().GetFaction() == Faction.Friendly)
-                friendlyCharacters.Add(character);
-        }
-        return friendlyCharacters;
-    }
-
-    public List<GameObject> GetAllEnemyCharacters()
-    {
-        List<GameObject> enemyCharacters = new List<GameObject>();
-        foreach (GameObject character in _charactersGO)
-        {
-            if (character.GetComponent<Character>().GetFaction() == Faction.Enemy)
-                enemyCharacters.Add(character);
-        }
-        return enemyCharacters;
-    }
-
-    public void AddCharacter(CombatGridCharacterData characterData)
-    {
-        Vector2Int tileIndex = characterData.GetTileIndex();
-        Vector3 instancePos  = characterData.GetCharacterPosition();
-        Faction faction      = characterData.GetFaction();
-        int healthPoints     = characterData.GetHealthPoints();
-        int initiative       = characterData.GetInitiative();
-
-        GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
-        GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, Quaternion.identity);
-        characterObject.GetComponent<Character>().SetCurrentTileIndex(tileIndex);
-        characterObject.GetComponent<Character>().SetBaseHealthPoints(healthPoints);
-        characterObject.GetComponent<Character>().SetBaseSpeed(initiative);
-        characterObject.GetComponent<Character>().SetFaction(faction);
-
-        _charactersGO.Add(characterObject);
-    }
-}
+    CharacterMode,
+    CardMode
+};
 
 [System.Serializable]
 public struct ClassAbilities
@@ -172,27 +47,36 @@ public struct ClassAbilities
 public class CombatManager : MonoBehaviour
 {
     public static CombatManager _instance;
+    private Selector _selector;
     
     [SerializeField] private string _fileToLoadDEBUG;
 
     [SerializeField] private CombatCamera _combatCamera;
+    [SerializeField] private float _cameraSpeed;
 
     [SerializeField] private CombatState _combatState;
     [SerializeField] private CombatTurn _currentTurn;
+    [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
+    [SerializeField] private GameObject _activeCharacter;
 
-    [SerializeField] private CombatGrid _combatGrid;
     [SerializeField] private bool _combatGridLoaded = false;
+
+    private GameObject _friendlyCharacterRoot;
+    private GameObject _enemyCharacterRoot;
+    private GameObject _tileRoot;
+
 
     [Header("Abilities")]
     [SerializeField] private List<ClassAbilities> _classAbilities;
     private Dictionary<CharacterClass, List<Ability>> _classAbilitiesDictionary;
 
-    public UnityEvent EnemyTurnStart = new();
+    public UnityEvent TurnStart = new();
     
     private void Awake()
     {
         if (_instance == null)
         {
+            Debug.Log("CombatManager Awake()");
             _instance = this;
             DontDestroyOnLoad(gameObject);
         }
@@ -208,39 +92,46 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {   
+        CombatUI.Instance.OnStartCombatButtonPressed += StartTakingTurns;
+        CombatUI.Instance.OnEndTurnButtonPressed += ChangeCurrentTurn;
+    }
+
+    private void OnDisable()
+    {
+        CombatUI.Instance.OnStartCombatButtonPressed -= StartTakingTurns;
+        CombatUI.Instance.OnEndTurnButtonPressed -= ChangeCurrentTurn;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _combatState = CombatState.LoadCombatLevel;
+        _selector = GetComponent<Selector>();
+
+        _friendlyCharacterRoot = new GameObject();
+        _friendlyCharacterRoot.name = "-PLAYER PARTY-";
+
+        _enemyCharacterRoot= new GameObject();
+        _enemyCharacterRoot.name = "-ENEMY CHARACTERS-";
+
+        _tileRoot = new GameObject();
+        _tileRoot.name = "-GRID TILES-";
+
     }
 
     
     // Update is called once per frame
     void Update()
     {
-        foreach (GameObject tile in _combatGrid.GetAllTiles())
-        {
-            if (tile.GetComponent<CombatGridTile>().IsMouseHovering())
-            {
-                tile.GetComponent<CombatGridTile>().SetTileColor(Color.yellow);
-            }
-            else if (tile.GetComponent<CombatGridTile>().GetOccupant())
-            {
-                tile.GetComponent<CombatGridTile>().SetTileColor(Color.green);
-            }
-           
-            else
-            {
-                tile.GetComponent<CombatGridTile>().SetTileColor(Color.white);
-            }
-        }
-
         switch (_combatState)
         {
             case CombatState.LoadCombatLevel:
                 {
                     HandleLoadCombatLevel();
-                }break;
+                }
+                break;
             case CombatState.IntroCinematic:
                 {
                     HandleIntroCinematic();
@@ -249,9 +140,9 @@ public class CombatManager : MonoBehaviour
                 {
                     HandlePlaceCharacters();
                 } break;
-            case CombatState.MakeTurn:
+            case CombatState.TakeTurn:
                 {
-                    HandleMakeTurn();
+                    HandleTakeTurn();
                 } break;
             case CombatState.EndTurn:
                 {
@@ -262,9 +153,14 @@ public class CombatManager : MonoBehaviour
                     HandleEndCombat();
                 } break;
         }
-
     }
-    
+
+    public CombatState GetCombatState()
+    {
+        return _combatState;
+    }
+
+
     /// <summary>
     /// Gets all abilities available to the class.
     /// </summary>
@@ -275,11 +171,103 @@ public class CombatManager : MonoBehaviour
         return _classAbilitiesDictionary.TryGetValue(characterClass, out var abilities) ? abilities : new List<Ability>();
     }
 
+    private void HandleIntroCinematic()
+    {   
+        if (_combatCamera.IsIntroCinematicDone())
+            UpdateCombatState(CombatState.PlaceCharacters);
+        else
+            _combatCamera.PlayIntroCinematic();
+    }
+
+    private void HandleLoadCombatLevel()
+    {
+        if(!_combatGridLoaded)
+        {
+            _combatGridLoaded = true;
+           
+            // TODO (Calle): Detta ska g�ra i LevelManagern
+            LoadNextLevel();
+
+
+            //LoadCurrentPlayerParty();
+            UpdateCombatState(CombatState.IntroCinematic);
+
+            Vector2Int tileIndex = new Vector2Int(5, 0);
+            Vector3 position = new Vector3(1.0f + tileIndex.x * 2.0f, 0.0f, 1.0f + tileIndex.y * 2.0f);
+            CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
+                                                                               Faction.Friendly,
+                                                                               10,
+                                                                               1,
+                                                                               tileIndex,
+                                                                               position,
+                                                                               Vector3.one,
+                                                                               Quaternion.identity);
+
+            //_combatGrid.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
+            CombatGrid._instance.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
+            tileIndex.x = 6;
+            position.x += 2.0f;
+            characterData.SetCurrentTileIndex(tileIndex);
+            characterData.SetPosition(position);
+            CombatGrid._instance.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
+        }
+
+    }
+
+    private void HandlePlaceCharacters()
+    {
+        if(_selector)
+        {
+            // Return early if mouse is over UI element.
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+            _selector.SetCurrentState(SelectorState.PlacingCharacters);
+
+            _selector.UpdateTileColors(CombatGrid._instance.GetAllTiles());
+            
+            CombatGridTile unoccupiedDeployTile = _selector.GetUnoccupiedDeployTileClicked();
+            Character selectedCharacter = _selector.GetSelectedCharacter();
+            
+            if(selectedCharacter)
+            {
+                if (unoccupiedDeployTile)
+                {
+                    Vector2Int tileIndex = unoccupiedDeployTile.GetTileIndex();
+                    Vector3 tilePosition = unoccupiedDeployTile.GetTilePosition();
+
+                    if (CombatGrid._instance.ContainsCharacter(selectedCharacter.gameObject))
+                    {
+                        selectedCharacter.gameObject.transform.position = tilePosition;
+                        selectedCharacter.SetCurrentTileIndex(tileIndex);
+                    }
+                    else
+                    {                     
+                        CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
+                                                                                            Faction.Friendly,
+                                                                                            10,
+                                                                                            1,
+                                                                                            tileIndex,
+                                                                                            tilePosition,
+                                                                                            Vector3.one,
+                                                                                            Quaternion.identity);
+
+                        CombatGrid._instance.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
+                    }
+                }
+                else
+                {
+                    DebugLog.CJLog("Show ERROR UI to place on a deploy tile.");
+                }
+            }
+        }
+        
+        //_selector.ResetSelectedCharacter();
+    }
+
     public GameObject GetNextTurnCharacter()
     {
         int highestInitiative = Int32.MinValue;
         GameObject nextCharacter = null;
-        foreach (var g in _combatGrid.GetAllCharacters())
+        foreach (var g in CombatGrid._instance.GetAllCharacters())
         {
             int initiative = g.GetComponent<Character>().GetSpeed();
             if (initiative > highestInitiative)
@@ -292,9 +280,39 @@ public class CombatManager : MonoBehaviour
         return nextCharacter;
     }
 
-    private void HandleMakeTurn()
+    private void SetCurrentTurn(CombatTurn turn)
     {
-        switch(_currentTurn)
+        _currentTurn = turn;
+        CombatEventManager.CombatTurnChanged(turn);
+    }
+
+    private void ChangeCurrentTurn()
+    {
+        if (_currentTurn == CombatTurn.PlayerTurn)
+            _currentTurn = CombatTurn.EnemyTurn;
+        else
+            _currentTurn -= CombatTurn.PlayerTurn;
+    }
+
+    private void HandleTakeTurn()
+    {
+        // NOTE (Calle): Only wan't to set the _activeCharacter once each turn
+        if(_activeCharacter == null)
+        {
+            // NOTE (Calle): Set current turn based on initiative and Faction
+            _activeCharacter = GetNextTurnCharacter();
+            //if(IsCharacterFriendly)
+            if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Friendly)
+            {
+                SetCurrentTurn(CombatTurn.PlayerTurn);
+                CardHandManager._instance.ChangeMana(1);
+            }
+            else if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Enemy)
+                SetCurrentTurn(CombatTurn.EnemyTurn);
+ 
+        }
+         
+        switch (_currentTurn)
         {
             case CombatTurn.PlayerTurn:
                 HandlePlayerTurn();
@@ -305,47 +323,60 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    private void HandleIntroCinematic()
+    private void HandlePlayerTurn()
     {
-        
-        if (_combatCamera.IsIntroCinematicDone())
-            _combatState = CombatState.PlaceCharacters;
-        else
-            _combatCamera.PlayIntroCinematic();
-    }
+        // TODO (Calle): 
+        //  Vid starten av varje hero karakt�rs turn sker dessa saker: 
+        //  - Spelarens mana �kar med 1 -> I CardHandManager()
+        //  - Hero karakt�rens ability cooldowns minskar med 1 -> WIP (MG/JOPPA)
+        //  - Spelarens "cooldown" / timer f�r att dra ett till kort minskar med 1 -> WIP 
 
-    private void HandleLoadCombatLevel()
-    {
-        if(!_combatGridLoaded)
+        // TODO: Call selector with character.
+        
+        //TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandleEnemyTurn() för att AI ska kunna spela båda factions.
+        switch(_currentPlayerTurnMode)
         {
-            _combatGridLoaded = true;
-            LoadNextLevel();
-            GameObject NavMesh = GameObject.Find("NavMesh Surface");
-            NavMesh.GetComponent<NavMeshSurface>().BuildNavMesh();
-            _combatState = CombatState.IntroCinematic;
+            case PlayerTurnMode.CharacterMode:
+                break;
+            case PlayerTurnMode.CardMode:
+                break;
         }
     }
 
-    private void HandlePlaceCharacters()
-    {
-
-    }
-    private void HandleEndTurn()
-    {
-
-    }
-
-    private void HandlePlayerTurn()
-    {
-        GameObject nextCharacter = GetNextTurnCharacter();
-
-        // TODO: Call selector with character.
-        Selector._instance.SetCurrentState(Selector.SelectorState.Idle);
-    }
-
+    bool enemyDoingStuff = false;
     private void HandleEnemyTurn()
     {
-        EnemyTurnStart.Invoke();
+        if(!enemyDoingStuff)
+        {
+            enemyDoingStuff = true;
+            TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandlePlayerTurn() för att AI ska kunna spela båda factions.
+            _activeCharacter = null;
+            //UpdateCombatState(CombatState.EndTurn);
+        }
+    }
+
+    public void HandleEndTurn()
+    {
+        // TODO (Calle): If all characters are dead, either friendly or enemies or Quit Game?
+        //               transition to EndCombat State.
+        //               If not, transition to TakeTurn again
+
+        // NOTE (Calle): Check End Combat conditions
+        if(CombatGrid._instance.GetAllEnemyCharacters().Count == 0)
+        {
+            // TODO (Calle): All enemies killed, do something specific to that.
+            UpdateCombatState(CombatState.EndCombat);
+        }
+        else if(CombatGrid._instance.GetAllFriendlyCharacters().Count == 0)
+        {
+            // TODO (Calle): All heroes killed, do something specific to that.
+            UpdateCombatState(CombatState.EndCombat);
+        }
+        else
+        {
+            // TODO (Calle): Continue with next turn, do we need to do anything else specific?
+            UpdateCombatState(CombatState.TakeTurn);
+        }
     }
 
     private void HandleEndCombat()
@@ -355,40 +386,53 @@ public class CombatManager : MonoBehaviour
 
     private void LoadNextLevel()
     {
-        
-        string filePathToload = Application.dataPath + "\\JSON BattleGrids\\" + _fileToLoadDEBUG + ".json";
+        string filePathToLoad = Application.streamingAssetsPath + "/JSON/CombatGrids/" + _fileToLoadDEBUG + ".json";
 
-        if (!System.IO.File.Exists(filePathToload))
+        if (!System.IO.File.Exists(filePathToLoad))
         {
-            Debug.Log("Level File didn't exist or filepath was wrong!");
+            DebugLog.CJLog("Level File didn't exist or filepath was wrong!");
             return;
         }
 
-        string jsonFileData = System.IO.File.ReadAllText(filePathToload);
+        string jsonFileData = System.IO.File.ReadAllText(filePathToLoad);
         if(jsonFileData.Length == 0)
         {
-            Debug.Log("json File Data was empty!");
+            DebugLog.CJLog("json File Data was empty!");
             return;
         }
 
-        CombatGridSerializedSaveData combatGrid = JsonUtility.FromJson<CombatGridSerializedSaveData>(jsonFileData);
+        CombatGridSerializedSaveData combatGridSaveData = JsonUtility.FromJson<CombatGridSerializedSaveData>(jsonFileData);
 
-        this._combatGrid.SetCombatGridSize(combatGrid._gridWidth, combatGrid._gridHeight);
-        this._combatGrid.SetTileSize(combatGrid._tileSize);
-        Debug.Log("CombatGrid tileSize: " + combatGrid._tileSize);
-       
-        for (int i = 0; i < combatGrid._tileData.Count; i++)
+        CombatGrid._instance.SetCombatGridSize(combatGridSaveData._gridWidth, combatGridSaveData._gridHeight);
+        CombatGrid._instance.SetTileSize(combatGridSaveData._tileSize);
+        DebugLog.CJLog("CombatGrid tileSize: " + combatGridSaveData._tileSize);
+
+        for (int i = 0; i < combatGridSaveData._tileData.Count; i++)
         {
-            Debug.Log("tiled["+i+"]: " + "\tTileType : " + combatGrid._tileData[i].GetTileType() + 
-                      "\tTileIndex: " + combatGrid._tileData[i].GetTilePosition() + "\n");
+            //DebugLog.CJLog("tiled["+i+"]: " + "\tTileType : " + combatGridSaveData._tileData[i].GetTileType() + 
+            //          "\tTileIndex: " + combatGridSaveData._tileData[i].GetTilePosition() + "\n");
 
-            this._combatGrid.AddTile(combatGrid._tileData[i]);
+            CombatGrid._instance.AddTile(combatGridSaveData._tileData[i]).transform.SetParent(_tileRoot.transform);
+            
+        }
+
+        GameObject NavMesh = GameObject.Find("NavMesh Surface");
+        NavMesh.GetComponent<NavMeshSurface>().BuildNavMesh();
+
+        for (int i = 0; i < combatGridSaveData._characterData.Count; i++)
+        {
+            CombatGrid._instance.AddCharacter(combatGridSaveData._characterData[i]).transform.SetParent(_enemyCharacterRoot.transform); ;
         }
         
-        for(int i = 0; i < combatGrid._characterData.Count; i++)
-        {
-            this._combatGrid.AddCharacter(combatGrid._characterData[i]);
-        }
+    }
+
+    private void StartTakingTurns()
+    {
+        UpdateCombatState(CombatState.TakeTurn);
+    }
+
+    private void LoadCurrentPlayerParty()
+    {
         
     }
 
@@ -396,49 +440,9 @@ public class CombatManager : MonoBehaviour
     {
 
     }
-
-    public List<GameObject> GetAllCharacters()
-    {
-        return _combatGrid.GetAllCharacters();
-
-    }
-
-    public List<GameObject> GetEnemyCharacters()
-    {
-        return _combatGrid.GetAllEnemyCharacters();
-    }
-
-    public List<GameObject> GetAllFriendlyCharacters()
-    {
-        return _combatGrid.GetAllFriendlyCharacters();
-    }
-    public Vector3 GetTileSize()
-    {
-        return _combatGrid.GetTileSize();
-    }
-
-    public int GetGridWidth()
-    {
-        return _combatGrid.GetGridWidth();
-    }
-
-    public int GetGridHeight()
-    {
-        return _combatGrid.GetGridHeight();
-    }
-
-    public GameObject[] GetGridTiles()
-    {
-        return _combatGrid.GetAllTiles();
-    }
-
-    public GameObject GetTileAtCoord(int x, int y)
-    {
-        return _combatGrid.GetTileAtCoord(x, y);
-    }
     public CombatGridTile GetTileComponent(int x, int y)
     {
-        GameObject tileObject = GetTileAtCoord(x, y);
+        GameObject tileObject = CombatGrid._instance.GetTileAtCoord(x, y);
         if (tileObject == null) return null;
 
         return tileObject.GetComponent<CombatGridTile>();
@@ -452,5 +456,14 @@ public class CombatManager : MonoBehaviour
     public void SetCombatTurn(CombatTurn turn) 
     { 
         _currentTurn = turn; 
+    }
+
+    public void UpdateCombatState(CombatState state)
+    {
+        if (_combatState != state)
+        {
+            _combatState = state;
+            CombatEventManager.CombatStateChanged(state);
+        }
     }
 }

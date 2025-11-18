@@ -13,19 +13,29 @@ public struct GameData
     public List<Card> cardList;
 
 }
+[CreateAssetMenu(fileName = "GlobalGameManager", menuName = "Manager/GlobalGameManager")]
 
-public class GlobalGameManager : MonoBehaviour
+public class GlobalGameManager : ScriptableObject
 {
+    [SerializeField] private DeckPreset _deckPreset;
+    [SerializeField] private CharacterPrefabLibrary _characterLibrary;
     private static GlobalGameManager _instance;
     private GameData _currentGame;
-    private void Awake()
-    {
-        _instance = this;
-        DontDestroyOnLoad(this.gameObject);
-    }
     public static GlobalGameManager GetInstance()
     {
+        if (_instance == null)
+        {
+            _instance = Resources.Load<GlobalGameManager>("GlobalGameManager");
+        }
         return _instance;
+    }
+    public GameData GetGameData()
+    {
+        if (_currentGame.cardList == null)
+        {
+            GetTemp();
+        }
+        return _currentGame;
     }
     public void LoadGame(int slot)
     {
@@ -44,12 +54,44 @@ public class GlobalGameManager : MonoBehaviour
         _currentGame = new GameData();
         _currentGame.saveSlot = slot;
         _currentGame.seed = Random.Range(0, 1000);
-        _currentGame.coins = 0;
-        SceneManager.LoadScene(1); //TODO
+        LevelManager.GetInstance().GenerateMap(_currentGame.seed);
+        _currentGame.heroList = new List<Character>();
+        _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
+        Debug.Log(_currentGame.cardList.Count);
+        _currentGame.coins = 50;
+        SceneManager.LoadScene("ShopScene"); //TODO
     }
     public void JSONWrite()
     {
         //TODO
+    }
+    /// <summary>
+    /// Temporary function so that same data exist regardless of scene and order of scene load
+    /// </summary>
+    private void GetTemp()
+    {
+        _currentGame = new GameData();
+        _currentGame.saveSlot = 1;
+        _currentGame.seed = 67;
+        LevelManager.GetInstance().GenerateMap(_currentGame.seed);
+        _currentGame.heroList = new List<Character>
+        {
+            _characterLibrary.GetPrefab(CharacterClass.Barbarian).GetComponent<Character>(),
+            _characterLibrary.GetPrefab(CharacterClass.Wizard).GetComponent<Character>(),
+            _characterLibrary.GetPrefab(CharacterClass.Rogue).GetComponent<Character>(),
+            _characterLibrary.GetPrefab(CharacterClass.Bard).GetComponent<Character>()
+        };
+        _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
+        Debug.Log(_currentGame.cardList.Count);
+        _currentGame.coins = 50;
+    }
+    public void SaveCards(List<Card> cards)
+    {
+        _currentGame.cardList = cards;
+    }
+    public void ChangeCoins(int amount)
+    {
+        _currentGame.coins += amount;
     }
 }
 

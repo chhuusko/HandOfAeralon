@@ -12,12 +12,14 @@ public class CardHandManager : MonoBehaviour
 
     [SerializeField] private GameObject _CardContainer;
     [SerializeField] private Transform _Hand;
+    [SerializeField] private Transform _mulligan;
     [SerializeField] private CardList _cardList;
     [SerializeField] private List<CardContainer> _cardsInHand;
     [SerializeField] private List<Card> _cardsInDeck;
     [SerializeField] private List<Card> _cardsInDiscardPile;
     [SerializeField] private int _maxHand = 3;
     
+    [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
     private int _maxMana = 5;
     private int _mana = 0;
 
@@ -27,25 +29,25 @@ public class CardHandManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-        AddRandomCardsToDeck();
-        drawHand();
-    }
-    private void AddRandomCardsToDeck()
-    {
-        for (int i = 0; i < 30; i++)
+        if (GlobalGameManager.GetInstance() != null)
         {
-            _cardsInDeck.Add(_cardList.GetRandomCard());
+            _cardsInDeck = GlobalGameManager.GetInstance().GetGameData().cardList;
         }
+        else
+        {
+            _cardsInDeck = new List<Card>(_deckPreset.GetCards());
+        }
+        drawHand();
     }
     public void drawHand()
     {
         _cardsInHand.RemoveAll(o => o == null);
-        if (_cardsInDeck.Count == 0)
-        {
-            AddRandomCardsToDeck();
-        }
         while (_maxHand > _cardsInHand.Count)
         {
+            if(_cardsInDeck.Count == 0)
+            {
+                _cardsInDeck = _cardsInDiscardPile;
+            }
             AddCardFromDeck();
         }
         
@@ -63,7 +65,7 @@ public class CardHandManager : MonoBehaviour
     {
         for (int i = 0; i < _cardsInHand.Count; i++)
         {
-            Vector3 position = transform.position + new Vector3(-(150f * (_cardsInHand.Count - 1)) / 2f, 0, 0) + new Vector3(i * 150f, 0, 0);
+            Vector3 position = _Hand.position + new Vector3(-(150f * (_cardsInHand.Count - 1)) / 2f, 0, 0) + new Vector3(i * 150f, 0, 0);
             _cardsInHand[i].transform.position = position;
             _cardsInHand[i].SetPos(position);
         }
@@ -104,7 +106,8 @@ public class CardHandManager : MonoBehaviour
     }
     public void SetUIActive(bool isActive)
     {
-        gameObject.SetActive(isActive);
+        // _Hand.gameObject.SetActive(isActive);
+        // _mulligan.gameObject.SetActive(isActive);
     }
     public int GetMana()
     {

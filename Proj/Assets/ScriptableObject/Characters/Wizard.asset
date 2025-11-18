@@ -12,11 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bded9f9cfcd7f36499942bd29fde2d69, type: 3}
   m_Name: Wizard
   m_EditorClassIdentifier: 
-  characterClass: 0
+  characterClass: 1
   minHealthPoints: 6
   maxHealthPoints: 10
   minSpeed: 3
   maxSpeed: 5
+  minMovmementPoints: 1
+  maxMovmentPoints: 10
   minDamage: 4
   maxDamage: 6
-  abilities: []
+  abilities:
+  - {fileID: 11400000, guid: 18610db6b6bb3be46a697a308838df9c, type: 2}
+  - {fileID: 11400000, guid: 18610db6b6bb3be46a697a308838df9c, type: 2}
+  classImage: {fileID: 21300000, guid: c04238735daa02845a5903a7681cb72a, type: 3}

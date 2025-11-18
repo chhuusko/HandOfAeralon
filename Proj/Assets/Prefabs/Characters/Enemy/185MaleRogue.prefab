@@ -26,7 +26,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 78cb7efc812f9b446bd019a8a1360add,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 78cb7efc812f9b446bd019a8a1360add,
         type: 3}
@@ -36,12 +36,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 78cb7efc812f9b446bd019a8a1360add,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 78cb7efc812f9b446bd019a8a1360add,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 78cb7efc812f9b446bd019a8a1360add,
         type: 3}
@@ -51,7 +51,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 78cb7efc812f9b446bd019a8a1360add,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 78cb7efc812f9b446bd019a8a1360add,
         type: 3}
@@ -93,6 +93,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -2310733035191840357}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 78cb7efc812f9b446bd019a8a1360add,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -560726372594452219}
   m_SourcePrefab: {fileID: 100100000, guid: 78cb7efc812f9b446bd019a8a1360add, type: 3}
 --- !u!1 &5632698098917217084 stripped
 GameObject:
@@ -121,6 +125,7 @@ MonoBehaviour:
   _currentHealthPoints: 0
   _currentSpeed: 0
   _currentDamage: 0
+  _currentMovementPoints: 0
   _currentTileIndex: {x: 0, y: 0}
 --- !u!54 &-5358155644811910876
 Rigidbody:
@@ -192,3 +197,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0516496, y: 2.5, z: 0.33930892}
   m_Center: {x: -0.00000014901161, y: 0.9282381, z: 0.0028755441}
+--- !u!114 &-560726372594452219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5632698098917217084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15ee2f2b8b09ad849b99d2ac5ea01dbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _abilities: []
+  _pendingAbility: {fileID: 0}

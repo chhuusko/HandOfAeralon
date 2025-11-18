@@ -1,0 +1,242 @@
+using System.Collections.Generic;
+using Unity.AI.Navigation;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.AI;
+
+[System.Serializable]
+public class CombatGrid : MonoBehaviour
+{
+    public static CombatGrid _instance;
+
+    [SerializeField] private TilePrefabLibrary _tilePrefabLibrary;
+    [SerializeField] private CharacterPrefabLibrary _characterPrefabLibrary;
+
+    [SerializeField] private int _height;
+    [SerializeField] private int _width;
+    [SerializeField] private Vector3 _tileSize;
+
+    [SerializeField] private GameObject[] _tilesGO;
+    [SerializeField] private List<GameObject> _charactersGO;
+    
+    [SerializeField] private Material inCombatTileMaterial;
+
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            Debug.Log("CombatGrid Awake(), instance = " + CombatGrid._instance);
+            _instance = this;
+            Debug.Log("CombatGrid instance now = " + CombatGrid._instance);
+
+            // NOTE (Calle): Can't be a Dont' destroy on load if its a child to the Combat Manager, (So maybe make it root for itself?)
+            //DontDestroyOnLoad(gameObject);
+
+            // #if UNITY_EDITOR
+            _tilePrefabLibrary      = Resources.Load<TilePrefabLibrary>("Tiles/TilePrefabLibrary");
+            _characterPrefabLibrary = Resources.Load<CharacterPrefabLibrary>("Characters/CharacterPrefabLibrary");
+            // #endif
+            if (_tilePrefabLibrary == null)
+                DebugLog.CJLog("CombatGrid failed to load TilePrefabLibrary.");
+            if (_tilePrefabLibrary == null)
+                DebugLog.CJLog("CombatGrid failed to load CharacterPrefabLibrary.");
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public GameObject[] GetAllTiles() { return _tilesGO; }
+    public GameObject GetTileAtCoord(int x, int y)
+    {
+        int index = x + y * _width;
+        // if (index < 0 || index >= _width * _height)
+        //     return null;
+        
+        if (_tilesGO == null)
+        {
+            Debug.LogError("GetTileAtCoord FAILED: _tilesGO is NULL!");
+            return null;
+        }
+
+        if (_tilesGO.Length == 0)
+        {
+            Debug.LogError("GetTileAtCoord FAILED: _tilesGO is EMPTY!");
+            return null;
+        }
+
+        if (index < 0 || index >= _tilesGO.Length)
+        {
+            Debug.LogError($"GetTileAtCoord FAILED: index {index} OUT OF RANGE (length={_tilesGO.Length})");
+            return null;
+        }
+
+        if (_tilesGO[index] == null)
+        {
+            Debug.LogError($"GetTileAtCoord FAILED: tile at index {index} is NULL!");
+            return null;
+        }
+
+        return _tilesGO[index];
+    }
+
+    public Vector3 GetTileSize() { return _tileSize; }
+    public int GetGridWidth() { return _width; }
+    public int GetGridHeight() { return _height; }
+    public void SetCombatGridSize(int w, int h)
+    {
+        _width = w;
+        _height = h;
+        _tilesGO = new GameObject[w * h];
+    }
+    public void SetTileSize(Vector3 tileSize)
+    {
+        _tileSize = tileSize;
+    }
+
+    public bool ContainsCharacter(GameObject chracter) { return _charactersGO.Contains(chracter); }
+
+    public GameObject AddTile(CombatGridTileData tileData)
+    {
+        GameObject result = null;
+        if (tileData.GetTileType() == TileType.UnInitialized)
+            return null;
+
+        Vector2 tileIndex = tileData.GetTileIndex();
+        Vector3 instancePos = tileData.GetTilePosition();
+
+        if (_tilePrefabLibrary != null)
+        {
+            GameObject tilePrefab = _tilePrefabLibrary.GetPrefab(tileData.GetTileType());
+            GameObject tileObject = Object.Instantiate(tilePrefab, instancePos, Quaternion.identity);
+            result = tileObject;
+
+            tileObject.transform.localScale = tileData.GetTileSize();
+            tileObject.GetComponent<CombatGridTile>().SetTilePosition(tileData.GetTilePosition());
+            tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
+            tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
+
+            switch (tileData.GetTileType())
+            {
+                case TileType.Deploy:
+                    {
+
+                    }
+                    break;
+                default:
+                    {
+                        MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
+                        Material inCombatTileMaterial = Resources.Load<Material>("Shaders/Tiles/TileMaterial");
+                        if (inCombatTileMaterial != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            if (tileObject.GetComponent<CombatGridTile>().GetTileIndex().x == 0)
+                                meshRend.material.SetColor("_TileColor", Color.green);
+                        }
+                        else
+                        {
+                            DebugLog.CJLog("Failed to load TileMaterial.mat");
+
+                        }
+                    }
+                    break;
+            }
+
+            if (tileData.IsWalkable())
+                tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
+            else
+            {
+                var volume = tileObject.AddComponent<NavMeshModifierVolume>();
+                volume.area = NavMesh.GetAreaFromName("Not Walkable");
+
+                Vector3 tileSize = tileData.GetTileSize();
+                volume.size = new Vector3(1.0f, 2.0f, 1.0f);
+                volume.center = new Vector3(0, 0.5f, 0);
+            }
+
+            _tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
+        }
+        else
+        {
+            DebugLog.CJLog("No TilePrefabLibrary assigned in inspector!");
+        }
+
+        return result;
+    }
+
+    public List<GameObject> GetAllCharacters() { return _charactersGO; }
+
+    public List<GameObject> GetAllFriendlyCharacters()
+    {
+        List<GameObject> friendlyCharacters = new List<GameObject>();
+        foreach (GameObject character in _charactersGO)
+        {
+            if (character.GetComponent<Character>().GetFaction() == Faction.Friendly)
+                friendlyCharacters.Add(character);
+        }
+        return friendlyCharacters;
+    }
+
+    public List<GameObject> GetAllEnemyCharacters()
+    {
+        List<GameObject> enemyCharacters = new List<GameObject>();
+        foreach (GameObject character in _charactersGO)
+        {
+            if (character.GetComponent<Character>().GetFaction() == Faction.Enemy)
+                enemyCharacters.Add(character);
+        }
+        return enemyCharacters;
+    }
+
+    public GameObject AddCharacter(CombatGridCharacterData characterData)
+    {
+        GameObject result = null;
+
+        Vector3        instancePos           = characterData.GetCharacterPosition();
+        Quaternion     rotation              = characterData.GetRotation();
+        Vector2Int     tileIndex             = characterData.GetCurrentTileIndex();
+        Faction        faction               = characterData.GetFaction();
+        CharacterClass characterClass        = characterData.GetCharacterClass();
+
+        int            currentHealtPoints    = characterData.GetHealthPoints();
+        int            currentSpeed          = characterData.GetInitiative();
+        int            currentDamage         = characterData.GetDamage();
+        int            currentMovementPoints = characterData.GetMovementPoints();
+
+        int            baseHealtPoints       = characterData.GetBaseHealthPoints();
+        int            baseSpeed             = characterData.GetBaseInitiative();
+        int            baseDamage            = characterData.GetBaseDamage();
+        int            baseMovementPoints    = characterData.GetBaseMovementPoints();
+
+
+        GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
+        GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, rotation);
+       
+
+        characterObject.GetComponent<Character>().SetCharacterClass(characterClass);
+        characterObject.GetComponent<Character>().SetFaction(faction);
+        characterObject.GetComponent<Character>().SetCurrentTileIndex(tileIndex);
+
+        characterObject.GetComponent<Character>().SetCurrentHealthPoints(currentHealtPoints);
+        characterObject.GetComponent<Character>().SetCurrentSpeed(currentSpeed);
+        characterObject.GetComponent<Character>().SetCurrentDamage(currentDamage);
+        characterObject.GetComponent<Character>().SetCurrentMovementPoints(currentMovementPoints);
+
+        characterObject.GetComponent<Character>().SetBaseHealthPoints(baseHealtPoints);
+        characterObject.GetComponent<Character>().SetBaseSpeed(baseSpeed);
+        characterObject.GetComponent<Character>().SetBaseDamage(baseDamage);
+        characterObject.GetComponent<Character>().SetBaseMovementPoints(baseMovementPoints);
+
+        _charactersGO.Add(characterObject);
+        
+        result = characterObject;
+        
+        return result;
+    }
+
+    public void RemoveCharacter(GameObject character)
+    {
+        _charactersGO.Remove(character);
+    }
+}

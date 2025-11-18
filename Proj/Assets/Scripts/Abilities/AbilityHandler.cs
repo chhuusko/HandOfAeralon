@@ -5,10 +5,12 @@ public class AbilityHandler : MonoBehaviour
 {
     [SerializeField] private List<Ability> _abilities;
 
-    List<CombatGridTile> _availableAbilityTargets = new List<CombatGridTile>();
+    private List<CombatGridTile> _tilesInRange = new List<CombatGridTile>();
+    private Character _characterCaster;
+    private CombatGridTile _casterTile;
+    [SerializeField] private Ability _pendingAbility;
 
-    Character _characterCaster;
-    CombatGridTile _casterTile;
+    bool _bDebugAbilityHandler = false;
 
     private void Start()
     {
@@ -17,34 +19,64 @@ public class AbilityHandler : MonoBehaviour
             Debug.LogError("AbilityHandler is missing Character component!");
             return;
         }
-        CombatGridTile _casterTile = _characterCaster.GetCurrentTileComponent();
+        _casterTile = _characterCaster.GetCurrentTileComponent();
     }
     public bool UseAbility(Ability ability, CombatGridTile targetTile)
     {
-        GetTilesInRange(ability);
-        if (!CanCastAbility(targetTile))
+        GetAvailableTargets(ability);
+        if (!CanCastAbility(ability, targetTile))
         {
-            ClearAbilityTargets();
-            Debug.Log("Tried casting ability on inaccaptable target.");
-            return false; ;
+            ClearAbilityTargetRange();
+            if (_bDebugAbilityHandler)
+                DebugLog.MGLog("Tried casting ability, but it failed");
+            return false;
         }
 
         ability.RunAbility(_casterTile, targetTile);
         return true;
     }
-    public void ClearAbilityTargets()
+    public Character GetCharacterCaster()
     {
-        _availableAbilityTargets.Clear();
+        return _characterCaster;
+    }
+    public List<CombatGridTile> GetTilesInRange()
+    {
+        return _tilesInRange;
+    }
+    public void ClearAbilityTargetRange()
+    {
+        _tilesInRange.Clear();
     }
 
-    private bool CanCastAbility(CombatGridTile targetTile)
+    public void SetPendingAbility(Ability ability)
     {
-        return _availableAbilityTargets.Contains(targetTile);
+        _pendingAbility = ability;
+    }
+    public Ability GetPendingAbility()
+    {
+        return _pendingAbility;
     }
 
-    private List<CombatGridTile> GetTilesInRange(Ability ability)
+    public void CalculateAbilityRange()
     {
-        return ability.GetAvailableTiles(_casterTile);
+        ClearAbilityTargetRange();
+
+        if(_pendingAbility == null)
+        {
+            Debug.LogError("No pending ability selected, but is still trying to calculate range");
+            return;
+        }
+        _tilesInRange = GetAvailableTargets(_pendingAbility);
+    }
+
+    private bool CanCastAbility(Ability ability, CombatGridTile targetTile)
+    {
+        return IsValidTargetForAbility(ability, targetTile) && _tilesInRange.Contains(targetTile);
+    }
+
+    private List<CombatGridTile> GetAvailableTargets(Ability ability)
+    {
+        return ability.GetAvailableTargets(_casterTile);
     }
 
     private bool IsValidTargetForAbility(Ability ability, CombatGridTile tile)
