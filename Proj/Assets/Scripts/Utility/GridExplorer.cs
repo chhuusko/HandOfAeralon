@@ -114,7 +114,7 @@ public class GridExplorer : MonoBehaviour
                     Vector2Int tile1 = new Vector2Int(current.x, next.y);
                     Vector2Int tile2 = new Vector2Int(next.x, current.y);
 
-                    if (!IsWalkable(tile1) || !IsWalkable(tile2) || IsOccupied(tile1) || IsOccupied(tile2)) continue;
+                    if (!IsWalkable(tile1) || !IsWalkable(tile2)) continue;
                 }
 
                 if (IsOccupied(next) && next != goal) continue;

@@ -958,6 +958,16 @@ PrefabInstance:
       propertyPath: _bAutoPlay
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8379955821282121603, guid: b50cf4c38c2c0f24ab87673e0ef21cb3,
+        type: 3}
+      propertyPath: AIEndTurn.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8379955821282121603, guid: b50cf4c38c2c0f24ab87673e0ef21cb3,
+        type: 3}
+      propertyPath: AIEndTurn.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
