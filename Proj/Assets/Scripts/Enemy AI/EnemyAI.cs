@@ -45,7 +45,7 @@ public class EnemyAI : MonoBehaviour
                 foreach (var character in allCharacters)
                 {
                     character.SetBaseHealthPoints(Random.Range(1, 4));
-                    character.SetBaseSpeed(Random.Range(1, 5));
+                    character.SetBaseInitiative(Random.Range(1, 5));
                     character.SetBaseDamage(Random.Range(1, 5));
                     character.ResetCharacter();
                     character.SetCurrentMovementPoints(2);
