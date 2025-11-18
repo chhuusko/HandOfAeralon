@@ -259,6 +259,11 @@ public class Character : MonoBehaviour
     /// <param name="positions">The grid points to move to.</param>
     public void SetMovePath(Vector3[] positions)
     {
+        if (positions == null || positions.Length == 0)
+        {
+            return;
+        }
+
         NavMeshPath path = new NavMeshPath();
         NavMesh.CalculatePath(transform.position, positions[^1], NavMesh.AllAreas, path);
         _navMeshAgent.SetPath(path);

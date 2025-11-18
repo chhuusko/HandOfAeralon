@@ -1,6 +1,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class PriorityQueue<T>
+{
+    private List<(T item, float priority)> elements = new();
+
+    public int Count => elements.Count;
+
+    public void Enqueue(T item, float priority)
+    {
+        elements.Add((item, priority));
+    }
+
+    public T Dequeue()
+    {
+        int bestIndex = 0;
+        float bestPriority = elements[0].priority;
+
+        for (int i = 1; i < elements.Count; i++)
+        {
+            if (elements[i].priority < bestPriority)
+            {
+                bestPriority = elements[i].priority;
+                bestIndex = i;
+            }
+        }
+
+        T bestItem = elements[bestIndex].item;
+        elements.RemoveAt(bestIndex);
+        return bestItem;
+    }
+}
+
 public class GridExplorer : MonoBehaviour
 {
     public static GridExplorer _instance { get; private set; }
@@ -32,12 +63,127 @@ public class GridExplorer : MonoBehaviour
     /// <param name="a">The GameObject of a GridTile.</param>
     /// <param name="b">The GameObject of a GridTile.</param>
     /// <returns>An int containing the ManhattanDistance value between object 'a' and object 'b'.</returns>
-    public int ManhattanDistance(GameObject a, GameObject b)
+    public int ManhattanDistance(Vector2Int a, Vector2Int b)
     {
-        Vector2Int c = a.GetComponent<CombatGridTile>().GetTileIndex();
-        Vector2Int d = b.GetComponent<CombatGridTile>().GetTileIndex();
+        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+    }
 
-        return Mathf.Abs(c.x - d.x) + Mathf.Abs(c.y - d.y);
+    /// <summary>
+    /// Performs an A* search from the given start tile to find an optimal path from 
+    /// <paramref name="startTile"/> to <paramref name="goalTile"/>.
+    /// </summary>
+    /// <param name="startTile">
+    /// The starting tile <see cref="GameObject"/> used as the origin of the search.
+    /// </param>
+    /// <param name="goalTile">
+    /// The destination tile <see cref="GameObject"/> the algorithm attempts to reach.
+    /// </param>
+    /// <returns>
+    /// A list of <see cref="GameObject"/> tiles representing the shortest calculated path 
+    /// from <paramref name="startTile"/> to <paramref name="goalTile"/>.
+    /// Returns an empty list if no valid path could be found.
+    /// </returns>
+    /// <remarks>
+    /// This method uses a grid-based A* pathfinding algorithm.  
+    /// A* combines actual movement cost (G-cost) with a heuristic estimate (H-cost) to efficiently 
+    /// determine the optimal route.
+    ///
+    /// The search expands both cardinal and diagonal neighbours.  
+    /// Diagonal movement is slightly more expensive than straight movement, encouraging the algorithm 
+    /// to prefer direct diagonal routes when available but still allowing natural cornering behavior.
+    ///
+    /// The method stops when the goal tile is dequeued from the open set, ensuring the returned path 
+    /// is optimal according to the distance model used.
+    ///
+    /// The method also updates internal debug fields (_debugStartTile, _debugPath and _debugGoalTile) 
+    /// to allow visualization of the final computed path inside the editor.
+    /// </remarks>
+
+    public List<GameObject> FindPathAStar(GameObject startTile, GameObject goalTile)
+    {
+        Vector2Int start = startTile.GetComponent<CombatGridTile>().GetTileIndex();
+        Vector2Int goal = goalTile.GetComponent<CombatGridTile>().GetTileIndex();
+
+        if (start == goal)
+        {
+            Clear();
+            return new List<GameObject>();
+        }
+
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            new Vector2Int(1, 1),
+            new Vector2Int(-1, 1),
+            new Vector2Int(1, -1),
+            new Vector2Int(-1, -1),
+
+            new Vector2Int(1, 0),
+            new Vector2Int(0, 1),
+            new Vector2Int(-1, 0),
+            new Vector2Int(0, -1)
+        };
+
+        PriorityQueue<Vector2Int> open = new PriorityQueue<Vector2Int>();
+        HashSet<Vector2Int> closed = new HashSet<Vector2Int>();
+
+        Dictionary<Vector2Int, Vector2Int> cameFrom = new();
+        Dictionary<Vector2Int, float> gCost = new();
+        Dictionary<Vector2Int, float> fCost = new();
+
+        gCost[start] = 0;
+        fCost[start] = ManhattanDistance(start, goal);
+
+        open.Enqueue(start, fCost[start]);
+
+        while (open.Count > 0)
+        {
+            Vector2Int current = open.Dequeue();
+
+            if (current == goal)
+            {
+                var result = BuildPath(cameFrom, start, goal);
+                DrawPath(result);
+                return result;
+            }
+
+            closed.Add(current);
+
+            foreach (var dir in directions)
+            {
+                Vector2Int next = current + dir;
+
+                if (OutOfBounds(next)) continue;
+                if (!IsWalkable(next)) continue;
+
+                if (IsDiagonal(dir))
+                {
+                    Vector2Int t1 = new Vector2Int(current.x, next.y);
+                    Vector2Int t2 = new Vector2Int(next.x, current.y);
+
+                    if (!IsWalkable(t1) || !IsWalkable(t2)) continue;
+                }
+
+                if (IsOccupied(next) && next != goal) continue;
+                if (closed.Contains(next)) continue;
+
+                float moveCost = (IsDiagonal(dir) ? 1.4f : 1f);
+                float tentativeG = gCost[current] + moveCost;
+
+                if (!gCost.ContainsKey(next) || tentativeG < gCost[next])
+                {
+                    cameFrom[next] = current;
+                    gCost[next] = tentativeG;
+
+                    float h = ManhattanDistance(next, goal);
+                    fCost[next] = gCost[next] + h;
+
+                    open.Enqueue(next, fCost[next]);
+                }
+            }
+        }
+
+        Clear();
+        return new List<GameObject>();
     }
 
     /// <summary>

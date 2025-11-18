@@ -188,10 +188,7 @@ public class EnemyAI : MonoBehaviour
 
     private void TryAttack(Character attacker, Character target)
     {
-        GameObject fromTile = attacker.GetCurrentTileComponent().gameObject;
-        GameObject toTile = target.GetCurrentTileComponent().gameObject;
-
-        if (GridExplorer._instance.ManhattanDistance(fromTile, toTile) <= _currentAttackRange)
+        if (GridExplorer._instance.ManhattanDistance(attacker.GetCurrentTileIndex(), target.GetCurrentTileIndex()) <= _currentAttackRange)
         {
             target.TakeDamage(_currentCharacter.GetDamage()); // Bör använda en ability istället
             if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name} strikes {target.name} for {_currentCharacter.GetDamage()} damage.");
@@ -204,7 +201,7 @@ public class EnemyAI : MonoBehaviour
     private List<GameObject> FindPath(GameObject currentTile, GameObject opponentTile)
     {
         List<GameObject> result = new();
-        List<GameObject> path = GridExplorer._instance.FindPath(currentTile, opponentTile);
+        List<GameObject> path = GridExplorer._instance.FindPathAStar(currentTile, opponentTile);
 
         if (path == null || path.Count <= 1)
         {
@@ -215,7 +212,7 @@ public class EnemyAI : MonoBehaviour
         for (int i = 1; i < path.Count && i <= _currentMoveRange; i++)
         {
             GameObject tile = path[i];
-            int distToEnemy = GridExplorer._instance.ManhattanDistance(tile, opponentTile);
+            int distToEnemy = GridExplorer._instance.ManhattanDistance(tile.GetComponent<CombatGridTile>().GetTileIndex(), opponentTile.GetComponent<CombatGridTile>().GetTileIndex());
 
             if (distToEnemy == _currentAttackRange)
             {
