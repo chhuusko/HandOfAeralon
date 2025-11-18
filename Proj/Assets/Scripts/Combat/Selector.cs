@@ -127,12 +127,23 @@ public class Selector : MonoBehaviour
         CombatGridTile hoveredTile = GetTileUnderMouse();
         if (hoveredTile == null) return;
 
-        if (hoveredTile.GetOccupant() != null && hoveredTile.GetOccupant().TryGetComponent<Character>(out var character)){
+        GameObject characterObject = hoveredTile.GetOccupant();
+        if (characterObject == null) return;
+    
+
+        if (characterObject.TryGetComponent<Character>(out var character)){
             // TODO: Call UIControll script to show character info on character position.
         }
 
         // TODO: Change state on tiles (with matching color) to indicate aoe abilities effected area.
         // if _currentState = SelectorState.ActionTypeSelected && hovoredTile = in range
+        if (_currentState == SelectorState.ActionTypeSelected && characterObject.TryGetComponent<AbilityHandler>(out var abilityHandler))
+        {
+            if (abilityHandler.GetPendingAbility() == null) return;
+
+            abilityHandler.PreviewTargetTiles(hoveredTile);
+        }
+       
     }
 
     /// <summary>
@@ -325,7 +336,8 @@ public class Selector : MonoBehaviour
     private void ShowCharacterUIWithOptions(Character character)
     {
         // Activates character UI with options to cast abilities and walk.
-        _combatUI.LoadAbilities(character);
+        _combatUI.LoadAbilities(character.Data);
+        _combatUI.UpdateSelectedPortrait(character.Data);
     }
 
     /// <summary>
@@ -337,7 +349,7 @@ public class Selector : MonoBehaviour
     {
         // Activates character UI without options since the character can't perform actions at the moment.
 
-        // TODO: Lead UI should place Load UI without actions method here.
+        _combatUI.UpdateSelectedPortrait(character.Data);
     }
     public void PreviewAbilityRange(Ability ability)
     {

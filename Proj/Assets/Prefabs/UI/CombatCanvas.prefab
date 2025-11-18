@@ -229,10 +229,10 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
@@ -1006,6 +1006,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _abilityPanel: {fileID: 6711793867523767747}
   _characterPortraitPanel: {fileID: 6638759918157169025}
+  _selectedCharacterPortrait: {fileID: 5542446194251932817}
   _startCombatButton: {fileID: 5180242821507393611}
   _endTurnButton: {fileID: 2767202164179268512}
   _abilityButtonPrefab: {fileID: 3267717621754287583, guid: e6a0b6ec1faba5446b4c1af9f3a69767,
@@ -1431,7 +1432,7 @@ GameObject:
   - component: {fileID: 7564866590134988532}
   - component: {fileID: 5542446194251932817}
   m_Layer: 5
-  m_Name: Portrait
+  m_Name: SelectedCharacterPortrait
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -14,6 +14,7 @@ public class CombatUI : MonoBehaviour
     
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Image _characterPortraitPanel;
+    [SerializeField] private Image _selectedCharacterPortrait;
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
     [SerializeField] private Button _abilityButtonPrefab;
@@ -45,31 +46,8 @@ public class CombatUI : MonoBehaviour
 
         _hand.SetActive(false);
         UpdateCharacterPortraits();
-    }
-
-    private void UpdateCharacterPortraits()
-    {
-        GameData gameData = GlobalGameManager.GetInstance().GetGameData();
-        List<Character> heroList = gameData.heroList;
-
-        if (heroList == null)
-        {
-            DebugLog.JoppaLog("No HeroList");
-            return;
-        }
-        
-        foreach (Character c in heroList)
-        {
-            DebugLog.JoppaLog($"Generating portrait for: {c.name}");
-            Button characterPortraitButton = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
-            characterPortraitButton.image.sprite = c.GetClassData().classImage;
-            characterPortraitButton.GetComponent<PortraitButton>().SetCharacter(c);
-        }
-    }
-
-    private void UpdateManaText(int mana)
-    {
-        _mana.text = $"Mana\n{mana}/10";
+        // Player 1 portrait displayed as default when no character has been selected yet.
+        UpdateSelectedPortrait(GlobalGameManager.GetInstance().GetGameData().heroDataList[0]);
     }
 
     public void StartCombat()
@@ -94,32 +72,73 @@ public class CombatUI : MonoBehaviour
     {
         CardHandManager._instance.OpenDiscardPile();
     }
+    
+    /// <summary>
+    /// Sets all character portraits in combat UI to reflect current party.
+    /// </summary>
+    private void UpdateCharacterPortraits()
+    {
+        GameData gameData = GlobalGameManager.GetInstance().GetGameData();
+        List<CharacterData> heroList = gameData.heroDataList;
 
+        if (heroList == null)
+        {
+            DebugLog.JoppaLog("No HeroList");
+            return;
+        }
+        
+        foreach (CharacterData c in heroList)
+        {
+            Button characterPortraitButton = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
+            characterPortraitButton.image.sprite = c.ClassData.classImage;
+            characterPortraitButton.GetComponent<PortraitButton>().SetCharacter(c);
+        }
+    }
+
+    private void UpdateManaText(int mana)
+    {
+        _mana.text = $"Mana\n{mana}/10";
+    }
+
+    public void UpdateSelectedPortrait(CharacterData character)
+    {
+        _selectedCharacterPortrait.sprite = character.ClassData.classImage;
+    }
+    
     public void SetCardsActive(bool active)
     {
         CardHandManager._instance.SetUIActive(active);
         _abilityPanel.color = active ? new Color(1, 1, 1, 0.5f) : new Color(1, 1, 1, 1);
     }
 
-    public void LoadAbilities(Character character)
+    /// <summary>
+    /// Displays each available ability for the selected character.
+    /// </summary>
+    /// <param name="character">The character of which's abilities to display.</param>
+    public void LoadAbilities(CharacterData character)
     {
-        Debug.Log("Loading Abilities");
-
         if (character == null)
         {
             DebugLog.JoppaLog("No selected character");
             return;
         }
-        
-        DebugLog.JoppaLog($"Number of abilities: {character.GetAvailableAbilities().Count}");
 
-        for (int i = 0; i < character.GetAvailableAbilities().Count; i++)
+        // Remove all current buttons.
+        for (int i = 0; i < _abilityPanel.transform.childCount; i++)
+        {
+            Destroy(_abilityPanel.transform.GetChild(i).gameObject);
+        }
+        
+        DebugLog.JoppaLog($"Number of abilities: {character.AvailableAbilities.Count}");
+
+        for (int i = 0; i < character.AvailableAbilities.Count; i++)
         {
             Button abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
             
-            var ability = character.GetAvailableAbilities()[i];
+            var ability = character.AvailableAbilities[i];
             abilityButton.GetComponentInChildren<TextMeshProUGUI>().text = ability.name;
             abilityButton.image.sprite = ability.GetIcon();
+            abilityButton.GetComponent<AbilityButton>().SetAbility(ability);
         }
     }
 }

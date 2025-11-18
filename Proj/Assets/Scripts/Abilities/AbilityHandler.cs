@@ -1,11 +1,15 @@
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using UnityEngine;
 
 public class AbilityHandler : MonoBehaviour
 {
     [SerializeField] private List<Ability> _abilities;
 
-    private List<CombatGridTile> _tilesInRange = new List<CombatGridTile>();
+    private List<CombatGridTile> _tilesInRange = new();
+    private List<CombatGridTile> _tilesEffected = new();
+    Dictionary<CombatGridTile, Color> tileColorMap = new();
     private Character _characterCaster;
     private CombatGridTile _casterTile;
     [SerializeField] private Ability _pendingAbility;
@@ -97,6 +101,66 @@ public class AbilityHandler : MonoBehaviour
 
             default: return false;
         }
-     
+    }
+
+    public void PreviewTargetTiles(CombatGridTile tile)
+    {
+        // Körs hela tiden och uppdateras alltså konstant. Eftersom den måste uppdateras medan man hovrar med musen.
+
+
+        // Sätt 1.
+
+        // Kolla alla tiles som kan träffas och lägg till dem i en lista.
+
+        // Om listan på klassnivå _tileEffected är tom. Lägg till elementen i den listan och färga dem röda.
+
+        // Gå igenom alla tiles i listan som är sparad på klass nivå: _tilesEffected.
+
+        // Om den finns i den nya listan, gör ingenting.
+
+        // Om den inte finns, kolla om den finns i den andra listan på klass nivå: _tilesInRange.
+
+        // Om den finns i den andra listan, färga tilen grön, om den inte finns, färga tilen vit.
+
+       // Gå sedan igenom den nya listan, om klass listan _tilesEffected inte innehåller ett element, färga den röd och lägg till den.
+
+        List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
+
+        if (!_tilesEffected.Any())
+        {
+            foreach(CombatGridTile t in newEffectedTiles)
+            {
+                _tilesEffected.Add(t);
+                t.SetTileColor(Color.red);
+            }
+            return;
+        }
+        var copiedList = new List<CombatGridTile>(_tilesEffected);
+        foreach (CombatGridTile t in copiedList)
+        {
+            if (newEffectedTiles.Contains(t))
+            {
+                continue;
+            }
+
+            if (_tilesInRange.Contains(t))
+            {
+                t.SetTileColor(Color.green);
+                _tilesEffected.Remove(t);
+                continue;
+            }
+
+            t.SetTileColor(Color.white);
+            _tilesEffected.Remove(t);
+        }
+
+        foreach(CombatGridTile t in newEffectedTiles)
+        {
+            if (!_tilesEffected.Contains(t))
+            {
+                t.SetTileColor(Color.red);
+                _tilesEffected.Add(t);
+            }
+        }
     }
 }
