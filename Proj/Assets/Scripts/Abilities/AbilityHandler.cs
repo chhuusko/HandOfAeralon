@@ -102,10 +102,7 @@ public class AbilityHandler : MonoBehaviour
 
     public void PreviewTargetTiles(CombatGridTile tile)
     {
-        switch (_pendingAbility.GetType())
-        {
-            case SingleTargetAbility;
-        }
+       
 
     }
 }
