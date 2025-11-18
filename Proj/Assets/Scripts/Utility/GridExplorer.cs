@@ -65,6 +65,7 @@ public class GridExplorer : MonoBehaviour
         if (start == goal)
         {
             DebugLog.JLWLog($"GridExplorer.cs | start {start} == goal {goal}");
+            Clear();
             return new List<GameObject>();
         }
 
@@ -97,6 +98,7 @@ public class GridExplorer : MonoBehaviour
                 if (_bDebug) _debugStartTile = startTile;
                 if (_bDebug) _debugPath = result;
                 if (_bDebug) _debugGoalTile = goalTile;
+                DrawPath(result);
                 return result;
             }
 
@@ -124,6 +126,7 @@ public class GridExplorer : MonoBehaviour
             }
         }
 
+        Clear();
         return new List<GameObject>(); // No path found
     }
 
@@ -270,6 +273,14 @@ public class GridExplorer : MonoBehaviour
         for (int i = 0; i < path.Count; i++)
         {
             _activeLineRenderer.SetPosition(i, path[i].transform.position + Vector3.up * 0.1f);
+        }
+    }
+
+    private void Clear()
+    {
+        if (_activeLineRenderer != null)
+        {
+            Destroy(_activeLineRenderer.gameObject);
         }
     }
 
