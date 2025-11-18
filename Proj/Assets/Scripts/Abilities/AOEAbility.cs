@@ -4,7 +4,6 @@ using System.Collections.Generic;
 public abstract class AOEAbility : Ability
 {
     [Header("- Type Specific values - ")]
-    [SerializeField] private int _radius = 1;
     [SerializeField] private AOEPattern pattern;
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
