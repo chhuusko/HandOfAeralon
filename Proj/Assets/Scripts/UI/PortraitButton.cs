@@ -2,27 +2,16 @@ using UnityEngine;
 
 public class PortraitButton : MonoBehaviour
 {
-    private Character _character;
+    private CharacterData _character;
 
-    public void SetCharacter(Character character)
+    public void SetCharacter(CharacterData character)
     {
         _character = character;
-    }
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void OnClick()
     {
         CombatUI.Instance.LoadAbilities(_character);
+        CombatUI.Instance.UpdateSelectedPortrait(_character);
     }
 }

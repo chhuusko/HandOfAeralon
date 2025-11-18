@@ -54,8 +54,14 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private CombatCamera _combatCamera;
     [SerializeField] private float _cameraSpeed;
 
-    [SerializeField] private ICombatState _currentCombatState;
+    //[SerializeField] private ICombatState _currentCombatState;
+    
+    [Header("Combat State")]
+    [SerializeReference] private CombatStateBase _currentCombatState;
     [SerializeField] private CombatState _currentCombatStateEnum;
+    //[SerializeField] private CombatStateLoadLevel _combatStateLoadlevel;
+    //[SerializeField] private CombatStateIntroCinematic _combatStateCinetmatic;
+    //[SerializeField] private CombatStateCharacterPlacement _combatStateCharacterPlacement;
 
     private CombatState _combatState;
     [SerializeField] private CombatTurn _currentTurn;
@@ -89,18 +95,13 @@ public class CombatManager : MonoBehaviour
     }
 
     private void OnEnable()
-    {   
-        CombatUI.Instance.OnStartCombatButtonPressed += StartTakingTurns;
-        CombatUI.Instance.OnEndTurnButtonPressed += ChangeCurrentTurn;
+    {      
     }
 
     private void OnDisable()
     {
-        CombatUI.Instance.OnStartCombatButtonPressed -= StartTakingTurns;
-        CombatUI.Instance.OnEndTurnButtonPressed -= ChangeCurrentTurn;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _combatState = CombatState.LoadCombatLevel;
@@ -109,42 +110,12 @@ public class CombatManager : MonoBehaviour
         ChangeCombatState(new CombatStateLoadLevel());
     }
 
-    // Update is called once per frame
     void Update()
     {
         _currentCombatState?.Update();
-
-        switch (_combatState)
-        {
-            case CombatState.LoadCombatLevel:
-                {
-                    //HandleLoadCombatLevel();
-                }
-                break;
-            case CombatState.IntroCinematic:
-                {
-                   // HandleIntroCinematic();
-                } break;
-            case CombatState.PlaceCharacters:
-                {
-                    //HandlePlaceCharacters();
-                } break;
-            case CombatState.TakeTurn:
-                {
-                    HandleTakeTurn();
-                } break;
-            case CombatState.EndTurn:
-                {
-                    HandleEndTurn();
-                } break;
-            case CombatState.EndCombat:
-                {
-                    HandleEndCombat();
-                } break;
-        }
     }
 
-    public void ChangeCombatState(ICombatState newCombatState)
+    public void ChangeCombatState(CombatStateBase newCombatState)
     {
         _currentCombatState?.Exit();
         _currentCombatState = newCombatState;
@@ -161,7 +132,9 @@ public class CombatManager : MonoBehaviour
     }
 
     public CombatCamera GetCombatCamera() { return _combatCamera; }
+
     public Selector GetCombatSelector() { return _selector; }
+
     /// <summary>
     /// Gets all abilities available to the class.
     /// </summary>
@@ -189,12 +162,6 @@ public class CombatManager : MonoBehaviour
         return nextCharacter;
     }
 
-    private void SetCurrentTurn(CombatTurn turn)
-    {
-        _currentTurn = turn;
-        CombatEventManager.CombatTurnChanged(turn);
-    }
-
     private void ChangeCurrentTurn()
     {
         if (_currentTurn == CombatTurn.PlayerTurn)
@@ -203,110 +170,8 @@ public class CombatManager : MonoBehaviour
             _currentTurn -= CombatTurn.PlayerTurn;
     }
 
-    private void HandleTakeTurn()
-    {
-        // NOTE (Calle): Only wan't to set the _activeCharacter once each turn
-        if(_activeCharacter == null)
-        {
-            // NOTE (Calle): Set current turn based on initiative and Faction
-            _activeCharacter = GetNextTurnCharacter();
-            //if(IsCharacterFriendly)
-            if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Friendly)
-            {
-                SetCurrentTurn(CombatTurn.PlayerTurn);
-                CardHandManager._instance.ChangeMana(1);
-            }
-            else if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Enemy)
-                SetCurrentTurn(CombatTurn.EnemyTurn);
- 
-        }
-         
-        switch (_currentTurn)
-        {
-            case CombatTurn.PlayerTurn:
-                HandlePlayerTurn();
-                break;
-            case CombatTurn.EnemyTurn:
-                HandleEnemyTurn();
-                break;
-        }
-    }
+    public GameObject GetActiveCharacter() { return _activeCharacter; }
 
-    private void HandlePlayerTurn()
-    {
-        // TODO (Calle): 
-        //  Vid starten av varje hero karakt�rs turn sker dessa saker: 
-        //  - Spelarens mana �kar med 1 -> I CardHandManager()
-        //  - Hero karakt�rens ability cooldowns minskar med 1 -> WIP (MG/JOPPA)
-        //  - Spelarens "cooldown" / timer f�r att dra ett till kort minskar med 1 -> WIP 
-
-        // TODO: Call selector with character.
-        
-        //TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandleEnemyTurn() för att AI ska kunna spela båda factions.
-        switch(_currentPlayerTurnMode)
-        {
-            case PlayerTurnMode.CharacterMode:
-                break;
-            case PlayerTurnMode.CardMode:
-                break;
-        }
-    }
-
-    bool enemyDoingStuff = false;
-    private void HandleEnemyTurn()
-    {
-        if(!enemyDoingStuff)
-        {
-            enemyDoingStuff = true;
-            TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandlePlayerTurn() för att AI ska kunna spela båda factions.
-            _activeCharacter = null;
-            //UpdateCombatState(CombatState.EndTurn);
-        }
-    }
-
-    public void HandleEndTurn()
-    {
-        // TODO (Calle): If all characters are dead, either friendly or enemies or Quit Game?
-        //               transition to EndCombat State.
-        //               If not, transition to TakeTurn again
-
-        // NOTE (Calle): Check End Combat conditions
-        if(CombatGrid._instance.GetAllEnemyCharacters().Count == 0)
-        {
-            // TODO (Calle): All enemies killed, do something specific to that.
-            UpdateCombatState(CombatState.EndCombat);
-        }
-        else if(CombatGrid._instance.GetAllFriendlyCharacters().Count == 0)
-        {
-            // TODO (Calle): All heroes killed, do something specific to that.
-            UpdateCombatState(CombatState.EndCombat);
-        }
-        else
-        {
-            // TODO (Calle): Continue with next turn, do we need to do anything else specific?
-            UpdateCombatState(CombatState.TakeTurn);
-        }
-    }
-
-    private void HandleEndCombat()
-    {
-
-    }
-
-    private void StartTakingTurns()
-    {
-        UpdateCombatState(CombatState.TakeTurn);
-    }
-
-    private void LoadCurrentPlayerParty()
-    {
-        
-    }
-
-    private void EvaluateInitiativeOrder()
-    {
-
-    }
     public CombatGridTile GetTileComponent(int x, int y)
     {
         GameObject tileObject = CombatGrid._instance.GetTileAtCoord(x, y);
