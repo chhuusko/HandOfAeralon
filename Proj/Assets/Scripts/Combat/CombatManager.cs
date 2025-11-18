@@ -13,17 +13,6 @@ using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 [System.Serializable]
-public enum CombatState
-{
-    IntroCinematic,
-    LoadCombatLevel,
-    PlaceCharacters,
-    TakeTurn,
-    EndTurn,
-    EndCombat
-};
-
-[System.Serializable]
 public enum CombatTurn
 {
     PlayerTurn,
@@ -48,23 +37,30 @@ public class CombatManager : MonoBehaviour
 {
     public static CombatManager _instance;
     private Selector _selector;
-    
+
+    // NOTE (Calle): Could Pre load each CombatState here and make them public so 
+    // each ICombatState derived class can access them
+    // 
+    // Ex:
+    // public CombatStateLoadLevel _combatStateLoadLevel;
+    // 
+    // void Awake()
+    // {
+    //     _combatStateLoadLevel = new CombatStateLoadLevel();
+    // }
+
     [SerializeField] private string _fileToLoadDEBUG;
 
     [SerializeField] private CombatCamera _combatCamera;
     [SerializeField] private float _cameraSpeed;
 
-    [SerializeField] private CombatState _combatState;
+    [SerializeField] private ICombatState _currentCombatState;
+    [SerializeField] private CombatState _currentCombatStateEnum;
+
+    private CombatState _combatState;
     [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
     [SerializeField] private GameObject _activeCharacter;
-
-    [SerializeField] private bool _combatGridLoaded = false;
-
-    private GameObject _friendlyCharacterRoot;
-    private GameObject _enemyCharacterRoot;
-    private GameObject _tileRoot;
-
 
     [Header("Abilities")]
     [SerializeField] private List<ClassAbilities> _classAbilities;
@@ -110,35 +106,28 @@ public class CombatManager : MonoBehaviour
         _combatState = CombatState.LoadCombatLevel;
         _selector = GetComponent<Selector>();
 
-        _friendlyCharacterRoot = new GameObject();
-        _friendlyCharacterRoot.name = "-PLAYER PARTY-";
-
-        _enemyCharacterRoot= new GameObject();
-        _enemyCharacterRoot.name = "-ENEMY CHARACTERS-";
-
-        _tileRoot = new GameObject();
-        _tileRoot.name = "-GRID TILES-";
-
+        ChangeCombatState(new CombatStateLoadLevel());
     }
 
-    
     // Update is called once per frame
     void Update()
     {
+        _currentCombatState?.Update();
+
         switch (_combatState)
         {
             case CombatState.LoadCombatLevel:
                 {
-                    HandleLoadCombatLevel();
+                    //HandleLoadCombatLevel();
                 }
                 break;
             case CombatState.IntroCinematic:
                 {
-                    HandleIntroCinematic();
+                   // HandleIntroCinematic();
                 } break;
             case CombatState.PlaceCharacters:
                 {
-                    HandlePlaceCharacters();
+                    //HandlePlaceCharacters();
                 } break;
             case CombatState.TakeTurn:
                 {
@@ -155,12 +144,24 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    public void ChangeCombatState(ICombatState newCombatState)
+    {
+        _currentCombatState?.Exit();
+        _currentCombatState = newCombatState;
+        _currentCombatStateEnum = newCombatState._state;
+        // NOTE (Calle): Broadcast the state change.
+        CombatEventManager.CombatStateChanged(newCombatState._state);
+
+        newCombatState?.Enter();
+    }
+
     public CombatState GetCombatState()
     {
         return _combatState;
     }
 
-
+    public CombatCamera GetCombatCamera() { return _combatCamera; }
+    public Selector GetCombatSelector() { return _selector; }
     /// <summary>
     /// Gets all abilities available to the class.
     /// </summary>
@@ -169,98 +170,6 @@ public class CombatManager : MonoBehaviour
     public List<Ability> GetClassAbilities(CharacterClass characterClass)
     {
         return _classAbilitiesDictionary.TryGetValue(characterClass, out var abilities) ? abilities : new List<Ability>();
-    }
-
-    private void HandleIntroCinematic()
-    {   
-        if (_combatCamera.IsIntroCinematicDone())
-            UpdateCombatState(CombatState.PlaceCharacters);
-        else
-            _combatCamera.PlayIntroCinematic();
-    }
-
-    private void HandleLoadCombatLevel()
-    {
-        if(!_combatGridLoaded)
-        {
-            _combatGridLoaded = true;
-           
-            // TODO (Calle): Detta ska g�ra i LevelManagern
-            LoadNextLevel();
-
-
-            //LoadCurrentPlayerParty();
-            UpdateCombatState(CombatState.IntroCinematic);
-
-            Vector2Int tileIndex = new Vector2Int(5, 0);
-            Vector3 position = new Vector3(1.0f + tileIndex.x * 2.0f, 0.0f, 1.0f + tileIndex.y * 2.0f);
-            CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
-                                                                               Faction.Friendly,
-                                                                               10,
-                                                                               1,
-                                                                               tileIndex,
-                                                                               position,
-                                                                               Vector3.one,
-                                                                               Quaternion.identity);
-
-            //_combatGrid.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
-            CombatGrid._instance.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
-            tileIndex.x = 6;
-            position.x += 2.0f;
-            characterData.SetCurrentTileIndex(tileIndex);
-            characterData.SetPosition(position);
-            CombatGrid._instance.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
-        }
-
-    }
-
-    private void HandlePlaceCharacters()
-    {
-        if(_selector)
-        {
-            // Return early if mouse is over UI element.
-            if (EventSystem.current.IsPointerOverGameObject()) return;
-            _selector.SetCurrentState(SelectorState.PlacingCharacters);
-
-            _selector.UpdateTileColors(CombatGrid._instance.GetAllTiles());
-            
-            CombatGridTile unoccupiedDeployTile = _selector.GetUnoccupiedDeployTileClicked();
-            Character selectedCharacter = _selector.GetSelectedCharacter();
-            
-            if(selectedCharacter)
-            {
-                if (unoccupiedDeployTile)
-                {
-                    Vector2Int tileIndex = unoccupiedDeployTile.GetTileIndex();
-                    Vector3 tilePosition = unoccupiedDeployTile.GetTilePosition();
-
-                    if (CombatGrid._instance.ContainsCharacter(selectedCharacter.gameObject))
-                    {
-                        selectedCharacter.gameObject.transform.position = tilePosition;
-                        selectedCharacter.SetCurrentTileIndex(tileIndex);
-                    }
-                    else
-                    {                     
-                        CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
-                                                                                            Faction.Friendly,
-                                                                                            10,
-                                                                                            1,
-                                                                                            tileIndex,
-                                                                                            tilePosition,
-                                                                                            Vector3.one,
-                                                                                            Quaternion.identity);
-
-                        CombatGrid._instance.AddCharacter(characterData).transform.SetParent(_friendlyCharacterRoot.transform);
-                    }
-                }
-                else
-                {
-                    DebugLog.CJLog("Show ERROR UI to place on a deploy tile.");
-                }
-            }
-        }
-        
-        //_selector.ResetSelectedCharacter();
     }
 
     public GameObject GetNextTurnCharacter()
@@ -382,48 +291,6 @@ public class CombatManager : MonoBehaviour
     private void HandleEndCombat()
     {
 
-    }
-
-    private void LoadNextLevel()
-    {
-        string filePathToLoad = Application.streamingAssetsPath + "/JSON/CombatGrids/" + _fileToLoadDEBUG + ".json";
-
-        if (!System.IO.File.Exists(filePathToLoad))
-        {
-            DebugLog.CJLog("Level File didn't exist or filepath was wrong!");
-            return;
-        }
-
-        string jsonFileData = System.IO.File.ReadAllText(filePathToLoad);
-        if(jsonFileData.Length == 0)
-        {
-            DebugLog.CJLog("json File Data was empty!");
-            return;
-        }
-
-        CombatGridSerializedSaveData combatGridSaveData = JsonUtility.FromJson<CombatGridSerializedSaveData>(jsonFileData);
-
-        CombatGrid._instance.SetCombatGridSize(combatGridSaveData._gridWidth, combatGridSaveData._gridHeight);
-        CombatGrid._instance.SetTileSize(combatGridSaveData._tileSize);
-        DebugLog.CJLog("CombatGrid tileSize: " + combatGridSaveData._tileSize);
-
-        for (int i = 0; i < combatGridSaveData._tileData.Count; i++)
-        {
-            //DebugLog.CJLog("tiled["+i+"]: " + "\tTileType : " + combatGridSaveData._tileData[i].GetTileType() + 
-            //          "\tTileIndex: " + combatGridSaveData._tileData[i].GetTilePosition() + "\n");
-
-            CombatGrid._instance.AddTile(combatGridSaveData._tileData[i]).transform.SetParent(_tileRoot.transform);
-            
-        }
-
-        GameObject NavMesh = GameObject.Find("NavMesh Surface");
-        NavMesh.GetComponent<NavMeshSurface>().BuildNavMesh();
-
-        for (int i = 0; i < combatGridSaveData._characterData.Count; i++)
-        {
-            CombatGrid._instance.AddCharacter(combatGridSaveData._characterData[i]).transform.SetParent(_enemyCharacterRoot.transform); ;
-        }
-        
     }
 
     private void StartTakingTurns()

@@ -112,16 +112,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4956f9c9bdd9845aef1f5ec39d41f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _classData: {fileID: 11400000, guid: 3bc0a3290853cab42b7d7b8a31d1b126, type: 2}
-  _characterClass: 2
-  _faction: 0
-  _baseHealthPoints: 0
-  _baseSpeed: 0
-  _baseDamage: 0
-  _currentHealthPoints: 0
   _currentSpeed: 0
   _currentDamage: 0
   _currentMovementPoints: 0
+  _data:
+    _classData: {fileID: 0}
+    _characterClass: 2
+    _faction: 0
+    _baseHealthPoints: 0
+    _baseInitiative: 0
+    _baseDamage: 0
+    _baseMovementPoints: 0
+    _currentHealthPoints: 0
+    _availableAbilities: []
   _currentTileIndex: {x: 0, y: 0}
 --- !u!54 &-5358155644811910876
 Rigidbody:
