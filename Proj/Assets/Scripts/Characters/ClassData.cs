@@ -13,8 +13,8 @@ public class ClassData : ScriptableObject
     public int maxHealthPoints;
     public int minSpeed;
     public int maxSpeed;
-    public int minMovmementPoints;
-    public int maxMovmentPoints;
+    public int minMovementPoints;
+    public int maxMovementPoints;
     public int minDamage;
     public int maxDamage;
     

@@ -41,6 +41,7 @@ public class Selector : MonoBehaviour
     }
     private void Start()
     {
+        DebugPossibleStartErrors();
         CombatEventManager.OnCombatStateChange += HandleCombatStateUpdated;
         CombatEventManager.OnCombatTurnChange += HandleCombatTurnChanged;
     }
@@ -81,19 +82,15 @@ public class Selector : MonoBehaviour
     {
         _selectedCharacter = selectedCharacter;
     }
-    
 
+    /// <summary>
+    /// Handles left-click interactions on tiles.  
+    /// Behavior depends on the current selector state, such as selecting,
+    /// deselecting, or executing pending actions.
+    /// </summary>
     private void HandleTileClick()
     {
         // Execute different actions based on current state when clicking on tiles.
-        if (Camera.main == null)
-        {
-            Debug.LogError("No MainCamera found! Tag your camera as 'MainCamera'."); return;
-        }
-        if (EventSystem.current == null)
-        {
-            Debug.LogError("No EventSystem in scene!"); return;
-        }
 
         // Return early if mouse is over UI element or current state is NonActive.
         if (_currentState == SelectorState.NonActive) return;
@@ -116,6 +113,11 @@ public class Selector : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// Handles tile hover logic.  
+    /// Shows character information when hovering over a tile with an occupant  
+    /// and will later be used for visualizing ability AoE or ranges.
+    /// </summary>
     private void HandleTileHover()
     {
         // Return early if mouse is over UI element.
@@ -133,6 +135,11 @@ public class Selector : MonoBehaviour
         // if _currentState = SelectorState.ActionTypeSelected && hovoredTile = in range
     }
 
+    /// <summary>
+    /// Returns the tile currently under the mouse cursor using a raycast.  
+    /// If no tile is detected, returns null.
+    /// </summary>
+    /// <returns>The tile under the mouse, or null if none was hit.</returns>
     public CombatGridTile GetTileUnderMouse()
     {
         // Cast ray cast from mouse to detect tile and return it if found.
@@ -172,16 +179,31 @@ public class Selector : MonoBehaviour
         _selectedCharacter = null;
     }
 
+    /// <summary>
+    /// Attempts to select a character based on the tile clicked.  
+    /// Uses the current selector state to determine the appropriate selection behavior.
+    /// </summary>
+    /// <param name="tile">The tile that was clicked.</param>
     public void SelectCharacter(CombatGridTile tile)
     {
+        // Selects the charater from the tile clicked. Checks state before to see which type of selection is appropriate.
         switch (_currentState)
         {
             case SelectorState.PlacingCharacters: SetSelectedCharacterPlacement(tile); break;
             case SelectorState.Idle: TrySelectCharacterIdle(tile); break;
         }
     }
+
+    /// <summary>
+    /// Selects a character directly from the UI.  
+    /// Uses the current selector state to determine how the character should be selected.
+    /// </summary>
+    /// <param name="character">The character selected through UI.</param>
     public void SelectCharacterUI(Character character)
     {
+        // Selects the charater from the UI buttons. Checks state before to see which type of selection is appropriate.
+        if (character == null) return;
+
         switch (_currentState)
         {
             case SelectorState.PlacingCharacters: SetSelectedCharacterPlacementUI(character); break;
@@ -190,7 +212,13 @@ public class Selector : MonoBehaviour
     }
     private void SetSelectedCharacterPlacement(CombatGridTile tile)
     {
-        if(tile && tile.GetOccupantCharacter() != null)
+        if (_currentState != SelectorState.PlacingCharacters)
+        {
+            Debug.LogError("Wrong selecting method was called when selecting character. Method not matching state.");
+            return;
+        }
+
+        if (tile && tile.GetOccupantCharacter() != null)
         {
             _selectedCharacter = tile.GetOccupantCharacter();
         }
@@ -198,7 +226,13 @@ public class Selector : MonoBehaviour
 
     private void SetSelectedCharacterPlacementUI(Character character)
     {
-        if (_selectedCharacter != null && _currentState == SelectorState.Idle)
+        if (_currentState != SelectorState.PlacingCharacters)
+        {
+            Debug.LogError("Wrong selecting method was called when selecting character. Method not matching state.");
+            return;
+        }
+
+        if (_selectedCharacter != null && _currentState == SelectorState.Idle && character.GetFaction() != Faction.Friendly)
         {
             DeselectCharacter();
         }
@@ -222,7 +256,7 @@ public class Selector : MonoBehaviour
 
         if (bIsFriendly && bIsCharactersTurn)
         {
-            ShowCharacterUIOptions(character);
+            ShowCharacterUIWithOptions(character);
             _currentState = SelectorState.CharacterSelected;
             _selectedCharacter = character;
 
@@ -230,6 +264,13 @@ public class Selector : MonoBehaviour
             {
                 DebugLog.MGLog(character.GetCharacterClass().ToString() + " on tile index: " + character.GetCurrentTileIndex().ToString());
             }
+
+            return;
+        }
+
+        if (bIsFriendly)
+        {
+            ShowCharacterUI(character);
         }
     }
 
@@ -276,10 +317,27 @@ public class Selector : MonoBehaviour
         if (_bDebugSelector) DebugLog.MGLog("Deselect Character");
     }
 
-    private void ShowCharacterUIOptions(Character character)
+    /// <summary>
+    /// Activates the character UI and displays all available actions,
+    /// such as abilities and movement options, for the selected character.
+    /// </summary>
+    /// <param name="character">The character whose options should be shown.</param>
+    private void ShowCharacterUIWithOptions(Character character)
     {
-        // Activate UI and place it to show over characters head.
+        // Activates character UI with options to cast abilities and walk.
         _combatUI.LoadAbilities(character);
+    }
+
+    /// <summary>
+    /// Activates the character UI without any action options.  
+    /// Used when the character cannot perform actions at the moment.
+    /// </summary>
+    /// <param name="character">The character to display basic UI for.</param>
+    private void ShowCharacterUI(Character character)
+    {
+        // Activates character UI without options since the character can't perform actions at the moment.
+
+        // TODO: Lead UI should place Load UI without actions method here.
     }
     public void PreviewAbilityRange(Ability ability)
     {
@@ -297,9 +355,17 @@ public class Selector : MonoBehaviour
             SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.white);
         }
     }
+
+    /// <summary>
+    /// Hides the character's action UI and resets any visual indicators,
+    /// such as highlighted tiles or ability range previews.
+    /// </summary>
     private void HideCharacterOptions()
     {
         // Deactivate UI and reset tile color.
+
+        // Here could a method to deactivate UI for specific character be placed if we want to remove UI when deselecting.
+
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
             SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.white);
@@ -362,6 +428,17 @@ public class Selector : MonoBehaviour
             {
                 tile.SetTileColor(color);
             }
+        }
+    }
+    private void DebugPossibleStartErrors()
+    {
+        if (Camera.main == null)
+        {
+            Debug.LogError("No MainCamera found! Tag your camera as 'MainCamera'."); return;
+        }
+        if (EventSystem.current == null)
+        {
+            Debug.LogError("No EventSystem in scene!"); return;
         }
     }
  
