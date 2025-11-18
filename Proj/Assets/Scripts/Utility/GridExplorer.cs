@@ -17,6 +17,9 @@ public class GridExplorer : MonoBehaviour
         }
     }
 
+    [SerializeField] private LineRenderer _lineRendererPrefab;
+    private LineRenderer _activeLineRenderer;
+
     [SerializeField] private bool _bDebug = false;
     private List<GameObject> _debugReachableTiles = new();
     private List<GameObject> _debugPath = new();
@@ -59,8 +62,19 @@ public class GridExplorer : MonoBehaviour
         Vector2Int start = startTile.GetComponent<CombatGridTile>().GetTileIndex();
         Vector2Int goal = goalTile.GetComponent<CombatGridTile>().GetTileIndex();
 
+        if (start == goal)
+        {
+            DebugLog.JLWLog($"GridExplorer.cs | start {start} == goal {goal}");
+            return new List<GameObject>();
+        }
+
         Vector2Int[] directions = new Vector2Int[]
         {
+            new Vector2Int(1, 1),
+            new Vector2Int(-1, 1),
+            new Vector2Int(1, -1),
+            new Vector2Int(-1, -1),
+
             new Vector2Int(1, 0),
             new Vector2Int(0, 1),
             new Vector2Int(-1, 0),
@@ -92,6 +106,15 @@ public class GridExplorer : MonoBehaviour
 
                 if (OutOfBounds(next)) continue;
                 if (!IsWalkable(next)) continue;
+
+                if (IsDiagonal(dir))
+                {
+                    Vector2Int tile1 = new Vector2Int(current.x, next.y);
+                    Vector2Int tile2 = new Vector2Int(next.x, current.y);
+
+                    if (!IsWalkable(tile1) || !IsWalkable(tile2) || IsOccupied(tile1) || IsOccupied(tile2)) continue;
+                }
+
                 if (IsOccupied(next) && next != goal) continue;
                 if (visited.Contains(next)) continue;
 
@@ -117,6 +140,11 @@ public class GridExplorer : MonoBehaviour
 
         result.Insert(0, CombatGrid._instance.GetTileAtCoord(start.x, start.y));
         return result;
+    }
+
+    private bool IsDiagonal(Vector2Int dir)
+    {
+        return Mathf.Abs(dir.x) + Mathf.Abs(dir.y) == 2;
     }
 
     /// <summary>
@@ -169,27 +197,27 @@ public class GridExplorer : MonoBehaviour
 
                 if (OutOfBounds(next))
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: next OutOfBounds");
+                    DebugLog.JLWLog("GridExplorer.cs | continue: next OutOfBounds");
                     continue;
                 }
                 if (checkWalkable && !IsWalkable(next))
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: next !IsWalkable");
+                    DebugLog.JLWLog("GridExplorer.cs | continue: next !IsWalkable");
                     continue;
                 }
                 if (checkWalkable && IsOccupied(next))
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: next IsOccupied");
+                    DebugLog.JLWLog("GridExplorer.cs | continue: next IsOccupied");
                     continue;
                 }
                 if (nextCost > range)
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: nextCost > range");
+                    DebugLog.JLWLog("GridExplorer.cs | continue: nextCost > range");
                     continue;
                 }
                 if (cost.ContainsKey(next))
                 {
-                    if (_bDebug) Debug.Log("GridExplorer.cs | continue: cost.ContainsKey(next)");
+                    DebugLog.JLWLog("GridExplorer.cs | continue: cost.ContainsKey(next)");
                     continue;
                 }
 
@@ -222,6 +250,27 @@ public class GridExplorer : MonoBehaviour
     private bool IsOccupied(Vector2Int pos)
     {
         return CombatGrid._instance.GetTileAtCoord(pos.x, pos.y).GetComponent<CombatGridTile>().GetOccupant() != null;
+    }
+
+    private void DrawPath(List<GameObject> path)
+    {
+        if (_activeLineRenderer != null)
+        {
+            Destroy(_activeLineRenderer.gameObject);
+        }
+
+        if (path == null || path.Count == 0)
+        {
+            return;
+        }
+
+        _activeLineRenderer = Instantiate(_lineRendererPrefab);
+        _activeLineRenderer.positionCount = path.Count;
+
+        for (int i = 0; i < path.Count; i++)
+        {
+            _activeLineRenderer.SetPosition(i, path[i].transform.position + Vector3.up * 0.1f);
+        }
     }
 
     private void OnDrawGizmos()

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Ability", menuName = "Scriptable Objects/Ability")]
 public abstract class Ability : ScriptableObject
 {
     [Header("- General -")]
@@ -24,7 +23,7 @@ public abstract class Ability : ScriptableObject
     }
 
     public abstract void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile);
-
+    public abstract List<CombatGridTile> GetTilesToEffect(CombatGridTile tile);
     protected abstract void ApplyEffectOnTile(CombatGridTile targetTile);
 
     public string GetAbilityName() => _abilityName;
