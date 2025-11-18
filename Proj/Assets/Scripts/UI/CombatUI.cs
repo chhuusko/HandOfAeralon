@@ -103,7 +103,7 @@ public class CombatUI : MonoBehaviour
 
     public void LoadAbilities(Character character)
     {
-        Debug.Log("Loading Abilities");
+        DebugLog.JoppaLog("Loading Abilities");
 
         if (character == null)
         {
