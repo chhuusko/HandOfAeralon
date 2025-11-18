@@ -16,10 +16,18 @@ public class CombatGrid : MonoBehaviour
     [SerializeField] private int _width;
     [SerializeField] private Vector3 _tileSize;
 
+    [SerializeField] private bool _bCombatGridLoaded;
+
     [SerializeField] private GameObject[] _tilesGO;
     [SerializeField] private List<GameObject> _charactersGO;
     
     [SerializeField] private Material inCombatTileMaterial;
+    
+    [SerializeField] private string _fileToLoadDEBUG;
+
+    private GameObject _friendlyCharacterRoot;
+    private GameObject _enemyCharacterRoot;
+    private GameObject _tileRoot;
 
     private void Awake()
     {
@@ -47,6 +55,19 @@ public class CombatGrid : MonoBehaviour
         }
     }
 
+    public void Start()
+    {
+        _friendlyCharacterRoot = new GameObject();
+        _friendlyCharacterRoot.name = "-PLAYER PARTY-";
+
+        _enemyCharacterRoot = new GameObject();
+        _enemyCharacterRoot.name = "-ENEMY CHARACTERS-";
+
+        _tileRoot = new GameObject();
+        _tileRoot.name = "-GRID TILES-";
+    }
+
+    public bool IsCombatGridLoaded() { return _bCombatGridLoaded; }
     public GameObject[] GetAllTiles() { return _tilesGO; }
     public GameObject GetTileAtCoord(int x, int y)
     {
@@ -224,7 +245,7 @@ public class CombatGrid : MonoBehaviour
         characterObject.GetComponent<Character>().SetCurrentMovementPoints(currentMovementPoints);
 
         characterObject.GetComponent<Character>().SetBaseHealthPoints(baseHealtPoints);
-        characterObject.GetComponent<Character>().SetBaseSpeed(baseSpeed);
+        characterObject.GetComponent<Character>().SetBaseInitiative(baseSpeed);
         characterObject.GetComponent<Character>().SetBaseDamage(baseDamage);
         characterObject.GetComponent<Character>().SetBaseMovementPoints(baseMovementPoints);
 
@@ -238,5 +259,55 @@ public class CombatGrid : MonoBehaviour
     public void RemoveCharacter(GameObject character)
     {
         _charactersGO.Remove(character);
+    }
+    public void SpawnCharacter(CombatGridCharacterData combatGridCharacterData)
+    {
+        GameObject character = AddCharacter(combatGridCharacterData);
+        if (combatGridCharacterData.GetFaction() == Faction.Friendly)
+            character.transform.SetParent(_friendlyCharacterRoot.transform);
+        else if(combatGridCharacterData.GetFaction() == Faction.Enemy)
+            character.transform.SetParent(_enemyCharacterRoot.transform);
+    }
+    public void LoadNextLevel()
+    {
+        string filePathToLoad = Application.streamingAssetsPath + "/JSON/CombatGrids/" + _fileToLoadDEBUG + ".json";
+
+        if (!System.IO.File.Exists(filePathToLoad))
+        {
+            DebugLog.CJLog("Level File didn't exist or filepath was wrong!");
+            return;
+        }
+
+        string jsonFileData = System.IO.File.ReadAllText(filePathToLoad);
+        if (jsonFileData.Length == 0)
+        {
+            DebugLog.CJLog("json File Data was empty!");
+            return;
+        }
+
+        CombatGridSerializedSaveData combatGridSaveData = JsonUtility.FromJson<CombatGridSerializedSaveData>(jsonFileData);
+
+        CombatGrid._instance.SetCombatGridSize(combatGridSaveData._gridWidth, combatGridSaveData._gridHeight);
+        CombatGrid._instance.SetTileSize(combatGridSaveData._tileSize);
+        DebugLog.CJLog("CombatGrid tileSize: " + combatGridSaveData._tileSize);
+
+        for (int i = 0; i < combatGridSaveData._tileData.Count; i++)
+        {
+            //DebugLog.CJLog("tiled["+i+"]: " + "\tTileType : " + combatGridSaveData._tileData[i].GetTileType() + 
+            //          "\tTileIndex: " + combatGridSaveData._tileData[i].GetTilePosition() + "\n");
+
+            CombatGrid._instance.AddTile(combatGridSaveData._tileData[i]).transform.SetParent(_tileRoot.transform);
+
+        }
+
+        GameObject NavMesh = GameObject.Find("NavMesh Surface");
+        NavMesh.GetComponent<NavMeshSurface>().BuildNavMesh();
+
+        for (int i = 0; i < combatGridSaveData._characterData.Count; i++)
+        {
+            CombatGrid._instance.AddCharacter(combatGridSaveData._characterData[i]).transform.SetParent(_enemyCharacterRoot.transform); ;
+        }
+
+        _bCombatGridLoaded = true;
     }
 }

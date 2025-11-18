@@ -88,7 +88,7 @@ public class CharacterEntry
         _character.GetComponent<Character>().SetCurrentMovementPoints(characterData.GetMovementPoints());
 
         _character.GetComponent<Character>().SetBaseHealthPoints(characterData.GetBaseHealthPoints());
-        _character.GetComponent<Character>().SetBaseSpeed(characterData.GetBaseSpeed());
+        _character.GetComponent<Character>().SetBaseInitiative(characterData.GetBaseSpeed());
         _character.GetComponent<Character>().SetBaseDamage(characterData.GetBaseDamage());
         _character.GetComponent<Character>().SetBaseMovementPoints(characterData.GetBaseMovementPoints());
 
