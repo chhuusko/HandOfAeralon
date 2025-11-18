@@ -1,12 +1,14 @@
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 public class AbilityHandler : MonoBehaviour
 {
     [SerializeField] private List<Ability> _abilities;
 
-    private List<CombatGridTile> _tilesInRange = new List<CombatGridTile>();
-    private List<CombatGridTile> _tilesEffected = new List<CombatGridTile>();
+    private List<CombatGridTile> _tilesInRange = new();
+    private List<CombatGridTile> _tilesEffected = new();
+    Dictionary<CombatGridTile, Color> tileColorMap = new();
     private Character _characterCaster;
     private CombatGridTile _casterTile;
     [SerializeField] private Ability _pendingAbility;
@@ -102,7 +104,16 @@ public class AbilityHandler : MonoBehaviour
 
     public void PreviewTargetTiles(CombatGridTile tile)
     {
-       
+        List<CombatGridTile> newTilesToEffect = _pendingAbility.GetTilesToEffect(tile);
 
+
+        foreach (CombatGridTile t in _tilesEffected)
+        {
+            if (t != null)
+            {
+
+            }
+        }
+        _tilesEffected = _pendingAbility.GetTilesToEffect(tile);
     }
 }
