@@ -1,5 +1,7 @@
 using UnityEngine;
 
+
+[System.Serializable]
 public class CombatStateLoadLevel : CombatStateBase
 {
     public override CombatState _state => CombatState.LoadCombatLevel;

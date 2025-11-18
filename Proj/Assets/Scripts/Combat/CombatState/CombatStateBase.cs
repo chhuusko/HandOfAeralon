@@ -1,5 +1,7 @@
 using UnityEngine;
 
+
+[System.Serializable]
 public abstract class CombatStateBase : ICombatState
 {
     public abstract CombatState _state {  get; }

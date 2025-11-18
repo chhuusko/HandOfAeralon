@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[System.Serializable]
 public class CombatStateIntroCinematic : CombatStateBase
 {
     public override CombatState _state => CombatState.IntroCinematic;
@@ -14,11 +15,12 @@ public class CombatStateIntroCinematic : CombatStateBase
     public override void Enter()
     {
         base.Enter();
+        CombatEventManager.OnEnterCombatStateIntroCinematic += EnterIntroCinematic;
     }
 
     public override void Exit()
     {
-        base .Exit();
+        base.Exit();
         
     }
 
@@ -28,5 +30,10 @@ public class CombatStateIntroCinematic : CombatStateBase
             CombatManager._instance.ChangeCombatState(new CombatStateCharacterPlacement(CombatManager._instance.GetCombatSelector()));
         else
             _combatCamera.PlayIntroCinematic();
+    }
+
+    private void EnterIntroCinematic()
+    {
+
     }
 }
