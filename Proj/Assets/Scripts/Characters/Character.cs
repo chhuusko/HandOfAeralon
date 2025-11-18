@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -84,7 +85,6 @@ public class Character : MonoBehaviour
     
     [Header("Abilities")]
     private AbilityHandler _abilityHandler;
-    private List<Ability> _availableAbilities;
     private Dictionary<Ability, int> _currentCooldowns = new();
     
     [Header("Misc")]
@@ -132,137 +132,48 @@ public class Character : MonoBehaviour
         }
     }
     
-    public AbilityHandler GetAbilityHandler()
-    {
-        return _abilityHandler;
-    }
-
-    public ClassData GetClassData()
-    {
-        return _data.ClassData;
-    }
+    // Data.
+    public ClassData GetClassData() => _data.ClassData;
+    public CharacterClass GetCharacterClass() => _data.CharacterClass;
+    public Faction GetFaction() => _data.Faction;
     
-    public CharacterClass GetCharacterClass()
-    {
-        return _data.CharacterClass;
-    }
+    // Base stats.
+    public int GetBaseHealthPoints() => _data.BaseHealthPoints;
+    public int GetBaseSpeed() => _data.BaseInitiative;
+    public int GetBaseDamage() => _data.BaseDamage;
+    public int GetBaseMovementPoints() => _data.BaseMovementPoints;
+    
+    // Current stats.
+    public int GetHealthPoints() => _data.CurrentHealthPoints;
+    public int GetSpeed() => _currentSpeed;
+    public int GetDamage() => _currentDamage;
+    public int GetMovementPoints() => _currentMovementPoints;
+    public Vector2Int GetCurrentTileIndex() => _currentTileIndex;
+    public CombatGridTile GetCurrentTileComponent() =>
+        CombatManager._instance.GetTileComponent(_currentTileIndex.x, _currentTileIndex.y);
+    
+    // Abilities.
+    public AbilityHandler GetAbilityHandler() => _abilityHandler;
+    public IReadOnlyList<Ability> GetAvailableAbilities() => _data.AvailableAbilities;
 
-    public Faction GetFaction()
-    {
-        return _data.Faction;
-    }
-
-    public int GetBaseHealthPoints()
-    {
-        return _data.BaseHealthPoints;
-    }
-
-    public int GetBaseSpeed()
-    {
-        return _data.BaseInitiative;
-    }
-
-    public int GetBaseDamage()
-    {
-        return _data.BaseDamage;
-    }
-
-    public int GetBaseMovementPoints()
-    {
-        return _data.BaseMovementPoints; 
-    }
-
-    public int GetHealthPoints()
-    {
-        return _data.CurrentHealthPoints;
-    }
-
-    public int GetSpeed()
-    {
-        return _currentSpeed;
-    }
-
-    public int GetDamage()
-    {
-        return _currentDamage;
-    }
-
-    public int GetMovementPoints()
-    {
-        return _currentMovementPoints;
-    }
-
-    public Vector2Int GetCurrentTileIndex()
-    {
-        return _currentTileIndex;
-    }
-
-    public CombatGridTile GetCurrentTileComponent()
-    {
-        return CombatManager._instance.GetTileComponent(_currentTileIndex.x, _currentTileIndex.y);
-    }
-
-    public List<Ability> GetAvailableAbilities()
-    {
-        return _availableAbilities;
-    }
-
-    public void SetCharacterClass(CharacterClass characterClass)
-    {
-        _data.SetCharacterClass(characterClass);
-    }
-
-    public void SetFaction(Faction faction)
-    {
-        _data.SetFaction(faction);
-    }
-
-    public void SetBaseHealthPoints(int healthPoints)
-    {
-        _data.SetBaseHealthPoints(healthPoints);
-    }
-
-    public void SetBaseInitiative(int initiative)
-    {
-        _data.SetBaseInitiative(initiative);
-    }
-
-    public void SetBaseDamage(int damage)
-    {
-        _data.SetBaseDamage(damage);
-    }
-    public void SetBaseMovementPoints(int movementPoints)
-    {
-        _data.SetBaseMovementPoints(movementPoints);
-    }
-    public void SetCurrentHealthPoints(int healthPoints)
-    {
-        _data.SetCurrentHealthPoints(healthPoints);
-    }
-
-    public void SetCurrentSpeed(int speed)
-    {
-        _currentSpeed = speed;
-    }
-
-    public void SetCurrentDamage(int damage)
-    {
-        _currentDamage = damage;    
-    }
-
-    public void SetCurrentMovementPoints(int movementPoints)
-    {
-        _currentMovementPoints = movementPoints;
-    }
-
-    public void SetCurrentTileIndex(Vector2Int tileIndex)
-    {
-        _currentTileIndex = tileIndex;
-    }
+    // Base stats.
+    public void SetCharacterClass(CharacterClass characterClass) => _data.SetCharacterClass(characterClass);
+    public void SetFaction(Faction faction) => _data.SetFaction(faction);
+    public void SetBaseHealthPoints(int healthPoints) => _data.SetBaseHealthPoints(healthPoints);
+    public void SetBaseInitiative(int initiative) => _data.SetBaseInitiative(initiative);
+    public void SetBaseDamage(int damage) => _data.SetBaseDamage(damage);
+    public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
+    
+    // Current stats.
+    public void SetCurrentHealthPoints(int healthPoints) => _data.SetCurrentHealthPoints(healthPoints);
+    public void SetCurrentSpeed(int speed) => _currentSpeed = speed;
+    public void SetCurrentDamage(int damage) => _currentDamage = damage;
+    public void SetCurrentMovementPoints(int movementPoints) => _currentMovementPoints = movementPoints;
+    public void SetCurrentTileIndex(Vector2Int tileIndex) => _currentTileIndex = tileIndex;
 
     public void StartAbilityCooldown(Ability ability)
     {
-        if (_availableAbilities.Contains(ability) && !_currentCooldowns.ContainsKey(ability))
+        if (GetAvailableAbilities().Contains(ability) && !_currentCooldowns.ContainsKey(ability))
         {
             _currentCooldowns.Add(ability, ability.GetCooldown());
         }
@@ -298,7 +209,7 @@ public class Character : MonoBehaviour
     }
 
     /// <summary>
-    /// Generates a new friendly character based on the character data.
+    /// Generates a new friendly character.
     /// </summary>
     /// <param name="data">The character data to generate from.</param>
     public void Initialize(CharacterData data)
@@ -314,7 +225,6 @@ public class Character : MonoBehaviour
         _currentSpeed = _data.BaseInitiative;
         _currentDamage = _data.BaseDamage;
         _currentMovementPoints = _data.BaseMovementPoints;
-        _availableAbilities = new List<Ability>(data.AvailableAbilities);
     }
     
     public void TakeDamage(int damage)
@@ -330,8 +240,8 @@ public class Character : MonoBehaviour
     {
         _data.Heal(healAmount);
     }
-
-    public bool IsMoving()
+    
+    private bool IsMoving()
     {
         if (_navMeshAgent.pathPending)
         {
@@ -345,10 +255,21 @@ public class Character : MonoBehaviour
     /// <summary>
     /// Sets a new target move location.
     /// </summary>
-    /// <param name="target">The grid to move to.</param>
+    /// <param name="positions">The grid points to move to.</param>
+    public void SetMovePath(Vector3[] positions)
+    {
+        NavMeshPath path = new NavMeshPath();
+        NavMesh.CalculatePath(transform.position, positions[^1], NavMesh.AllAreas, path);
+        _navMeshAgent.SetPath(path);
+    }
+    
+    /// <summary>
+    /// Sets a new target move location.
+    /// </summary>
+    /// <param name="target">The position to move to.</param>
     public void SetMoveTarget(CombatGridTile target)
     {
-        SetMoveTarget(target.GetTilePosition());
+        _navMeshAgent.SetDestination(target.GetTilePosition());
     }
 
     /// <summary>

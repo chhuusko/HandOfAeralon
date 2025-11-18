@@ -6,6 +6,7 @@ public class AbilityHandler : MonoBehaviour
     [SerializeField] private List<Ability> _abilities;
 
     private List<CombatGridTile> _tilesInRange = new List<CombatGridTile>();
+    private List<CombatGridTile> _tilesEffected = new List<CombatGridTile>();
     private Character _characterCaster;
     private CombatGridTile _casterTile;
     [SerializeField] private Ability _pendingAbility;
@@ -97,6 +98,11 @@ public class AbilityHandler : MonoBehaviour
 
             default: return false;
         }
-     
+    }
+
+    public void PreviewTargetTiles(CombatGridTile tile)
+    {
+       
+
     }
 }
