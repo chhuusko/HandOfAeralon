@@ -182,6 +182,8 @@ public class Selector : MonoBehaviour
     }
     public void SelectCharacterUI(Character character)
     {
+        if (character == null) return;
+
         switch (_currentState)
         {
             case SelectorState.PlacingCharacters: SetSelectedCharacterPlacementUI(character); break;
@@ -190,7 +192,13 @@ public class Selector : MonoBehaviour
     }
     private void SetSelectedCharacterPlacement(CombatGridTile tile)
     {
-        if(tile && tile.GetOccupantCharacter() != null)
+        if (_currentState != SelectorState.PlacingCharacters)
+        {
+            Debug.LogError("Wrong selecting method was called when selecting character. Method not matching state.");
+            return;
+        }
+
+        if (tile && tile.GetOccupantCharacter() != null)
         {
             _selectedCharacter = tile.GetOccupantCharacter();
         }
@@ -198,7 +206,13 @@ public class Selector : MonoBehaviour
 
     private void SetSelectedCharacterPlacementUI(Character character)
     {
-        if (_selectedCharacter != null && _currentState == SelectorState.Idle)
+        if (_currentState != SelectorState.PlacingCharacters)
+        {
+            Debug.LogError("Wrong selecting method was called when selecting character. Method not matching state.");
+            return;
+        }
+
+        if (_selectedCharacter != null && _currentState == SelectorState.Idle && character.GetFaction() != Faction.Friendly)
         {
             DeselectCharacter();
         }
@@ -222,7 +236,7 @@ public class Selector : MonoBehaviour
 
         if (bIsFriendly && bIsCharactersTurn)
         {
-            ShowCharacterUIOptions(character);
+            ShowCharacterUIWithOptions(character);
             _currentState = SelectorState.CharacterSelected;
             _selectedCharacter = character;
 
@@ -230,6 +244,13 @@ public class Selector : MonoBehaviour
             {
                 DebugLog.MGLog(character.GetCharacterClass().ToString() + " on tile index: " + character.GetCurrentTileIndex().ToString());
             }
+
+            return;
+        }
+
+        if (bIsFriendly)
+        {
+            ShowCharacterUI(character);
         }
     }
 
@@ -276,10 +297,17 @@ public class Selector : MonoBehaviour
         if (_bDebugSelector) DebugLog.MGLog("Deselect Character");
     }
 
-    private void ShowCharacterUIOptions(Character character)
+    private void ShowCharacterUIWithOptions(Character character)
     {
-        // Activate UI and place it to show over characters head.
+        // Activates character UI with options to cast abilities and walk.
         _combatUI.LoadAbilities(character);
+    }
+
+    private void ShowCharacterUI(Character character)
+    {
+        // Activates character UI without options since the character can't perform actions at the moment.
+
+        // TODO: Lead UI should place Load UI without actions method here.
     }
     public void PreviewAbilityRange(Ability ability)
     {
