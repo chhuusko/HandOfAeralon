@@ -96,15 +96,15 @@ public class EnemyAI : MonoBehaviour
         }
 
         // Move and attack
-        GameObject targetTile = FindPath(currentTile, closestOpponentTile);
-        if (targetTile == null)
+        List<GameObject> movePath = FindPath(currentTile, closestOpponentTile);
+        if (movePath == null || movePath.Count == 0)
         {
-            DebugLog.JLWLog($"EnemyAI.cs | targetTile NOT FOUND!");
+            DebugLog.JLWLog($"EnemyAI.cs | movePath NOT FOUND!");
         }
-        _currentCharacter.SetMoveTarget(targetTile.transform.position);
-        if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | Moving {_currentCharacter.name} to {targetTile.GetComponent<CombatGridTile>().GetTileIndex()}");
+        _currentCharacter.SetMoveTarget(movePath[movePath.Count - 1].GetComponent<CombatGridTile>());
+        if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | Moving {_currentCharacter.name} to {movePath[movePath.Count - 1].GetComponent<CombatGridTile>().GetTileIndex()}");
 
-        if (!TryAttack(targetTile, closestOpponentTile))
+        if (!TryAttack(movePath[movePath.Count-1], closestOpponentTile))
         {
             if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | {closestOpponentCharacter.name} outside attack range.");
             return;
@@ -167,15 +167,15 @@ public class EnemyAI : MonoBehaviour
         return false;
     }
 
-    private GameObject FindPath(GameObject currentTile, GameObject opponentTile)
+    private List<GameObject> FindPath(GameObject currentTile, GameObject opponentTile)
     {
-        GameObject result = currentTile;
+        List<GameObject> result = new();
         List<GameObject> path = GridExplorer._instance.FindPath(currentTile, opponentTile);
 
         if (path == null || path.Count <= 1)
         {
             DebugLog.JLWLog($"EnemyAI.cs | No path found from {currentTile.GetComponent<CombatGridTile>().GetTileIndex()} to {opponentTile.GetComponent<CombatGridTile>().GetTileIndex()}");
-            return currentTile;
+            return new List<GameObject>();
         }
 
         for (int i = 1; i < path.Count && i <= _currentMoveRange; i++)
@@ -185,12 +185,12 @@ public class EnemyAI : MonoBehaviour
 
             if (distToEnemy == _currentAttackRange)
             {
-                return tile;
+                return result;
             }
 
             if (distToEnemy > 0)
             {
-                result = tile;
+                result.Add(tile);
             }
         }
 
