@@ -35,6 +35,7 @@ public class EnemyAI : MonoBehaviour
         {
             yield return new WaitForSeconds(2f);
 
+            /*
             if (controlledFaction == Faction.Enemy)
             {
                 List<Character> allCharacters = CombatGrid._instance.GetAllCharacters()
@@ -53,6 +54,7 @@ public class EnemyAI : MonoBehaviour
 
                 if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | All character stats randomized!");
             }
+            */
 
             OnTurnStart();
         }
