@@ -9,6 +9,7 @@ public struct GameData
     public int level; 
     public int coins;
 
+    public List<CharacterData> heroDataList;
     public List<Character> heroList;
     public List<Card> cardList;
 
@@ -19,6 +20,7 @@ public class GlobalGameManager : ScriptableObject
 {
     [SerializeField] private DeckPreset _deckPreset;
     [SerializeField] private CharacterPrefabLibrary _characterLibrary;
+    [SerializeField] private ClassDatabase _classDatabase;
     private static GlobalGameManager _instance;
     private GameData _currentGame;
     public static GlobalGameManager GetInstance()
@@ -41,8 +43,9 @@ public class GlobalGameManager : ScriptableObject
     {
         //TODO
     }
-    public void SaveGame(List<Character> heroList, List<Card> cardList, int level, int coins)
+    public void SaveGame(List<CharacterData> heroDataList, List<Character> heroList, List<Card> cardList, int level, int coins)
     {
+        _currentGame.heroDataList = heroDataList;
         _currentGame.heroList = heroList;
         _currentGame.cardList = cardList;
         _currentGame.level = level;
@@ -74,6 +77,7 @@ public class GlobalGameManager : ScriptableObject
         _currentGame.saveSlot = 1;
         _currentGame.seed = 67;
         LevelManager.GetInstance().GenerateMap(_currentGame.seed);
+        
         _currentGame.heroList = new List<Character>
         {
             _characterLibrary.GetPrefab(CharacterClass.Barbarian).GetComponent<Character>(),
@@ -81,6 +85,13 @@ public class GlobalGameManager : ScriptableObject
             _characterLibrary.GetPrefab(CharacterClass.Rogue).GetComponent<Character>(),
             _characterLibrary.GetPrefab(CharacterClass.Bard).GetComponent<Character>()
         };
+        _currentGame.heroDataList = new List<CharacterData>(){
+            new CharacterData(_classDatabase.Classes[0], Faction.Friendly),
+            new CharacterData(_classDatabase.Classes[1], Faction.Friendly),
+            new CharacterData(_classDatabase.Classes[2], Faction.Friendly),
+            new CharacterData(_classDatabase.Classes[3], Faction.Friendly)
+        };
+
         _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
         Debug.Log(_currentGame.cardList.Count);
         _currentGame.coins = 50;
