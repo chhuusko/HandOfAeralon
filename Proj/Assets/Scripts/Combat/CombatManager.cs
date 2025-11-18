@@ -13,17 +13,6 @@ using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 [System.Serializable]
-public enum CombatState
-{
-    IntroCinematic,
-    LoadCombatLevel,
-    PlaceCharacters,
-    TakeTurn,
-    EndTurn,
-    EndCombat
-};
-
-[System.Serializable]
 public enum CombatTurn
 {
     PlayerTurn,
@@ -48,18 +37,32 @@ public class CombatManager : MonoBehaviour
 {
     public static CombatManager _instance;
     private Selector _selector;
-    
+
+    // NOTE (Calle): Could Pre load each CombatState here and make them public so 
+    // each ICombatState derived class can access them
+    // 
+    // Ex:
+    // public CombatStateLoadLevel _combatStateLoadLevel;
+    // 
+    // void Awake()
+    // {
+    //     _combatStateLoadLevel = new CombatStateLoadLevel();
+    // }
+
     [SerializeField] private string _fileToLoadDEBUG;
 
     [SerializeField] private CombatCamera _combatCamera;
     [SerializeField] private float _cameraSpeed;
 
-    [SerializeField] private CombatState _combatState;
+    [SerializeField] private ICombatState _currentCombatState;
+    [SerializeField] private CombatState _currentCombatStateEnum;
+
+    private CombatState _combatState;
     [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
     [SerializeField] private GameObject _activeCharacter;
 
-    [SerializeField] private bool _combatGridLoaded = false;
+    [SerializeField] private bool _bCombatGridLoaded = false;
 
     private GameObject _friendlyCharacterRoot;
     private GameObject _enemyCharacterRoot;
@@ -110,6 +113,8 @@ public class CombatManager : MonoBehaviour
         _combatState = CombatState.LoadCombatLevel;
         _selector = GetComponent<Selector>();
 
+// NOTE (Calle): This is done in CombatGrid now
+/*
         _friendlyCharacterRoot = new GameObject();
         _friendlyCharacterRoot.name = "-PLAYER PARTY-";
 
@@ -118,27 +123,29 @@ public class CombatManager : MonoBehaviour
 
         _tileRoot = new GameObject();
         _tileRoot.name = "-GRID TILES-";
-
+*/
+        ChangeCombatState(new CombatStateLoadLevel());
     }
 
-    
     // Update is called once per frame
     void Update()
     {
+        _currentCombatState?.Update();
+
         switch (_combatState)
         {
             case CombatState.LoadCombatLevel:
                 {
-                    HandleLoadCombatLevel();
+                    //HandleLoadCombatLevel();
                 }
                 break;
             case CombatState.IntroCinematic:
                 {
-                    HandleIntroCinematic();
+                   // HandleIntroCinematic();
                 } break;
             case CombatState.PlaceCharacters:
                 {
-                    HandlePlaceCharacters();
+                    //HandlePlaceCharacters();
                 } break;
             case CombatState.TakeTurn:
                 {
@@ -155,12 +162,24 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    public void ChangeCombatState(ICombatState newCombatState)
+    {
+        _currentCombatState?.Exit();
+        _currentCombatState = newCombatState;
+        _currentCombatStateEnum = newCombatState._state;
+        // NOTE (Calle): Broadcast the state change.
+        CombatEventManager.CombatStateChanged(newCombatState._state);
+
+        newCombatState?.Enter();
+    }
+
     public CombatState GetCombatState()
     {
         return _combatState;
     }
 
-
+    public CombatCamera GetCombatCamera() { return _combatCamera; }
+    public Selector GetCombatSelector() { return _selector; }
     /// <summary>
     /// Gets all abilities available to the class.
     /// </summary>
@@ -181,9 +200,9 @@ public class CombatManager : MonoBehaviour
 
     private void HandleLoadCombatLevel()
     {
-        if(!_combatGridLoaded)
+        if(!_bCombatGridLoaded)
         {
-            _combatGridLoaded = true;
+            _bCombatGridLoaded = true;
            
             // TODO (Calle): Detta ska g�ra i LevelManagern
             LoadNextLevel();
@@ -423,7 +442,8 @@ public class CombatManager : MonoBehaviour
         {
             CombatGrid._instance.AddCharacter(combatGridSaveData._characterData[i]).transform.SetParent(_enemyCharacterRoot.transform); ;
         }
-        
+
+        _bCombatGridLoaded = true;
     }
 
     private void StartTakingTurns()

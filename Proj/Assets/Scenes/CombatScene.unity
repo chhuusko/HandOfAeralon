@@ -973,6 +973,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
+      propertyPath: _fileToLoadDEBUG
+      value: Battle1
+      objectReference: {fileID: 0}
+    - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
+        type: 3}
       propertyPath: _tilePrefabLibrary
       value: 
       objectReference: {fileID: 11400000, guid: 04a120cb18f76f341b4fa433f2de3433,
