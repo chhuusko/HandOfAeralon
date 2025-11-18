@@ -14,6 +14,7 @@ public class CombatUI : MonoBehaviour
     
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Image _characterPortraitPanel;
+    [SerializeField] private Image _selectedCharacterPortrait;
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
     [SerializeField] private Button _abilityButtonPrefab;
@@ -50,7 +51,7 @@ public class CombatUI : MonoBehaviour
     private void UpdateCharacterPortraits()
     {
         GameData gameData = GlobalGameManager.GetInstance().GetGameData();
-        List<Character> heroList = gameData.heroList;
+        List<CharacterData> heroList = gameData.heroDataList;
 
         if (heroList == null)
         {
@@ -58,11 +59,10 @@ public class CombatUI : MonoBehaviour
             return;
         }
         
-        foreach (Character c in heroList)
+        foreach (CharacterData c in heroList)
         {
-            DebugLog.JoppaLog($"Generating portrait for: {c.name}");
             Button characterPortraitButton = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
-            characterPortraitButton.image.sprite = c.GetClassData().classImage;
+            characterPortraitButton.image.sprite = c.ClassData.classImage;
             characterPortraitButton.GetComponent<PortraitButton>().SetCharacter(c);
         }
     }
@@ -70,6 +70,11 @@ public class CombatUI : MonoBehaviour
     private void UpdateManaText(int mana)
     {
         _mana.text = $"Mana\n{mana}/10";
+    }
+
+    private void UpdateSelectedPortrait(CharacterData character)
+    {
+        _selectedCharacterPortrait.sprite = character.ClassData.classImage;
     }
 
     public void StartCombat()
@@ -101,7 +106,7 @@ public class CombatUI : MonoBehaviour
         _abilityPanel.color = active ? new Color(1, 1, 1, 0.5f) : new Color(1, 1, 1, 1);
     }
 
-    public void LoadAbilities(Character character)
+    public void LoadAbilities(CharacterData character)
     {
         DebugLog.JoppaLog("Loading Abilities");
 
@@ -111,13 +116,13 @@ public class CombatUI : MonoBehaviour
             return;
         }
         
-        DebugLog.JoppaLog($"Number of abilities: {character.GetAvailableAbilities().Count}");
+        DebugLog.JoppaLog($"Number of abilities: {character.AvailableAbilities.Count}");
 
-        for (int i = 0; i < character.GetAvailableAbilities().Count; i++)
+        for (int i = 0; i < character.AvailableAbilities.Count; i++)
         {
             Button abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
             
-            var ability = character.GetAvailableAbilities()[i];
+            var ability = character.AvailableAbilities[i];
             abilityButton.GetComponentInChildren<TextMeshProUGUI>().text = ability.name;
             abilityButton.image.sprite = ability.GetIcon();
         }

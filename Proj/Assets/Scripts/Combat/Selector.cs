@@ -336,7 +336,7 @@ public class Selector : MonoBehaviour
     private void ShowCharacterUIWithOptions(Character character)
     {
         // Activates character UI with options to cast abilities and walk.
-        _combatUI.LoadAbilities(character);
+        _combatUI.LoadAbilities(character.Data);
     }
 
     /// <summary>

@@ -91,6 +91,7 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
     private NavMeshAgent _navMeshAgent;
+    public CharacterData Data => _data;
     
     private void Awake()
     {
