@@ -242,7 +242,7 @@ public class Character : MonoBehaviour
         _data.Heal(healAmount);
     }
     
-    private bool IsMoving()
+    public bool IsMoving()
     {
         if (_navMeshAgent.pathPending)
         {
