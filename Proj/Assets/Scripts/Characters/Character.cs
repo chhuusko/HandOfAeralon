@@ -255,10 +255,21 @@ public class Character : MonoBehaviour
     /// <summary>
     /// Sets a new target move location.
     /// </summary>
-    /// <param name="target">The grid to move to.</param>
+    /// <param name="positions">The grid points to move to.</param>
+    public void SetMovePath(Vector3[] positions)
+    {
+        NavMeshPath path = new NavMeshPath();
+        NavMesh.CalculatePath(transform.position, positions[^1], NavMesh.AllAreas, path);
+        _navMeshAgent.SetPath(path);
+    }
+    
+    /// <summary>
+    /// Sets a new target move location.
+    /// </summary>
+    /// <param name="target">The position to move to.</param>
     public void SetMoveTarget(CombatGridTile target)
     {
-        SetMoveTarget(target.GetTilePosition());
+        _navMeshAgent.SetDestination(target.GetTilePosition());
     }
 
     /// <summary>
