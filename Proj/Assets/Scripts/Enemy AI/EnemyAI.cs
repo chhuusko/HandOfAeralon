@@ -36,7 +36,7 @@ public class EnemyAI : MonoBehaviour
     {
         while (_bAutoPlay)
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(3f);
 
             if (controlledFaction == Faction.Enemy)
             {
@@ -106,13 +106,13 @@ public class EnemyAI : MonoBehaviour
         }
 
         Vector3[] vectorPath = new Vector3[_movePath.Count];
-        foreach (var obj in _movePath)
+        for (int i = 0; i < _movePath.Count; i++)
         {
-            vectorPath[_movePath.IndexOf(obj)] = obj.transform.position;
+            vectorPath[i] = _movePath[i].transform.position;
         }
 
         _currentCharacter.SetMovePath(vectorPath);
-        if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | Moving {_currentCharacter.name} to {_movePath[_movePath.Count - 1].GetComponent<CombatGridTile>().GetTileIndex()}");
+        if (_bDebug && _movePath == null && _movePath.Count != 0) DebugLog.JLWLog($"EnemyAI.cs | Moving {_currentCharacter.name} to {_movePath[_movePath.Count - 1].GetComponent<CombatGridTile>().GetTileIndex()}");
 
         StartCoroutine(WaitForMovementCompletion());
     }
@@ -216,6 +216,7 @@ public class EnemyAI : MonoBehaviour
 
             if (distToEnemy == _currentAttackRange)
             {
+                result.Add(tile);
                 return result;
             }
 

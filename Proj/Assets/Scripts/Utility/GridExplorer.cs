@@ -217,11 +217,6 @@ public class GridExplorer : MonoBehaviour
 
         Vector2Int[] directions = new Vector2Int[]
         {
-            new Vector2Int(1, 1),
-            new Vector2Int(-1, 1),
-            new Vector2Int(1, -1),
-            new Vector2Int(-1, -1),
-
             new Vector2Int(1, 0),
             new Vector2Int(0, 1),
             new Vector2Int(-1, 0),
@@ -254,15 +249,6 @@ public class GridExplorer : MonoBehaviour
 
                 if (OutOfBounds(next)) continue;
                 if (!IsWalkable(next)) continue;
-
-                if (IsDiagonal(dir))
-                {
-                    Vector2Int tile1 = new Vector2Int(current.x, next.y);
-                    Vector2Int tile2 = new Vector2Int(next.x, current.y);
-
-                    if (!IsWalkable(tile1) || !IsWalkable(tile2)) continue;
-                }
-
                 if (IsOccupied(next) && next != goal) continue;
                 if (visited.Contains(next)) continue;
 
