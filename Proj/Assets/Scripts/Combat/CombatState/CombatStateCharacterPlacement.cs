@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+[System.Serializable]
 public class CombatStateCharacterPlacement : CombatStateBase
 {
     public override CombatState _state => CombatState.PlaceCharacters;
-    private Selector _selector;
+    [SerializeField] private Selector _selector;
 
     public CombatStateCharacterPlacement(Selector selector)
     {
@@ -14,11 +15,13 @@ public class CombatStateCharacterPlacement : CombatStateBase
     public override void Enter()
     {
         base.Enter();
+        CombatUI.Instance.OnStartCombatButtonPressed += StartTakeTurns;
     }
 
     public override void Exit()
     {
         base.Exit();
+        CombatUI.Instance.OnStartCombatButtonPressed -= StartTakeTurns;
     }
 
     public override void Update()
@@ -65,5 +68,12 @@ public class CombatStateCharacterPlacement : CombatStateBase
                 }
             }
         }
+    }
+
+    private void StartTakeTurns()
+    {
+        CombatManager._instance.ChangeCombatState( 
+                                            new CombatStateTakeTurn(CombatManager._instance.GetActiveCharacter()) 
+                                            );
     }
 }
