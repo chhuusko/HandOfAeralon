@@ -91,15 +91,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 997788ee48202fb449707aee8fa8ea94,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6398260866208266378}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 997788ee48202fb449707aee8fa8ea94,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2731230323059344622}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 997788ee48202fb449707aee8fa8ea94,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -219652449965204795}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 997788ee48202fb449707aee8fa8ea94,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6398260866208266378}
   m_SourcePrefab: {fileID: 100100000, guid: 997788ee48202fb449707aee8fa8ea94, type: 3}
 --- !u!1 &3104298640036701326 stripped
 GameObject:
@@ -199,29 +199,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &6398260866208266378
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3104298640036701326}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b4956f9c9bdd9845aef1f5ec39d41f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _classData: {fileID: 11400000, guid: 2d7e8f713be7ea34f9cd6d6ebad08875, type: 2}
-  _characterClass: 0
-  _faction: 1
-  _baseHealthPoints: 0
-  _baseSpeed: 0
-  _baseDamage: 0
-  _currentHealthPoints: 0
-  _currentSpeed: 0
-  _currentDamage: 0
-  _currentMovementPoints: 0
-  _currentTileIndex: {x: 0, y: 0}
 --- !u!137 &2731230323059344622
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -292,3 +269,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _abilities: []
   _pendingAbility: {fileID: 0}
+--- !u!114 &6398260866208266378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3104298640036701326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b4956f9c9bdd9845aef1f5ec39d41f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentSpeed: 0
+  _currentDamage: 0
+  _currentMovementPoints: 0
+  _data:
+    _classData: {fileID: 0}
+    _characterClass: 0
+    _faction: 1
+    _baseHealthPoints: 0
+    _baseInitiative: 0
+    _baseDamage: 0
+    _baseMovementPoints: 0
+    _currentHealthPoints: 0
+    _availableAbilities: []
+  _currentTileIndex: {x: 0, y: 0}

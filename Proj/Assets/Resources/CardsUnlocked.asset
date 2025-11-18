@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36cf68b36fd0ad841bfe636f0b241a2a, type: 3}
-  m_Name: CardList
+  m_Script: {fileID: 11500000, guid: 3a9b532ece14e334fb1b59a62a97253d, type: 3}
+  m_Name: CardsUnlocked
   m_EditorClassIdentifier: 
-  _cards:
-  - {fileID: 11400000, guid: e5cbee363fa51c6418a17c1c26eb8a77, type: 2}
-  - {fileID: 11400000, guid: 1b0fbada78c27a048b83ebf9e2a0e94a, type: 2}
+  allCards: {fileID: 11400000, guid: e232ce3a2b62b374e8ad6c6ff933bfd9, type: 2}
+  defaultUnlocked: {fileID: 11400000, guid: 818fdf480554b7144871b8b3286563f3, type: 2}
+  cardsUnlocked: []
