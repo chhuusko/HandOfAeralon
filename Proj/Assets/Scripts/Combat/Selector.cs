@@ -337,6 +337,7 @@ public class Selector : MonoBehaviour
     {
         // Activates character UI with options to cast abilities and walk.
         _combatUI.LoadAbilities(character.Data);
+        _combatUI.UpdateSelectedPortrait(character.Data);
     }
 
     /// <summary>
@@ -348,7 +349,7 @@ public class Selector : MonoBehaviour
     {
         // Activates character UI without options since the character can't perform actions at the moment.
 
-        // TODO: Lead UI should place Load UI without actions method here.
+        _combatUI.UpdateSelectedPortrait(character.Data);
     }
     public void PreviewAbilityRange(Ability ability)
     {
