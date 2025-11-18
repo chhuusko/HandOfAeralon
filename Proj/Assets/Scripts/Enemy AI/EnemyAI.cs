@@ -35,7 +35,6 @@ public class EnemyAI : MonoBehaviour
         {
             yield return new WaitForSeconds(2f);
 
-            /*
             if (controlledFaction == Faction.Enemy)
             {
                 List<Character> allCharacters = CombatGrid._instance.GetAllCharacters()
@@ -46,7 +45,7 @@ public class EnemyAI : MonoBehaviour
                 foreach (var character in allCharacters)
                 {
                     character.SetBaseHealthPoints(Random.Range(1, 4));
-                    character.SetBaseSpeed(Random.Range(1, 5));
+                    character.SetBaseInitiative(Random.Range(1, 5));
                     character.SetBaseDamage(Random.Range(1, 5));
                     character.ResetCharacter();
                     character.SetCurrentMovementPoints(2);
@@ -54,7 +53,6 @@ public class EnemyAI : MonoBehaviour
 
                 if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | All character stats randomized!");
             }
-            */
 
             OnTurnStart();
         }
