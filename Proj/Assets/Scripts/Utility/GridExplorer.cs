@@ -58,14 +58,27 @@ public class GridExplorer : MonoBehaviour
     private GameObject _debugGoalTile;
 
     /// <summary>
-    /// Calculates the ManhattanDistance between two tile objects (a.x - b.x + a.y - b.y).
+    /// Calculates the ManhattanDistance between two Vector2Int (a.x - b.x + a.y - b.y).
     /// </summary>
-    /// <param name="a">The GameObject of a GridTile.</param>
-    /// <param name="b">The GameObject of a GridTile.</param>
+    /// <param name="a">The Vector2Int representation of a grid tile.</param>
+    /// <param name="b">The Vector2Int representation of a grid tile.</param>
     /// <returns>An int containing the ManhattanDistance value between object 'a' and object 'b'.</returns>
     public int ManhattanDistance(Vector2Int a, Vector2Int b)
     {
         return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+    }
+
+    /// <summary>
+    /// Calculates the ChebyshevDistance between two Vector2Int.
+    /// </summary>
+    /// <param name="a">The Vector2Int representation of a grid tile.</param>
+    /// <param name="b">The Vector2Int representation of a grid tile.</param>
+    /// <returns>An int containing the ChebyshevDistance (diagonal distance) value between object 'a' and object 'b'.</returns>
+    public int ChebyshevDistance(Vector2Int a, Vector2Int b)
+    {
+        int dx = Mathf.Abs(a.x - b.x);
+        int dy = Mathf.Abs(a.y - b.y);
+        return Mathf.Max(dx, dy);
     }
 
     /// <summary>

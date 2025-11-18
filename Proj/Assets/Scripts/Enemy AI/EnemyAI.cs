@@ -188,7 +188,7 @@ public class EnemyAI : MonoBehaviour
 
     private void TryAttack(Character attacker, Character target)
     {
-        if (GridExplorer._instance.ManhattanDistance(attacker.GetCurrentTileIndex(), target.GetCurrentTileIndex()) <= _currentAttackRange)
+        if (GridExplorer._instance.ChebyshevDistance(attacker.GetCurrentTileIndex(), target.GetCurrentTileIndex()) <= _currentAttackRange)
         {
             target.TakeDamage(_currentCharacter.GetDamage()); // Bör använda en ability istället
             if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name} strikes {target.name} for {_currentCharacter.GetDamage()} damage.");
