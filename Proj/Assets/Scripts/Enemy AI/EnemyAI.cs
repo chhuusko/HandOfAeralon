@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class EnemyAI : MonoBehaviour
 {
-    public UnityEvent AIEndTurn = new();
+    public UnityEvent AIEndTurn;
 
     [SerializeField] private Faction controlledFaction = Faction.Enemy;
     private Character _currentCharacter = null;
