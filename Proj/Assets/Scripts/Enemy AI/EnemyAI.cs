@@ -65,7 +65,8 @@ public class EnemyAI : MonoBehaviour
     private void OnTurnStart()
     {
         // Initialization & null checks
-        _currentCharacter = CombatManager._instance.GetNextTurnCharacter().GetComponent<Character>();
+        //_currentCharacter = CombatManager._instance.GetNextTurnCharacter().GetComponent<Character>();
+        _currentCharacter = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
         if (_currentCharacter == null || _currentCharacter.GetFaction() != controlledFaction)
         {
             if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | Not {this.name}'s turn...");

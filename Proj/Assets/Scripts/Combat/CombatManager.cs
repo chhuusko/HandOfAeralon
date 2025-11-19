@@ -13,12 +13,6 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
-[System.Serializable]
-public enum CombatTurn
-{
-    PlayerTurn,
-    EnemyTurn
-};
 
 [System.Serializable]
 public enum PlayerTurnMode
@@ -36,11 +30,8 @@ public struct ClassAbilities
 
 public class CombatManager : MonoBehaviour
 {
-    public static CombatManager _instance;
-    private Selector _selector;
-
-    // NOTE (Calle): Could Pre load each CombatState here and make them public so 
-    // each ICombatState derived class can access them
+    // NOTE (Calle): Could Pre load each CombatState here and let each combat state
+    // access them through the CombatManager when changing combat state,
     // 
     // Ex:
     // public CombatStateLoadLevel _combatStateLoadLevel;
@@ -49,9 +40,31 @@ public class CombatManager : MonoBehaviour
     // {
     //     _combatStateLoadLevel = new CombatStateLoadLevel();
     // }
+    // 
+    // In for example CombatStateLoadNextLevel's Update()
+    //
+    // if(CombatGrid._instance.IsCombatGridLoaded())
+    // {
+    //     CombatManager._instance.ChangeCombatState(CombatManager._instance.GetCombatState(CombatState.IntroCinematic));
+    // }
+    //
+    // public CombatStateBase GetCombatState(CombatState combatState)
+    // {
+    //     switch(combatState)
+    //     {
+    //         case CombatState.IntroCinematic:
+    //             return _combatStateIntroCinematic;
+    //             break;
+    //     }
+    // }
+    //
+    //
+
+    public static CombatManager _instance;
+    private Selector _selector;
 
     [SerializeField] private string _fileToLoadDEBUG;
-
+    
     [SerializeField] private CombatCamera _combatCamera;
 
     private GameObject _selectorOverHead;
@@ -63,12 +76,13 @@ public class CombatManager : MonoBehaviour
     [Header("Combat State")]
     [SerializeReference] private CombatStateBase _currentCombatState;
     [SerializeField] private CombatState _currentCombatStateEnum;
-
     [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
-    [SerializeField] private CombatTurnOrder _combatTurnOrder;
 
     private Dictionary<CharacterData, Character> _dataToCharacterDict;
+
+    [Header("Combat Turn Order")]
+    [SerializeField] private CombatTurnOrder _combatTurnOrder;
 
     [Header("Abilities")]
     [SerializeField] private List<ClassAbilities> _classAbilities;
@@ -118,9 +132,7 @@ public class CombatManager : MonoBehaviour
     void Update()
     {
         _currentCombatState?.Update();
-        Character go = GetActiveCharacter();
-        if(go != null)
-            DebugLog.CJLog("Active char: " + go.ToString());
+
     }
 
     public void ChangeCombatState(CombatStateBase newCombatState)
@@ -140,7 +152,6 @@ public class CombatManager : MonoBehaviour
     }
 
     public CombatCamera GetCombatCamera() { return _combatCamera; }
-
     public GameObject GetSelectorOverHead() { return _selectorOverHead; }
     public Selector GetCombatSelector() { return _selector; }
 
@@ -190,6 +201,15 @@ public class CombatManager : MonoBehaviour
         _selectorOverHead.SetActive(false);
     }
 
+    public void SetSelectorOverHeadColor(Color color)
+    {
+        MeshRenderer rend = _selectorOverHead.GetComponent<MeshRenderer>();
+        if(rend != null)
+        {
+                rend.material.SetColor("_BaseColor", color); 
+        }
+    }
+
     /// <summary>
     /// Gets all abilities available to the class.
     /// </summary>
@@ -200,40 +220,22 @@ public class CombatManager : MonoBehaviour
         return _classAbilitiesDictionary.TryGetValue(characterClass, out var abilities) ? abilities : new List<Ability>();
     }
 
-    public GameObject GetNextTurnCharacter()
-    {
-        int highestInitiative = Int32.MinValue;
-        GameObject nextCharacter = null;
-        foreach (var g in CombatGrid._instance.GetAllCharacters())
-        {
-            int initiative = g.GetComponent<Character>().GetInitiative();
-            if (initiative > highestInitiative)
-            {
-                highestInitiative = initiative;
-                nextCharacter = g;
-            }
-        }
-
-        return nextCharacter;
-    }
-
-    private void ChangeCurrentTurn()
-    {
-        if (_currentTurn == CombatTurn.PlayerTurn)
-            _currentTurn = CombatTurn.EnemyTurn;
-        else
-            _currentTurn -= CombatTurn.PlayerTurn;
-    }
-
-    public Character GetActiveCharacter() 
-    {
-        if (_currentCombatState._state == CombatState.TakeTurn)
-        {
-            CombatStateTakeTurn combatStateTakeTurn = (CombatStateTakeTurn)_currentCombatState;
-            return combatStateTakeTurn.GetActiveCharacter();
-        }
-        return null;
-    }
+    //public GameObject GetNextTurnCharacter()
+    //{
+    //    int highestInitiative = Int32.MinValue;
+    //    GameObject nextCharacter = null;
+    //    foreach (var g in CombatGrid._instance.GetAllCharacters())
+    //    {
+    //        int initiative = g.GetComponent<Character>().GetInitiative();
+    //        if (initiative > highestInitiative)
+    //        {
+    //            highestInitiative = initiative;
+    //            nextCharacter = g;
+    //        }
+    //    }
+    //
+    //    return nextCharacter;
+    //}
 
     public CombatGridTile GetTileComponent(int x, int y)
     {
@@ -243,13 +245,4 @@ public class CombatManager : MonoBehaviour
         return tileObject.GetComponent<CombatGridTile>();
     }
 
-    public CombatTurn GetCombatTurn()
-    {
-        return _currentTurn;
-    }
-
-    public void SetCombatTurn(CombatTurn turn) 
-    { 
-        _currentTurn = turn; 
-    }
 }

@@ -263,7 +263,8 @@ public class Selector : MonoBehaviour
     private void SelectCharacterIdle(Character character)
     {
         bool bIsFriendly = character.GetFaction() == Faction.Friendly;
-        bool bIsCharactersTurn = character == CombatManager._instance.GetNextTurnCharacter();
+        //bool bIsCharactersTurn = character == CombatManager._instance.GetNextTurnCharacter();
+        bool bIsCharactersTurn = character == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
 
         if (bIsFriendly && bIsCharactersTurn)
         {
@@ -322,7 +323,7 @@ public class Selector : MonoBehaviour
             // Stay in placement phase.
             _currentState = SelectorState.PlacingCharacters;
         }
-        else if (CombatManager._instance.GetCombatTurn() == CombatTurn.PlayerTurn)
+        else if (CombatManager._instance.GetCombatTurnOrder().GetCurrentTurn() == CombatTurn.PlayerTurn)
         {
             // Back to idle if it's players turn.
             _currentState = SelectorState.Idle;
