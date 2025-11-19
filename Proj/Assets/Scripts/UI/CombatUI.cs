@@ -27,17 +27,22 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Color _inactiveColor;
     
     private List<PortraitButton> _portraits = new();
+    private PortraitButton _selectedPortrait;
+    
+    private Dictionary<CharacterData, PortraitButton> _characterPortraits = new();
     
     private void OnEnable()
     {
         CardHandManager.onManaChange += UpdateManaText;
-        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateSelectedPortrait;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateActivePortrait;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdatePortraitColors;
     }
 
     private void OnDisable()
     {
         CardHandManager.onManaChange -= UpdateManaText;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateSelectedPortrait;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateActivePortrait;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdatePortraitColors;
 
         foreach (var portrait in _portraits)
         {
@@ -118,14 +123,20 @@ public class CombatUI : MonoBehaviour
             pb.OnClickPortraitButton += LoadAbilities;
             
             _portraits.Add(pb);
+            _characterPortraits.Add(pb.Character, pb);
         }
+    }
+    
+    private void UpdatePortraitColors(Character c) 
+    {
+        UpdatePortraitColors(_characterPortraits[c.Data]);
     }
 
     private void UpdatePortraitColors(PortraitButton selectedPortrait)
     {
-        foreach (var portrait in _portraits)
+        foreach (var pb in _portraits)
         {
-            portrait.GetComponent<Image>().color = _inactiveColor;
+            pb.GetComponent<Image>().color = _inactiveColor;
         }
         
         selectedPortrait.GetComponent<Image>().color = _activeColor;
@@ -136,7 +147,7 @@ public class CombatUI : MonoBehaviour
         _mana.text = $"Mana\n{mana}/10";
     }
 
-    private void UpdateSelectedPortrait(Character c)
+    private void UpdateActivePortrait(Character c)
     {
         if (!c || c.Data.Faction == Faction.Enemy)
         {
