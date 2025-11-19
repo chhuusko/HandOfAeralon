@@ -49,15 +49,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fileToLoadDEBUG: battle1
   _combatCamera: {fileID: 0}
-  _cameraSpeed: 10
-  _combatState: 0
+  _selectorOverHead: {fileID: 0}
+  _selectorOverHeadPrefab: {fileID: 6057364718574362769, guid: 8518d72cc20b6f547adee1398aa3a646,
+    type: 3}
+  _selectorOverHeadStartPos: {x: 0, y: 0, z: 0}
+  _currentCombatState:
+    rid: -2
+  _currentCombatStateEnum: 0
   _currentTurn: 0
+  _currentPlayerTurnMode: 0
   _activeCharacter: {fileID: 0}
-  _combatGridLoaded: 0
   _classAbilities: []
   TurnStart:
     m_PersistentCalls:
       m_Calls: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!320 &5951504651251208821
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -142,5 +152,8 @@ MonoBehaviour:
   _height: 0
   _width: 0
   _tileSize: {x: 0, y: 0, z: 0}
+  _bCombatGridLoaded: 0
   _tilesGO: []
   _charactersGO: []
+  inCombatTileMaterial: {fileID: 0}
+  _fileToLoadDEBUG: 

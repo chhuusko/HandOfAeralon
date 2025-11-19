@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using Unity.AI.Navigation;
 using Unity.VisualScripting;
@@ -51,9 +52,9 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] private string _fileToLoadDEBUG;
 
-    [SerializeField] private CombatCamera _combatCamera;
+    private CombatCamera _combatCamera;
 
-    [SerializeField] private GameObject _selectorOverHead;
+    private GameObject _selectorOverHead;
     [SerializeField] private GameObject _selectorOverHeadPrefab;
     [SerializeField] private Vector3 _selectorOverHeadStartPos;
 
@@ -145,6 +146,8 @@ public class CombatManager : MonoBehaviour
 
     public void InitializeCharacterDataDict()
     {
+        _dataToCharacterDict.Clear();
+
         List<CharacterData> characterDataList = GlobalGameManager.GetInstance().GetGameData().heroDataList;
 
         List<CombatGridTile> deployTiles = CombatGrid._instance.GetAllDeployTiles();
@@ -153,7 +156,7 @@ public class CombatManager : MonoBehaviour
         {
             Character playerHero = CombatGrid._instance.SpawnCharacter(data, 
                                                                        deployTiles[deployTileIndex++].GetTilePosition(),
-                                                                       Quaternion.identity);
+                                                                       Quaternion.Euler(0.0f, 90.0f, 0.0f));
             playerHero.Initialize(data);
 
             _dataToCharacterDict.Add(data, playerHero);
