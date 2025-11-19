@@ -243,7 +243,7 @@ public class CombatGrid : MonoBehaviour
         characterObject.GetComponent<Character>().SetCurrentTileIndex(tileIndex);
 
         characterObject.GetComponent<Character>().SetCurrentHealthPoints(currentHealtPoints);
-        characterObject.GetComponent<Character>().SetCurrentSpeed(currentSpeed);
+        characterObject.GetComponent<Character>().SetCurrentInitiative(currentSpeed);
         characterObject.GetComponent<Character>().SetCurrentDamage(currentDamage);
         characterObject.GetComponent<Character>().SetCurrentMovementPoints(currentMovementPoints);
 

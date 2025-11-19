@@ -85,7 +85,7 @@ public class CombatStateTakeTurn : CombatStateBase
         GameObject nextCharacter = null;
         foreach (var g in CombatGrid._instance.GetAllCharacters())
         {
-            int initiative = g.GetComponent<Character>().GetSpeed();
+            int initiative = g.GetComponent<Character>().GetInitiative();
             if (initiative > highestInitiative)
             {
                 highestInitiative = initiative;
