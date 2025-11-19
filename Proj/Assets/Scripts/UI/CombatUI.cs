@@ -136,7 +136,7 @@ public class CombatUI : MonoBehaviour
             Button abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
             
             var ability = character.AvailableAbilities[i];
-            abilityButton.GetComponentInChildren<TextMeshProUGUI>().text = ability.name;
+            // abilityButton.GetComponentInChildren<TextMeshProUGUI>().text = ability.name;
             abilityButton.image.sprite = ability.GetIcon();
             abilityButton.GetComponent<AbilityButton>().SetAbility(ability);
         }
