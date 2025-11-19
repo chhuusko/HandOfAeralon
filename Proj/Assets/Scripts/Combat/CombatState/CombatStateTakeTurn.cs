@@ -20,11 +20,14 @@ public class CombatStateTakeTurn : CombatStateBase
     public override void Enter()
     {
         base.Enter();
+        CombatEventManager.InvokeEnterCombatStateTakeTurn();
+        CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
     }
 
     public override void Exit()
     {
         base.Exit();
+        CombatEventManager.InvokeExitCombatStateTakeTurn();
     }
 
     public override void Update()
@@ -53,6 +56,11 @@ public class CombatStateTakeTurn : CombatStateBase
                 HandleEnemyTurn();
                 break;
         }
+    }
+
+    private void EndTurn()
+    {
+        CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
     }
 
     private void SetCurrentTurn(CombatTurn turn)

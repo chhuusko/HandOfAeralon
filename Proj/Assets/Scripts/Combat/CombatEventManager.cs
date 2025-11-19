@@ -4,11 +4,7 @@ using UnityEngine;
 public static class CombatEventManager
 {
     public static event Action<CombatState> OnCombatStateChange;
-    public static event Action<CombatState> OnCombatEnterState;
     public static event Action<CombatTurn> OnCombatTurnChange;
-    
-    public static event Action<CombatState> OnCombatStateEnter;
-    public static event Action<CombatState> OnCombatStateExit;
     
     public static event Action OnEnterCombatStateLoadNextLevel;
     public static event Action OnEnterCombatStateIntroCinematic;
@@ -38,6 +34,32 @@ public static class CombatEventManager
         => OnEnterCombatStateIntroCinematic?.Invoke();
 
     public static void InvokeEnterCombatStatePlaceCharacter()
-        => OnEnterCombatStatePlaceCharacter.Invoke();
+        => OnEnterCombatStatePlaceCharacter?.Invoke();
+
+    public static void InvokeEnterCombatStateTakeTurn()
+        => OnEnterCombatStateTakeTurn?.Invoke();
+
+    public static void InvokeEnterCombatStateEndTurn()
+        => OnEnterCombatStateEndTurn?.Invoke();
+    public static void InvokeEnterCombatStateEndCombat()
+        => OnEnterCombatStateEndCombat?.Invoke();
+
+    public static void InvokeExitCombatStateLoadNextLevel()
+    => OnExitCombatStateLoadNextLevel?.Invoke();
+
+    public static void InvokeExitCombatStateIntroCinematic()
+        => OnExitCombatStateIntroCinematic?.Invoke();
+
+    public static void InvokeExitCombatStatePlaceCharacter()
+        => OnExitCombatStatePlaceCharacter?.Invoke();
+
+    public static void InvokeExitCombatStateTakeTurn()
+        => OnExitCombatStateTakeTurn?.Invoke();
+
+    public static void InvokeExitCombatStateEndTurn()
+        => OnExitCombatStateEndTurn?.Invoke();
+    public static void InvokeExitCombatStateEndCombat()
+        => OnExitCombatStateEndCombat?.Invoke();
+
 
 }

@@ -29,12 +29,15 @@ public class CombatStateLoadLevel : CombatStateBase
         characterData.SetCurrentTileIndex(tileIndex);
         characterData.SetPosition(position);
         CombatGrid._instance.SpawnCharacter(characterData);
+
+        CombatEventManager.InvokeEnterCombatStateLoadNextLevel();
         
     }
 
     public override void Exit()
     {
         base.Exit();
+        CombatEventManager.InvokeExitCombatStateLoadNextLevel();
     }
 
     public override void Update()
