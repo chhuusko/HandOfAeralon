@@ -13,5 +13,6 @@ public class PortraitButton : MonoBehaviour
     {
         CombatUI.Instance.LoadAbilities(_character);
         CombatUI.Instance.UpdateSelectedPortrait(_character);
+        Selector._instance.SetSelectedCharacter(CombatManager._instance.GetCharacterDataDict()[_character]);
     }
 }
