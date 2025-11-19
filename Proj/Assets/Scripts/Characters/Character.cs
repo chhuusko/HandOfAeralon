@@ -90,15 +90,8 @@ public class Character : MonoBehaviour
     [Header("Misc")]
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
-    private NavMeshAgent _navMeshAgent;
-    private bool _bIsMoving = false;
+    private bool _bIsMoving;
     public CharacterData Data => _data;
-    
-    private void Awake()
-    {
-        _navMeshAgent = GetComponent<NavMeshAgent>();
-        _navMeshAgent.enabled = false; // JLW was here
-    }
     
     private void Start()
     {
@@ -302,39 +295,5 @@ public class Character : MonoBehaviour
         }
 
         _bIsMoving = false;
-    }
-
-    /// <summary>
-    /// Sets a new target move location.
-    /// </summary>
-    /// <param name="positions">The grid points to move to.</param>
-    public void SetMovePath(Vector3[] positions)
-    {
-        if (positions == null || positions.Length == 0)
-        {
-            return;
-        }
-
-        NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(transform.position, positions[^1], NavMesh.AllAreas, path);
-        _navMeshAgent.SetPath(path);
-    }
-
-    /// <summary>
-    /// Sets a new target move location.
-    /// </summary>
-    /// <param name="target">The position to move to.</param>
-    public void SetMoveTarget(CombatGridTile target)
-    {
-        _navMeshAgent.SetDestination(target.GetTilePosition());
-    }
-
-    /// <summary>
-    /// Sets a new target move location.
-    /// </summary>
-    /// <param name="target">The position to move to.</param>
-    public void SetMoveTarget(Vector3 target)
-    {
-        _navMeshAgent.SetDestination(target);
     }
 }
