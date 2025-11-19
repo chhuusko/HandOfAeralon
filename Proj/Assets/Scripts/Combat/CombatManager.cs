@@ -116,7 +116,7 @@ public class CombatManager : MonoBehaviour
     void Update()
     {
         _currentCombatState?.Update();
-        GameObject go = GetActiveCharacter();
+        Character go = GetActiveCharacter();
         if(go != null)
             DebugLog.CJLog("Active char: " + go.ToString());
     }
@@ -222,7 +222,7 @@ public class CombatManager : MonoBehaviour
             _currentTurn -= CombatTurn.PlayerTurn;
     }
 
-    public GameObject GetActiveCharacter() 
+    public Character GetActiveCharacter() 
     {
         if (_currentCombatState._state == CombatState.TakeTurn)
         {

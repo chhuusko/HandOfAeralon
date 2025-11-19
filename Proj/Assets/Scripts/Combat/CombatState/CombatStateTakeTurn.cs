@@ -12,15 +12,14 @@ public class CombatStateTakeTurn : CombatStateBase
     [SerializeField] private GameObject _selectorOverHead;
     public UnityEvent TurnStart = new();
 
-    public CombatStateTakeTurn(GameObject activeCharacter)
+    public CombatStateTakeTurn()
     {
-        _activeCharacter = activeCharacter;
     }
 
     public override void Enter()
     {
         base.Enter();
-        CombatEventManager.InvokeEnterCombatStateTakeTurn();
+        
         CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
 
         // NOTE (Calle): Set current turn based on initiative and Faction
@@ -40,6 +39,8 @@ public class CombatStateTakeTurn : CombatStateBase
             SetCurrentTurn(CombatTurn.EnemyTurn);
             CombatManager._instance.HideSelectorOverhead();
         }
+
+        CombatEventManager.InvokeEnterCombatStateTakeTurn(_activeCharacter);
     }
 
     public override void Exit()
@@ -62,9 +63,9 @@ public class CombatStateTakeTurn : CombatStateBase
         }
     }
 
-    public GameObject GetActiveCharacter()
+    public Character GetActiveCharacter()
     {
-        return _activeCharacter;
+        return _activeCharacter.GetComponent<Character>();
     }
 
     private void EndTurn()

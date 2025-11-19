@@ -74,8 +74,6 @@ public class CombatStateCharacterPlacement : CombatStateBase
 
     private void StartTakeTurns()
     {
-        CombatManager._instance.ChangeCombatState( 
-                                            new CombatStateTakeTurn(CombatManager._instance.GetActiveCharacter()) 
-                                            );
+        CombatManager._instance.ChangeCombatState(new CombatStateTakeTurn());
     }
 }
