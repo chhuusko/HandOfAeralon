@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,7 +25,6 @@ public class CardsUnlocked : ScriptableObject
     {
         if (_instance == null)
         {
-            Debug.Log("instantiatie");
             _instance = Resources.Load<CardsUnlocked>("CardsUnlocked");
             _instance.AddAllCards();
             _instance.SetDefaultUnlocked();
@@ -54,5 +54,17 @@ public class CardsUnlocked : ScriptableObject
                 }
             }
         }
+    }
+    public List<Card> GetUnlockedCards()
+    {
+        List<Card> newCard = new List<Card>();
+        for (int i = 0; i < cardsUnlocked.Length; ++i)
+        {
+            if (cardsUnlocked[i].isUnlocked)
+            {
+                newCard.Add(cardsUnlocked[i].card);
+            }
+        }
+        return newCard;
     }
 }

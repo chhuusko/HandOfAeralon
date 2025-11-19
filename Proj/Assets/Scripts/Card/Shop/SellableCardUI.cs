@@ -29,8 +29,7 @@ public class SellableCardUI : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             _fillImage.fillAmount = 1-(_sellTime-_timeHeld)/_sellTime;
             if (_timeHeld > _sellTime)
             {
-                GlobalGameManager.GetInstance().GetGameData().cardList.Remove(_card);
-                GlobalGameManager.GetInstance().ChangeCoins(10);
+                Sell();
                 _soldText.SetActive(true);
                 Destroy(this);
             }
@@ -54,5 +53,10 @@ public class SellableCardUI : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         _timeHeld = 0;
         
         
+    }
+    private void Sell()
+    {
+        GlobalGameManager.GetInstance().GetGameData().cardList.Remove(_card);
+        Shop.GetInstance().ChangeCoins(10);
     }
 }

@@ -9,41 +9,49 @@ public class CombatStateTakeTurn : CombatStateBase
     [SerializeField] private GameObject _activeCharacter;
     [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
-
+    [SerializeField] private GameObject _selectorOverHead;
     public UnityEvent TurnStart = new();
 
-    public CombatStateTakeTurn(GameObject activeCharacter)
+    public CombatStateTakeTurn()
     {
-        _activeCharacter = activeCharacter;
     }
 
     public override void Enter()
     {
         base.Enter();
+        
+        CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
+
+        // NOTE (Calle): Set current turn based on initiative and Faction
+        _activeCharacter = GetNextTurnCharacter();
+        if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Friendly)
+        {
+            SetCurrentTurn(CombatTurn.PlayerTurn);
+            CardHandManager._instance.ChangeMana(1);
+
+            Vector3 position = _activeCharacter.transform.position;
+            position += Vector3.up * 3.0f;
+            CombatManager._instance.SetSelectorOverHeadPosition(position);
+            
+        }
+        else if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Enemy)
+        {
+            SetCurrentTurn(CombatTurn.EnemyTurn);
+            CombatManager._instance.HideSelectorOverhead();
+        }
+
+        CombatEventManager.InvokeEnterCombatStateTakeTurn(_activeCharacter.GetComponent<Character>());
     }
 
     public override void Exit()
     {
         base.Exit();
+        CombatEventManager.InvokeExitCombatStateTakeTurn();
+        CombatUI.Instance.OnEndTurnButtonPressed -= EndTurn;
     }
 
     public override void Update()
     {
-        // NOTE (Calle): Only wan't to set the _activeCharacter once each turn
-        if (_activeCharacter == null)
-        {
-            // NOTE (Calle): Set current turn based on initiative and Faction
-            _activeCharacter = GetNextTurnCharacter();
-            //if(IsCharacterFriendly)
-            if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Friendly)
-            {
-                SetCurrentTurn(CombatTurn.PlayerTurn);
-                CardHandManager._instance.ChangeMana(1);
-            }
-            else if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Enemy)
-                SetCurrentTurn(CombatTurn.EnemyTurn);
-        }
-
         switch (_currentTurn)
         {
             case CombatTurn.PlayerTurn:
@@ -55,10 +63,20 @@ public class CombatStateTakeTurn : CombatStateBase
         }
     }
 
+    public Character GetActiveCharacter()
+    {
+        return _activeCharacter.GetComponent<Character>();
+    }
+
+    private void EndTurn()
+    {
+        CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
+    }
+
     private void SetCurrentTurn(CombatTurn turn)
     {
         _currentTurn = turn;
-        CombatEventManager.CombatTurnChanged(turn);
+        CombatEventManager.InvokeCombatTurnChanged(turn);
     }
 
     public GameObject GetNextTurnCharacter()
@@ -96,6 +114,8 @@ public class CombatStateTakeTurn : CombatStateBase
             case PlayerTurnMode.CardMode:
                 break;
         }
+
+        CombatManager._instance.UpdateSelectorOverHeadPosition();
     }
 
     bool enemyDoingStuff = false;
@@ -105,7 +125,7 @@ public class CombatStateTakeTurn : CombatStateBase
         {
             enemyDoingStuff = true;
             TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandlePlayerTurn() för att AI ska kunna spela båda factions.
-            _activeCharacter = null;
+            //_activeCharacter = null;
             //UpdateCombatState(CombatState.EndTurn);
         }
     }

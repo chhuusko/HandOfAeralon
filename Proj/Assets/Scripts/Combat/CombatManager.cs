@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using Unity.AI.Navigation;
 using Unity.VisualScripting;
@@ -52,21 +53,20 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private string _fileToLoadDEBUG;
 
     [SerializeField] private CombatCamera _combatCamera;
-    [SerializeField] private float _cameraSpeed;
 
-    //[SerializeField] private ICombatState _currentCombatState;
-    
+    private GameObject _selectorOverHead;
+    [SerializeField] private GameObject _selectorOverHeadPrefab;
+    [SerializeField] private Vector3 _selectorOverHeadStartPos;
+
+    private CombatState _combatState;
+
     [Header("Combat State")]
     [SerializeReference] private CombatStateBase _currentCombatState;
     [SerializeField] private CombatState _currentCombatStateEnum;
-    //[SerializeField] private CombatStateLoadLevel _combatStateLoadlevel;
-    //[SerializeField] private CombatStateIntroCinematic _combatStateCinetmatic;
-    //[SerializeField] private CombatStateCharacterPlacement _combatStateCharacterPlacement;
 
-    private CombatState _combatState;
     [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
-    [SerializeField] private GameObject _activeCharacter;
+    private Dictionary<CharacterData, Character> _dataToCharacterDict;
 
     [Header("Abilities")]
     [SerializeField] private List<ClassAbilities> _classAbilities;
@@ -92,6 +92,7 @@ public class CombatManager : MonoBehaviour
         {
             _classAbilitiesDictionary[pair.characterClass] = pair.abilities;
         }
+        _dataToCharacterDict = new Dictionary<CharacterData, Character>();
     }
 
     private void OnEnable()
@@ -106,13 +107,17 @@ public class CombatManager : MonoBehaviour
     {
         _combatState = CombatState.LoadCombatLevel;
         _selector = GetComponent<Selector>();
-
         ChangeCombatState(new CombatStateLoadLevel());
+        _selectorOverHead = Instantiate(_selectorOverHeadPrefab, Vector3.zero, Quaternion.identity);
+        _selectorOverHead.SetActive(false);
     }
 
     void Update()
     {
         _currentCombatState?.Update();
+        Character go = GetActiveCharacter();
+        if(go != null)
+            DebugLog.CJLog("Active char: " + go.ToString());
     }
 
     public void ChangeCombatState(CombatStateBase newCombatState)
@@ -121,7 +126,7 @@ public class CombatManager : MonoBehaviour
         _currentCombatState = newCombatState;
         _currentCombatStateEnum = newCombatState._state;
         // NOTE (Calle): Broadcast the state change.
-        CombatEventManager.CombatStateChanged(newCombatState._state);
+        CombatEventManager.InvokeCombatStateChanged(newCombatState._state);
 
         newCombatState?.Enter();
     }
@@ -133,7 +138,53 @@ public class CombatManager : MonoBehaviour
 
     public CombatCamera GetCombatCamera() { return _combatCamera; }
 
+    public GameObject GetSelectorOverHead() { return _selectorOverHead; }
     public Selector GetCombatSelector() { return _selector; }
+
+    public Dictionary<CharacterData, Character> GetCharacterDataDict()
+    {
+        return _dataToCharacterDict;
+    }
+
+    public void InitializeCharacterDataDict()
+    {
+        _dataToCharacterDict.Clear();
+
+        List<CharacterData> characterDataList = GlobalGameManager.GetInstance().GetGameData().heroDataList;
+
+        List<CombatGridTile> deployTiles = CombatGrid._instance.GetAllDeployTiles();
+
+        // NOTE (Calle): only placing heroes on the first deploytiles in the list.
+        int deployTileIndex = 0;
+        foreach(CharacterData data in characterDataList)
+        {
+            Character playerHero = CombatGrid._instance.SpawnCharacter(data, 
+                                                                       deployTiles[deployTileIndex++].GetTilePosition(),
+                                                                       Quaternion.Euler(0.0f, 90.0f, 0.0f));
+            playerHero.Initialize(data);
+
+            _dataToCharacterDict.Add(data, playerHero);
+        }
+    }
+
+    public void SetSelectorOverHeadPosition(Vector3 pos)
+    {
+        _selectorOverHead.SetActive(true);
+        _selectorOverHeadStartPos = pos;
+        _selectorOverHead.transform.position = pos;
+    }
+
+    public void UpdateSelectorOverHeadPosition()
+    {
+        
+        float py = _selectorOverHeadStartPos.y;
+        
+        _selectorOverHead.transform.position = new Vector3(_selectorOverHeadStartPos.x, py  + Mathf.Sin(Time.deltaTime * 0.1f) * 200.0f, _selectorOverHeadStartPos.z);
+    }
+    public void HideSelectorOverhead()
+    {
+        _selectorOverHead.SetActive(false);
+    }
 
     /// <summary>
     /// Gets all abilities available to the class.
@@ -170,7 +221,15 @@ public class CombatManager : MonoBehaviour
             _currentTurn -= CombatTurn.PlayerTurn;
     }
 
-    public GameObject GetActiveCharacter() { return _activeCharacter; }
+    public Character GetActiveCharacter() 
+    {
+        if (_currentCombatState._state == CombatState.TakeTurn)
+        {
+            CombatStateTakeTurn combatStateTakeTurn = (CombatStateTakeTurn)_currentCombatState;
+            return combatStateTakeTurn.GetActiveCharacter();
+        }
+        return null;
+    }
 
     public CombatGridTile GetTileComponent(int x, int y)
     {
@@ -188,14 +247,5 @@ public class CombatManager : MonoBehaviour
     public void SetCombatTurn(CombatTurn turn) 
     { 
         _currentTurn = turn; 
-    }
-
-    public void UpdateCombatState(CombatState state)
-    {
-        if (_combatState != state)
-        {
-            _combatState = state;
-            CombatEventManager.CombatStateChanged(state);
-        }
     }
 }

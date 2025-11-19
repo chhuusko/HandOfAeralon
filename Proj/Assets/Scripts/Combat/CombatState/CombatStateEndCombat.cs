@@ -7,11 +7,13 @@ public class CombatStateEndCombat : CombatStateBase
     public override void Enter()
     {
         base.Enter();
+        CombatEventManager.InvokeEnterCombatStateEndCombat();
     }
 
     public override void Exit()
     {
         base.Exit();
+        CombatEventManager.InvokeExitCombatStateEndCombat();
     }
 
     public override void Update()

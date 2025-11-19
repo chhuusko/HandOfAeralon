@@ -86,10 +86,10 @@ public class GlobalGameManager : ScriptableObject
             _characterLibrary.GetPrefab(CharacterClass.Bard).GetComponent<Character>()
         };
         _currentGame.heroDataList = new List<CharacterData>(){
-            new CharacterData(_classDatabase.Classes[0], Faction.Friendly),
-            new CharacterData(_classDatabase.Classes[1], Faction.Friendly),
-            new CharacterData(_classDatabase.Classes[2], Faction.Friendly),
-            new CharacterData(_classDatabase.Classes[3], Faction.Friendly)
+            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Barbarian], Faction.Friendly),
+            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Rogue], Faction.Friendly),
+            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Bard], Faction.Friendly),
+            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Wizard], Faction.Friendly)
         };
 
         _currentGame.cardList = new List<Card>(_deckPreset.GetCards());

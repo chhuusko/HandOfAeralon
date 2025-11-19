@@ -14,6 +14,10 @@ public abstract class Ability : ScriptableObject
     [SerializeField] private RangeCalculation _rangeCalculation;
     [SerializeField] private AbilityTargetType _targetType;
 
+    [Header("- Visuals & Audio - ")]
+    [SerializeField] private ParticleSystem castingEffect, hitEffect;
+    [SerializeField] private AudioClip castingSound, hitSound;
+
     public enum AbilityTargetType
     {
         Any,
