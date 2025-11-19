@@ -9,6 +9,7 @@ public class DEBUGSettings : ScriptableObject
     public bool JLWLog = true;
     public bool AlexLog = true;
     public bool JoppaLog = true;
+    public bool CombatLog = true;
 }
 
 
@@ -56,5 +57,12 @@ public static class DebugLog
         if (_settings && _settings.JoppaLog)
 
             Debug.Log("Joppa Log: " + message);
+    }
+    public static void CombatLog(string message)
+    {
+        LoadSettings();
+        if (_settings && _settings.CombatLog)
+
+            Debug.Log("Combat Log: " + message);
     }
 };

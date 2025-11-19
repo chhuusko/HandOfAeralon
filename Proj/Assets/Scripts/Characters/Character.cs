@@ -79,7 +79,7 @@ public class Character : MonoBehaviour
     // TODO: Traits.
     
     [Header("Current stats")]
-    [SerializeField] private int _currentSpeed;
+    [SerializeField] private int _currentInitiative;
     [SerializeField] private int _currentDamage;
     [SerializeField] private int _currentMovementPoints;
     
@@ -104,7 +104,7 @@ public class Character : MonoBehaviour
 
     public void ResetCharacter() // Endast för testkörning (JLW), tills dess att turtagningen fungerar som tänkt
     {
-        _currentSpeed = _data.BaseInitiative;
+        _currentInitiative = _data.BaseInitiative;
         _currentDamage = _data.BaseDamage;
         _currentMovementPoints = _data.BaseMovementPoints;
     }
@@ -141,7 +141,7 @@ public class Character : MonoBehaviour
     
     // Current stats.
     public int GetHealthPoints() => _data.CurrentHealthPoints;
-    public int GetSpeed() => _currentSpeed;
+    public int GetSpeed() => _currentInitiative;
     public int GetDamage() => _currentDamage;
     public int GetMovementPoints() => _currentMovementPoints;
     public Vector2Int GetCurrentTileIndex() => _currentTileIndex;
@@ -162,7 +162,7 @@ public class Character : MonoBehaviour
     
     // Current stats.
     public void SetCurrentHealthPoints(int healthPoints) => _data.SetCurrentHealthPoints(healthPoints);
-    public void SetCurrentSpeed(int speed) => _currentSpeed = speed;
+    public void SetCurrentSpeed(int speed) => _currentInitiative = speed;
     public void SetCurrentDamage(int damage) => _currentDamage = damage;
     public void SetCurrentMovementPoints(int movementPoints) => _currentMovementPoints = movementPoints;
     public void SetCurrentTileIndex(Vector2Int tileIndex) => _currentTileIndex = tileIndex;
@@ -218,7 +218,7 @@ public class Character : MonoBehaviour
         }
             
         // Set values from class data.
-        _currentSpeed = _data.BaseInitiative;
+        _currentInitiative = _data.BaseInitiative;
         _currentDamage = _data.BaseDamage;
         _currentMovementPoints = _data.BaseMovementPoints;
     }
