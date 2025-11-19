@@ -127,23 +127,22 @@ public class Selector : MonoBehaviour
         CombatGridTile hoveredTile = GetTileUnderMouse();
         if (hoveredTile == null) return;
 
-        GameObject characterObject = hoveredTile.GetOccupant();
-        if (characterObject == null) return;
-    
-
-        if (characterObject.TryGetComponent<Character>(out var character)){
-            // TODO: Call UIControll script to show character info on character position.
-        }
-
-        // TODO: Change state on tiles (with matching color) to indicate aoe abilities effected area.
-        // if _currentState = SelectorState.ActionTypeSelected && hovoredTile = in range
-        if (_currentState == SelectorState.ActionTypeSelected && characterObject.TryGetComponent<AbilityHandler>(out var abilityHandler))
+        // Show hovered character info.
+        GameObject occupant = hoveredTile.GetOccupant();
+        if (occupant != null && occupant.TryGetComponent<Character>(out var character))
         {
-            if (abilityHandler.GetPendingAbility() == null) return;
-
-            abilityHandler.PreviewTargetTiles(hoveredTile);
+            // TODO: Show character info in UI.
         }
-       
+
+        // Change color on tiles to indicate aoe abilities effected area.
+        if (_currentState == SelectorState.ActionTypeSelected)
+        {
+            if (_selectedCharacter == null) return;
+            AbilityHandler handler = _selectedCharacter.GetAbilityHandler();
+
+            if (handler == null || handler.GetPendingAbility() == null) return;
+            handler.PreviewTargetTiles(hoveredTile);
+        }
     }
 
     /// <summary>
@@ -243,10 +242,6 @@ public class Selector : MonoBehaviour
             return;
         }
 
-        if (_selectedCharacter != null && _currentState == SelectorState.Idle && character.GetFaction() != Faction.Friendly)
-        {
-            DeselectCharacter();
-        }
         _selectedCharacter = character;
     }
 
@@ -314,10 +309,16 @@ public class Selector : MonoBehaviour
         _selectedCharacter?.GetAbilityHandler()?.SetPendingAbility(null);
         _selectedCharacter = null;
         _pendingCharacterActionType = CharacterActionType.Null;
-        
+        ResetColorAllTiles();
 
-        if (CombatManager._instance.GetCombatTurn() == CombatTurn.PlayerTurn)
+        if (_currentState == SelectorState.PlacingCharacters)
         {
+            // Stay in placement phase.
+            _currentState = SelectorState.PlacingCharacters;
+        }
+        else if (CombatManager._instance.GetCombatTurn() == CombatTurn.PlayerTurn)
+        {
+            // Back to idle if it's players turn.
             _currentState = SelectorState.Idle;
         }
         else
@@ -441,6 +442,18 @@ public class Selector : MonoBehaviour
                 tile.SetTileColor(color);
             }
         }
+    }
+    private void ResetColorAllTiles()
+    {
+        GameObject[] tileObjects = CombatGrid._instance.GetAllTiles();
+        List<CombatGridTile> tiles = new();
+
+        foreach (GameObject obj in tileObjects) {
+            if (obj.TryGetComponent<CombatGridTile>(out var tile)) {
+                tiles.Add(tile);
+            }
+        }
+        SetColorOfTiles(tiles, Color.white);
     }
     private void DebugPossibleStartErrors()
     {
