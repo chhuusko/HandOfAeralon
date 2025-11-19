@@ -66,6 +66,8 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
+    [SerializeField] private CombatTurnOrder _combatTurnOrder;
+
     private Dictionary<CharacterData, Character> _dataToCharacterDict;
 
     [Header("Abilities")]
@@ -93,6 +95,7 @@ public class CombatManager : MonoBehaviour
             _classAbilitiesDictionary[pair.characterClass] = pair.abilities;
         }
         _dataToCharacterDict = new Dictionary<CharacterData, Character>();
+        _combatTurnOrder = new CombatTurnOrder();
     }
 
     private void OnEnable()
@@ -141,6 +144,7 @@ public class CombatManager : MonoBehaviour
     public GameObject GetSelectorOverHead() { return _selectorOverHead; }
     public Selector GetCombatSelector() { return _selector; }
 
+    public CombatTurnOrder GetCombatTurnOrder() { return _combatTurnOrder; }
     public Dictionary<CharacterData, Character> GetCharacterDataDict()
     {
         return _dataToCharacterDict;

@@ -2,10 +2,14 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// NOTE (Calle): PriorityQueue is a MIN HEAP so small values are prioritized, therefor initiative has to be negated when 
+//               inserted.
+
 public class CombatTurnOrder
 {
-    private List<Character> _characters;
-    private PriorityQueue<Character> _characterTurnQueue;
+    [SerializeField] private List<Character> _characters;
+    [SerializeField] private PriorityQueue<Character> _characterTurnQueue;
 
     public CombatTurnOrder()
     {
@@ -16,9 +20,11 @@ public class CombatTurnOrder
 
     public void InitializeTurnOrder()
     {
-        foreach(Character c in GlobalGameManager.GetInstance().GetGameData().heroList)
+        _characters = CombatGrid._instance.GetAllCharacterScripts();
+        
+        foreach (Character c in _characters)
         {
-            //_characterTurnQueue.Enqueue(c, c.GetInitiative());
+            _characterTurnQueue.Enqueue(c, -c.GetInitiative());
         }
     }
 
