@@ -91,11 +91,13 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
     private NavMeshAgent _navMeshAgent;
+    private bool _bIsMoving = false;
     public CharacterData Data => _data;
     
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        _navMeshAgent.enabled = false; // JLW was here
     }
     
     private void Start()
@@ -107,7 +109,7 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void ResetCharacter() // Endast för testkörning (JLW)
+    public void ResetCharacter() // Endast för testkörning (JLW), tills dess att turtagningen fungerar som tänkt
     {
         _currentSpeed = _data.BaseInitiative;
         _currentDamage = _data.BaseDamage;
@@ -244,6 +246,9 @@ public class Character : MonoBehaviour
     
     public bool IsMoving()
     {
+        return _bIsMoving;
+
+        /*
         if (_navMeshAgent.pathPending)
         {
             return true; 
@@ -251,6 +256,52 @@ public class Character : MonoBehaviour
 
         return _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance
                || _navMeshAgent.velocity.sqrMagnitude > 0.03f;
+        */
+    }
+
+    public IEnumerator MoveAlongPath(List<GameObject> tiles)
+    {
+        if (tiles == null || tiles.Count == 0)
+        {
+            DebugLog.JLWLog($"Character.cs | MoveAlongPath called with an empty list!");
+            yield break;
+        }
+
+        _bIsMoving = true;
+
+        float moveSpeed = 4f; // Måste matcha animationerna
+
+        foreach (var tile in tiles)
+        {
+            Vector3 targetPos = tile.transform.position;
+
+            Vector3 direction = (targetPos - transform.position).normalized;
+            direction.y = 0f;
+
+            if (direction.sqrMagnitude > 0.0001f)
+            {
+                transform.rotation = Quaternion.LookRotation(direction);
+            }
+
+            DebugLog.JLWLog($"Character.cs | {this.name} moving towards {targetPos}");
+
+            while (Vector3.Distance(transform.position, targetPos) > 0.01f)
+            {
+                transform.position = Vector3.MoveTowards(
+                    transform.position,
+                    targetPos,
+                    moveSpeed * Time.deltaTime
+                );
+
+                yield return null;
+            }
+
+            transform.position = targetPos;
+
+            //GetComponent<CombatGridTile>().SetOccupant(this.gameObject);
+        }
+
+        _bIsMoving = false;
     }
 
     /// <summary>
@@ -268,7 +319,7 @@ public class Character : MonoBehaviour
         NavMesh.CalculatePath(transform.position, positions[^1], NavMesh.AllAreas, path);
         _navMeshAgent.SetPath(path);
     }
-    
+
     /// <summary>
     /// Sets a new target move location.
     /// </summary>
