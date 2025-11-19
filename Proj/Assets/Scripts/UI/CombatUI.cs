@@ -61,7 +61,7 @@ public class CombatUI : MonoBehaviour
         _hand.SetActive(true);
         
         // Set abilities for first character.
-        LoadAbilities(Selector._instance.GetSelectedCharacter().Data);
+        LoadAbilities(Selector._instance.GetSelectedCharacter()?.Data);
     }
 
     public void EndTurn()
