@@ -26,7 +26,7 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Color _activeColor;
     [SerializeField] private Color _inactiveColor;
     
-    private List<GameObject> _portraits = new();
+    private List<PortraitButton> _portraits = new();
     
     private void OnEnable()
     {
@@ -37,6 +37,13 @@ public class CombatUI : MonoBehaviour
     private void OnDisable()
     {
         CardHandManager.onManaChange -= UpdateManaText;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateSelectedPortrait;
+
+        foreach (var portrait in _portraits)
+        {
+            portrait.OnClickPortraitButton -= UpdatePortraitColors;
+            portrait.OnClickPortraitButton -= LoadAbilities;
+        }
     }
 
     private void Awake()
@@ -110,7 +117,7 @@ public class CombatUI : MonoBehaviour
             pb.OnClickPortraitButton += UpdatePortraitColors;
             pb.OnClickPortraitButton += LoadAbilities;
             
-            _portraits.Add(button.gameObject);
+            _portraits.Add(pb);
         }
     }
 
@@ -174,7 +181,6 @@ public class CombatUI : MonoBehaviour
             Button abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
             
             var ability = character.AvailableAbilities[i];
-            // abilityButton.GetComponentInChildren<TextMeshProUGUI>().text = ability.name;
             abilityButton.image.sprite = ability.GetIcon();
             abilityButton.GetComponent<AbilityButton>().SetAbility(ability);
         }
