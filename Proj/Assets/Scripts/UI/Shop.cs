@@ -1,13 +1,21 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Shop : MonoBehaviour
 {
+    [SerializeField] private static Shop _instance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] private GameObject _sellTab;
-    [SerializeField] private static Shop _instance;
-    public void Awake()
+    [SerializeField] private Transform[] _purchasCardPos;
+    [SerializeField] private GameObject _purchaseCardPrefab;
+    private List<Card> unlockedCards;
+    private List<GameObject> _buyableCardInScene;
+    private void Awake()
     {
-        Debug.Log(CardsUnlocked.GetInstance());
+        _buyableCardInScene = new List<GameObject>();
+        unlockedCards = CardsUnlocked.GetInstance().GetUnlockedCards();
+        LoadBuyCard();
     }
     public static Shop GetInstance()
     {
@@ -20,7 +28,19 @@ public class Shop : MonoBehaviour
     }
     public void LoadBuyCard()
     {
-        
+        foreach (Transform t in _purchasCardPos)
+        {
+            GameObject newCardObject = Instantiate(_purchaseCardPrefab, t);
+            newCardObject.GetComponent<BuyableCard>().SetCard(GetRandomUnlockedCard());
+            _buyableCardInScene.Add(newCardObject);
+        }
+    }
+    public Card GetRandomUnlockedCard()
+    {
+        return unlockedCards[Random.Range(0, unlockedCards.Count)];
+    }
+    public void Refresh()
+    {
 
     }
     public void SellCard()
