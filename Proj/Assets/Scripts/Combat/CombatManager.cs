@@ -151,6 +151,8 @@ public class CombatManager : MonoBehaviour
         List<CharacterData> characterDataList = GlobalGameManager.GetInstance().GetGameData().heroDataList;
 
         List<CombatGridTile> deployTiles = CombatGrid._instance.GetAllDeployTiles();
+
+        // NOTE (Calle): only placing heroes on the first deploytiles in the list.
         int deployTileIndex = 0;
         foreach(CharacterData data in characterDataList)
         {
