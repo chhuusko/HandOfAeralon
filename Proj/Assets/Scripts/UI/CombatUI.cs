@@ -14,7 +14,7 @@ public class CombatUI : MonoBehaviour
     
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Image _characterPortraitPanel;
-    [SerializeField] private Image _selectedCharacterPortrait;
+    [SerializeField] private Image _activeCharacterPortrait;
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
     [SerializeField] private Button _abilityButtonPrefab;
@@ -22,9 +22,14 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _hand;
     [SerializeField] private TextMeshProUGUI _mana;
 
+    // Colors.
+    [SerializeField] private Color _activeColor;
+    [SerializeField] private Color _inactiveColor;
+    
     private void OnEnable()
     {
         CardHandManager.onManaChange += UpdateManaText;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateSelectedPortrait;
     }
 
     private void OnDisable()
@@ -48,7 +53,7 @@ public class CombatUI : MonoBehaviour
         UpdateCharacterPortraits();
         
         // Player 1 portrait displayed as default when no character has been selected yet.
-        UpdateSelectedPortrait(GlobalGameManager.GetInstance().GetGameData().heroDataList[0]);
+        // UpdateSelectedPortrait(GlobalGameManager.GetInstance().GetGameData().heroDataList[0]);
     }
 
     public void StartCombat()
@@ -95,9 +100,23 @@ public class CombatUI : MonoBehaviour
         
         foreach (CharacterData c in heroList)
         {
-            Button characterPortraitButton = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
-            characterPortraitButton.image.sprite = c.ClassData.classImage;
-            characterPortraitButton.GetComponent<PortraitButton>().SetCharacter(c);
+            Button button = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
+            button.image.sprite = c.ClassData.classImage;
+            button.GetComponent<PortraitButton>().SetCharacter(c);
+            button.image.color = _inactiveColor;
+        }
+    }
+
+    public void UpdatePortraitColors(GameObject selectedPortrait)
+    {
+        selectedPortrait.GetComponent<Image>().color = _activeColor;
+        for (int i = 0; i < _characterPortraitPanel.transform.childCount; i++)
+        {
+            GameObject child = _characterPortraitPanel.transform.GetChild(i).gameObject;
+            if (child != selectedPortrait)
+            {
+                child.GetComponent<Image>().color = _inactiveColor;
+            }
         }
     }
 
@@ -106,12 +125,13 @@ public class CombatUI : MonoBehaviour
         _mana.text = $"Mana\n{mana}/10";
     }
 
-    public void UpdateSelectedPortrait(CharacterData character)
+    private void UpdateSelectedPortrait(Character c)
     {
-        if (character != null)
+        if (!c || c.Data.Faction == Faction.Enemy)
         {
-            _selectedCharacterPortrait.sprite = character.ClassData.classImage;
+            return;
         }
+        _activeCharacterPortrait.sprite = c.Data.ClassData.classImage;
     }
     
     public void SetCardsActive(bool active)
