@@ -26,6 +26,8 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Color _activeColor;
     [SerializeField] private Color _inactiveColor;
     
+    private List<GameObject> _portraits = new();
+    
     private void OnEnable()
     {
         CardHandManager.onManaChange += UpdateManaText;
@@ -102,22 +104,24 @@ public class CombatUI : MonoBehaviour
         {
             Button button = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
             button.image.sprite = c.ClassData.classImage;
-            button.GetComponent<PortraitButton>().SetCharacter(c);
             button.image.color = _inactiveColor;
+            PortraitButton pb = button.GetComponent<PortraitButton>();
+            pb.Character = c;
+            pb.OnClickPortraitButton += UpdatePortraitColors;
+            pb.OnClickPortraitButton += LoadAbilities;
+            
+            _portraits.Add(button.gameObject);
         }
     }
 
-    public void UpdatePortraitColors(GameObject selectedPortrait)
+    private void UpdatePortraitColors(PortraitButton selectedPortrait)
     {
-        selectedPortrait.GetComponent<Image>().color = _activeColor;
-        for (int i = 0; i < _characterPortraitPanel.transform.childCount; i++)
+        foreach (var portrait in _portraits)
         {
-            GameObject child = _characterPortraitPanel.transform.GetChild(i).gameObject;
-            if (child != selectedPortrait)
-            {
-                child.GetComponent<Image>().color = _inactiveColor;
-            }
+            portrait.GetComponent<Image>().color = _inactiveColor;
         }
+        
+        selectedPortrait.GetComponent<Image>().color = _activeColor;
     }
 
     private void UpdateManaText(int mana)
@@ -140,10 +144,15 @@ public class CombatUI : MonoBehaviour
         _abilityPanel.color = active ? new Color(1, 1, 1, 0.5f) : new Color(1, 1, 1, 1);
     }
 
+    private void LoadAbilities(PortraitButton portraitButton)
+    {
+        LoadAbilities(portraitButton.Character);
+    }
+
     /// <summary>
     /// Displays each available ability for the selected character.
     /// </summary>
-    /// <param name="character">The character of which's abilities to display.</param>
+    /// <param name="portraitButton">The character of which's abilities to display.</param>
     public void LoadAbilities(CharacterData character)
     {
         if (character == null)
@@ -152,7 +161,7 @@ public class CombatUI : MonoBehaviour
             return;
         }
 
-        // Remove all current buttons.
+        // Remove all current ability buttons.
         for (int i = 0; i < _abilityPanel.transform.childCount; i++)
         {
             Destroy(_abilityPanel.transform.GetChild(i).gameObject);
