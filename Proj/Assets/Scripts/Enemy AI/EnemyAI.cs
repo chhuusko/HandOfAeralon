@@ -30,6 +30,7 @@ public class EnemyAI : MonoBehaviour
         {
             StartCoroutine(Autoplay());
         }
+        // End of only for testing
     }
 
     private IEnumerator Autoplay() // Only for testing
@@ -105,13 +106,7 @@ public class EnemyAI : MonoBehaviour
             DebugLog.JLWLog($"EnemyAI.cs | _movePath NOT FOUND!");
         }
 
-        Vector3[] vectorPath = new Vector3[_movePath.Count];
-        for (int i = 0; i < _movePath.Count; i++)
-        {
-            vectorPath[i] = _movePath[i].transform.position;
-        }
-
-        _currentCharacter.SetMovePath(vectorPath);
+        StartCoroutine(_currentCharacter.MoveAlongPath(_movePath));
         if (_bDebug && _movePath == null && _movePath.Count != 0) DebugLog.JLWLog($"EnemyAI.cs | Moving {_currentCharacter.name} to {_movePath[_movePath.Count - 1].GetComponent<CombatGridTile>().GetTileIndex()}");
 
         StartCoroutine(WaitForMovementCompletion());
@@ -190,6 +185,14 @@ public class EnemyAI : MonoBehaviour
     {
         if (GridExplorer._instance.ChebyshevDistance(attacker.GetCurrentTileIndex(), target.GetCurrentTileIndex()) <= _currentAttackRange)
         {
+            Vector3 direction = (target.transform.position - _currentCharacter.transform.position).normalized;
+            direction.y = 0f;
+
+            if (direction.sqrMagnitude > 0.0001f)
+            {
+                _currentCharacter.transform.rotation = Quaternion.LookRotation(direction);
+            }
+
             target.TakeDamage(_currentCharacter.GetDamage()); // Bör använda en ability istället
             if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name} strikes {target.name} for {_currentCharacter.GetDamage()} damage.");
             return;

@@ -58,6 +58,42 @@ public class GridExplorer : MonoBehaviour
     private GameObject _debugGoalTile;
 
     /// <summary>
+    /// Defines our melee attacking range. Includes diagonals, but only for attacks that reach 1 tile. Can't reach through diagonal obstacles.
+    /// </summary>
+    /// <param name="attacker">The <see cref="GameObject"/> of the attacking character.</param>
+    /// <param name="target">The <see cref="GameObject"/> of the target character.</param>
+    /// <returns>True if the target is within range of our melee attack definition, false if not.</returns>
+    public bool MeleeAttackCheck(GameObject attacker, GameObject target)
+    {
+        CombatGridTile aTile = attacker.GetComponent<Character>().GetCurrentTileComponent();
+        CombatGridTile tTile = target.GetComponent<Character>().GetCurrentTileComponent();
+
+        Vector2Int aPos = aTile.GetTileIndex();
+        Vector2Int tPos = tTile.GetTileIndex();
+
+        if (ChebyshevDistance(aPos, tPos) != 1)
+        {
+            return false;
+        }
+
+        Vector2Int diff = tPos - aPos;
+
+        // If attack is diagonal
+        if (Mathf.Abs(diff.x) == 1 && Mathf.Abs(diff.y) == 1)
+        {
+            Vector2Int side1 = new Vector2Int(aPos.x, tPos.y);
+            Vector2Int side2 = new Vector2Int(tPos.x, aPos.y);
+
+            if (!IsWalkable(side1) && !IsWalkable(side2))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
     /// Calculates the ManhattanDistance between two Vector2Int (a.x - b.x + a.y - b.y).
     /// </summary>
     /// <param name="a">The Vector2Int representation of a grid tile.</param>

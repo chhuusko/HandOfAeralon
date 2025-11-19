@@ -53,16 +53,20 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] private CombatCamera _combatCamera;
 
+    [SerializeField] private GameObject _selectorOverHead;
+    [SerializeField] private GameObject _selectorOverHeadPrefab;
+    [SerializeField] private Vector3 _selectorOverHeadStartPos;
+
     private CombatState _combatState;
 
     [Header("Combat State")]
     [SerializeReference] private CombatStateBase _currentCombatState;
     [SerializeField] private CombatState _currentCombatStateEnum;
 
-
     [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
     [SerializeField] private GameObject _activeCharacter;
+    private Dictionary<CharacterData, Character> _dataToCharacterDict;
 
     [Header("Abilities")]
     [SerializeField] private List<ClassAbilities> _classAbilities;
@@ -88,6 +92,7 @@ public class CombatManager : MonoBehaviour
         {
             _classAbilitiesDictionary[pair.characterClass] = pair.abilities;
         }
+        _dataToCharacterDict = new Dictionary<CharacterData, Character>();
     }
 
     private void OnEnable()
@@ -102,8 +107,9 @@ public class CombatManager : MonoBehaviour
     {
         _combatState = CombatState.LoadCombatLevel;
         _selector = GetComponent<Selector>();
-
         ChangeCombatState(new CombatStateLoadLevel());
+        _selectorOverHead = Instantiate(_selectorOverHeadPrefab, Vector3.zero, Quaternion.identity);
+        _selectorOverHead.SetActive(false);
     }
 
     void Update()
@@ -129,7 +135,49 @@ public class CombatManager : MonoBehaviour
 
     public CombatCamera GetCombatCamera() { return _combatCamera; }
 
+    public GameObject GetSelectorOverHead() { return _selectorOverHead; }
     public Selector GetCombatSelector() { return _selector; }
+
+    public Dictionary<CharacterData, Character> GetCharacterDataDict()
+    {
+        return _dataToCharacterDict;
+    }
+
+    public void InitializeCharacterDataDict()
+    {
+        List<CharacterData> characterDataList = GlobalGameManager.GetInstance().GetGameData().heroDataList;
+
+        List<CombatGridTile> deployTiles = CombatGrid._instance.GetAllDeployTiles();
+        int deployTileIndex = 0;
+        foreach(CharacterData data in characterDataList)
+        {
+            Character playerHero = CombatGrid._instance.SpawnCharacter(data, 
+                                                                       deployTiles[deployTileIndex++].GetTilePosition(),
+                                                                       Quaternion.identity);
+            playerHero.Initialize(data);
+
+            _dataToCharacterDict.Add(data, playerHero);
+        }
+    }
+
+    public void SetSelectorOverHeadPosition(Vector3 pos)
+    {
+        _selectorOverHead.SetActive(true);
+        _selectorOverHeadStartPos = pos;
+        _selectorOverHead.transform.position = pos;
+    }
+
+    public void UpdateSelectorOverHeadPosition()
+    {
+        
+        float py = _selectorOverHeadStartPos.y;
+        
+        _selectorOverHead.transform.position = new Vector3(_selectorOverHeadStartPos.x, py  + Mathf.Sin(Time.deltaTime * 0.1f) * 200.0f, _selectorOverHeadStartPos.z);
+    }
+    public void HideSelectorOverhead()
+    {
+        _selectorOverHead.SetActive(false);
+    }
 
     /// <summary>
     /// Gets all abilities available to the class.
