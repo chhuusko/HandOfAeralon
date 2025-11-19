@@ -15,13 +15,13 @@ public class CombatStateIntroCinematic : CombatStateBase
     public override void Enter()
     {
         base.Enter();
-        CombatEventManager.OnEnterCombatStateIntroCinematic += EnterIntroCinematic;
+        CombatEventManager.InvokeEnterCombatStateIntroCinematic();
     }
 
     public override void Exit()
     {
         base.Exit();
-        
+        CombatEventManager.InvokeExitCombatStateIntroCinematic();
     }
 
     public override void Update()
@@ -32,8 +32,4 @@ public class CombatStateIntroCinematic : CombatStateBase
             _combatCamera.PlayIntroCinematic();
     }
 
-    private void EnterIntroCinematic()
-    {
-
-    }
 }

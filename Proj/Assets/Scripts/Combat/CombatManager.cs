@@ -52,18 +52,14 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private string _fileToLoadDEBUG;
 
     [SerializeField] private CombatCamera _combatCamera;
-    [SerializeField] private float _cameraSpeed;
 
-    //[SerializeField] private ICombatState _currentCombatState;
-    
+    private CombatState _combatState;
+
     [Header("Combat State")]
     [SerializeReference] private CombatStateBase _currentCombatState;
     [SerializeField] private CombatState _currentCombatStateEnum;
-    //[SerializeField] private CombatStateLoadLevel _combatStateLoadlevel;
-    //[SerializeField] private CombatStateIntroCinematic _combatStateCinetmatic;
-    //[SerializeField] private CombatStateCharacterPlacement _combatStateCharacterPlacement;
 
-    private CombatState _combatState;
+
     [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
     [SerializeField] private GameObject _activeCharacter;
@@ -121,7 +117,7 @@ public class CombatManager : MonoBehaviour
         _currentCombatState = newCombatState;
         _currentCombatStateEnum = newCombatState._state;
         // NOTE (Calle): Broadcast the state change.
-        CombatEventManager.CombatStateChanged(newCombatState._state);
+        CombatEventManager.InvokeCombatStateChanged(newCombatState._state);
 
         newCombatState?.Enter();
     }
@@ -188,14 +184,5 @@ public class CombatManager : MonoBehaviour
     public void SetCombatTurn(CombatTurn turn) 
     { 
         _currentTurn = turn; 
-    }
-
-    public void UpdateCombatState(CombatState state)
-    {
-        if (_combatState != state)
-        {
-            _combatState = state;
-            CombatEventManager.CombatStateChanged(state);
-        }
     }
 }

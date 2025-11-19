@@ -16,12 +16,14 @@ public class CombatStateCharacterPlacement : CombatStateBase
     {
         base.Enter();
         CombatUI.Instance.OnStartCombatButtonPressed += StartTakeTurns;
+        CombatEventManager.InvokeEnterCombatStatePlaceCharacter();
     }
 
     public override void Exit()
     {
         base.Exit();
         CombatUI.Instance.OnStartCombatButtonPressed -= StartTakeTurns;
+        CombatEventManager.InvokeExitCombatStatePlaceCharacter();
     }
 
     public override void Update()
