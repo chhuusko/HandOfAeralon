@@ -1,18 +1,17 @@
+using System;
 using UnityEngine;
 
 public class PortraitButton : MonoBehaviour
 {
-    private CharacterData _character;
+    public event Action<PortraitButton> OnClickPortraitButton;
 
-    public void SetCharacter(CharacterData character)
-    {
-        _character = character;
-    }
+    public CharacterData Character { get; set; }
 
     public void OnClick()
     {
-        CombatUI.Instance.LoadAbilities(_character);
-        CombatUI.Instance.UpdatePortraitColors(gameObject);
-        Selector._instance.SetSelectedCharacter(CombatManager._instance.GetCharacterDataDict()[_character]);
+        OnClickPortraitButton?.Invoke(this);
+        // CombatUI.Instance.LoadAbilities(_character);
+        // CombatUI.Instance.UpdatePortraitColors(gameObject);
+        Selector._instance.SetSelectedCharacter(CombatManager._instance.GetCharacterDataDict()[Character]);
     }
 }
