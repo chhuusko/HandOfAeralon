@@ -20,11 +20,11 @@ public class Selector : MonoBehaviour
     [SerializeField] private SelectorState _currentState = SelectorState.NonActive;
     [SerializeField] private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
     [SerializeField] private Character _selectedCharacter;
-    [SerializeField] private bool _bDebugSelector = false;
+    [SerializeField] private bool _bDebugSelector = true;
     public enum CharacterActionType
     {
         Null,
-        Movevement,
+        Movement,
         AbilityCasting
     } 
 
@@ -268,6 +268,7 @@ public class Selector : MonoBehaviour
         if (bIsFriendly && bIsCharactersTurn)
         {
             ShowCharacterUIWithOptions(character);
+            _pendingCharacterActionType = CharacterActionType.Movement;
             _currentState = SelectorState.CharacterSelected;
             _selectedCharacter = character;
 
@@ -361,6 +362,8 @@ public class Selector : MonoBehaviour
     {
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
+            _pendingCharacterActionType = CharacterActionType.AbilityCasting;
+            _currentState = SelectorState.ActionTypeSelected;
             abilityHandler.SetPendingAbility(ability);
             abilityHandler.CalculateAbilityRange();
             SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.green);
@@ -398,7 +401,7 @@ public class Selector : MonoBehaviour
             return;
         }
 
-        if (_pendingCharacterActionType == CharacterActionType.Movevement)
+        if (_pendingCharacterActionType == CharacterActionType.Movement)
         {
             HandleMovement(tile);
             return;
@@ -415,6 +418,7 @@ public class Selector : MonoBehaviour
         }
         DeselectCharacter();
     }
+
     private void HandleMovement(CombatGridTile tile)
     {
         GameObject currentTile = _selectedCharacter.GetCurrentTileComponent().gameObject;

@@ -84,8 +84,10 @@ public class AbilityHandler : MonoBehaviour
 
     private bool IsValidTargetForAbility(Ability ability, CombatGridTile tile)
     {
+        if (tile == null) return false;
+
         var occupant = tile.GetOccupant();
-        Character character = occupant.GetComponent<Character>();
+        Character character = occupant? occupant.GetComponent<Character>(): null;
 
         switch (ability.GetAbilityTargetType())
         {
