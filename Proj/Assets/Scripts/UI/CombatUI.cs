@@ -108,7 +108,10 @@ public class CombatUI : MonoBehaviour
 
     public void UpdateSelectedPortrait(CharacterData character)
     {
-        _selectedCharacterPortrait.sprite = character.ClassData.classImage;
+        if (character != null)
+        {
+            _selectedCharacterPortrait.sprite = character.ClassData.classImage;
+        }
     }
     
     public void SetCardsActive(bool active)
