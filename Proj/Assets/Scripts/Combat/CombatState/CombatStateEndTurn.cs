@@ -37,7 +37,7 @@ public class CombatStateEndTurn : CombatStateBase
         else
         {
             // TODO (Calle): Continue with next turn, do we need to do anything else specific?
-            CombatManager._instance.ChangeCombatState(new CombatStateTakeTurn(CombatManager._instance.GetActiveCharacter()));
+            CombatManager._instance.ChangeCombatState(new CombatStateTakeTurn());
         }
     }
 }

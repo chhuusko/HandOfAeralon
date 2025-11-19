@@ -83,7 +83,7 @@ public class CharacterEntry
         _character.GetComponent<Character>().SetFaction(characterData.GetFaction());
 
         _character.GetComponent<Character>().SetCurrentHealthPoints(characterData.GetHealthPoints());
-        _character.GetComponent<Character>().SetCurrentSpeed(characterData.GetSpeed());
+        _character.GetComponent<Character>().SetCurrentInitiative(characterData.GetSpeed());
         _character.GetComponent<Character>().SetCurrentDamage(characterData.GetDamage());
         _character.GetComponent<Character>().SetCurrentMovementPoints(characterData.GetMovementPoints());
 

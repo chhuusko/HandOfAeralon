@@ -12,15 +12,14 @@ public class CombatStateTakeTurn : CombatStateBase
     [SerializeField] private GameObject _selectorOverHead;
     public UnityEvent TurnStart = new();
 
-    public CombatStateTakeTurn(GameObject activeCharacter)
+    public CombatStateTakeTurn()
     {
-        _activeCharacter = activeCharacter;
     }
 
     public override void Enter()
     {
         base.Enter();
-        CombatEventManager.InvokeEnterCombatStateTakeTurn();
+        
         CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
 
         // NOTE (Calle): Set current turn based on initiative and Faction
@@ -40,6 +39,8 @@ public class CombatStateTakeTurn : CombatStateBase
             SetCurrentTurn(CombatTurn.EnemyTurn);
             CombatManager._instance.HideSelectorOverhead();
         }
+
+        CombatEventManager.InvokeEnterCombatStateTakeTurn(_activeCharacter.GetComponent<Character>());
     }
 
     public override void Exit()
@@ -62,6 +63,11 @@ public class CombatStateTakeTurn : CombatStateBase
         }
     }
 
+    public Character GetActiveCharacter()
+    {
+        return _activeCharacter.GetComponent<Character>();
+    }
+
     private void EndTurn()
     {
         CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
@@ -79,7 +85,7 @@ public class CombatStateTakeTurn : CombatStateBase
         GameObject nextCharacter = null;
         foreach (var g in CombatGrid._instance.GetAllCharacters())
         {
-            int initiative = g.GetComponent<Character>().GetSpeed();
+            int initiative = g.GetComponent<Character>().GetInitiative();
             if (initiative > highestInitiative)
             {
                 highestInitiative = initiative;
@@ -119,7 +125,7 @@ public class CombatStateTakeTurn : CombatStateBase
         {
             enemyDoingStuff = true;
             TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandlePlayerTurn() för att AI ska kunna spela båda factions.
-            _activeCharacter = null;
+            //_activeCharacter = null;
             //UpdateCombatState(CombatState.EndTurn);
         }
     }

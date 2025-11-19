@@ -14,7 +14,7 @@ public class CombatUI : MonoBehaviour
     
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Image _characterPortraitPanel;
-    [SerializeField] private Image _selectedCharacterPortrait;
+    [SerializeField] private Image _activeCharacterPortrait;
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
     [SerializeField] private Button _abilityButtonPrefab;
@@ -22,14 +22,35 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _hand;
     [SerializeField] private TextMeshProUGUI _mana;
 
+    // Colors.
+    [SerializeField] private Color _activeColor;
+    [SerializeField] private Color _inactiveColor;
+    
+    private List<PortraitButton> _portraitButtons = new();
+    private PortraitButton _selectedPortrait;
+    private List<AbilityButton> _abilityButtons = new();
+    
+    private Dictionary<CharacterData, PortraitButton> _characterPortraits = new();
+    
     private void OnEnable()
     {
         CardHandManager.onManaChange += UpdateManaText;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateActivePortrait;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdatePortraitColors;
+        
     }
 
     private void OnDisable()
     {
         CardHandManager.onManaChange -= UpdateManaText;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateActivePortrait;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdatePortraitColors;
+
+        foreach (var portrait in _portraitButtons)
+        {
+            portrait.OnClickPortraitButton -= UpdatePortraitColors;
+            portrait.OnClickPortraitButton -= LoadAbilities;
+        }
     }
 
     private void Awake()
@@ -48,7 +69,7 @@ public class CombatUI : MonoBehaviour
         UpdateCharacterPortraits();
         
         // Player 1 portrait displayed as default when no character has been selected yet.
-        UpdateSelectedPortrait(GlobalGameManager.GetInstance().GetGameData().heroDataList[0]);
+        // UpdateSelectedPortrait(GlobalGameManager.GetInstance().GetGameData().heroDataList[0]);
     }
 
     public void StartCombat()
@@ -61,7 +82,7 @@ public class CombatUI : MonoBehaviour
         _hand.SetActive(true);
         
         // Set abilities for first character.
-        LoadAbilities(Selector._instance.GetSelectedCharacter().Data);
+        LoadAbilities(Selector._instance.GetSelectedCharacter()?.Data);
     }
 
     public void EndTurn()
@@ -95,10 +116,32 @@ public class CombatUI : MonoBehaviour
         
         foreach (CharacterData c in heroList)
         {
-            Button characterPortraitButton = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
-            characterPortraitButton.image.sprite = c.ClassData.classImage;
-            characterPortraitButton.GetComponent<PortraitButton>().SetCharacter(c);
+            Button button = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
+            button.image.sprite = c.ClassData.classImage;
+            button.image.color = _inactiveColor;
+            PortraitButton pb = button.GetComponent<PortraitButton>();
+            pb.Character = c;
+            pb.OnClickPortraitButton += UpdatePortraitColors;
+            pb.OnClickPortraitButton += LoadAbilities;
+            
+            _portraitButtons.Add(pb);
+            _characterPortraits.Add(pb.Character, pb);
         }
+    }
+    
+    private void UpdatePortraitColors(Character c) 
+    {
+        UpdatePortraitColors(_characterPortraits[c.Data]);
+    }
+
+    private void UpdatePortraitColors(PortraitButton selectedPortrait)
+    {
+        foreach (var pb in _portraitButtons)
+        {
+            pb.GetComponent<Image>().color = _inactiveColor;
+        }
+        
+        selectedPortrait.GetComponent<Image>().color = _activeColor;
     }
 
     private void UpdateManaText(int mana)
@@ -106,12 +149,13 @@ public class CombatUI : MonoBehaviour
         _mana.text = $"Mana\n{mana}/10";
     }
 
-    public void UpdateSelectedPortrait(CharacterData character)
+    private void UpdateActivePortrait(Character c)
     {
-        if (character != null)
+        if (!c || c.Data.Faction == Faction.Enemy)
         {
-            _selectedCharacterPortrait.sprite = character.ClassData.classImage;
+            return;
         }
+        _activeCharacterPortrait.sprite = c.Data.ClassData.classImage;
     }
     
     public void SetCardsActive(bool active)
@@ -120,10 +164,15 @@ public class CombatUI : MonoBehaviour
         _abilityPanel.color = active ? new Color(1, 1, 1, 0.5f) : new Color(1, 1, 1, 1);
     }
 
+    private void LoadAbilities(PortraitButton portraitButton)
+    {
+        LoadAbilities(portraitButton.Character);
+    }
+
     /// <summary>
     /// Displays each available ability for the selected character.
     /// </summary>
-    /// <param name="character">The character of which's abilities to display.</param>
+    /// <param name="portraitButton">The character of which's abilities to display.</param>
     public void LoadAbilities(CharacterData character)
     {
         if (character == null)
@@ -132,7 +181,7 @@ public class CombatUI : MonoBehaviour
             return;
         }
 
-        // Remove all current buttons.
+        // Remove all current ability buttons.
         for (int i = 0; i < _abilityPanel.transform.childCount; i++)
         {
             Destroy(_abilityPanel.transform.GetChild(i).gameObject);
@@ -142,12 +191,19 @@ public class CombatUI : MonoBehaviour
 
         for (int i = 0; i < character.AvailableAbilities.Count; i++)
         {
-            Button abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
+            Button button = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
             
             var ability = character.AvailableAbilities[i];
-            // abilityButton.GetComponentInChildren<TextMeshProUGUI>().text = ability.name;
-            abilityButton.image.sprite = ability.GetIcon();
-            abilityButton.GetComponent<AbilityButton>().SetAbility(ability);
+            button.image.sprite = ability.GetIcon();
+            button.GetComponent<AbilityButton>().SetAbility(ability);
+            
+            var abilityButton = button.GetComponent<AbilityButton>();
+            _abilityButtons.Add(abilityButton);
         }
+    }
+
+    private void UpdateAbilityColors()
+    {
+        
     }
 }
