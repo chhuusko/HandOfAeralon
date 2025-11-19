@@ -49,6 +49,7 @@ public class LevelManager : ScriptableObject
             SceneManager.LoadScene("ShopScene");
         }
         
+        
     }
     public CombatGrid GetCombatLevel()
     {
