@@ -22,31 +22,27 @@ public class CombatStateTakeTurn : CombatStateBase
         base.Enter();
         CombatEventManager.InvokeEnterCombatStateTakeTurn();
         CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
+
+        // NOTE (Calle): Set current turn based on initiative and Faction
+        _activeCharacter = GetNextTurnCharacter();
+        if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Friendly)
+        {
+            SetCurrentTurn(CombatTurn.PlayerTurn);
+            CardHandManager._instance.ChangeMana(1);
+        }
+        else if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Enemy)
+            SetCurrentTurn(CombatTurn.EnemyTurn);
     }
 
     public override void Exit()
     {
         base.Exit();
         CombatEventManager.InvokeExitCombatStateTakeTurn();
+        CombatUI.Instance.OnEndTurnButtonPressed -= EndTurn;
     }
 
     public override void Update()
     {
-        // NOTE (Calle): Only wan't to set the _activeCharacter once each turn
-        if (_activeCharacter == null)
-        {
-            // NOTE (Calle): Set current turn based on initiative and Faction
-            _activeCharacter = GetNextTurnCharacter();
-            //if(IsCharacterFriendly)
-            if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Friendly)
-            {
-                SetCurrentTurn(CombatTurn.PlayerTurn);
-                CardHandManager._instance.ChangeMana(1);
-            }
-            else if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Enemy)
-                SetCurrentTurn(CombatTurn.EnemyTurn);
-        }
-
         switch (_currentTurn)
         {
             case CombatTurn.PlayerTurn:
@@ -66,7 +62,7 @@ public class CombatStateTakeTurn : CombatStateBase
     private void SetCurrentTurn(CombatTurn turn)
     {
         _currentTurn = turn;
-        CombatEventManager.CombatTurnChanged(turn);
+        CombatEventManager.InvokeCombatTurnChanged(turn);
     }
 
     public GameObject GetNextTurnCharacter()

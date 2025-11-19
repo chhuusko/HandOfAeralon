@@ -21,10 +21,10 @@ public static class CombatEventManager
     public static event Action OnExitCombatStateEndCombat;
 
 
-    public static void CombatStateChanged(CombatState newState)
+    public static void InvokeCombatStateChanged(CombatState newState)
         => OnCombatStateChange?.Invoke(newState);
 
-    public static void CombatTurnChanged(CombatTurn turn)
+    public static void InvokeCombatTurnChanged(CombatTurn turn)
         => OnCombatTurnChange?.Invoke(turn);
 
     public static void InvokeEnterCombatStateLoadNextLevel()

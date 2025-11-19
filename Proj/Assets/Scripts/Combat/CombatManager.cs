@@ -121,7 +121,7 @@ public class CombatManager : MonoBehaviour
         _currentCombatState = newCombatState;
         _currentCombatStateEnum = newCombatState._state;
         // NOTE (Calle): Broadcast the state change.
-        CombatEventManager.CombatStateChanged(newCombatState._state);
+        CombatEventManager.InvokeCombatStateChanged(newCombatState._state);
 
         newCombatState?.Enter();
     }
@@ -188,14 +188,5 @@ public class CombatManager : MonoBehaviour
     public void SetCombatTurn(CombatTurn turn) 
     { 
         _currentTurn = turn; 
-    }
-
-    public void UpdateCombatState(CombatState state)
-    {
-        if (_combatState != state)
-        {
-            _combatState = state;
-            CombatEventManager.CombatStateChanged(state);
-        }
     }
 }
