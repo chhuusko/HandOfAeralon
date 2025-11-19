@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class AbilityHandler : MonoBehaviour
 {
+    public static event System.Action OnAbilityCast;
     [SerializeField] private List<Ability> _abilities;
 
     private List<CombatGridTile> _tilesInRange = new();
@@ -34,7 +35,7 @@ public class AbilityHandler : MonoBehaviour
                 DebugLog.MGLog("Tried casting ability, but it failed");
             return false;
         }
-
+        OnAbilityCast?.Invoke();
         ability.RunAbility(_casterTile, targetTile);
         return true;
     }
