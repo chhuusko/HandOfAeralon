@@ -69,6 +69,21 @@ public class CombatGrid : MonoBehaviour
 
     public bool IsCombatGridLoaded() { return _bCombatGridLoaded; }
     public GameObject[] GetAllTiles() { return _tilesGO; }
+
+    public List<CombatGridTile> GetAllDeployTiles()
+    {
+        List<CombatGridTile> deployTiles = new List<CombatGridTile>();
+
+        foreach(GameObject tileGO in _tilesGO)
+        {
+            CombatGridTile combatGridTile = tileGO.GetComponent<CombatGridTile>();
+            if(combatGridTile.GetTileType() == TileType.Deploy)
+            {
+                deployTiles.Add(combatGridTile);
+            }
+        }
+        return deployTiles;
+    }
     public GameObject GetTileAtCoord(int x, int y)
     {
         int index = x + y * _width;
@@ -164,18 +179,6 @@ public class CombatGrid : MonoBehaviour
                     break;
             }
 
-            if (tileData.IsWalkable())
-                tileObject.GetComponent<CombatGridTile>().SetWalkable(true);
-            else
-            {
-                var volume = tileObject.AddComponent<NavMeshModifierVolume>();
-                volume.area = NavMesh.GetAreaFromName("Not Walkable");
-
-                Vector3 tileSize = tileData.GetTileSize();
-                volume.size = new Vector3(1.0f, 2.0f, 1.0f);
-                volume.center = new Vector3(0, 0.5f, 0);
-            }
-
             _tilesGO[(int)tileIndex.x + (int)tileIndex.y * _width] = tileObject;
         }
         else
@@ -268,6 +271,28 @@ public class CombatGrid : MonoBehaviour
         else if(combatGridCharacterData.GetFaction() == Faction.Enemy)
             character.transform.SetParent(_enemyCharacterRoot.transform);
     }
+
+    public Character SpawnCharacter(CharacterData data, Vector3 position, Quaternion rotation)
+    {
+        // Instantiate the prefab
+        var characterGO = GameObject.Instantiate(_characterPrefabLibrary.GetPrefab(data.CharacterClass), position, rotation);
+
+        // Get the Character component
+        Character character = characterGO.GetComponent<Character>();
+
+        // Assign and initialize
+        character.Initialize(data);
+
+        _charactersGO.Add(characterGO);
+
+        if (character.GetFaction() == Faction.Friendly)
+            characterGO.transform.SetParent(_friendlyCharacterRoot.transform);
+        else if (character.GetFaction() == Faction.Enemy)
+            characterGO.transform.SetParent(_enemyCharacterRoot.transform);
+
+        return character;
+    }
+
     public void LoadNextLevel()
     {
         string filePathToLoad = Application.streamingAssetsPath + "/JSON/CombatGrids/" + _fileToLoadDEBUG + ".json";
@@ -299,9 +324,6 @@ public class CombatGrid : MonoBehaviour
             CombatGrid._instance.AddTile(combatGridSaveData._tileData[i]).transform.SetParent(_tileRoot.transform);
 
         }
-
-        GameObject NavMesh = GameObject.Find("NavMesh Surface");
-        NavMesh.GetComponent<NavMeshSurface>().BuildNavMesh();
 
         for (int i = 0; i < combatGridSaveData._characterData.Count; i++)
         {

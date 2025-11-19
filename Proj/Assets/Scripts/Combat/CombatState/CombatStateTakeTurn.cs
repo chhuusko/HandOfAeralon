@@ -9,7 +9,7 @@ public class CombatStateTakeTurn : CombatStateBase
     [SerializeField] private GameObject _activeCharacter;
     [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
-
+    [SerializeField] private GameObject _selectorOverHead;
     public UnityEvent TurnStart = new();
 
     public CombatStateTakeTurn(GameObject activeCharacter)
@@ -29,9 +29,17 @@ public class CombatStateTakeTurn : CombatStateBase
         {
             SetCurrentTurn(CombatTurn.PlayerTurn);
             CardHandManager._instance.ChangeMana(1);
+
+            Vector3 position = _activeCharacter.transform.position;
+            position += Vector3.up * 4.0f;
+            CombatManager._instance.SetSelectorOverHeadPosition(position);
+            
         }
         else if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Enemy)
+        {
             SetCurrentTurn(CombatTurn.EnemyTurn);
+            CombatManager._instance.HideSelectorOverhead();
+        }
     }
 
     public override void Exit()
@@ -100,6 +108,8 @@ public class CombatStateTakeTurn : CombatStateBase
             case PlayerTurnMode.CardMode:
                 break;
         }
+
+        CombatManager._instance.UpdateSelectorOverHeadPosition();
     }
 
     bool enemyDoingStuff = false;
