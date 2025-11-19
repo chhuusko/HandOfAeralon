@@ -141,7 +141,7 @@ public class Character : MonoBehaviour
     
     // Current stats.
     public int GetHealthPoints() => _data.CurrentHealthPoints;
-    public int GetSpeed() => _currentInitiative;
+    public int GetInitiative() => _currentInitiative;
     public int GetDamage() => _currentDamage;
     public int GetMovementPoints() => _currentMovementPoints;
     public Vector2Int GetCurrentTileIndex() => _currentTileIndex;
@@ -162,7 +162,7 @@ public class Character : MonoBehaviour
     
     // Current stats.
     public void SetCurrentHealthPoints(int healthPoints) => _data.SetCurrentHealthPoints(healthPoints);
-    public void SetCurrentSpeed(int speed) => _currentInitiative = speed;
+    public void SetCurrentInitiative(int initiative) => _currentInitiative = initiative;
     public void SetCurrentDamage(int damage) => _currentDamage = damage;
     public void SetCurrentMovementPoints(int movementPoints) => _currentMovementPoints = movementPoints;
     public void SetCurrentTileIndex(Vector2Int tileIndex) => _currentTileIndex = tileIndex;
