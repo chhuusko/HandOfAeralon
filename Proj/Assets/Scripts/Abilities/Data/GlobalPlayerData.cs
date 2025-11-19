@@ -6,17 +6,18 @@ public class GlobalPlayerData : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private static GlobalPlayerData _instance;
-    private List<Character> heroList;
+    private List<CharacterData> heroList;
     private List<Card> cardsList;
     private void Awake()
     {
+        
         _instance = this;
     }
     public GlobalPlayerData GetInstance()
     {
         return _instance;
     }
-    public List<Character> GetHeroList()
+    public List<CharacterData> GetHeroList()
     {
         return heroList;
     }
@@ -24,19 +25,19 @@ public class GlobalPlayerData : MonoBehaviour
     {
         return cardsList;
     }
-    public void SetHeroList(List<Character> newHeroList)
+    public void SetHeroList(List<CharacterData> newHeroList)
     {
         heroList = newHeroList;
     }
-    public void SetCardList(List<Character> newHeroList)
+    public void SetCardList(List<CharacterData> newHeroList)
     {
         heroList = newHeroList;
     }
-    public void AddCharacter(Character hero)
+    public void AddCharacter(CharacterData hero)
     {
         heroList.Add(hero);
     }
-    public void RemoveCharacter(Character hero)
+    public void RemoveCharacter(CharacterData hero)
     {
         heroList.Remove(hero); 
     }

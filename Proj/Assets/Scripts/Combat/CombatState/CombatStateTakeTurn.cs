@@ -31,7 +31,7 @@ public class CombatStateTakeTurn : CombatStateBase
             CardHandManager._instance.ChangeMana(1);
 
             Vector3 position = _activeCharacter.transform.position;
-            position += Vector3.up * 4.0f;
+            position += Vector3.up * 3.0f;
             CombatManager._instance.SetSelectorOverHeadPosition(position);
             
         }

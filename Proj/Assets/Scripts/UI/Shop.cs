@@ -9,22 +9,32 @@ public class Shop : MonoBehaviour
     [SerializeField] private GameObject _sellTab;
     [SerializeField] private Transform[] _purchasCardPos;
     [SerializeField] private GameObject _purchaseCardPrefab;
+    [SerializeField] private Transform[] _purchasCharacterPos;
+    [SerializeField] private GameObject _purchaseCharacterPrefab;
+    [SerializeField] private ClassDatabase _classDatabase;
     private List<Card> unlockedCards;
-    private List<GameObject> _buyableCardInScene;
-    private void Awake()
-    {
-        _buyableCardInScene = new List<GameObject>();
-        unlockedCards = CardsUnlocked.GetInstance().GetUnlockedCards();
-        LoadBuyCard();
-    }
+    private List<GameObject> _buyableItemInScene;
     public static Shop GetInstance()
     {
         return _instance;
     }
-    public void OpenSellTab()
+    private void Awake()
     {
-        _sellTab.GetComponent<CardViewUI>().UpdateCards(GlobalGameManager.GetInstance().GetGameData().cardList);
-        _sellTab.SetActive(true);
+        _instance = this;
+        _buyableItemInScene = new List<GameObject>();
+        unlockedCards = CardsUnlocked.GetInstance().GetUnlockedCards();
+        LoadBuyCard();
+        LoadBuyCharacter();
+    }
+
+    private void LoadBuyCharacter()
+    {
+        foreach (Transform t in _purchasCharacterPos)
+        {
+            GameObject newCharacterObject = Instantiate(_purchaseCharacterPrefab, t);
+            newCharacterObject.GetComponent<BuyableCharacter>().SetCharacter(GetRandomCharacter());
+            _buyableItemInScene.Add(newCharacterObject);
+        }
     }
     public void LoadBuyCard()
     {
@@ -32,26 +42,38 @@ public class Shop : MonoBehaviour
         {
             GameObject newCardObject = Instantiate(_purchaseCardPrefab, t);
             newCardObject.GetComponent<BuyableCard>().SetCard(GetRandomUnlockedCard());
-            _buyableCardInScene.Add(newCardObject);
+            _buyableItemInScene.Add(newCardObject);
         }
     }
     public Card GetRandomUnlockedCard()
     {
         return unlockedCards[Random.Range(0, unlockedCards.Count)];
     }
-    public void Refresh()
+    public CharacterData GetRandomCharacter()
     {
-        foreach (GameObject t in _buyableCardInScene)
-        {
-            Destroy(t.gameObject);
-        }
-        _buyableCardInScene.Clear();
-        LoadBuyCard();
+        return new CharacterData(_classDatabase.Classes[Random.Range(0, 3)], Faction.Friendly);
+    }
+    
+    public void OpenSellTab()
+    {
+        _sellTab.GetComponent<CardViewUI>().UpdateCards(GlobalGameManager.GetInstance().GetGameData().cardList);
+        _sellTab.SetActive(true);
     }
     public void SellCard()
     {
         
     }
+    public void Refresh()
+    {
+        foreach (GameObject item in _buyableItemInScene)
+        {
+            Destroy(item.gameObject);
+        }
+        _buyableItemInScene.Clear();
+        LoadBuyCard();
+        LoadBuyCharacter();
+    }
+
     public void ExitShop()
     {
         LevelManager.GetInstance().StartNextLevel();
