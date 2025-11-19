@@ -41,7 +41,12 @@ public class Shop : MonoBehaviour
     }
     public void Refresh()
     {
-
+        foreach (GameObject t in _buyableCardInScene)
+        {
+            Destroy(t.gameObject);
+        }
+        _buyableCardInScene.Clear();
+        LoadBuyCard();
     }
     public void SellCard()
     {
