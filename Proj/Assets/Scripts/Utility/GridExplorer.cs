@@ -467,27 +467,39 @@ public class GridExplorer : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (!_bDebug || _debugStartTile == null)
+        if (!_bDebug)
         {
             return;
         }
 
-        Gizmos.color = new Color(0, 1, 0, 0.5f);
-        foreach (var element in _debugReachableTiles)
+        if (_debugReachableTiles != null && _debugReachableTiles.Count > 0)
         {
-            Gizmos.DrawCube(element.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
+            Gizmos.color = new Color(0, 1, 0, 0.5f);
+            foreach (var element in _debugReachableTiles)
+            {
+                Gizmos.DrawCube(element.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
+            }
         }
 
-        Gizmos.color = new Color(1, 0, 1, 0.5f);
-        foreach (var element in _debugPath)
+        if (_debugPath != null && _debugPath.Count > 0)
         {
-            Gizmos.DrawCube(element.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
+            Gizmos.color = new Color(1, 0, 1, 0.5f);
+            foreach (var element in _debugPath)
+            {
+                Gizmos.DrawCube(element.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
+            }
         }
 
-        Gizmos.color = new Color(1, 1, 1, 0.8f);
-        Gizmos.DrawCube(_debugStartTile.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
+        if (_debugStartTile != null)
+        {
+            Gizmos.color = new Color(1, 1, 1, 0.8f);
+            Gizmos.DrawCube(_debugStartTile.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
+        }
 
-        Gizmos.color = new Color(1, 0, 0, 0.8f);
-        Gizmos.DrawCube(_debugGoalTile.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
+        if (_debugGoalTile != null)
+        {
+            Gizmos.color = new Color(1, 0, 0, 0.8f);
+            Gizmos.DrawCube(_debugGoalTile.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
+        }
     }
 }
