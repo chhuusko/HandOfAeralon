@@ -412,7 +412,21 @@ public class Selector : MonoBehaviour
     }
     private void HandleMovement(CombatGridTile tile)
     {
-        _selectedCharacter.SetMoveTarget(tile);
+        GameObject currentTile = _selectedCharacter.GetCurrentTileComponent().gameObject;
+        if (currentTile == null)
+        {
+            DebugLog.JLWLog($"Selector.cs 418 | currentTile NOT FOUND!");
+            return;
+        }
+
+        List<GameObject> path = GridExplorer._instance.FindPathAStar(currentTile, tile.gameObject);
+        if (path == null || path.Count <= 1)
+        {
+            DebugLog.JLWLog($"Selector.cs 425 | No path found from {currentTile.GetComponent<CombatGridTile>().GetTileIndex()} to {tile.GetTileIndex()}");
+            return;
+        }
+
+        StartCoroutine(_selectedCharacter.MoveAlongPath(path));
         if (_bDebugSelector)
         {
             DebugLog.MGLog(_selectedCharacter.GetCharacterClass() + " on tile: " + _selectedCharacter.GetCurrentTileIndex().ToString() + " is set to move to: " + tile.GetComponentIndex().ToString());
