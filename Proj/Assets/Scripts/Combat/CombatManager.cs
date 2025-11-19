@@ -52,7 +52,7 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] private string _fileToLoadDEBUG;
 
-    private CombatCamera _combatCamera;
+    [SerializeField] private CombatCamera _combatCamera;
 
     private GameObject _selectorOverHead;
     [SerializeField] private GameObject _selectorOverHeadPrefab;
