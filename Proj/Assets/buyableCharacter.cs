@@ -51,6 +51,6 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private void Bought()
     {
         GlobalGameManager.GetInstance().GetGameData().heroDataList.Add(_characterData);
-        GlobalGameManager.GetInstance().ChangeCoins(-10);
+        Shop.GetInstance().ChangeCoins(-10);
     }
 }
