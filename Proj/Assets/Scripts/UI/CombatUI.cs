@@ -26,17 +26,31 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Color _activeColor;
     [SerializeField] private Color _inactiveColor;
     
-    private List<GameObject> _portraits = new();
+    private List<PortraitButton> _portraitButtons = new();
+    private PortraitButton _selectedPortrait;
+    private List<AbilityButton> _abilityButtons = new();
+    
+    private Dictionary<CharacterData, PortraitButton> _characterPortraits = new();
     
     private void OnEnable()
     {
         CardHandManager.onManaChange += UpdateManaText;
-        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateSelectedPortrait;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateActivePortrait;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdatePortraitColors;
+        
     }
 
     private void OnDisable()
     {
         CardHandManager.onManaChange -= UpdateManaText;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateActivePortrait;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdatePortraitColors;
+
+        foreach (var portrait in _portraitButtons)
+        {
+            portrait.OnClickPortraitButton -= UpdatePortraitColors;
+            portrait.OnClickPortraitButton -= LoadAbilities;
+        }
     }
 
     private void Awake()
@@ -110,15 +124,21 @@ public class CombatUI : MonoBehaviour
             pb.OnClickPortraitButton += UpdatePortraitColors;
             pb.OnClickPortraitButton += LoadAbilities;
             
-            _portraits.Add(button.gameObject);
+            _portraitButtons.Add(pb);
+            _characterPortraits.Add(pb.Character, pb);
         }
+    }
+    
+    private void UpdatePortraitColors(Character c) 
+    {
+        UpdatePortraitColors(_characterPortraits[c.Data]);
     }
 
     private void UpdatePortraitColors(PortraitButton selectedPortrait)
     {
-        foreach (var portrait in _portraits)
+        foreach (var pb in _portraitButtons)
         {
-            portrait.GetComponent<Image>().color = _inactiveColor;
+            pb.GetComponent<Image>().color = _inactiveColor;
         }
         
         selectedPortrait.GetComponent<Image>().color = _activeColor;
@@ -129,7 +149,7 @@ public class CombatUI : MonoBehaviour
         _mana.text = $"Mana\n{mana}/10";
     }
 
-    private void UpdateSelectedPortrait(Character c)
+    private void UpdateActivePortrait(Character c)
     {
         if (!c || c.Data.Faction == Faction.Enemy)
         {
@@ -171,12 +191,19 @@ public class CombatUI : MonoBehaviour
 
         for (int i = 0; i < character.AvailableAbilities.Count; i++)
         {
-            Button abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
+            Button button = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
             
             var ability = character.AvailableAbilities[i];
-            // abilityButton.GetComponentInChildren<TextMeshProUGUI>().text = ability.name;
-            abilityButton.image.sprite = ability.GetIcon();
-            abilityButton.GetComponent<AbilityButton>().SetAbility(ability);
+            button.image.sprite = ability.GetIcon();
+            button.GetComponent<AbilityButton>().SetAbility(ability);
+            
+            var abilityButton = button.GetComponent<AbilityButton>();
+            _abilityButtons.Add(abilityButton);
         }
+    }
+
+    private void UpdateAbilityColors()
+    {
+        
     }
 }

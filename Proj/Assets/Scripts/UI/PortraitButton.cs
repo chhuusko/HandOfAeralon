@@ -10,8 +10,6 @@ public class PortraitButton : MonoBehaviour
     public void OnClick()
     {
         OnClickPortraitButton?.Invoke(this);
-        // CombatUI.Instance.LoadAbilities(_character);
-        // CombatUI.Instance.UpdatePortraitColors(gameObject);
         Selector._instance.SetSelectedCharacter(CombatManager._instance.GetCharacterDataDict()[Character]);
     }
 }

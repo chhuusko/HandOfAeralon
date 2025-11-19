@@ -8,15 +8,22 @@ public class Card : ScriptableObject
         Instant,
         Select,
     }
+    public enum Rarity
+    {
+        Common,
+        Uncommon,
+        Rare,
+    }
 
     [Header("Info")]
     public CardType type;
+    public Rarity rarity;
     public string title;
     public string description;
     public int cost;
     public Sprite icon;
-    
-    public void PlayCard()
+    public Sprite CardTemplate;
+    public virtual void PlayCard()
     {
         //när den spelas
 
