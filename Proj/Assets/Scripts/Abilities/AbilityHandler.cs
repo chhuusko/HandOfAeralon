@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class AbilityHandler : MonoBehaviour
 {
+    public static event System.Action OnAbilityCast;
     [SerializeField] private List<Ability> _abilities;
 
     private List<CombatGridTile> _tilesInRange = new();
@@ -34,7 +35,7 @@ public class AbilityHandler : MonoBehaviour
                 DebugLog.MGLog("Tried casting ability, but it failed");
             return false;
         }
-
+        OnAbilityCast?.Invoke();
         ability.RunAbility(_casterTile, targetTile);
         return true;
     }
@@ -84,8 +85,10 @@ public class AbilityHandler : MonoBehaviour
 
     private bool IsValidTargetForAbility(Ability ability, CombatGridTile tile)
     {
+        if (tile == null) return false;
+
         var occupant = tile.GetOccupant();
-        Character character = occupant.GetComponent<Character>();
+        Character character = occupant? occupant.GetComponent<Character>(): null;
 
         switch (ability.GetAbilityTargetType())
         {
