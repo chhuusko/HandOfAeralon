@@ -17,11 +17,13 @@ MonoBehaviour:
   maxHealthPoints: 9
   minSpeed: 2
   maxSpeed: 4
-  minMovmementPoints: 1
-  maxMovmentPoints: 10
+  minMovementPoints: 0
+  maxMovementPoints: 0
   minDamage: 3
   maxDamage: 5
   abilities:
+  - {fileID: 11400000, guid: 18610db6b6bb3be46a697a308838df9c, type: 2}
+  - {fileID: 11400000, guid: 18610db6b6bb3be46a697a308838df9c, type: 2}
   - {fileID: 11400000, guid: 18610db6b6bb3be46a697a308838df9c, type: 2}
   - {fileID: 11400000, guid: 18610db6b6bb3be46a697a308838df9c, type: 2}
   classImage: {fileID: 21300000, guid: 498aaaad97940e949bbc06dce548997f, type: 3}

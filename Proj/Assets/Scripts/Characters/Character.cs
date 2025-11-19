@@ -90,13 +90,8 @@ public class Character : MonoBehaviour
     [Header("Misc")]
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
-    private NavMeshAgent _navMeshAgent;
+    private bool _bIsMoving;
     public CharacterData Data => _data;
-    
-    private void Awake()
-    {
-        _navMeshAgent = GetComponent<NavMeshAgent>();
-    }
     
     private void Start()
     {
@@ -107,7 +102,7 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void ResetCharacter() // Endast för testkörning (JLW)
+    public void ResetCharacter() // Endast för testkörning (JLW), tills dess att turtagningen fungerar som tänkt
     {
         _currentSpeed = _data.BaseInitiative;
         _currentDamage = _data.BaseDamage;
@@ -244,6 +239,9 @@ public class Character : MonoBehaviour
     
     public bool IsMoving()
     {
+        return _bIsMoving;
+
+        /*
         if (_navMeshAgent.pathPending)
         {
             return true; 
@@ -251,39 +249,51 @@ public class Character : MonoBehaviour
 
         return _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance
                || _navMeshAgent.velocity.sqrMagnitude > 0.03f;
+        */
     }
 
-    /// <summary>
-    /// Sets a new target move location.
-    /// </summary>
-    /// <param name="positions">The grid points to move to.</param>
-    public void SetMovePath(Vector3[] positions)
+    public IEnumerator MoveAlongPath(List<GameObject> tiles)
     {
-        if (positions == null || positions.Length == 0)
+        if (tiles == null || tiles.Count == 0)
         {
-            return;
+            DebugLog.JLWLog($"Character.cs | MoveAlongPath called with an empty list!");
+            yield break;
         }
 
-        NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(transform.position, positions[^1], NavMesh.AllAreas, path);
-        _navMeshAgent.SetPath(path);
-    }
-    
-    /// <summary>
-    /// Sets a new target move location.
-    /// </summary>
-    /// <param name="target">The position to move to.</param>
-    public void SetMoveTarget(CombatGridTile target)
-    {
-        _navMeshAgent.SetDestination(target.GetTilePosition());
-    }
+        _bIsMoving = true;
 
-    /// <summary>
-    /// Sets a new target move location.
-    /// </summary>
-    /// <param name="target">The position to move to.</param>
-    public void SetMoveTarget(Vector3 target)
-    {
-        _navMeshAgent.SetDestination(target);
+        float moveSpeed = 4f; // Måste matcha animationerna
+
+        foreach (var tile in tiles)
+        {
+            Vector3 targetPos = tile.transform.position;
+
+            Vector3 direction = (targetPos - transform.position).normalized;
+            direction.y = 0f;
+
+            if (direction.sqrMagnitude > 0.0001f)
+            {
+                transform.rotation = Quaternion.LookRotation(direction);
+            }
+
+            DebugLog.JLWLog($"Character.cs | {this.name} moving towards {targetPos}");
+
+            while (Vector3.Distance(transform.position, targetPos) > 0.01f)
+            {
+                transform.position = Vector3.MoveTowards(
+                    transform.position,
+                    targetPos,
+                    moveSpeed * Time.deltaTime
+                );
+
+                yield return null;
+            }
+
+            transform.position = targetPos;
+
+            //GetComponent<CombatGridTile>().SetOccupant(this.gameObject);
+        }
+
+        _bIsMoving = false;
     }
 }

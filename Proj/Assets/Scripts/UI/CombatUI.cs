@@ -46,6 +46,7 @@ public class CombatUI : MonoBehaviour
 
         _hand.SetActive(false);
         UpdateCharacterPortraits();
+        
         // Player 1 portrait displayed as default when no character has been selected yet.
         UpdateSelectedPortrait(GlobalGameManager.GetInstance().GetGameData().heroDataList[0]);
     }
@@ -53,9 +54,14 @@ public class CombatUI : MonoBehaviour
     public void StartCombat()
     {
         OnStartCombatButtonPressed?.Invoke();
+        
         _startCombatButton.gameObject.SetActive(false);
         _endTurnButton.gameObject.SetActive(true);
+        _abilityPanel.gameObject.SetActive(true);
         _hand.SetActive(true);
+        
+        // Set abilities for first character.
+        LoadAbilities(Selector._instance.GetSelectedCharacter().Data);
     }
 
     public void EndTurn()
@@ -136,7 +142,7 @@ public class CombatUI : MonoBehaviour
             Button abilityButton = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
             
             var ability = character.AvailableAbilities[i];
-            abilityButton.GetComponentInChildren<TextMeshProUGUI>().text = ability.name;
+            // abilityButton.GetComponentInChildren<TextMeshProUGUI>().text = ability.name;
             abilityButton.image.sprite = ability.GetIcon();
             abilityButton.GetComponent<AbilityButton>().SetAbility(ability);
         }

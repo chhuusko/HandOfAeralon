@@ -9,7 +9,6 @@ public class AbilityHandler : MonoBehaviour
 
     private List<CombatGridTile> _tilesInRange = new();
     private List<CombatGridTile> _tilesEffected = new();
-    Dictionary<CombatGridTile, Color> tileColorMap = new();
     private Character _characterCaster;
     private CombatGridTile _casterTile;
     [SerializeField] private Ability _pendingAbility;
@@ -103,29 +102,18 @@ public class AbilityHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the visual preview of which tiles will be affected by the pending ability
+    /// based on the tile currently hovered by the player. 
+    /// Removes highlight from old tiles, restores their original colors, 
+    /// and highlights newly affected tiles in real time.
+    /// </summary>
+    /// <param name="tile">The tile currently hovered by the player.</param>
     public void PreviewTargetTiles(CombatGridTile tile)
     {
-        // Körs hela tiden och uppdateras alltså konstant. Eftersom den måste uppdateras medan man hovrar med musen.
-
-
-        // Sätt 1.
-
-        // Kolla alla tiles som kan träffas och lägg till dem i en lista.
-
-        // Om listan på klassnivå _tileEffected är tom. Lägg till elementen i den listan och färga dem röda.
-
-        // Gå igenom alla tiles i listan som är sparad på klass nivå: _tilesEffected.
-
-        // Om den finns i den nya listan, gör ingenting.
-
-        // Om den inte finns, kolla om den finns i den andra listan på klass nivå: _tilesInRange.
-
-        // Om den finns i den andra listan, färga tilen grön, om den inte finns, färga tilen vit.
-
-       // Gå sedan igenom den nya listan, om klass listan _tilesEffected inte innehåller ett element, färga den röd och lägg till den.
-
         List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
 
+        // When no existing tiles are effected. (first frame)
         if (!_tilesEffected.Any())
         {
             foreach(CombatGridTile t in newEffectedTiles)
@@ -135,8 +123,10 @@ public class AbilityHandler : MonoBehaviour
             }
             return;
         }
-        var copiedList = new List<CombatGridTile>(_tilesEffected);
-        foreach (CombatGridTile t in copiedList)
+
+        // Reset old tiles that should not be effected.
+        var previousEffectedTiles = new List<CombatGridTile>(_tilesEffected);
+        foreach (CombatGridTile t in previousEffectedTiles)
         {
             if (newEffectedTiles.Contains(t))
             {
@@ -154,6 +144,7 @@ public class AbilityHandler : MonoBehaviour
             _tilesEffected.Remove(t);
         }
 
+        // Add new tiles effected list and turn them red.
         foreach(CombatGridTile t in newEffectedTiles)
         {
             if (!_tilesEffected.Contains(t))

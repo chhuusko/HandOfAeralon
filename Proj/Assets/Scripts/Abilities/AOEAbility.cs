@@ -19,4 +19,8 @@ public abstract class AOEAbility : Ability
             }
         }
     }
+    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile tile)
+    {
+        return pattern.CalculateTilesToEffect(tile);
+    }
 }
