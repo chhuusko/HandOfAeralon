@@ -62,6 +62,11 @@ public class CombatStateTakeTurn : CombatStateBase
         }
     }
 
+    public GameObject GetActiveCharacter()
+    {
+        return _activeCharacter;
+    }
+
     private void EndTurn()
     {
         CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
@@ -119,7 +124,7 @@ public class CombatStateTakeTurn : CombatStateBase
         {
             enemyDoingStuff = true;
             TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandlePlayerTurn() för att AI ska kunna spela båda factions.
-            _activeCharacter = null;
+            //_activeCharacter = null;
             //UpdateCombatState(CombatState.EndTurn);
         }
     }

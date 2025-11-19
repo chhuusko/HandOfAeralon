@@ -112,6 +112,11 @@ public class Selector : MonoBehaviour
                 case SelectorState.ActionTypeSelected: HandlePendingCharacterAction(clickedTile); break;
             }
         }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            DeselectCharacter();
+        }
     }
     /// <summary>
     /// Handles tile hover logic.  

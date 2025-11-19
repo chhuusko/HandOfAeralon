@@ -116,6 +116,9 @@ public class CombatManager : MonoBehaviour
     void Update()
     {
         _currentCombatState?.Update();
+        GameObject go = GetActiveCharacter();
+        if(go != null)
+            DebugLog.CJLog("Active char: " + go.ToString());
     }
 
     public void ChangeCombatState(CombatStateBase newCombatState)
@@ -219,7 +222,15 @@ public class CombatManager : MonoBehaviour
             _currentTurn -= CombatTurn.PlayerTurn;
     }
 
-    public GameObject GetActiveCharacter() { return _activeCharacter; }
+    public GameObject GetActiveCharacter() 
+    {
+        if (_currentCombatState._state == CombatState.TakeTurn)
+        {
+            CombatStateTakeTurn combatStateTakeTurn = (CombatStateTakeTurn)_currentCombatState;
+            return combatStateTakeTurn.GetActiveCharacter();
+        }
+        return null;
+    }
 
     public CombatGridTile GetTileComponent(int x, int y)
     {
