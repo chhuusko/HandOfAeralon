@@ -40,7 +40,7 @@ public class CombatStateTakeTurn : CombatStateBase
             CombatManager._instance.HideSelectorOverhead();
         }
 
-        CombatEventManager.InvokeEnterCombatStateTakeTurn(_activeCharacter);
+        CombatEventManager.InvokeEnterCombatStateTakeTurn(_activeCharacter.GetComponent<Character>());
     }
 
     public override void Exit()

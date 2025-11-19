@@ -66,7 +66,6 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
-    [SerializeField] private GameObject _activeCharacter;
     private Dictionary<CharacterData, Character> _dataToCharacterDict;
 
     [Header("Abilities")]

@@ -9,7 +9,7 @@ public static class CombatEventManager
     public static event Action OnEnterCombatStateLoadNextLevel;
     public static event Action OnEnterCombatStateIntroCinematic;
     public static event Action OnEnterCombatStatePlaceCharacter;
-    public static event Action<GameObject> OnEnterCombatStateTakeTurn;
+    public static event Action<Character> OnEnterCombatStateTakeTurn;
     public static event Action OnEnterCombatStateEndTurn;
     public static event Action OnEnterCombatStateEndCombat;
 
@@ -36,7 +36,7 @@ public static class CombatEventManager
     public static void InvokeEnterCombatStatePlaceCharacter()
         => OnEnterCombatStatePlaceCharacter?.Invoke();
 
-    public static void InvokeEnterCombatStateTakeTurn(GameObject activeCharacter)
+    public static void InvokeEnterCombatStateTakeTurn(Character activeCharacter)
         => OnEnterCombatStateTakeTurn?.Invoke(activeCharacter);
 
     public static void InvokeEnterCombatStateEndTurn()
