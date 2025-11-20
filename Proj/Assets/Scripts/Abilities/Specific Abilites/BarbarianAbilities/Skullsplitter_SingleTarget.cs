@@ -2,7 +2,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
-[CreateAssetMenu(fileName = "Skullsplitter_Ability", menuName = "Scriptable Objects/Abilities/Range Calculations/Non-Blocking")]
+[CreateAssetMenu(fileName = "Skullsplitter_Ability", menuName = "Scriptable Objects/Abilities/Barbarian/Skullsplitter")]
 public class Skullsplitter_Ability : SingleTargetAbility
 {
     [Header("- Ability Specific values -")]
