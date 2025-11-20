@@ -38,15 +38,15 @@ public class CombatUI : MonoBehaviour
     private void OnEnable()
     {
         CardHandManager.onManaChange += UpdateManaText;
-        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateActivePortrait;
-        CombatEventManager.OnEnterCombatStateTakeTurn += UpdatePortraitColors;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateCharacterUI;
+        CombatEventManager.OnEnterCombatStatePlaceCharacter += UpdateTurnOrder;
     }
 
     private void OnDisable()
     {
         CardHandManager.onManaChange -= UpdateManaText;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateActivePortrait;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdatePortraitColors;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateCharacterUI;
+        CombatEventManager.OnEnterCombatStatePlaceCharacter -= UpdateTurnOrder;
 
         foreach (var pb in _portraitButtons)
         {
@@ -107,6 +107,13 @@ public class CombatUI : MonoBehaviour
     {
         CardHandManager._instance.OpenDiscardPile();
     }
+
+    private void UpdateCharacterUI(Character character)
+    {
+        UpdateActivePortrait(character);
+        UpdatePortraitColors(character);
+        UpdateTurnOrder();
+    }
     
     /// <summary>
     /// Sets all character portraits in combat UI to reflect current party.
@@ -126,9 +133,9 @@ public class CombatUI : MonoBehaviour
         
         foreach (CharacterData c in heroList)
         {
-            PortraitButton pb = CreateCharacterPortrait(c);
+            PortraitButton pb = CreateCharacterPortrait(c, _characterPortraitPanel.transform);
             _portraitButtons.Add(pb);
-            _characterPortraits.Add(pb.Character, pb);
+            _characterPortraits.TryAdd(pb.Character, pb);
         }
     }
 
@@ -143,9 +150,9 @@ public class CombatUI : MonoBehaviour
         }
     }
 
-    private PortraitButton CreateCharacterPortrait(CharacterData c)
+    private PortraitButton CreateCharacterPortrait(CharacterData c, Transform parent)
     {
-        Button button = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
+        Button button = Instantiate(_characterPortraitButtonPrefab, parent);
         button.image.sprite = c.ClassData.classImage;
         button.image.color = _inactiveColor;
         PortraitButton pb = button.GetComponent<PortraitButton>();
@@ -160,17 +167,18 @@ public class CombatUI : MonoBehaviour
     
     private void UpdateTurnOrder()
     {
-        // for (int i = 0; i < _turnOrderPanel.transform.childCount; i++)
-        // {
-        //     Destroy(_turnOrderPanel.transform.GetChild(i).gameObject);
-        // }
-        //
-        // CombatTurnOrder turnOrder = CombatManager._instance.GetCombatTurnOrder();
-        //
-        // foreach (Character c in turnOrder.GetCharactersInTurnOrder())
-        // {
-        //     Button button = Instantiate
-        // }
+        for (int i = 0; i < _turnOrderPanel.transform.childCount; i++)
+        {
+            Destroy(_turnOrderPanel.transform.GetChild(i).gameObject);
+        }
+        
+        CombatTurnOrder turnOrder = CombatManager._instance.GetCombatTurnOrder();
+        
+        foreach (Character c in turnOrder.GetCharactersInTurnOrder())
+        {
+            PortraitButton pb = CreateCharacterPortrait(c.Data, _turnOrderPanel.transform);
+            _characterPortraits.TryAdd(pb.Character, pb);
+        }
     }
     
     public void UpdatePortraitColors(Character c) 
