@@ -89,6 +89,8 @@ public class CombatManager : MonoBehaviour
     private Dictionary<CharacterClass, List<Ability>> _classAbilitiesDictionary;
 
     public UnityEvent TurnStart = new();
+
+    public event Action<Character> OnCharacterDeath;
     
     private void Awake()
     {
@@ -245,4 +247,8 @@ public class CombatManager : MonoBehaviour
         return tileObject.GetComponent<CombatGridTile>();
     }
 
+    public void CharacterDied(Character character)
+    {
+        OnCharacterDeath?.Invoke(character);
+    }
 }

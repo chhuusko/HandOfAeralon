@@ -75,6 +75,7 @@ public class CharacterData
 public class Character : MonoBehaviour
 {
     public const int MOVEMENT_POINTS = 5;
+    public const float DEATH_COOLDOWN = 1f;
     
     // TODO: Traits.
     
@@ -226,10 +227,21 @@ public class Character : MonoBehaviour
     public void TakeDamage(int damage)
     {
         _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
+        
+        Debug.Log($"Taking {damage} damage. New health: {GetHealthPoints()}");
+        
         if (_data.CurrentHealthPoints <= 0)
         {
-            // TODO: Character dies.
+            StartCoroutine(RemoveCharacter());
         }
+    }
+
+    private IEnumerator RemoveCharacter()
+    {
+        CombatManager._instance.CharacterDied(this);
+        // TODO: Play animation.
+        yield return new WaitForSeconds(DEATH_COOLDOWN);
+        Destroy(gameObject);
     }
 
     public void Heal(int healAmount)
