@@ -79,6 +79,7 @@ public class CombatUI : MonoBehaviour
     {
         _hand.SetActive(false);
         UpdateCharacterPortraits();
+        UpdateManaText(CardHandManager.GetInstance().GetMana());
     }
 
     public void StartCombat()
@@ -201,7 +202,7 @@ public class CombatUI : MonoBehaviour
 
     private void UpdateManaText(int mana)
     {
-        _mana.text = $"Mana\n{mana}/10";
+        _mana.text = $"Mana\n{mana}/{CardHandManager.GetInstance().GetMaxMana()}";
     }
     
     private void UpdateActivePortrait(PortraitButton pb)
