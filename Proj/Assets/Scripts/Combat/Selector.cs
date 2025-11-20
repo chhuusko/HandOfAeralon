@@ -449,7 +449,7 @@ public class Selector : MonoBehaviour
             return;
         }
 
-        StartCoroutine(_selectedCharacter.MoveAlongPath(path));
+        _selectedCharacter.GetComponent<CharacterMovement>().MoveAlongPath(path);
         if (_bDebugSelector)
         {
             DebugLog.MGLog(_selectedCharacter.GetCharacterClass() + " on tile: " + _selectedCharacter.GetCurrentTileIndex().ToString() + " is set to move to: " + tile.GetComponentIndex().ToString());

@@ -65,7 +65,6 @@ public class EnemyAI : MonoBehaviour
     private void OnTurnStart()
     {
         // Initialization & null checks
-        //_currentCharacter = CombatManager._instance.GetNextTurnCharacter().GetComponent<Character>();
         _currentCharacter = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
         if (_currentCharacter == null || _currentCharacter.GetFaction() != controlledFaction)
         {
@@ -107,7 +106,7 @@ public class EnemyAI : MonoBehaviour
             DebugLog.JLWLog($"EnemyAI.cs | _movePath NOT FOUND!");
         }
 
-        StartCoroutine(_currentCharacter.MoveAlongPath(_movePath));
+        _currentCharacter.GetComponent<CharacterMovement>().MoveAlongPath(_movePath);
         if (_bDebug && _movePath == null && _movePath.Count != 0) DebugLog.JLWLog($"EnemyAI.cs | Moving {_currentCharacter.name} to {_movePath[_movePath.Count - 1].GetComponent<CombatGridTile>().GetTileIndex()}");
 
         StartCoroutine(WaitForMovementCompletion());

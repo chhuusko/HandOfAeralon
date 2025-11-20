@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -90,7 +89,6 @@ public class Character : MonoBehaviour
     [Header("Misc")]
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
-    private bool _bIsMoving;
     public CharacterData Data => _data;
     
     private void Start()
@@ -239,61 +237,12 @@ public class Character : MonoBehaviour
     
     public bool IsMoving()
     {
-        return _bIsMoving;
-
-        /*
-        if (_navMeshAgent.pathPending)
+        CharacterMovement component = null;
+        if (TryGetComponent<CharacterMovement>(out component))
         {
-            return true; 
+            return component.IsMoving();
         }
-
-        return _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance
-               || _navMeshAgent.velocity.sqrMagnitude > 0.03f;
-        */
-    }
-
-    public IEnumerator MoveAlongPath(List<GameObject> tiles)
-    {
-        if (tiles == null || tiles.Count == 0)
-        {
-            DebugLog.JLWLog($"Character.cs | MoveAlongPath called with an empty list!");
-            yield break;
-        }
-
-        _bIsMoving = true;
-
-        float moveSpeed = 4f; // Måste matcha animationerna
-
-        foreach (var tile in tiles)
-        {
-            Vector3 targetPos = tile.transform.position;
-
-            Vector3 direction = (targetPos - transform.position).normalized;
-            direction.y = 0f;
-
-            if (direction.sqrMagnitude > 0.0001f)
-            {
-                transform.rotation = Quaternion.LookRotation(direction);
-            }
-
-            DebugLog.JLWLog($"Character.cs | {this.name} moving towards {targetPos}");
-
-            while (Vector3.Distance(transform.position, targetPos) > 0.01f)
-            {
-                transform.position = Vector3.MoveTowards(
-                    transform.position,
-                    targetPos,
-                    moveSpeed * Time.deltaTime
-                );
-
-                yield return null;
-            }
-
-            transform.position = targetPos;
-
-            //GetComponent<CombatGridTile>().SetOccupant(this.gameObject);
-        }
-
-        _bIsMoving = false;
+        Debug.Log($"Character.cs 245 | CharacterMovement component not found!");
+        return false;
     }
 }
