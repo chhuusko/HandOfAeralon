@@ -134,13 +134,13 @@ public class Character : MonoBehaviour
     public Faction GetFaction() => _data.Faction;
     
     // Base stats.
-    public int GetBaseHealthPoints() => _data.BaseHealthPoints;
+    public int GetMaxHealth() => _data.BaseHealthPoints;
     public int GetBaseSpeed() => _data.BaseInitiative;
     public int GetBaseDamage() => _data.BaseDamage;
     public int GetBaseMovementPoints() => _data.BaseMovementPoints;
     
     // Current stats.
-    public int GetHealthPoints() => _data.CurrentHealthPoints;
+    public int GetCurrentHealth() => _data.CurrentHealthPoints;
     public int GetInitiative() => _currentInitiative;
     public int GetDamage() => _currentDamage;
     public int GetMovementPoints() => _currentMovementPoints;
@@ -227,7 +227,7 @@ public class Character : MonoBehaviour
     {
         _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
         
-        Debug.Log($"Taking {damage} damage. New health: {GetHealthPoints()}");
+        Debug.Log($"Taking {damage} damage. New health: {GetCurrentHealth()}");
         
         if (_data.CurrentHealthPoints <= 0)
         {
@@ -246,7 +246,7 @@ public class Character : MonoBehaviour
     public void Heal(int healAmount)
     {
         _data.Heal(healAmount);
-        Debug.Log($"Healing {healAmount} health. New health: {GetHealthPoints()}");
+        Debug.Log($"Healing {healAmount} health. New health: {GetCurrentHealth()}");
     }
     
     public bool IsMoving()
