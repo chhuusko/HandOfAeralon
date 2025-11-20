@@ -102,4 +102,9 @@ public class CombatTurnOrder
     {
         return _turnCountFullRound;
     }
+
+    public List<Character> GetCharactersInTurnOrder()
+    {
+        return _charactersInTurnOrder;
+    }
 }

@@ -15,10 +15,13 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Image _characterPortraitPanel;
     [SerializeField] private Image _activeCharacterPortrait;
+    [SerializeField] private Image _turnOrderPanel;
+    
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
     [SerializeField] private Button _abilityButtonPrefab;
     [SerializeField] private Button _characterPortraitButtonPrefab;
+    
     [SerializeField] private GameObject _hand;
     [SerializeField] private TextMeshProUGUI _mana;
 
@@ -35,16 +38,15 @@ public class CombatUI : MonoBehaviour
     private void OnEnable()
     {
         CardHandManager.onManaChange += UpdateManaText;
-        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateActivePortrait;
-        CombatEventManager.OnEnterCombatStateTakeTurn += UpdatePortraitColors;
-        
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateCharacterUI;
+        CombatEventManager.OnEnterCombatStatePlaceCharacter += UpdateTurnOrder;
     }
 
     private void OnDisable()
     {
         CardHandManager.onManaChange -= UpdateManaText;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateActivePortrait;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdatePortraitColors;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateCharacterUI;
+        CombatEventManager.OnEnterCombatStatePlaceCharacter -= UpdateTurnOrder;
 
         foreach (var pb in _portraitButtons)
         {
@@ -60,17 +62,22 @@ public class CombatUI : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            
+            _hand.SetActive(false);
         }
         else
         {
             Destroy(gameObject);
         }
-
-        _hand.SetActive(false);
-        UpdateCharacterPortraits();
         
         // Player 1 portrait displayed as default when no character has been selected yet.
         // UpdateSelectedPortrait(GlobalGameManager.GetInstance().GetGameData().heroDataList[0]);
+    }
+
+    private void Start()
+    {
+        _hand.SetActive(false);
+        UpdateCharacterPortraits();
     }
 
     public void StartCombat()
@@ -100,6 +107,13 @@ public class CombatUI : MonoBehaviour
     {
         CardHandManager._instance.OpenDiscardPile();
     }
+
+    private void UpdateCharacterUI(Character character)
+    {
+        UpdateActivePortrait(character);
+        UpdatePortraitColors(character);
+        UpdateTurnOrder();
+    }
     
     /// <summary>
     /// Sets all character portraits in combat UI to reflect current party.
@@ -115,25 +129,60 @@ public class CombatUI : MonoBehaviour
             return;
         }
         
+        ClearCharacterPortraits();
+        
         foreach (CharacterData c in heroList)
         {
-            Button button = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
-            button.image.sprite = c.ClassData.classImage;
-            button.image.color = _inactiveColor;
-            PortraitButton pb = button.GetComponent<PortraitButton>();
-            pb.Character = c;
-            pb.OnClickPortraitButton += UpdatePortraitColors;
-            pb.OnClickPortraitButton += UpdateActivePortrait;
-            pb.OnClickPortraitButton += LoadAbilities;
-            
+            PortraitButton pb = CreateCharacterPortrait(c, _characterPortraitPanel.transform);
             _portraitButtons.Add(pb);
-            _characterPortraits.Add(pb.Character, pb);
+            _characterPortraits.TryAdd(pb.Character, pb);
+        }
+    }
+
+    private void ClearCharacterPortraits()
+    {
+        _portraitButtons.Clear();
+        _characterPortraits.Clear();
+
+        for (int i = 0; i < _characterPortraitPanel.transform.childCount; i++)
+        {
+            Destroy(_characterPortraitPanel.transform.GetChild(i).gameObject);
+        }
+    }
+
+    private PortraitButton CreateCharacterPortrait(CharacterData c, Transform parent)
+    {
+        Button button = Instantiate(_characterPortraitButtonPrefab, parent);
+        button.image.sprite = c.ClassData.classImage;
+        button.image.color = _inactiveColor;
+        PortraitButton pb = button.GetComponent<PortraitButton>();
+        pb.Character = c;
+        
+        pb.OnClickPortraitButton += UpdatePortraitColors;
+        pb.OnClickPortraitButton += UpdateActivePortrait;
+        pb.OnClickPortraitButton += LoadAbilities;
+        
+        return pb;
+    }
+    
+    private void UpdateTurnOrder()
+    {
+        for (int i = 0; i < _turnOrderPanel.transform.childCount; i++)
+        {
+            Destroy(_turnOrderPanel.transform.GetChild(i).gameObject);
+        }
+        
+        CombatTurnOrder turnOrder = CombatManager._instance.GetCombatTurnOrder();
+        
+        foreach (Character c in turnOrder.GetCharactersInTurnOrder())
+        {
+            PortraitButton pb = CreateCharacterPortrait(c.Data, _turnOrderPanel.transform);
+            _characterPortraits.TryAdd(pb.Character, pb);
         }
     }
     
     public void UpdatePortraitColors(Character c) 
     {
-        Debug.Log(c.Data.ClassData.name);
         UpdatePortraitColors(_characterPortraits[c.Data]);
     }
 
