@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -60,37 +61,54 @@ public class GridExplorer : MonoBehaviour
     /// <summary>
     /// Defines our melee attacking range. Includes diagonals, but only for attacks that reach 1 tile. Can't reach through diagonal obstacles.
     /// </summary>
-    /// <param name="attacker">The <see cref="GameObject"/> of the attacking character.</param>
-    /// <param name="target">The <see cref="GameObject"/> of the target character.</param>
-    /// <returns>True if the target is within range of our melee attack definition, false if not.</returns>
-    public bool MeleeAttackCheck(GameObject attacker, GameObject target)
+    /// <param name="character">The <see cref="Character"/> component of the attacking character.</param>
+    /// <returns>A List of CombatGridTiles that represent all the reachable tiles for this characters current position.</returns>
+    public List<CombatGridTile> GetTilesInMeleeRange(GameObject origin)
     {
-        CombatGridTile aTile = attacker.GetComponent<Character>().GetCurrentTileComponent();
-        CombatGridTile tTile = target.GetComponent<Character>().GetCurrentTileComponent();
+        List<CombatGridTile> result = new();
+        Vector2Int pos = new();
 
-        Vector2Int aPos = aTile.GetTileIndex();
-        Vector2Int tPos = tTile.GetTileIndex();
-
-        if (ChebyshevDistance(aPos, tPos) != 1)
+        if (origin.TryGetComponent<CombatGridTile>(out CombatGridTile tile))
         {
-            return false;
+            pos = tile.GetTileIndex();
+        }
+        else if (origin.TryGetComponent<Character>(out Character character))
+        {
+            pos = character.GetCurrentTileIndex();
         }
 
-        Vector2Int diff = tPos - aPos;
-
-        // If attack is diagonal
-        if (Mathf.Abs(diff.x) == 1 && Mathf.Abs(diff.y) == 1)
-        {
-            Vector2Int side1 = new Vector2Int(aPos.x, tPos.y);
-            Vector2Int side2 = new Vector2Int(tPos.x, aPos.y);
-
-            if (!IsWalkable(side1) && !IsWalkable(side2))
+            Vector2Int[] directions = new Vector2Int[]
             {
-                return false;
+            new Vector2Int(1, 1),
+            new Vector2Int(-1, 1),
+            new Vector2Int(1, -1),
+            new Vector2Int(-1, -1),
+
+            new Vector2Int(1, 0),
+            new Vector2Int(0, 1),
+            new Vector2Int(-1, 0),
+            new Vector2Int(0, -1)
+            };
+
+        foreach (var dir in directions)
+        {
+            Vector2Int next = pos + dir;
+
+            if (OutOfBounds(next)) continue;
+            if (!IsWalkable(next)) continue;
+
+            if (IsDiagonal(dir))
+            {
+                Vector2Int t1 = new Vector2Int(pos.x, next.y);
+                Vector2Int t2 = new Vector2Int(next.x, pos.y);
+
+                if (!IsWalkable(t1) && !IsWalkable(t2)) continue;
             }
+
+            result.Add(CombatGrid._instance.GetTileAtCoord(next.x, next.y).GetComponent<CombatGridTile>());
         }
 
-        return true;
+        return result;
     }
 
     /// <summary>
@@ -250,7 +268,7 @@ public class GridExplorer : MonoBehaviour
     /// The method also updates internal debug fields (_debugStartTile, _debugPath and _debugGoalTile) 
     /// used for visualization in the editor.
     /// </remarks>
-    public List<GameObject> FindPath(GameObject startTile, GameObject goalTile)
+    public List<GameObject> FindPathBFS(GameObject startTile, GameObject goalTile)
     {
         List<GameObject> result = new();
 
