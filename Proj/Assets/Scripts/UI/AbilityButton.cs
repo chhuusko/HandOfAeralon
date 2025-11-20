@@ -1,16 +1,14 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AbilityButton : MonoBehaviour
 {
-    private Ability _ability;
-
-    public void SetAbility(Ability ability)
-    {
-        _ability = ability;
-    }
-
+    public Ability Ability { get; set; }
+    [SerializeField] private Button _button;
+    public Button Button => _button;
+    
     public void OnClick()
     {
-        Selector._instance.PreviewAbilityRange(_ability);
+        Selector._instance.PreviewAbilityRange(Ability);
     }
 }
