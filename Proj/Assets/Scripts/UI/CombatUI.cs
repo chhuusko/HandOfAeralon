@@ -126,18 +126,9 @@ public class CombatUI : MonoBehaviour
         
         foreach (CharacterData c in heroList)
         {
-            Button button = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
-            button.image.sprite = c.ClassData.classImage;
-            button.image.color = _inactiveColor;
-            PortraitButton pb = button.GetComponent<PortraitButton>();
-            pb.Character = c;
-            
+            PortraitButton pb = CreateCharacterPortrait(c);
             _portraitButtons.Add(pb);
             _characterPortraits.Add(pb.Character, pb);
-            
-            pb.OnClickPortraitButton += UpdatePortraitColors;
-            pb.OnClickPortraitButton += UpdateActivePortrait;
-            pb.OnClickPortraitButton += LoadAbilities;
         }
     }
 
@@ -150,6 +141,36 @@ public class CombatUI : MonoBehaviour
         {
             Destroy(_characterPortraitPanel.transform.GetChild(i).gameObject);
         }
+    }
+
+    private PortraitButton CreateCharacterPortrait(CharacterData c)
+    {
+        Button button = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
+        button.image.sprite = c.ClassData.classImage;
+        button.image.color = _inactiveColor;
+        PortraitButton pb = button.GetComponent<PortraitButton>();
+        pb.Character = c;
+        
+        pb.OnClickPortraitButton += UpdatePortraitColors;
+        pb.OnClickPortraitButton += UpdateActivePortrait;
+        pb.OnClickPortraitButton += LoadAbilities;
+        
+        return pb;
+    }
+    
+    private void UpdateTurnOrder()
+    {
+        // for (int i = 0; i < _turnOrderPanel.transform.childCount; i++)
+        // {
+        //     Destroy(_turnOrderPanel.transform.GetChild(i).gameObject);
+        // }
+        //
+        // CombatTurnOrder turnOrder = CombatManager._instance.GetCombatTurnOrder();
+        //
+        // foreach (Character c in turnOrder.GetCharactersInTurnOrder())
+        // {
+        //     Button button = Instantiate
+        // }
     }
     
     public void UpdatePortraitColors(Character c) 
