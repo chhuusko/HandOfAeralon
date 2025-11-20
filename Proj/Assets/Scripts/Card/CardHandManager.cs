@@ -8,7 +8,7 @@ public class CardHandManager : MonoBehaviour
 {
     //Controlls hand 
 
-    public static CardHandManager _instance;
+    private static CardHandManager _instance;
 
     [SerializeField] private GameObject _CardContainer;
     [SerializeField] private Transform _Hand;
