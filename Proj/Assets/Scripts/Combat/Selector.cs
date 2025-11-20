@@ -275,14 +275,13 @@ public class Selector : MonoBehaviour
     {
         DeselectCharacter();
         bool bIsFriendly = character.GetFaction() == Faction.Friendly;
-        //bool bIsCharactersTurn = character == CombatManager._instance.GetNextTurnCharacter();
         bool bIsCharactersTurn = character == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
 
         if (bIsFriendly && bIsCharactersTurn)
         {
             ShowCharacterUIWithOptions(character);
             _pendingCharacterActionType = CharacterActionType.Movement;
-            _currentState = SelectorState.CharacterSelected;
+            _currentState = SelectorState.ActionTypeSelected;
             _selectedCharacter = character;
 
             // JLW
@@ -303,6 +302,7 @@ public class Selector : MonoBehaviour
         if (bIsFriendly)
         {
             ShowCharacterUI(character);
+            _currentState = SelectorState.CharacterSelected;
         }
     }
 
