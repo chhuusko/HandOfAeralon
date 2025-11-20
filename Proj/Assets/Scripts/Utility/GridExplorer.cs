@@ -61,7 +61,7 @@ public class GridExplorer : MonoBehaviour
     /// <summary>
     /// Defines our melee attacking range. Includes diagonals, but only for attacks that reach 1 tile. Can't reach through diagonal obstacles.
     /// </summary>
-    /// <param name="character">The <see cref="Character"/> component of the attacking character.</param>
+    /// <param name="origin">The <see cref="GameObject"/> of the attacking character or tile.</param>
     /// <returns>A List of CombatGridTiles that represent all the reachable tiles for this characters current position.</returns>
     public List<CombatGridTile> GetTilesInMeleeRange(GameObject origin)
     {
@@ -77,7 +77,7 @@ public class GridExplorer : MonoBehaviour
             pos = character.GetCurrentTileIndex();
         }
 
-            Vector2Int[] directions = new Vector2Int[]
+        Vector2Int[] directions = new Vector2Int[]
             {
             new Vector2Int(1, 1),
             new Vector2Int(-1, 1),
