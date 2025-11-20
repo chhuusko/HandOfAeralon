@@ -37,7 +37,6 @@ public class CombatUI : MonoBehaviour
         CardHandManager.onManaChange += UpdateManaText;
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateActivePortrait;
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdatePortraitColors;
-        
     }
 
     private void OnDisable()
@@ -60,17 +59,22 @@ public class CombatUI : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            
+            _hand.SetActive(false);
         }
         else
         {
             Destroy(gameObject);
         }
-
-        _hand.SetActive(false);
-        UpdateCharacterPortraits();
         
         // Player 1 portrait displayed as default when no character has been selected yet.
         // UpdateSelectedPortrait(GlobalGameManager.GetInstance().GetGameData().heroDataList[0]);
+    }
+
+    private void Start()
+    {
+        _hand.SetActive(false);
+        UpdateCharacterPortraits();
     }
 
     public void StartCombat()
@@ -115,6 +119,8 @@ public class CombatUI : MonoBehaviour
             return;
         }
         
+        ClearCharacterPortraits();
+        
         foreach (CharacterData c in heroList)
         {
             Button button = Instantiate(_characterPortraitButtonPrefab, _characterPortraitPanel.transform);
@@ -122,18 +128,29 @@ public class CombatUI : MonoBehaviour
             button.image.color = _inactiveColor;
             PortraitButton pb = button.GetComponent<PortraitButton>();
             pb.Character = c;
-            pb.OnClickPortraitButton += UpdatePortraitColors;
-            pb.OnClickPortraitButton += UpdateActivePortrait;
-            pb.OnClickPortraitButton += LoadAbilities;
             
             _portraitButtons.Add(pb);
             _characterPortraits.Add(pb.Character, pb);
+            
+            pb.OnClickPortraitButton += UpdatePortraitColors;
+            pb.OnClickPortraitButton += UpdateActivePortrait;
+            pb.OnClickPortraitButton += LoadAbilities;
+        }
+    }
+
+    private void ClearCharacterPortraits()
+    {
+        _portraitButtons.Clear();
+        _characterPortraits.Clear();
+
+        for (int i = 0; i < _characterPortraitPanel.transform.childCount; i++)
+        {
+            Destroy(_characterPortraitPanel.transform.GetChild(i).gameObject);
         }
     }
     
     public void UpdatePortraitColors(Character c) 
     {
-        Debug.Log(c.Data.ClassData.name);
         UpdatePortraitColors(_characterPortraits[c.Data]);
     }
 
