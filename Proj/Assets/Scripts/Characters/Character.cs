@@ -247,6 +247,7 @@ public class Character : MonoBehaviour
     public void Heal(int healAmount)
     {
         _data.Heal(healAmount);
+        Debug.Log($"Healing {healAmount} health. New health: {GetHealthPoints()}");
     }
     
     public bool IsMoving()
