@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -10,8 +11,10 @@ public class BuyableCard : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private bool _isHeldDown;
     private float _sellTime = 2f;
     private float _timeHeld = 0;
+    private int _price;
     [SerializeField] Image _fillImage;
     [SerializeField] GameObject _aboveText;
+    [SerializeField] TextMeshProUGUI _priceText;
     private void Awake()
     {
         _fillImage.fillAmount = 0;
@@ -34,10 +37,13 @@ public class BuyableCard : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public void SetCard(Card card)
     {
         _card = card;
+        _price = (int)(card.rarity+1)*50;
+        _priceText.text = "£" + _price;
         GetComponent<CardUI>().SetUpUIElements(card);
     }
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (!canAfford()) return;
         _isHeldDown = true;
     }
 
@@ -53,6 +59,10 @@ public class BuyableCard : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private void Bought()
     {
         GlobalGameManager.GetInstance().GetGameData().cardList.Add(_card);
-        Shop.GetInstance().ChangeCoins(10);
+        Shop.GetInstance().ChangeCoins(-_price);
+    }
+    private bool canAfford()
+    {
+        return GlobalGameManager.GetInstance().GetGameData().coins >= _price;
     }
 }
