@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class Ability : ScriptableObject
@@ -10,6 +9,12 @@ public abstract class Ability : ScriptableObject
     [SerializeField] private int _range;
     [SerializeField] private int _cooldown;
 
+    [Header("- Tags -")]
+    [SerializeField] private AbilityTag _abilityTag;
+
+    [Header("- Types -")]
+    [SerializeField] private Type _type;
+
     [Header("- Targeting -")]
     [SerializeField] private RangeCalculation _rangeCalculation;
     [SerializeField] private AbilityTargetType _targetType;
@@ -17,6 +22,24 @@ public abstract class Ability : ScriptableObject
     [Header("- Visuals & Audio - ")]
     [SerializeField] private ParticleSystem castingEffect, hitEffect;
     [SerializeField] private AudioClip castingSound, hitSound;
+
+    [System.Flags]
+    public enum AbilityTag
+    {
+        None = 0,               // 0000
+        Melee = 1 << 0,         // 0001  (1)
+        Ranged = 1 << 1,        // 0010  (2)
+        SingleTarget = 1 << 2,  // 0100  (4)
+        AOE = 1 << 3            // 1000  (8)
+    }
+    public enum Type
+    {
+        Physical,
+        Elemental,
+        Heal,
+        Buff,
+        Debuff
+    }
 
     public enum AbilityTargetType
     {
@@ -29,6 +52,7 @@ public abstract class Ability : ScriptableObject
     public abstract void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile);
     public abstract List<CombatGridTile> GetTilesToEffect(CombatGridTile tile);
     protected abstract void ApplyEffectOnTile(CombatGridTile targetTile);
+
 
     public string GetAbilityName() => _abilityName;
     public Sprite GetIcon() => _icon;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SingleTargetAbility", menuName = "Scriptable Objects/Abilities/Single Target/Firebolt")]
+[CreateAssetMenu(fileName = "Firebolt_Ability", menuName = "Scriptable Objects/Abilities/Single Target/Firebolt")]
 public class Firebolt_SingleTarget : SingleTargetAbility
 {
     [Header("- Ability Specific values -")]

@@ -63,12 +63,12 @@ public class CombatGridCharacterData
         _characterClass        = characterScript.GetCharacterClass();
         _faction               = characterScript.GetFaction();
 
-        _baseHealthPoints      = characterScript.GetBaseHealthPoints();
+        _baseHealthPoints      = characterScript.GetMaxHealth();
         _baseSpeed             = characterScript.GetBaseSpeed();
         _baseDamage            = characterScript.GetBaseDamage();
         _baseMovementPoints    = characterScript.GetBaseMovementPoints();
 
-        _currentHealthPoints   = characterScript.GetHealthPoints();
+        _currentHealthPoints   = characterScript.GetCurrentHealth();
         _currentSpeed          = characterScript.GetInitiative();
         _currentDamage         = characterScript.GetDamage();
         _currentMovementPoints = characterScript.GetMovementPoints();

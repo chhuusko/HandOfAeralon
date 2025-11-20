@@ -6,8 +6,6 @@ public class CombatStateTakeTurn : CombatStateBase
 {
     public override CombatState _state => CombatState.TakeTurn;
 
-    [SerializeField] private GameObject _activeCharacter;
-    [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
     [SerializeField] private GameObject _selectorOverHead;
     public UnityEvent TurnStart = new();
@@ -22,25 +20,33 @@ public class CombatStateTakeTurn : CombatStateBase
         
         CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
 
-        // NOTE (Calle): Set current turn based on initiative and Faction
-        _activeCharacter = GetNextTurnCharacter();
-        if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Friendly)
-        {
-            SetCurrentTurn(CombatTurn.PlayerTurn);
-            CardHandManager._instance.ChangeMana(1);
+        CombatTurnOrder combatTurnOrder = CombatManager._instance.GetCombatTurnOrder();
 
-            Vector3 position = _activeCharacter.transform.position;
-            position += Vector3.up * 3.0f;
-            CombatManager._instance.SetSelectorOverHeadPosition(position);
-            
-        }
-        else if (_activeCharacter.GetComponent<Character>().GetFaction() == Faction.Enemy)
+        combatTurnOrder.UpdateCharacterTurnOrder();
+        Character activeCharacter = combatTurnOrder.GetActiveCharacter();
+
+        switch(activeCharacter.GetFaction())
         {
-            SetCurrentTurn(CombatTurn.EnemyTurn);
-            CombatManager._instance.HideSelectorOverhead();
+            case Faction.Friendly:
+                {
+                    CardHandManager._instance.ChangeMana(1);
+
+                    
+                    CombatManager._instance.SetSelectorOverHeadColor(Color.green);
+                }
+                break;
+            case Faction.Enemy:
+                {
+                    CombatManager._instance.SetSelectorOverHeadColor(Color.red);
+
+                }
+                break;
         }
 
-        CombatEventManager.InvokeEnterCombatStateTakeTurn(_activeCharacter.GetComponent<Character>());
+        Vector3 selectorOverHeadPosition = activeCharacter.transform.position + (Vector3.up * 3.0f);
+        CombatManager._instance.SetSelectorOverHeadPosition(selectorOverHeadPosition);
+
+        CombatEventManager.InvokeEnterCombatStateTakeTurn(activeCharacter);
     }
 
     public override void Exit()
@@ -52,7 +58,7 @@ public class CombatStateTakeTurn : CombatStateBase
 
     public override void Update()
     {
-        switch (_currentTurn)
+        switch (CombatManager._instance.GetCombatTurnOrder().GetCurrentTurn())
         {
             case CombatTurn.PlayerTurn:
                 HandlePlayerTurn();
@@ -63,20 +69,9 @@ public class CombatStateTakeTurn : CombatStateBase
         }
     }
 
-    public Character GetActiveCharacter()
-    {
-        return _activeCharacter.GetComponent<Character>();
-    }
-
     private void EndTurn()
     {
         CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
-    }
-
-    private void SetCurrentTurn(CombatTurn turn)
-    {
-        _currentTurn = turn;
-        CombatEventManager.InvokeCombatTurnChanged(turn);
     }
 
     public GameObject GetNextTurnCharacter()
