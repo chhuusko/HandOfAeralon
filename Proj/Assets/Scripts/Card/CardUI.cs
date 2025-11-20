@@ -12,8 +12,12 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] TextMeshProUGUI _title, _description, _mana;
     [SerializeField] Image _frame, _image;
     [SerializeField] List<InfoPanel> _infoPanels;
-    [SerializeField] GameObject _infoPanelPrefab;
     [SerializeField] List<GameObject> _infoPanelInScene;
+    GameObject _infoPanelPrefab;
+    private void Awake()
+    {
+        _infoPanelPrefab = Resources.Load<GameObject>("UI/InfoPanel");
+    }
     public void OnPointerEnter(PointerEventData eventData)
     {
         foreach (InfoPanel info in _infoPanels)
