@@ -15,14 +15,18 @@ public class Skullsplitter_Ability : SingleTargetAbility
         Character affectedCharacter = tileToEffect.GetOccupantCharacter();
         if (affectedCharacter == null) return;
 
+        affectedCharacter.TakeDamage(CalculateDamage(affectedCharacter));
+    }
+
+    private int CalculateDamage(Character affectedCharacter)
+    {
         // Calculate increasedDamage;
-        int increasedDamage = (int) (_baseDamage * damageMultiplier);
+        int increasedDamage = (int)(_baseDamage * damageMultiplier);
 
         // Decide which damage to use.
-        int calculatedDamge = affectedCharacter.GetHealthPoints() < (0.5 * affectedCharacter.GetBaseHealthPoints()) ? increasedDamage : _baseDamage;
- 
+        int calculatedDamge = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.GetMaxHealth()) ? increasedDamage : _baseDamage;
 
-        affectedCharacter.TakeDamage(_baseDamage);
+        return 0;
     }
 
 }
