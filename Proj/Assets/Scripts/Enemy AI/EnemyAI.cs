@@ -21,9 +21,20 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private bool _bAutoPlay = false;
     // End of only for testing
 
+
+    private void OnEnable()
+    {
+        CombatEventManager.OnEnterCombatStateTakeTurn += StartTurn;
+    }
+
+    private void OnDisable()
+    {
+        CombatEventManager.OnEnterCombatStateTakeTurn -= StartTurn;
+    }
+
     void Start()
     {
-        CombatManager._instance.TurnStart.AddListener(OnTurnStart);
+        //CombatManager._instance.TurnStart.AddListener(OnTurnStart);
 
         // Only for testing
         if (_bAutoPlay)
@@ -62,6 +73,11 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    // NOTE (Calle): Added this for test, and executing from CombatEventManager.OnEnterCombatStateTakeTurn
+    private void StartTurn(Character character)
+    {
+        OnTurnStart();
+    }
     private void OnTurnStart()
     {
         // Initialization & null checks

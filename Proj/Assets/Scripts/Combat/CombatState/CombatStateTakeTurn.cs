@@ -19,6 +19,9 @@ public class CombatStateTakeTurn : CombatStateBase
         base.Enter();   
         
         CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
+        // TODO (Calle): Should AIEndTurn be in CombatEventManager, and/or should it be a event Action instead of UnityEvent?
+        CombatManager._instance.GetEnemyAI().AIEndTurn.AddListener(EndTurn);
+        
 
         CombatTurnOrder combatTurnOrder = CombatManager._instance.GetCombatTurnOrder();
 
@@ -38,7 +41,6 @@ public class CombatStateTakeTurn : CombatStateBase
             case Faction.Enemy:
                 {
                     CombatManager._instance.SetSelectorOverHeadColor(Color.red);
-
                 }
                 break;
         }
@@ -54,6 +56,7 @@ public class CombatStateTakeTurn : CombatStateBase
         base.Exit();
         CombatEventManager.InvokeExitCombatStateTakeTurn();
         CombatUI.Instance.OnEndTurnButtonPressed -= EndTurn;
+        CombatManager._instance.GetEnemyAI().AIEndTurn.RemoveListener(EndTurn);
     }
 
     public override void Update()
@@ -72,23 +75,6 @@ public class CombatStateTakeTurn : CombatStateBase
     private void EndTurn()
     {
         CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
-    }
-
-    public GameObject GetNextTurnCharacter()
-    {
-        int highestInitiative = Int32.MinValue;
-        GameObject nextCharacter = null;
-        foreach (var g in CombatGrid._instance.GetAllCharacters())
-        {
-            int initiative = g.GetComponent<Character>().GetInitiative();
-            if (initiative > highestInitiative)
-            {
-                highestInitiative = initiative;
-                nextCharacter = g;
-            }
-        }
-
-        return nextCharacter;
     }
 
     private void HandlePlayerTurn()
@@ -119,7 +105,7 @@ public class CombatStateTakeTurn : CombatStateBase
         if (!enemyDoingStuff)
         {
             enemyDoingStuff = true;
-            TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandlePlayerTurn() för att AI ska kunna spela båda factions.
+             // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandlePlayerTurn() för att AI ska kunna spela båda factions.
             //_activeCharacter = null;
             //UpdateCombatState(CombatState.EndTurn);
         }

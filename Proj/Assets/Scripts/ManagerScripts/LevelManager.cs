@@ -9,8 +9,8 @@ public class LevelManager : ScriptableObject
     private static LevelManager _instance;
     private string[] _combatList;
     private string[] _generatedList;
-    private int level = 0;
-    private int gameLevels = 10;
+    private int _level = 0;
+    private int _gameLevels = 10;
 
     private CombatGrid _combatGrid;
     public static LevelManager GetInstance()
@@ -38,11 +38,9 @@ public class LevelManager : ScriptableObject
     }
     public void StartNextLevel() 
     {
-        level++;
-        if (level % 2 == 0)
+        if(SceneManager.GetActiveScene().name == "ShopScene")
         {
-            //GetCombatLevel();
-            SceneManager.LoadScene("Graveyard12x10_Easy");
+            SceneManager.LoadScene("CombatScene");
         }
         else
         {
@@ -53,7 +51,7 @@ public class LevelManager : ScriptableObject
     }
     public CombatGrid GetCombatLevel()
     {
-        string filePathToload = Application.dataPath + "\\JSON BattleGrids\\" + _generatedList[level] + ".json";
+        string filePathToload = Application.dataPath + "\\JSON BattleGrids\\" + _generatedList[_level] + ".json";
 
         if (!System.IO.File.Exists(filePathToload))
         {
