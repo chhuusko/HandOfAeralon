@@ -46,10 +46,11 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateActivePortrait;
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdatePortraitColors;
 
-        foreach (var portrait in _portraitButtons)
+        foreach (var pb in _portraitButtons)
         {
-            portrait.OnClickPortraitButton -= UpdatePortraitColors;
-            portrait.OnClickPortraitButton -= LoadAbilities;
+            pb.OnClickPortraitButton -= UpdatePortraitColors;
+            pb.OnClickPortraitButton -= UpdateActivePortrait;
+            pb.OnClickPortraitButton -= LoadAbilities;
         }
     }
 
@@ -122,6 +123,7 @@ public class CombatUI : MonoBehaviour
             PortraitButton pb = button.GetComponent<PortraitButton>();
             pb.Character = c;
             pb.OnClickPortraitButton += UpdatePortraitColors;
+            pb.OnClickPortraitButton += UpdateActivePortrait;
             pb.OnClickPortraitButton += LoadAbilities;
             
             _portraitButtons.Add(pb);
@@ -129,8 +131,9 @@ public class CombatUI : MonoBehaviour
         }
     }
     
-    private void UpdatePortraitColors(Character c) 
+    public void UpdatePortraitColors(Character c) 
     {
+        Debug.Log(c.Data.ClassData.name);
         UpdatePortraitColors(_characterPortraits[c.Data]);
     }
 
@@ -148,14 +151,31 @@ public class CombatUI : MonoBehaviour
     {
         _mana.text = $"Mana\n{mana}/10";
     }
-
-    private void UpdateActivePortrait(Character c)
+    
+    private void UpdateActivePortrait(PortraitButton pb)
     {
-        if (!c || c.Data.Faction == Faction.Enemy)
+        UpdateActivePortrait(pb.Character);
+    }
+
+    public void UpdateActivePortrait(Character c)
+    {
+        if (!c)
         {
+            DebugLog.JoppaLog("Null character");
             return;
         }
-        _activeCharacterPortrait.sprite = c.Data.ClassData.classImage;
+        UpdateActivePortrait(c.Data);
+    }
+
+    private void UpdateActivePortrait(CharacterData c)
+    {
+        if (c.Faction == Faction.Enemy)
+        {
+            DebugLog.JoppaLog("Enemy");
+            return;
+        }
+        DebugLog.JoppaLog("Called");
+        _activeCharacterPortrait.sprite = c.ClassData.classImage;
     }
     
     public void SetCardsActive(bool active)

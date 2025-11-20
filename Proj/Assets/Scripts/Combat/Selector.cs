@@ -345,6 +345,8 @@ public class Selector : MonoBehaviour
     {
         // Activates character UI with options to cast abilities and walk.
         _combatUI.LoadAbilities(character.Data);
+        _combatUI.UpdateActivePortrait(character);
+        _combatUI.UpdatePortraitColors(character);
     }
 
     /// <summary>
@@ -354,7 +356,10 @@ public class Selector : MonoBehaviour
     /// <param name="character">The character to display basic UI for.</param>
     private void ShowCharacterUI(Character character)
     {
+        Debug.Log("Called");
         // Activates character UI without options since the character can't perform actions at the moment.
+        _combatUI.UpdateActivePortrait(character);
+        _combatUI.UpdatePortraitColors(character);
     }
     public void PreviewAbilityRange(Ability ability)
     {
