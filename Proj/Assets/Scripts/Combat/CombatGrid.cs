@@ -55,6 +55,16 @@ public class CombatGrid : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        CombatEventManager.OnCharacterDeath += HandleCharacterDeath;
+    }
+
+    private void OnDisable()
+    {
+        CombatEventManager.OnCharacterDeath += HandleCharacterDeath;
+    }
+
     public void Start()
     {
         _friendlyCharacterRoot = new GameObject();
@@ -266,6 +276,11 @@ public class CombatGrid : MonoBehaviour
         result = characterObject;
         
         return result;
+    }
+
+    private void HandleCharacterDeath(Character character)
+    {
+        RemoveCharacter(character.gameObject);
     }
 
     public void RemoveCharacter(GameObject character)

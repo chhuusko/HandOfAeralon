@@ -237,7 +237,7 @@ public class Character : MonoBehaviour
 
     private IEnumerator RemoveCharacter()
     {
-        CombatManager._instance.CharacterDied(this);
+        CombatEventManager.InvokeOnCharacterDeath(this);
         // TODO: Play animation.
         yield return new WaitForSeconds(DEATH_COOLDOWN);
         Destroy(gameObject);

@@ -21,6 +21,8 @@ public static class CombatEventManager
     public static event Action OnExitCombatStateEndCombat;
 
 
+    public static event Action<Character> OnCharacterDeath;
+
     public static void InvokeCombatStateChanged(CombatState newState)
         => OnCombatStateChange?.Invoke(newState);
 
@@ -61,5 +63,7 @@ public static class CombatEventManager
     public static void InvokeExitCombatStateEndCombat()
         => OnExitCombatStateEndCombat?.Invoke();
 
+    public static void InvokeOnCharacterDeath(Character character)
+        => OnCharacterDeath.Invoke(character);
 
 }
