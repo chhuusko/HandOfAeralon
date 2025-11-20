@@ -23,7 +23,7 @@ public static class CombatEventManager
     public static event Action OnExitCombatStateEndTurn;
     public static event Action OnExitCombatStateEndCombat;
 
-    public static event Action<List<Character>> OnTurnOrderChanged;
+    public static event Action<IReadOnlyList<Character>> OnTurnOrderChanged;
 
     public static event Action<Character> OnCharacterDeath;
 
@@ -70,7 +70,7 @@ public static class CombatEventManager
     public static void InvokeOnCharacterDeath(Character character)
         => OnCharacterDeath?.Invoke(character);
 
-    public static void InvokeOnTurnOrderChanged(List<Character> characterTurnOrder)
+    public static void InvokeOnTurnOrderChanged(IReadOnlyList<Character> characterTurnOrder)
         => OnTurnOrderChanged?.Invoke(characterTurnOrder);
 
 }

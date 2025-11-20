@@ -351,7 +351,7 @@ public class CombatGrid : MonoBehaviour
 
         for (int i = 0; i < combatGridSaveData._characterData.Count; i++)
         {
-            CombatGrid._instance.AddCharacter(combatGridSaveData._characterData[i]).transform.SetParent(_enemyCharacterRoot.transform); ;
+            CombatGrid._instance.AddCharacter(combatGridSaveData._characterData[i]).transform.SetParent(_enemyCharacterRoot.transform);
         }
 
         _bCombatGridLoaded = true;
