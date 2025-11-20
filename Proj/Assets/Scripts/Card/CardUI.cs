@@ -26,12 +26,11 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             _infoPanelInScene.Add(Instantiate(_infoPanelPrefab, offset, Quaternion.identity, CanvasManager.Instance().OverlayCanvas.transform));
             _infoPanelInScene.Last<GameObject>().GetComponent<InfoPanelUI>().SetUpUIElements(info);
         }
-        
+
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        
         foreach (GameObject go in _infoPanelInScene)
         {
             Destroy(go);
