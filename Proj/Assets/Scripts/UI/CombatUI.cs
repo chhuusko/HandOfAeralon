@@ -15,10 +15,13 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Image _characterPortraitPanel;
     [SerializeField] private Image _activeCharacterPortrait;
+    [SerializeField] private Image _turnOrderPanel;
+    
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
     [SerializeField] private Button _abilityButtonPrefab;
     [SerializeField] private Button _characterPortraitButtonPrefab;
+    
     [SerializeField] private GameObject _hand;
     [SerializeField] private TextMeshProUGUI _mana;
 
