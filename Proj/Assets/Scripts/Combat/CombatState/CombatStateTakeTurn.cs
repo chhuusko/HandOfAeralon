@@ -16,7 +16,7 @@ public class CombatStateTakeTurn : CombatStateBase
 
     public override void Enter()
     {
-        base.Enter();
+        base.Enter();   
         
         CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
 

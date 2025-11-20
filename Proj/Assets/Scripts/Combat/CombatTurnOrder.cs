@@ -66,6 +66,8 @@ public class CombatTurnOrder
 
             _charactersInTurnOrder.Add(_activeCharacter);
         }
+
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
     }
 
     public void UpdateCharacterTurnOrder()
@@ -86,11 +88,14 @@ public class CombatTurnOrder
             SetCurrentTurn(CombatTurn.EnemyTurn);
 
         _activeCharacter = nextCharacter;
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
     }
 
     private void HandleCharacterDeath(Character character)
     {
         _charactersInTurnOrder.Remove(character);
+        _turnCountFullRound--;
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
     }
 
     public void SetCurrentTurn(CombatTurn nextTurn)
