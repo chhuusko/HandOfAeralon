@@ -18,6 +18,6 @@ public class CombatStateEndCombat : CombatStateBase
 
     public override void Update()
     {
-        throw new System.NotImplementedException();
+        LevelManager.GetInstance().StartNextLevel();
     }
 }

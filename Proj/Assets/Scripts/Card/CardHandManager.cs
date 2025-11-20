@@ -101,7 +101,11 @@ public class CardHandManager : MonoBehaviour
     }
     public void ChangeMana(int change)
     {
-        _mana += change;
+        if(_mana +  change > _maxMana)
+            _mana = _maxMana;
+        else
+            _mana += change;
+
         ManaChanged();
     }
     public void SetUIActive(bool isActive)

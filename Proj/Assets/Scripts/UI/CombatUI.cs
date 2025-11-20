@@ -30,8 +30,10 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Color _activeColor;
     [SerializeField] private Color _inactiveColor;
     
+    private CharacterData _selectedCharacter;
+    private bool _combatStarted;
+    
     private List<PortraitButton> _portraitButtons = new();
-    private PortraitButton _selectedPortrait;
     private List<AbilityButton> _abilityButtons = new();
     
     private Dictionary<CharacterData, PortraitButton> _characterPortraits = new();
@@ -39,15 +41,17 @@ public class CombatUI : MonoBehaviour
     private void OnEnable()
     {
         CardHandManager.onManaChange += UpdateManaText;
-        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateCharacterUI;
-        CombatEventManager.OnEnterCombatStateLoadNextLevel += UpdateTurnOrder;
+        CombatEventManager.OnEnterCombatStateTakeTurn += CombatStarted;
+        // CombatEventManager.OnEnterCombatStateLoadNextLevel += UpdateTurnOrder;
+        CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
     }
 
     private void OnDisable()
     {
         CardHandManager.onManaChange -= UpdateManaText;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateCharacterUI;
-        CombatEventManager.OnEnterCombatStatePlaceCharacter -= UpdateTurnOrder;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= CombatStarted;
+        // CombatEventManager.OnEnterCombatStatePlaceCharacter -= UpdateTurnOrder;
+        CombatEventManager.OnTurnOrderChanged -= UpdateTurnOrder;
 
         foreach (var pb in _portraitButtons)
         {
@@ -79,6 +83,7 @@ public class CombatUI : MonoBehaviour
     {
         _hand.SetActive(false);
         UpdateCharacterPortraits();
+        UpdateManaText(CardHandManager.GetInstance().GetMana());
     }
 
     public void StartCombat()
@@ -109,11 +114,13 @@ public class CombatUI : MonoBehaviour
         CardHandManager.GetInstance().OpenDiscardPile();
     }
 
-    private void UpdateCharacterUI(Character character)
+    private void CombatStarted(Character character)
     {
         UpdateActivePortrait(character);
         UpdatePortraitColors(character);
-        UpdateTurnOrder();
+        
+        _selectedCharacter = character.Data;
+        _combatStarted = true;
     }
     
     /// <summary>
@@ -168,16 +175,16 @@ public class CombatUI : MonoBehaviour
         return pb;
     }
     
-    private void UpdateTurnOrder()
+    private void UpdateTurnOrder(IReadOnlyList<Character> characters)
     {
+        // Clear previous portraits.
         for (int i = 0; i < _turnOrderPanel.transform.childCount; i++)
         {
             Destroy(_turnOrderPanel.transform.GetChild(i).gameObject);
         }
         
-        CombatTurnOrder turnOrder = CombatManager._instance.GetCombatTurnOrder();
-        
-        foreach (Character c in turnOrder.GetCharactersInTurnOrder())
+        // Create portraits for current turn order.
+        foreach (Character c in characters)
         {
             PortraitButton pb = CreateCharacterPortrait(c.Data, _turnOrderPanel.transform);
             _characterPortraits.TryAdd(pb.Character, pb);
@@ -201,7 +208,7 @@ public class CombatUI : MonoBehaviour
 
     private void UpdateManaText(int mana)
     {
-        _mana.text = $"Mana\n{mana}/10";
+        _mana.text = $"Mana\n{mana}/{CardHandManager.GetInstance().GetMaxMana()}";
     }
     
     private void UpdateActivePortrait(PortraitButton pb)
@@ -253,6 +260,12 @@ public class CombatUI : MonoBehaviour
             return;
         }
 
+        // Abilities aren't available in character placement phase.
+        if (!_combatStarted)
+        {
+            return;
+        }
+
         // Remove all current ability buttons.
         for (int i = 0; i < _abilityPanel.transform.childCount; i++)
         {
@@ -267,15 +280,20 @@ public class CombatUI : MonoBehaviour
             
             var ability = character.AvailableAbilities[i];
             button.image.sprite = ability.GetIcon();
-            button.GetComponent<AbilityButton>().SetAbility(ability);
+            button.GetComponent<AbilityButton>().Ability = ability;
             
             var abilityButton = button.GetComponent<AbilityButton>();
             _abilityButtons.Add(abilityButton);
         }
+        
+        UpdateAbilityColors();
     }
 
     private void UpdateAbilityColors()
     {
-        
+        foreach (AbilityButton abilityButton in _abilityButtons)
+        {
+            abilityButton.Button.interactable = abilityButton.Ability.GetCooldown() <= 0 && _selectedCharacter.Faction == Faction.Friendly;
+        }
     }
 }

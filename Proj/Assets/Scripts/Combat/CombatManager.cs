@@ -84,6 +84,9 @@ public class CombatManager : MonoBehaviour
     [Header("Combat Turn Order")]
     [SerializeField] private CombatTurnOrder _combatTurnOrder;
 
+    [Header("Combat Turn Order")]
+    [SerializeField] private EnemyAI _enemyAI;
+
     [Header("Abilities")]
     [SerializeField] private List<ClassAbilities> _classAbilities;
     private Dictionary<CharacterClass, List<Ability>> _classAbilitiesDictionary;
@@ -156,7 +159,7 @@ public class CombatManager : MonoBehaviour
     public CombatCamera GetCombatCamera() { return _combatCamera; }
     public GameObject GetSelectorOverHead() { return _selectorOverHead; }
     public Selector GetCombatSelector() { return _selector; }
-
+    public EnemyAI GetEnemyAI() { return _enemyAI; }
     public CombatTurnOrder GetCombatTurnOrder() { return _combatTurnOrder; }
     public Dictionary<CharacterData, Character> GetCharacterDataDict()
     {

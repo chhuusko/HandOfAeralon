@@ -48,7 +48,9 @@ public class CombatTurnOrder
         // Sort them byt initiative, highest first
         _charactersInTurnOrder.Sort((a,b) => b.GetInitiative().CompareTo(a.GetInitiative()));
 
-        UpdateCharacterTurnOrder();
+        _activeCharacter = _charactersInTurnOrder[0];
+
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
     }
 
     public void RebuildTurnOrder()
@@ -88,6 +90,7 @@ public class CombatTurnOrder
             SetCurrentTurn(CombatTurn.EnemyTurn);
 
         _activeCharacter = nextCharacter;
+
         CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
     }
 
