@@ -90,7 +90,7 @@ public class CombatManager : MonoBehaviour
 
     public UnityEvent TurnStart = new();
 
-    public event Action<Character> OnCharacterDeath;
+    
     
     private void Awake()
     {
@@ -245,10 +245,5 @@ public class CombatManager : MonoBehaviour
         if (tileObject == null) return null;
 
         return tileObject.GetComponent<CombatGridTile>();
-    }
-
-    public void CharacterDied(Character character)
-    {
-        OnCharacterDeath?.Invoke(character);
     }
 }

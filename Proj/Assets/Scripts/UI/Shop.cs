@@ -7,10 +7,9 @@ public class Shop : MonoBehaviour
 {
     [SerializeField] private static Shop _instance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] public GameObject _mainCanvas, _overlayCanvas;
     [SerializeField] private GameObject _sellTab;
-
     [SerializeField] private TextMeshProUGUI _balanceText;
-
     [SerializeField] private Transform[] _purchasCardPos;
     [SerializeField] private GameObject _purchaseCardPrefab;
     [SerializeField] private Transform[] _purchasCharacterPos;
@@ -47,7 +46,9 @@ public class Shop : MonoBehaviour
         foreach (Transform t in _purchasCardPos)
         {
             GameObject newCardObject = Instantiate(_purchaseCardPrefab, t);
-            newCardObject.GetComponent<BuyableCard>().SetCard(GetRandomUnlockedCard());
+            Card newCard = GetRandomUnlockedCard();
+            newCardObject.GetComponent<CardUI>().SetUpUIElements(newCard);
+            newCardObject.GetComponent<BuyableCard>().SetCard(newCard);
             _buyableItemInScene.Add(newCardObject);
         }
     }

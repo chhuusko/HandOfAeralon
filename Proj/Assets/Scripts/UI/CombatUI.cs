@@ -15,14 +15,15 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Image _characterPortraitPanel;
     [SerializeField] private Image _activeCharacterPortrait;
-    [SerializeField] private Image _turnOrderPanel;
     
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
     [SerializeField] private Button _abilityButtonPrefab;
     [SerializeField] private Button _characterPortraitButtonPrefab;
     
+    [SerializeField] private GameObject _turnOrderPanel;
     [SerializeField] private GameObject _hand;
+    
     [SerializeField] private TextMeshProUGUI _mana;
 
     // Colors.
@@ -39,7 +40,7 @@ public class CombatUI : MonoBehaviour
     {
         CardHandManager.onManaChange += UpdateManaText;
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateCharacterUI;
-        CombatEventManager.OnEnterCombatStatePlaceCharacter += UpdateTurnOrder;
+        CombatEventManager.OnEnterCombatStateLoadNextLevel += UpdateTurnOrder;
     }
 
     private void OnDisable()
@@ -100,12 +101,12 @@ public class CombatUI : MonoBehaviour
 
     public void ShowDeck()
     {
-        CardHandManager._instance.OpenDeck();
+        CardHandManager.GetInstance().OpenDeck();
     }
 
     public void ShowDiscardPile()
     {
-        CardHandManager._instance.OpenDiscardPile();
+        CardHandManager.GetInstance().OpenDiscardPile();
     }
 
     private void UpdateCharacterUI(Character character)
@@ -231,7 +232,7 @@ public class CombatUI : MonoBehaviour
     
     public void SetCardsActive(bool active)
     {
-        CardHandManager._instance.SetUIActive(active);
+        CardHandManager.GetInstance().SetUIActive(active);
         _abilityPanel.color = active ? new Color(1, 1, 1, 0.5f) : new Color(1, 1, 1, 1);
     }
 

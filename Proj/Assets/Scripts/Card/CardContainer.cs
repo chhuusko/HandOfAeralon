@@ -9,24 +9,22 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     //Performs mainly ui part of card
     [SerializeField] private Card _containedCard;
     [SerializeField] private GameObject _particleDrag, _particleDrop;
-    [SerializeField] private GameObject _spriteObj;
     private RectTransform _spriteTransform;
     private InputController _controller;
     private GameObject _spawnedParticle;
     private RectTransform _rect;
     Vector3 _startPosition, _hoverEndPosition;
-    float _hoverDistance = 50f;
+    float _hoverDistance = 120f;
     private bool _isDragging;
     private void Awake()
     {
         _controller = new InputController();
-        _spriteTransform = _spriteObj.GetComponent<RectTransform>();
+        _spriteTransform = GetComponent<RectTransform>();
     }
     private void Start()
     {
         _rect = GetComponent<RectTransform>();
         SetPos(_rect.position);
-        _spriteObj.GetComponent<Image>().sprite = _containedCard.icon;
     }
     private void OnEnable()
     {
@@ -107,6 +105,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     public void AddCard(Card newCard)
     {
         _containedCard = newCard;
+        GetComponent<CardUI>().SetUpUIElements(_containedCard);
     }
     public void SetPos(Vector3 newStarterPoint)
     {

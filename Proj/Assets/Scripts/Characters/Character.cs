@@ -71,7 +71,7 @@ public class CharacterData
     public void SetCurrentAbilities(List<Ability> abilities) => _availableAbilities = new List<Ability>(abilities);
 }
 
-[RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour
 {
     public const int MOVEMENT_POINTS = 5;
@@ -237,7 +237,7 @@ public class Character : MonoBehaviour
 
     private IEnumerator RemoveCharacter()
     {
-        CombatManager._instance.CharacterDied(this);
+        CombatEventManager.InvokeOnCharacterDeath(this);
         // TODO: Play animation.
         yield return new WaitForSeconds(DEATH_COOLDOWN);
         Destroy(gameObject);

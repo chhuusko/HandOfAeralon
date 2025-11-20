@@ -55,6 +55,16 @@ public class CombatGrid : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        CombatEventManager.OnCharacterDeath += HandleCharacterDeath;
+    }
+
+    private void OnDisable()
+    {
+        CombatEventManager.OnCharacterDeath += HandleCharacterDeath;
+    }
+
     public void Start()
     {
         _friendlyCharacterRoot = new GameObject();
@@ -268,6 +278,11 @@ public class CombatGrid : MonoBehaviour
         return result;
     }
 
+    private void HandleCharacterDeath(Character character)
+    {
+        RemoveCharacter(character.gameObject);
+    }
+
     public void RemoveCharacter(GameObject character)
     {
         _charactersGO.Remove(character);
@@ -336,7 +351,7 @@ public class CombatGrid : MonoBehaviour
 
         for (int i = 0; i < combatGridSaveData._characterData.Count; i++)
         {
-            CombatGrid._instance.AddCharacter(combatGridSaveData._characterData[i]).transform.SetParent(_enemyCharacterRoot.transform); ;
+            CombatGrid._instance.AddCharacter(combatGridSaveData._characterData[i]).transform.SetParent(_enemyCharacterRoot.transform);
         }
 
         _bCombatGridLoaded = true;

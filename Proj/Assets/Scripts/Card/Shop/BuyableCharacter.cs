@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -10,8 +11,10 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private bool _isHeldDown;
     private float _sellTime = 2f;
     private float _timeHeld = 0;
+    private int price = 200;
     [SerializeField] Image _fillImage;
     [SerializeField] GameObject _aboveText;
+    [SerializeField] TextMeshProUGUI _priceText;
     private void Awake()
     {
         _fillImage.fillAmount = 0;
@@ -38,6 +41,7 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     }
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (!RoomInParty() || !CanAfford()) return;
         _isHeldDown = true;
     }
 
@@ -52,5 +56,13 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     {
         GlobalGameManager.GetInstance().GetGameData().heroDataList.Add(_characterData);
         Shop.GetInstance().ChangeCoins(-10);
+    }
+    private bool CanAfford()
+    {
+        return GlobalGameManager.GetInstance().GetGameData().coins >= price;
+    }
+    private bool RoomInParty()
+    {
+        return GlobalGameManager.GetInstance().GetGameData().heroDataList.Count < 4;
     }
 }

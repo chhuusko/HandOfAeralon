@@ -306,8 +306,10 @@ MonoBehaviour:
   _title: {fileID: 3765052398625036627}
   _description: {fileID: 0}
   _mana: {fileID: 0}
-  _cardTemplate: {fileID: 0}
-  _cardImage: {fileID: 0}
+  _frame: {fileID: 0}
+  _image: {fileID: 0}
+  _infoPanels: []
+  _infoPanelInScene: []
 --- !u!1 &6901843408592024814
 GameObject:
   m_ObjectHideFlags: 0

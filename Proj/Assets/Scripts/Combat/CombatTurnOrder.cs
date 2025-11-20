@@ -26,8 +26,19 @@ public class CombatTurnOrder
         _charactersInTurnOrder = new List<Character>();
     }
 
+    private void HandleEndCombat()
+    {
+        CombatEventManager.OnCharacterDeath -= HandleCharacterDeath;
+        CombatEventManager.OnExitCombatStateEndCombat -= HandleEndCombat;
+    }
+
     public void InitializeTurnOrder()
     {
+        // NOTE (Calle): Can't be subscribed to in constructor since it's persistant across combats, as it is
+        // an instance in the CombatManager.
+        CombatEventManager.OnCharacterDeath += HandleCharacterDeath;
+        CombatEventManager.OnExitCombatStateEndCombat += HandleEndCombat;
+
         // Get all active characters in combat scene
         _charactersInTurnOrder = CombatGrid._instance.GetAllCharacterScripts();
 
@@ -55,6 +66,8 @@ public class CombatTurnOrder
 
             _charactersInTurnOrder.Add(_activeCharacter);
         }
+
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
     }
 
     public void UpdateCharacterTurnOrder()
@@ -75,6 +88,14 @@ public class CombatTurnOrder
             SetCurrentTurn(CombatTurn.EnemyTurn);
 
         _activeCharacter = nextCharacter;
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
+    }
+
+    private void HandleCharacterDeath(Character character)
+    {
+        _charactersInTurnOrder.Remove(character);
+        _turnCountFullRound--;
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
     }
 
     public void SetCurrentTurn(CombatTurn nextTurn)

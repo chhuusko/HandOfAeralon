@@ -16,7 +16,7 @@ public class CombatStateTakeTurn : CombatStateBase
 
     public override void Enter()
     {
-        base.Enter();
+        base.Enter();   
         
         CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
 
@@ -29,8 +29,8 @@ public class CombatStateTakeTurn : CombatStateBase
         {
             case Faction.Friendly:
                 {
-                    CardHandManager._instance.ChangeMana(1);
-
+                    CardHandManager.GetInstance().ChangeMana(1);
+                    
                     
                     CombatManager._instance.SetSelectorOverHeadColor(Color.green);
                 }
