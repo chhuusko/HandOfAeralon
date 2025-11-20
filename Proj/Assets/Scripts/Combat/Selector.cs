@@ -233,7 +233,7 @@ public class Selector : MonoBehaviour
             return;
         }
 
-        if (tile && tile.GetOccupantCharacter() != null)
+        if (tile?.GetOccupantCharacter()?.GetFaction() == Faction.Friendly)
         {
             _selectedCharacter = tile.GetOccupantCharacter();
         }
