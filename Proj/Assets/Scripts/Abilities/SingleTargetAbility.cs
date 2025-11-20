@@ -6,7 +6,7 @@ public abstract class SingleTargetAbility : Ability
 {
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
-        ApplyEffectOnTile(targetTile);
+        ApplyEffectOnTile(casterTile, targetTile);
     }
 
     public override List<CombatGridTile> GetTilesToEffect(CombatGridTile tile)

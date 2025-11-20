@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ public abstract class Ability : ScriptableObject
     [Header("- Visuals & Audio - ")]
     [SerializeField] private ParticleSystem castingEffect, hitEffect;
     [SerializeField] private AudioClip castingSound, hitSound;
+    [SerializeField] private float castingTime, fromCastToHitTime;
 
     [System.Flags]
     public enum AbilityTag
@@ -51,7 +53,7 @@ public abstract class Ability : ScriptableObject
 
     public abstract void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile);
     public abstract List<CombatGridTile> GetTilesToEffect(CombatGridTile tile);
-    protected abstract void ApplyEffectOnTile(CombatGridTile targetTile);
+    protected abstract void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile);
 
 
     public string GetAbilityName() => _abilityName;
@@ -71,6 +73,16 @@ public abstract class Ability : ScriptableObject
     {
         return _rangeCalculation.CalculateTilesInRange(casterTile, _range);
     }
+
+    public IEnumerator PlayAbilityEffect(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Play casting sound.
+        yield return new WaitForSeconds(castingTime);
+        InitiateParticles(casterTile, targetTile);
+        // Play hit sound.
+        yield return new WaitForSeconds(fromCastToHitTime);
+    }
+    protected abstract void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile);
 
 
 }
