@@ -142,6 +142,8 @@ public class CombatUI : MonoBehaviour
     private void ClearCharacterPortraits()
     {
         _portraitButtons.Clear();
+        
+        // TODO: Clearing character portraits here will cause turn order to break most likely. Need to fix.
         _characterPortraits.Clear();
 
         for (int i = 0; i < _characterPortraitPanel.transform.childCount; i++)
