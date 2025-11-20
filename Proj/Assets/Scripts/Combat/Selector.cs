@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TextCore.Text;
 
     public enum SelectorState
     {
@@ -106,8 +107,8 @@ public class Selector : MonoBehaviour
             switch (_currentState)
             {
                 case SelectorState.NonActive: break;
-                case SelectorState.PlacingCharacters: SelectCharacter(clickedTile); break;
-                case SelectorState.Idle: SelectCharacter(clickedTile); break;
+                case SelectorState.PlacingCharacters: SelectCharacterFromTile(clickedTile); break;
+                case SelectorState.Idle: SelectCharacterFromTile(clickedTile); break;
                 case SelectorState.CharacterSelected: DeselectCharacter(); break;
                 case SelectorState.ActionTypeSelected: HandlePendingCharacterAction(clickedTile); break;
             }
@@ -199,13 +200,17 @@ public class Selector : MonoBehaviour
     /// Uses the current selector state to determine the appropriate selection behavior.
     /// </summary>
     /// <param name="tile">The tile that was clicked.</param>
-    public void SelectCharacter(CombatGridTile tile)
+    public void SelectCharacterFromTile(CombatGridTile tile)
     {
         // Selects the charater from the tile clicked. Checks state before to see which type of selection is appropriate.
-        switch (_currentState)
+       
+        if (_currentState == SelectorState.PlacingCharacters)
         {
-            case SelectorState.PlacingCharacters: SetSelectedCharacterPlacement(tile); break;
-            case SelectorState.Idle: TrySelectCharacterIdle(tile); break;
+            SelectPlacementCharacterFromTile(tile);
+        }
+        else
+        {
+            TrySelectCharacterFromTile(tile);
         }
     }
 
@@ -214,32 +219,36 @@ public class Selector : MonoBehaviour
     /// Uses the current selector state to determine how the character should be selected.
     /// </summary>
     /// <param name="character">The character selected through UI.</param>
-    public void SelectCharacterUI(Character character)
+    public void SelectCharacterFromUI(Character character)
     {
         // Selects the charater from the UI buttons. Checks state before to see which type of selection is appropriate.
         if (character == null) return;
 
-        switch (_currentState)
+        if(_currentState == SelectorState.PlacingCharacters)
         {
-            case SelectorState.PlacingCharacters: SetSelectedCharacterPlacementUI(character); break;
-            case SelectorState.Idle: SelectCharacterIdle(character); break;
+            SelectPlacementCharacterFromUI(character);
+        }
+        else
+        {
+            SelectCharacter(character); 
         }
     }
-    private void SetSelectedCharacterPlacement(CombatGridTile tile)
+    private void SelectPlacementCharacterFromTile(CombatGridTile tile)
     {
         if (_currentState != SelectorState.PlacingCharacters)
         {
             Debug.LogError("Wrong selecting method was called when selecting character. Method not matching state.");
             return;
         }
-
-        if (tile?.GetOccupantCharacter()?.GetFaction() == Faction.Friendly)
+        Character character = tile?.GetOccupantCharacter();
+        if (character?.GetFaction() == Faction.Friendly)
         {
             _selectedCharacter = tile.GetOccupantCharacter();
+            ShowCharacterUI(character);
         }
     }
 
-    private void SetSelectedCharacterPlacementUI(Character character)
+    private void SelectPlacementCharacterFromUI(Character character)
     {
         if (_currentState != SelectorState.PlacingCharacters)
         {
@@ -248,9 +257,10 @@ public class Selector : MonoBehaviour
         }
 
         _selectedCharacter = character;
+        ShowCharacterUI(character);
     }
 
-    private void TrySelectCharacterIdle(CombatGridTile tile)
+    private void TrySelectCharacterFromTile(CombatGridTile tile)
     {
         Character character = tile?.GetOccupantCharacter();
         if(character == null)
@@ -258,10 +268,11 @@ public class Selector : MonoBehaviour
             DeselectCharacter();
             return;
         }
-        SelectCharacterIdle(character);
+        SelectCharacter(character);
     }
-    private void SelectCharacterIdle(Character character)
+    private void SelectCharacter(Character character)
     {
+        DeselectCharacter();
         bool bIsFriendly = character.GetFaction() == Faction.Friendly;
         //bool bIsCharactersTurn = character == CombatManager._instance.GetNextTurnCharacter();
         bool bIsCharactersTurn = character == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
