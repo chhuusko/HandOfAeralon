@@ -2170,38 +2170,6 @@
     ],
     "_characterData": [
         {
-            "_characterClass": 2,
-            "_faction": 1,
-            "_position": {
-                "x": 17.0,
-                "y": 0.0,
-                "z": 3.0
-            },
-            "_size": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "_rotation": {
-                "x": 0.0,
-                "y": -0.7071068286895752,
-                "z": 0.0,
-                "w": 0.7071068286895752
-            },
-            "_baseHealthPoints": 2,
-            "_baseSpeed": 3,
-            "_baseDamage": 1,
-            "_baseMovementPoints": 1,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 0,
-            "_currentDamage": 0,
-            "_currentMovementPoints": 0,
-            "_currentTileIndex": {
-                "x": 8,
-                "y": 1
-            }
-        },
-        {
             "_characterClass": 1,
             "_faction": 1,
             "_position": {
@@ -2222,24 +2190,24 @@
             },
             "_baseHealthPoints": 2,
             "_baseSpeed": 3,
-            "_baseDamage": 1,
-            "_baseMovementPoints": 1,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 0,
-            "_currentDamage": 0,
-            "_currentMovementPoints": 0,
+            "_baseDamage": 4,
+            "_baseMovementPoints": 2,
+            "_currentHealthPoints": 2,
+            "_currentSpeed": 3,
+            "_currentDamage": 4,
+            "_currentMovementPoints": 2,
             "_currentTileIndex": {
                 "x": 8,
                 "y": 2
             }
         },
         {
-            "_characterClass": 3,
+            "_characterClass": 1,
             "_faction": 1,
             "_position": {
-                "x": 17.0,
+                "x": 15.0,
                 "y": 0.0,
-                "z": 7.0
+                "z": 5.0
             },
             "_size": {
                 "x": 1.0,
@@ -2254,22 +2222,22 @@
             },
             "_baseHealthPoints": 2,
             "_baseSpeed": 3,
-            "_baseDamage": 1,
-            "_baseMovementPoints": 1,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 0,
-            "_currentDamage": 0,
-            "_currentMovementPoints": 0,
+            "_baseDamage": 4,
+            "_baseMovementPoints": 2,
+            "_currentHealthPoints": 2,
+            "_currentSpeed": 3,
+            "_currentDamage": 4,
+            "_currentMovementPoints": 2,
             "_currentTileIndex": {
-                "x": 8,
-                "y": 3
+                "x": 7,
+                "y": 2
             }
         },
         {
             "_characterClass": 2,
             "_faction": 1,
             "_position": {
-                "x": 17.0,
+                "x": 15.0,
                 "y": 0.0,
                 "z": 9.0
             },
@@ -2285,25 +2253,25 @@
                 "w": 0.7071068286895752
             },
             "_baseHealthPoints": 2,
-            "_baseSpeed": 3,
-            "_baseDamage": 1,
-            "_baseMovementPoints": 1,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 0,
-            "_currentDamage": 0,
-            "_currentMovementPoints": 0,
+            "_baseSpeed": 4,
+            "_baseDamage": 3,
+            "_baseMovementPoints": 3,
+            "_currentHealthPoints": 2,
+            "_currentSpeed": 4,
+            "_currentDamage": 3,
+            "_currentMovementPoints": 3,
             "_currentTileIndex": {
-                "x": 8,
+                "x": 7,
                 "y": 4
             }
         },
         {
-            "_characterClass": 2,
+            "_characterClass": 3,
             "_faction": 1,
             "_position": {
-                "x": 15.0,
+                "x": 17.0,
                 "y": 0.0,
-                "z": 3.0
+                "z": 7.0
             },
             "_size": {
                 "x": 1.0,
@@ -2317,48 +2285,16 @@
                 "w": 0.7071068286895752
             },
             "_baseHealthPoints": 2,
-            "_baseSpeed": 3,
-            "_baseDamage": 1,
-            "_baseMovementPoints": 1,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 0,
-            "_currentDamage": 0,
-            "_currentMovementPoints": 0,
+            "_baseSpeed": 2,
+            "_baseDamage": 2,
+            "_baseMovementPoints": 2,
+            "_currentHealthPoints": 2,
+            "_currentSpeed": 2,
+            "_currentDamage": 2,
+            "_currentMovementPoints": 2,
             "_currentTileIndex": {
-                "x": 7,
-                "y": 1
-            }
-        },
-        {
-            "_characterClass": 1,
-            "_faction": 1,
-            "_position": {
-                "x": 15.0,
-                "y": 0.0,
-                "z": 5.0
-            },
-            "_size": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "_rotation": {
-                "x": 0.0,
-                "y": -0.7071068286895752,
-                "z": 0.0,
-                "w": 0.7071068286895752
-            },
-            "_baseHealthPoints": 2,
-            "_baseSpeed": 3,
-            "_baseDamage": 1,
-            "_baseMovementPoints": 1,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 0,
-            "_currentDamage": 0,
-            "_currentMovementPoints": 0,
-            "_currentTileIndex": {
-                "x": 7,
-                "y": 2
+                "x": 8,
+                "y": 3
             }
         },
         {
@@ -2381,13 +2317,13 @@
                 "w": 0.7071068286895752
             },
             "_baseHealthPoints": 2,
-            "_baseSpeed": 3,
-            "_baseDamage": 1,
-            "_baseMovementPoints": 1,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 0,
-            "_currentDamage": 0,
-            "_currentMovementPoints": 0,
+            "_baseSpeed": 2,
+            "_baseDamage": 2,
+            "_baseMovementPoints": 2,
+            "_currentHealthPoints": 2,
+            "_currentSpeed": 2,
+            "_currentDamage": 2,
+            "_currentMovementPoints": 2,
             "_currentTileIndex": {
                 "x": 7,
                 "y": 3
@@ -2398,6 +2334,70 @@
             "_faction": 1,
             "_position": {
                 "x": 15.0,
+                "y": 0.0,
+                "z": 3.0
+            },
+            "_size": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "_rotation": {
+                "x": 0.0,
+                "y": -0.7071068286895752,
+                "z": 0.0,
+                "w": 0.7071068286895752
+            },
+            "_baseHealthPoints": 2,
+            "_baseSpeed": 4,
+            "_baseDamage": 3,
+            "_baseMovementPoints": 3,
+            "_currentHealthPoints": 2,
+            "_currentSpeed": 4,
+            "_currentDamage": 3,
+            "_currentMovementPoints": 3,
+            "_currentTileIndex": {
+                "x": 7,
+                "y": 1
+            }
+        },
+        {
+            "_characterClass": 2,
+            "_faction": 1,
+            "_position": {
+                "x": 17.0,
+                "y": 0.0,
+                "z": 3.0
+            },
+            "_size": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "_rotation": {
+                "x": 0.0,
+                "y": -0.7071068286895752,
+                "z": 0.0,
+                "w": 0.7071068286895752
+            },
+            "_baseHealthPoints": 2,
+            "_baseSpeed": 4,
+            "_baseDamage": 3,
+            "_baseMovementPoints": 3,
+            "_currentHealthPoints": 2,
+            "_currentSpeed": 4,
+            "_currentDamage": 3,
+            "_currentMovementPoints": 3,
+            "_currentTileIndex": {
+                "x": 8,
+                "y": 1
+            }
+        },
+        {
+            "_characterClass": 2,
+            "_faction": 1,
+            "_position": {
+                "x": 17.0,
                 "y": 0.0,
                 "z": 9.0
             },
@@ -2413,15 +2413,15 @@
                 "w": 0.7071068286895752
             },
             "_baseHealthPoints": 2,
-            "_baseSpeed": 3,
-            "_baseDamage": 1,
-            "_baseMovementPoints": 1,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 0,
-            "_currentDamage": 0,
-            "_currentMovementPoints": 0,
+            "_baseSpeed": 4,
+            "_baseDamage": 3,
+            "_baseMovementPoints": 3,
+            "_currentHealthPoints": 2,
+            "_currentSpeed": 4,
+            "_currentDamage": 3,
+            "_currentMovementPoints": 3,
             "_currentTileIndex": {
-                "x": 7,
+                "x": 8,
                 "y": 4
             }
         }
