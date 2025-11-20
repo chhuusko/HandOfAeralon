@@ -6,7 +6,7 @@ public class Firebolt_SingleTarget : SingleTargetAbility
     [Header("- Ability Specific values -")]
     [SerializeField] private int _damage;
 
-    protected override void ApplyEffectOnTile(CombatGridTile tileToEffect)
+    protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
     {
         if(tileToEffect == null) return;   
 
@@ -14,5 +14,9 @@ public class Firebolt_SingleTarget : SingleTargetAbility
         if (affectedCharacter == null) return;
 
         affectedCharacter.TakeDamage(_damage);
+    }
+    protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Spawn and direct VFX to target location.
     }
 }

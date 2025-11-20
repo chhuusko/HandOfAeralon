@@ -15,7 +15,7 @@ public abstract class AOEAbility : Ability
         {
             if (tile != null)
             {
-                ApplyEffectOnTile(tile);
+                ApplyEffectOnTile(casterTile, tile);
             }
         }
     }
