@@ -22,6 +22,7 @@ public class Selector : MonoBehaviour
     [SerializeField] private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
     [SerializeField] private Character _selectedCharacter;
     [SerializeField] private bool _bDebugSelector = true;
+
     public enum CharacterActionType
     {
         Null,
@@ -284,6 +285,13 @@ public class Selector : MonoBehaviour
             _currentState = SelectorState.CharacterSelected;
             _selectedCharacter = character;
 
+            // JLW
+            CharacterMovement characterMovement = _selectedCharacter.GetComponent<CharacterMovement>();
+            if (characterMovement != null)
+            {
+                characterMovement.DrawMoveRange();
+            }
+
             if (_bDebugSelector)
             {
                 DebugLog.MGLog(character.GetCharacterClass().ToString() + " on tile index: " + character.GetCurrentTileIndex().ToString());
@@ -434,24 +442,24 @@ public class Selector : MonoBehaviour
 
     private void HandleMovement(CombatGridTile tile)
     {
-        GameObject currentTile = _selectedCharacter.GetCurrentTileComponent().gameObject;
-        if (currentTile == null)
+        DebugLog.JLWLog("Selector.cs | HandleMovement");
+
+        CharacterMovement characterMovement = _selectedCharacter.GetComponent<CharacterMovement>();
+        if (characterMovement == null)
         {
-            DebugLog.JLWLog($"Selector.cs 418 | currentTile NOT FOUND!");
+            Debug.LogError($"Selector.cs | characterMovement NOT FOUND!");
             return;
         }
 
-        List<GameObject> path = GridExplorer._instance.FindPathAStar(currentTile, tile.gameObject);
-        if (path == null || path.Count <= 1)
+        if (characterMovement.GetPathPreview()[^1] == tile)
         {
-            DebugLog.JLWLog($"Selector.cs 425 | No path found from {currentTile.GetComponent<CombatGridTile>().GetTileIndex()} to {tile.GetTileIndex()}");
+            characterMovement.ConfirmPreviewedPath();
             return;
         }
 
-        StartCoroutine(_selectedCharacter.MoveAlongPath(path));
-        if (_bDebugSelector)
+        if (characterMovement.GetTilesInRange().Contains(tile))
         {
-            DebugLog.MGLog(_selectedCharacter.GetCharacterClass() + " on tile: " + _selectedCharacter.GetCurrentTileIndex().ToString() + " is set to move to: " + tile.GetComponentIndex().ToString());
+            characterMovement.PreviewPath(tile);
         }
     }
 

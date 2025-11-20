@@ -12,7 +12,7 @@ public class EnemyAI : MonoBehaviour
     private Character _currentCharacter = null;
     private int _currentMoveRange = 0;
     private int _currentAttackRange = 0;
-    private List<GameObject> _movePath = new();
+    private List<CombatGridTile> _movePath = new();
     private Character _targetCharacter = null;
     private GameObject _closestOpponentTile = null;
 
@@ -65,7 +65,6 @@ public class EnemyAI : MonoBehaviour
     private void OnTurnStart()
     {
         // Initialization & null checks
-        //_currentCharacter = CombatManager._instance.GetNextTurnCharacter().GetComponent<Character>();
         _currentCharacter = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
         if (_currentCharacter == null || _currentCharacter.GetFaction() != controlledFaction)
         {
@@ -101,13 +100,17 @@ public class EnemyAI : MonoBehaviour
         }
 
         // Move and attack
-        _movePath = FindPath(currentTile, _closestOpponentTile);
+        _movePath = FindPath(currentTile, _closestOpponentTile)
+            .Select(obj => obj.GetComponent<CombatGridTile>())
+            .Where(ch => ch != null)
+            .ToList();
+
         if (_movePath == null || _movePath.Count == 0)
         {
             DebugLog.JLWLog($"EnemyAI.cs | _movePath NOT FOUND!");
         }
 
-        StartCoroutine(_currentCharacter.MoveAlongPath(_movePath));
+        _currentCharacter.GetComponent<CharacterMovement>().ForceCustomPath(_movePath);
         if (_bDebug && _movePath == null && _movePath.Count != 0) DebugLog.JLWLog($"EnemyAI.cs | Moving {_currentCharacter.name} to {_movePath[_movePath.Count - 1].GetComponent<CombatGridTile>().GetTileIndex()}");
 
         StartCoroutine(WaitForMovementCompletion());

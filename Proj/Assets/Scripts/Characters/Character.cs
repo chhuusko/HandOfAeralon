@@ -91,7 +91,6 @@ public class Character : MonoBehaviour
     [Header("Misc")]
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
-    private bool _bIsMoving;
     public CharacterData Data => _data;
     
     private void Start()
@@ -135,13 +134,13 @@ public class Character : MonoBehaviour
     public Faction GetFaction() => _data.Faction;
     
     // Base stats.
-    public int GetBaseHealthPoints() => _data.BaseHealthPoints;
+    public int GetMaxHealth() => _data.BaseHealthPoints;
     public int GetBaseSpeed() => _data.BaseInitiative;
     public int GetBaseDamage() => _data.BaseDamage;
     public int GetBaseMovementPoints() => _data.BaseMovementPoints;
     
     // Current stats.
-    public int GetHealthPoints() => _data.CurrentHealthPoints;
+    public int GetCurrentHealth() => _data.CurrentHealthPoints;
     public int GetInitiative() => _currentInitiative;
     public int GetDamage() => _currentDamage;
     public int GetMovementPoints() => _currentMovementPoints;
@@ -228,7 +227,7 @@ public class Character : MonoBehaviour
     {
         _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
         
-        Debug.Log($"Taking {damage} damage. New health: {GetHealthPoints()}");
+        Debug.Log($"Taking {damage} damage. New health: {GetCurrentHealth()}");
         
         if (_data.CurrentHealthPoints <= 0)
         {
@@ -247,66 +246,17 @@ public class Character : MonoBehaviour
     public void Heal(int healAmount)
     {
         _data.Heal(healAmount);
-        Debug.Log($"Healing {healAmount} health. New health: {GetHealthPoints()}");
+        Debug.Log($"Healing {healAmount} health. New health: {GetCurrentHealth()}");
     }
     
     public bool IsMoving()
     {
-        return _bIsMoving;
-
-        /*
-        if (_navMeshAgent.pathPending)
+        CharacterMovement component = null;
+        if (TryGetComponent<CharacterMovement>(out component))
         {
-            return true; 
+            return component.IsMoving();
         }
-
-        return _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance
-               || _navMeshAgent.velocity.sqrMagnitude > 0.03f;
-        */
-    }
-
-    public IEnumerator MoveAlongPath(List<GameObject> tiles)
-    {
-        if (tiles == null || tiles.Count == 0)
-        {
-            DebugLog.JLWLog($"Character.cs | MoveAlongPath called with an empty list!");
-            yield break;
-        }
-
-        _bIsMoving = true;
-
-        float moveSpeed = 4f; // Måste matcha animationerna
-
-        foreach (var tile in tiles)
-        {
-            Vector3 targetPos = tile.transform.position;
-
-            Vector3 direction = (targetPos - transform.position).normalized;
-            direction.y = 0f;
-
-            if (direction.sqrMagnitude > 0.0001f)
-            {
-                transform.rotation = Quaternion.LookRotation(direction);
-            }
-
-            DebugLog.JLWLog($"Character.cs | {this.name} moving towards {targetPos}");
-
-            while (Vector3.Distance(transform.position, targetPos) > 0.01f)
-            {
-                transform.position = Vector3.MoveTowards(
-                    transform.position,
-                    targetPos,
-                    moveSpeed * Time.deltaTime
-                );
-
-                yield return null;
-            }
-
-            transform.position = targetPos;
-
-            //GetComponent<CombatGridTile>().SetOccupant(this.gameObject);
-        }
-
-        _bIsMoving = false;
+        Debug.Log($"Character.cs 245 | CharacterMovement component not found!");
+        return false;
     }
 }
