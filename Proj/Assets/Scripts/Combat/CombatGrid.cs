@@ -190,6 +190,15 @@ public class CombatGrid : MonoBehaviour
     }
 
     public List<GameObject> GetAllCharacters() { return _charactersGO; }
+    public List<Character> GetAllCharacterScripts() 
+    {
+        List<Character> characterScriptList = new List<Character>();
+        foreach(GameObject characterGO in _charactersGO)
+        {
+            characterScriptList.Add(characterGO.GetComponent<Character>());
+        }
+        return characterScriptList; 
+    }
 
     public List<GameObject> GetAllFriendlyCharacters()
     {
@@ -243,7 +252,7 @@ public class CombatGrid : MonoBehaviour
         characterObject.GetComponent<Character>().SetCurrentTileIndex(tileIndex);
 
         characterObject.GetComponent<Character>().SetCurrentHealthPoints(currentHealtPoints);
-        characterObject.GetComponent<Character>().SetCurrentSpeed(currentSpeed);
+        characterObject.GetComponent<Character>().SetCurrentInitiative(currentSpeed);
         characterObject.GetComponent<Character>().SetCurrentDamage(currentDamage);
         characterObject.GetComponent<Character>().SetCurrentMovementPoints(currentMovementPoints);
 

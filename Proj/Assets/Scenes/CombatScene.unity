@@ -1019,6 +1019,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CombatManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5032110584365307085, guid: 85800cd360de6f54f9b4f93a19564c85,
+        type: 3}
+      propertyPath: _bDebugSelector
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5288347990569714036, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
       propertyPath: m_LocalPosition.x
