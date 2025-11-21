@@ -32,9 +32,7 @@ public class CombatStateCharacterPlacement : CombatStateBase
         {
             // Return early if mouse is over UI element.
             if (EventSystem.current.IsPointerOverGameObject()) return;
-            _selector.SetCurrentState(SelectorState.PlacingCharacters);
-
-            _selector.UpdateTileColors(CombatGrid._instance.GetAllTiles());
+                _selector.SetCurrentState(SelectorState.PlacingCharacters);
 
             CombatGridTile unoccupiedDeployTile = _selector.GetUnoccupiedDeployTileClicked();
             Character selectedCharacter = _selector.GetSelectedCharacter();
