@@ -454,9 +454,9 @@ public class Selector : MonoBehaviour
 
         List<CombatGridTile> pathPreview = characterMovement.GetPathPreview();
 
-        if (pathPreview != null || pathPreview.Count > 0)
+        if (pathPreview != null && pathPreview.Count > 0)
         {
-            if (characterMovement.GetPathPreview()[^1] == tile)
+            if (pathPreview[^1] == tile)
             {
                 characterMovement.ConfirmPreviewedPath();
                 return;
