@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/CombatScene.unity
+    guid: d870ea65da7396540ac6c6dbe4ba3443
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 989858d3f0041a14fbcf5a13a58653da
   - enabled: 1
@@ -20,8 +23,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Graveyard12x10_Easy.unity
     guid: f1fa6e397d7c4d643850e807584ae436
-  - enabled: 1
-    path: Assets/Scenes/CombatScene.unity
-    guid: d870ea65da7396540ac6c6dbe4ba3443
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
