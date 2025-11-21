@@ -282,6 +282,11 @@ public class CombatUI : MonoBehaviour
             return;
         }
 
+        if (!_combatStarted)
+        {
+            return;
+        }
+
         _abilityButtons.Clear();
         // Remove all current ability buttons.
         for (int i = 0; i < _abilityPanel.transform.childCount; i++)
