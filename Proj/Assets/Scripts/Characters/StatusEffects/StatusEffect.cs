@@ -1,16 +1,24 @@
 using UnityEngine;
 
-public class StatusEffect : MonoBehaviour
+public abstract class StatusEffect
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public int Duration { get; private set; }
+    
+    private StatusEffectData _buffData;
+    private Character _character;
+    private int _stacks;
+    
+    protected StatusEffect(Character character, StatusEffectData buffData)
     {
-        
+        _character = character;
+        _buffData = buffData;
+        Duration = buffData.Duration;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public virtual void OnApply() {}
+    public virtual void OnExpire() {}
+    public virtual void OnTurnStart() {}
+    public virtual void OnTurnEnd() {}
+    public virtual void ModifyIncomingDamage(ref int damage) {}
+    public virtual void ModifyOutgoingDamage(ref int damage) {}
 }

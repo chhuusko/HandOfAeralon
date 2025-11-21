@@ -27,6 +27,7 @@ public class Card : ScriptableObject
     public List<InfoPanel> info;
     public virtual void PlayCard()
     {
+        
         //när den spelas
     }
     

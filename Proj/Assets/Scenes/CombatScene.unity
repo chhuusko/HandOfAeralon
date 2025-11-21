@@ -232,7 +232,7 @@ PrefabInstance:
     - target: {fileID: 2624034976232883914, guid: 1ded389e7cf27fd4babb4879d5fddb91,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -0.000061035156
       objectReference: {fileID: 0}
     - target: {fileID: 4278123578306519974, guid: 1ded389e7cf27fd4babb4879d5fddb91,
         type: 3}
@@ -339,10 +339,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6593736256243166136, guid: 1ded389e7cf27fd4babb4879d5fddb91,
+    - target: {fileID: 6961219777148858852, guid: 1ded389e7cf27fd4babb4879d5fddb91,
         type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -200
+      propertyPath: m_Value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7683974624865042462, guid: 1ded389e7cf27fd4babb4879d5fddb91,
         type: 3}
@@ -1090,7 +1090,7 @@ PrefabInstance:
     - target: {fileID: 616073620153778492, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
       propertyPath: _fileToLoadDEBUG
-      value: Battle1
+      value: TriangleMap
       objectReference: {fileID: 0}
     - target: {fileID: 616073620153778492, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}

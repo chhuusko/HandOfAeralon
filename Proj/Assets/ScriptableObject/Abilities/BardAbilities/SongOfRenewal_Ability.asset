@@ -13,20 +13,20 @@ MonoBehaviour:
   m_Name: SongOfRenewal_Ability
   m_EditorClassIdentifier: 
   _abilityName: SongOfRenewal
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 3a660618327df054daacb48836ca1eb7, type: 3}
   _range: 6
   _cooldown: 3
   _abilityTag: 10
   _type: 2
   _rangeCalculation: {fileID: 11400000, guid: c582227474edfeb4e9f0206e0e4fcc31, type: 2}
-  _targetType: 2
+  _targetType: 0
   castingEffect: {fileID: 0}
   hitEffect: {fileID: 0}
   castingSound: {fileID: 0}
   hitSound: {fileID: 0}
   castingTime: 0
   fromCastToHitTime: 0
-  _pattern: {fileID: 0}
-  _radius: 4
+  _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
+  _radius: 3
   _maxHealthHealMain: 0.25
   _maxHealthHealArea: 0.1

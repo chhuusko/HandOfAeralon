@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
@@ -22,7 +22,10 @@ public class Selector : MonoBehaviour
     [SerializeField] private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
     [SerializeField] private Character _selectedCharacter;
     [SerializeField] private bool _bDebugSelector = true;
-    private CharacterMovement _characterMovement;
+    [SerializeField] private CombatGridTile _currentHoveredTile;
+
+    public event Action<CharacterData> OnCharacterSelected;
+    public event Action OnCharacterDeselected;
 
     public enum CharacterActionType
     {
@@ -47,12 +50,18 @@ public class Selector : MonoBehaviour
         DebugPossibleStartErrors();
         CombatEventManager.OnCombatStateChange += HandleCombatStateUpdated;
         CombatEventManager.OnCombatTurnChange += HandleCombatTurnChanged;
+        CombatEventManager.OnExitCombatStateTakeTurn += HandleCombatStateTakeTurn;
     }
 
     void Update()
     {
         HandleTileClick();
         HandleTileHover();
+    }
+
+    private void HandleCombatStateTakeTurn()
+    {
+        DeselectCharacter();
     }
 
     private void HandleCombatStateUpdated(CombatState state)
@@ -140,11 +149,6 @@ public class Selector : MonoBehaviour
         if (occupant != null && occupant.TryGetComponent<Character>(out var character))
         {
             // TODO: Show character info in UI.
-        }
-
-        if (_characterMovement && CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() == Faction.Friendly)
-        {
-            _characterMovement.PreviewPath(GetTileUnderMouse());
         }
 
         // Change color on tiles to indicate aoe abilities effected area.
@@ -283,20 +287,20 @@ public class Selector : MonoBehaviour
         bool bIsFriendly = character.GetFaction() == Faction.Friendly;
         bool bIsCharactersTurn = character == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
 
+        // JLW
+        CharacterMovement characterMovement = character.GetComponent<CharacterMovement>();
+        if (characterMovement != null)
+        {
+            DebugLog.JLWLog($"Selector.cs | Drawing move range for {character.name}");
+            characterMovement.DrawMoveRange();
+        }
+
         if (bIsFriendly && bIsCharactersTurn)
         {
-            ShowCharacterUIWithOptions(character);
+            ShowCharacterUI(character);
             _pendingCharacterActionType = CharacterActionType.Movement;
             _currentState = SelectorState.ActionTypeSelected;
             _selectedCharacter = character;
-
-            // JLW
-            _characterMovement = character.GetComponent<CharacterMovement>();
-            if (_characterMovement != null)
-            {
-                DebugLog.JLWLog($"Selector.cs | Drawing move range for {character.name}");
-                _characterMovement.DrawMoveRange();
-            }
 
             if (_bDebugSelector)
             {
@@ -313,39 +317,16 @@ public class Selector : MonoBehaviour
         }
     }
 
-
-    public void UpdateTileColors(GameObject[] tiles)
-    {
-
-        foreach (GameObject tile in tiles)
-        {
-            CombatGridTile tileComponent = tile.GetComponent<CombatGridTile>();
-            if (tileComponent == null) continue;
-
-            if (tileComponent.IsMouseHovering())
-            {
-                tileComponent.SetTileColor(Color.yellow);
-            }
-            else if (tileComponent.GetOccupant())
-            {
-                tileComponent.SetTileColor(Color.cyan);
-            }
-            else
-            {
-                tileComponent.SetTileColor(Color.white);
-            }
-
-        }
-    } 
     private void DeselectCharacter()
     {
+        OnCharacterDeselected?.Invoke();
+        
         // if ui is active Deactivate UI
         HideCharacterOptions();
 
         StopPreviewAbilityRange();
         _selectedCharacter?.GetAbilityHandler()?.SetPendingAbility(null);
         _selectedCharacter = null;
-        _characterMovement = null;
         _pendingCharacterActionType = CharacterActionType.Null;
         ResetColorAllTiles();
 
@@ -368,19 +349,6 @@ public class Selector : MonoBehaviour
     }
 
     /// <summary>
-    /// Activates the character UI and displays all available actions,
-    /// such as abilities and movement options, for the selected character.
-    /// </summary>
-    /// <param name="character">The character whose options should be shown.</param>
-    private void ShowCharacterUIWithOptions(Character character)
-    {
-        // Activates character UI with options to cast abilities and walk.
-        CombatUI.Instance.LoadAbilities(character.Data);
-        CombatUI.Instance.UpdateActivePortrait(character);
-        CombatUI.Instance.UpdatePortraitColors(character);
-    }
-
-    /// <summary>
     /// Activates the character UI without any action options.  
     /// Used when the character cannot perform actions at the moment.
     /// </summary>
@@ -388,8 +356,7 @@ public class Selector : MonoBehaviour
     private void ShowCharacterUI(Character character)
     {
         // Activates character UI without options since the character can't perform actions at the moment.
-        CombatUI.Instance.UpdateActivePortrait(character);
-        CombatUI.Instance.UpdatePortraitColors(character);
+        OnCharacterSelected?.Invoke(character.Data);
     }
     public void PreviewAbilityRange(Ability ability)
     {
@@ -454,7 +421,30 @@ public class Selector : MonoBehaviour
 
     private void HandleMovement(CombatGridTile tile)
     {
-        _characterMovement.ConfirmPath(tile);
+        DebugLog.JLWLog("Selector.cs | HandleMovement called.");
+
+        CharacterMovement characterMovement = _selectedCharacter.GetComponent<CharacterMovement>();
+        if (characterMovement == null)
+        {
+            Debug.LogError($"Selector.cs | characterMovement NOT FOUND!");
+            return;
+        }
+
+        List<CombatGridTile> pathPreview = characterMovement.GetPathPreview();
+
+        if (pathPreview != null && pathPreview.Count > 0)
+        {
+            if (pathPreview[^1] == tile)
+            {
+                characterMovement.ConfirmPreviewedPath();
+                return;
+            }
+        }
+
+        if (characterMovement.GetTilesInRange().Contains(tile))
+        {
+            characterMovement.PreviewPath(tile);
+        }
     }
 
     private void HandleAbilityCast(CombatGridTile tile)

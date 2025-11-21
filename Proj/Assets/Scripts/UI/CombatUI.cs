@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -25,6 +26,7 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _hand;
     
     [SerializeField] private TextMeshProUGUI _mana;
+    [SerializeField] private ScrollRect _scrollRect;
 
     // Colors.
     [SerializeField] private Color _activeColor;
@@ -43,17 +45,26 @@ public class CombatUI : MonoBehaviour
     private void OnEnable()
     {
         CardHandManager.onManaChange += UpdateManaText;
+        
         CombatEventManager.OnEnterCombatStateLoadNextLevel += PlaceCharacterStarted;
         CombatEventManager.OnEnterCombatStateTakeTurn += StartTurn;
         CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
+
+        StartCoroutine(WaitForSelector());
     }
 
     private void OnDisable()
     {
         CardHandManager.onManaChange -= UpdateManaText;
+        
         CombatEventManager.OnEnterCombatStatePlaceCharacter -= PlaceCharacterStarted;
         CombatEventManager.OnEnterCombatStateTakeTurn -= StartTurn;
         CombatEventManager.OnTurnOrderChanged -= UpdateTurnOrder;
+        
+        Selector._instance.OnCharacterSelected -= LoadAbilities;
+        Selector._instance.OnCharacterSelected -= UpdateActivePortrait;
+        Selector._instance.OnCharacterSelected -= UpdatePortraitColors;
+        Selector._instance.OnCharacterDeselected -= DeselectCharacter;
 
         foreach (var pb in _portraitButtons)
         {
@@ -86,6 +97,19 @@ public class CombatUI : MonoBehaviour
         _hand.SetActive(false);
         UpdateCharacterPortraits();
         UpdateManaText(CardHandManager.GetInstance().GetMana());
+    }
+    
+    private IEnumerator WaitForSelector()
+    {
+        while (!Selector._instance)
+        {
+            yield return null;
+        }
+        
+        Selector._instance.OnCharacterSelected += LoadAbilities;
+        Selector._instance.OnCharacterSelected += UpdateActivePortrait;
+        Selector._instance.OnCharacterSelected += UpdatePortraitColors;
+        Selector._instance.OnCharacterDeselected += DeselectCharacter;
     }
 
     public void StartCombat()
@@ -137,6 +161,11 @@ public class CombatUI : MonoBehaviour
         _currentTurnCharacter = c;
         
         LoadAbilities(_selectedCharacter);
+    }
+
+    private void DeselectCharacter()
+    {
+        
     }
     
     /// <summary>
@@ -205,9 +234,24 @@ public class CombatUI : MonoBehaviour
             PortraitButton pb = CreateCharacterPortrait(c.Data, _turnOrderPanel.transform);
             _characterPortraits.TryAdd(pb.Character, pb);
         }
+        
+        StartCoroutine(ScrollToBottom());
+    }
+
+    private IEnumerator ScrollToBottom()
+    {
+        yield return null;
+        
+        // Set scroll to bottom.
+        _scrollRect.verticalNormalizedPosition = 0;
+    }
+
+    private void UpdatePortraitColors(CharacterData c)
+    {
+        UpdatePortraitColors(CombatManager._instance.GetCharacterDataDict()[c]);
     }
     
-    public void UpdatePortraitColors(Character c) 
+    private void UpdatePortraitColors(Character c) 
     {
         UpdatePortraitColors(_characterPortraits[c.Data]);
     }
@@ -259,16 +303,16 @@ public class CombatUI : MonoBehaviour
         _abilityPanel.color = active ? new Color(1, 1, 1, 0.5f) : new Color(1, 1, 1, 1);
     }
 
-    private void LoadAbilities(PortraitButton portraitButton)
-    {
-        LoadAbilities(portraitButton.Character);
-    }
-
     /// <summary>
     /// Displays each available ability for the selected character.
     /// </summary>
     /// <param name="portraitButton">The character of which's abilities to display.</param>
-    public void LoadAbilities(CharacterData character)
+    private void LoadAbilities(PortraitButton portraitButton)
+    {
+        LoadAbilities(portraitButton.Character);
+    }
+    
+    private void LoadAbilities(CharacterData character)
     {
         if (character == null)
         {
@@ -278,6 +322,11 @@ public class CombatUI : MonoBehaviour
 
         // Don't show abilities for enemies.
         if (character.Faction == Faction.Enemy)
+        {
+            return;
+        }
+
+        if (!_combatStarted)
         {
             return;
         }
@@ -293,7 +342,11 @@ public class CombatUI : MonoBehaviour
 
         for (int i = 0; i < character.AvailableAbilities.Count; i++)
         {
-            Button button = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
+            var buttonGO = Instantiate(_abilityButtonPrefab.gameObject);
+            buttonGO.SetActive(false);
+            buttonGO.transform.SetParent(_abilityPanel.transform, false);
+            
+            var button = buttonGO.GetComponent<Button>();
             
             var ability = character.AvailableAbilities[i];
             button.image.sprite = ability.GetIcon();
@@ -301,18 +354,23 @@ public class CombatUI : MonoBehaviour
             
             var abilityButton = button.GetComponent<AbilityButton>();
             _abilityButtons.Add(abilityButton);
+            
+            UpdateAbilityColors(CombatManager._instance.GetCharacterDataDict()[character], abilityButton);
+            
+            buttonGO.SetActive(true);
         }
-        
-        UpdateAbilityColors(CombatManager._instance.GetCharacterDataDict()[character]);
     }
 
-    private void UpdateAbilityColors(Character c)
+    private void UpdateAbilityColors(Character c, AbilityButton abilityButton)
     {
-        foreach (AbilityButton abilityButton in _abilityButtons)
+        if (!_currentTurnCharacter)
         {
-            abilityButton.Button.interactable = !c.IsAbilityCooldownActive(abilityButton.Ability)
-                                                && _selectedCharacter.Faction == Faction.Friendly 
-                                                && c == _currentTurnCharacter && _combatStarted;
+            abilityButton.Button.interactable = false;
+            return;
         }
+        
+        abilityButton.Button.interactable = !c.IsAbilityCooldownActive(abilityButton.Ability)
+                                            && _selectedCharacter.Faction == Faction.Friendly 
+                                            && c == _currentTurnCharacter && _combatStarted;
     }
 }

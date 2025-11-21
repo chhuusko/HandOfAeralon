@@ -2,18 +2,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SongOfRenewal_Ability", menuName = "Scriptable Objects/Abilities/Bard/SongOfRenewal")]
-public class SongOfRenewalAOE : AOEAbility
+public class SongOfRenewalAOE : RoundAOEAbility
 {
     [Header("- Ability Specific values -")]
-    [SerializeField] private int _radius;
     [SerializeField] private float _maxHealthHealMain = 0.25f;
     [SerializeField] private float _maxHealthHealArea = 0.1f;
-
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Calculate all tiles around with in radius and apply effect to all of them.
-        _pattern.SetRadius(_radius);
+        if (_pattern is RoundAOEPattern pattern)
+        {
+            pattern.SetRadius(_radius);
+        }
         List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
 
         foreach (CombatGridTile tile in tilesToEffect)

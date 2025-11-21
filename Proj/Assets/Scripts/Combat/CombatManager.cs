@@ -63,8 +63,6 @@ public class CombatManager : MonoBehaviour
     public static CombatManager _instance;
     private Selector _selector;
 
-    [SerializeField] private string _fileToLoadDEBUG;
-    
     [SerializeField] private CombatCamera _combatCamera;
 
     private GameObject _selectorOverHead;
@@ -92,8 +90,6 @@ public class CombatManager : MonoBehaviour
 
     public UnityEvent TurnStart = new();
 
-    
-    
     private void Awake()
     {
         if (_instance == null)
@@ -141,7 +137,6 @@ public class CombatManager : MonoBehaviour
         if(_currentCombatState != null)
         {
             _currentCombatState?.Update();
-            _selector.UpdateTileColors(CombatGrid._instance.GetAllTiles());
             Character activeCharacter = _combatTurnOrder.GetActiveCharacter();
             if (activeCharacter)
             {

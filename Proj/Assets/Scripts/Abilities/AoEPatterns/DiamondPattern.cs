@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DiamondPattern : AOEPattern
+[CreateAssetMenu(fileName = "DiamondPattern", menuName = "Scriptable Objects/Abilities/Patterns/DiamondPattern")]
+public class DiamondPattern : RoundAOEPattern
 {
-    private int _radius;
     public override List<CombatGridTile> CalculateTilesToEffect(CombatGridTile targetTile)
     {
         // Calculates every tile around target in every direction based on radius, but radius counts as 2.
@@ -21,6 +21,9 @@ public class DiamondPattern : AOEPattern
                     int checkX = (int) centerIndex.x + x;
                     int checkY = (int) centerIndex.y + y;
 
+                    if (checkX < 0 || checkX >= CombatGrid._instance.GetGridWidth()) continue;
+                    if (checkY < 0 || checkY >= CombatGrid._instance.GetGridHeight()) continue;
+
                     var tile = CombatManager._instance.GetTileComponent(checkX, checkY);
                     if (tile != null)
                         TilesToEffect.Add(tile);
@@ -30,9 +33,6 @@ public class DiamondPattern : AOEPattern
 
         return TilesToEffect;
     }
-    public override void SetRadius(int radius)
-    {
-        _radius = radius;
-    }
+  
 }
 

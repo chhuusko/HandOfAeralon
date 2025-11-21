@@ -92,7 +92,12 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
     public CharacterData Data => _data;
-    
+
+    private void OnEnable()
+    {
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
+    }
+
     private void Start()
     {
         if (!TryGetComponent(out _abilityHandler))
@@ -100,6 +105,11 @@ public class Character : MonoBehaviour
             Debug.LogError("Character is missing AbilityHandler component!");
             return;
         }
+    }
+
+    private void OnDisable()
+    {
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
     }
 
     public void ResetCharacter() // Endast för testkörning (JLW), tills dess att turtagningen fungerar som tänkt
@@ -175,8 +185,14 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void UpdateAbilityCooldowns()
+    private void UpdateAbilityCooldowns(Character c)
     {
+        // Only update cooldowns for this character.
+        if (c != this)
+        {
+            return;
+        }
+        
         var finishedAbilities = new List<Ability>();
         
         foreach (var ability in _currentCooldowns.Keys)

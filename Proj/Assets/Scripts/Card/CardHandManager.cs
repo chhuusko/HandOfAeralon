@@ -21,7 +21,7 @@ public class CardHandManager : MonoBehaviour
     
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
     private int _maxMana = 5;
-    private int _mana = 0;
+    private int _mana = 5;
 
     public static Action<int> onManaChange;
     public static CardHandManager GetInstance() {return _instance;}

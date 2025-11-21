@@ -1017,6 +1017,7 @@ MonoBehaviour:
   _turnOrderPanel: {fileID: 7483078133583643469}
   _hand: {fileID: 3650385346247062174}
   _mana: {fileID: 4826794601199300524}
+  _scrollRect: {fileID: 1479745401614222361}
   _activeColor: {r: 1, g: 1, b: 1, a: 1}
   _inactiveColor: {r: 1, g: 1, b: 1, a: 0.5882353}
 --- !u!1 &4785057601845566282
@@ -1721,7 +1722,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1830,7 +1831,7 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
-  m_ReverseArrangement: 0
+  m_ReverseArrangement: 1
 --- !u!114 &1021431393327692567
 MonoBehaviour:
   m_ObjectHideFlags: 0

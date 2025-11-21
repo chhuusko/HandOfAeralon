@@ -55,7 +55,6 @@ public abstract class Ability : ScriptableObject
     public abstract List<CombatGridTile> GetTilesToEffect(CombatGridTile tile);
     protected abstract void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile);
 
-
     public string GetAbilityName() => _abilityName;
     public Sprite GetIcon() => _icon;
     public float GetRange() => _range;
