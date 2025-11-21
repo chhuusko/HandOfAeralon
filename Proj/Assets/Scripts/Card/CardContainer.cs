@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     //Contains card.
     //Performs mainly ui part of card
@@ -67,6 +67,9 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         {
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
+
+            Character character = Selector._instance.GetTileUnderMouse().GetOccupant().GetComponent<Character>();
+            character.TakeDamage(10);
             _containedCard.PlayCard();
             CardHandManager.GetInstance().RemoveCard(this);   
         }
@@ -131,11 +134,10 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     {
         return _containedCard;
     }
-=======
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!CanAfford() && _containedCard.type == Card.CardType.Instant) return;
+        if (!CanAfford()) return;
         _containedCard.PlayCard();
     }
 }

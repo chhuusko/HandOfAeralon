@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
@@ -24,6 +24,9 @@ public class Selector : MonoBehaviour
     [SerializeField] private bool _bDebugSelector = true;
     [SerializeField] private CombatGridTile _currentHoveredTile;
 
+    public event Action<CharacterData> OnCharacterSelected;
+    public event Action OnCharacterDeselected;
+
     public enum CharacterActionType
     {
         Null,
@@ -47,12 +50,18 @@ public class Selector : MonoBehaviour
         DebugPossibleStartErrors();
         CombatEventManager.OnCombatStateChange += HandleCombatStateUpdated;
         CombatEventManager.OnCombatTurnChange += HandleCombatTurnChanged;
+        CombatEventManager.OnExitCombatStateTakeTurn += HandleCombatStateTakeTurn;
     }
 
     void Update()
     {
         HandleTileClick();
         HandleTileHover();
+    }
+
+    private void HandleCombatStateTakeTurn()
+    {
+        DeselectCharacter();
     }
 
     private void HandleCombatStateUpdated(CombatState state)
@@ -288,7 +297,7 @@ public class Selector : MonoBehaviour
 
         if (bIsFriendly && bIsCharactersTurn)
         {
-            ShowCharacterUIWithOptions(character);
+            ShowCharacterUI(character);
             _pendingCharacterActionType = CharacterActionType.Movement;
             _currentState = SelectorState.ActionTypeSelected;
             _selectedCharacter = character;
@@ -308,33 +317,10 @@ public class Selector : MonoBehaviour
         }
     }
 
-
-    public void UpdateTileColors(GameObject[] tiles)
-    {
-
-        foreach (GameObject tile in tiles)
-        {
-            CombatGridTile tileComponent = tile.GetComponent<CombatGridTile>();
-            if (tileComponent == null) continue;
-
-            if (tileComponent.IsMouseHovering())
-            {
-                tileComponent.SetTileColor(Color.yellow);
-                _currentHoveredTile = tileComponent;
-            }
-            else if (tileComponent.GetOccupant())
-            {
-                tileComponent.SetTileColor(Color.cyan);
-            }
-            else
-            {
-                tileComponent.SetTileColor(Color.white);
-            }
-
-        }
-    } 
     private void DeselectCharacter()
     {
+        OnCharacterDeselected?.Invoke();
+        
         // if ui is active Deactivate UI
         HideCharacterOptions();
 
@@ -363,19 +349,6 @@ public class Selector : MonoBehaviour
     }
 
     /// <summary>
-    /// Activates the character UI and displays all available actions,
-    /// such as abilities and movement options, for the selected character.
-    /// </summary>
-    /// <param name="character">The character whose options should be shown.</param>
-    private void ShowCharacterUIWithOptions(Character character)
-    {
-        // Activates character UI with options to cast abilities and walk.
-        CombatUI.Instance.LoadAbilities(character.Data);
-        CombatUI.Instance.UpdateActivePortrait(character);
-        CombatUI.Instance.UpdatePortraitColors(character);
-    }
-
-    /// <summary>
     /// Activates the character UI without any action options.  
     /// Used when the character cannot perform actions at the moment.
     /// </summary>
@@ -383,8 +356,7 @@ public class Selector : MonoBehaviour
     private void ShowCharacterUI(Character character)
     {
         // Activates character UI without options since the character can't perform actions at the moment.
-        CombatUI.Instance.UpdateActivePortrait(character);
-        CombatUI.Instance.UpdatePortraitColors(character);
+        OnCharacterSelected?.Invoke(character.Data);
     }
     public void PreviewAbilityRange(Ability ability)
     {
