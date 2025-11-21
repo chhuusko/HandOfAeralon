@@ -397,31 +397,11 @@ public class GridExplorer : MonoBehaviour
                 Vector2Int next = current + dir;
                 int nextCost = cost[current] + 1;
 
-                if (OutOfBounds(next))
-                {
-                    DebugLog.JLWLog("GridExplorer.cs | continue: next OutOfBounds");
-                    continue;
-                }
-                if (checkWalkable && !IsWalkable(next))
-                {
-                    DebugLog.JLWLog("GridExplorer.cs | continue: next !IsWalkable");
-                    continue;
-                }
-                if (checkWalkable && IsOccupied(next))
-                {
-                    DebugLog.JLWLog("GridExplorer.cs | continue: next IsOccupied");
-                    continue;
-                }
-                if (nextCost > range)
-                {
-                    DebugLog.JLWLog("GridExplorer.cs | continue: nextCost > range");
-                    continue;
-                }
-                if (cost.ContainsKey(next))
-                {
-                    DebugLog.JLWLog("GridExplorer.cs | continue: cost.ContainsKey(next)");
-                    continue;
-                }
+                if (OutOfBounds(next)) continue;
+                if (checkWalkable && !IsWalkable(next)) continue;
+                if (checkWalkable && IsOccupied(next)) continue;
+                if (nextCost > range) continue;
+                if (cost.ContainsKey(next)) continue;
 
                 cost[next] = nextCost;
                 queue.Enqueue(next);

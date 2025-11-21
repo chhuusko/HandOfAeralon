@@ -48,6 +48,13 @@ public class CharacterMovement : MonoBehaviour
 
         if (TryGetComponent<Character>(out character))
         {
+            if (character.GetMovementPoints() <= 0)
+            {
+                Debug.LogError($"CharacterMovement.cs | {character.name} is out of MP!");
+                _tilesInRange = new();
+                return;
+            }
+
             currentTile = character.GetCurrentTileComponent().gameObject;
 
             _tilesInRange = GridExplorer._instance.GetTilesInRange(currentTile, character.GetMovementPoints(), true)
