@@ -454,11 +454,11 @@ public class Selector : MonoBehaviour
         {
             DebugLog.MGLog(_selectedCharacter.GetCharacterClass() + " used ability: " + _selectedCharacter.GetAbilityHandler().GetPendingAbility().GetAbilityName().ToString());
         }
-        if (!success)
+        if (_bDebugSelector && !success)
         {
-            DeselectCharacter();
-            _currentState = SelectorState.Idle;
+            DebugLog.MGLog(_selectedCharacter.GetCharacterClass() + " failed to use ability: " + _selectedCharacter.GetAbilityHandler().GetPendingAbility().GetAbilityName().ToString());
         }
+        DeselectCharacter();
     }
 
     private void SetColorOfTiles(List<CombatGridTile> tiles, Color color)
