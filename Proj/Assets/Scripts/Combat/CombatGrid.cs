@@ -58,11 +58,14 @@ public class CombatGrid : MonoBehaviour
     private void OnEnable()
     {
         CombatEventManager.OnCharacterDeath += HandleCharacterDeath;
+        CombatEventManager.OnExitCombatStatePlaceCharacter += OnExitPlaceCharacter;
+
     }
 
     private void OnDisable()
     {
-        CombatEventManager.OnCharacterDeath += HandleCharacterDeath;
+        CombatEventManager.OnCharacterDeath -= HandleCharacterDeath;
+        CombatEventManager.OnExitCombatStatePlaceCharacter -= OnExitPlaceCharacter;
     }
 
     public void Start()
@@ -79,6 +82,34 @@ public class CombatGrid : MonoBehaviour
 
     public bool IsCombatGridLoaded() { return _bCombatGridLoaded; }
     public GameObject[] GetAllTiles() { return _tilesGO; }
+    public List<Character> GetAllCharacterScripts() 
+    {
+        List<Character> characterScritps = new List<Character>();
+
+        foreach(GameObject characterGO in GetAllCharacters())
+        {
+            Character character = characterGO.GetComponent<Character>();
+            if(character)
+            {
+                characterScritps.Add(character);
+            }
+            
+        }
+        return characterScritps; 
+    }
+
+    public List<CombatGridTile> GetAllCombatGridTileScripts() 
+    {
+        List<CombatGridTile> tiles = new List<CombatGridTile>();
+
+        foreach(GameObject tileGO in _tilesGO)
+        {
+            CombatGridTile combatGridTile = tileGO.GetComponent<CombatGridTile>();
+            if (combatGridTile)
+                tiles.Add(combatGridTile);
+        }
+        return tiles; 
+    }
 
     public List<CombatGridTile> GetAllDeployTiles()
     {
@@ -102,25 +133,25 @@ public class CombatGrid : MonoBehaviour
         
         if (_tilesGO == null)
         {
-            Debug.LogError("GetTileAtCoord FAILED: _tilesGO is NULL!");
+            DebugLog.JLWLog("GetTileAtCoord FAILED: _tilesGO is NULL!");
             return null;
         }
 
         if (_tilesGO.Length == 0)
         {
-            Debug.LogError("GetTileAtCoord FAILED: _tilesGO is EMPTY!");
+            DebugLog.JLWLog("GetTileAtCoord FAILED: _tilesGO is EMPTY!");
             return null;
         }
 
         if (index < 0 || index >= _tilesGO.Length)
         {
-            Debug.LogError($"GetTileAtCoord FAILED: index {index} OUT OF RANGE (length={_tilesGO.Length})");
+            DebugLog.JLWLog($"GetTileAtCoord FAILED: index {index} OUT OF RANGE (length={_tilesGO.Length})");
             return null;
         }
 
         if (_tilesGO[index] == null)
         {
-            Debug.LogError($"GetTileAtCoord FAILED: tile at index {index} is NULL!");
+            DebugLog.JLWLog($"GetTileAtCoord FAILED: tile at index {index} is NULL!");
             return null;
         }
 
@@ -163,22 +194,46 @@ public class CombatGrid : MonoBehaviour
             tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
             tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
 
+            MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
+            Material inCombatTileMaterial = Resources.Load<Material>("Shaders/Tiles/TileMaterial");
+            
+
             switch (tileData.GetTileType())
             {
-                case TileType.Deploy:
+                case TileType.UnInitialized:
                     {
 
                     }
                     break;
-                default:
+                case TileType.Impassable:
                     {
-                        MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
-                        Material inCombatTileMaterial = Resources.Load<Material>("Shaders/Tiles/TileMaterial");
+                        if (meshRend != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            meshRend.material.SetFloat("_Alpha", 0.0f);
+                        }
+                    }
+                    break;
+                case TileType.Deploy:
+                    {
                         if (inCombatTileMaterial != null)
                         {
                             meshRend.material = inCombatTileMaterial;
-                            if (tileObject.GetComponent<CombatGridTile>().GetTileIndex().x == 0)
-                                meshRend.material.SetColor("_TileColor", Color.green);
+                            meshRend.material.SetColor("_TileColor", Color.green);
+                        }
+                        else
+                        {
+                            DebugLog.CJLog("Failed to load TileMaterial.mat");
+
+                        }
+                    }
+                    break;
+                default:
+                    {
+                        if (inCombatTileMaterial != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            meshRend.material.SetColor("_TileColor", Color.white);
                         }
                         else
                         {
@@ -355,5 +410,39 @@ public class CombatGrid : MonoBehaviour
         }
 
         _bCombatGridLoaded = true;
+    }
+
+    private void OnExitPlaceCharacter()
+    {
+        foreach(GameObject tile in GetAllTiles())
+        {
+            MeshRenderer meshRend = tile.GetComponent<MeshRenderer>();
+
+            switch(tile.GetComponent<CombatGridTile>().GetTileType())
+            {
+                case TileType.UnInitialized:
+                    {
+
+                    }
+                    break;
+                case TileType.Impassable:
+                    {
+                        if (meshRend != null)
+                        {
+                            meshRend.material.SetFloat("_Alpha", 0.0f);
+                        }
+                    }
+                    break;
+                default:
+                    {
+                        if (meshRend != null)
+                        {
+                            meshRend.material.SetColor("_TileColor", Color.white);
+                        }
+                    }
+                    break;
+            }
+            
+        }
     }
 }
