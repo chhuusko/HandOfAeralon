@@ -15,6 +15,19 @@ public abstract class StatusEffect
         Duration = buffData.Duration;
     }
 
+    /// <summary>
+    /// Decreases duration by 1 and returns if the status effect is still active.
+    /// </summary>
+    /// <returns></returns>
+    public bool TickDuration()
+    {
+        if (_buffData.IsPermanent)
+        {
+            return true;
+        }
+        return --Duration > 0;
+    }
+    
     public virtual void OnApply() {}
     public virtual void OnExpire() {}
     public virtual void OnTurnStart() {}
