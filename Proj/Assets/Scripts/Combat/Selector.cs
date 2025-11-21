@@ -313,17 +313,20 @@ public class Selector : MonoBehaviour
 
         foreach (GameObject tile in tiles)
         {
-            if (tile.GetComponent<CombatGridTile>().IsMouseHovering())
+            CombatGridTile tileComponent = tile.GetComponent<CombatGridTile>();
+            if (tileComponent == null) continue;
+
+            if (tileComponent.IsMouseHovering())
             {
-                tile.GetComponent<CombatGridTile>().SetTileColor(Color.yellow);
+                tileComponent.SetTileColor(Color.yellow);
             }
-            else if (tile.GetComponent<CombatGridTile>().GetOccupant())
+            else if (tileComponent.GetOccupant())
             {
-                tile.GetComponent<CombatGridTile>().SetTileColor(Color.green);
+                tileComponent.SetTileColor(Color.cyan);
             }
             else
             {
-                tile.GetComponent<CombatGridTile>().SetTileColor(Color.white);
+                tileComponent.SetTileColor(Color.white);
             }
         }
     } 
@@ -443,7 +446,7 @@ public class Selector : MonoBehaviour
 
     private void HandleMovement(CombatGridTile tile)
     {
-        DebugLog.JLWLog("Selector.cs | HandleMovement");
+        DebugLog.JLWLog("Selector.cs | HandleMovement called.");
 
         CharacterMovement characterMovement = _selectedCharacter.GetComponent<CharacterMovement>();
         if (characterMovement == null)

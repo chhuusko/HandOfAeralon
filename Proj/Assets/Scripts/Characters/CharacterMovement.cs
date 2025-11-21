@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using UnityEngine;
@@ -47,6 +48,15 @@ public class CharacterMovement : MonoBehaviour
         if (_pathPreview == null || _pathPreview.Count == 0)
         {
             Debug.LogError($"CharacterMovement.cs | _pathPreview IS EMPTY!");
+            return;
+        }
+
+        _character.SetCurrentMovementPoints(_character.GetMovementPoints() - _pathPreview.Count);
+
+        if (_character.GetMovementPoints() <= 0)
+        {
+            Debug.LogError($"CharacterMovement.cs | {_character.name} is out of MP!");
+            _tilesInRange = new();
             return;
         }
 
@@ -104,7 +114,6 @@ public class CharacterMovement : MonoBehaviour
     {
         _bIsMoving = true;
         float moveSpeed = 4f; // Måste matcha animationerna
-        _character.SetCurrentMovementPoints(_character.GetMovementPoints() - path.Count);
 
         foreach (var step in path)
         {
