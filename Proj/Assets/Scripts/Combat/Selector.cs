@@ -277,19 +277,20 @@ public class Selector : MonoBehaviour
         bool bIsFriendly = character.GetFaction() == Faction.Friendly;
         bool bIsCharactersTurn = character == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
 
+        // JLW
+        CharacterMovement characterMovement = character.GetComponent<CharacterMovement>();
+        if (characterMovement != null)
+        {
+            DebugLog.JLWLog($"Selector.cs | Drawing move range for {character.name}");
+            characterMovement.DrawMoveRange();
+        }
+
         if (bIsFriendly && bIsCharactersTurn)
         {
             ShowCharacterUIWithOptions(character);
             _pendingCharacterActionType = CharacterActionType.Movement;
             _currentState = SelectorState.ActionTypeSelected;
             _selectedCharacter = character;
-
-            // JLW
-            CharacterMovement characterMovement = _selectedCharacter.GetComponent<CharacterMovement>();
-            if (characterMovement != null)
-            {
-                characterMovement.DrawMoveRange();
-            }
 
             if (_bDebugSelector)
             {
@@ -451,10 +452,15 @@ public class Selector : MonoBehaviour
             return;
         }
 
-        if (characterMovement.GetPathPreview()[^1] == tile)
+        List<CombatGridTile> pathPreview = characterMovement.GetPathPreview();
+
+        if (pathPreview != null || pathPreview.Count > 0)
         {
-            characterMovement.ConfirmPreviewedPath();
-            return;
+            if (characterMovement.GetPathPreview()[^1] == tile)
+            {
+                characterMovement.ConfirmPreviewedPath();
+                return;
+            }
         }
 
         if (characterMovement.GetTilesInRange().Contains(tile))
