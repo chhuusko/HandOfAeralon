@@ -41,16 +41,16 @@ public class CombatUI : MonoBehaviour
     private void OnEnable()
     {
         CardHandManager.onManaChange += UpdateManaText;
+        CombatEventManager.OnEnterCombatStateLoadNextLevel += PlaceCharacterStarted;
         CombatEventManager.OnEnterCombatStateTakeTurn += CombatStarted;
-        // CombatEventManager.OnEnterCombatStateLoadNextLevel += UpdateTurnOrder;
         CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
     }
 
     private void OnDisable()
     {
         CardHandManager.onManaChange -= UpdateManaText;
+        CombatEventManager.OnEnterCombatStatePlaceCharacter -= PlaceCharacterStarted;
         CombatEventManager.OnEnterCombatStateTakeTurn -= CombatStarted;
-        // CombatEventManager.OnEnterCombatStatePlaceCharacter -= UpdateTurnOrder;
         CombatEventManager.OnTurnOrderChanged -= UpdateTurnOrder;
 
         foreach (var pb in _portraitButtons)
@@ -112,6 +112,15 @@ public class CombatUI : MonoBehaviour
     public void ShowDiscardPile()
     {
         CardHandManager.GetInstance().OpenDiscardPile();
+    }
+
+    private void PlaceCharacterStarted()
+    {
+        CharacterData c = GlobalGameManager.GetInstance().GetGameData().heroDataList[0];
+        UpdateActivePortrait(c);
+        UpdatePortraitColors(_characterPortraits[c]);
+        
+        _selectedCharacter = c;
     }
 
     private void CombatStarted(Character character)
