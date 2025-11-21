@@ -61,7 +61,7 @@ public class GlobalGameManager : ScriptableObject
         _currentGame.heroList = new List<Character>();
         _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
         Debug.Log(_currentGame.cardList.Count);
-        _currentGame.coins = 50;
+        _currentGame.coins = 800;
         SceneManager.LoadScene("ShopScene"); //TODO
     }
     public void JSONWrite()
