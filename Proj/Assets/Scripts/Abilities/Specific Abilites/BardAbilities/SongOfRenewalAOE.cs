@@ -70,9 +70,10 @@ public class SongOfRenewalAOE : AOEAbility
 
         if (bIsMainTarget)
         {
+            // Draw an extra card from your deck if main target was below 50% health.
             if (affectedCharacter.GetCurrentHealth() < (int) (affectedCharacter.GetMaxHealth() * 0.5f))
             {
-                // CardManager._instance.DrawACard();
+                CardHandManager.GetInstance().AddCardFromDeck();
             }
         }
 
