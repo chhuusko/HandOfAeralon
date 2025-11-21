@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: dd6b4ba3678c72444a44879f2372cda3
+guid: 46209913cc5db6c4db0d78f029fd62e8
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MetalPart
+    second: {fileID: 2100000, guid: 4836138512fcf8848adca6a3df43c828, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: StoneWall_oPBR1
+    second: {fileID: 2100000, guid: 51456be188aa0074ebdd478eda8888f0, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
