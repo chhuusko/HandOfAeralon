@@ -9,9 +9,6 @@ public enum CombatTurn
     EnemyTurn
 };
 
-// NOTE (Calle): PriorityQueue is a MIN HEAP so small values are prioritized, therefor initiative has to be negated when 
-//               inserted.
-
 [System.Serializable]
 public class CombatTurnOrder
 {

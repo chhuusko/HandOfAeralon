@@ -100,7 +100,7 @@ public class CombatManager : MonoBehaviour
         {
             Debug.Log("CombatManager Awake()");
             _instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -117,11 +117,13 @@ public class CombatManager : MonoBehaviour
     }
 
     private void OnEnable()
-    {      
+    {
+        CombatEventManager.OnExitCombatStateEndCombat += HandleEndCombat;
     }
 
     private void OnDisable()
     {
+        CombatEventManager.OnExitCombatStateEndCombat -= HandleEndCombat;
     }
 
     void Start()
@@ -136,14 +138,17 @@ public class CombatManager : MonoBehaviour
 
     void Update()
     {
-        _currentCombatState?.Update();
-        _selector.UpdateTileColors(CombatGrid._instance.GetAllTiles());
-        Character activeCharacter = _combatTurnOrder.GetActiveCharacter();
-        if(activeCharacter)
+        if(_currentCombatState != null)
         {
-            Vector3 selectorOverHeadPosition = activeCharacter.transform.position + (Vector3.up * 3.0f);
-            SetSelectorOverHeadPosition(selectorOverHeadPosition);
-            UpdateSelectorOverHeadPosition();
+            _currentCombatState?.Update();
+            _selector.UpdateTileColors(CombatGrid._instance.GetAllTiles());
+            Character activeCharacter = _combatTurnOrder.GetActiveCharacter();
+            if (activeCharacter)
+            {
+                Vector3 selectorOverHeadPosition = activeCharacter.transform.position + (Vector3.up * 3.0f);
+                SetSelectorOverHeadPosition(selectorOverHeadPosition);
+                UpdateSelectorOverHeadPosition();
+            }
         }
     }
 
@@ -156,6 +161,12 @@ public class CombatManager : MonoBehaviour
         CombatEventManager.InvokeCombatStateChanged(newCombatState._state);
 
         newCombatState?.Enter();
+    }
+
+    private void HandleEndCombat()
+    {
+        _currentCombatState = null;
+        LevelManager.GetInstance().StartNextLevel();
     }
 
     public CombatState GetCombatState()
