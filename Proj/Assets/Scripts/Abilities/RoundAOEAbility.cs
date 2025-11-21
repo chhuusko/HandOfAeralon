@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class AOEAbility : Ability
+public abstract class RoundAOEAbility : Ability
 {
     [Header("- Type Specific values - ")]
-    [SerializeField] protected AOEPattern _pattern;
+    [SerializeField] protected RoundAOEPattern _pattern;
     [SerializeField] protected int _radius;
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {

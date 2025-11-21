@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "DiamondPattern", menuName = "Scriptable Objects/Abilities/Patterns/DiamondPattern")]
-public class DiamondPattern : AOEPattern
+public class DiamondPattern : RoundAOEPattern
 {
     public override List<CombatGridTile> CalculateTilesToEffect(CombatGridTile targetTile)
     {

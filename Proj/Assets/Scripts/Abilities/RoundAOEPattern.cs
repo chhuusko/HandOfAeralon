@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AOEPattern : ScriptableObject
+public abstract class RoundAOEPattern : ScriptableObject
 {
     protected int _radius;
     public abstract List<CombatGridTile> CalculateTilesToEffect(CombatGridTile targetTile);

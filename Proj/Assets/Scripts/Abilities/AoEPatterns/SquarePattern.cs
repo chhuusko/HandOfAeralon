@@ -3,7 +3,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "SquarePattern", menuName = "Scriptable Objects/Abilities/Patterns/SquarePattern")]
 
-public class SquarePattern : AOEPattern
+public class SquarePattern : RoundAOEPattern
 {
     public override List<CombatGridTile> CalculateTilesToEffect(CombatGridTile targetTile)
     {

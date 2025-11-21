@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SongOfRenewal_Ability", menuName = "Scriptable Objects/Abilities/Bard/SongOfRenewal")]
-public class SongOfRenewalAOE : AOEAbility
+public class SongOfRenewalAOE : RoundAOEAbility
 {
     [Header("- Ability Specific values -")]
     [SerializeField] private float _maxHealthHealMain = 0.25f;
