@@ -138,10 +138,12 @@ public class CombatManager : MonoBehaviour
         _currentCombatState?.Update();
         _selector.UpdateTileColors(CombatGrid._instance.GetAllTiles());
         Character activeCharacter = _combatTurnOrder.GetActiveCharacter();
-        Vector3 selectorOverHeadPosition = activeCharacter.transform.position + (Vector3.up * 3.0f);
-        SetSelectorOverHeadPosition(selectorOverHeadPosition);
-        UpdateSelectorOverHeadPosition();
-
+        if(activeCharacter)
+        {
+            Vector3 selectorOverHeadPosition = activeCharacter.transform.position + (Vector3.up * 3.0f);
+            SetSelectorOverHeadPosition(selectorOverHeadPosition);
+            UpdateSelectorOverHeadPosition();
+        }
     }
 
     public void ChangeCombatState(CombatStateBase newCombatState)

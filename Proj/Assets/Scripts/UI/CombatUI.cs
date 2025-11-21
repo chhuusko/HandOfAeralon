@@ -121,18 +121,20 @@ public class CombatUI : MonoBehaviour
         CharacterData c = GlobalGameManager.GetInstance().GetGameData().heroDataList[0];
         UpdateActivePortrait(c);
         UpdatePortraitColors(_characterPortraits[c]);
+        LoadAbilities(c);
         
         _selectedCharacter = c;
+        _currentTurnCharacter = CombatManager._instance.GetCharacterDataDict()[_selectedCharacter];
     }
 
-    private void StartTurn(Character character)
+    private void StartTurn(Character c)
     {
-        UpdateActivePortrait(character);
-        UpdatePortraitColors(character);
+        UpdateActivePortrait(c);
+        UpdatePortraitColors(c);
         
-        _selectedCharacter = character.Data;
+        _selectedCharacter = c.Data;
         _combatStarted = true;
-        _currentTurnCharacter = character;
+        _currentTurnCharacter = c;
         
         LoadAbilities(_selectedCharacter);
     }
@@ -274,8 +276,8 @@ public class CombatUI : MonoBehaviour
             return;
         }
 
-        // Abilities aren't available in character placement phase.
-        if (!_combatStarted)
+        // Don't show abilities for enemies.
+        if (character.Faction == Faction.Enemy)
         {
             return;
         }
@@ -310,7 +312,7 @@ public class CombatUI : MonoBehaviour
         {
             abilityButton.Button.interactable = !c.IsAbilityCooldownActive(abilityButton.Ability)
                                                 && _selectedCharacter.Faction == Faction.Friendly 
-                                                && c == _currentTurnCharacter;
+                                                && c == _currentTurnCharacter && _combatStarted;
         }
     }
 }
