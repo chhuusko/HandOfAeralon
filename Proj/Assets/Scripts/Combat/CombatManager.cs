@@ -128,9 +128,10 @@ public class CombatManager : MonoBehaviour
     {
         _combatState = CombatState.LoadCombatLevel;
         _selector = GetComponent<Selector>();
-        ChangeCombatState(new CombatStateLoadLevel());
         _selectorOverHead = Instantiate(_selectorOverHeadPrefab, Vector3.zero, Quaternion.identity);
         _selectorOverHead.SetActive(false);
+
+        ChangeCombatState(new CombatStateLoadLevel());        
     }
 
     void Update()
