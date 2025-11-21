@@ -16,9 +16,9 @@ public abstract class StatusEffect
     }
 
     /// <summary>
-    /// Decreases duration by 1 and returns if the status effect is still active.
+    /// Decrements duration and returns whether status effect is still active.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Whether the status effect is still active.</returns>
     public bool TickDuration()
     {
         if (_buffData.IsPermanent)
