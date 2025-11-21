@@ -255,15 +255,6 @@ public class CombatGrid : MonoBehaviour
     }
 
     public List<GameObject> GetAllCharacters() { return _charactersGO; }
-    public List<Character> GetAllCharacterScripts() 
-    {
-        List<Character> characterScriptList = new List<Character>();
-        foreach(GameObject characterGO in _charactersGO)
-        {
-            characterScriptList.Add(characterGO.GetComponent<Character>());
-        }
-        return characterScriptList; 
-    }
 
     public List<GameObject> GetAllFriendlyCharacters()
     {

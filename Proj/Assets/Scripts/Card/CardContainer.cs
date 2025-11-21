@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     //Contains card.
     //Performs mainly ui part of card
@@ -133,5 +133,11 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     public Card GetCard()
     {
         return _containedCard;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!CanAfford()) return;
+        _containedCard.PlayCard();
     }
 }
