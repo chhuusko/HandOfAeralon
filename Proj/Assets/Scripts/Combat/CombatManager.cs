@@ -63,8 +63,6 @@ public class CombatManager : MonoBehaviour
     public static CombatManager _instance;
     private Selector _selector;
 
-    [SerializeField] private string _fileToLoadDEBUG;
-    
     [SerializeField] private CombatCamera _combatCamera;
 
     private GameObject _selectorOverHead;

@@ -184,6 +184,20 @@ public class CombatGrid : MonoBehaviour
 
             switch (tileData.GetTileType())
             {
+                case TileType.UnInitialized:
+                    {
+
+                    }
+                    break;
+                case TileType.Impassable:
+                    {
+                        if (meshRend != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            meshRend.material.SetFloat("_Alpha", 0.0f);
+                        }
+                    }
+                    break;
                 case TileType.Deploy:
                     {
                         if (inCombatTileMaterial != null)
@@ -388,10 +402,31 @@ public class CombatGrid : MonoBehaviour
         {
             MeshRenderer meshRend = tile.GetComponent<MeshRenderer>();
 
-            if (meshRend != null)
+            switch(tile.GetComponent<CombatGridTile>().GetTileType())
             {
-                meshRend.material.SetColor("_TileColor", Color.white);
+                case TileType.UnInitialized:
+                    {
+
+                    }
+                    break;
+                case TileType.Impassable:
+                    {
+                        if (meshRend != null)
+                        {
+                            meshRend.material.SetFloat("_Alpha", 0.0f);
+                        }
+                    }
+                    break;
+                default:
+                    {
+                        if (meshRend != null)
+                        {
+                            meshRend.material.SetColor("_TileColor", Color.white);
+                        }
+                    }
+                    break;
             }
+            
         }
     }
 }
