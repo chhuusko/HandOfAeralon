@@ -136,6 +136,7 @@ public class CombatManager : MonoBehaviour
     void Update()
     {
         _currentCombatState?.Update();
+        _selector.UpdateTileColors(CombatGrid._instance.GetAllTiles());
 
     }
 
