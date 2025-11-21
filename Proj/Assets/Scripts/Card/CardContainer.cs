@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -42,32 +43,47 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     public void OnDrag(PointerEventData eventData)
     {
-        Ray ray = Camera.main.ScreenPointToRay(_controller.UI.Point.ReadValue<Vector2>());
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
+        if (_isDragging)
         {
-            _spawnedParticle.transform.position = hit.point;
+            Ray ray = Camera.main.ScreenPointToRay(_controller.UI.Point.ReadValue<Vector2>());
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                _spawnedParticle.transform.position = hit.point;
+            }
         }
-        
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (!CanAfford()) return;
+        _isDragging = true;
         _spawnedParticle = Instantiate(_particleDrag);  
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
-        Destroy(_spawnedParticle);
-        // TODO GetGrid and do the Card thing
-        _containedCard.PlayCard();
-        CardHandManager.GetInstance().RemoveCard(this);   
+        if (_isDragging)
+        {
+            Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
+            Destroy(_spawnedParticle);
+
+            Character character = Selector._instance.GetTileUnderMouse().GetOccupant().GetComponent<Character>();
+            character.TakeDamage(10);
+            _containedCard.PlayCard();
+            CardHandManager.GetInstance().RemoveCard(this);   
+        }
+        
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         StartCoroutine(OnHover(true));
+    }
+
+    private bool CanAfford()
+    {
+        return CardHandManager.GetInstance().GetMana() >= _containedCard.cost;
     }
 
     public void OnPointerExit(PointerEventData eventData)
