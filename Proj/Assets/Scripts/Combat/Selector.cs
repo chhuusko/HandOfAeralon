@@ -308,31 +308,6 @@ public class Selector : MonoBehaviour
         }
     }
 
-
-    public void UpdateTileColors(GameObject[] tiles)
-    {
-
-        foreach (GameObject tile in tiles)
-        {
-            CombatGridTile tileComponent = tile.GetComponent<CombatGridTile>();
-            if (tileComponent == null) continue;
-
-            if (tileComponent.IsMouseHovering())
-            {
-                tileComponent.SetTileColor(Color.yellow);
-                _currentHoveredTile = tileComponent;
-            }
-            else if (tileComponent.GetOccupant())
-            {
-                tileComponent.SetTileColor(Color.cyan);
-            }
-            else
-            {
-                tileComponent.SetTileColor(Color.white);
-            }
-
-        }
-    } 
     private void DeselectCharacter()
     {
         // if ui is active Deactivate UI

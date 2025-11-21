@@ -92,8 +92,6 @@ public class CombatManager : MonoBehaviour
 
     public UnityEvent TurnStart = new();
 
-    
-    
     private void Awake()
     {
         if (_instance == null)
@@ -141,7 +139,6 @@ public class CombatManager : MonoBehaviour
         if(_currentCombatState != null)
         {
             _currentCombatState?.Update();
-            _selector.UpdateTileColors(CombatGrid._instance.GetAllTiles());
             Character activeCharacter = _combatTurnOrder.GetActiveCharacter();
             if (activeCharacter)
             {
