@@ -1,13 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class CharacterMovement : MonoBehaviour
 {
+    private Character _character;
     private List<CombatGridTile> _tilesInRange = new();
     private List<CombatGridTile> _pathPreview = new();
     private bool _bIsMoving = false;
+
+    void Start()
+    {
+        _character = GetComponent<Character>();
+        if (_character == null)
+        {
+            Debug.LogError($"CharacterMovement.cs | _character NOT FOUND!");
+        }
+    }
 
     public void Reset()
     {
@@ -43,54 +55,38 @@ public class CharacterMovement : MonoBehaviour
 
     public void DrawMoveRange()
     {
-        Character character = null;
         GameObject currentTile = null;
 
-        if (TryGetComponent<Character>(out character))
+        if (_character.GetMovementPoints() <= 0)
         {
-            if (character.GetMovementPoints() <= 0)
-            {
-                Debug.LogError($"CharacterMovement.cs | {character.name} is out of MP!");
-                _tilesInRange = new();
-                return;
-            }
-
-            currentTile = character.GetCurrentTileComponent().gameObject;
-
-            _tilesInRange = GridExplorer._instance.GetTilesInRange(currentTile, character.GetMovementPoints(), true)
-            .Select(obj => obj.GetComponent<CombatGridTile>())
-            .Where(ch => ch != null)
-            .ToList();
-
-            foreach (var tile in _tilesInRange)
-            {
-                tile.SetTileColor(Color.green);
-            }
-
+            Debug.LogError($"CharacterMovement.cs | {_character.name} is out of MP!");
+            _tilesInRange = new();
             return;
         }
 
-        _tilesInRange = new();
+        currentTile = _character.GetCurrentTileComponent().gameObject;
+
+        _tilesInRange = GridExplorer._instance.GetTilesInRange(currentTile, _character.GetMovementPoints(), true)
+        .Select(obj => obj.GetComponent<CombatGridTile>())
+        .Where(ch => ch != null)
+        .ToList();
+
+        foreach (var tile in _tilesInRange)
+        {
+            tile.SetTileColor(Color.green);
+        }
     }
 
     public void PreviewPath(CombatGridTile goalTile)
     {
-        Character character = null;
         GameObject currentTile = null;
 
-        if (TryGetComponent<Character>(out character))
-        {
-            currentTile = character.GetCurrentTileComponent().gameObject;
+        currentTile = _character.GetCurrentTileComponent().gameObject;
 
-            _pathPreview = GridExplorer._instance.FindPathAStar(currentTile, goalTile.gameObject)
-            .Select(obj => obj.GetComponent<CombatGridTile>())
-            .Where(ch => ch != null)
-            .ToList();
-
-            return;
-        }
-
-        _pathPreview = new();
+        _pathPreview = GridExplorer._instance.FindPathAStar(currentTile, goalTile.gameObject)
+        .Select(obj => obj.GetComponent<CombatGridTile>())
+        .Where(ch => ch != null)
+        .ToList();
     }
 
     public void ForceCustomPath(List<CombatGridTile> path)
@@ -107,8 +103,8 @@ public class CharacterMovement : MonoBehaviour
     private IEnumerator Move(List<CombatGridTile> path)
     {
         _bIsMoving = true;
-
         float moveSpeed = 4f; // Måste matcha animationerna
+        _character.SetCurrentMovementPoints(_character.GetMovementPoints() - path.Count);
 
         foreach (var step in path)
         {
