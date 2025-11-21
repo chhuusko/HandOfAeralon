@@ -47,12 +47,18 @@ public class Selector : MonoBehaviour
         DebugPossibleStartErrors();
         CombatEventManager.OnCombatStateChange += HandleCombatStateUpdated;
         CombatEventManager.OnCombatTurnChange += HandleCombatTurnChanged;
+        CombatEventManager.OnExitCombatStateTakeTurn += HandleCombatStateTakeTurn;
     }
 
     void Update()
     {
         HandleTileClick();
         HandleTileHover();
+    }
+
+    private void HandleCombatStateTakeTurn()
+    {
+        DeselectCharacter();
     }
 
     private void HandleCombatStateUpdated(CombatState state)

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "DiamondPattern", menuName = "Scriptable Objects/Abilities/Patterns/DiamondPattern")]
 public class DiamondPattern : AOEPattern
 {
     private int _radius;
