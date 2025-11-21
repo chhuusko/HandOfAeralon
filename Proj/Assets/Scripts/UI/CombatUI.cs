@@ -259,15 +259,15 @@ public class CombatUI : MonoBehaviour
         _abilityPanel.color = active ? new Color(1, 1, 1, 0.5f) : new Color(1, 1, 1, 1);
     }
 
-    private void LoadAbilities(PortraitButton portraitButton)
-    {
-        LoadAbilities(portraitButton.Character);
-    }
-
     /// <summary>
     /// Displays each available ability for the selected character.
     /// </summary>
     /// <param name="portraitButton">The character of which's abilities to display.</param>
+    private void LoadAbilities(PortraitButton portraitButton)
+    {
+        LoadAbilities(portraitButton.Character);
+    }
+    
     public void LoadAbilities(CharacterData character)
     {
         if (character == null)
@@ -301,18 +301,21 @@ public class CombatUI : MonoBehaviour
             
             var abilityButton = button.GetComponent<AbilityButton>();
             _abilityButtons.Add(abilityButton);
+            
+            UpdateAbilityColors(CombatManager._instance.GetCharacterDataDict()[character], abilityButton);
         }
-        
-        UpdateAbilityColors(CombatManager._instance.GetCharacterDataDict()[character]);
     }
 
-    private void UpdateAbilityColors(Character c)
+    private void UpdateAbilityColors(Character c, AbilityButton abilityButton)
     {
-        foreach (AbilityButton abilityButton in _abilityButtons)
+        if (!_currentTurnCharacter)
         {
-            abilityButton.Button.interactable = !c.IsAbilityCooldownActive(abilityButton.Ability)
-                                                && _selectedCharacter.Faction == Faction.Friendly 
-                                                && c == _currentTurnCharacter && _combatStarted;
+            abilityButton.Button.interactable = false;
+            return;
         }
+        
+        abilityButton.Button.interactable = !c.IsAbilityCooldownActive(abilityButton.Ability)
+                                            && _selectedCharacter.Faction == Faction.Friendly 
+                                            && c == _currentTurnCharacter && _combatStarted;
     }
 }
