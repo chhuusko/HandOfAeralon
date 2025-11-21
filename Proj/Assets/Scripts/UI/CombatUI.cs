@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -43,17 +44,26 @@ public class CombatUI : MonoBehaviour
     private void OnEnable()
     {
         CardHandManager.onManaChange += UpdateManaText;
+        
         CombatEventManager.OnEnterCombatStateLoadNextLevel += PlaceCharacterStarted;
         CombatEventManager.OnEnterCombatStateTakeTurn += StartTurn;
         CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
+
+        StartCoroutine(WaitForSelector());
     }
 
     private void OnDisable()
     {
         CardHandManager.onManaChange -= UpdateManaText;
+        
         CombatEventManager.OnEnterCombatStatePlaceCharacter -= PlaceCharacterStarted;
         CombatEventManager.OnEnterCombatStateTakeTurn -= StartTurn;
         CombatEventManager.OnTurnOrderChanged -= UpdateTurnOrder;
+        
+        Selector._instance.OnCharacterSelected -= LoadAbilities;
+        Selector._instance.OnCharacterSelected -= UpdateActivePortrait;
+        Selector._instance.OnCharacterSelected -= UpdatePortraitColors;
+        Selector._instance.OnCharacterDeselected -= DeselectCharacter;
 
         foreach (var pb in _portraitButtons)
         {
@@ -86,6 +96,19 @@ public class CombatUI : MonoBehaviour
         _hand.SetActive(false);
         UpdateCharacterPortraits();
         UpdateManaText(CardHandManager.GetInstance().GetMana());
+    }
+    
+    private IEnumerator WaitForSelector()
+    {
+        while (!Selector._instance)
+        {
+            yield return null;
+        }
+        
+        Selector._instance.OnCharacterSelected += LoadAbilities;
+        Selector._instance.OnCharacterSelected += UpdateActivePortrait;
+        Selector._instance.OnCharacterSelected += UpdatePortraitColors;
+        Selector._instance.OnCharacterDeselected += DeselectCharacter;
     }
 
     public void StartCombat()
@@ -137,6 +160,11 @@ public class CombatUI : MonoBehaviour
         _currentTurnCharacter = c;
         
         LoadAbilities(_selectedCharacter);
+    }
+
+    private void DeselectCharacter()
+    {
+        
     }
     
     /// <summary>
@@ -206,8 +234,13 @@ public class CombatUI : MonoBehaviour
             _characterPortraits.TryAdd(pb.Character, pb);
         }
     }
+
+    private void UpdatePortraitColors(CharacterData c)
+    {
+        UpdatePortraitColors(CombatManager._instance.GetCharacterDataDict()[c]);
+    }
     
-    public void UpdatePortraitColors(Character c) 
+    private void UpdatePortraitColors(Character c) 
     {
         UpdatePortraitColors(_characterPortraits[c.Data]);
     }
@@ -268,7 +301,7 @@ public class CombatUI : MonoBehaviour
         LoadAbilities(portraitButton.Character);
     }
     
-    public void LoadAbilities(CharacterData character)
+    private void LoadAbilities(CharacterData character)
     {
         if (character == null)
         {

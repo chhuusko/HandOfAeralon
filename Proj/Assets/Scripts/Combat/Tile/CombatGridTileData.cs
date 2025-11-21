@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 [System.Serializable]
 public enum TileType

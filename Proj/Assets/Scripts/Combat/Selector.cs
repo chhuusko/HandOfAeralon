@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
@@ -23,6 +23,9 @@ public class Selector : MonoBehaviour
     [SerializeField] private Character _selectedCharacter;
     [SerializeField] private bool _bDebugSelector = true;
     [SerializeField] private CombatGridTile _currentHoveredTile;
+
+    public event Action<CharacterData> OnCharacterSelected;
+    public event Action OnCharacterDeselected;
 
     public enum CharacterActionType
     {
@@ -316,6 +319,8 @@ public class Selector : MonoBehaviour
 
     private void DeselectCharacter()
     {
+        OnCharacterDeselected?.Invoke();
+        
         // if ui is active Deactivate UI
         HideCharacterOptions();
 
@@ -351,9 +356,7 @@ public class Selector : MonoBehaviour
     private void ShowCharacterUI(Character character)
     {
         // Activates character UI without options since the character can't perform actions at the moment.
-        CombatUI.Instance.LoadAbilities(character.Data);
-        CombatUI.Instance.UpdateActivePortrait(character);
-        CombatUI.Instance.UpdatePortraitColors(character);
+        OnCharacterSelected?.Invoke(character.Data);
     }
     public void PreviewAbilityRange(Ability ability)
     {
