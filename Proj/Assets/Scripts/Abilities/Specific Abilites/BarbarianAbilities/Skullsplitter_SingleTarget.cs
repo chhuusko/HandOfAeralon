@@ -1,4 +1,3 @@
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
@@ -23,10 +22,10 @@ public class Skullsplitter_Ability : SingleTargetAbility
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
-        // 1. Your Base Damage(Kan ökas med traits och eller kort.)
+        // 1. Your Base Damage(Kan ï¿½kas med traits och eller kort.)
         // 2. Ability damage.
         // 3. Your Traits
-        // 4. Your Buffs/ Debuffs(Kan även appliceras av kort)
+        // 4. Your Buffs/ Debuffs(Kan ï¿½ven appliceras av kort)
         // 5. Eventuella Ability Global Modifiers(Ex.Arena modifiers)
         // 6. EnemyTraits
         // 7. Enemy Buffs / Debuffs
