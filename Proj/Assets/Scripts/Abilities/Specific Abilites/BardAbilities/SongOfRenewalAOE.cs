@@ -5,10 +5,8 @@ using UnityEngine;
 public class SongOfRenewalAOE : AOEAbility
 {
     [Header("- Ability Specific values -")]
-    [SerializeField] private int _radius;
     [SerializeField] private float _maxHealthHealMain = 0.25f;
     [SerializeField] private float _maxHealthHealArea = 0.1f;
-
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {

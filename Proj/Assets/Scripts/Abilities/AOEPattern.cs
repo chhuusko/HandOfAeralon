@@ -3,9 +3,10 @@ using UnityEngine;
 
 public abstract class AOEPattern : ScriptableObject
 {
+    protected int _radius;
     public abstract List<CombatGridTile> CalculateTilesToEffect(CombatGridTile targetTile);
 
-    public virtual void SetRadius(int radius) {
-        // Only used by patterns that uses radius.
+    public void SetRadius(int radius) {
+        _radius = radius;
     }
 }

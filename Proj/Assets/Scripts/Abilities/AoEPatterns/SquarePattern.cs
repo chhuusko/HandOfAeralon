@@ -5,11 +5,10 @@ using UnityEngine;
 
 public class SquarePattern : AOEPattern
 {
-    [SerializeField] private int _radius;
     public override List<CombatGridTile> CalculateTilesToEffect(CombatGridTile targetTile)
     {
         // Calculates every tile around target in every direction based on radius.
-
+      
         List<CombatGridTile> tilesToEffect = new();
         Vector2 centerIndex = targetTile.GetTileIndex();
       
@@ -21,6 +20,9 @@ public class SquarePattern : AOEPattern
                 int checkX = (int) centerIndex.x + x;
                 int checkY = (int) centerIndex.y + y;
 
+                if (checkX < 0 || checkX >= CombatGrid._instance.GetGridWidth()) continue;
+                if (checkY < 0 || checkY >= CombatGrid._instance.GetGridHeight()) continue;
+
                 CombatGridTile nearbyTile = CombatManager._instance.GetTileComponent(checkX, checkY);
                 if (nearbyTile != null)
                 {
@@ -29,10 +31,5 @@ public class SquarePattern : AOEPattern
             }
         }
         return tilesToEffect;
-    }
-
-    public override void SetRadius(int radius)
-    {
-        _radius = radius;
     }
 }
