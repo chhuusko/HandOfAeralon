@@ -28,4 +28,9 @@ public class SquarePattern : AOEPattern
         }
         return tilesToEffect;
     }
+
+    public override void SetRadius(int radius)
+    {
+        _radius = radius;
+    }
 }

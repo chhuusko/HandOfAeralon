@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DiamondPattern : AOEPattern
 {
-    [SerializeField] private int _radius;
+    private int _radius;
     public override List<CombatGridTile> CalculateTilesToEffect(CombatGridTile targetTile)
     {
         // Calculates every tile around target in every direction based on radius, but radius counts as 2.
@@ -29,6 +29,10 @@ public class DiamondPattern : AOEPattern
         }
 
         return TilesToEffect;
+    }
+    public override void SetRadius(int radius)
+    {
+        _radius = radius;
     }
 }
 
