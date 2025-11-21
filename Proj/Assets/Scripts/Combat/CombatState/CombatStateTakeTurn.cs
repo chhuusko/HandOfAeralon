@@ -7,7 +7,6 @@ public class CombatStateTakeTurn : CombatStateBase
     public override CombatState _state => CombatState.TakeTurn;
 
     [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
-    [SerializeField] private GameObject _selectorOverHead;
     public UnityEvent TurnStart = new();
 
     public CombatStateTakeTurn()
@@ -44,10 +43,6 @@ public class CombatStateTakeTurn : CombatStateBase
                 }
                 break;
         }
-
-        Vector3 selectorOverHeadPosition = activeCharacter.transform.position + (Vector3.up * 3.0f);
-        CombatManager._instance.SetSelectorOverHeadPosition(selectorOverHeadPosition);
-
         CombatEventManager.InvokeEnterCombatStateTakeTurn(activeCharacter);
     }
 
@@ -95,8 +90,6 @@ public class CombatStateTakeTurn : CombatStateBase
             case PlayerTurnMode.CardMode:
                 break;
         }
-
-        CombatManager._instance.UpdateSelectorOverHeadPosition();
     }
 
     bool enemyDoingStuff = false;
