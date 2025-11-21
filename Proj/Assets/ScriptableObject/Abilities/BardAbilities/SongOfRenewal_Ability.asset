@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SongOfRenewal_Ability
   m_EditorClassIdentifier: 
   _abilityName: SongOfRenewal
-  _icon: {fileID: 0}
+  _icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   _range: 6
   _cooldown: 3
   _abilityTag: 10
@@ -26,7 +26,7 @@ MonoBehaviour:
   hitSound: {fileID: 0}
   castingTime: 0
   fromCastToHitTime: 0
-  _pattern: {fileID: 0}
+  _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
   _radius: 4
   _maxHealthHealMain: 0.25
   _maxHealthHealArea: 0.1
