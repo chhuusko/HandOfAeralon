@@ -9,4 +9,5 @@ public class StatusEffectData : ScriptableObject
     public int Duration;
     public Sprite Icon;
     public StatusEffectType Type;
+    public bool IsPermanent;
 }
