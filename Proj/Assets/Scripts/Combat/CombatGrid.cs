@@ -82,6 +82,22 @@ public class CombatGrid : MonoBehaviour
 
     public bool IsCombatGridLoaded() { return _bCombatGridLoaded; }
     public GameObject[] GetAllTiles() { return _tilesGO; }
+    public List<Character> GetAllCharacterScripts() 
+    {
+        List<Character> characterScritps = new List<Character>();
+
+        foreach(GameObject characterGO in GetAllCharacters())
+        {
+            Character character = characterGO.GetComponent<Character>();
+            if(character)
+            {
+                characterScritps.Add(character);
+            }
+            
+        }
+        return characterScritps; 
+    }
+
     public List<CombatGridTile> GetAllCombatGridTileScripts() 
     {
         List<CombatGridTile> tiles = new List<CombatGridTile>();
