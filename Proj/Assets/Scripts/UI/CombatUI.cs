@@ -26,6 +26,7 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _hand;
     
     [SerializeField] private TextMeshProUGUI _mana;
+    [SerializeField] private ScrollRect _scrollRect;
 
     // Colors.
     [SerializeField] private Color _activeColor;
@@ -233,6 +234,16 @@ public class CombatUI : MonoBehaviour
             PortraitButton pb = CreateCharacterPortrait(c.Data, _turnOrderPanel.transform);
             _characterPortraits.TryAdd(pb.Character, pb);
         }
+        
+        StartCoroutine(ScrollToBottom());
+    }
+
+    private IEnumerator ScrollToBottom()
+    {
+        yield return null;
+        
+        // Set scroll to bottom.
+        _scrollRect.verticalNormalizedPosition = 0;
     }
 
     private void UpdatePortraitColors(CharacterData c)
@@ -331,7 +342,11 @@ public class CombatUI : MonoBehaviour
 
         for (int i = 0; i < character.AvailableAbilities.Count; i++)
         {
-            Button button = Instantiate(_abilityButtonPrefab, _abilityPanel.transform);
+            var buttonGO = Instantiate(_abilityButtonPrefab.gameObject);
+            buttonGO.SetActive(false);
+            buttonGO.transform.SetParent(_abilityPanel.transform, false);
+            
+            var button = buttonGO.GetComponent<Button>();
             
             var ability = character.AvailableAbilities[i];
             button.image.sprite = ability.GetIcon();
@@ -341,6 +356,8 @@ public class CombatUI : MonoBehaviour
             _abilityButtons.Add(abilityButton);
             
             UpdateAbilityColors(CombatManager._instance.GetCharacterDataDict()[character], abilityButton);
+            
+            buttonGO.SetActive(true);
         }
     }
 

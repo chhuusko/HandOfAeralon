@@ -22,7 +22,7 @@ public class Selector : MonoBehaviour
     [SerializeField] private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
     [SerializeField] private Character _selectedCharacter;
     [SerializeField] private bool _bDebugSelector = true;
-    [SerializeField] private CombatGridTile _currentHoveredTile;
+    private CharacterMovement _characterMovement;
 
     public event Action<CharacterData> OnCharacterSelected;
     public event Action OnCharacterDeselected;
@@ -149,6 +149,11 @@ public class Selector : MonoBehaviour
         if (occupant != null && occupant.TryGetComponent<Character>(out var character))
         {
             // TODO: Show character info in UI.
+        }
+
+        if (_characterMovement && CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() == Faction.Friendly)
+        {
+            _characterMovement.PreviewPath(GetTileUnderMouse());
         }
 
         // Change color on tiles to indicate aoe abilities effected area.
@@ -287,20 +292,20 @@ public class Selector : MonoBehaviour
         bool bIsFriendly = character.GetFaction() == Faction.Friendly;
         bool bIsCharactersTurn = character == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
 
-        // JLW
-        CharacterMovement characterMovement = character.GetComponent<CharacterMovement>();
-        if (characterMovement != null)
-        {
-            DebugLog.JLWLog($"Selector.cs | Drawing move range for {character.name}");
-            characterMovement.DrawMoveRange();
-        }
-
         if (bIsFriendly && bIsCharactersTurn)
         {
             ShowCharacterUI(character);
             _pendingCharacterActionType = CharacterActionType.Movement;
             _currentState = SelectorState.ActionTypeSelected;
             _selectedCharacter = character;
+
+            // JLW
+            _characterMovement = character.GetComponent<CharacterMovement>();
+            if (_characterMovement != null)
+            {
+                DebugLog.JLWLog($"Selector.cs | Drawing move range for {character.name}");
+                _characterMovement.DrawMoveRange();
+            }
 
             if (_bDebugSelector)
             {
@@ -327,6 +332,7 @@ public class Selector : MonoBehaviour
         StopPreviewAbilityRange();
         _selectedCharacter?.GetAbilityHandler()?.SetPendingAbility(null);
         _selectedCharacter = null;
+        _characterMovement = null;
         _pendingCharacterActionType = CharacterActionType.Null;
         ResetColorAllTiles();
 
@@ -421,30 +427,7 @@ public class Selector : MonoBehaviour
 
     private void HandleMovement(CombatGridTile tile)
     {
-        DebugLog.JLWLog("Selector.cs | HandleMovement called.");
-
-        CharacterMovement characterMovement = _selectedCharacter.GetComponent<CharacterMovement>();
-        if (characterMovement == null)
-        {
-            Debug.LogError($"Selector.cs | characterMovement NOT FOUND!");
-            return;
-        }
-
-        List<CombatGridTile> pathPreview = characterMovement.GetPathPreview();
-
-        if (pathPreview != null && pathPreview.Count > 0)
-        {
-            if (pathPreview[^1] == tile)
-            {
-                characterMovement.ConfirmPreviewedPath();
-                return;
-            }
-        }
-
-        if (characterMovement.GetTilesInRange().Contains(tile))
-        {
-            characterMovement.PreviewPath(tile);
-        }
+        _characterMovement.ConfirmPath(tile);
     }
 
     private void HandleAbilityCast(CombatGridTile tile)

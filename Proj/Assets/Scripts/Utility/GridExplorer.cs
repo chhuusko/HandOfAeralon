@@ -455,7 +455,7 @@ public class GridExplorer : MonoBehaviour
         }
     }
 
-    private void Clear()
+    public void Clear()
     {
         if (_activeLineRenderer != null)
         {
