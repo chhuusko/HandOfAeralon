@@ -74,10 +74,9 @@ public class CombatManager : MonoBehaviour
     private CombatState _combatState;
 
     [Header("Combat State")]
+    [SerializeField] private CombatState _debugCurrentState;
     [SerializeReference] private CombatStateBase _currentCombatState;
-    [SerializeField] private CombatState _currentCombatStateEnum;
-    [SerializeField] private CombatTurn _currentTurn;
-    [SerializeField] private PlayerTurnMode _currentPlayerTurnMode;
+   
 
     private Dictionary<CharacterData, Character> _dataToCharacterDict;
 
@@ -144,7 +143,7 @@ public class CombatManager : MonoBehaviour
     {
         _currentCombatState?.Exit();
         _currentCombatState = newCombatState;
-        _currentCombatStateEnum = newCombatState._state;
+        _debugCurrentState = newCombatState._state;
         // NOTE (Calle): Broadcast the state change.
         CombatEventManager.InvokeCombatStateChanged(newCombatState._state);
 
@@ -194,12 +193,14 @@ public class CombatManager : MonoBehaviour
         _selectorOverHead.transform.position = pos;
     }
 
+    [SerializeField] private float _selectorOverHeadBounceSpeed;
+    [SerializeField] private float _selectorOverHeadBounceInterval;
     public void UpdateSelectorOverHeadPosition()
     {
         
-        float py = _selectorOverHeadStartPos.y;
+        float py = _selectorOverHeadStartPos.y + Mathf.Sin(Time.time * _selectorOverHeadBounceSpeed) * _selectorOverHeadBounceInterval;
         
-        _selectorOverHead.transform.position = new Vector3(_selectorOverHeadStartPos.x, py  + Mathf.Sin(Time.deltaTime * 0.1f) * 200.0f, _selectorOverHeadStartPos.z);
+        _selectorOverHead.transform.position = new Vector3(_selectorOverHeadStartPos.x, py, _selectorOverHeadStartPos.z);
     }
     public void HideSelectorOverhead()
     {

@@ -202,8 +202,8 @@ public class CombatUI : MonoBehaviour
         {
             pb.GetComponent<Image>().color = _inactiveColor;
         }
-        
-        selectedPortrait.GetComponent<Image>().color = _activeColor;
+        if(selectedPortrait)
+            selectedPortrait.GetComponent<Image>().color = _activeColor;
     }
 
     private void UpdateManaText(int mana)
