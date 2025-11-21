@@ -38,11 +38,13 @@ public class CombatUI : MonoBehaviour
     
     private Dictionary<CharacterData, PortraitButton> _characterPortraits = new();
     
+    private Character _currentTurnCharacter;
+    
     private void OnEnable()
     {
         CardHandManager.onManaChange += UpdateManaText;
         CombatEventManager.OnEnterCombatStateLoadNextLevel += PlaceCharacterStarted;
-        CombatEventManager.OnEnterCombatStateTakeTurn += CombatStarted;
+        CombatEventManager.OnEnterCombatStateTakeTurn += StartTurn;
         CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
     }
 
@@ -50,7 +52,7 @@ public class CombatUI : MonoBehaviour
     {
         CardHandManager.onManaChange -= UpdateManaText;
         CombatEventManager.OnEnterCombatStatePlaceCharacter -= PlaceCharacterStarted;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= CombatStarted;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= StartTurn;
         CombatEventManager.OnTurnOrderChanged -= UpdateTurnOrder;
 
         foreach (var pb in _portraitButtons)
@@ -119,17 +121,22 @@ public class CombatUI : MonoBehaviour
         CharacterData c = GlobalGameManager.GetInstance().GetGameData().heroDataList[0];
         UpdateActivePortrait(c);
         UpdatePortraitColors(_characterPortraits[c]);
+        LoadAbilities(c);
         
         _selectedCharacter = c;
+        _currentTurnCharacter = CombatManager._instance.GetCharacterDataDict()[_selectedCharacter];
     }
 
-    private void CombatStarted(Character character)
+    private void StartTurn(Character c)
     {
-        UpdateActivePortrait(character);
-        UpdatePortraitColors(character);
+        UpdateActivePortrait(c);
+        UpdatePortraitColors(c);
         
-        _selectedCharacter = character.Data;
+        _selectedCharacter = c.Data;
         _combatStarted = true;
+        _currentTurnCharacter = c;
+        
+        LoadAbilities(_selectedCharacter);
     }
     
     /// <summary>
@@ -269,12 +276,13 @@ public class CombatUI : MonoBehaviour
             return;
         }
 
-        // Abilities aren't available in character placement phase.
-        if (!_combatStarted)
+        // Don't show abilities for enemies.
+        if (character.Faction == Faction.Enemy)
         {
             return;
         }
 
+        _abilityButtons.Clear();
         // Remove all current ability buttons.
         for (int i = 0; i < _abilityPanel.transform.childCount; i++)
         {
@@ -295,14 +303,16 @@ public class CombatUI : MonoBehaviour
             _abilityButtons.Add(abilityButton);
         }
         
-        UpdateAbilityColors();
+        UpdateAbilityColors(CombatManager._instance.GetCharacterDataDict()[character]);
     }
 
-    private void UpdateAbilityColors()
+    private void UpdateAbilityColors(Character c)
     {
         foreach (AbilityButton abilityButton in _abilityButtons)
         {
-            abilityButton.Button.interactable = abilityButton.Ability.GetCooldown() <= 0 && _selectedCharacter.Faction == Faction.Friendly;
+            abilityButton.Button.interactable = !c.IsAbilityCooldownActive(abilityButton.Ability)
+                                                && _selectedCharacter.Faction == Faction.Friendly 
+                                                && c == _currentTurnCharacter && _combatStarted;
         }
     }
 }
