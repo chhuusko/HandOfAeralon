@@ -58,11 +58,14 @@ public class CombatGrid : MonoBehaviour
     private void OnEnable()
     {
         CombatEventManager.OnCharacterDeath += HandleCharacterDeath;
+        CombatEventManager.OnExitCombatStatePlaceCharacter += OnExitPlaceCharacter;
+
     }
 
     private void OnDisable()
     {
-        CombatEventManager.OnCharacterDeath += HandleCharacterDeath;
+        CombatEventManager.OnCharacterDeath -= HandleCharacterDeath;
+        CombatEventManager.OnExitCombatStatePlaceCharacter -= OnExitPlaceCharacter;
     }
 
     public void Start()
@@ -79,6 +82,18 @@ public class CombatGrid : MonoBehaviour
 
     public bool IsCombatGridLoaded() { return _bCombatGridLoaded; }
     public GameObject[] GetAllTiles() { return _tilesGO; }
+    public List<CombatGridTile> GetAllCombatGridTileScripts() 
+    {
+        List<CombatGridTile> tiles = new List<CombatGridTile>();
+
+        foreach(GameObject tileGO in _tilesGO)
+        {
+            CombatGridTile combatGridTile = tileGO.GetComponent<CombatGridTile>();
+            if (combatGridTile)
+                tiles.Add(combatGridTile);
+        }
+        return tiles; 
+    }
 
     public List<CombatGridTile> GetAllDeployTiles()
     {
@@ -163,22 +178,32 @@ public class CombatGrid : MonoBehaviour
             tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
             tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
 
+            MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
+            Material inCombatTileMaterial = Resources.Load<Material>("Shaders/Tiles/TileMaterial");
+            
+
             switch (tileData.GetTileType())
             {
                 case TileType.Deploy:
                     {
+                        if (inCombatTileMaterial != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            meshRend.material.SetColor("_TileColor", Color.green);
+                        }
+                        else
+                        {
+                            DebugLog.CJLog("Failed to load TileMaterial.mat");
 
+                        }
                     }
                     break;
                 default:
                     {
-                        MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
-                        Material inCombatTileMaterial = Resources.Load<Material>("Shaders/Tiles/TileMaterial");
                         if (inCombatTileMaterial != null)
                         {
                             meshRend.material = inCombatTileMaterial;
-                            if (tileObject.GetComponent<CombatGridTile>().GetTileIndex().x == 0)
-                                meshRend.material.SetColor("_TileColor", Color.green);
+                            meshRend.material.SetColor("_TileColor", Color.white);
                         }
                         else
                         {
@@ -355,5 +380,18 @@ public class CombatGrid : MonoBehaviour
         }
 
         _bCombatGridLoaded = true;
+    }
+
+    private void OnExitPlaceCharacter()
+    {
+        foreach(GameObject tile in GetAllTiles())
+        {
+            MeshRenderer meshRend = tile.GetComponent<MeshRenderer>();
+
+            if (meshRend != null)
+            {
+                meshRend.material.SetColor("_TileColor", Color.white);
+            }
+        }
     }
 }
