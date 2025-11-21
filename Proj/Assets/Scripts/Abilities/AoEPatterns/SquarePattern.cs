@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "SquarePattern", menuName = "Scriptable Objects/Abilities/Patterns/SquarePattern")]
+
 public class SquarePattern : AOEPattern
 {
     [SerializeField] private int _radius;
