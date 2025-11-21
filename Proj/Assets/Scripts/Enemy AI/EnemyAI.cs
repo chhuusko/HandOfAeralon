@@ -82,6 +82,9 @@ public class EnemyAI : MonoBehaviour
     {
         // Initialization & null checks
         _currentCharacter = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
+        if (_currentCharacter.GetFaction() == Faction.Friendly)
+            return;
+
         if (_currentCharacter == null || _currentCharacter.GetFaction() != controlledFaction)
         {
             if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | Not {this.name}'s turn...");
