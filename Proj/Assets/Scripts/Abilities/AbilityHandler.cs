@@ -38,6 +38,7 @@ public class AbilityHandler : MonoBehaviour
         OnAbilityCast?.Invoke();
         StartCoroutine(ability.PlayAbilityEffect(_casterTile, targetTile));
         ability.RunAbility(_casterTile, targetTile);
+        _characterCaster.StartAbilityCooldown(ability);
         return true;
     }
     public Character GetCharacterCaster()

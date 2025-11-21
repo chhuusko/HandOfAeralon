@@ -4,12 +4,12 @@ using System.Collections.Generic;
 public abstract class AOEAbility : Ability
 {
     [Header("- Type Specific values - ")]
-    [SerializeField] private AOEPattern pattern;
+    [SerializeField] protected AOEPattern _pattern;
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Calculate all tiles around with in radius and apply effect to all of them.
 
-        List<CombatGridTile> tilesToEffect = pattern.CalculateTilesToEffect(targetTile);
+        List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
 
         foreach (CombatGridTile tile in tilesToEffect)
         {
@@ -21,6 +21,6 @@ public abstract class AOEAbility : Ability
     }
     public override List<CombatGridTile> GetTilesToEffect(CombatGridTile tile)
     {
-        return pattern.CalculateTilesToEffect(tile);
+        return _pattern.CalculateTilesToEffect(tile);
     }
 }
