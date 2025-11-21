@@ -43,7 +43,7 @@ public class CharacterMovement : MonoBehaviour
         return _bIsMoving;
     }
 
-    public void ConfirmPreviewedPath()
+    public void ConfirmPath(CombatGridTile tile)
     {
         if (_pathPreview == null || _pathPreview.Count == 0)
         {
@@ -51,49 +51,50 @@ public class CharacterMovement : MonoBehaviour
             return;
         }
 
-        if (_character.GetMovementPoints() == 0)
+        if (_pathPreview[^1] == tile)
         {
-            Debug.LogError($"CharacterMovement.cs | {_character.name} is out of MP!");
-            _tilesInRange = new();
-            return;
+            if (_character.GetMovementPoints() == 0)
+            {
+                Debug.LogError($"CharacterMovement.cs | {_character.name} is out of MP!");
+                _tilesInRange = new();
+                return;
+            }
+
+            _character.SetCurrentMovementPoints(Mathf.Max(_character.GetMovementPoints() - _pathPreview.Count, 0));
+
+            StartCoroutine(Move(_pathPreview));
         }
-
-        _character.SetCurrentMovementPoints(Mathf.Max(_character.GetMovementPoints() - _pathPreview.Count, 0));
-
-        StartCoroutine(Move(_pathPreview));
     }
 
     public void DrawMoveRange()
     {
-        GameObject currentTile = null;
-
+        GameObject currentTile = _character.GetCurrentTileComponent().gameObject;
         if (_character.GetMovementPoints() <= 0)
         {
-            Debug.LogError($"CharacterMovement.cs | {_character.name} is out of MP!");
+            Debug.Log($"CharacterMovement.cs | {_character.name} is out of MP!");
             _tilesInRange = new();
             return;
         }
 
-        currentTile = _character.GetCurrentTileComponent().gameObject;
-
+        Debug.Log($"CharacterMovement.cs | {_character.name} move range drawn.");
         _tilesInRange = GridExplorer._instance.GetTilesInRange(currentTile, _character.GetMovementPoints(), true)
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
         .ToList();
-
-        foreach (var tile in _tilesInRange)
-        {
-            tile.SetTileColor(Color.green);
-        }
     }
 
-    public void PreviewPath(CombatGridTile goalTile)
+    public void PreviewPath(CombatGridTile tile)
     {
-        GameObject currentTile = null;
+        if (tile == null || !_tilesInRange.Contains(tile))
+        {
+            GridExplorer._instance.Clear();
+            return;
+        }
 
+        GameObject currentTile = null;
         currentTile = _character.GetCurrentTileComponent().gameObject;
 
-        _pathPreview = GridExplorer._instance.FindPathAStar(currentTile, goalTile.gameObject)
+        _pathPreview = GridExplorer._instance.FindPathAStar(currentTile, tile.gameObject)
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
         .ToList();
