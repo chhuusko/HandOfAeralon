@@ -1,15 +1,17 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class RoundAOEAbility : Ability
+public abstract class RoundAOEAbility : AOEAbility
 {
     [Header("- Type Specific values - ")]
-    [SerializeField] protected RoundAOEPattern _pattern;
     [SerializeField] protected int _radius;
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Calculate all tiles around with in radius and apply effect to all of them.
-        _pattern.SetRadius(_radius);
+        if (_pattern is RoundAOEPattern pattern)
+        {
+            pattern.SetRadius(_radius);
+        }
         List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
 
         foreach (CombatGridTile tile in tilesToEffect)
@@ -22,7 +24,10 @@ public abstract class RoundAOEAbility : Ability
     }
     public override List<CombatGridTile> GetTilesToEffect(CombatGridTile tile)
     {
-        _pattern.SetRadius(_radius);
+        if (_pattern is RoundAOEPattern pattern)
+        {
+            pattern.SetRadius(_radius);
+        }
         return _pattern.CalculateTilesToEffect(tile);
     }
 }
