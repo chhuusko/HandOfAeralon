@@ -294,7 +294,7 @@ public class Selector : MonoBehaviour
 
         if (bIsFriendly && bIsCharactersTurn)
         {
-            ShowCharacterUIWithOptions(character);
+            ShowCharacterUI(character);
             _pendingCharacterActionType = CharacterActionType.Movement;
             _currentState = SelectorState.ActionTypeSelected;
             _selectedCharacter = character;
@@ -344,19 +344,6 @@ public class Selector : MonoBehaviour
     }
 
     /// <summary>
-    /// Activates the character UI and displays all available actions,
-    /// such as abilities and movement options, for the selected character.
-    /// </summary>
-    /// <param name="character">The character whose options should be shown.</param>
-    private void ShowCharacterUIWithOptions(Character character)
-    {
-        // Activates character UI with options to cast abilities and walk.
-        CombatUI.Instance.LoadAbilities(character.Data);
-        CombatUI.Instance.UpdateActivePortrait(character);
-        CombatUI.Instance.UpdatePortraitColors(character);
-    }
-
-    /// <summary>
     /// Activates the character UI without any action options.  
     /// Used when the character cannot perform actions at the moment.
     /// </summary>
@@ -364,6 +351,7 @@ public class Selector : MonoBehaviour
     private void ShowCharacterUI(Character character)
     {
         // Activates character UI without options since the character can't perform actions at the moment.
+        CombatUI.Instance.LoadAbilities(character.Data);
         CombatUI.Instance.UpdateActivePortrait(character);
         CombatUI.Instance.UpdatePortraitColors(character);
     }
