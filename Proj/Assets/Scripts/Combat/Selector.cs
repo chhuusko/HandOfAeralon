@@ -22,6 +22,7 @@ public class Selector : MonoBehaviour
     [SerializeField] private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
     [SerializeField] private Character _selectedCharacter;
     [SerializeField] private bool _bDebugSelector = true;
+    [SerializeField] private CombatGridTile _currentHoveredTile;
 
     public enum CharacterActionType
     {
@@ -319,6 +320,7 @@ public class Selector : MonoBehaviour
             if (tileComponent.IsMouseHovering())
             {
                 tileComponent.SetTileColor(Color.yellow);
+                _currentHoveredTile = tileComponent;
             }
             else if (tileComponent.GetOccupant())
             {
@@ -328,6 +330,7 @@ public class Selector : MonoBehaviour
             {
                 tileComponent.SetTileColor(Color.white);
             }
+
         }
     } 
     private void DeselectCharacter()
