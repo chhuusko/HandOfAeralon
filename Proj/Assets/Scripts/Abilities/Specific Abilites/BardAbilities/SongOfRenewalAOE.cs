@@ -11,7 +11,10 @@ public class SongOfRenewalAOE : RoundAOEAbility
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Calculate all tiles around with in radius and apply effect to all of them.
-        _pattern.SetRadius(_radius);
+        if (_pattern is RoundAOEPattern pattern)
+        {
+            pattern.SetRadius(_radius);
+        }
         List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
 
         foreach (CombatGridTile tile in tilesToEffect)
