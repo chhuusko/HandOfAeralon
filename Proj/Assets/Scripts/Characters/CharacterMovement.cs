@@ -51,14 +51,14 @@ public class CharacterMovement : MonoBehaviour
             return;
         }
 
-        if (_character.GetMovementPoints() <= 0)
+        if (_character.GetMovementPoints() == 0)
         {
             Debug.LogError($"CharacterMovement.cs | {_character.name} is out of MP!");
             _tilesInRange = new();
             return;
         }
 
-        _character.SetCurrentMovementPoints(_character.GetMovementPoints() - _pathPreview.Count);
+        _character.SetCurrentMovementPoints(Mathf.Max(_character.GetMovementPoints() - _pathPreview.Count, 0));
 
         StartCoroutine(Move(_pathPreview));
     }
