@@ -12,6 +12,7 @@ public class CharacterMovement : MonoBehaviour
     private List<CombatGridTile> _tilesInRange = new();
     private List<CombatGridTile> _pathPreview = new();
     private bool _bIsMoving = false;
+    private CombatGridTile _lastPreviewPathTile = null;
 
     void Start()
     {
@@ -26,6 +27,7 @@ public class CharacterMovement : MonoBehaviour
     {
         _tilesInRange = new();
         _pathPreview = new();
+        _lastPreviewPathTile = null;
     }
 
     public List<CombatGridTile> GetTilesInRange()
@@ -91,9 +93,18 @@ public class CharacterMovement : MonoBehaviour
             return;
         }
 
+        if (tile == _lastPreviewPathTile)
+        {
+            //Debug.LogError($"CharacterMovement::PreviewPath() skipped");
+            return;
+        }
+
+        _lastPreviewPathTile = tile;
+
         GameObject currentTile = null;
         currentTile = _character.GetCurrentTileComponent().gameObject;
 
+        //Debug.LogError($"CharacterMovement::PreviewPath() called A*");
         _pathPreview = GridExplorer._instance.FindPathAStar(currentTile, tile.gameObject)
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
