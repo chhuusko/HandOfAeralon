@@ -13,11 +13,11 @@ public class CombatStateEndCombat : CombatStateBase
     public override void Exit()
     {
         base.Exit();
-        CombatEventManager.InvokeExitCombatStateEndCombat();
+        
     }
 
     public override void Update()
     {
-        LevelManager.GetInstance().StartNextLevel();
+        CombatEventManager.InvokeExitCombatStateEndCombat();
     }
 }

@@ -68,7 +68,7 @@ public class CombatUI : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
             
             _hand.SetActive(false);
         }
