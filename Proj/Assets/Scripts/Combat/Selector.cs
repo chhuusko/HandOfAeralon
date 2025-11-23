@@ -151,6 +151,7 @@ public class Selector : MonoBehaviour
             // TODO: Show character info in UI.
         }
 
+        // JLW
         if (_characterMovement && CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() == Faction.Friendly)
         {
             _characterMovement.PreviewPath(GetTileUnderMouse());
