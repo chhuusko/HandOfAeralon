@@ -21,37 +21,38 @@ public class CombatCamera : MonoBehaviour
     [System.Serializable]
     public class CameraZoomController
     {
-        [SerializeField] private int _zoomStep;
-        [SerializeField] private int _zoomStepMax;
-        [SerializeField] private Vector3[] _zoomAnglePositions = new Vector3[10];
-        [SerializeField] private float[] _zoomAngleRotations = new float[10];
+        [Range(0, 1)]
+        [SerializeField] private float _zoom = 0.5f;
+        [SerializeField] private float _zoomSpeed = 2.0f;
+        [SerializeField] private float _smoothSpeed = 10.0f;
+
+        [SerializeField] private AnimationCurve heightCurve;
+        [SerializeField] private AnimationCurve tiltCurve;
+
+        [SerializeField] private float _height;
+        [SerializeField] private float _minHeight;
+        [SerializeField] private float _maxHeight;
+
+        [SerializeField] private float _tilt;
+        [SerializeField] private float _minTilt;
+        [SerializeField] private float _maxTilt;
+        [SerializeField] private float _scroll;
+
 
         public void UpdateZoomScroll()
         {
-            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            float scroll = -Input.GetAxis("Mouse ScrollWheel");
+            _zoom = Mathf.Clamp01(_zoom + scroll * _zoomSpeed * Time.deltaTime);
 
-            if(scroll > 0) 
-                _zoomStep++;
+            _height = _minHeight + heightCurve.Evaluate(_zoom) * _maxHeight;
 
-            if (scroll < 0)
-                _zoomStep--;
-
-            ClampZoomStep();
-
-            
+            _tilt = _minTilt + tiltCurve.Evaluate(_zoom) * _maxTilt;
         }
 
-        private void ClampZoomStep()
-        {
-            if (_zoomStep >= _zoomStepMax)
-                _zoomStep = _zoomStepMax - 1;
+        public float GetHeight() { return _height; }
+        public float GetTilt() { return _tilt; }
+        public float GetSmoothSpeed() { return _smoothSpeed; }
 
-            if (_zoomStep <= 0)
-                _zoomStep = 0;
-        }
-
-        public Vector3 GetZoomPosition() { return _zoomAnglePositions[_zoomStep]; }
-        public float GetZoomRotation() { return  _zoomAngleRotations[_zoomStep]; }
     };
 
     [SerializeField] private PlayableDirector timelineDirector;
@@ -59,7 +60,6 @@ public class CombatCamera : MonoBehaviour
     [SerializeField] private float _cameraSpeed;
     [SerializeField] CameraBounds _cameraBounds;
     [SerializeField] CameraZoomController _cameraZoomController;
-
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -143,14 +143,13 @@ public class CombatCamera : MonoBehaviour
     {
         _cameraZoomController.UpdateZoomScroll();
 
-        Vector3 currentPos = transform.position;
-        Vector3 zoomPosition = _cameraZoomController.GetZoomPosition();
-        float zoomRotation = _cameraZoomController.GetZoomRotation();
-        float y = zoomPosition.y;
-        Vector3 newPosition = new Vector3(currentPos.x, y, currentPos.z);
-        
-        transform.rotation = Quaternion.Euler(zoomRotation, transform.rotation.y, transform.rotation.z);
-        transform.position = newPosition;
+        Vector3 pos = transform.position;
+        pos.y = Mathf.Lerp(pos.y, _cameraZoomController.GetHeight(), Time.deltaTime * _cameraZoomController.GetSmoothSpeed());
+        transform.position = pos;
+
+        Vector3 rot = transform.eulerAngles;
+        rot.x = Mathf.Lerp(rot.x, _cameraZoomController.GetTilt(), Time.deltaTime * _cameraZoomController.GetSmoothSpeed());
+        transform.eulerAngles = rot;
     }
 
     private void OnDrawGizmos()
