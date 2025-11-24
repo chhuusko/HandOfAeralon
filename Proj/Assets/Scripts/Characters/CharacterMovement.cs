@@ -12,6 +12,7 @@ public class CharacterMovement : MonoBehaviour
     private List<CombatGridTile> _tilesInRange = new();
     private List<CombatGridTile> _pathPreview = new();
     private bool _bIsMoving = false;
+    private CombatGridTile _lastPreviewPathTile = null;
 
     void Start()
     {
@@ -26,44 +27,12 @@ public class CharacterMovement : MonoBehaviour
     {
         _tilesInRange = new();
         _pathPreview = new();
-    }
-
-    public List<CombatGridTile> GetTilesInRange()
-    {
-        return _tilesInRange;
-    }
-
-    public List<CombatGridTile> GetPathPreview()
-    {
-        return _pathPreview;
+        _lastPreviewPathTile = null;
     }
 
     public bool IsMoving()
     {
         return _bIsMoving;
-    }
-
-    public void ConfirmPath(CombatGridTile tile)
-    {
-        if (_pathPreview == null || _pathPreview.Count == 0)
-        {
-            Debug.LogError($"CharacterMovement.cs | _pathPreview IS EMPTY!");
-            return;
-        }
-
-        if (_pathPreview[^1] == tile)
-        {
-            if (_character.GetMovementPoints() == 0)
-            {
-                Debug.LogError($"CharacterMovement.cs | {_character.name} is out of MP!");
-                _tilesInRange = new();
-                return;
-            }
-
-            _character.SetCurrentMovementPoints(Mathf.Max(_character.GetMovementPoints() - _pathPreview.Count, 0));
-
-            StartCoroutine(Move(_pathPreview));
-        }
     }
 
     public void DrawMoveRange()
@@ -87,17 +56,50 @@ public class CharacterMovement : MonoBehaviour
     {
         if (tile == null || !_tilesInRange.Contains(tile))
         {
+            _lastPreviewPathTile = null;
             GridExplorer._instance.Clear();
             return;
         }
 
+        if (_bIsMoving || tile == _lastPreviewPathTile || _character.GetMovementPoints() <= 0)
+        {
+            //Debug.LogError($"CharacterMovement::PreviewPath() skipped");
+            return;
+        }
+
+        _lastPreviewPathTile = tile;
+
         GameObject currentTile = null;
         currentTile = _character.GetCurrentTileComponent().gameObject;
 
+        //Debug.LogError($"CharacterMovement::PreviewPath() called A*");
         _pathPreview = GridExplorer._instance.FindPathAStar(currentTile, tile.gameObject)
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
         .ToList();
+    }
+
+    public void ConfirmPath(CombatGridTile tile)
+    {
+        if (_pathPreview == null || _pathPreview.Count == 0)
+        {
+            Debug.LogError($"CharacterMovement.cs | _pathPreview IS EMPTY!");
+            return;
+        }
+
+        if (_pathPreview[^1] == tile)
+        {
+            if (_character.GetMovementPoints() <= 0)
+            {
+                Debug.LogError($"CharacterMovement.cs | {_character.name} is out of MP!");
+                _tilesInRange = new();
+                return;
+            }
+
+            _character.SetCurrentMovementPoints(Mathf.Max(_character.GetMovementPoints() - _pathPreview.Count, 0));
+
+            StartCoroutine(Move(_pathPreview));
+        }
     }
 
     public void ForceCustomPath(List<CombatGridTile> path)
@@ -114,6 +116,7 @@ public class CharacterMovement : MonoBehaviour
     private IEnumerator Move(List<CombatGridTile> path)
     {
         _bIsMoving = true;
+        GridExplorer._instance.Clear();
         float moveSpeed = 4f; // Måste matcha animationerna
 
         foreach (var step in path)

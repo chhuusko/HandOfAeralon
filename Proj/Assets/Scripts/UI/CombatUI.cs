@@ -24,6 +24,7 @@ public class CombatUI : MonoBehaviour
     
     [SerializeField] private GameObject _turnOrderPanel;
     [SerializeField] private GameObject _hand;
+    [SerializeField] private GameObject _placeCharactersPanel;
     
     [SerializeField] private TextMeshProUGUI _mana;
     [SerializeField] private ScrollRect _scrollRect;
@@ -120,6 +121,7 @@ public class CombatUI : MonoBehaviour
         _endTurnButton.gameObject.SetActive(true);
         _abilityPanel.gameObject.SetActive(true);
         _hand.SetActive(true);
+        _placeCharactersPanel.SetActive(false);
         
         // Set abilities for first character.
         LoadAbilities(Selector._instance.GetSelectedCharacter()?.Data);

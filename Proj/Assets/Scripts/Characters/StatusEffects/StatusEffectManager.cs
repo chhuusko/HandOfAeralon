@@ -6,10 +6,16 @@ using UnityEngine;
 public class StatusEffectManager : MonoBehaviour
 {
     private List<StatusEffect> _statusEffects;
+    private Character _character;
     
     private void OnEnable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
+    }
+
+    private void Start()
+    {
+        _character = GetComponent<Character>();
     }
 
     private void OnDisable()
@@ -29,6 +35,11 @@ public class StatusEffectManager : MonoBehaviour
 
     private void UpdateDuration(Character c)
     {
+        if (!_character || c != _character)
+        {
+            return;
+        }
+        
         foreach (var statusEffect in _statusEffects)
         {
             if (!statusEffect.TickDuration())

@@ -211,6 +211,7 @@ public class CombatGrid : MonoBehaviour
                         {
                             meshRend.material = inCombatTileMaterial;
                             meshRend.material.SetFloat("_Alpha", 0.0f);
+                            meshRend.material.SetColor("_TileColor", Color.black);
                         }
                     }
                     break;
