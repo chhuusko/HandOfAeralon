@@ -383,8 +383,8 @@ public class CombatGrid : MonoBehaviour
 
         CombatGridSerializedSaveData combatGridSaveData = JsonUtility.FromJson<CombatGridSerializedSaveData>(jsonFileData);
 
-        CombatGrid._instance.SetCombatGridSize(combatGridSaveData._gridWidth, combatGridSaveData._gridHeight);
-        CombatGrid._instance.SetTileSize(combatGridSaveData._tileSize);
+        SetCombatGridSize(combatGridSaveData._gridWidth, combatGridSaveData._gridHeight);
+        SetTileSize(combatGridSaveData._tileSize);
         DebugLog.CJLog("CombatGrid tileSize: " + combatGridSaveData._tileSize);
 
         for (int i = 0; i < combatGridSaveData._tileData.Count; i++)
@@ -392,13 +392,13 @@ public class CombatGrid : MonoBehaviour
             //DebugLog.CJLog("tiled["+i+"]: " + "\tTileType : " + combatGridSaveData._tileData[i].GetTileType() + 
             //          "\tTileIndex: " + combatGridSaveData._tileData[i].GetTilePosition() + "\n");
 
-            CombatGrid._instance.AddTile(combatGridSaveData._tileData[i]).transform.SetParent(_tileRoot.transform);
+            AddTile(combatGridSaveData._tileData[i]).transform.SetParent(_tileRoot.transform);
 
         }
 
         for (int i = 0; i < combatGridSaveData._characterData.Count; i++)
         {
-            CombatGrid._instance.AddCharacter(combatGridSaveData._characterData[i]).transform.SetParent(_enemyCharacterRoot.transform);
+            AddCharacter(combatGridSaveData._characterData[i]).transform.SetParent(_enemyCharacterRoot.transform);
         }
 
         _bCombatGridLoaded = true;
