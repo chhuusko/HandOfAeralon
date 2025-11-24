@@ -16,10 +16,7 @@ public class EnemyAI : MonoBehaviour
     private Character _targetCharacter = null;
     private GameObject _closestOpponentTile = null;
 
-    // Only for testing
     [SerializeField] private bool _bDebug = false;
-    [SerializeField] private bool _bAutoPlay = false;
-    // End of only for testing
 
 
     private void OnEnable()
