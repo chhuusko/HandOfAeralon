@@ -25,8 +25,6 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _turnOrderPanel;
     [SerializeField] private GameObject _hand;
     [SerializeField] private GameObject _placeCharactersPanel;
-    [SerializeField] private GameObject _combatLogButton;
-    [SerializeField] private GameObject _combatLogPanel;
     
     [SerializeField] private TextMeshProUGUI _mana;
     [SerializeField] private ScrollRect _scrollRect;
@@ -35,12 +33,19 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Color _activeColor;
     [SerializeField] private Color _inactiveColor;
     
+    // Combat log.
+    [SerializeField] private GameObject _combatLogEntryPrefab;
+    [SerializeField] private GameObject _combatLogPanel;
+    [SerializeField] private GameObject _combatLogScrollbar;
+    [SerializeField] private GameObject _combatLogButton;
+    
     private CharacterData _selectedCharacter;
     private bool _bCombatStarted;
     private bool _bCombatLogEnabled;
     
     private List<PortraitButton> _portraitButtons = new();
     private List<AbilityButton> _abilityButtons = new();
+    private List<CombatLogEntry> _combatLogEntries = new();
     
     private Dictionary<CharacterData, PortraitButton> _characterPortraits = new();
     
@@ -148,6 +153,18 @@ public class CombatUI : MonoBehaviour
     public void SetCombatLogActive()
     {
         _bCombatLogEnabled = !_bCombatLogEnabled;
+        _combatLogPanel.SetActive(_bCombatLogEnabled);
+        _combatLogScrollbar.SetActive(_bCombatLogEnabled);
+    }
+
+    private void AddCombatLogEntry(CombatLogEntry entry)
+    {
+        _combatLogEntries.Add(entry);
+        var go = Instantiate(_combatLogEntryPrefab, _combatLogPanel.transform);
+        
+        go.transform.Find("Icon").GetComponent<Image>().sprite = entry.Ability.GetIcon();
+        go.transform.Find("Text").GetComponent<Text>().text =
+            $"{entry.Source.ClassData.name} does 4 damage to {entry.Target.ClassData.name}";
     }
 
     private void PlaceCharacterStarted()

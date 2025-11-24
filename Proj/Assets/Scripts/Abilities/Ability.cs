@@ -28,11 +28,11 @@ public abstract class Ability : ScriptableObject
     [System.Flags]
     public enum AbilityTag
     {
-        None = 0,               // 0000
-        Melee = 1 << 0,         // 0001  (1)
-        Ranged = 1 << 1,        // 0010  (2)
-        SingleTarget = 1 << 2,  // 0100  (4)
-        AOE = 1 << 3            // 1000  (8)
+        None = 0,
+        Melee = 1 << 0,
+        Ranged = 1 << 1,
+        SingleTarget = 1 << 2,
+        AOE = 1 << 3
     }
     public enum Type
     {

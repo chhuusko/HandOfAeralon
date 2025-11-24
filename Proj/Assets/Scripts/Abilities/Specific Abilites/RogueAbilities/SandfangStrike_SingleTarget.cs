@@ -1,11 +1,13 @@
-using UnityEngine;
-using UnityEngine.SocialPlatforms;
+﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "Skullsplitter_Ability", menuName = "Scriptable Objects/Abilities/Barbarian/Skullsplitter")]
-public class Skullsplitter_Ability : SingleTargetAbility
+
+[CreateAssetMenu(fileName = "SandfangStrike_Ability", menuName = "Scriptable Objects/Abilities/Rogue/Sandfang Strike")]
+public class SandfangStrike_SingleTarget : SingleTargetAbility
 {
     [Header("- Ability Specific values -")]
-    [SerializeField] private float _damageMultiplier = 1.6f;
+    [SerializeField] private float _damageMultiplier = 1.3f;
+    [SerializeField] private float _applyPoisonChance = 0.8f;
+    [SerializeField] private int _posionStacksToApply = 3;
 
 
     protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
@@ -18,6 +20,12 @@ public class Skullsplitter_Ability : SingleTargetAbility
         if (castingCharacter == null) return;
 
         affectedCharacter.TakeDamage(CalculateDamage(castingCharacter, affectedCharacter));
+        if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
+            //if (statusEffectManager.ContainsEffect(poison){
+            //    CardHandManager.GetInstance().AddCardFromDeck();
+            //}
+            //statusEffectManager.AddStatusEffect(new Poison(_poisonStacksToApply);
+        }
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
@@ -34,7 +42,7 @@ public class Skullsplitter_Ability : SingleTargetAbility
         int damage = castingCharacter.GetBaseDamage();
 
         //2.
-        damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.GetMaxHealth()) ? (int) (damage * _damageMultiplier) : damage;
+       damage = (int) (damage * _damageMultiplier);
 
         //3-5.
         // damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
