@@ -154,7 +154,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5973925488804196149
 RectTransform:
   m_ObjectHideFlags: 0
@@ -170,10 +170,10 @@ RectTransform:
   - {fileID: 5847316504884693192}
   m_Father: {fileID: 4384949029401830295}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -101, y: 143}
-  m_SizeDelta: {x: 15, y: -430}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -101, y: 0}
+  m_SizeDelta: {x: 15, y: 275}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &2772854383687885198
 CanvasRenderer:
@@ -854,7 +854,7 @@ RectTransform:
   m_Father: {fileID: 5847316504884693192}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1420,7 +1420,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &728683182464085535
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1439,7 +1439,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -330, y: 0}
-  m_SizeDelta: {x: 400, y: 400}
+  m_SizeDelta: {x: 400, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5740057160564030448
 CanvasRenderer:
@@ -1501,7 +1501,7 @@ MonoBehaviour:
   m_ScrollSensitivity: 5
   m_Viewport: {fileID: 728683182464085535}
   m_HorizontalScrollbar: {fileID: 0}
-  m_VerticalScrollbar: {fileID: 6961219777148858852}
+  m_VerticalScrollbar: {fileID: 5834619376741623144}
   m_HorizontalScrollbarVisibility: 0
   m_VerticalScrollbarVisibility: 0
   m_HorizontalScrollbarSpacing: 0
@@ -1650,12 +1650,14 @@ MonoBehaviour:
   _turnOrderPanel: {fileID: 7483078133583643469}
   _hand: {fileID: 3650385346247062174}
   _placeCharactersPanel: {fileID: 7668318786330276250}
-  _combatLogButton: {fileID: 2933260372876191707}
-  _combatLogPanel: {fileID: 0}
   _mana: {fileID: 4826794601199300524}
   _scrollRect: {fileID: 1479745401614222361}
   _activeColor: {r: 1, g: 1, b: 1, a: 1}
   _inactiveColor: {r: 1, g: 1, b: 1, a: 0.5882353}
+  _combatLogEntryPrefab: {fileID: 0}
+  _combatLogPanel: {fileID: 4193454243049444370}
+  _combatLogScrollbar: {fileID: 0}
+  _combatLogButton: {fileID: 2933260372876191707}
 --- !u!1 &4306417135386459380
 GameObject:
   m_ObjectHideFlags: 0
