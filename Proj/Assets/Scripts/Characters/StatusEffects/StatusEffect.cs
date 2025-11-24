@@ -28,6 +28,7 @@ public abstract class StatusEffect
         return --Duration > 0;
     }
     
+    // Virtual methods. Overriden and implemented in subclasses.
     public virtual void OnApply() {}
     public virtual void OnExpire() {}
     public virtual void OnTurnStart() {}
