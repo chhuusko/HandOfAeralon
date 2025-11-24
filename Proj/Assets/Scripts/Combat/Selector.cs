@@ -120,7 +120,7 @@ public class Selector : MonoBehaviour
                 case SelectorState.NonActive: break;
                 case SelectorState.PlacingCharacters: SelectCharacterFromTile(clickedTile); break;
                 case SelectorState.Idle: SelectCharacterFromTile(clickedTile); break;
-                case SelectorState.CharacterSelected: DeselectCharacter(); break;
+                case SelectorState.CharacterSelected: SelectCharacterFromTile(clickedTile); break;
                 case SelectorState.ActionTypeSelected: HandlePendingCharacterAction(clickedTile); break;
             }
         }
@@ -411,6 +411,7 @@ public class Selector : MonoBehaviour
         if (_pendingCharacterActionType == CharacterActionType.Movement)
         {
             HandleMovement(tile);
+            TrySelectCharacterFromTile(tile);
             return;
         }
         if (_pendingCharacterActionType == CharacterActionType.AbilityCasting && _selectedCharacter.GetAbilityHandler().GetPendingAbility() != null)
