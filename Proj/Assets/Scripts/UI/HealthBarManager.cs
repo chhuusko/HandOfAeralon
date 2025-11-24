@@ -8,7 +8,7 @@ public class HealthBarManager : MonoBehaviour
     [Header("World Space Setup")]
     [SerializeField] private Transform _healthBarContainer;
     [SerializeField] private GameObject _healthBarPrefab;
-    [SerializeField] private Vector3 _offset = new Vector3(0, 2f, 0);
+    [SerializeField] private Vector3 _offset = new Vector3(0, 2.5f, 0);
 
     private Dictionary<Character, HealthBar> _healthBars = new();
 
