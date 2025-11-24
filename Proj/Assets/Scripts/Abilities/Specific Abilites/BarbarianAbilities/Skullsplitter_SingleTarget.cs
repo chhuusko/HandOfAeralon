@@ -5,7 +5,7 @@ using UnityEngine.SocialPlatforms;
 public class Skullsplitter_Ability : SingleTargetAbility
 {
     [Header("- Ability Specific values -")]
-    [SerializeField] private float damageMultiplier = 1.6f;
+    [SerializeField] private float _damageMultiplier = 1.6f;
 
 
     protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
@@ -34,7 +34,7 @@ public class Skullsplitter_Ability : SingleTargetAbility
         int damage = castingCharacter.GetBaseDamage();
 
         //2.
-        damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.GetMaxHealth()) ? (int) (damage*damageMultiplier) : damage;
+        damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.GetMaxHealth()) ? (int) (damage * _damageMultiplier) : damage;
 
         //3-5.
         // damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
