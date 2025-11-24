@@ -202,27 +202,61 @@ MonoBehaviour:
     _northEast: {x: 27, y: 0, z: 18}
     _southEast: {x: 27, y: 0, z: -3}
   _cameraZoomController:
-    _zoomStep: 0
-    _zoomStepMax: 10
-    _zoomAnglePositions:
-    - {x: 0, y: 10, z: 0}
-    - {x: 0, y: 9.2, z: 0}
-    - {x: 0, y: 8.6, z: 0}
-    - {x: 0, y: 7.8, z: 0}
-    - {x: 0, y: 7, z: 0}
-    - {x: 0, y: 6.2, z: 0}
-    - {x: 0, y: 5.4, z: 0}
-    - {x: 0, y: 4.6, z: 0}
-    - {x: 0, y: 3.8, z: 0}
-    - {x: 0, y: 3, z: 0}
-    _zoomAngleRotations:
-    - 55
-    - 49
-    - 46
-    - 43
-    - 40
-    - 37
-    - 34
-    - 31
-    - 28
-    - 25
+    _zoom: 1
+    _zoomSpeed: 50
+    _smoothSpeed: 10
+    heightCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    tiltCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _height: 0
+    _minHeight: 3
+    _maxHeight: 14
+    _tilt: 0
+    _minTilt: 20
+    _maxTilt: 40
+    _scroll: 0
