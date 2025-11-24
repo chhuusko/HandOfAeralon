@@ -74,6 +74,8 @@ public class CharacterData
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour
 {
+    public event Action<int> OnHealthChanged;
+
     public const int MOVEMENT_POINTS = 5;
     public const float DEATH_COOLDOWN = 1f;
     
@@ -110,13 +112,6 @@ public class Character : MonoBehaviour
     private void OnDisable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
-    }
-
-    public void ResetCharacter() // Endast för testkörning (JLW), tills dess att turtagningen fungerar som tänkt
-    {
-        _currentInitiative = _data.BaseInitiative;
-        _currentDamage = _data.BaseDamage;
-        _currentMovementPoints = _data.BaseMovementPoints;
     }
 
     public void Update()
@@ -237,12 +232,22 @@ public class Character : MonoBehaviour
         _currentInitiative = _data.BaseInitiative;
         _currentDamage = _data.BaseDamage;
         _currentMovementPoints = _data.BaseMovementPoints;
+
+        if (HealthBarManager._instance != null)
+        {
+            HealthBarManager._instance.Register(this);
+        }
+        else
+        {
+            Debug.LogError($"Character.cs | No health bar canvas (prefab by JLW) found in scene!");
+        }
     }
     
     public void TakeDamage(int damage)
     {
         _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
-        
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
+
         Debug.Log($"Taking {damage} damage. New health: {GetCurrentHealth()}");
         
         if (_data.CurrentHealthPoints <= 0)
@@ -262,6 +267,7 @@ public class Character : MonoBehaviour
     public void Heal(int healAmount)
     {
         _data.Heal(healAmount);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
         Debug.Log($"Healing {healAmount} health. New health: {GetCurrentHealth()}");
     }
     
@@ -274,5 +280,13 @@ public class Character : MonoBehaviour
         }
         Debug.Log($"Character.cs 245 | CharacterMovement component not found!");
         return false;
+    }
+
+    void OnDestroy()
+    {
+        if (HealthBarManager._instance != null)
+        {
+            HealthBarManager._instance.Unregister(this);
+        }
     }
 }
