@@ -10,7 +10,7 @@ public class CharacterPrefabEntry
     //public List<GameObject> _prefabList; // NOTE (Calle): For multiple models
 }
 
-[CreateAssetMenu(fileName = "CharacterPrefabLibrary", menuName = "Scriptable Objects/Character Prefab Library")]
+[CreateAssetMenu(fileName = "CharacterPrefabLibrary", menuName = "Resources/Character Prefab Library")]
 public class CharacterPrefabLibrary : ScriptableObject
 {
     public List<CharacterPrefabEntry> _characterPrefabs;
