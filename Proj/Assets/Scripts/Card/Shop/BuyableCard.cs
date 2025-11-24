@@ -9,7 +9,7 @@ public class BuyableCard : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created'
     private bool _isHeldDown;
-    private float _sellTime = 2f;
+    private float _sellTime = 1f;
     private float _timeHeld = 0;
     private int _price;
     [SerializeField] Image _fillImage;
