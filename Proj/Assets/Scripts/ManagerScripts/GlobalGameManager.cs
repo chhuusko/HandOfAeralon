@@ -54,14 +54,7 @@ public class GlobalGameManager : ScriptableObject
     }
     public void StartNewGame(int slot)
     {
-        _currentGame = new GameData();
-        _currentGame.saveSlot = slot;
-        _currentGame.seed = Random.Range(0, 1000);
-        LevelManager.GetInstance().GenerateMap(_currentGame.seed);
-        _currentGame.heroList = new List<Character>();
-        _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
-        Debug.Log(_currentGame.cardList.Count);
-        _currentGame.coins = 800;
+        GetTemp();
         SceneManager.LoadScene("ShopScene"); //TODO
     }
     public void JSONWrite()
