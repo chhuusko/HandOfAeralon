@@ -196,3 +196,33 @@ MonoBehaviour:
   timelineDirector: {fileID: 1753662456628443831}
   bIntroCinematicDone: 0
   _cameraSpeed: 10
+  _cameraBounds:
+    _southWest: {x: -3, y: 0, z: -3}
+    _northWest: {x: -3, y: 0, z: 18}
+    _northEast: {x: 27, y: 0, z: 18}
+    _southEast: {x: 27, y: 0, z: -3}
+  _cameraZoomController:
+    _zoomStep: 0
+    _zoomStepMax: 10
+    _zoomAnglePositions:
+    - {x: 0, y: 10, z: 0}
+    - {x: 0, y: 9.2, z: 0}
+    - {x: 0, y: 8.6, z: 0}
+    - {x: 0, y: 7.8, z: 0}
+    - {x: 0, y: 7, z: 0}
+    - {x: 0, y: 6.2, z: 0}
+    - {x: 0, y: 5.4, z: 0}
+    - {x: 0, y: 4.6, z: 0}
+    - {x: 0, y: 3.8, z: 0}
+    - {x: 0, y: 3, z: 0}
+    _zoomAngleRotations:
+    - 55
+    - 49
+    - 46
+    - 43
+    - 40
+    - 37
+    - 34
+    - 31
+    - 28
+    - 25
