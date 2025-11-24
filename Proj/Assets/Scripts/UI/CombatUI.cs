@@ -25,6 +25,8 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _turnOrderPanel;
     [SerializeField] private GameObject _hand;
     [SerializeField] private GameObject _placeCharactersPanel;
+    [SerializeField] private GameObject _combatLogButton;
+    [SerializeField] private GameObject _combatLogPanel;
     
     [SerializeField] private TextMeshProUGUI _mana;
     [SerializeField] private ScrollRect _scrollRect;
@@ -34,7 +36,8 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Color _inactiveColor;
     
     private CharacterData _selectedCharacter;
-    private bool _combatStarted;
+    private bool _bCombatStarted;
+    private bool _bCombatLogEnabled;
     
     private List<PortraitButton> _portraitButtons = new();
     private List<AbilityButton> _abilityButtons = new();
@@ -142,6 +145,11 @@ public class CombatUI : MonoBehaviour
         CardHandManager.GetInstance().OpenDiscardPile();
     }
 
+    public void SetCombatLogActive()
+    {
+        _bCombatLogEnabled = !_bCombatLogEnabled;
+    }
+
     private void PlaceCharacterStarted()
     {
         CharacterData c = GlobalGameManager.GetInstance().GetGameData().heroDataList[0];
@@ -159,7 +167,7 @@ public class CombatUI : MonoBehaviour
         UpdatePortraitColors(c);
         
         _selectedCharacter = c.Data;
-        _combatStarted = true;
+        _bCombatStarted = true;
         _currentTurnCharacter = c;
         
         LoadAbilities(_selectedCharacter);
@@ -328,7 +336,7 @@ public class CombatUI : MonoBehaviour
             return;
         }
 
-        if (!_combatStarted)
+        if (!_bCombatStarted)
         {
             return;
         }
@@ -373,6 +381,6 @@ public class CombatUI : MonoBehaviour
         
         abilityButton.Button.interactable = !c.IsAbilityCooldownActive(abilityButton.Ability)
                                             && _selectedCharacter.Faction == Faction.Friendly 
-                                            && c == _currentTurnCharacter && _combatStarted;
+                                            && c == _currentTurnCharacter && _bCombatStarted;
     }
 }
