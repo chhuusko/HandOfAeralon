@@ -32,47 +32,6 @@ public class EnemyAI : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn -= StartTurn;
     }
 
-    void Start()
-    {
-        //CombatManager._instance.TurnStart.AddListener(OnTurnStart);
-
-        // Only for testing
-        if (_bAutoPlay)
-        {
-            StartCoroutine(Autoplay());
-        }
-        // End of only for testing
-    }
-
-    private IEnumerator Autoplay() // Only for testing
-    {
-        while (_bAutoPlay)
-        {
-            yield return new WaitForSeconds(3f);
-
-            if (controlledFaction == Faction.Enemy)
-            {
-                List<Character> allCharacters = CombatGrid._instance.GetAllCharacters()
-                .Select(obj => obj.GetComponent<Character>())
-                .Where(ch => ch != null)
-                .ToList();
-
-                foreach (var character in allCharacters)
-                {
-                    character.SetBaseHealthPoints(Random.Range(1, 4));
-                    character.SetBaseInitiative(Random.Range(1, 5));
-                    character.SetBaseDamage(Random.Range(1, 5));
-                    character.ResetCharacter();
-                    character.SetCurrentMovementPoints(2);
-                }
-
-                if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | All character stats randomized!");
-            }
-
-            OnTurnStart();
-        }
-    }
-
     // NOTE (Calle): Added this for test, and executing from CombatEventManager.OnEnterCombatStateTakeTurn
     private void StartTurn(Character character)
     {
