@@ -5,6 +5,7 @@ public class PopupText : MonoBehaviour
 {
     [SerializeField] private float _destroyTime;
     [SerializeField] private Vector3 _randomStartPositionRange;
+    private Vector3 _randomStartPosition;
     [SerializeField] GameObject _characterTarget;
     [SerializeField] Canvas _canvasParent;
 
@@ -32,6 +33,8 @@ public class PopupText : MonoBehaviour
             Vector3 characterPos = _characterTarget.transform.position;
             characterPos.y = _fixedYPos;
             transform.position = characterPos;
+            
+            transform.position += _randomStartPosition;
         }
         
     }
@@ -67,11 +70,14 @@ public class PopupText : MonoBehaviour
         float randomStartPositionX = Random.Range(-_randomStartPositionRange.x, _randomStartPositionRange.x);
         float randomStartPositionY = Random.Range(-_randomStartPositionRange.y, _randomStartPositionRange.y);
         float randomStartPositionZ = Random.Range(-_randomStartPositionRange.z, _randomStartPositionRange.z);
-        
+
+        _randomStartPosition = new Vector3(randomStartPositionX, randomStartPositionY, randomStartPositionZ);
 
         //Vector3 randomPos = new Vector3(randomStartPositionX, randomStartPositionY, randomStartPositionZ);
-        Vector3 randomPos = new Vector3(randomStartPositionX, _fixedYPos, randomStartPositionZ);
-        transform.position += randomPos;
+        //Vector3 randomPos = new Vector3(randomStartPositionX, _fixedYPos, randomStartPositionZ);
+        //transform.position += randomPos;
+
+        transform.position += _randomStartPosition;
     }
 
 }
