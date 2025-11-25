@@ -1,16 +1,9 @@
 using UnityEngine;
-
-public class ShardVolley : MonoBehaviour
+[CreateAssetMenu(fileName = "Shard Volley", menuName = "Item/Card Data/Shard Volley", order = 1)]
+public class ShardVolley : Card
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void PlayCard()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.PlayCard();
     }
 }

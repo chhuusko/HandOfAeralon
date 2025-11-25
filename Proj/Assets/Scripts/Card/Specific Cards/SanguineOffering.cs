@@ -1,16 +1,10 @@
 using UnityEngine;
 
-public class SanguineOffering : MonoBehaviour
+[CreateAssetMenu(fileName = "Sanguine Offering", menuName = "Item/Card Data/Sanguine Offering", order = 1)]
+public class SanguineOffering : Card
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void PlayCard()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.PlayCard();
     }
 }

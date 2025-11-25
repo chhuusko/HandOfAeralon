@@ -1,16 +1,11 @@
 using UnityEngine;
 
-public class CrimsonStrike : MonoBehaviour
+[CreateAssetMenu(fileName = "Crimson Strike", menuName = "Item/Card Data/Crimson Strike", order = 1)]
+public class CrimsonStrike : Card
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void PlayCard()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.PlayCard();
     }
 }
