@@ -1,16 +1,10 @@
 using UnityEngine;
 
-public class VitalSurge : MonoBehaviour
+[CreateAssetMenu(fileName = "Vital Surge", menuName = "Item/Card Data/Vital Surge", order = 1)]
+public class VitalSurge : Card
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void PlayCard()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.PlayCard();
     }
 }

@@ -1,16 +1,12 @@
 using UnityEngine;
 
-public class ExposeWeakness : MonoBehaviour
+[CreateAssetMenu(fileName = "Expose Weakness", menuName = "Item/Card Data/Expose Weakness", order = 1)]
+
+public class ExposeWeakness : Card
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void PlayCard()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.PlayCard();
     }
 }

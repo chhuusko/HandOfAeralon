@@ -1,16 +1,11 @@
 using UnityEngine;
 
-public class RecallMemory : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+[CreateAssetMenu(fileName = "Recall Memory", menuName = "Item/Card Data/Recall Memory", order = 1)]
 
-    // Update is called once per frame
-    void Update()
+public class RecallMemory : Card
+{
+    public override void PlayCard()
     {
-        
+        base.PlayCard();
     }
 }

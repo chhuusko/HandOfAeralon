@@ -1,16 +1,11 @@
 using UnityEngine;
 
-public class FlameMark : MonoBehaviour
+[CreateAssetMenu(fileName = "Flame Mark", menuName = "Item/Card Data/Flame Mark", order = 1)]
+public class FlameMark : Card
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void PlayCard()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.PlayCard();
     }
 }

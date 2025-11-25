@@ -1,16 +1,10 @@
 using UnityEngine;
 
-public class PurewatersTouch : MonoBehaviour
+[CreateAssetMenu(fileName = "Purewaters Touch", menuName = "Item/Card Data/Purewaters Touch", order = 1)]
+public class PurewatersTouch : Card
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void PlayCard()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.PlayCard();
     }
 }
