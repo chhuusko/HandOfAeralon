@@ -74,8 +74,8 @@ public class CharacterData
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour
 {
-    public event Action<int, int> OnHealthChanged;
-    public event Action<int> OnTakeDamage;
+    public event Action<int> OnHealthChanged;
+    public event Action<int, Vector3> OnTakeDamage;
 
     public const int MOVEMENT_POINTS = 5;
     public const float DEATH_COOLDOWN = 1f;
@@ -247,7 +247,8 @@ public class Character : MonoBehaviour
     public void TakeDamage(int damage)
     {
         _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
-        OnHealthChanged?.Invoke(_data.CurrentHealthPoints, -damage);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
+        OnTakeDamage?.Invoke(-damage, transform.position);
 
         Debug.Log($"Taking {damage} damage. New health: {GetCurrentHealth()}");
         
@@ -268,7 +269,7 @@ public class Character : MonoBehaviour
     public void Heal(int healAmount)
     {
         _data.Heal(healAmount);
-        OnHealthChanged?.Invoke(_data.CurrentHealthPoints, healAmount);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
         Debug.Log($"Healing {healAmount} health. New health: {GetCurrentHealth()}");
     }
     
