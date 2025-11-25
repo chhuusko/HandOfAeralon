@@ -47,6 +47,7 @@ public class StatusEffectManager : MonoBehaviour
 
     public void RemoveStatusEffect(StatusEffect statusEffect)
     {
+        statusEffect.OnExpire();
         _statusEffects.Remove(statusEffect);
     }
 
@@ -78,7 +79,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void OnApply()
+    private void OnApply()
     {
         foreach (var statusEffect in _statusEffects)
         {
@@ -86,7 +87,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void OnExpire()
+    private void OnExpire()
     {
         foreach (var statusEffect in _statusEffects)
         {
@@ -94,7 +95,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void OnTurnStart(Character c)
+    private void OnTurnStart(Character c)
     {
         foreach (var statusEffect in _statusEffects)
         {
@@ -102,7 +103,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void OnTurnEnd()
+    private void OnTurnEnd()
     {
         foreach (var statusEffect in _statusEffects)
         {
