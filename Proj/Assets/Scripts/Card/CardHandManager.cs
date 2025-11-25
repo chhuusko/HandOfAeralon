@@ -50,7 +50,6 @@ public class CardHandManager : MonoBehaviour
             }
             AddCardFromDeck();
         }
-        
         AddSpaceing();
     }
     public void AddCardFromDeck()
@@ -59,6 +58,17 @@ public class CardHandManager : MonoBehaviour
         _cardsInHand.Add(newCardContainer);
         newCardContainer.AddCard(_cardsInDeck[0]);
         _cardsInDeck.RemoveAt(0);
+        AddSpaceing();
+    }
+    public void AddCardFromDeck(int amount)
+    {
+        for(int i = 0; i < _cardsInHand.Count; i++)
+        {
+            CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
+            _cardsInHand.Add(newCardContainer);
+            newCardContainer.AddCard(_cardsInDeck[0]);
+            _cardsInDeck.RemoveAt(0);
+        }
         AddSpaceing();
     }
 
@@ -98,7 +108,7 @@ public class CardHandManager : MonoBehaviour
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
         _cardsInDiscardPile.Add(cardContainer.GetCard());
-        drawHand();
+        AddSpaceing();
     }
     public void ChangeMana(int change)
     {
@@ -129,6 +139,10 @@ public class CardHandManager : MonoBehaviour
     private List<Card> GetDiscardPile()
     {
         return _cardsInDiscardPile;
+    }
+    public List<CardContainer> GetCardsInHand()
+    {
+        return _cardsInHand;
     }
 
 
