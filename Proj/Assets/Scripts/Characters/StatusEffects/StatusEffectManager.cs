@@ -111,7 +111,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    private float ModifyIncomingDamage(float damage, Ability ability)
+    public float ModifyIncomingDamage(float damage, Ability ability)
     {
         foreach (var statusEffect in _statusEffects)
         {
@@ -120,7 +120,7 @@ public class StatusEffectManager : MonoBehaviour
         return damage;
     }
 
-    private float ModifyOutgoingDamage(float damage, Ability ability)
+    public float ModifyOutgoingDamage(float damage, Ability ability)
     {
         foreach (var statusEffect in _statusEffects)
         {
