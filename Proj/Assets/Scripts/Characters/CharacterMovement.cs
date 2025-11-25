@@ -1,10 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -96,7 +93,7 @@ public class CharacterMovement : MonoBehaviour
                 return;
             }
 
-            _character.SetCurrentMovementPoints(Mathf.Max(_character.GetMovementPoints() - _pathPreview.Count, 0));
+            _character.DecreaseCurrentMovementPoints(_pathPreview.Count - 1);
 
             StartCoroutine(Move(_pathPreview));
         }
