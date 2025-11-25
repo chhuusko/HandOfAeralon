@@ -47,6 +47,7 @@ public class StatusEffectManager : MonoBehaviour
 
     public void RemoveStatusEffect(StatusEffect statusEffect)
     {
+        statusEffect.OnExpire();
         _statusEffects.Remove(statusEffect);
     }
 
