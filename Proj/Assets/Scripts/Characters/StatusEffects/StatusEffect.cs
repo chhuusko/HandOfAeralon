@@ -20,6 +20,7 @@ public abstract class StatusEffect
     {
         Character = character;
         Manager = manager;
+        OnApply();
     }
 
     public virtual void IncreaseDuration(int amount = 1)
