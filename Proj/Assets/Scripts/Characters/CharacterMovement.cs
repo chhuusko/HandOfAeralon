@@ -145,10 +145,9 @@ public class CharacterMovement : MonoBehaviour
             }
 
             transform.position = targetPos;
-
-            //GetComponent<CombatGridTile>().SetOccupant(this.gameObject);
         }
 
         _bIsMoving = false;
+        DrawMoveRange();
     }
 }
