@@ -49,7 +49,7 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
 
 
         //3-5.
-        // damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        //damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
 
         // 6-7 Gets applied withing affected character StatusEffectManager: ModifyOutgoingDamage(damage, this);
