@@ -5,14 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "StatusEffectDataRegistry", menuName = "StatusEffects/StatusEffectDataRegistry")]
 public class StatusEffectDataRegistry : ScriptableObject
 {
-    [Serializable]
-    private struct Entry
-    {
-        public string Name;
-        public StatusEffectData Data;
-    }
+    // [Serializable]
+    // private struct Entry
+    // {
+    //     public StatusEffectData Data;
+    // }
     
-    [SerializeField] private Entry[] entries;
+    [SerializeField] private StatusEffectData[] entries;
     private static Dictionary<Type, StatusEffectData> _lookup;
 
     public void Initialize()
@@ -23,7 +22,7 @@ public class StatusEffectDataRegistry : ScriptableObject
             Type type = Type.GetType(entry.Name);
             if (type != null)
             {
-                _lookup[type] = entry.Data;
+                _lookup[type] = entry;
             }
             else
             {

@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: StatusEffectDataRegistry
   m_EditorClassIdentifier: 
   entries:
-  - Name: Empowered
-    Data: {fileID: 11400000, guid: 8ac9a7cf4d60a58479c25f1a51fd034a, type: 2}
-  - Name: Vulnerable
-    Data: {fileID: 11400000, guid: 87c57d604cddadc44ae09812ac425003, type: 2}
+  - {fileID: 11400000, guid: 8ac9a7cf4d60a58479c25f1a51fd034a, type: 2}
+  - {fileID: 11400000, guid: 87c57d604cddadc44ae09812ac425003, type: 2}
