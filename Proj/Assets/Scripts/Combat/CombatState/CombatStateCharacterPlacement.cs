@@ -51,7 +51,7 @@ public class CombatStateCharacterPlacement : CombatStateBase
                     }
                     else
                     {
-                        CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Wizard,
+                        CombatGridCharacterData characterData = new CombatGridCharacterData(CharacterClass.Sorceress,
                                                                                             Faction.Friendly,
                                                                                             10,
                                                                                             1,

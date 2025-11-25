@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CharacterClass { Barbarian, Wizard, Rogue, Bard, None }
+public enum CharacterClass { Barbarian, Sorceress, Rogue, Bard, None }
 
 [CreateAssetMenu(fileName = "ClassData", menuName = "Character/ClassData")]
 public class ClassData : ScriptableObject
