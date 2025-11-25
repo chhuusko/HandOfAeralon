@@ -69,6 +69,10 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private GameObject _selectorOverHeadPrefab;
     [SerializeField] private Vector3 _selectorOverHeadStartPos;
 
+    private GameObject _selectorCube;
+    [SerializeField] private GameObject _selectorCubePrefab;
+
+
     private CombatState _combatState;
 
     [Header("Combat State")]
@@ -129,6 +133,12 @@ public class CombatManager : MonoBehaviour
         _selectorOverHead = Instantiate(_selectorOverHeadPrefab, Vector3.zero, Quaternion.identity);
         _selectorOverHead.SetActive(false);
 
+        _selectorCube = Instantiate(_selectorCubePrefab, Vector3.zero, Quaternion.identity);
+        Vector3 pos = _selectorCube.transform.position;
+        pos.y = _selectorCube.transform.localScale.y / 2.0f;
+        _selectorCube.transform.position = pos;
+        _selectorCube.SetActive(false);
+
         ChangeCombatState(new CombatStateLoadLevel());        
     }
 
@@ -144,6 +154,16 @@ public class CombatManager : MonoBehaviour
                 SetSelectorOverHeadPosition(selectorOverHeadPosition);
                 UpdateSelectorOverHeadPosition();
             }
+        }
+
+        Character selectedCharacter = _selector.GetSelectedCharacter();
+
+        if (selectedCharacter != null && _selectorCube != null)
+        {
+            _selectorCube.SetActive(true);
+            Vector3 pos = selectedCharacter.gameObject.transform.position;
+            pos.y = _selectorCube.transform.localScale.y / 2.0f;
+            _selectorCube.transform.position= pos;
         }
     }
 
@@ -171,6 +191,7 @@ public class CombatManager : MonoBehaviour
 
     public CombatCamera GetCombatCamera() { return _combatCamera; }
     public GameObject GetSelectorOverHead() { return _selectorOverHead; }
+    
     public Selector GetCombatSelector() { return _selector; }
     public EnemyAI GetEnemyAI() { return _enemyAI; }
     public CombatTurnOrder GetCombatTurnOrder() { return _combatTurnOrder; }
