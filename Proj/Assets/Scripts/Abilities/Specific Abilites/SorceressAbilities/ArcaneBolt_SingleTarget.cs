@@ -52,7 +52,7 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
         //damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
 
-        // 6-7 Gets applied withing affected character StatusEffectManager: ModifyOutgoingDamage(damage, this);
+        // 6-7 Gets applied withing affected character StatusEffectManager: ModifyIncomingDamage(damage, this);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
