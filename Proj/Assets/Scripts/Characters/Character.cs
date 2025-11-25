@@ -76,6 +76,8 @@ public class Character : MonoBehaviour
 {
     public event Action<int> OnHealthChanged;
     public event Action<int, GameObject> OnTakeDamage;
+    public event Action<int, GameObject> OnWasHealed;
+
 
     public const int MOVEMENT_POINTS = 5;
     public const float DEATH_COOLDOWN = 1f;
@@ -102,7 +104,11 @@ public class Character : MonoBehaviour
         
         PopupTextManager damagePopupTextManager= PopupTextManager.GetInstance();
         if(damagePopupTextManager != null)
-            damagePopupTextManager.BindEventOnHealthChanged(this);
+        {
+            damagePopupTextManager.BindEventOnTakeDamage(this);
+            damagePopupTextManager.BindEventOnWasHealed(this);
+        }
+            
        
     }
 
@@ -121,7 +127,10 @@ public class Character : MonoBehaviour
 
         PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
         if (damagePopupTextManager != null)
-            damagePopupTextManager.UnBindEventOnHealthChanged(this);
+        {
+            damagePopupTextManager.UnBindEventOnTakeDamage(this);
+            damagePopupTextManager.UnBindEventOnWasHealed(this);
+        }
     }
 
     public void Update()
@@ -257,7 +266,7 @@ public class Character : MonoBehaviour
     {
         _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
-        OnTakeDamage?.Invoke(-damage, gameObject);
+        OnTakeDamage?.Invoke(damage, gameObject);
 
         Debug.Log($"Taking {damage} damage. New health: {GetCurrentHealth()}");
         
@@ -279,6 +288,7 @@ public class Character : MonoBehaviour
     {
         _data.Heal(healAmount);
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
+        OnWasHealed?.Invoke(healAmount, gameObject);
         Debug.Log($"Healing {healAmount} health. New health: {GetCurrentHealth()}");
     }
     

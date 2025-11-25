@@ -1,16 +1,20 @@
 using UnityEngine;
+using TMPro;
 
 public class PopupTextManager : MonoBehaviour
 {
     private static PopupTextManager _instance;
+
+    [SerializeField] private Canvas _worldCanvasPrefab;
+    [SerializeField] private Canvas _worldCanvas;
+
+    [SerializeField] GameObject _popupTextPrefabToSpawnDamage;
+    [SerializeField] GameObject _popupTextPrefabToSpawnCriticalDamage;
     
-    [SerializeField] GameObject PopupTextPrefabToSpawnDamage;
-    [SerializeField] GameObject PopupTextPrefabToSpawnCriticalDamage;
+    [SerializeField] GameObject _popupTextPrefabToSpawnHeal;
+    [SerializeField] GameObject _popupTextPrefabToSpawnCriticalHeal;
     
-    [SerializeField] GameObject PopupTextPrefabToSpawnHeal;
-    [SerializeField] GameObject PopupTextPrefabToSpawnCriticalHeal;
-    
-    [SerializeField] Character testCharacter;
+    [SerializeField] Character _testCharacter;
     
     void Awake()
     {
@@ -23,6 +27,11 @@ public class PopupTextManager : MonoBehaviour
         _instance = this;
     }
 
+    private void Start()
+    {
+        
+    }
+
     public static PopupTextManager GetInstance() { return _instance; }
 
 
@@ -30,44 +39,54 @@ public class PopupTextManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            testCharacter.TakeDamage(-1);
+            _testCharacter.TakeDamage(1);
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
-            testCharacter.TakeDamage(1);
+
+            _testCharacter.Heal((int)Random.Range(1, 40));
         }
     }
-    public void BindEventOnHealthChanged(Character character)
+    public void BindEventOnTakeDamage(Character character)
     {
-        character.OnHealthChanged += HealthChanged;
-        testCharacter = character;
+        character.OnTakeDamage += TakeDamage;
+        _testCharacter = character;
     }
 
-    public void UnBindEventOnHealthChanged(Character character)
+    public void UnBindEventOnTakeDamage(Character character)
     {
-        character.OnHealthChanged -= HealthChanged;
+        character.OnTakeDamage -= TakeDamage;
+    }
+    public void BindEventOnWasHealed(Character character)
+    {
+        character.OnWasHealed+= WasHealed;
+        _testCharacter = character;
     }
 
-    private void HealthChanged(int newHealth, int amount)
+    public void UnBindEventOnWasHealed(Character character)
     {
-        GameObject popupText = null;
-        
-        if(amount > 0)
-        {
-            popupText = Instantiate(PopupTextPrefabToSpawnHeal) as GameObject;
-        }
-        else if(amount < 0)
-        {
-            popupText = Instantiate(PopupTextPrefabToSpawnDamage) as GameObject;
-        }
+        character.OnWasHealed -= WasHealed;
+    }
 
-        DamagePopupText text = popupText.GetComponent<DamagePopupText>();
-        TextMesh textMesh = text.GetComponent<TextMesh>();
+    private void WasHealed(int healAmount, GameObject character)
+    {
+        GameObject popupText = Instantiate(_popupTextPrefabToSpawnHeal) as GameObject;
+        popupText.GetComponent<PopupText>().Initialize(character, _worldCanvasPrefab);
+        SetTextHealthChangedAmount(popupText, healAmount);
+    }
 
-        if (amount < 0)
-            amount *= -1;
+    private void TakeDamage(int damageAmount, GameObject character)
+    {
+        GameObject popupText = Instantiate(_popupTextPrefabToSpawnDamage) as GameObject;
+        popupText.GetComponent<PopupText>().Initialize(character, _worldCanvasPrefab);
+        SetTextHealthChangedAmount(popupText, damageAmount);
+    }
 
+    private void SetTextHealthChangedAmount(GameObject popupText, int amount)
+    {
+        PopupText text = popupText.GetComponent<PopupText>();
+        TMP_Text textMesh = text.GetComponent<TMP_Text>();
         textMesh.text = amount.ToString();
-    }
 
+    }
 }

@@ -44,10 +44,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5af874b008f5c524884c7555eefeb7f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PopupTextPrefabToSpawnDamage: {fileID: 3449041288618192171, guid: e4fc5b20181250347862249a5608b336,
+  _worldCanvasPrefab: {fileID: 668814708894956668, guid: b126f5ec17251ff4f9641e620018ae69,
     type: 3}
-  PopupTextPrefabToSpawnCriticalDamage: {fileID: 0}
-  PopupTextPrefabToSpawnHeal: {fileID: 3449041288618192171, guid: 849e7853077052849aa29ef7c1822309,
+  _worldCanvas: {fileID: 668814708894956668, guid: b126f5ec17251ff4f9641e620018ae69,
     type: 3}
-  PopupTextPrefabToSpawnCriticalHeal: {fileID: 0}
-  testCharacter: {fileID: 0}
+  _popupTextPrefabToSpawnDamage: {fileID: 3622600758543142800, guid: 77ed2e59d783ef04380a72f2573f6fcf,
+    type: 3}
+  _popupTextPrefabToSpawnCriticalDamage: {fileID: 0}
+  _popupTextPrefabToSpawnHeal: {fileID: 3622600758543142800, guid: e9f497eed28801745856610583fea0ef,
+    type: 3}
+  _popupTextPrefabToSpawnCriticalHeal: {fileID: 0}
+  _testCharacter: {fileID: 0}
