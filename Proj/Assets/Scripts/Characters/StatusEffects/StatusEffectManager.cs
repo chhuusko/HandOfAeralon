@@ -5,12 +5,22 @@ using UnityEngine;
 
 public class StatusEffectManager : MonoBehaviour
 {
-    private List<StatusEffect> _statusEffects;
+    [SerializeField] private StatusEffectDataRegistry _registry;
+    
+    private List<StatusEffect> _statusEffects = new();
     private Character _character;
     
     private void OnEnable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
+    }
+
+    private void Awake()
+    {
+        if (_registry != null)
+        {
+            _registry.Initialize();
+        }
     }
 
     private void Start()
@@ -22,7 +32,7 @@ public class StatusEffectManager : MonoBehaviour
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
     }
-
+    
     public void AddStatusEffect(StatusEffect statusEffect)
     {
         _statusEffects.Add(statusEffect);
@@ -45,12 +55,19 @@ public class StatusEffectManager : MonoBehaviour
             return;
         }
         
+        List<StatusEffect> statusEffectsToRemove = new();
+        
         foreach (var statusEffect in _statusEffects)
         {
             if (!statusEffect.TickDuration())
             {
-                RemoveStatusEffect(statusEffect);
+                statusEffectsToRemove.Add(statusEffect);
             }
+        }
+
+        foreach (var statusEffect in statusEffectsToRemove)
+        {
+            RemoveStatusEffect(statusEffect);
         }
     }
 
@@ -86,20 +103,20 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public float ModifyIncomingDamage(float damage)
+    public float ModifyIncomingDamage(float damage, Ability ability)
     {
         foreach (var statusEffect in _statusEffects)
         {
-            statusEffect.ModifyIncomingDamage(ref damage);
+            statusEffect.ModifyIncomingDamage(ref damage, ability);
         }
         return damage;
     }
 
-    public float ModifyOutgoingDamage(float damage)
+    public float ModifyOutgoingDamage(float damage, Ability ability)
     {
         foreach (var statusEffect in _statusEffects)
         {
-            statusEffect.ModifyOutgoingDamage(ref damage);
+            statusEffect.ModifyOutgoingDamage(ref damage, ability);
         }
         return damage;
     }

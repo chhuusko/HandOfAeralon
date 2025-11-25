@@ -113,8 +113,8 @@ public class Character : MonoBehaviour
         }
         if (!TryGetComponent(out _statusEffectManager))
         {
-           // Debug.LogError("Character is missing _statusEffectManager component!");
-           // return;
+           Debug.LogError("Character is missing _statusEffectManager component!");
+           return;
         }
     }
 
