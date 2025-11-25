@@ -1,16 +1,10 @@
 using UnityEngine;
 
-public class PreciseStrike : MonoBehaviour
+[CreateAssetMenu(fileName = "Precise Strike", menuName = "Item/Card Data/Precise Strike", order = 1)]
+public class PreciseStrike : Card
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void PlayCard()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.PlayCard();
     }
 }

@@ -1,16 +1,11 @@
 using UnityEngine;
 
-public class ChaoticInvocation : MonoBehaviour
+[CreateAssetMenu(fileName = "Chaotic Invocation", menuName = "Item/Card Data/Chaotic Invocation", order = 1)]
+public class ChaoticInvocation : Card
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void PlayCard()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.PlayCard();
     }
 }

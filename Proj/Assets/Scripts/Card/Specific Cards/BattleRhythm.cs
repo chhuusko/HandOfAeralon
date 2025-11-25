@@ -1,16 +1,12 @@
 using UnityEngine;
 
-public class BattleRhythm : MonoBehaviour
+[CreateAssetMenu(fileName = "Battle Rhythm", menuName = "Item/Card Data/Battle Rhythm", order = 1)]
+
+public class BattleRhythm : Card
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void PlayCard()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.PlayCard();
     }
 }
