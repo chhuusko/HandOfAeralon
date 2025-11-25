@@ -14,7 +14,7 @@ public class Vulnerable : StatusEffect
         _data = data;
     }
 
-    public override void ModifyIncomingDamage(ref float damage)
+    public override void ModifyIncomingDamage(ref float damage, Ability ability)
     {
         damage /= 1.5f;
     }
