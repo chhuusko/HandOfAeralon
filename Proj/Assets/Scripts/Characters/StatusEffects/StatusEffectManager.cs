@@ -79,7 +79,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void OnApply()
+    private void OnApply()
     {
         foreach (var statusEffect in _statusEffects)
         {
@@ -87,7 +87,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void OnExpire()
+    private void OnExpire()
     {
         foreach (var statusEffect in _statusEffects)
         {
@@ -95,7 +95,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void OnTurnStart(Character c)
+    private void OnTurnStart(Character c)
     {
         foreach (var statusEffect in _statusEffects)
         {
@@ -103,7 +103,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void OnTurnEnd()
+    private void OnTurnEnd()
     {
         foreach (var statusEffect in _statusEffects)
         {
@@ -111,7 +111,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public float ModifyIncomingDamage(float damage, Ability ability)
+    private float ModifyIncomingDamage(float damage, Ability ability)
     {
         foreach (var statusEffect in _statusEffects)
         {
@@ -120,7 +120,7 @@ public class StatusEffectManager : MonoBehaviour
         return damage;
     }
 
-    public float ModifyOutgoingDamage(float damage, Ability ability)
+    private float ModifyOutgoingDamage(float damage, Ability ability)
     {
         foreach (var statusEffect in _statusEffects)
         {
