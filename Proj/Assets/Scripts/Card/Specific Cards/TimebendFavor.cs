@@ -1,16 +1,10 @@
 using UnityEngine;
 
-public class TimebendFavor : MonoBehaviour
+[CreateAssetMenu(fileName = "TimebendFavor", menuName = "Item/Card Data/TimebendFavor", order = 1)]
+public class TimebendFavor : Card
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void PlayCard()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.PlayCard();
     }
 }

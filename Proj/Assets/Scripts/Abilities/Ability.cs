@@ -18,7 +18,7 @@ public abstract class Ability : ScriptableObject
 
     [Header("- Targeting -")]
     [SerializeField] private RangeCalculation _rangeCalculation;
-    [SerializeField] private AbilityTargetType _targetType;
+    [SerializeField] private ValidTargetOccupant _targetType;
 
     [Header("- Visuals & Audio - ")]
     [SerializeField] private ParticleSystem castingEffect, hitEffect;
@@ -43,7 +43,7 @@ public abstract class Ability : ScriptableObject
         Debuff
     }
 
-    public enum AbilityTargetType
+    public enum ValidTargetOccupant
     {
         Any,
         CharacterOccupiedTile,
@@ -64,7 +64,7 @@ public abstract class Ability : ScriptableObject
     {
         _cooldown = cooldown;
     }
-    public AbilityTargetType GetAbilityTargetType() => _targetType;
+    public ValidTargetOccupant GetAbilityTargetType() => _targetType;
 
     public RangeCalculation GetRangeCalculation => _rangeCalculation;
 

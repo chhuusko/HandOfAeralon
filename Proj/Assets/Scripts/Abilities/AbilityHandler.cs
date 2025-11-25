@@ -77,7 +77,7 @@ public class AbilityHandler : MonoBehaviour
 
     private bool CanCastAbility(Ability ability, CombatGridTile targetTile)
     {
-        return IsValidTargetForAbility(ability, targetTile) && _tilesInRange.Contains(targetTile);
+        return IsValidTargetTileForAbility(ability, targetTile) && _tilesInRange.Contains(targetTile);
     }
 
     private List<CombatGridTile> GetAvailableTargets(Ability ability)
@@ -85,7 +85,7 @@ public class AbilityHandler : MonoBehaviour
         return ability.GetAvailableTargets(_casterTile);
     }
 
-    private bool IsValidTargetForAbility(Ability ability, CombatGridTile tile)
+    private bool IsValidTargetTileForAbility(Ability ability, CombatGridTile tile)
     {
         if (tile == null) return false;
 
@@ -94,15 +94,14 @@ public class AbilityHandler : MonoBehaviour
 
         switch (ability.GetAbilityTargetType())
         {
-            case Ability.AbilityTargetType.Any:
-                 return true;
-            case Ability.AbilityTargetType.CharacterOccupiedTile:
-                 return occupant != null;
-            case Ability.AbilityTargetType.Enemy:
-                 return character != null && character.GetFaction() == Faction.Enemy;
-            case Ability.AbilityTargetType.Friendly:
-                return character != null && character.GetFaction() == Faction.Friendly;
-
+            case Ability.ValidTargetOccupant.Any:
+                return true;
+            case Ability.ValidTargetOccupant.CharacterOccupiedTile:
+                return occupant != null;
+            case Ability.ValidTargetOccupant.Enemy:
+                return character != null && character.GetFaction() != _characterCaster.GetFaction();
+            case Ability.ValidTargetOccupant.Friendly:
+                return character != null && character.GetFaction() == _characterCaster.GetFaction();
             default: return false;
         }
     }

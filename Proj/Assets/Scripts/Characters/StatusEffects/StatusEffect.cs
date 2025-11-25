@@ -2,16 +2,38 @@ using UnityEngine;
 
 public abstract class StatusEffect
 {
-    public int Duration { get; private set; }
+    public int Duration { get; protected set; }
     
-    private StatusEffectData _statusEffectData;
-    private Character _character;
-    private int _stacks;
+    protected Character Character { get; private set; }
+    protected StatusEffectManager Manager { get; private set; }
     
-    protected StatusEffect(Character character, int duration)
+    private StatusEffectData Data;
+    
+    protected StatusEffect(int duration)
     {
-        _character = character;
         Duration = duration;
+
+        Data = StatusEffectDataRegistry.GetDataForType(GetType());
+    }
+
+    public void Initialize(Character character, StatusEffectManager manager)
+    {
+        Character = character;
+        Manager = manager;
+    }
+
+    public virtual void IncreaseDuration(int amount = 1)
+    {
+        Duration = Mathf.Max(Duration, amount);
+    }
+
+    public void DecreaseDuration(int amount = 1)
+    {
+        Duration -= amount;
+        if (Duration <= 0)
+        {
+            Manager.RemoveStatusEffect(this);
+        }
     }
 
     /// <summary>
@@ -20,7 +42,7 @@ public abstract class StatusEffect
     /// <returns>Whether the status effect is still active.</returns>
     public bool TickDuration()
     {
-        if (_statusEffectData.IsPermanent)
+        if (Data.IsPermanent)
         {
             return true;
         }
@@ -28,13 +50,13 @@ public abstract class StatusEffect
     }
 
     // Each subclass has to set the status effect data.
-    public abstract void SetData(StatusEffectData data);
+    // public abstract void SetData(StatusEffectData data);
     
     // Virtual methods. Overriden and implemented in subclasses.
     public virtual void OnApply() {}
     public virtual void OnExpire() {}
     public virtual void OnTurnStart() {}
     public virtual void OnTurnEnd() {}
-    public virtual void ModifyIncomingDamage(ref float damage) {}
-    public virtual void ModifyOutgoingDamage(ref float damage) {}
+    public virtual void ModifyIncomingDamage(ref float damage, Ability ability) {}
+    public virtual void ModifyOutgoingDamage(ref float damage, Ability ability) {}
 }

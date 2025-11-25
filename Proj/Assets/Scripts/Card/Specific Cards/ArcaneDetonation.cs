@@ -1,16 +1,11 @@
 using UnityEngine;
 
-public class ArcaneDetonation : MonoBehaviour
+[CreateAssetMenu(fileName = "Arcane Detonation", menuName = "Item/Card Data/Arcane Detonation", order = 1)]
+public class ArcaneDetonation : Card
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void PlayCard()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.PlayCard();
     }
 }

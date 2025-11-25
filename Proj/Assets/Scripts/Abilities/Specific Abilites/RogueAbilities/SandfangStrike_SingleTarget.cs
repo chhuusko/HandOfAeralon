@@ -20,20 +20,23 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
         if (castingCharacter == null) return;
 
         affectedCharacter.TakeDamage(CalculateDamage(castingCharacter, affectedCharacter));
+        affectedCharacter.GetStatusEffectManager().AddStatusEffect(new Vulnerable(_posionStacksToApply));
+
         if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
-            //if (statusEffectManager.ContainsEffect(poison){
-            //    CardHandManager.GetInstance().AddCardFromDeck();
+            //if (statusEffectManager.ContainsStatusEffect<Poison>(){
+               // CardHandManager.GetInstance().AddCardFromDeck();
             //}
             //statusEffectManager.AddStatusEffect(new Poison(_poisonStacksToApply);
+            
         }
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
-        // 1. Your Base Damage(Kan �kas med traits och eller kort.)
+        // 1. Your Base Damage(Can also be applied by traits or cards.)
         // 2. Ability damage.
         // 3. Your Traits
-        // 4. Your Buffs/ Debuffs(Kan �ven appliceras av kort)
+        // 4. Your Buffs/ Debuffs(Can also be applied by cards.)
         // 5. Eventuella Ability Global Modifiers(Ex.Arena modifiers)
         // 6. EnemyTraits
         // 7. Enemy Buffs / Debuffs

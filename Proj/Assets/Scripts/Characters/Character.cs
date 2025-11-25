@@ -92,7 +92,10 @@ public class Character : MonoBehaviour
     [Header("Abilities")]
     private AbilityHandler _abilityHandler;
     private Dictionary<Ability, int> _currentCooldowns = new();
-    
+
+    [Header("Status Effects")]
+    private StatusEffectManager _statusEffectManager;
+
     [Header("Misc")]
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
@@ -118,6 +121,11 @@ public class Character : MonoBehaviour
         {
             Debug.LogError("Character is missing AbilityHandler component!");
             return;
+        }
+        if (!TryGetComponent(out _statusEffectManager))
+        {
+           Debug.LogError("Character is missing _statusEffectManager component!");
+           return;
         }
     }
 
@@ -175,6 +183,9 @@ public class Character : MonoBehaviour
     // Abilities.
     public AbilityHandler GetAbilityHandler() => _abilityHandler;
     public IReadOnlyList<Ability> GetAvailableAbilities() => _data.AvailableAbilities;
+
+    // Status Effects.
+    public StatusEffectManager GetStatusEffectManager() => _statusEffectManager;
 
     // Base stats.
     public void SetCharacterClass(CharacterClass characterClass) => _data.SetCharacterClass(characterClass);
