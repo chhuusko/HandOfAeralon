@@ -52,11 +52,13 @@ public class GridExplorer : MonoBehaviour
     [SerializeField] private LineRenderer _lineRendererPrefab;
     private LineRenderer _activeLineRenderer;
 
-    [SerializeField] private bool _bDebug = false;
-    private List<GameObject> _debugReachableTiles = new();
-    private List<GameObject> _debugPath = new();
-    private GameObject _debugStartTile;
-    private GameObject _debugGoalTile;
+    /*
+    [SerializeField] private bool _bPaintTiles = false;
+    private List<GameObject> _paintReachableTiles = new();
+    private List<GameObject> _paintPath = new();
+    private GameObject _paintStartTile;
+    private GameObject _paintGoalTile;
+    */
 
     /// <summary>
     /// Defines our melee attacking range. Includes diagonals, but only for attacks that reach 1 tile. Can't reach through diagonal obstacles.
@@ -303,9 +305,11 @@ public class GridExplorer : MonoBehaviour
             if (current == goal)
             {
                 result = BuildPath(connection, start, goal);
-                if (_bDebug) _debugStartTile = startTile;
-                if (_bDebug) _debugPath = result;
-                if (_bDebug) _debugGoalTile = goalTile;
+                /*
+                if (_bPaintTiles) _paintStartTile = startTile;
+                if (_bPaintTiles) _paintPath = result;
+                if (_bPaintTiles) _paintGoalTile = goalTile;
+                */
                 DrawPath(result);
                 return result;
             }
@@ -409,8 +413,11 @@ public class GridExplorer : MonoBehaviour
             }
         }
 
-        if (_bDebug) _debugStartTile = CombatGrid._instance.GetTileAtCoord(start.x, start.y);
-        if (_bDebug) _debugReachableTiles = result;
+        /*
+        if (_bPaintTiles) _paintStartTile = CombatGrid._instance.GetTileAtCoord(start.x, start.y);
+        if (_bPaintTiles) _paintReachableTiles = result;
+        */
+        PaintReachableTiles(result, Color.green);
         return result;
     }
 
@@ -463,41 +470,60 @@ public class GridExplorer : MonoBehaviour
         }
     }
 
+    private void PaintReachableTiles(List<GameObject> tileObjects, Color color)
+    {
+        Debug.Log("PaintReachableTiles()");
+        if (tileObjects != null && tileObjects.Count > 0)
+        {
+            Debug.Log("GameObjects found!");
+            foreach (var element in tileObjects)
+            {
+                if (element.TryGetComponent<CombatGridTile>(out CombatGridTile component))
+                {
+                    Debug.Log("CombatGridTile component found!");
+                    component.SetTileColor(color);
+                }
+            }
+        }
+    }
+
+    /*
     private void OnDrawGizmos()
     {
-        if (!_bDebug)
+        if (!_bPaintTiles)
         {
             return;
         }
 
-        if (_debugReachableTiles != null && _debugReachableTiles.Count > 0)
+        if (_paintReachableTiles != null && _paintReachableTiles.Count > 0)
         {
             Gizmos.color = new Color(0, 1, 0, 0.5f);
-            foreach (var element in _debugReachableTiles)
+            foreach (var element in _paintReachableTiles)
             {
                 Gizmos.DrawCube(element.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
             }
         }
 
-        if (_debugPath != null && _debugPath.Count > 0)
+        if (_paintPath != null && _paintPath.Count > 0)
         {
             Gizmos.color = new Color(1, 0, 1, 0.5f);
-            foreach (var element in _debugPath)
+            foreach (var element in _paintPath)
             {
                 Gizmos.DrawCube(element.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
             }
         }
 
-        if (_debugStartTile != null)
+        if (_paintStartTile != null)
         {
             Gizmos.color = new Color(1, 1, 1, 0.8f);
-            Gizmos.DrawCube(_debugStartTile.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
+            Gizmos.DrawCube(_paintStartTile.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
         }
 
-        if (_debugGoalTile != null)
+        if (_paintGoalTile != null)
         {
             Gizmos.color = new Color(1, 0, 0, 0.8f);
-            Gizmos.DrawCube(_debugGoalTile.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
+            Gizmos.DrawCube(_paintGoalTile.transform.position, CombatGrid._instance.GetTileSize() * 0.9f);
         }
     }
+    */
 }
