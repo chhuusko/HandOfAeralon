@@ -148,20 +148,20 @@ public class Character : MonoBehaviour
     public void Update()
     {
         // NOTE (CJ & Carl): Testkod f�r animationer
-        Animator animator = GetComponent<Animator>();
-        if(animator)
-        {
-            animator.GetBool("IsMoving");
-            if (IsMoving())
-            {
-                animator.SetBool("IsMoving", true);
-            }
-            else
-            {
-                animator.SetBool("IsMoving", false);
-            }
-
-        }
+        //Animator animator = GetComponent<Animator>();
+        //if(animator)
+        //{
+        //    animator.GetBool("IsMoving");
+        //    if (IsMoving())
+        //    {
+        //        animator.SetBool("IsMoving", true);
+        //    }
+        //    else
+        //    {
+        //        animator.SetBool("IsMoving", false);
+        //    }
+        //
+        //}
     }
     
     // Data.

@@ -17,7 +17,7 @@ public class CombatStateTakeTurn : CombatStateBase
     {
         base.Enter();   
         
-        CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
+        
         // TODO (Calle): Should AIEndTurn be in CombatEventManager, and/or should it be a event Action instead of UnityEvent?
         CombatManager._instance.GetEnemyAI().AIEndTurn.AddListener(EndTurn);
         
@@ -26,8 +26,12 @@ public class CombatStateTakeTurn : CombatStateBase
 
         combatTurnOrder.UpdateCharacterTurnOrder();
         Character activeCharacter = combatTurnOrder.GetActiveCharacter();
+        
+        //NOTE (Calle): Only make it possible to press "End Turn" button if its a hero
+        if(activeCharacter.GetFaction() == Faction.Friendly)
+            CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
 
-        switch(activeCharacter.GetFaction())
+        switch (activeCharacter.GetFaction())
         {
             case Faction.Friendly:
                 {
@@ -50,7 +54,10 @@ public class CombatStateTakeTurn : CombatStateBase
     {
         base.Exit();
         CombatEventManager.InvokeExitCombatStateTakeTurn();
-        CombatUI.Instance.OnEndTurnButtonPressed -= EndTurn;
+
+        if (CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() == Faction.Friendly)
+            CombatUI.Instance.OnEndTurnButtonPressed -= EndTurn;
+
         CombatManager._instance.GetEnemyAI().AIEndTurn.RemoveListener(EndTurn);
     }
 
