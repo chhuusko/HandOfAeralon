@@ -65,8 +65,8 @@ public class CharacterData
     public void SetBaseHealthPoints(int health) => _baseHealthPoints = Mathf.Max(1, health);
     public void SetBaseInitiative(int initiative) => _baseInitiative = Mathf.Max(1, initiative);
     public void SetBaseDamage(int damage) => _baseDamage = Mathf.Max(1, damage);
-    public void SetBaseMovementPoints(int movementPoints) => _baseMovementPoints = Mathf.Max(1, movementPoints);
-    public void SetCurrentHealthPoints(int health) => _currentHealthPoints = health;
+    public void SetBaseMovementPoints(int movementPoints) => _baseMovementPoints = Mathf.Max(movementPoints, 1);
+    public void SetCurrentHealthPoints(int health) => _currentHealthPoints = Mathf.Max(health, 0);
     public void Heal(int amount) => SetCurrentHealthPoints(Mathf.Min(CurrentHealthPoints + amount, _baseHealthPoints));
     public void SetCurrentAbilities(List<Ability> abilities) => _availableAbilities = new List<Ability>(abilities);
 }
@@ -195,11 +195,52 @@ public class Character : MonoBehaviour
     public void SetBaseDamage(int damage) => _data.SetBaseDamage(damage);
     public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
     
-    // Current stats.
-    public void SetCurrentHealthPoints(int healthPoints) => _data.SetCurrentHealthPoints(healthPoints);
-    public void SetCurrentInitiative(int initiative) => _currentInitiative = initiative;
-    public void SetCurrentDamage(int damage) => _currentDamage = damage;
-    public void SetCurrentMovementPoints(int movementPoints) => _currentMovementPoints = movementPoints;
+    // Health.
+    public void SetCurrentHealthPoints(int healthPoints)
+    {
+        _data.SetCurrentHealthPoints(healthPoints);
+        if (_data.CurrentHealthPoints <= 0)
+        {
+            StartCoroutine(RemoveCharacter());
+        }
+    }
+
+    public void IncreaseCurrentHealthPoints(int amount = 1) => 
+        SetCurrentHealthPoints(_data.CurrentHealthPoints + amount);
+    
+    public void DecreaseCurrentHealthPoints(int amount = 1) =>
+        SetCurrentHealthPoints(_data.CurrentHealthPoints - amount);
+
+    // Initiative.
+    public void SetCurrentInitiative(int initiative) => 
+        _currentInitiative = Mathf.Max(initiative, 0);
+    
+    public void IncreaseCurrentInitiative(int amount = 1) => 
+        SetCurrentInitiative(_currentInitiative + amount);
+    
+    public void DecreaseCurrentInitiative(int amount = 1) =>
+        SetCurrentInitiative(_currentInitiative - amount);
+    
+    // Damage.
+    public void SetCurrentDamage(int damage) =>
+        _currentDamage = Mathf.Max(damage, 0);
+    
+    public void IncreaseCurrentDamage(int amount = 1) =>
+        SetCurrentDamage(_currentDamage + amount);
+    
+    public void DecreaseCurrentDamage(int amount = 1) =>
+        SetCurrentDamage(_currentDamage - amount);
+    
+    // Movement points.
+    public void SetCurrentMovementPoints(int movementPoints) =>
+        _currentMovementPoints = Mathf.Max(movementPoints, 0);
+    
+    public void IncreaseCurrentMovementPoints(int amount = 1) =>
+        SetCurrentMovementPoints(_currentMovementPoints + amount);
+    
+    public void DecreaseCurrentMovementPoints(int amount = 1) =>
+        SetCurrentMovementPoints(_currentMovementPoints - amount);
+    
     public void SetCurrentTileIndex(Vector2Int tileIndex) => _currentTileIndex = tileIndex;
 
     public void StartAbilityCooldown(Ability ability)
