@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "RC_ObstacleBlock", menuName = "Scriptable Objects/Abilities/Range Calculations/Obstacle Block")]
 public class RC_ObstacleBlock : RangeCalculation
 {
     [SerializeField] private float _lineOfSightHeight = 1f;
@@ -57,6 +58,10 @@ public class RC_ObstacleBlock : RangeCalculation
         // Normalize direction and get distance between tiles.
         Vector3 direction = (endPosition - startPosition).normalized;
         float distance = Vector3.Distance(startPosition, endPosition);
+
+        // Debug sphere cast.
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(startPosition, _radius);
 
         // Return true if there are no blocking obstacles.
         return !Physics.SphereCast(startPosition, _radius, direction, out RaycastHit hit, distance, obstacleLayer);
