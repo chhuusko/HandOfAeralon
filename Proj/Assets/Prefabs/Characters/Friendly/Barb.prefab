@@ -58,12 +58,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
+      propertyPath: _data._faction
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5632698098917217084, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
         type: 3}
       propertyPath: m_Name
-      value: BaseCharacter
+      value: Barb
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5503383749563910009, guid: b03a88dfaf98bac44a29fdf5e627b1fe, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
