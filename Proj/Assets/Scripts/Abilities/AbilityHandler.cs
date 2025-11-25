@@ -66,6 +66,7 @@ public class AbilityHandler : MonoBehaviour
     public void CalculateAbilityRange()
     {
         ClearAbilityTargetRange();
+        _casterTile = _characterCaster.GetCurrentTileComponent();
 
         if(_pendingAbility == null)
         {
