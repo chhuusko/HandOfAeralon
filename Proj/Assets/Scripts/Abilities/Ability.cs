@@ -40,7 +40,8 @@ public abstract class Ability : ScriptableObject
         Elemental,
         Heal,
         Buff,
-        Debuff
+        Debuff,
+        Movement
     }
 
     public enum ValidTargetOccupant
