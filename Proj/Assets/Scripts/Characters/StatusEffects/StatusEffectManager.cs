@@ -86,7 +86,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public int ModifyIncomingDamage(int damage)
+    public float ModifyIncomingDamage(float damage)
     {
         foreach (var statusEffect in _statusEffects)
         {
@@ -95,7 +95,7 @@ public class StatusEffectManager : MonoBehaviour
         return damage;
     }
 
-    public int ModifyOutgoingDamage(int damage)
+    public float ModifyOutgoingDamage(float damage)
     {
         foreach (var statusEffect in _statusEffects)
         {

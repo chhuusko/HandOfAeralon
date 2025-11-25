@@ -30,10 +30,10 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
-        // 1. Your Base Damage(Kan �kas med traits och eller kort.)
+        // 1. Your Base Damage(Can also be applied by traits or cards.)
         // 2. Ability damage.
         // 3. Your Traits
-        // 4. Your Buffs/ Debuffs(Kan �ven appliceras av kort)
+        // 4. Your Buffs/ Debuffs(Can also be applied by cards.)
         // 5. Eventuella Ability Global Modifiers(Ex.Arena modifiers)
         // 6. EnemyTraits
         // 7. Enemy Buffs / Debuffs

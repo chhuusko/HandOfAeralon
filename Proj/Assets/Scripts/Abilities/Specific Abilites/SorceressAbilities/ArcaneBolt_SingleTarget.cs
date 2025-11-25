@@ -40,16 +40,16 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
 
         if (castingCharacter.GetFaction() == Faction.Friendly)
         {
-            damage += (int) (_manaDamageMultiplier * CardHandManager.GetInstance().GetMana());
+            damage += (int)(_manaDamageMultiplier * CardHandManager.GetInstance().GetMana());
         }
         else
         {
-            damage += (int) (_manaDamageMultiplier * _enemyManaAmount);
+            damage += (int)(_manaDamageMultiplier * _enemyManaAmount);
         }
 
 
         //3-5.
-        // damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        //damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
 
         // 6-7 Gets applied withing affected character StatusEffectManager: ModifyOutgoingDamage(damage, this);
