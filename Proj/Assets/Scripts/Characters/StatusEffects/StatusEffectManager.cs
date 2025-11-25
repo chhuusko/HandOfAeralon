@@ -35,7 +35,13 @@ public class StatusEffectManager : MonoBehaviour
     
     public void AddStatusEffect(StatusEffect statusEffect)
     {
+        if (statusEffect is IStackable stackable && _statusEffects.Contains(statusEffect))
+        {
+            stackable.AddStack(statusEffect.Duration);
+            return;
+        }
         _statusEffects.Add(statusEffect);
+        statusEffect.Initialize(_character, this);
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect)

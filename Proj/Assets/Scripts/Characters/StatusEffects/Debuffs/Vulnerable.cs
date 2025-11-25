@@ -5,7 +5,7 @@ public class Vulnerable : StatusEffect
     private static StatusEffectData _data;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public Vulnerable(Character character, int duration) : base(character, duration)
+    public Vulnerable(int duration) : base(duration)
     {
     }
 
@@ -16,6 +16,6 @@ public class Vulnerable : StatusEffect
 
     public override void ModifyIncomingDamage(ref float damage, Ability ability)
     {
-        damage /= 1.5f;
+        damage *= 1.5f;
     }
 }
