@@ -81,8 +81,9 @@ public class SongOfRenewalAOE : RoundAOEAbility
         //3-5.
         // healAmount = castingCharacter.GetStatusEffectManager().ModifyOutgoingHeal(healAmount, this);
 
-        return healAmount; 
         // 6-7 Gets applied withing affected character StatusEffectManager: ModifyOutgoingHeal(healAmount, this);
+        
+        return healAmount; 
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
