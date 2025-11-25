@@ -192,7 +192,12 @@ public class CombatUI : MonoBehaviour
 
     private void DeselectCharacter()
     {
+        _selectedCharacter = null;
         
+        ClearActivePortrait();
+        ClearAbilityButtons();
+
+        ClearPortraitColors();
     }
     
     /// <summary>
@@ -273,6 +278,14 @@ public class CombatUI : MonoBehaviour
         _scrollRect.verticalNormalizedPosition = 0;
     }
 
+    private void ClearPortraitColors()
+    {
+        foreach (var pb in _portraitButtons)
+        {
+            pb.GetComponent<Image>().color = _inactiveColor;
+        }
+    }
+
     private void UpdatePortraitColors(CharacterData c)
     {
         UpdatePortraitColors(CombatManager._instance.GetCharacterDataDict()[c]);
@@ -289,13 +302,22 @@ public class CombatUI : MonoBehaviour
         {
             pb.GetComponent<Image>().color = _inactiveColor;
         }
-        if(selectedPortrait)
+
+        if (selectedPortrait)
+        {
             selectedPortrait.GetComponent<Image>().color = _activeColor;
+        }
     }
 
     private void UpdateManaText(int mana)
     {
         _mana.text = $"Mana\n{mana}/{CardHandManager.GetInstance().GetMaxMana()}";
+    }
+
+    private void ClearActivePortrait()
+    {
+        _activeCharacterPortrait.sprite = null;
+        _activeCharacterPortrait.gameObject.SetActive(false);
     }
     
     private void UpdateActivePortrait(PortraitButton pb)
@@ -307,6 +329,7 @@ public class CombatUI : MonoBehaviour
     {
         if (!c)
         {
+            ClearActivePortrait();
             DebugLog.JoppaLog("Null character");
             return;
         }
@@ -315,12 +338,18 @@ public class CombatUI : MonoBehaviour
 
     private void UpdateActivePortrait(CharacterData c)
     {
+        if (c == null)
+        {
+            ClearActivePortrait();
+        }
+        
         if (c.Faction == Faction.Enemy)
         {
             DebugLog.JoppaLog("Enemy");
             return;
         }
-        DebugLog.JoppaLog("Called");
+        
+        _activeCharacterPortrait.gameObject.SetActive(true);
         _activeCharacterPortrait.sprite = c.ClassData.classImage;
     }
     
@@ -337,6 +366,18 @@ public class CombatUI : MonoBehaviour
     private void LoadAbilities(PortraitButton portraitButton)
     {
         LoadAbilities(portraitButton.Character);
+    }
+
+    private void ClearAbilityButtons()
+    {
+        _abilityButtons.Clear();
+        // Remove all current ability buttons.
+        for (int i = 0; i < _abilityPanel.transform.childCount; i++)
+        {
+            Destroy(_abilityPanel.transform.GetChild(i).gameObject);
+        }
+        
+        _abilityPanel.gameObject.SetActive(false);
     }
     
     private void LoadAbilities(CharacterData character)
@@ -358,12 +399,9 @@ public class CombatUI : MonoBehaviour
             return;
         }
 
-        _abilityButtons.Clear();
-        // Remove all current ability buttons.
-        for (int i = 0; i < _abilityPanel.transform.childCount; i++)
-        {
-            Destroy(_abilityPanel.transform.GetChild(i).gameObject);
-        }
+        ClearAbilityButtons();
+        
+        _abilityPanel.gameObject.SetActive(true);
         
         DebugLog.JoppaLog($"Number of abilities: {character.AvailableAbilities.Count}");
 
@@ -393,6 +431,11 @@ public class CombatUI : MonoBehaviour
         if (!_currentTurnCharacter)
         {
             abilityButton.Button.interactable = false;
+            return;
+        }
+
+        if (!c || _selectedCharacter == null)
+        {
             return;
         }
         

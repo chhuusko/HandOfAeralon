@@ -22,7 +22,7 @@ public class HealthBar : MonoBehaviour
         }
     }
 
-    private void HandleHealthChanged(int hp)
+    private void HandleHealthChanged(int hp, int amount)
     {
         _slider.value = hp;
     }
