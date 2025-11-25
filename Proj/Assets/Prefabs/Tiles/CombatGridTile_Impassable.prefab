@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5066150827335351323}
   - component: {fileID: 8235279195098966187}
   - component: {fileID: 5111750605719670512}
+  - component: {fileID: 627471488828118174}
   m_Layer: 6
   m_Name: CombatGridTile_Impassable
   m_TagString: EditorTile
@@ -128,3 +129,16 @@ MonoBehaviour:
     _size: {x: 0, y: 0, z: 0}
     _bWalkable: 0
   _occupant: {fileID: 0}
+--- !u!114 &627471488828118174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8873241694455068705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 903adc99111b781459e8a7a6b146d838, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltip: Impassable tile

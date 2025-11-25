@@ -82,5 +82,28 @@ PrefabInstance:
     - {fileID: 5503383749563910009, guid: b03a88dfaf98bac44a29fdf5e627b1fe, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5632698098917217084, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7143077203938894155}
   m_SourcePrefab: {fileID: 100100000, guid: b03a88dfaf98bac44a29fdf5e627b1fe, type: 3}
+--- !u!1 &3941172968225426863 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5632698098917217084, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 8690406852443790995}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-7143077203938894155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3941172968225426863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 903adc99111b781459e8a7a6b146d838, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltip: Rogue
