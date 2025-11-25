@@ -441,6 +441,6 @@ public class CombatUI : MonoBehaviour
         
         abilityButton.Button.interactable = !c.IsAbilityCooldownActive(abilityButton.Ability)
                                             && _selectedCharacter.Faction == Faction.Friendly 
-                                            && c == _currentTurnCharacter && _bCombatStarted;
+                                            && c == _currentTurnCharacter && _bCombatStarted && c.CanAttack;
     }
 }

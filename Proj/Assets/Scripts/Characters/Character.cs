@@ -96,6 +96,10 @@ public class Character : MonoBehaviour
     [Header("Status Effects")]
     private StatusEffectManager _statusEffectManager;
 
+    [Header("State")] 
+    public bool CanMove { get; set; } = true;
+    public bool CanAttack { get; set; } = true;
+
     [Header("Misc")]
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
