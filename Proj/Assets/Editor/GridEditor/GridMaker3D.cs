@@ -246,7 +246,7 @@ public class GridMaker3D : EditorWindow
         _drawMode               = GUILayout.SelectionGrid(_drawMode, new[] { "Draw Tiles", "Draw Characters" }, 1);
         _combatGridWidth        = EditorGUILayout.IntSlider("CombatGrid Width", _combatGridWidth, 0, 30);
         _combatGridHeight       = EditorGUILayout.IntSlider("CombatGrid Height", _combatGridHeight, 0, 30);
-        _defaultDeployZoneWidth = EditorGUILayout.IntSlider("CombatGrid Width", _defaultDeployZoneWidth, 0, 30);
+        _defaultDeployZoneWidth = EditorGUILayout.IntSlider("Default Deployzone Width", _defaultDeployZoneWidth, 0, 30);
         _defaultTile            = EditorGUILayout.ObjectField("Default Tile for Grid Generation", _defaultTile, typeof(GameObject), false) as GameObject;
         _defaultDeployTile      = EditorGUILayout.ObjectField("Default Deploy Tile for Deploy Zone Generation", _defaultDeployTile, typeof(GameObject), false) as GameObject;
         

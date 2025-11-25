@@ -2,18 +2,38 @@ using UnityEngine;
 
 public abstract class StatusEffect
 {
-    public int Duration { get; private set; }
+    public int Duration { get; protected set; }
     
-    protected StatusEffectData Data;
-    private Character _character;
-    private int _stacks;
+    protected Character Character { get; private set; }
+    protected StatusEffectManager Manager { get; private set; }
     
-    protected StatusEffect(Character character, int duration)
+    private StatusEffectData Data;
+    
+    protected StatusEffect(int duration)
     {
-        _character = character;
         Duration = duration;
 
         Data = StatusEffectDataRegistry.GetDataForType(GetType());
+    }
+
+    public void Initialize(Character character, StatusEffectManager manager)
+    {
+        Character = character;
+        Manager = manager;
+    }
+
+    public virtual void IncreaseDuration(int amount = 1)
+    {
+        Duration = Mathf.Max(Duration, amount);
+    }
+
+    public void DecreaseDuration(int amount = 1)
+    {
+        Duration -= amount;
+        if (Duration <= 0)
+        {
+            Manager.RemoveStatusEffect(this);
+        }
     }
 
     /// <summary>

@@ -12,6 +12,7 @@ public class StatusEffectManager : MonoBehaviour
     
     private void OnEnable()
     {
+        CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
     }
 
@@ -35,7 +36,13 @@ public class StatusEffectManager : MonoBehaviour
     
     public void AddStatusEffect(StatusEffect statusEffect)
     {
+        if (_statusEffects.Contains(statusEffect))
+        {
+            statusEffect.IncreaseDuration(statusEffect.Duration);
+            return;
+        }
         _statusEffects.Add(statusEffect);
+        statusEffect.Initialize(_character, this);
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect)
@@ -87,7 +94,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void OnTurnStart()
+    public void OnTurnStart(Character c)
     {
         foreach (var statusEffect in _statusEffects)
         {
