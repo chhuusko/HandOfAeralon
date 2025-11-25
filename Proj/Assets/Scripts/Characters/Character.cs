@@ -99,6 +99,11 @@ public class Character : MonoBehaviour
     private void OnEnable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
+        
+        PopupTextManager damagePopupTextManager= PopupTextManager.GetInstance();
+        if(damagePopupTextManager != null)
+            damagePopupTextManager.BindEventOnHealthChanged(this);
+       
     }
 
     private void Start()
@@ -113,6 +118,10 @@ public class Character : MonoBehaviour
     private void OnDisable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
+
+        PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
+        if (damagePopupTextManager != null)
+            damagePopupTextManager.UnBindEventOnHealthChanged(this);
     }
 
     public void Update()
@@ -256,7 +265,7 @@ public class Character : MonoBehaviour
             StartCoroutine(RemoveCharacter());
         }
     }
-
+     
     private IEnumerator RemoveCharacter()
     {
         CombatEventManager.InvokeOnCharacterDeath(this);
