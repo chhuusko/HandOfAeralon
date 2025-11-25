@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class StatusEffect
 {
-    public int Duration { get; private set; }
+    public int Duration { get; protected set; }
     
     protected Character Character { get; private set; }
     protected StatusEffectManager Manager { get; private set; }
@@ -20,6 +20,20 @@ public abstract class StatusEffect
     {
         Character = character;
         Manager = manager;
+    }
+
+    public virtual void IncreaseDuration(int amount = 1)
+    {
+        Duration = Mathf.Max(Duration, amount);
+    }
+
+    public void DecreaseDuration(int amount = 1)
+    {
+        Duration -= amount;
+        if (Duration <= 0)
+        {
+            Manager.RemoveStatusEffect(this);
+        }
     }
 
     /// <summary>
