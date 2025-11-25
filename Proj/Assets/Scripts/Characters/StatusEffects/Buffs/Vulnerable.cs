@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class NewMonoBehaviourScript : StatusEffect
+public class Vulnerable : StatusEffect
 {
     private static StatusEffectData _data;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public NewMonoBehaviourScript(Character character, int duration) : base(character, duration)
+    public Vulnerable(Character character, int duration) : base(character, duration)
     {
     }
 
-    public override void SetData(StatusEffectData data)
+    public static void SetData(StatusEffectData data)
     {
         _data = data;
     }

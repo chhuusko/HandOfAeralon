@@ -9,7 +9,7 @@ public class Empowered : StatusEffect
     {
     }
 
-    public override void SetData(StatusEffectData data)
+    public static void SetData(StatusEffectData data)
     {
         _data = data;
     }
