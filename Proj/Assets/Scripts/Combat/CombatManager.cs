@@ -71,6 +71,7 @@ public class CombatManager : MonoBehaviour
 
     private GameObject _selectorCube;
     [SerializeField] private GameObject _selectorCubePrefab;
+    [SerializeField] private Character _currentSelectedCharacter;
 
 
     private CombatState _combatState;
@@ -156,12 +157,18 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        Character selectedCharacter = _selector.GetSelectedCharacter();
 
-        if (selectedCharacter != null && _selectorCube != null)
+        Character selectedCharacter = _selector.GetSelectedCharacter();
+        if (selectedCharacter != null)
+        {
+            _currentSelectedCharacter = _selector.GetSelectedCharacter();
+        }
+        
+
+        if (_currentSelectedCharacter != null && _selectorCube != null)
         {
             _selectorCube.SetActive(true);
-            Vector3 pos = selectedCharacter.gameObject.transform.position;
+            Vector3 pos = _currentSelectedCharacter.gameObject.transform.position;
             pos.y = _selectorCube.transform.localScale.y / 2.0f;
             _selectorCube.transform.position= pos;
         }
