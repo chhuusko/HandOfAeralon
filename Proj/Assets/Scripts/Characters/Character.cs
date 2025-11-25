@@ -75,7 +75,7 @@ public class CharacterData
 public class Character : MonoBehaviour
 {
     public event Action<int> OnHealthChanged;
-    public event Action<int, Vector3> OnTakeDamage;
+    public event Action<int, GameObject> OnTakeDamage;
 
     public const int MOVEMENT_POINTS = 5;
     public const float DEATH_COOLDOWN = 1f;
@@ -248,7 +248,7 @@ public class Character : MonoBehaviour
     {
         _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
-        OnTakeDamage?.Invoke(-damage, transform.position);
+        OnTakeDamage?.Invoke(-damage, gameObject);
 
         Debug.Log($"Taking {damage} damage. New health: {GetCurrentHealth()}");
         
