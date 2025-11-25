@@ -33,6 +33,11 @@ public class StatusEffectManager : MonoBehaviour
         _statusEffects.Remove(statusEffect);
     }
 
+    public bool ContainsStatusEffect<T>() where T : StatusEffect
+    {
+        return _statusEffects.Exists(e => e is T);
+    }
+
     private void UpdateDuration(Character c)
     {
         if (!_character || c != _character)
@@ -81,7 +86,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public int ModifyIncomingDamage(int damage)
+    public float ModifyIncomingDamage(float damage)
     {
         foreach (var statusEffect in _statusEffects)
         {
@@ -90,7 +95,7 @@ public class StatusEffectManager : MonoBehaviour
         return damage;
     }
 
-    public int ModifyOutgoingDamage(int damage)
+    public float ModifyOutgoingDamage(float damage)
     {
         foreach (var statusEffect in _statusEffects)
         {
