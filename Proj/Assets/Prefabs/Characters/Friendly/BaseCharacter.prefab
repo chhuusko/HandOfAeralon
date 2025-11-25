@@ -66,7 +66,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 78cb7efc812f9b446bd019a8a1360add,
         type: 3}
       propertyPath: m_Name
-      value: 185MaleBarb
+      value: BaseCharacter
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 78cb7efc812f9b446bd019a8a1360add,
         type: 3}
@@ -101,6 +101,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8184761775088234579}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 78cb7efc812f9b446bd019a8a1360add,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -938437373701701158}
   m_SourcePrefab: {fileID: 100100000, guid: 78cb7efc812f9b446bd019a8a1360add, type: 3}
 --- !u!1 &5632698098917217084 stripped
 GameObject:
@@ -230,3 +234,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _abilities: []
   _pendingAbility: {fileID: 0}
+--- !u!114 &-938437373701701158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5632698098917217084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446ae561fdd6c9a4f9d98cdc4badb473, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _registry: {fileID: 11400000, guid: 73140fd2fdab2d544aaa9d475106ff8b, type: 2}

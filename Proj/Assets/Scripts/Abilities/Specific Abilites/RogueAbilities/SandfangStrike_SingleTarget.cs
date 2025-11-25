@@ -20,11 +20,14 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
         if (castingCharacter == null) return;
 
         affectedCharacter.TakeDamage(CalculateDamage(castingCharacter, affectedCharacter));
+        affectedCharacter.GetStatusEffectManager().AddStatusEffect(new Vulnerable(affectedCharacter, _posionStacksToApply));
+
         if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
-            //if (statusEffectManager.ContainsEffect(poison){
-            //    CardHandManager.GetInstance().AddCardFromDeck();
+            //if (statusEffectManager.ContainsStatusEffect<Poison>(){
+               // CardHandManager.GetInstance().AddCardFromDeck();
             //}
             //statusEffectManager.AddStatusEffect(new Poison(_poisonStacksToApply);
+            
         }
     }
 

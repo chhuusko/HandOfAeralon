@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29fdfcb28979abd49b4809912369a392, type: 3}
+  m_Name: StatusEffectDataRegistry
+  m_EditorClassIdentifier: 
+  entries:
+  - {fileID: 11400000, guid: 8ac9a7cf4d60a58479c25f1a51fd034a, type: 2}
+  - {fileID: 11400000, guid: 87c57d604cddadc44ae09812ac425003, type: 2}
