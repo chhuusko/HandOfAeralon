@@ -74,7 +74,7 @@ public class GlobalGameManager : ScriptableObject
         _currentGame.heroList = new List<Character>
         {
             _characterLibrary.GetPrefab(CharacterClass.Barbarian).GetComponent<Character>(),
-            _characterLibrary.GetPrefab(CharacterClass.Wizard).GetComponent<Character>(),
+            _characterLibrary.GetPrefab(CharacterClass.Sorceress).GetComponent<Character>(),
             _characterLibrary.GetPrefab(CharacterClass.Rogue).GetComponent<Character>(),
             _characterLibrary.GetPrefab(CharacterClass.Bard).GetComponent<Character>()
         };
@@ -82,7 +82,7 @@ public class GlobalGameManager : ScriptableObject
             new CharacterData(_classDatabase.Classes[(int)CharacterClass.Barbarian], Faction.Friendly),
             new CharacterData(_classDatabase.Classes[(int)CharacterClass.Rogue], Faction.Friendly),
             new CharacterData(_classDatabase.Classes[(int)CharacterClass.Bard], Faction.Friendly),
-            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Wizard], Faction.Friendly)
+            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Sorceress], Faction.Friendly)
         };
 
         _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
