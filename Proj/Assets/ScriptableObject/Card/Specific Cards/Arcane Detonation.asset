@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb930beac03c5d64ba84d666dd06b415, type: 3}
   m_Name: Arcane Detonation
   m_EditorClassIdentifier: 
-  type: 0
+  type: 1
   rarity: 0
-  title: 
-  description: 
-  cost: 0
-  icon: {fileID: 0}
+  title: Arcane Detonation
+  description: Deal 6 damage to all characters. Draw 1 card.
+  cost: 2
+  icon: {fileID: 21300000, guid: 97ed2b2c830e1c8439660bb91ec33887, type: 3}
   CardTemplate: {fileID: 0}
   info: []

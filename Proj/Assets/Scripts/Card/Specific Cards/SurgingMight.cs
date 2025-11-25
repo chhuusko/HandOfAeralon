@@ -8,7 +8,7 @@ public class SurgingMight : Card
         Character character = Selector._instance.GetTileUnderMouse().GetOccupantCharacter();
         if (character != null)
         {
-            character.TakeDamage(5); // TODO SHOULD BE EMPOWER
+            character.GetComponent<StatusEffectManager>().AddStatusEffect(new Empowered(2));
         }
 
     }

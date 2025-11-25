@@ -59,6 +59,7 @@ public class CardHandManager : MonoBehaviour
         _cardsInHand.Add(newCardContainer);
         newCardContainer.AddCard(_cardsInDeck[0]);
         _cardsInDeck.RemoveAt(0);
+        AddSpaceing();
     }
 
     public void AddSpaceing()
