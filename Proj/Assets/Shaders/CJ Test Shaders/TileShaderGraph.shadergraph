@@ -8,6 +8,9 @@
         },
         {
             "m_Id": "b6784a5a94004d569a28f4c826f34a8c"
+        },
+        {
+            "m_Id": "7e3c0414cf5240a19299c8a5685d877d"
         }
     ],
     "m_Keywords": [],
@@ -47,6 +50,9 @@
         },
         {
             "m_Id": "d0c2afc0c5f04f019a59b0d48e97e786"
+        },
+        {
+            "m_Id": "690942278f5b49b487030e94534d7706"
         }
     ],
     "m_GroupDatas": [],
@@ -62,6 +68,20 @@
             "m_InputSlot": {
                 "m_Node": {
                     "m_Id": "940f65bd3c6f4df7a619d720925c4e9d"
+                },
+                "m_SlotId": 1
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "690942278f5b49b487030e94534d7706"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "b6b905a5c04b47b0a258cbc036514f29"
                 },
                 "m_SlotId": 1
             }
@@ -325,6 +345,19 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Texture2DMaterialSlot",
+    "m_ObjectId": "2f84e86041df44c68ba2f390f601994d",
+    "m_Id": 0,
+    "m_DisplayName": "TileTexture",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_BareResource": false
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "35f97a78d2e94211981256a325f12ff8",
     "m_Id": 0,
@@ -389,6 +422,9 @@
         },
         {
             "m_Id": "b6784a5a94004d569a28f4c826f34a8c"
+        },
+        {
+            "m_Id": "7e3c0414cf5240a19299c8a5685d877d"
         }
     ]
 }
@@ -431,6 +467,42 @@
         "w": 0.0
     },
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
+    "m_ObjectId": "690942278f5b49b487030e94534d7706",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Property",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -1093.9998779296875,
+            "y": 174.0,
+            "width": 140.99993896484376,
+            "height": 33.99998474121094
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "2f84e86041df44c68ba2f390f601994d"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Property": {
+        "m_Id": "7e3c0414cf5240a19299c8a5685d877d"
+    }
 }
 
 {
@@ -542,6 +614,36 @@
         "e32": 0.0,
         "e33": 1.0
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Texture2DShaderProperty",
+    "m_ObjectId": "7e3c0414cf5240a19299c8a5685d877d",
+    "m_Guid": {
+        "m_GuidSerialized": "3b649bba-2b0a-486b-96e2-00ebb03749e6"
+    },
+    "m_Name": "TileTexture",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "TileTexture",
+    "m_DefaultReferenceName": "_TileTexture",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
+        "m_SerializedTexture": "",
+        "m_Guid": ""
+    },
+    "isMainTexture": false,
+    "useTilingAndOffset": false,
+    "m_Modifiable": true,
+    "m_DefaultType": 0
 }
 
 {
