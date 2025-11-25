@@ -33,6 +33,11 @@ public class StatusEffectManager : MonoBehaviour
         _statusEffects.Remove(statusEffect);
     }
 
+    public bool ContainsStatusEffect<T>() where T : StatusEffect
+    {
+        return _statusEffects.Exists(e => e is T);
+    }
+
     private void UpdateDuration(Character c)
     {
         if (!_character || c != _character)
