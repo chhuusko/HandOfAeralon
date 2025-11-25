@@ -41,6 +41,7 @@ public class StatusEffectManager : MonoBehaviour
             return;
         }
         _statusEffects.Add(statusEffect);
+        statusEffect.Initialize(_character, this);
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect)

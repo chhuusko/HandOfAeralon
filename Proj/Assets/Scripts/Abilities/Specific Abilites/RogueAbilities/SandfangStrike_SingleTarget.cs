@@ -20,7 +20,7 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
         if (castingCharacter == null) return;
 
         affectedCharacter.TakeDamage(CalculateDamage(castingCharacter, affectedCharacter));
-        affectedCharacter.GetStatusEffectManager().AddStatusEffect(new Vulnerable(affectedCharacter, _posionStacksToApply));
+        affectedCharacter.GetStatusEffectManager().AddStatusEffect(new Vulnerable(_posionStacksToApply));
 
         if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
             //if (statusEffectManager.ContainsStatusEffect<Poison>(){

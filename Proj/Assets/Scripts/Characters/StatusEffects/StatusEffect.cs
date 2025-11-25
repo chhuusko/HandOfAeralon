@@ -4,13 +4,22 @@ public abstract class StatusEffect
 {
     public int Duration { get; private set; }
     
-    protected StatusEffectData Data;
+    protected Character Character { get; private set; }
+    protected StatusEffectManager Manager { get; private set; }
+    
+    private StatusEffectData Data;
     
     protected StatusEffect(int duration)
     {
         Duration = duration;
 
         Data = StatusEffectDataRegistry.GetDataForType(GetType());
+    }
+
+    public void Initialize(Character character, StatusEffectManager manager)
+    {
+        Character = character;
+        Manager = manager;
     }
 
     /// <summary>
