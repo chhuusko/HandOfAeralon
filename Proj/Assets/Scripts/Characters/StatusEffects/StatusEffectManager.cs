@@ -103,20 +103,20 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public float ModifyIncomingDamage(float damage)
+    public float ModifyIncomingDamage(float damage, Ability ability)
     {
         foreach (var statusEffect in _statusEffects)
         {
-            statusEffect.ModifyIncomingDamage(ref damage);
+            statusEffect.ModifyIncomingDamage(ref damage, ability);
         }
         return damage;
     }
 
-    public float ModifyOutgoingDamage(float damage)
+    public float ModifyOutgoingDamage(float damage, Ability ability)
     {
         foreach (var statusEffect in _statusEffects)
         {
-            statusEffect.ModifyOutgoingDamage(ref damage);
+            statusEffect.ModifyOutgoingDamage(ref damage, ability);
         }
         return damage;
     }
