@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _destroyTime: 1
-  _randomStartPositionRange: {x: 0, y: 0, z: 0}
+  _randomStartPositionRange: {x: 0.2, y: 0.2, z: 0.2}
   _characterTarget: {fileID: 0}
   _canvasParent: {fileID: 0}
   _fixedYPos: 2
