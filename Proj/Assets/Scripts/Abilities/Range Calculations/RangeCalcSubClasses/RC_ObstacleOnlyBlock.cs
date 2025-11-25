@@ -60,7 +60,7 @@ public class RC_ObstacleBlock : RangeCalculation
         float distance = Vector3.Distance(startPosition, endPosition);
 
         // Debug sphere cast.
-        Debug.DrawLine(startPosition, endPosition, Color.red, 1f);
+        Debug.DrawLine(startPosition, endPosition, Color.red, 8f);
 
 
         // Return true if there are no blocking obstacles.
