@@ -38,9 +38,9 @@ public class CharacterMovement : MonoBehaviour
     public void DrawMoveRange()
     {
         GameObject currentTile = _character.GetCurrentTileComponent().gameObject;
-        if (_character.GetMovementPoints() <= 0)
+        if (_character.GetMovementPoints() <= 0 || !_character.CanMove)
         {
-            Debug.Log($"CharacterMovement.cs | {_character.name} is out of MP!");
+            DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} can't move!");
             _tilesInRange = new();
             return;
         }

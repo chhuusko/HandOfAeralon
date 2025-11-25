@@ -85,7 +85,17 @@ public class EnemyAI : MonoBehaviour
             DebugLog.JLWLog($"EnemyAI.cs | _movePath NOT FOUND!");
         }
 
-        _currentCharacter.GetComponent<CharacterMovement>().ForceCustomPath(_movePath);
+        if (_currentCharacter.CanMove)
+        {
+            _currentCharacter.GetComponent<CharacterMovement>().ForceCustomPath(_movePath);
+        }
+        else
+        {
+            TryAttack(_currentCharacter, _targetCharacter);
+            EndTurn();
+            return;
+        }
+
         if (_bDebug && _movePath == null && _movePath.Count != 0) DebugLog.JLWLog($"EnemyAI.cs | Moving {_currentCharacter.name} to {_movePath[_movePath.Count - 1].GetComponent<CombatGridTile>().GetTileIndex()}");
 
         StartCoroutine(WaitForMovementCompletion());
@@ -162,6 +172,12 @@ public class EnemyAI : MonoBehaviour
 
     private void TryAttack(Character attacker, Character target)
     {
+        if (!attacker.CanAttack)
+        {
+            if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | {attacker.name} can't attack!");
+            return;
+        }
+
         if (GridExplorer._instance.ChebyshevDistance(attacker.GetCurrentTileIndex(), target.GetCurrentTileIndex()) <= _currentAttackRange)
         {
             Vector3 direction = (target.transform.position - _currentCharacter.transform.position).normalized;

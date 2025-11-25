@@ -307,7 +307,10 @@ public class Character : MonoBehaviour
         _currentInitiative = _data.BaseInitiative;
         _currentDamage = _data.BaseDamage;
         _currentMovementPoints = _data.BaseMovementPoints;
+    }
 
+    public void AddHealthBar()
+    {
         if (HealthBarManager._instance != null)
         {
             HealthBarManager._instance.Register(this);
