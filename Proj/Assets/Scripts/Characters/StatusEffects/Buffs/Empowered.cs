@@ -5,7 +5,7 @@ public class Empowered : StatusEffect
     private static StatusEffectData _data;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public Empowered(Character character, int duration) : base(character, duration)
+    public Empowered(int duration) : base(duration)
     {
     }
 

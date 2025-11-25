@@ -5,12 +5,9 @@ public abstract class StatusEffect
     public int Duration { get; private set; }
     
     protected StatusEffectData Data;
-    private Character _character;
-    private int _stacks;
     
-    protected StatusEffect(Character character, int duration)
+    protected StatusEffect(int duration)
     {
-        _character = character;
         Duration = duration;
 
         Data = StatusEffectDataRegistry.GetDataForType(GetType());
