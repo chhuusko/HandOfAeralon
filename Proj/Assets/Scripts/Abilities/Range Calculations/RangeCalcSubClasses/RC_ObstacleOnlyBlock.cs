@@ -60,8 +60,8 @@ public class RC_ObstacleBlock : RangeCalculation
         float distance = Vector3.Distance(startPosition, endPosition);
 
         // Debug sphere cast.
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(startPosition, _radius);
+        Debug.DrawLine(startPosition, endPosition, Color.red, 1f);
+
 
         // Return true if there are no blocking obstacles.
         return !Physics.SphereCast(startPosition, _radius, direction, out RaycastHit hit, distance, obstacleLayer);
