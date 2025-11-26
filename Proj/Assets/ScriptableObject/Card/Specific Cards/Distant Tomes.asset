@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   rarity: 0
-  title: 
-  description: 
-  cost: 0
-  icon: {fileID: 0}
+  title: Distant Tomes
+  description: Deal damage to target character equal to the number of cards remaining
+    in your deck
+  cost: 3
+  icon: {fileID: 21300000, guid: 39962f603ad787b4cb52569386cd4872, type: 3}
   CardTemplate: {fileID: 0}
   info: []
