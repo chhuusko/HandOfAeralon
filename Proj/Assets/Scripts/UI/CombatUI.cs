@@ -22,12 +22,15 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Button _abilityButtonPrefab;
     [SerializeField] private Button _characterPortraitButtonPrefab;
     
-    [SerializeField] private GameObject _turnOrderPanel;
     [SerializeField] private GameObject _placeCharactersPanel;
     
     [SerializeField] private TextMeshProUGUI _mana;
     [SerializeField] private ScrollRect _scrollRect;
 
+    // Turn order.
+    [SerializeField] private GameObject _turnOrderPanel;
+    private Character _currentTurnCharacter;
+    
     // Colors.
     [SerializeField] private Color _activeColor;
     [SerializeField] private Color _inactiveColor;
@@ -51,8 +54,6 @@ public class CombatUI : MonoBehaviour
     private List<CombatLogEntry> _combatLogEntries = new();
     
     private Dictionary<CharacterData, PortraitButton> _characterPortraits = new();
-    
-    private Character _currentTurnCharacter;
     
     private void OnEnable()
     {
@@ -223,6 +224,7 @@ public class CombatUI : MonoBehaviour
         foreach (CharacterData c in heroList)
         {
             PortraitButton pb = CreateCharacterPortrait(c, _characterPortraitPanel.transform);
+            pb.Button.image.color = _inactiveColor;
             _portraitButtons.Add(pb);
             _characterPortraits.TryAdd(pb.Character, pb);
         }
@@ -244,8 +246,8 @@ public class CombatUI : MonoBehaviour
     private PortraitButton CreateCharacterPortrait(CharacterData c, Transform parent)
     {
         Button button = Instantiate(_characterPortraitButtonPrefab, parent);
+        
         button.image.sprite = c.ClassData.classImage;
-        button.image.color = _inactiveColor;
         PortraitButton pb = button.GetComponent<PortraitButton>();
         pb.Character = c;
         
