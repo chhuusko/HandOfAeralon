@@ -209,6 +209,7 @@ public class CombatUI : MonoBehaviour
         _manaPanel.gameObject.SetActive(true);
         _startCombatButton.gameObject.SetActive(true);
         _cardHandManager.SetActive(true);
+        _combatLogButton.SetActive(true);
         
         UpdateCharacterPortraits();
         UpdateManaText(CardHandManager.GetInstance().GetMana());
