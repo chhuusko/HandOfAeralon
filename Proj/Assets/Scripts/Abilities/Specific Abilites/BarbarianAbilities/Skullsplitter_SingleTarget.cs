@@ -16,8 +16,9 @@ public class Skullsplitter_Ability : SingleTargetAbility
         if (affectedCharacter == null) return;
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null) return;
-
-        affectedCharacter.TakeDamage(CalculateDamage(castingCharacter, affectedCharacter));
+        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        affectedCharacter.TakeDamage(damage);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
@@ -36,9 +37,8 @@ public class Skullsplitter_Ability : SingleTargetAbility
         //2.
         damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.GetMaxHealth()) ? (int) (damage * _damageMultiplier) : damage;
 
-        //3-5.
-        // damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
-        // 6-7 Gets applied withing affected character StatusEffectManager: ModifyIncomingDamage(damage, this);
+        damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
 
         return damage;
 

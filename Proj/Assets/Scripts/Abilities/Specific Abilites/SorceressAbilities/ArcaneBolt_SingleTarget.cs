@@ -34,10 +34,7 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
         // 6. EnemyTraits
         // 7. Enemy Buffs / Debuffs
 
-        //1.
         int damage = castingCharacter.GetBaseDamage();
-
-        //2.
         damage = (int)(damage * _damageMultiplier);
 
         if (castingCharacter.GetFaction() == Faction.Friendly)
@@ -48,13 +45,11 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
         {
             damage += (int)(_manaDamageMultiplier * _enemyManaAmount);
         }
+        
+        damage = (int) castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = (int) affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
 
-
-        //3-5.
-        //damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
-
-        // 6-7 Gets applied withing affected character StatusEffectManager: ModifyIncomingDamage(damage, this);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
