@@ -368,6 +368,7 @@ public class Selector : MonoBehaviour
     {
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
+            ResetColorAllTiles();
             _pendingCharacterActionType = CharacterActionType.AbilityCasting;
             _currentState = SelectorState.ActionTypeSelected;
             abilityHandler.SetPendingAbility(ability);
