@@ -45,6 +45,7 @@ public class CombatUI : MonoBehaviour
     // Cards.
     [SerializeField] private GameObject _hand;
     [SerializeField] private GameObject _cardHandManager;
+    [SerializeField] private GameObject _deckButton;
     
     private CharacterData _selectedCharacter;
     private bool _bCombatStarted;
@@ -60,7 +61,7 @@ public class CombatUI : MonoBehaviour
     {
         CardHandManager.onManaChange += UpdateManaText;
         
-        CombatEventManager.OnEnterCombatStateLoadNextLevel += PlaceCharacterStarted;
+        CombatEventManager.OnEnterCombatStatePlaceCharacter += PlaceCharacterStarted;
         CombatEventManager.OnEnterCombatStateTakeTurn += StartTurn;
         CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
@@ -195,11 +196,24 @@ public class CombatUI : MonoBehaviour
         UpdateActivePortrait(c);
         UpdatePortraitColors(_characterPortraits[c]);
         LoadAbilities(c);
+        EnablePanels();
         
         SetSelectedCharacter(c);
         _currentTurnCharacter = CombatManager._instance.GetCharacterDataDict()[_selectedCharacter];
     }
 
+    private void EnablePanels()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(true);
+        }
+        _abilityPanel.gameObject.SetActive(false);
+        _endTurnButton.gameObject.SetActive(false);
+        _combatLogPanel.gameObject.SetActive(false);
+        _combatLogScrollbar.gameObject.SetActive(false);
+    }
+    
     private void PlaceCharactersEnded()
     {
         _bCombatStarted = true;
