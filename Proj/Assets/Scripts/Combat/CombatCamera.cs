@@ -55,7 +55,7 @@ public class CombatCamera : MonoBehaviour
 
     };
 
-    [SerializeField] private PlayableDirector timelineDirector;
+    [SerializeField] private PlayableDirector _timelineDirector;
     [SerializeField] private bool bIntroCinematicDone;
     [SerializeField] private float _cameraSpeed;
     [SerializeField] CameraBounds _cameraBounds;
@@ -65,12 +65,12 @@ public class CombatCamera : MonoBehaviour
     void Start()
     {
         bIntroCinematicDone = false;
-        timelineDirector.stopped += OnTimelineStopped;
+        _timelineDirector.stopped += OnTimelineStopped;
     }
 
     void OnDestroy()
     {
-        timelineDirector.stopped -= OnTimelineStopped;
+        _timelineDirector.stopped -= OnTimelineStopped;
     }
 
     void Update()
@@ -102,17 +102,27 @@ public class CombatCamera : MonoBehaviour
 
         ClampToCamerBounds();
 
+        if (Input.GetKeyDown(KeyCode.Escape) && !IsIntroCinematicDone())
+            InterruptIntroCinematic();
+
     }
+
+    private void InterruptIntroCinematic()
+    {
+        bIntroCinematicDone = true;
+        _timelineDirector.Stop();
+    }
+
     public bool IsIntroCinematicDone() { return bIntroCinematicDone; }
     public void PlayIntroCinematic()
     {
-        timelineDirector.Play();
+        _timelineDirector.Play();
     }
 
     private void OnTimelineStopped(PlayableDirector pd)
     {
         bIntroCinematicDone = true;
-        timelineDirector.Stop();
+        _timelineDirector.Stop();
     }
 
     private void ClampToCamerBounds()
