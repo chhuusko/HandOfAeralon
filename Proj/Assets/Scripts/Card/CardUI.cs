@@ -1,4 +1,5 @@
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -13,28 +14,45 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] Image _frame, _image;
     [SerializeField] List<InfoPanel> _infoPanels;
     [SerializeField] List<GameObject> _infoPanelInScene;
+    [SerializeField] Transform _pivotPoint;
     GameObject _infoPanelPrefab;
+    private bool isHover;
     private void Awake()
     {
         _infoPanelPrefab = Resources.Load<GameObject>("UI/InfoPanel");
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        isHover = true;
         foreach (InfoPanel info in _infoPanels)
         {
-            Vector3 offset = transform.position + new Vector3(GetComponent<RectTransform>().rect.width, 0, 0) * 0.5f;
-            _infoPanelInScene.Add(Instantiate(_infoPanelPrefab, offset, Quaternion.identity, CanvasManager.Instance().OverlayCanvas.transform));
+            _infoPanelInScene.Add(Instantiate(_infoPanelPrefab, _pivotPoint.position, Quaternion.identity, CanvasManager.Instance().OverlayCanvas.transform));
             _infoPanelInScene.Last<GameObject>().GetComponent<InfoPanelUI>().SetUpUIElements(info);
+            StartCoroutine(FollowParent());
         }
 
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        isHover = false;
         foreach (GameObject go in _infoPanelInScene)
         {
             Destroy(go);
         }
+        _infoPanelInScene.Clear();
+    }
+    IEnumerator FollowParent()
+    {
+        while (isHover)
+        {
+            foreach(GameObject GO in _infoPanelInScene)
+            {
+                GO.transform.position = _pivotPoint.position;
+            }
+            yield return new WaitForSeconds(0.01f);
+        }
+        
     }
     public void SetInfoPanel(List<InfoPanel> newInfoPanels)
     {
