@@ -238,6 +238,9 @@ public class Character : MonoBehaviour
     public void SetCurrentMovementPoints(int movementPoints) =>
         _currentMovementPoints = Mathf.Max(movementPoints, 0);
     
+    public void ResetCurrentMovementPoints() =>
+        _currentMovementPoints = GetBaseMovementPoints();
+    
     public void IncreaseCurrentMovementPoints(int amount = 1) =>
         SetCurrentMovementPoints(_currentMovementPoints + amount);
     
