@@ -16,6 +16,7 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Image _characterPortraitPanel;
     [SerializeField] private Image _activeCharacterPortrait;
+    [SerializeField] private GameObject _activeCharacterBorder;
     
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
@@ -203,7 +204,7 @@ public class CombatUI : MonoBehaviour
         _deckButton.gameObject.SetActive(true);
         _turnOrderPanel.gameObject.SetActive(true);
         _turnOrderScrollBar.gameObject.SetActive(true);
-        _activeCharacterPortrait.gameObject.SetActive(true);
+        _activeCharacterBorder.gameObject.SetActive(true);
         _discardPileButton.gameObject.SetActive(true);
         _manaPanel.gameObject.SetActive(true);
         _startCombatButton.gameObject.SetActive(true);
