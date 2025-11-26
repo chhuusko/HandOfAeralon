@@ -84,5 +84,7 @@ public abstract class Ability : ScriptableObject
     }
     protected abstract void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile);
 
+    protected 
+
 
 }

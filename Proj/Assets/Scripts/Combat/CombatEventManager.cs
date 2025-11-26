@@ -8,7 +8,7 @@ public static class CombatEventManager
 {
     public static event Action<CombatState> OnCombatStateChange;
     public static event Action<CombatTurn> OnCombatTurnChange;
-    
+
     public static event Action OnEnterCombatStateLoadNextLevel;
     public static event Action OnEnterCombatStateIntroCinematic;
     public static event Action OnEnterCombatStatePlaceCharacter;
@@ -26,6 +26,8 @@ public static class CombatEventManager
     public static event Action<IReadOnlyList<Character>> OnTurnOrderChanged;
 
     public static event Action<Character> OnCharacterDeath;
+
+    public static event Action<AbilityExecutionData> OnAbilityDataCreated;
 
     public static void InvokeCombatStateChanged(CombatState newState)
         => OnCombatStateChange?.Invoke(newState);
@@ -72,5 +74,9 @@ public static class CombatEventManager
 
     public static void InvokeOnTurnOrderChanged(IReadOnlyList<Character> characterTurnOrder)
         => OnTurnOrderChanged?.Invoke(characterTurnOrder);
+
+    public static void InvokeOnAbilityDataCreated(AbilityExecutionData result)
+       => OnAbilityDataCreated?.Invoke(result);
+
 
 }

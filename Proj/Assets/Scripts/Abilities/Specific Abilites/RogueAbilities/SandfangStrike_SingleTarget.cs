@@ -19,15 +19,15 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null) return;
 
-        affectedCharacter.TakeDamage(CalculateDamage(castingCharacter, affectedCharacter));
-        affectedCharacter.GetStatusEffectManager().AddStatusEffect(new Vulnerable(_posionStacksToApply));
+        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        affectedCharacter.TakeDamage(damage);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0);
 
         if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
-            //if (statusEffectManager.ContainsStatusEffect<Poison>(){
-               // CardHandManager.GetInstance().AddCardFromDeck();
-            //}
-            //statusEffectManager.AddStatusEffect(new Poison(_poisonStacksToApply);
-            
+            if (statusEffectManager.ContainsStatusEffect<Poison>()){
+                CardHandManager.GetInstance().AddCardFromDeck();
+            }
+            statusEffectManager.AddStatusEffect(new Poison(_posionStacksToApply));
         }
     }
 
@@ -41,17 +41,14 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
         // 6. EnemyTraits
         // 7. Enemy Buffs / Debuffs
 
-        //1.
+     
         int damage = castingCharacter.GetBaseDamage();
+        damage = (int)(damage * _damageMultiplier);
 
-        //2.
-       damage = (int) (damage * _damageMultiplier);
 
-        //3-5.
-        // damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
         return damage;
-
-        // 6-7 Gets applied withing affected character StatusEffectManager: ModifyOutgoingDamage(damage, this);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
