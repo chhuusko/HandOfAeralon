@@ -74,7 +74,7 @@ public abstract class Ability : ScriptableObject
         return _rangeCalculation.CalculateTilesInRange(casterTile, _range);
     }
 
-    public IEnumerator PlayAbilityEffect(CombatGridTile casterTile, CombatGridTile targetTile)
+    public IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Play casting sound.
         yield return new WaitForSeconds(castingTime);
