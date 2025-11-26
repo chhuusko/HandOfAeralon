@@ -46,6 +46,8 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _hand;
     [SerializeField] private GameObject _cardHandManager;
     [SerializeField] private GameObject _deckButton;
+    [SerializeField] private GameObject _discardPileButton;
+    [SerializeField] private GameObject _manaPanel;
     
     private CharacterData _selectedCharacter;
     private bool _bCombatStarted;
@@ -62,6 +64,7 @@ public class CombatUI : MonoBehaviour
         CardHandManager.onManaChange += UpdateManaText;
         
         CombatEventManager.OnEnterCombatStatePlaceCharacter += PlaceCharacterStarted;
+        CombatEventManager.OnEnterCombatStateLoadNextLevel += DisablePanels;
         CombatEventManager.OnEnterCombatStateTakeTurn += StartTurn;
         CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
@@ -75,6 +78,7 @@ public class CombatUI : MonoBehaviour
         CardHandManager.onManaChange -= UpdateManaText;
         
         CombatEventManager.OnEnterCombatStatePlaceCharacter -= PlaceCharacterStarted;
+        CombatEventManager.OnEnterCombatStateLoadNextLevel -= DisablePanels;
         CombatEventManager.OnEnterCombatStateTakeTurn -= StartTurn;
         CombatEventManager.OnTurnOrderChanged -= UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
@@ -196,22 +200,26 @@ public class CombatUI : MonoBehaviour
         UpdateActivePortrait(c);
         UpdatePortraitColors(_characterPortraits[c]);
         LoadAbilities(c);
-        EnablePanels();
         
         SetSelectedCharacter(c);
         _currentTurnCharacter = CombatManager._instance.GetCharacterDataDict()[_selectedCharacter];
+        
+        _characterPortraitPanel.gameObject.SetActive(true);
+        _deckButton.gameObject.SetActive(true);
+        _turnOrderPanel.gameObject.SetActive(true);
+        _turnOrderScrollBar.gameObject.SetActive(true);
+        _activeCharacterPortrait.gameObject.SetActive(true);
+        _discardPileButton.gameObject.SetActive(true);
+        _manaPanel.gameObject.SetActive(true);
+        _startCombatButton.gameObject.SetActive(true);
     }
 
-    private void EnablePanels()
+    private void DisablePanels()
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).gameObject.SetActive(true);
+            transform.GetChild(i).gameObject.SetActive(false);
         }
-        _abilityPanel.gameObject.SetActive(false);
-        _endTurnButton.gameObject.SetActive(false);
-        _combatLogPanel.gameObject.SetActive(false);
-        _combatLogScrollbar.gameObject.SetActive(false);
     }
     
     private void PlaceCharactersEnded()
