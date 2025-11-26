@@ -21,6 +21,8 @@ public class SongOfRenewalAOE : RoundAOEAbility
         {
             if (tile == null) continue;
 
+            if (!IsValidTargetForAbility(casterTile, tile)) continue;
+
             if (tile == targetTile)
             {
                 ApplyEffectOnMainTile(casterTile, tile);
