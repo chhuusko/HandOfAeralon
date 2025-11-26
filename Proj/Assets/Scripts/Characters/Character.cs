@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public enum Faction { Friendly, Enemy }
 
@@ -79,7 +80,7 @@ public class Character : MonoBehaviour
 
 
     public const int MOVEMENT_POINTS = 5;
-    public const float DEATH_COOLDOWN = 1f;
+    public const float DEATH_COOLDOWN = 5f;
     
     // TODO: Traits.
     
@@ -336,12 +337,26 @@ public class Character : MonoBehaviour
         {
             StartCoroutine(RemoveCharacter());
         }
+        else
+        {
+            Animator animator = null;
+            if (TryGetComponent<Animator>(out animator))
+            {
+                animator.SetTrigger("TakeDamage");
+            }
+        }
     }
      
     private IEnumerator RemoveCharacter()
     {
         CombatEventManager.InvokeOnCharacterDeath(this);
-        // TODO: Play animation.
+
+        Animator animator = null;
+        if (TryGetComponent<Animator>(out animator))
+        {
+            animator.SetTrigger("Death");
+        }
+
         yield return new WaitForSeconds(DEATH_COOLDOWN);
         Destroy(gameObject);
     }
