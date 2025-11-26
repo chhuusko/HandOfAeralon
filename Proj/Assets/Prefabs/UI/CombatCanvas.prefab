@@ -728,7 +728,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &212127358709999771
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1439,7 +1439,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2273880188213187820
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1516,7 +1516,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3178105563928316308
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1753,6 +1753,8 @@ MonoBehaviour:
   _hand: {fileID: 3650385346247062174}
   _cardHandManager: {fileID: 3311761313986929369}
   _deckButton: {fileID: 9082217781877423237}
+  _discardPileButton: {fileID: 2664291079622857572}
+  _manaPanel: {fileID: 8751787786310694528}
 --- !u!1 &4306417135386459380
 GameObject:
   m_ObjectHideFlags: 0
@@ -2380,7 +2382,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6504526688241440631
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2690,7 +2692,7 @@ RectTransform:
   m_Father: {fileID: 5705970037875591956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 14, y: 14}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2750,7 +2752,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1275161176884299870
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2933,7 +2935,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &675719426384561637
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3010,7 +3012,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1199117070462766896
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3212,7 +3214,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8684822668574598262
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3289,7 +3291,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6474844169660020892
 RectTransform:
   m_ObjectHideFlags: 0
