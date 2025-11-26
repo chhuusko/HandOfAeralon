@@ -16,6 +16,7 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Image _characterPortraitPanel;
     [SerializeField] private Image _activeCharacterPortrait;
+    [SerializeField] private GameObject _activeCharacterBorder;
     
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
@@ -104,9 +105,6 @@ public class CombatUI : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            
-            _cardHandManager.SetActive(true);
-            _hand.SetActive(false);
         }
         else
         {
@@ -119,9 +117,7 @@ public class CombatUI : MonoBehaviour
 
     private void Start()
     {
-        _hand.SetActive(false);
-        UpdateCharacterPortraits();
-        UpdateManaText(CardHandManager.GetInstance().GetMana());
+        
     }
     
     private IEnumerator WaitForSelector()
@@ -208,10 +204,14 @@ public class CombatUI : MonoBehaviour
         _deckButton.gameObject.SetActive(true);
         _turnOrderPanel.gameObject.SetActive(true);
         _turnOrderScrollBar.gameObject.SetActive(true);
-        _activeCharacterPortrait.gameObject.SetActive(true);
+        _activeCharacterBorder.gameObject.SetActive(true);
         _discardPileButton.gameObject.SetActive(true);
         _manaPanel.gameObject.SetActive(true);
         _startCombatButton.gameObject.SetActive(true);
+        _cardHandManager.SetActive(true);
+        
+        UpdateCharacterPortraits();
+        UpdateManaText(CardHandManager.GetInstance().GetMana());
     }
 
     private void DisablePanels()
