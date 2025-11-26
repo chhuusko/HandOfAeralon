@@ -21,9 +21,11 @@ public abstract class Ability : ScriptableObject
     [SerializeField] private ValidTargetOccupant _targetType;
 
     [Header("- Visuals & Audio - ")]
-    [SerializeField] private ParticleSystem castingEffect, hitEffect;
-    [SerializeField] private AudioClip castingSound, hitSound;
-    [SerializeField] private float castingTime, fromCastToHitTime;
+    [SerializeField] private ParticleSystem _castingEffect, _hitEffect;
+    [SerializeField] private AudioClip _castingSound, _hitSound;
+    [SerializeField] private float _castingTime, _fromCastToHitTime;
+    [SerializeField] private float _castingRotationTime = 0.3f;
+
 
     [System.Flags]
     public enum AbilityTag
@@ -76,11 +78,20 @@ public abstract class Ability : ScriptableObject
 
     public IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
     {
+        Character caster = casterTile.GetOccupantCharacter();
+        if (caster == null) Debug.LogError("CasterTile has no character!");
+        caster.RotateTowards(targetTile.transform, _castingRotationTime);
+
+        if (caster.TryGetComponent<Animator>(out var animator)){
+            animator.SetTrigger(_abilityName);
+        }
+        // Play Animation.
         // Play casting sound.
-        yield return new WaitForSeconds(castingTime);
+        yield return new WaitForSeconds(_castingTime);
         InitiateParticles(casterTile, targetTile);
         // Play hit sound.
-        yield return new WaitForSeconds(fromCastToHitTime);
+        yield return new WaitForSeconds(_fromCastToHitTime);
+        RunAbility(casterTile, targetTile);
     }
     protected abstract void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile);
 }

@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class AbilityHandler : MonoBehaviour
 {
@@ -36,8 +38,8 @@ public class AbilityHandler : MonoBehaviour
             return false;
         }
         OnAbilityCast?.Invoke();
+
         StartCoroutine(ability.StartAbilityEffects(_casterTile, targetTile));
-        ability.RunAbility(_casterTile, targetTile);
         _characterCaster.StartAbilityCooldown(ability);
         return true;
     }

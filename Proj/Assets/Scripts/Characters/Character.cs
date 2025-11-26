@@ -360,6 +360,33 @@ public class Character : MonoBehaviour
         Debug.Log($"Character.cs 245 | CharacterMovement component not found!");
         return false;
     }
+    /// <summary>
+    /// Rotates towards target over time.
+    /// </summary>
+    public void RotateTowards(Transform target, float duration)
+    {
+        // Calculate direction.
+        Vector3 direction = (target.position - transform.position).normalized;
+
+        // Y is zero to not rotate up or down.
+        direction.y = 0f;
+
+        Quaternion targetRot = Quaternion.LookRotation(direction);
+        StartCoroutine(RotateCoroutine(targetRot, duration));
+    }
+
+    private IEnumerator RotateCoroutine(Quaternion targetRot, float duration)
+    {
+        Quaternion startRot = transform.rotation;
+        float t = 0f;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime / duration;
+            transform.rotation = Quaternion.Slerp(startRot, targetRot, t);
+            yield return null;
+        }
+    }
 
     void OnDestroy()
     {
