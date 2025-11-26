@@ -153,13 +153,21 @@ public class CombatCamera : MonoBehaviour
     {
         _cameraZoomController.UpdateZoomScroll();
 
+        // Handle height
         Vector3 pos = transform.position;
-        pos.y = Mathf.Lerp(pos.y, _cameraZoomController.GetHeight(), Time.deltaTime * _cameraZoomController.GetSmoothSpeed());
+        pos.y = Mathf.Lerp(pos.y, _cameraZoomController.GetHeight(),
+                           Time.deltaTime * _cameraZoomController.GetSmoothSpeed());
         transform.position = pos;
 
-        Vector3 rot = transform.eulerAngles;
-        rot.x = Mathf.Lerp(rot.x, _cameraZoomController.GetTilt(), Time.deltaTime * _cameraZoomController.GetSmoothSpeed());
-        transform.eulerAngles = rot;
+        // Handle tilt (safe version)
+        float targetTilt = _cameraZoomController.GetTilt();
+        Quaternion targetRot = Quaternion.Euler(targetTilt, transform.eulerAngles.y, 0f);
+
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            targetRot,
+            Time.deltaTime * _cameraZoomController.GetSmoothSpeed()
+        );
     }
 
     private void OnDrawGizmos()
