@@ -136,24 +136,34 @@ public class Selector : MonoBehaviour
     /// </summary>
     private void HandleTileHover()
     {
+        // JLW
+        if (_characterMovement)
+        {
+            _characterMovement.PreviewPath(GetTileUnderMouse());
+        }
+        else
+        {
+            GridExplorer._instance.ClearPathDrawing();
+        }
+
         // Return early if mouse is over UI element.
-        if (EventSystem.current.IsPointerOverGameObject()) return;
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
 
         // Show info about character.
         CombatGridTile hoveredTile = GetTileUnderMouse();
-        if (hoveredTile == null) return;
+        if (hoveredTile == null)
+        {
+            return;
+        }
 
         // Show hovered character info.
         GameObject occupant = hoveredTile.GetOccupant();
         if (occupant != null && occupant.TryGetComponent<Character>(out var character))
         {
             // TODO: Show character info in UI.
-        }
-
-        // JLW
-        if (_characterMovement && CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() == Faction.Friendly)
-        {
-            _characterMovement.PreviewPath(GetTileUnderMouse());
         }
 
         // Change color on tiles to indicate aoe abilities effected area.
@@ -430,8 +440,8 @@ public class Selector : MonoBehaviour
 
         if (_pendingCharacterActionType == CharacterActionType.Movement)
         {
-            HandleMovement(tile);
-            TrySelectCharacterFromTile(tile);
+            HandleMovement(tile); // JLW
+            ResetColorAllTiles();
             return;
         }
         if (_pendingCharacterActionType == CharacterActionType.AbilityCasting && _selectedCharacter.GetAbilityHandler().GetPendingAbility() != null)

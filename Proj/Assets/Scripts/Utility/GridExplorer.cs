@@ -175,7 +175,7 @@ public class GridExplorer : MonoBehaviour
 
         if (start == goal)
         {
-            Clear();
+            ClearPathDrawing();
             return new List<GameObject>();
         }
 
@@ -251,7 +251,7 @@ public class GridExplorer : MonoBehaviour
             }
         }
 
-        Clear();
+        ClearPathDrawing();
         return new List<GameObject>();
     }
 
@@ -280,7 +280,7 @@ public class GridExplorer : MonoBehaviour
         if (start == goal)
         {
             DebugLog.JLWLog($"GridExplorer.cs | start {start} == goal {goal}");
-            Clear();
+            ClearPathDrawing();
             return new List<GameObject>();
         }
 
@@ -329,7 +329,7 @@ public class GridExplorer : MonoBehaviour
             }
         }
 
-        Clear();
+        ClearPathDrawing();
         return new List<GameObject>(); // No path found
     }
 
@@ -462,7 +462,7 @@ public class GridExplorer : MonoBehaviour
         }
     }
 
-    public void Clear()
+    public void ClearPathDrawing()
     {
         if (_activeLineRenderer != null)
         {

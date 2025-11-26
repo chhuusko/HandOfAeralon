@@ -20,13 +20,6 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-    public void Reset()
-    {
-        _tilesInRange = new();
-        _pathPreview = new();
-        _lastPreviewPathTile = null;
-    }
-
     public bool IsMoving()
     {
         return _bIsMoving;
@@ -51,10 +44,10 @@ public class CharacterMovement : MonoBehaviour
 
     public void PreviewPath(CombatGridTile tile)
     {
-        if (tile == null || !_tilesInRange.Contains(tile))
+        if (tile == null || !_tilesInRange.Contains(tile) || CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() != Faction.Friendly)
         {
             _lastPreviewPathTile = null;
-            GridExplorer._instance.Clear();
+            GridExplorer._instance.ClearPathDrawing();
             return;
         }
 
@@ -93,7 +86,7 @@ public class CharacterMovement : MonoBehaviour
                 return;
             }
 
-            _character.DecreaseCurrentMovementPoints(_pathPreview.Count - 1);
+            _character.DecreaseCurrentMovementPoints(CalculateMovementCost(_pathPreview));
 
             StartCoroutine(Move(_pathPreview));
         }
@@ -113,7 +106,7 @@ public class CharacterMovement : MonoBehaviour
     private IEnumerator Move(List<CombatGridTile> path)
     {
         _bIsMoving = true;
-        GridExplorer._instance.Clear();
+        GridExplorer._instance.ClearPathDrawing();
         float moveSpeed = 4f; // Måste matcha animationerna
 
         Animator animator = null;
@@ -160,5 +153,22 @@ public class CharacterMovement : MonoBehaviour
         }
 
         DrawMoveRange();
+    }
+
+    private int CalculateMovementCost(List<CombatGridTile> path)
+    {
+        int result = 0;
+
+        for (int i = 1; i < path.Count; i++)
+        {
+            Vector2Int a = path[i - 1].GetTileIndex();
+            Vector2Int b = path[i].GetTileIndex();
+
+            bool diagonal = Mathf.Abs(a.x - b.x) == 1 && Mathf.Abs(a.y - b.y) == 1;
+
+            result += diagonal ? 2 : 1;
+        }
+
+        return result;
     }
 }
