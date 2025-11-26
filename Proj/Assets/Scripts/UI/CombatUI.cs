@@ -16,6 +16,7 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Image _characterPortraitPanel;
     [SerializeField] private Image _activeCharacterPortrait;
+    [SerializeField] private GameObject _activeCharacterBorder;
     
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
@@ -66,6 +67,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnEnterCombatStatePlaceCharacter += PlaceCharacterStarted;
         CombatEventManager.OnEnterCombatStateLoadNextLevel += DisablePanels;
         CombatEventManager.OnEnterCombatStateTakeTurn += StartTurn;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateActivePortrait;
         CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
         CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
@@ -80,13 +82,13 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnEnterCombatStatePlaceCharacter -= PlaceCharacterStarted;
         CombatEventManager.OnEnterCombatStateLoadNextLevel -= DisablePanels;
         CombatEventManager.OnEnterCombatStateTakeTurn -= StartTurn;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateActivePortrait;
         CombatEventManager.OnTurnOrderChanged -= UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
         CombatEventManager.OnAbilityDataCreated -= AddCombatLogEntry;
         
         Selector._instance.OnCharacterSelected -= SetSelectedCharacter;
         Selector._instance.OnCharacterSelected -= LoadAbilities;
-        Selector._instance.OnCharacterSelected -= UpdateActivePortrait;
         Selector._instance.OnCharacterSelected -= UpdatePortraitColors;
         Selector._instance.OnCharacterDeselected -= DeselectCharacter;
 
@@ -128,7 +130,6 @@ public class CombatUI : MonoBehaviour
         
         Selector._instance.OnCharacterSelected += SetSelectedCharacter;
         Selector._instance.OnCharacterSelected += LoadAbilities;
-        Selector._instance.OnCharacterSelected += UpdateActivePortrait;
         Selector._instance.OnCharacterSelected += UpdatePortraitColors;
         Selector._instance.OnCharacterDeselected += DeselectCharacter;
     }
@@ -203,11 +204,12 @@ public class CombatUI : MonoBehaviour
         _deckButton.gameObject.SetActive(true);
         _turnOrderPanel.gameObject.SetActive(true);
         _turnOrderScrollBar.gameObject.SetActive(true);
-        _activeCharacterPortrait.gameObject.SetActive(true);
+        _activeCharacterBorder.gameObject.SetActive(true);
         _discardPileButton.gameObject.SetActive(true);
         _manaPanel.gameObject.SetActive(true);
         _startCombatButton.gameObject.SetActive(true);
         _cardHandManager.SetActive(true);
+        _combatLogButton.SetActive(true);
         
         UpdateCharacterPortraits();
         UpdateManaText(CardHandManager.GetInstance().GetMana());
@@ -241,7 +243,6 @@ public class CombatUI : MonoBehaviour
     {
         _selectedCharacter = null;
         
-        ClearActivePortrait();
         ClearAbilityButtons();
 
         ClearPortraitColors();
@@ -371,7 +372,7 @@ public class CombatUI : MonoBehaviour
     
     private void UpdateActivePortrait(PortraitButton pb)
     {
-        UpdateActivePortrait(pb.Character);
+        // UpdateActivePortrait(pb.Character);
     }
 
     public void UpdateActivePortrait(Character c)
