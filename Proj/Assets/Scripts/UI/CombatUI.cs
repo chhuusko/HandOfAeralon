@@ -104,9 +104,6 @@ public class CombatUI : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            
-            _cardHandManager.SetActive(true);
-            _hand.SetActive(false);
         }
         else
         {
@@ -119,9 +116,7 @@ public class CombatUI : MonoBehaviour
 
     private void Start()
     {
-        _hand.SetActive(false);
-        UpdateCharacterPortraits();
-        UpdateManaText(CardHandManager.GetInstance().GetMana());
+        
     }
     
     private IEnumerator WaitForSelector()
@@ -212,6 +207,10 @@ public class CombatUI : MonoBehaviour
         _discardPileButton.gameObject.SetActive(true);
         _manaPanel.gameObject.SetActive(true);
         _startCombatButton.gameObject.SetActive(true);
+        _cardHandManager.SetActive(true);
+        
+        UpdateCharacterPortraits();
+        UpdateManaText(CardHandManager.GetInstance().GetMana());
     }
 
     private void DisablePanels()
