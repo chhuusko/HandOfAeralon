@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad9f937a4d409d442bb94d47179b7c2c, type: 3}
+  m_Name: SongOfRenewal_Ability
+  m_EditorClassIdentifier: 
+  _abilityName: SongOfRenewal
+  _icon: {fileID: 21300000, guid: 0c3bb867d3de52f43ae0e7a74de316d0, type: 3}
+  _range: 6
+  _cooldown: 1
+  _abilityTag: 10
+  _type: 2
+  _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
+  _targetType: 0
+  castingEffect: {fileID: 0}
+  hitEffect: {fileID: 0}
+  castingSound: {fileID: 0}
+  hitSound: {fileID: 0}
+  castingTime: 0
+  fromCastToHitTime: 0
+  _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
+  _validTargets: 1
+  _radius: 3
+  _maxHealthHealMain: 0.25
+  _maxHealthHealArea: 0.1

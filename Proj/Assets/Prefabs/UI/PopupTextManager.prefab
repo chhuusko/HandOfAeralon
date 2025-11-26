@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8517856769611283199
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 11823323262046925}
+  - component: {fileID: 3313001044617880167}
+  m_Layer: 0
+  m_Name: PopupTextManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &11823323262046925
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8517856769611283199}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3313001044617880167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8517856769611283199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af874b008f5c524884c7555eefeb7f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _worldCanvasPrefab: {fileID: 668814708894956668, guid: b126f5ec17251ff4f9641e620018ae69,
+    type: 3}
+  _worldCanvas: {fileID: 668814708894956668, guid: b126f5ec17251ff4f9641e620018ae69,
+    type: 3}
+  _popupTextPrefabToSpawnDamage: {fileID: 3622600758543142800, guid: 77ed2e59d783ef04380a72f2573f6fcf,
+    type: 3}
+  _popupTextPrefabToSpawnCriticalDamage: {fileID: 0}
+  _popupTextPrefabToSpawnHeal: {fileID: 3622600758543142800, guid: e9f497eed28801745856610583fea0ef,
+    type: 3}
+  _popupTextPrefabToSpawnCriticalHeal: {fileID: 0}
+  _testCharacter: {fileID: 0}

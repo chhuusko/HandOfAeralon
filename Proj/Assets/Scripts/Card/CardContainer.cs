@@ -1,32 +1,31 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     //Contains card.
     //Performs mainly ui part of card
     [SerializeField] private Card _containedCard;
     [SerializeField] private GameObject _particleDrag, _particleDrop;
-    [SerializeField] private GameObject _spriteObj;
     private RectTransform _spriteTransform;
     private InputController _controller;
     private GameObject _spawnedParticle;
     private RectTransform _rect;
     Vector3 _startPosition, _hoverEndPosition;
-    float _hoverDistance = 50f;
+    float _hoverDistance = 120f;
     private bool _isDragging;
     private void Awake()
     {
         _controller = new InputController();
-        _spriteTransform = _spriteObj.GetComponent<RectTransform>();
+        _spriteTransform = GetComponent<RectTransform>();
     }
     private void Start()
     {
         _rect = GetComponent<RectTransform>();
         SetPos(_rect.position);
-        _spriteObj.GetComponent<Image>().sprite = _containedCard.icon;
     }
     private void OnEnable()
     {
@@ -44,32 +43,44 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     public void OnDrag(PointerEventData eventData)
     {
-        Ray ray = Camera.main.ScreenPointToRay(_controller.UI.Point.ReadValue<Vector2>());
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
+        if (_isDragging)
         {
-            _spawnedParticle.transform.position = hit.point;
+            Ray ray = Camera.main.ScreenPointToRay(_controller.UI.Point.ReadValue<Vector2>());
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                _spawnedParticle.transform.position = hit.point;
+            }
         }
-        
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (!CanAfford()) return;
+        _isDragging = true;
         _spawnedParticle = Instantiate(_particleDrag);  
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
-        Destroy(_spawnedParticle);
-        // TODO GetGrid and do the Card thing
-        _containedCard.PlayCard();
-        CardHandManager.GetInstance().RemoveCard(this);   
+        if (_isDragging)
+        {
+            Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
+            Destroy(_spawnedParticle);
+            _containedCard.PlayCard();
+            CardHandManager.GetInstance().RemoveCard(this);   
+        }
+        
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         StartCoroutine(OnHover(true));
+    }
+
+    private bool CanAfford()
+    {
+        return CardHandManager.GetInstance().GetMana() >= _containedCard.cost;
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -78,7 +89,9 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     }
     IEnumerator OnHover(bool isEnter)
     {
-
+        CombatUI combatCanvas = GameObject.Find("CombatCanvas")?.GetComponent<CombatUI>();
+        combatCanvas?.SetCardsActive(isEnter);
+        
         float duration = 0.1f; 
         float elapsed = 0f;
         if (isEnter)
@@ -105,6 +118,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     public void AddCard(Card newCard)
     {
         _containedCard = newCard;
+        GetComponent<CardUI>().SetUpUIElements(_containedCard);
     }
     public void SetPos(Vector3 newStarterPoint)
     {
@@ -116,5 +130,10 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     public Card GetCard()
     {
         return _containedCard;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!CanAfford()) return;
     }
 }

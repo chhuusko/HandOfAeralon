@@ -8,18 +8,21 @@ public class CardHandManager : MonoBehaviour
 {
     //Controlls hand 
 
-    public static CardHandManager _instance;
+    private static CardHandManager _instance;
 
     [SerializeField] private GameObject _CardContainer;
     [SerializeField] private Transform _Hand;
+    [SerializeField] private Transform _mulligan;
     [SerializeField] private CardList _cardList;
     [SerializeField] private List<CardContainer> _cardsInHand;
     [SerializeField] private List<Card> _cardsInDeck;
     [SerializeField] private List<Card> _cardsInDiscardPile;
     [SerializeField] private int _maxHand = 3;
     
+    [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
     private int _maxMana = 5;
-    private int _mana = 0;
+    private int _mana = 5;
+    private int _cardsPlayedThisTurn = 0;
 
     public static Action<int> onManaChange;
     public static CardHandManager GetInstance() {return _instance;}
@@ -27,28 +30,35 @@ public class CardHandManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-        AddRandomCardsToDeck();
+        if (GlobalGameManager.GetInstance() != null)
+        {
+            _cardsInDeck = new List<Card>(GlobalGameManager.GetInstance().GetGameData().cardList);
+        }
+        else
+        {
+            _cardsInDeck = new List<Card>(_deckPreset.GetCards());
+        }
         drawHand();
     }
-    private void AddRandomCardsToDeck()
+    private void OnEnable()
     {
-        for (int i = 0; i < 30; i++)
-        {
-            _cardsInDeck.Add(_cardList.GetRandomCard());
-        }
+        CombatEventManager.OnCombatTurnChange += TurnChanged;
+    }
+    private void OnDisable()
+    {
+        CombatEventManager.OnCombatTurnChange -= TurnChanged;
     }
     public void drawHand()
     {
         _cardsInHand.RemoveAll(o => o == null);
-        if (_cardsInDeck.Count == 0)
-        {
-            AddRandomCardsToDeck();
-        }
         while (_maxHand > _cardsInHand.Count)
         {
+            if(_cardsInDeck.Count == 0)
+            {
+                _cardsInDeck = _cardsInDiscardPile;
+            }
             AddCardFromDeck();
         }
-        
         AddSpaceing();
     }
     public void AddCardFromDeck()
@@ -57,13 +67,25 @@ public class CardHandManager : MonoBehaviour
         _cardsInHand.Add(newCardContainer);
         newCardContainer.AddCard(_cardsInDeck[0]);
         _cardsInDeck.RemoveAt(0);
+        AddSpaceing();
+    }
+    public void AddCardFromDeck(int amount)
+    {
+        for(int i = 0; i < _cardsInHand.Count; i++)
+        {
+            CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
+            _cardsInHand.Add(newCardContainer);
+            newCardContainer.AddCard(_cardsInDeck[0]);
+            _cardsInDeck.RemoveAt(0);
+        }
+        AddSpaceing();
     }
 
     public void AddSpaceing()
     {
         for (int i = 0; i < _cardsInHand.Count; i++)
         {
-            Vector3 position = transform.position + new Vector3(-(150f * (_cardsInHand.Count - 1)) / 2f, 0, 0) + new Vector3(i * 150f, 0, 0);
+            Vector3 position = _Hand.position + new Vector3(-(150f * (_cardsInHand.Count - 1)) / 2f, 0, 0) + new Vector3(i * 150f, 0, 0);
             _cardsInHand[i].transform.position = position;
             _cardsInHand[i].SetPos(position);
         }
@@ -95,16 +117,22 @@ public class CardHandManager : MonoBehaviour
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
         _cardsInDiscardPile.Add(cardContainer.GetCard());
-        drawHand();
+        AddSpaceing();
+        _cardsPlayedThisTurn++;
     }
     public void ChangeMana(int change)
     {
-        _mana += change;
+        if(_mana +  change > _maxMana)
+            _mana = _maxMana;
+        else
+            _mana += change;
+
         ManaChanged();
     }
     public void SetUIActive(bool isActive)
     {
-        gameObject.SetActive(isActive);
+        // _Hand.gameObject.SetActive(isActive);
+        // _mulligan.gameObject.SetActive(isActive);
     }
     public int GetMana()
     {
@@ -118,10 +146,21 @@ public class CardHandManager : MonoBehaviour
     {
         return _cardsInDeck;
     }
-    private List<Card> GetDiscardPile()
+    public List<Card> GetDiscardPile()
     {
         return _cardsInDiscardPile;
     }
-
+    public List<CardContainer> GetCardsInHand()
+    {
+        return _cardsInHand;
+    }
+    private void TurnChanged(CombatTurn t)
+    {
+        _cardsPlayedThisTurn = 0;
+    }
+    public int GetCardsPlayedThisTurn()
+    {
+        return _cardsPlayedThisTurn;
+    }
 
 }

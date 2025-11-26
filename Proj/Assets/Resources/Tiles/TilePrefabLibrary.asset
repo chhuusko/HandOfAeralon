@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38064ff27784d634fa258244122d9d4f, type: 3}
+  m_Name: TilePrefabLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::TilePrefabLibrary
+  _tilePrefabs:
+  - type: 0
+    prefab: {fileID: 8873241694455068705, guid: b520e066e98e78f4bb5b8c2881d4531d,
+      type: 3}
+  - type: 1
+    prefab: {fileID: 8873241694455068705, guid: c22f69e6bfe0e2d46919125cb374d642,
+      type: 3}
+  - type: 2
+    prefab: {fileID: 8873241694455068705, guid: 13b01ba244b3e90488b0ec7f4e4b95fb,
+      type: 3}
+  - type: 3
+    prefab: {fileID: 8873241694455068705, guid: 817c3ba5ea7d9514b99238626b3b1949,
+      type: 3}
+  - type: 4
+    prefab: {fileID: 8873241694455068705, guid: bc75e39458f0930428165fdfc7cea1ca,
+      type: 3}
+  - type: 5
+    prefab: {fileID: 8873241694455068705, guid: f41e752e12644b24a8c22ae7a53fa561,
+      type: 3}

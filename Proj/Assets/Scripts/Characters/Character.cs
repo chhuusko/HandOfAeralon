@@ -1,128 +1,43 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.AI;
 
 public enum Faction { Friendly, Enemy }
 
-[RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
-public class Character : MonoBehaviour
+[System.Serializable]
+public class CharacterData
 {
-    [Header("Character")]
+    [Header("Data")]
     [SerializeField] private ClassData _classData;
     [SerializeField] private CharacterClass _characterClass;
     [SerializeField] private Faction _faction;
+    public ClassData ClassData => _classData;
+    public CharacterClass CharacterClass => _characterClass;
+    public Faction Faction => _faction;
     
-    [Header("Base stats")]
+    [Header("Base Stats")]
     [SerializeField] private int _baseHealthPoints;
-    [SerializeField] private int _baseSpeed;
+    [SerializeField] private int _baseInitiative;
     [SerializeField] private int _baseDamage;
-    // TODO: Traits.
+    [SerializeField] private int _baseMovementPoints;
+    public int BaseHealthPoints => _baseHealthPoints;
+    public int BaseInitiative => _baseInitiative;
+    public int BaseDamage => _baseDamage;
+    public int BaseMovementPoints => _baseMovementPoints;
     
     [Header("Current stats")]
     [SerializeField] private int _currentHealthPoints;
-    [SerializeField] private int _currentSpeed;
-    [SerializeField] private int _currentDamage;
-    
-    [Header("Misc")]
-    [SerializeField] private Vector2Int _currentTileIndex;
-    private List<Ability> _availableAbilities;
-    private NavMeshAgent _navMeshAgent;
+    [SerializeField] private List<Ability> _availableAbilities;
+    public int CurrentHealthPoints => _currentHealthPoints;
+    public IReadOnlyList<Ability> AvailableAbilities => _availableAbilities;
 
-
-    public void Update()
+    public CharacterData(ClassData classData, Faction faction)
     {
-        // NOTE (CJ & Carl): Testkod för animationer
-        //if(IsMoving())
-        //{
-        //    GetComponent<Animator>().SetBool("IsMoving", true);
-        //}
-        //else
-        //{
-        //    GetComponent<Animator>().SetBool("IsMoving", false);
-        //}
-    }
-    public CharacterClass GetCharacterClass()
-    {
-        return _characterClass;
-    }
-
-    public Faction GetFaction()
-    {
-        return _faction;
-    }
-
-    public int GetHealthPoints()
-    {
-        return _currentHealthPoints;
-    }
-
-    public int GetSpeed()
-    {
-        return _currentSpeed;
-    }
-
-    public int GetDamage()
-    {
-        return _currentDamage;
-    }
-
-    public Vector2Int GetCurrentTileIndex()
-    {
-        return _currentTileIndex;
-    }
-
-    public CombatGridTile GetCurrentTileComponent()
-    {
-        return CombatManager._instance.GetTileComponent(_currentTileIndex.x, _currentTileIndex.y);
-    }
-
-    public List<Ability> GetAvailableAbilities()
-    {
-        return _availableAbilities;
-    }
-
-    public void SetCharacterClass(CharacterClass characterClass)
-    {
-        _characterClass = characterClass;
-    }
-
-    public void SetFaction(Faction faction)
-    {
+        _classData = classData;
         _faction = faction;
-    }
-
-    public void SetBaseHealthPoints(int healthPoints)
-    {
-        _baseHealthPoints = healthPoints;
-    }
-
-    public void SetBaseSpeed(int initiative)
-    {
-        _baseSpeed = initiative;
-    }
-
-    public void SetBaseDamage(int damage)
-    {
-        _baseDamage = damage;
-    }
-    
-    public void SetCurrentTileIndex(Vector2Int tileIndex)
-    {
-        _currentTileIndex = tileIndex;
-    }
-    
-    private void Awake()
-    {
-        _navMeshAgent = GetComponent<NavMeshAgent>();
-
-        // Only set class values for friendlies.
-        if (_faction == Faction.Friendly)
-        {
-            InitializeClassData();
-            InitializeAbilities();
-        }
+        InitializeClassData();
     }
     
     /// <summary>
@@ -130,75 +45,357 @@ public class Character : MonoBehaviour
     /// </summary>
     private void InitializeClassData()
     {
-        if (_classData == null)
+        if (ClassData == null)
         {
             return;
         }
             
         // Set values from class data.
-        _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(_classData.minHealthPoints, _classData.maxHealthPoints + 1);
-        _currentSpeed = _baseSpeed =  UnityEngine.Random.Range(_classData.minSpeed, _classData.maxSpeed + 1);
-        _currentDamage = _baseDamage = UnityEngine.Random.Range(_classData.minDamage, _classData.maxDamage + 1);
-        _characterClass = _classData.characterClass;
+        _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(ClassData.minHealthPoints, ClassData.maxHealthPoints + 1);
+        _baseInitiative =  UnityEngine.Random.Range(ClassData.minSpeed, ClassData.maxSpeed + 1);
+        _baseDamage = UnityEngine.Random.Range(ClassData.minDamage, ClassData.maxDamage + 1);
+        _baseMovementPoints = UnityEngine.Random.Range(ClassData.minMovementPoints, ClassData.maxMovementPoints + 1);
+        _characterClass = ClassData.characterClass;
+        _availableAbilities = ClassData.abilities;
     }
 
-    /// <summary>
-    /// Sets all the abilities available to the character.
-    /// </summary>
-    private void InitializeAbilities()
+    public void SetCharacterClass(CharacterClass characterClass) => _characterClass = characterClass;
+    public void SetFaction(Faction faction) => _faction = faction;
+    public void SetBaseHealthPoints(int health) => _baseHealthPoints = Mathf.Max(1, health);
+    public void SetBaseInitiative(int initiative) => _baseInitiative = Mathf.Max(1, initiative);
+    public void SetBaseDamage(int damage) => _baseDamage = Mathf.Max(1, damage);
+    public void SetBaseMovementPoints(int movementPoints) => _baseMovementPoints = Mathf.Max(movementPoints, 1);
+    public void SetCurrentHealthPoints(int health) => _currentHealthPoints = Mathf.Max(health, 0);
+    public void Heal(int amount) => SetCurrentHealthPoints(Mathf.Min(CurrentHealthPoints + amount, _baseHealthPoints));
+    public void SetCurrentAbilities(List<Ability> abilities) => _availableAbilities = new List<Ability>(abilities);
+}
+
+[RequireComponent(typeof(Rigidbody))]
+public class Character : MonoBehaviour
+{
+    public event Action<int> OnHealthChanged;
+    public event Action<int, GameObject> OnTakeDamage;
+    public event Action<int, GameObject> OnWasHealed;
+
+
+    public const int MOVEMENT_POINTS = 5;
+    public const float DEATH_COOLDOWN = 1f;
+    
+    // TODO: Traits.
+    
+    [Header("Current stats")]
+    [SerializeField] private int _currentInitiative;
+    [SerializeField] private int _currentDamage;
+    [SerializeField] private int _currentMovementPoints;
+    
+    [Header("Abilities")]
+    private AbilityHandler _abilityHandler;
+    private Dictionary<Ability, int> _currentCooldowns = new();
+
+    [Header("Status Effects")]
+    private StatusEffectManager _statusEffectManager;
+
+    [Header("State")] 
+    public bool CanMove { get; set; } = true;
+    public bool CanAttack { get; set; } = true;
+
+    [Header("Misc")]
+    [SerializeField] private CharacterData _data;
+    [SerializeField] private Vector2Int _currentTileIndex;
+    public CharacterData Data => _data;
+
+    private void OnEnable()
     {
-        if (CombatManager._instance == null)
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
+        
+        PopupTextManager damagePopupTextManager= PopupTextManager.GetInstance();
+        if(damagePopupTextManager != null)
+        {
+            damagePopupTextManager.BindEventOnTakeDamage(this);
+            damagePopupTextManager.BindEventOnWasHealed(this);
+        }
+            
+       
+    }
+
+    private void Start()
+    {
+        if (!TryGetComponent(out _abilityHandler))
+        {
+            Debug.LogError("Character is missing AbilityHandler component!");
+            return;
+        }
+        if (!TryGetComponent(out _statusEffectManager))
+        {
+           Debug.LogError("Character is missing _statusEffectManager component!");
+           return;
+        }
+    }
+
+    private void OnDisable()
+    {
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
+
+        PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
+        if (damagePopupTextManager != null)
+        {
+            damagePopupTextManager.UnBindEventOnTakeDamage(this);
+            damagePopupTextManager.UnBindEventOnWasHealed(this);
+        }
+    }
+
+    public void Update()
+    {
+        // NOTE (CJ & Carl): Testkod fï¿½r animationer
+        //Animator animator = GetComponent<Animator>();
+        //if(animator)
+        //{
+        //    animator.GetBool("IsMoving");
+        //    if (IsMoving())
+        //    {
+        //        animator.SetBool("IsMoving", true);
+        //    }
+        //    else
+        //    {
+        //        animator.SetBool("IsMoving", false);
+        //    }
+        //
+        //}
+    }
+    
+    // Data.
+    public ClassData GetClassData() => _data.ClassData;
+    public CharacterClass GetCharacterClass() => _data.CharacterClass;
+    public Faction GetFaction() => _data.Faction;
+    
+    // Base stats.
+    public int GetMaxHealth() => _data.BaseHealthPoints;
+    public int GetBaseSpeed() => _data.BaseInitiative;
+    public int GetBaseDamage() => _data.BaseDamage;
+    public int GetBaseMovementPoints() => _data.BaseMovementPoints;
+    
+    // Current stats.
+    public int GetCurrentHealth() => _data.CurrentHealthPoints;
+    public int GetInitiative() => _currentInitiative;
+    public int GetDamage() => _currentDamage;
+    public int GetMovementPoints() => _currentMovementPoints;
+    public Vector2Int GetCurrentTileIndex() => _currentTileIndex;
+    public CombatGridTile GetCurrentTileComponent() =>
+        CombatManager._instance.GetTileComponent(_currentTileIndex.x, _currentTileIndex.y);
+    
+    // Abilities.
+    public AbilityHandler GetAbilityHandler() => _abilityHandler;
+    public IReadOnlyList<Ability> GetAvailableAbilities() => _data.AvailableAbilities;
+
+    // Status Effects.
+    public StatusEffectManager GetStatusEffectManager() => _statusEffectManager;
+
+    // Base stats.
+    public void SetCharacterClass(CharacterClass characterClass) => _data.SetCharacterClass(characterClass);
+    public void SetFaction(Faction faction) => _data.SetFaction(faction);
+    public void SetBaseHealthPoints(int healthPoints) => _data.SetBaseHealthPoints(healthPoints);
+    public void SetBaseInitiative(int initiative) => _data.SetBaseInitiative(initiative);
+    public void SetBaseDamage(int damage) => _data.SetBaseDamage(damage);
+    public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
+    
+    // Health.
+    public void SetCurrentHealthPoints(int healthPoints)
+    {
+        _data.SetCurrentHealthPoints(healthPoints);
+        if (_data.CurrentHealthPoints <= 0)
+        {
+            StartCoroutine(RemoveCharacter());
+        }
+    }
+
+    public void IncreaseCurrentHealthPoints(int amount = 1) => 
+        SetCurrentHealthPoints(_data.CurrentHealthPoints + amount);
+    
+    public void DecreaseCurrentHealthPoints(int amount = 1) =>
+        SetCurrentHealthPoints(_data.CurrentHealthPoints - amount);
+
+    // Initiative.
+    public void SetCurrentInitiative(int initiative) => 
+        _currentInitiative = Mathf.Max(initiative, 0);
+    
+    public void IncreaseCurrentInitiative(int amount = 1) => 
+        SetCurrentInitiative(_currentInitiative + amount);
+    
+    public void DecreaseCurrentInitiative(int amount = 1) =>
+        SetCurrentInitiative(_currentInitiative - amount);
+    
+    // Damage.
+    public void SetCurrentDamage(int damage) =>
+        _currentDamage = Mathf.Max(damage, 0);
+    
+    public void IncreaseCurrentDamage(int amount = 1) =>
+        SetCurrentDamage(_currentDamage + amount);
+    
+    public void DecreaseCurrentDamage(int amount = 1) =>
+        SetCurrentDamage(_currentDamage - amount);
+    
+    // Movement points.
+    public void SetCurrentMovementPoints(int movementPoints) =>
+        _currentMovementPoints = Mathf.Max(movementPoints, 0);
+    
+    public void ResetCurrentMovementPoints() =>
+        _currentMovementPoints = GetBaseMovementPoints();
+    
+    public void IncreaseCurrentMovementPoints(int amount = 1) =>
+        SetCurrentMovementPoints(_currentMovementPoints + amount);
+    
+    public void DecreaseCurrentMovementPoints(int amount = 1) =>
+        SetCurrentMovementPoints(_currentMovementPoints - amount);
+    
+    public void SetCurrentTileIndex(Vector2Int tileIndex) => _currentTileIndex = tileIndex;
+
+    public void StartAbilityCooldown(Ability ability)
+    {
+        if (GetAvailableAbilities().Contains(ability) && !_currentCooldowns.ContainsKey(ability))
+        {
+            _currentCooldowns.Add(ability, ability.GetCooldown());
+        }
+    }
+
+    private void UpdateAbilityCooldowns(Character c)
+    {
+        // Only update cooldowns for this character.
+        if (c != this)
         {
             return;
         }
-        _availableAbilities = new List<Ability>();
-        _availableAbilities = CombatManager._instance.GetClassAbilities(_characterClass);
+        
+        var finishedAbilities = new List<Ability>();
+        
+        foreach (var ability in _currentCooldowns.Keys)
+        {
+            _currentCooldowns[ability]--;
+            if (_currentCooldowns[ability] <= 0)
+            {
+                finishedAbilities.Add(ability);
+            }
+        }
+
+        foreach (var ability in finishedAbilities)
+        {
+            _currentCooldowns.Remove(ability);
+        }
     }
 
-    private IEnumerator WaitForCombatManager()
+    public bool IsAbilityCooldownActive(Ability ability)
     {
-        yield return new WaitUntil(() => CombatManager._instance != null);
-        InitializeAbilities();
+        return _currentCooldowns.ContainsKey(ability);
+    }
+
+    public int GetCurrentCooldown(Ability ability)
+    {
+        return _currentCooldowns.GetValueOrDefault(ability, 0);
+    }
+
+    /// <summary>
+    /// Generates a new friendly character.
+    /// </summary>
+    /// <param name="data">The character data to generate from.</param>
+    public void Initialize(CharacterData data)
+    {
+        _data = data;
+        
+        if (_data.ClassData == null)
+        {
+            return;
+        }
+            
+        // Set values from class data.
+        _currentInitiative = _data.BaseInitiative;
+        _currentDamage = _data.BaseDamage;
+        _currentMovementPoints = _data.BaseMovementPoints;
+    }
+
+    public void AddHealthBar()
+    {
+        if (HealthBarManager._instance != null)
+        {
+            HealthBarManager._instance.Register(this);
+        }
+        else
+        {
+            Debug.LogError($"Character.cs | No health bar canvas (prefab by JLW) found in scene!");
+        }
     }
     
     public void TakeDamage(int damage)
     {
-        _currentHealthPoints -= damage;
-        if (_currentHealthPoints <= 0)
+        _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
+        OnTakeDamage?.Invoke(damage, gameObject);
+
+        Debug.Log($"Taking {damage} damage. New health: {GetCurrentHealth()}");
+        
+        if (_data.CurrentHealthPoints <= 0)
         {
-            // TODO: Character dies.
+            StartCoroutine(RemoveCharacter());
         }
+    }
+     
+    private IEnumerator RemoveCharacter()
+    {
+        CombatEventManager.InvokeOnCharacterDeath(this);
+        // TODO: Play animation.
+        yield return new WaitForSeconds(DEATH_COOLDOWN);
+        Destroy(gameObject);
     }
 
     public void Heal(int healAmount)
     {
-        _currentHealthPoints = Mathf.Min(_currentHealthPoints + healAmount, _baseHealthPoints);
+        _data.Heal(healAmount);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
+        OnWasHealed?.Invoke(healAmount, gameObject);
+        Debug.Log($"Healing {healAmount} health. New health: {GetCurrentHealth()}");
     }
-
+    
     public bool IsMoving()
     {
-        if (_navMeshAgent.pathPending)
-            return true; 
+        CharacterMovement component = null;
+        if (TryGetComponent<CharacterMovement>(out component))
+        {
+            return component.IsMoving();
+        }
+        Debug.Log($"Character.cs 245 | CharacterMovement component not found!");
+        return false;
+    }
+    /// <summary>
+    /// Rotates towards target over time.
+    /// </summary>
+    public void RotateTowards(Transform target, float duration)
+    {
+        // Calculate direction.
+        Vector3 direction = (target.position - transform.position).normalized;
 
-        return _navMeshAgent.remainingDistance > _navMeshAgent.stoppingDistance
-               || _navMeshAgent.velocity.sqrMagnitude > 0.01f;
+        // Y is zero to not rotate up or down.
+        direction.y = 0f;
+
+        Quaternion targetRot = Quaternion.LookRotation(direction);
+        StartCoroutine(RotateCoroutine(targetRot, duration));
     }
 
-    /// <summary>
-    /// Sets a new target move location.
-    /// </summary>
-    /// <param name="target">The grid to move to.</param>
-    public void SetMoveTarget(CombatGridTile target)
+    private IEnumerator RotateCoroutine(Quaternion targetRot, float duration)
     {
-        SetMoveTarget(target.GetTilePosition());
+        Quaternion startRot = transform.rotation;
+        float t = 0f;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime / duration;
+            transform.rotation = Quaternion.Slerp(startRot, targetRot, t);
+            yield return null;
+        }
     }
 
-    /// <summary>
-    /// Sets a new target move location.
-    /// </summary>
-    /// <param name="target">The position to move to.</param>
-    public void SetMoveTarget(Vector3 target)
+    void OnDestroy()
     {
-        _navMeshAgent.SetDestination(target);
+        if (HealthBarManager._instance != null)
+        {
+            HealthBarManager._instance.Unregister(this);
+        }
     }
 }

@@ -21,6 +21,10 @@ public class MainMenu : MonoBehaviour
         mainMenu.gameObject.SetActive(true);
         saveMenu.gameObject.SetActive(false);
     }
+    public void SelectGameSlot(int slot)
+    {
+        GlobalGameManager.GetInstance().StartNewGame(slot);
+    }
     public void LoadSaveMenuInfo()
     {
         // loads the info to the gameslot cards

@@ -1,0 +1,62 @@
+using UnityEngine;
+
+public abstract class StatusEffect
+{
+    public int Duration { get; protected set; }
+    
+    protected Character Character { get; private set; }
+    protected StatusEffectManager Manager { get; private set; }
+    
+    public StatusEffectData Data { get; private set; }
+    
+    protected StatusEffect(int duration)
+    {
+        Duration = duration;
+
+        Data = StatusEffectDataRegistry.GetDataForType(GetType());
+    }
+
+    public void Initialize(Character character, StatusEffectManager manager)
+    {
+        Character = character;
+        Manager = manager;
+        OnApply();
+    }
+
+    public virtual void IncreaseDuration(int amount = 1)
+    {
+        Duration = Mathf.Max(Duration, amount);
+    }
+
+    public void DecreaseDuration(int amount = 1)
+    {
+        Duration -= amount;
+        if (Duration <= 0)
+        {
+            Manager.RemoveStatusEffect(this);
+        }
+    }
+
+    /// <summary>
+    /// Decrements duration and returns whether status effect is still active.
+    /// </summary>
+    /// <returns>Whether the status effect is still active.</returns>
+    public bool TickDuration()
+    {
+        if (Data.IsPermanent)
+        {
+            return true;
+        }
+        return --Duration > 0;
+    }
+    
+    // Virtual methods. Overriden and implemented in subclasses as needed.
+    public virtual void OnApply() {}
+    public virtual void OnExpire() {}
+    public virtual void OnTurnStart() {}
+    public virtual void OnTurnEnd() {}
+    public virtual void ModifyIncomingDamage(ref float damage, Ability ability) {}
+    public virtual void ModifyOutgoingDamage(ref float damage, Ability ability) {}
+    public virtual void ModifyIncomingHeal(ref float heal, Ability ability) {}
+    public virtual void ModifyOutgoingHeal(ref float heal, Ability ability) {}
+}

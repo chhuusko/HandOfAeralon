@@ -5,10 +5,14 @@ public class CardList : ScriptableObject
 {
    
     [Header("Info")]
-    [SerializeField] private Card[] cards;
+    [SerializeField] private Card[] _cards;
     public Card GetRandomCard()
     {
-        return cards[Random.Range(0, cards.Length)];
+        return _cards[Random.Range(0, _cards.Length)];
+    }
+    public Card[] GetCards()
+    {
+        return _cards;
     }
     
 }

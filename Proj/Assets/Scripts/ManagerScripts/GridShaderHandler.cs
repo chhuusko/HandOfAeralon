@@ -1,5 +1,4 @@
-﻿using UnityEditor.ShaderGraph.Internal;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GridShaderHandler : MonoBehaviour
 {

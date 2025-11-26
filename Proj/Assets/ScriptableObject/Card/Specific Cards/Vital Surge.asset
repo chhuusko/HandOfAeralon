@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec8efe2c556517b49a1bd0b0967567dc, type: 3}
+  m_Name: Vital Surge
+  m_EditorClassIdentifier: 
+  type: 0
+  rarity: 0
+  title: Vital Surge
+  description: "Restore 25% of target character\u2019s Max Health. If the target
+    was below 50% Health, gain 1 Mana"
+  cost: 2
+  icon: {fileID: 21300000, guid: d2f6494a105421047974228ce298f010, type: 3}
+  CardTemplate: {fileID: 0}
+  info: []
