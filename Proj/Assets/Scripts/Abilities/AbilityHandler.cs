@@ -96,7 +96,7 @@ public class AbilityHandler : MonoBehaviour
         switch (ability.GetAbilityTargetType())
         {
             case Ability.ValidTargetOccupant.Any:
-                return true;
+                return tile.IsWalkable();
             case Ability.ValidTargetOccupant.CharacterOccupiedTile:
                 return occupant != null;
             case Ability.ValidTargetOccupant.Enemy:

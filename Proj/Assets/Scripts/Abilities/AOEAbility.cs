@@ -42,7 +42,7 @@ public abstract class AOEAbility : Ability
     /// <param name="casterTile">The tile of the character casting the ability.</param>
     /// <param name="targetTile">The tile being evaluated as a potential target.</param>
     /// <returns>True if the tile contains a valid target for the AoE ability.</returns>
-    private bool IsValidTargetForAbility(CombatGridTile casterTile, CombatGridTile targetTile)
+    protected bool IsValidTargetForAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         
         if (casterTile == null || targetTile == null) return false;

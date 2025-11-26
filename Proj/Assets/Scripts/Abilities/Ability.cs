@@ -83,6 +83,4 @@ public abstract class Ability : ScriptableObject
         yield return new WaitForSeconds(fromCastToHitTime);
     }
     protected abstract void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile);
-
-
 }

@@ -49,15 +49,14 @@ public abstract class StatusEffect
         }
         return --Duration > 0;
     }
-
-    // Each subclass has to set the status effect data.
-    // public abstract void SetData(StatusEffectData data);
     
-    // Virtual methods. Overriden and implemented in subclasses.
+    // Virtual methods. Overriden and implemented in subclasses as needed.
     public virtual void OnApply() {}
     public virtual void OnExpire() {}
     public virtual void OnTurnStart() {}
     public virtual void OnTurnEnd() {}
     public virtual void ModifyIncomingDamage(ref float damage, Ability ability) {}
     public virtual void ModifyOutgoingDamage(ref float damage, Ability ability) {}
+    public virtual void ModifyIncomingHeal(ref float heal, Ability ability) {}
+    public virtual void ModifyOutgoingHeal(ref float heal, Ability ability) {}
 }

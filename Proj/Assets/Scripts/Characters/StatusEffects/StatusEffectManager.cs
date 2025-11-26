@@ -128,4 +128,23 @@ public class StatusEffectManager : MonoBehaviour
         }
         return damage;
     }
+
+    public float ModifyIncomingHeal(float heal, Ability ability)
+    {
+        foreach (var statusEffect in _statusEffects)
+        {
+            statusEffect.ModifyIncomingHeal(ref heal, ability);
+        }
+        return heal;
+    }
+    
+    public float ModifyOutgoingHeal(float heal, Ability ability)
+    {
+        foreach (var statusEffect in _statusEffects)
+        {
+            statusEffect.ModifyOutgoingHeal(ref heal, ability);
+        }
+
+        return heal;
+    }
 }
