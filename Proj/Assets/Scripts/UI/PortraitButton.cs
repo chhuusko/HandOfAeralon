@@ -19,6 +19,6 @@ public class PortraitButton : MonoBehaviour
             return;
         }
         OnClickPortraitButton?.Invoke(this);
-        Selector._instance.SetSelectedCharacter(CombatManager._instance.GetCharacterDataDict()[Character]);
+        Selector._instance.SelectCharacterFromUI(CombatManager._instance.GetCharacterDataDict()[Character]);
     }
 }
