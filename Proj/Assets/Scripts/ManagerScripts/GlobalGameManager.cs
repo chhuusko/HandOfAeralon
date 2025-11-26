@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public struct GameData
 {
@@ -15,7 +16,6 @@ public struct GameData
 
 }
 [CreateAssetMenu(fileName = "GlobalGameManager", menuName = "Manager/GlobalGameManager")]
-
 public class GlobalGameManager : ScriptableObject
 {
     [SerializeField] private DeckPreset _deckPreset;
@@ -31,6 +31,28 @@ public class GlobalGameManager : ScriptableObject
         }
         return _instance;
     }
+    private void OnEnable()
+    {
+        CombatEventManager.OnCharacterDeath += RemoveCharacter;
+    }
+    private void OnDisable()
+    {
+        CombatEventManager.OnCharacterDeath -= RemoveCharacter;
+    }
+
+    private void RemoveCharacter(Character obj)
+    {
+        Dictionary<CharacterData, Character> dict = CombatManager._instance.GetCharacterDataDict();
+        foreach (var pair in dict)
+        {
+            if (pair.Value == obj)
+            {
+                _currentGame.heroDataList.Remove(pair.Key);
+                break;
+            }
+        }
+    }
+
     public GameData GetGameData()
     {
         if (_currentGame.cardList == null)

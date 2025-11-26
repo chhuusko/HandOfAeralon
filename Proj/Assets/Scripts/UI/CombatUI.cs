@@ -16,6 +16,7 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private Image _characterPortraitPanel;
     [SerializeField] private Image _activeCharacterPortrait;
+    [SerializeField] private GameObject _activeCharacterBorder;
     
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
@@ -45,6 +46,9 @@ public class CombatUI : MonoBehaviour
     // Cards.
     [SerializeField] private GameObject _hand;
     [SerializeField] private GameObject _cardHandManager;
+    [SerializeField] private GameObject _deckButton;
+    [SerializeField] private GameObject _discardPileButton;
+    [SerializeField] private GameObject _manaPanel;
     
     private CharacterData _selectedCharacter;
     private bool _bCombatStarted;
@@ -60,8 +64,10 @@ public class CombatUI : MonoBehaviour
     {
         CardHandManager.onManaChange += UpdateManaText;
         
-        CombatEventManager.OnEnterCombatStateLoadNextLevel += PlaceCharacterStarted;
+        CombatEventManager.OnEnterCombatStatePlaceCharacter += PlaceCharacterStarted;
+        CombatEventManager.OnEnterCombatStateLoadNextLevel += DisablePanels;
         CombatEventManager.OnEnterCombatStateTakeTurn += StartTurn;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateActivePortrait;
         CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
         CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
@@ -74,14 +80,15 @@ public class CombatUI : MonoBehaviour
         CardHandManager.onManaChange -= UpdateManaText;
         
         CombatEventManager.OnEnterCombatStatePlaceCharacter -= PlaceCharacterStarted;
+        CombatEventManager.OnEnterCombatStateLoadNextLevel -= DisablePanels;
         CombatEventManager.OnEnterCombatStateTakeTurn -= StartTurn;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateActivePortrait;
         CombatEventManager.OnTurnOrderChanged -= UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
         CombatEventManager.OnAbilityDataCreated -= AddCombatLogEntry;
         
         Selector._instance.OnCharacterSelected -= SetSelectedCharacter;
         Selector._instance.OnCharacterSelected -= LoadAbilities;
-        Selector._instance.OnCharacterSelected -= UpdateActivePortrait;
         Selector._instance.OnCharacterSelected -= UpdatePortraitColors;
         Selector._instance.OnCharacterDeselected -= DeselectCharacter;
 
@@ -99,9 +106,6 @@ public class CombatUI : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            
-            _cardHandManager.SetActive(true);
-            _hand.SetActive(false);
         }
         else
         {
@@ -114,9 +118,7 @@ public class CombatUI : MonoBehaviour
 
     private void Start()
     {
-        _hand.SetActive(false);
-        UpdateCharacterPortraits();
-        UpdateManaText(CardHandManager.GetInstance().GetMana());
+        
     }
     
     private IEnumerator WaitForSelector()
@@ -128,7 +130,6 @@ public class CombatUI : MonoBehaviour
         
         Selector._instance.OnCharacterSelected += SetSelectedCharacter;
         Selector._instance.OnCharacterSelected += LoadAbilities;
-        Selector._instance.OnCharacterSelected += UpdateActivePortrait;
         Selector._instance.OnCharacterSelected += UpdatePortraitColors;
         Selector._instance.OnCharacterDeselected += DeselectCharacter;
     }
@@ -198,8 +199,30 @@ public class CombatUI : MonoBehaviour
         
         SetSelectedCharacter(c);
         _currentTurnCharacter = CombatManager._instance.GetCharacterDataDict()[_selectedCharacter];
+        
+        _characterPortraitPanel.gameObject.SetActive(true);
+        _deckButton.gameObject.SetActive(true);
+        _turnOrderPanel.gameObject.SetActive(true);
+        _turnOrderScrollBar.gameObject.SetActive(true);
+        _activeCharacterBorder.gameObject.SetActive(true);
+        _discardPileButton.gameObject.SetActive(true);
+        _manaPanel.gameObject.SetActive(true);
+        _startCombatButton.gameObject.SetActive(true);
+        _cardHandManager.SetActive(true);
+        _combatLogButton.SetActive(true);
+        
+        UpdateCharacterPortraits();
+        UpdateManaText(CardHandManager.GetInstance().GetMana());
     }
 
+    private void DisablePanels()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+    }
+    
     private void PlaceCharactersEnded()
     {
         _bCombatStarted = true;
@@ -220,7 +243,6 @@ public class CombatUI : MonoBehaviour
     {
         _selectedCharacter = null;
         
-        ClearActivePortrait();
         ClearAbilityButtons();
 
         ClearPortraitColors();
@@ -350,7 +372,7 @@ public class CombatUI : MonoBehaviour
     
     private void UpdateActivePortrait(PortraitButton pb)
     {
-        UpdateActivePortrait(pb.Character);
+        // UpdateActivePortrait(pb.Character);
     }
 
     public void UpdateActivePortrait(Character c)
