@@ -80,6 +80,7 @@ public abstract class Ability : ScriptableObject
     {
         Character caster = casterTile.GetOccupantCharacter();
         if (caster == null) Debug.LogError("CasterTile has no character!");
+        ResetMovementPoints(caster);
         caster.RotateTowards(targetTile.transform, _castingRotationTime);
 
         if (caster.TryGetComponent<Animator>(out var animator)){
@@ -93,5 +94,8 @@ public abstract class Ability : ScriptableObject
         yield return new WaitForSeconds(_fromCastToHitTime);
         RunAbility(casterTile, targetTile);
     }
-    protected abstract void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile);
-}
+    protected void ResetMovementPoints(Character character)
+    {
+        character.SetCurrentMovementPoints(0);
+    }
+    protected abstract void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile);}

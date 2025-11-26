@@ -861,7 +861,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2220726506216397152
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1752,6 +1752,9 @@ MonoBehaviour:
   _combatLogViewPort: {fileID: 3389316738139497050}
   _hand: {fileID: 3650385346247062174}
   _cardHandManager: {fileID: 3311761313986929369}
+  _deckButton: {fileID: 9082217781877423237}
+  _discardPileButton: {fileID: 2664291079622857572}
+  _manaPanel: {fileID: 8751787786310694528}
 --- !u!1 &4306417135386459380
 GameObject:
   m_ObjectHideFlags: 0

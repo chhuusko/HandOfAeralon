@@ -38,13 +38,23 @@ public class LevelManager : ScriptableObject
     }
     public void StartNextLevel() 
     {
+        
         if(SceneManager.GetActiveScene().name == "ShopScene")
         {
-            SceneManager.LoadScene("CombatScene");
+            if (_level%2 == 0)
+            {
+                SceneManager.LoadScene("GraveyardTest");
+            }
+            else
+            {
+                SceneManager.LoadScene("Graveyard12x10_Easy");
+            }
+            
         }
         else
         {
             SceneManager.LoadScene("ShopScene");
+            //_level++;
         }
         
         

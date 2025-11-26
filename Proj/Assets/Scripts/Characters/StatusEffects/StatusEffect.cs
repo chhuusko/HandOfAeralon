@@ -7,7 +7,7 @@ public abstract class StatusEffect
     protected Character Character { get; private set; }
     protected StatusEffectManager Manager { get; private set; }
     
-    private StatusEffectData Data;
+    public StatusEffectData Data { get; private set; }
     
     protected StatusEffect(int duration)
     {
