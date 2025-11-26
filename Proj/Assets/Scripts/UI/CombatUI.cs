@@ -67,6 +67,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnEnterCombatStatePlaceCharacter += PlaceCharacterStarted;
         CombatEventManager.OnEnterCombatStateLoadNextLevel += DisablePanels;
         CombatEventManager.OnEnterCombatStateTakeTurn += StartTurn;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateActivePortrait;
         CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
         CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
@@ -81,13 +82,13 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnEnterCombatStatePlaceCharacter -= PlaceCharacterStarted;
         CombatEventManager.OnEnterCombatStateLoadNextLevel -= DisablePanels;
         CombatEventManager.OnEnterCombatStateTakeTurn -= StartTurn;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateActivePortrait;
         CombatEventManager.OnTurnOrderChanged -= UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
         CombatEventManager.OnAbilityDataCreated -= AddCombatLogEntry;
         
         Selector._instance.OnCharacterSelected -= SetSelectedCharacter;
         Selector._instance.OnCharacterSelected -= LoadAbilities;
-        Selector._instance.OnCharacterSelected -= UpdateActivePortrait;
         Selector._instance.OnCharacterSelected -= UpdatePortraitColors;
         Selector._instance.OnCharacterDeselected -= DeselectCharacter;
 
@@ -129,7 +130,6 @@ public class CombatUI : MonoBehaviour
         
         Selector._instance.OnCharacterSelected += SetSelectedCharacter;
         Selector._instance.OnCharacterSelected += LoadAbilities;
-        Selector._instance.OnCharacterSelected += UpdateActivePortrait;
         Selector._instance.OnCharacterSelected += UpdatePortraitColors;
         Selector._instance.OnCharacterDeselected += DeselectCharacter;
     }
@@ -243,7 +243,6 @@ public class CombatUI : MonoBehaviour
     {
         _selectedCharacter = null;
         
-        ClearActivePortrait();
         ClearAbilityButtons();
 
         ClearPortraitColors();
@@ -373,7 +372,7 @@ public class CombatUI : MonoBehaviour
     
     private void UpdateActivePortrait(PortraitButton pb)
     {
-        UpdateActivePortrait(pb.Character);
+        // UpdateActivePortrait(pb.Character);
     }
 
     public void UpdateActivePortrait(Character c)
