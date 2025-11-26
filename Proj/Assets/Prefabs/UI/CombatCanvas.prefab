@@ -1723,10 +1723,10 @@ MonoBehaviour:
     type: 3}
   _characterPortraitButtonPrefab: {fileID: 3320840960465630, guid: e0604acf35576954bb8b49405d849ce8,
     type: 3}
-  _turnOrderPanel: {fileID: 7483078133583643469}
   _placeCharactersPanel: {fileID: 7668318786330276250}
   _mana: {fileID: 4826794601199300524}
   _scrollRect: {fileID: 1479745401614222361}
+  _turnOrderPanel: {fileID: 7483078133583643469}
   _activeColor: {r: 1, g: 1, b: 1, a: 1}
   _inactiveColor: {r: 1, g: 1, b: 1, a: 0.5882353}
   _combatLogEntryPrefab: {fileID: 515051203510682649, guid: d029746f98115104494a220ba07147d2,
@@ -2059,7 +2059,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 275, y: 40}
+  m_SizeDelta: {x: 230, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &697170551177152969
 CanvasRenderer:
@@ -2116,7 +2116,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.3
+  m_fontSize: 28.7
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2975,8 +2975,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -340}
-  m_SizeDelta: {x: 325, y: 75}
+  m_AnchoredPosition: {x: 0, y: -325}
+  m_SizeDelta: {x: 275, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5267642165116478331
 CanvasRenderer:
