@@ -42,7 +42,7 @@ public class CharacterMovement : MonoBehaviour
             return;
         }
 
-        Debug.Log($"CharacterMovement.cs | {_character.name} move range drawn.");
+        DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} move range drawn.");
         _tilesInRange = GridExplorer._instance.GetTilesInRange(currentTile, _character.GetMovementPoints(), true)
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
@@ -60,7 +60,7 @@ public class CharacterMovement : MonoBehaviour
 
         if (_bIsMoving || tile == _lastPreviewPathTile || _character.GetMovementPoints() <= 0)
         {
-            //Debug.LogError($"CharacterMovement::PreviewPath() skipped");
+            DebugLog.JLWLog($"CharacterMovement::PreviewPath() skipped");
             return;
         }
 
@@ -69,7 +69,7 @@ public class CharacterMovement : MonoBehaviour
         GameObject currentTile = null;
         currentTile = _character.GetCurrentTileComponent().gameObject;
 
-        //Debug.LogError($"CharacterMovement::PreviewPath() called A*");
+        DebugLog.JLWLog($"CharacterMovement::PreviewPath() called A*");
         _pathPreview = GridExplorer._instance.FindPathAStar(currentTile, tile.gameObject)
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
@@ -80,7 +80,7 @@ public class CharacterMovement : MonoBehaviour
     {
         if (_pathPreview == null || _pathPreview.Count == 0)
         {
-            Debug.LogError($"CharacterMovement.cs | _pathPreview IS EMPTY!");
+            DebugLog.JLWLog($"CharacterMovement.cs | _pathPreview IS EMPTY!");
             return;
         }
 
@@ -88,7 +88,7 @@ public class CharacterMovement : MonoBehaviour
         {
             if (_character.GetMovementPoints() <= 0)
             {
-                Debug.LogError($"CharacterMovement.cs | {_character.name} is out of MP!");
+                DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} is out of MP!");
                 _tilesInRange = new();
                 return;
             }
@@ -103,7 +103,7 @@ public class CharacterMovement : MonoBehaviour
     {
         if (path == null || path.Count == 0)
         {
-            Debug.LogError($"CharacterMovement.cs | path IS EMPTY!");
+            DebugLog.JLWLog($"CharacterMovement.cs | path IS EMPTY!");
             return;
         }
 
