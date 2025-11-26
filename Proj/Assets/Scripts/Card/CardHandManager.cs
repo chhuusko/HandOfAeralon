@@ -22,6 +22,7 @@ public class CardHandManager : MonoBehaviour
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
     private int _maxMana = 5;
     private int _mana = 5;
+    private int _cardsPlayedThisTurn = 0;
 
     public static Action<int> onManaChange;
     public static CardHandManager GetInstance() {return _instance;}
@@ -38,6 +39,14 @@ public class CardHandManager : MonoBehaviour
             _cardsInDeck = new List<Card>(_deckPreset.GetCards());
         }
         drawHand();
+    }
+    private void OnEnable()
+    {
+        CombatEventManager.OnCombatTurnChange += TurnChanged;
+    }
+    private void OnDisable()
+    {
+        CombatEventManager.OnCombatTurnChange -= TurnChanged;
     }
     public void drawHand()
     {
@@ -109,6 +118,7 @@ public class CardHandManager : MonoBehaviour
         Destroy(cardContainer.gameObject);
         _cardsInDiscardPile.Add(cardContainer.GetCard());
         AddSpaceing();
+        _cardsPlayedThisTurn++;
     }
     public void ChangeMana(int change)
     {
@@ -136,7 +146,7 @@ public class CardHandManager : MonoBehaviour
     {
         return _cardsInDeck;
     }
-    private List<Card> GetDiscardPile()
+    public List<Card> GetDiscardPile()
     {
         return _cardsInDiscardPile;
     }
@@ -144,6 +154,13 @@ public class CardHandManager : MonoBehaviour
     {
         return _cardsInHand;
     }
-
+    private void TurnChanged(CombatTurn t)
+    {
+        _cardsPlayedThisTurn = 0;
+    }
+    public int GetCardsPlayedThisTurn()
+    {
+        return _cardsPlayedThisTurn;
+    }
 
 }
