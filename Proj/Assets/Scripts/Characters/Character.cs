@@ -202,6 +202,7 @@ public class Character : MonoBehaviour
     public void SetCurrentHealthPoints(int healthPoints)
     {
         _data.SetCurrentHealthPoints(healthPoints);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
         if (_data.CurrentHealthPoints <= 0)
         {
             StartCoroutine(RemoveCharacter());

@@ -116,6 +116,13 @@ public class CharacterMovement : MonoBehaviour
         GridExplorer._instance.Clear();
         float moveSpeed = 4f; // Måste matcha animationerna
 
+        Animator animator = null;
+        if (_character.TryGetComponent<Animator>(out animator))
+        {
+            //Debug.LogError($"{_character.name} går!");
+            animator.SetBool("IsMoving", true);
+        }
+
         foreach (var step in path)
         {
             Vector3 targetPos = step.transform.position;
@@ -145,6 +152,13 @@ public class CharacterMovement : MonoBehaviour
         }
 
         _bIsMoving = false;
+
+        if (animator != null)
+        {
+            //Debug.LogError($"{_character.name} stannade!");
+            animator.SetBool("IsMoving", false);
+        }
+
         DrawMoveRange();
     }
 }
