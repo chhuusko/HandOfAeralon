@@ -20,10 +20,11 @@ MonoBehaviour:
   _type: 0
   _rangeCalculation: {fileID: 11400000, guid: b26a232b16ceee045899106d2759f853, type: 2}
   _targetType: 3
-  castingEffect: {fileID: 0}
-  hitEffect: {fileID: 0}
-  castingSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  castingTime: 1
-  fromCastToHitTime: 0
+  _castingEffect: {fileID: 0}
+  _hitEffect: {fileID: 0}
+  _castingSound: {fileID: 0}
+  _hitSound: {fileID: 0}
+  _castingTime: 2.29166
+  _fromCastToHitTime: 0
+  _castingRotationTime: 0.3
   _damageMultiplier: 1.6
