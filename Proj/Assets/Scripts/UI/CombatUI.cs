@@ -23,7 +23,6 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Button _characterPortraitButtonPrefab;
     
     [SerializeField] private GameObject _turnOrderPanel;
-    [SerializeField] private GameObject _hand;
     [SerializeField] private GameObject _placeCharactersPanel;
     
     [SerializeField] private TextMeshProUGUI _mana;
@@ -38,6 +37,10 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _combatLogPanel;
     [SerializeField] private GameObject _combatLogScrollbar;
     [SerializeField] private GameObject _combatLogButton;
+    
+    // Cards.
+    [SerializeField] private GameObject _hand;
+    [SerializeField] private GameObject _cardHandManager;
     
     private CharacterData _selectedCharacter;
     private bool _bCombatStarted;
@@ -90,6 +93,7 @@ public class CombatUI : MonoBehaviour
             Instance = this;
             //DontDestroyOnLoad(gameObject);
             
+            _cardHandManager.SetActive(true);
             _hand.SetActive(false);
         }
         else
