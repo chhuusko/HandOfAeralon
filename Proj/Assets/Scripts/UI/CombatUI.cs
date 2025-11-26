@@ -25,7 +25,7 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _placeCharactersPanel;
     
     [SerializeField] private TextMeshProUGUI _mana;
-    [SerializeField] private ScrollRect _scrollRect;
+    [SerializeField] private ScrollRect _turnOrderScrollBar;
 
     // Turn order.
     [SerializeField] private GameObject _turnOrderPanel;
@@ -40,6 +40,7 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _combatLogPanel;
     [SerializeField] private GameObject _combatLogScrollbar;
     [SerializeField] private GameObject _combatLogButton;
+    [SerializeField] private Transform _combatLogViewPort;
     
     // Cards.
     [SerializeField] private GameObject _hand;
@@ -51,7 +52,7 @@ public class CombatUI : MonoBehaviour
     
     private List<PortraitButton> _portraitButtons = new();
     private List<AbilityButton> _abilityButtons = new();
-    private List<CombatLogEntry> _combatLogEntries = new();
+    private List<AbilityExecutionData> _combatLogEntries = new();
     
     private Dictionary<CharacterData, PortraitButton> _characterPortraits = new();
     
@@ -63,6 +64,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn += StartTurn;
         CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
+        CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
 
         StartCoroutine(WaitForSelector());
     }
@@ -75,6 +77,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn -= StartTurn;
         CombatEventManager.OnTurnOrderChanged -= UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
+        CombatEventManager.OnAbilityDataCreated -= AddCombatLogEntry;
         
         Selector._instance.OnCharacterSelected -= SetSelectedCharacter;
         Selector._instance.OnCharacterSelected -= LoadAbilities;
@@ -176,14 +179,14 @@ public class CombatUI : MonoBehaviour
         _combatLogScrollbar.SetActive(_bCombatLogEnabled);
     }
 
-    private void AddCombatLogEntry(CombatLogEntry entry)
+    private void AddCombatLogEntry(AbilityExecutionData data)
     {
-        _combatLogEntries.Add(entry);
-        var go = Instantiate(_combatLogEntryPrefab, _combatLogPanel.transform);
+        _combatLogEntries.Add(data);
+        var go = Instantiate(_combatLogEntryPrefab, _combatLogViewPort);
         
-        go.transform.Find("Icon").GetComponent<Image>().sprite = entry.Ability.GetIcon();
-        go.transform.Find("Text").GetComponent<Text>().text =
-            $"{entry.Source.ClassData.name} does 4 damage to {entry.Target.ClassData.name}";
+        go.transform.Find("Icon").GetComponent<Image>().sprite = data.Ability.GetIcon();
+        go.transform.Find("Text").GetComponent<TMP_Text>().text =
+            $"{data.Caster.Data.ClassData.name} does 4 damage to {data.Target.Data.ClassData.name}";
     }
 
     private void PlaceCharacterStarted()
@@ -300,7 +303,7 @@ public class CombatUI : MonoBehaviour
         yield return null;
         
         // Set scroll to bottom.
-        _scrollRect.verticalNormalizedPosition = 0;
+        _turnOrderScrollBar.verticalNormalizedPosition = 0;
     }
 
     private void ClearPortraitColors()
