@@ -56,6 +56,11 @@ public class StatusEffectManager : MonoBehaviour
         return _statusEffects.Exists(e => e is T);
     }
 
+    public IReadOnlyList<StatusEffect> GetAllStatusEffects()
+    {
+        return _statusEffects;
+    }
+
     private void UpdateDuration(Character c)
     {
         if (!_character || c != _character)

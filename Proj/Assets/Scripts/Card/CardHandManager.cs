@@ -32,7 +32,7 @@ public class CardHandManager : MonoBehaviour
         _instance = this;
         if (GlobalGameManager.GetInstance() != null)
         {
-            _cardsInDeck = GlobalGameManager.GetInstance().GetGameData().cardList;
+            _cardsInDeck = new List<Card>(GlobalGameManager.GetInstance().GetGameData().cardList);
         }
         else
         {

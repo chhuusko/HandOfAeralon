@@ -352,7 +352,7 @@ public class Selector : MonoBehaviour
         _selectedCharacter = null;
         _characterMovement = null;
         _pendingCharacterActionType = CharacterActionType.Null;
-        ResetColorAllTiles();
+        
 
         if (_currentState == SelectorState.PlacingCharacters)
         {
@@ -363,10 +363,12 @@ public class Selector : MonoBehaviour
         {
             // Back to idle if it's players turn.
             _currentState = SelectorState.Idle;
+            ResetColorAllTiles();
         }
         else
         {
             _currentState = SelectorState.NonActive;
+            ResetColorAllTiles();
         }
 
         if (_bDebugSelector) DebugLog.MGLog("Deselect Character");
@@ -453,6 +455,11 @@ public class Selector : MonoBehaviour
     private void HandleAbilityCast(CombatGridTile tile)
     {
         bool success = _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_selectedCharacter.GetAbilityHandler().GetPendingAbility(), tile);
+        _selectedCharacter?.GetAbilityHandler()?.SetPendingAbility(null);
+        _pendingCharacterActionType = CharacterActionType.Null;
+        ResetColorAllTiles();
+        _currentState = CombatManager._instance.GetCombatTurnOrder().GetCurrentTurn() == CombatTurn.PlayerTurn? SelectorState.Idle: _currentState = SelectorState.NonActive;
+    
         if (_bDebugSelector && success)
         {
             DebugLog.MGLog(_selectedCharacter.GetCharacterClass() + " used ability: " + _selectedCharacter.GetAbilityHandler().GetPendingAbility().GetAbilityName().ToString());
@@ -461,7 +468,6 @@ public class Selector : MonoBehaviour
         {
             DebugLog.MGLog(_selectedCharacter.GetCharacterClass() + " failed to use ability: " + _selectedCharacter.GetAbilityHandler().GetPendingAbility().GetAbilityName().ToString());
         }
-        DeselectCharacter();
     }
 
     private void SetColorOfTiles(List<CombatGridTile> tiles, Color color)

@@ -1,13 +1,9 @@
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class AbilityHandler : MonoBehaviour
 {
-    public static event System.Action OnAbilityCast;
     [SerializeField] private List<Ability> _abilities;
 
     private List<CombatGridTile> _tilesInRange = new();
@@ -37,8 +33,7 @@ public class AbilityHandler : MonoBehaviour
                 DebugLog.MGLog("Tried casting ability, but it failed");
             return false;
         }
-        OnAbilityCast?.Invoke();
-
+        CombatEventManager.InvokeOnAbilityCast();
         StartCoroutine(ability.StartAbilityEffects(_casterTile, targetTile));
         _characterCaster.StartAbilityCooldown(ability);
         return true;
