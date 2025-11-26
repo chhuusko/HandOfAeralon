@@ -83790,6 +83790,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: CutsceneManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2292155220432598705, guid: 4e14480202e566a4781d3aa6384022ff,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2292155220432598705, guid: 4e14480202e566a4781d3aa6384022ff,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3312992760229847428, guid: 4e14480202e566a4781d3aa6384022ff,
+        type: 3}
+      propertyPath: ShapeModule.m_Scale.x
+      value: 17.652096
+      objectReference: {fileID: 0}
     - target: {fileID: 6611824564840862240, guid: 4e14480202e566a4781d3aa6384022ff,
         type: 3}
       propertyPath: m_LocalPosition.x
