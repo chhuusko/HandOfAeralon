@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-    public enum SelectorState
-    {
-        NonActive,
-        PlacingCharacters,
-        Idle,  
-        CharacterSelected,
-        ActionTypeSelected,
-    }
+public enum SelectorState
+{
+    NonActive,
+    PlacingCharacters,
+    Idle,
+    CharacterSelected,
+    ActionTypeSelected,
+}
 
 public class Selector : MonoBehaviour
 {
-    public static Selector _instance {  get; private set; }
-    
+    public static Selector _instance { get; private set; }
+
     [SerializeField] private CombatUI _combatUI;
     [SerializeField] private SelectorState _currentState = SelectorState.NonActive;
     [SerializeField] private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
@@ -31,11 +31,11 @@ public class Selector : MonoBehaviour
         Null,
         Movement,
         AbilityCasting
-    } 
+    }
 
     private void Awake()
     {
-        if(_instance != null && _instance != this)
+        if (_instance != null && _instance != this)
         {
             Destroy(this);
         }
@@ -68,7 +68,7 @@ public class Selector : MonoBehaviour
         switch (state)
         {
             case CombatState.IntroCinematic: _currentState = SelectorState.NonActive; break;
-            case CombatState.PlaceCharacters: _currentState = SelectorState.PlacingCharacters;break;
+            case CombatState.PlaceCharacters: _currentState = SelectorState.PlacingCharacters; break;
             case CombatState.TakeTurn: break;
             case CombatState.EndCombat: _currentState = SelectorState.NonActive; break;
         }
@@ -188,7 +188,7 @@ public class Selector : MonoBehaviour
     public CombatGridTile GetTileClicked()
     {
         // Get clicked tile.
-        if(!Input.GetMouseButtonDown(0)) return null;
+        if (!Input.GetMouseButtonDown(0)) return null;
 
         return GetTileUnderMouse();
     }
@@ -219,7 +219,7 @@ public class Selector : MonoBehaviour
     public void SelectCharacterFromTile(CombatGridTile tile)
     {
         // Selects the charater from the tile clicked. Checks state before to see which type of selection is appropriate.
-       
+
         if (_currentState == SelectorState.PlacingCharacters)
         {
             SelectPlacementCharacterFromTile(tile);
@@ -240,13 +240,13 @@ public class Selector : MonoBehaviour
         // Selects the charater from the UI buttons. Checks state before to see which type of selection is appropriate.
         if (character == null) return;
 
-        if(_currentState == SelectorState.PlacingCharacters)
+        if (_currentState == SelectorState.PlacingCharacters)
         {
             SelectPlacementCharacterFromUI(character);
         }
         else
         {
-            SelectCharacter(character); 
+            SelectCharacter(character);
         }
     }
     private void SelectPlacementCharacterFromTile(CombatGridTile tile)
@@ -276,28 +276,46 @@ public class Selector : MonoBehaviour
         ShowCharacterUI(character);
     }
 
+    /// <summary>
+    /// Attempts to select a character from the given tile.  
+    /// If the tile is empty, the current selection is cleared.
+    /// </summary>
+    /// <param name="tile">The tile to check for a character.</param>
     private void TrySelectCharacterFromTile(CombatGridTile tile)
     {
         Character character = tile?.GetOccupantCharacter();
-        if(character == null)
+        if (character == null)
         {
             DeselectCharacter();
             return;
         }
         SelectCharacter(character);
     }
+
+    /// <summary>
+    /// Handles character selection logic.  
+    /// Updates selector state, shows character UI and activates movement logic  
+    /// if it is the selected character's turn.
+    /// </summary>
+    /// <param name="character">The character to select.</param>
     private void SelectCharacter(Character character)
     {
         DeselectCharacter();
-        bool bIsFriendly = character.GetFaction() == Faction.Friendly;
+
+        // Return if character is not friendly.
+        if (character.GetFaction() != Faction.Friendly) return;
+
         bool bIsCharactersTurn = character == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
 
-        if (bIsFriendly && bIsCharactersTurn)
+        // Update selected character and show it's related UI.
+        _selectedCharacter = character;
+        ShowCharacterUI(character);
+
+        // If it's the characters turn, activate logic.
+        if (bIsCharactersTurn)
         {
-            ShowCharacterUI(character);
             _pendingCharacterActionType = CharacterActionType.Movement;
             _currentState = SelectorState.ActionTypeSelected;
-            _selectedCharacter = character;
 
             // JLW
             _characterMovement = character.GetComponent<CharacterMovement>();
@@ -311,21 +329,21 @@ public class Selector : MonoBehaviour
             {
                 DebugLog.MGLog(character.GetCharacterClass().ToString() + " on tile index: " + character.GetCurrentTileIndex().ToString());
             }
-
             return;
         }
-
-        if (bIsFriendly)
-        {
-            ShowCharacterUI(character);
-            _currentState = SelectorState.CharacterSelected;
-        }
+        // Else, just change the selector state.
+        _currentState = SelectorState.CharacterSelected;
     }
 
+    /// <summary>
+    /// Clears the currently selected character and resets all related state and visuals.  
+    /// Hides character UI, stops ability previews, resets tile colors and updates selector state  
+    /// based on the current combat state.
+    /// </summary>
     private void DeselectCharacter()
     {
         OnCharacterDeselected?.Invoke();
-        
+
         // if ui is active Deactivate UI
         HideCharacterOptions();
 
@@ -368,6 +386,7 @@ public class Selector : MonoBehaviour
     {
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
+            ResetColorAllTiles();
             _pendingCharacterActionType = CharacterActionType.AbilityCasting;
             _currentState = SelectorState.ActionTypeSelected;
             abilityHandler.SetPendingAbility(ability);
@@ -460,8 +479,10 @@ public class Selector : MonoBehaviour
         GameObject[] tileObjects = CombatGrid._instance.GetAllTiles();
         List<CombatGridTile> tiles = new();
 
-        foreach (GameObject obj in tileObjects) {
-            if (obj.TryGetComponent<CombatGridTile>(out var tile)) {
+        foreach (GameObject obj in tileObjects)
+        {
+            if (obj.TryGetComponent<CombatGridTile>(out var tile))
+            {
                 tiles.Add(tile);
             }
         }
@@ -478,9 +499,9 @@ public class Selector : MonoBehaviour
             Debug.LogError("No EventSystem in scene!"); return;
         }
     }
- 
-    public SelectorState GetCurrentState() { return _currentState; }
-    public void SetCurrentState(SelectorState state) {  _currentState = state; }
 
-    public void SetCharacterActionType(CharacterActionType actionType) { _pendingCharacterActionType = actionType;  }
+    public SelectorState GetCurrentState() { return _currentState; }
+    public void SetCurrentState(SelectorState state) { _currentState = state; }
+
+    public void SetCharacterActionType(CharacterActionType actionType) { _pendingCharacterActionType = actionType; }
 }
