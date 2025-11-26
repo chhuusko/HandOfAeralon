@@ -5,12 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "StatusEffectDataRegistry", menuName = "StatusEffects/StatusEffectDataRegistry")]
 public class StatusEffectDataRegistry : ScriptableObject
 {
-    // [Serializable]
-    // private struct Entry
-    // {
-    //     public StatusEffectData Data;
-    // }
-    
     [SerializeField] private StatusEffectData[] entries;
     private static Dictionary<Type, StatusEffectData> _lookup;
 
