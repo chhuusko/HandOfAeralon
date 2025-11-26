@@ -5,6 +5,6 @@ public class ReapersLedger : Card
 {
     public override void PlayCard()
     {
-        base.PlayCard();
+        
     }
 }

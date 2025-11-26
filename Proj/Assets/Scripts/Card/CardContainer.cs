@@ -135,6 +135,5 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!CanAfford()) return;
-        _containedCard.PlayCard();
     }
 }

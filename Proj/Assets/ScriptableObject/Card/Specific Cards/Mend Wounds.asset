@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 140fae950b362b145837f5485dead6df, type: 3}
   m_Name: Mend Wounds
   m_EditorClassIdentifier: 
-  type: 0
+  type: 1
   rarity: 0
-  title: 
-  description: 
-  cost: 0
-  icon: {fileID: 0}
+  title: Mend Wounds
+  description: Restore 10 Health to target character. If the target was below 50%
+    Health, gain 1 Mana.
+  cost: 2
+  icon: {fileID: 21300000, guid: 732a76c7fad5af64eb30c6ad4f487101, type: 3}
   CardTemplate: {fileID: 0}
   info: []
