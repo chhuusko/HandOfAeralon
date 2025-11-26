@@ -29,6 +29,8 @@ public static class CombatEventManager
 
     public static event Action<AbilityExecutionData> OnAbilityDataCreated;
 
+    public static event Action OnAbilityCast;
+
     public static void InvokeCombatStateChanged(CombatState newState)
         => OnCombatStateChange?.Invoke(newState);
 
@@ -78,5 +80,6 @@ public static class CombatEventManager
     public static void InvokeOnAbilityDataCreated(AbilityExecutionData result)
        => OnAbilityDataCreated?.Invoke(result);
 
-
+    public static void InvokeOnAbilityCast()
+       => OnAbilityCast?.Invoke();
 }
