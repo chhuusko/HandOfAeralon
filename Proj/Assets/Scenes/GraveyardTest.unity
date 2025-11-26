@@ -15617,16 +15617,31 @@ PrefabInstance:
     - target: {fileID: 2707079280425294226, guid: 2757f80d6f2eac24cb5a719251a32771,
         type: 3}
       propertyPath: m_ClearFlags
-      value: 4
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2707079280425294226, guid: 2757f80d6f2eac24cb5a719251a32771,
+        type: 3}
+      propertyPath: m_TargetTexture
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2707079280425294226, guid: 2757f80d6f2eac24cb5a719251a32771,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 247
       objectReference: {fileID: 0}
+    - target: {fileID: 2707079280425294226, guid: 2757f80d6f2eac24cb5a719251a32771,
+        type: 3}
+      propertyPath: m_AllowDynamicResolution
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3419882531001912383, guid: 2757f80d6f2eac24cb5a719251a32771,
         type: 3}
       propertyPath: m_CameraType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3419882531001912383, guid: 2757f80d6f2eac24cb5a719251a32771,
+        type: 3}
+      propertyPath: m_AllowXRRendering
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4215152467198644793, guid: 2757f80d6f2eac24cb5a719251a32771,
@@ -83790,6 +83805,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CutsceneManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2088031624125624343, guid: 4e14480202e566a4781d3aa6384022ff,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2292155220432598705, guid: 4e14480202e566a4781d3aa6384022ff,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -83804,6 +83824,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ShapeModule.m_Scale.x
       value: 17.652096
+      objectReference: {fileID: 0}
+    - target: {fileID: 5888991273250624878, guid: 4e14480202e566a4781d3aa6384022ff,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6611824564840862240, guid: 4e14480202e566a4781d3aa6384022ff,
         type: 3}
