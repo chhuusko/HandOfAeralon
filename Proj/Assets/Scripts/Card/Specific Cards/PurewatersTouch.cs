@@ -15,21 +15,17 @@ public class PurewatersTouch : Card
             List<StatusEffect> debuffs = new List<StatusEffect>();
             foreach (StatusEffect status in statuses)
             {
-                //if (status.() != null)
-                //{
-                //
-                //}
-                //debuffs.Add(status);
+                if (status.Data.Type == StatusEffectType.Debuff)
+                {
+                    debuffs.Add(status);
+                }
             }
+            if (debuffs.Count > 0)
+            {
+                debuffs.RemoveAt(Random.Range(0, debuffs.Count));
+                CardHandManager.GetInstance().ChangeMana(2);
+            }
+            character.Heal(15);
         }
-
-
-            Debug.Log("TODO");
     }
-    private void StatusEffectRemoved()
-    {
-        // give 2 mana if removed
-    }
-
-
 }
