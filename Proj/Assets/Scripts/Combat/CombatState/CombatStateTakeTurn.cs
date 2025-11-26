@@ -45,6 +45,10 @@ public class CombatStateTakeTurn : CombatStateBase
                 }
                 break;
         }
+
+        foreach(Character character in CombatGrid._instance.GetAllCharacterScripts())
+            character.ResetCurrentMovementPoints();
+
         CombatEventManager.InvokeEnterCombatStateTakeTurn(activeCharacter);
     }
 
