@@ -117,6 +117,8 @@ public class Selector : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             CombatGridTile clickedTile = GetTileUnderMouse();
+            if (clickedTile ==null) return;
+
             if (_bDebugSelector && clickedTile != null)
             {
                 DebugLog.MGLog("Clicked on tile " + clickedTile.gameObject);
