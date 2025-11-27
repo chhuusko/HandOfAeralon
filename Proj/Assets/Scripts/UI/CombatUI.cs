@@ -35,6 +35,7 @@ public class CombatUI : MonoBehaviour
     // Colors.
     [SerializeField] private Color _activeColor;
     [SerializeField] private Color _inactiveColor;
+    [SerializeField] private Color _enemyColor;
     
     // Combat log.
     [SerializeField] private GameObject _combatLogEntryPrefab;
@@ -291,6 +292,12 @@ public class CombatUI : MonoBehaviour
         Button button = Instantiate(_characterPortraitButtonPrefab, parent);
         
         button.image.sprite = c.ClassData.classImage;
+
+        if (c.Faction == Faction.Enemy)
+        {
+            button.image.color = _enemyColor;
+        }
+        
         PortraitButton pb = button.GetComponent<PortraitButton>();
         pb.Character = c;
 
