@@ -39,7 +39,7 @@ public class LevelManager : ScriptableObject
     public void StartNextLevel() 
     {
         
-        if(SceneManager.GetActiveScene().name != "ShopScene")
+        if(SceneManager.GetActiveScene().name == "ShopScene")
         {
             if (_level%2 == 0)
             {
