@@ -86,6 +86,11 @@ public class StatusEffectManager : MonoBehaviour
 
     private void OnApply()
     {
+        if (!_character)
+        {
+            return;
+        } 
+        
         foreach (var statusEffect in _statusEffects)
         {
             statusEffect.OnApply();
@@ -94,6 +99,11 @@ public class StatusEffectManager : MonoBehaviour
 
     private void OnExpire()
     {
+        if (!_character)
+        {
+            return;
+        } 
+        
         foreach (var statusEffect in _statusEffects)
         {
             statusEffect.OnExpire();
@@ -102,6 +112,11 @@ public class StatusEffectManager : MonoBehaviour
 
     private void OnTurnStart(Character c)
     {
+        if (!_character)
+        {
+            return;
+        } 
+        
         foreach (var statusEffect in _statusEffects)
         {
             statusEffect.OnTurnStart();
@@ -110,6 +125,11 @@ public class StatusEffectManager : MonoBehaviour
 
     private void OnTurnEnd()
     {
+        if (!_character)
+        {
+            return;
+        } 
+        
         foreach (var statusEffect in _statusEffects)
         {
             statusEffect.OnTurnEnd();
@@ -118,6 +138,11 @@ public class StatusEffectManager : MonoBehaviour
 
     public float ModifyIncomingDamage(float damage, Ability ability)
     {
+        if (!_character)
+        {
+            return damage;
+        } 
+        
         foreach (var statusEffect in _statusEffects)
         {
             statusEffect.ModifyIncomingDamage(ref damage, ability);
@@ -127,6 +152,11 @@ public class StatusEffectManager : MonoBehaviour
 
     public float ModifyOutgoingDamage(float damage, Ability ability)
     {
+        if (!_character)
+        {
+            return damage;
+        } 
+        
         foreach (var statusEffect in _statusEffects)
         {
             statusEffect.ModifyOutgoingDamage(ref damage, ability);
@@ -136,6 +166,11 @@ public class StatusEffectManager : MonoBehaviour
 
     public float ModifyIncomingHeal(float heal, Ability ability)
     {
+        if (!_character)
+        {
+            return heal;
+        } 
+        
         foreach (var statusEffect in _statusEffects)
         {
             statusEffect.ModifyIncomingHeal(ref heal, ability);
@@ -145,6 +180,11 @@ public class StatusEffectManager : MonoBehaviour
     
     public float ModifyOutgoingHeal(float heal, Ability ability)
     {
+        if (!_character)
+        {
+            return heal;
+        } 
+        
         foreach (var statusEffect in _statusEffects)
         {
             statusEffect.ModifyOutgoingHeal(ref heal, ability);
