@@ -39,22 +39,21 @@ public class LevelManager : ScriptableObject
     public void StartNextLevel() 
     {
         
-        if(SceneManager.GetActiveScene().name == "ShopScene")
+        if(SceneManager.GetActiveScene().name != "ShopScene")
         {
             if (_level%2 == 0)
             {
-                SceneManager.LoadScene("Graveyard13x8_Easy");
+                SceneManager.LoadScene("Graveyard12x10_Easy");
             }
             else
             {
-                SceneManager.LoadScene("Graveyard12x10_Easy");
+                SceneManager.LoadScene("Graveyard13x8_Easy");
             }
-            
         }
         else
         {
             SceneManager.LoadScene("ShopScene");
-            //_level++;
+            _level++;
         }
         
         

@@ -83,7 +83,7 @@ public class GlobalGameManager : ScriptableObject
     public void StartNewGame(int slot)
     {
         GetTemp();
-        SceneManager.LoadScene("Graveyard13x8_Easy"); //TODO
+        SceneManager.LoadScene("Graveyard12x10_Easy"); //TODO
     }
     public void JSONWrite()
     {
