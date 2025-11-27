@@ -77,6 +77,8 @@ public class Selector : MonoBehaviour
     {
         if (turn == CombatTurn.PlayerTurn)
         {
+            DeselectCharacter();
+            SelectCharacterFromUI(CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter());
             _currentState = SelectorState.Idle;
         }
         else
