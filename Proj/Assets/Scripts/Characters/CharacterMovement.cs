@@ -43,6 +43,11 @@ public class CharacterMovement : MonoBehaviour
         Selector._instance.SetColorOfTiles(_tilesInRange, Color.green);
     }
 
+    public void ForgetMoveRange()
+    {
+        _tilesInRange = new();
+    }
+
     public void PreviewPath(CombatGridTile tile)
     {
         if (tile == _character.GetCurrentTileComponent() || tile == null || !_tilesInRange.Contains(tile) || CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() != Faction.Friendly)
