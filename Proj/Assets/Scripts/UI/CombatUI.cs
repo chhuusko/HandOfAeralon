@@ -71,6 +71,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
         CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
+        CombatEventManager.OnAbilityCast += UpdateAbilityColors;
 
         StartCoroutine(WaitForSelector());
     }
@@ -86,6 +87,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnTurnOrderChanged -= UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
         CombatEventManager.OnAbilityDataCreated -= AddCombatLogEntry;
+        CombatEventManager.OnAbilityCast -= UpdateAbilityColors;
         
         Selector._instance.OnCharacterSelected -= SetSelectedCharacter;
         Selector._instance.OnCharacterSelected -= LoadAbilities;
@@ -114,11 +116,6 @@ public class CombatUI : MonoBehaviour
         
         // Player 1 portrait displayed as default when no character has been selected yet.
         // UpdateSelectedPortrait(GlobalGameManager.GetInstance().GetGameData().heroDataList[0]);
-    }
-
-    private void Start()
-    {
-        
     }
     
     private IEnumerator WaitForSelector()
@@ -475,14 +472,17 @@ public class CombatUI : MonoBehaviour
         }
     }
 
+    private void UpdateAbilityColors()
+    {
+        foreach (var abilityButton in _abilityButtons)
+        {
+            UpdateAbilityColors(CombatManager._instance.GetCharacterDataDict()[_selectedCharacter], abilityButton);
+        }
+    }
+
     private void UpdateAbilityColors(Character c, AbilityButton abilityButton)
     {
         bool interactable = false;
-        
-        DebugLog.JoppaLog($"c == _currentTurnCharacter: {c == _currentTurnCharacter}");
-        DebugLog.JoppaLog($"_selectedCharacter.Faction: {_selectedCharacter.Faction == Faction.Friendly}");
-        DebugLog.JoppaLog($"IsAbilityCooldownActive: {!c.IsAbilityCooldownActive(abilityButton.Ability)}");
-        DebugLog.JoppaLog($"CanAttack: {c.CanAttack}");
         
         if (_bCombatStarted && c && _currentTurnCharacter && _selectedCharacter != null)
         {

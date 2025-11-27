@@ -107,7 +107,8 @@ public class Character : MonoBehaviour
 
     private void OnEnable()
     {
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateAbilityCooldowns;
+        CombatEventManager.OnEnterCombatStateTakeTurn += ResetCanAttack;
         
         PopupTextManager damagePopupTextManager= PopupTextManager.GetInstance();
         if(damagePopupTextManager != null)
@@ -115,8 +116,6 @@ public class Character : MonoBehaviour
             damagePopupTextManager.BindEventOnTakeDamage(this);
             damagePopupTextManager.BindEventOnWasHealed(this);
         }
-            
-       
     }
 
     private void Start()
@@ -136,6 +135,7 @@ public class Character : MonoBehaviour
     private void OnDisable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= ResetCanAttack;
 
         PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
         if (damagePopupTextManager != null)
@@ -259,6 +259,11 @@ public class Character : MonoBehaviour
         }
     }
 
+    private void ResetCanAttack(Character c)
+    {
+        CanAttack = true;
+    }
+
     private void UpdateAbilityCooldowns(Character c)
     {
         // Only update cooldowns for this character.
@@ -269,7 +274,7 @@ public class Character : MonoBehaviour
         
         var finishedAbilities = new List<Ability>();
         
-        foreach (var ability in _currentCooldowns.Keys)
+        foreach (var ability in _currentCooldowns.Keys.ToList())
         {
             _currentCooldowns[ability]--;
             if (_currentCooldowns[ability] <= 0)
