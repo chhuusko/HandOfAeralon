@@ -43,7 +43,7 @@ public class LevelManager : ScriptableObject
         {
             if (_level%2 == 0)
             {
-                SceneManager.LoadScene("GraveyardTest");
+                SceneManager.LoadScene("Graveyard13x8_Easy");
             }
             else
             {

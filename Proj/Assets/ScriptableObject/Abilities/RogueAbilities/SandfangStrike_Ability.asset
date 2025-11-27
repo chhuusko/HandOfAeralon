@@ -16,16 +16,19 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 7250f903b6576774fbca4f0b980d27ad, type: 3}
   _range: 1
   _cooldown: 1
+  _description: "Deal (130% \xD7 Damage) Physical damage. Has an 80% chance to apply
+    3 stacks of Poison to the target. If the target already had Poison, draw 1 card."
   _abilityTag: 5
   _type: 0
   _rangeCalculation: {fileID: 11400000, guid: b26a232b16ceee045899106d2759f853, type: 2}
   _targetType: 3
-  castingEffect: {fileID: 0}
-  hitEffect: {fileID: 0}
-  castingSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  castingTime: 0
-  fromCastToHitTime: 0
+  _castingEffect: {fileID: 0}
+  _hitEffect: {fileID: 0}
+  _castingSound: {fileID: 0}
+  _hitSound: {fileID: 0}
+  _castingTime: 0
+  _fromCastToHitTime: 0
+  _castingRotationTime: 0.3
   _damageMultiplier: 1.3
   _applyPoisonChance: 0.8
   _posionStacksToApply: 3

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 [CreateAssetMenu(fileName = "SongOfRenewal_Ability", menuName = "Scriptable Objects/Abilities/Bard/SongOfRenewal")]
 public class SongOfRenewalAOE : RoundAOEAbility
@@ -7,6 +9,12 @@ public class SongOfRenewalAOE : RoundAOEAbility
     [Header("- Ability Specific values -")]
     [SerializeField] private float _maxHealthHealMain = 0.25f;
     [SerializeField] private float _maxHealthHealArea = 0.1f;
+
+    // Description
+
+    // Restore 25% of a target ally’s max Health, and 10% to all allies in the area.
+    // Draw 1 card if the main target was below 50% Health.
+
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
