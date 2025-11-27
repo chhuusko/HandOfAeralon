@@ -42,7 +42,7 @@ public class CombatCamera : MonoBehaviour
         public void UpdateZoomScroll()
         {
             float scroll = -Input.GetAxis("Mouse ScrollWheel");
-            _zoom = Mathf.Clamp01(_zoom + scroll * _zoomSpeed * Time.deltaTime);
+            _zoom = Mathf.Clamp01(_zoom + scroll * _zoomSpeed);
 
             _height = _minHeight + heightCurve.Evaluate(_zoom) * _maxHeight;
 
