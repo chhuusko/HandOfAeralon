@@ -73,11 +73,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -5.248993
       objectReference: {fileID: 0}
+    - target: {fileID: -6592171990773024573, guid: f2e3021709bd77d419d5831254e2ebd6,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -608139067324319093, guid: a669c79529900654fbc2d08e0da5d66f,
+        type: 3}
     - target: {fileID: 919132149155446097, guid: f2e3021709bd77d419d5831254e2ebd6,
         type: 3}
       propertyPath: m_Name
       value: LP_Boulder_FixedRotation (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1279331594903543219, guid: f2e3021709bd77d419d5831254e2ebd6,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 953aa45c8f7652b4ba8b2ef52466d535, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

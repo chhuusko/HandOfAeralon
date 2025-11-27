@@ -98,6 +98,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gravestone_A (39)
       objectReference: {fileID: 0}
+    - target: {fileID: 3010072503416576978, guid: c937f9c9d032c2b4db7fdaec89f6d563,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ce1e730064fa8bf4397a7ae17ab41d88, type: 2}
+    - target: {fileID: 5419810460941970059, guid: c937f9c9d032c2b4db7fdaec89f6d563,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -5776873277280154278, guid: 268f57b35b0aa7a48bfe428c253677a2,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

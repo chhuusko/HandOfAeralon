@@ -41,7 +41,9 @@ public class SongOfRenewalAOE : RoundAOEAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null) return;
 
-        affectedCharacter.Heal(CalculateHealAmount(castingCharacter, affectedCharacter, false));
+        int healAmount = CalculateHealAmount(castingCharacter, affectedCharacter, false);
+        affectedCharacter.Heal(healAmount);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, healAmount);
     }
 
     private void ApplyEffectOnMainTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
@@ -54,7 +56,7 @@ public class SongOfRenewalAOE : RoundAOEAbility
         if (castingCharacter == null) return;
 
         int healAmount = CalculateHealAmount(castingCharacter, affectedCharacter, true);
-        affectedCharacter.Heal(CalculateHealAmount(castingCharacter, affectedCharacter, true));
+        affectedCharacter.Heal(healAmount);
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, healAmount);
     }
 

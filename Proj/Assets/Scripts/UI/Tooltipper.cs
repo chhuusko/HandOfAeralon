@@ -18,6 +18,7 @@ public class Tooltipper : MonoBehaviour
         }
     }
 
+    [SerializeField] private RectTransform _panel;
     [SerializeField] private TMP_Text _tmpText;
     [SerializeField] private Vector2 _offset = new Vector2(15, -15);
     [SerializeField] private float hoverTime = 1f;
@@ -34,6 +35,8 @@ public class Tooltipper : MonoBehaviour
         {
             Debug.LogError("Tooltipper.cs | Canvas not found!");
         }
+
+        HideTooltip();
     }
 
     void Update()
@@ -72,11 +75,16 @@ public class Tooltipper : MonoBehaviour
 
                 if (_currentObject.TryGetComponent(out TooltipComponent component))
                 {
-                    _tmpText.text = component.GetTooltip();
+                    ShowTooltip();
+
+                    string dynamicTooltip = GenerateTooltip();
+
+                    _tmpText.text = dynamicTooltip + component.GetTooltip();
 
                     LayoutRebuilder.ForceRebuildLayoutImmediate(_tmpText.rectTransform);
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(_panel);
 
-                    RectTransform tooltipRect = _tmpText.rectTransform;
+                    RectTransform tooltipRect = _panel;
                     Vector2 tooltipSize = tooltipRect.rect.size;
                     Vector2 pivot = tooltipRect.pivot;
 
@@ -96,7 +104,6 @@ public class Tooltipper : MonoBehaviour
 
                     tooltipRect.position = pos;
 
-                    ShowTooltip();
                     return;
                 }
 
@@ -107,13 +114,28 @@ public class Tooltipper : MonoBehaviour
 
     private void ShowTooltip()
     {
-        _tmpText.alpha = 1f;
+        _panel.gameObject.SetActive(true);
     }
 
     private void HideTooltip()
     {
         _currentObject = null;
         _tmpText.text = "";
-        _tmpText.alpha = 0f;
+        _panel.gameObject.SetActive(false);
+    }
+
+    private string GenerateTooltip()
+    {
+        string result = "";
+
+        if (_currentObject.TryGetComponent<Character>(out Character c))
+        {
+            result += $"Faction: {c.GetFaction()}"
+                    + $"\nClass: {c.GetCharacterClass()}" 
+                    + $"\nHP: {c.GetCurrentHealth()}/{c.GetMaxHealth()}" 
+                    + $"\n";
+        }
+
+        return result;
     }
 }
