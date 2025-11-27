@@ -40,6 +40,7 @@ public class CharacterMovement : MonoBehaviour
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
         .ToList();
+        Selector._instance.SetColorOfTiles(_tilesInRange, Color.green);
     }
 
     public void PreviewPath(CombatGridTile tile)

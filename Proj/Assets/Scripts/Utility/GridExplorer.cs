@@ -417,7 +417,7 @@ public class GridExplorer : MonoBehaviour
         if (_bPaintTiles) _paintStartTile = CombatGrid._instance.GetTileAtCoord(start.x, start.y);
         if (_bPaintTiles) _paintReachableTiles = result;
         */
-        PaintReachableTiles(result, Color.green);
+       
         return result;
     }
 
