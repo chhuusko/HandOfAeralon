@@ -79,10 +79,17 @@ public class CardHandManager : MonoBehaviour
     {
         if (_cardsInDeck.Count == 0)
         {
-            _cardsInDeck = _cardsInDiscardPile;
-            _cardsInDiscardPile.Clear();
+            if(_cardsInDiscardPile.Count > 0)
+            {
+                 _cardsInDeck = new List<Card>(_cardsInDiscardPile);
+                _cardsInDiscardPile.Clear();
+            }
+            
         }
-
+        if (_cardsInDeck.Count == 0)
+        {
+            return;
+        }
         CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
         _cardsInHand.Add(newCardContainer);
         int newCardIndex = UnityEngine.Random.Range(0, _cardsInDeck.Count);
