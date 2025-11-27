@@ -450,7 +450,6 @@ public class Selector : MonoBehaviour
         if (_pendingCharacterActionType == CharacterActionType.Movement)
         {
             HandleMovement(tile); // JLW
-            ResetColorAllTiles();
             return;
         }
         if (_pendingCharacterActionType == CharacterActionType.AbilityCasting && _selectedCharacter.GetAbilityHandler().GetPendingAbility() != null)
@@ -469,13 +468,14 @@ public class Selector : MonoBehaviour
     private void HandleMovement(CombatGridTile tile)
     {
         _characterMovement.ConfirmPath(tile);
-
+        ResetColorAllTiles();
         // MG was here.
         Character character = tile.GetOccupantCharacter();
         if (character == null) return;
         if (character.GetFaction() == Faction.Friendly)
         {
             SelectCharacter(character);
+            return;
         }
         // Hade varit nice om ConfirmPath kunde returna true eller false om den faktiskt lockar in en rutt och börjar gå.
     }
