@@ -1,6 +1,4 @@
-﻿using NUnit.Framework;
-using UnityEngine;
-using static UnityEditor.Rendering.FilterWindow;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "ArcaneBolt_Ability", menuName = "Scriptable Objects/Abilities/Sorceress/Arcane Bolt")]
 public class ArcaneBolt_SingleTarget : SingleTargetAbility
