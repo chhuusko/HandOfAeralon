@@ -41,8 +41,64 @@ public class Tooltipper : MonoBehaviour
 
     void Update()
     {
-        if (_canvas == null)
-            return;
+        ScanForTooltip();
+        UpdatePosition();
+    }
+
+    private void ScanForTooltip()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, 999f))
+        {
+            if (hit.collider.gameObject != _currentObject)
+            {
+                _currentObject = hit.collider.gameObject;
+
+                if (_currentObject.TryGetComponent(out TooltipComponent component))
+                {
+                    ShowTooltip();
+
+                    string dynamicTooltip = GenerateTooltip();
+                    _tmpText.text = dynamicTooltip + component.GetTooltip();
+                }
+                else
+                {
+                    HideTooltip();
+                }
+            }
+        }
+    }
+
+    private void UpdatePosition()
+    {
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_tmpText.rectTransform);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_panel);
+
+        RectTransform tooltipRect = _panel;
+        Vector2 tooltipSize = tooltipRect.rect.size;
+        Vector2 pivot = tooltipRect.pivot;
+
+        Vector2 pos = (Vector2)Input.mousePosition + _offset;
+
+        // Clamp X
+        if (pos.x + tooltipSize.x * (1 - pivot.x) > Screen.width)
+            pos.x = Screen.width - tooltipSize.x * (1 - pivot.x);
+        if (pos.x - tooltipSize.x * pivot.x < 0)
+            pos.x = tooltipSize.x * pivot.x;
+
+        // Clamp Y
+        if (pos.y + tooltipSize.y * (1 - pivot.y) > Screen.height)
+            pos.y = Screen.height - tooltipSize.y * (1 - pivot.y);
+        if (pos.y - tooltipSize.y * pivot.y < 0)
+            pos.y = tooltipSize.y * pivot.y;
+
+        tooltipRect.position = pos;
+    }
+
+    /*
+    void Update()
+    {
+        if (_canvas == null) return;
 
         Vector3 mousePos = Input.mousePosition;
 
@@ -111,6 +167,7 @@ public class Tooltipper : MonoBehaviour
             }
         }
     }
+    */
 
     private void ShowTooltip()
     {
