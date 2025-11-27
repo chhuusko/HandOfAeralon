@@ -33,6 +33,7 @@ public class AbilityHandler : MonoBehaviour
                 DebugLog.MGLog("Tried casting ability, but it failed");
             return false;
         }
+        _characterCaster.CanAttack = false;
         CombatEventManager.InvokeOnAbilityCast();
         StartCoroutine(ability.StartAbilityEffects(_casterTile, targetTile));
         _characterCaster.StartAbilityCooldown(ability);

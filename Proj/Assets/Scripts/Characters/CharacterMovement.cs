@@ -106,13 +106,14 @@ public class CharacterMovement : MonoBehaviour
     private IEnumerator Move(List<CombatGridTile> path)
     {
         _bIsMoving = true;
+        CombatEventManager.InvokeOnCharacterMove(_bIsMoving);
         GridExplorer._instance.ClearPathDrawing();
-        float moveSpeed = 4f; // Måste matcha animationerna
+        float moveSpeed = 4f; // Mï¿½ste matcha animationerna
 
         Animator animator = null;
         if (_character.TryGetComponent<Animator>(out animator))
         {
-            //Debug.LogError($"{_character.name} går!");
+            //Debug.LogError($"{_character.name} gï¿½r!");
             animator.SetBool("IsMoving", true);
         }
 
@@ -145,6 +146,7 @@ public class CharacterMovement : MonoBehaviour
         }
 
         _bIsMoving = false;
+        CombatEventManager.InvokeOnCharacterMove(_bIsMoving);
 
         if (animator != null)
         {
