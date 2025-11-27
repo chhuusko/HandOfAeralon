@@ -36,6 +36,7 @@ public class AbilityHandler : MonoBehaviour
         CombatEventManager.InvokeOnAbilityCast();
         StartCoroutine(ability.StartAbilityEffects(_casterTile, targetTile));
         _characterCaster.StartAbilityCooldown(ability);
+        _characterCaster.CanAttack = false;
         return true;
     }
     public Character GetCharacterCaster()
