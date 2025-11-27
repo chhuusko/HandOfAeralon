@@ -80,6 +80,7 @@ public class CardHandManager : MonoBehaviour
         int newCardIndex = UnityEngine.Random.Range(0, _cardsInDeck.Count);
         newCardContainer.AddCard(_cardsInDeck[newCardIndex]);
         _cardsInDeck.RemoveAt(newCardIndex);
+        AddSpaceing();
     }
 
     public void AddSpaceing()
