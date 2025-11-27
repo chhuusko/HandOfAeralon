@@ -81,7 +81,7 @@ public class Character : MonoBehaviour
 
 
     public const int MOVEMENT_POINTS = 5;
-    public const float DEATH_COOLDOWN = 5f;
+    public const float DEATH_COOLDOWN = 2.5f;
     
     // TODO: Traits.
     
@@ -357,13 +357,17 @@ public class Character : MonoBehaviour
     {
         CombatEventManager.InvokeOnCharacterDeath(this);
 
+        float deathCooldown = DEATH_COOLDOWN;
+        
         Animator animator = null;
         if (TryGetComponent<Animator>(out animator))
         {
             animator.SetTrigger("Death");
+            AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            deathCooldown = animatorStateInfo.length;
         }
 
-        yield return new WaitForSeconds(DEATH_COOLDOWN);
+        yield return new WaitForSeconds(deathCooldown);
         Destroy(gameObject);
     }
 
