@@ -24,7 +24,7 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0);
 
         if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
-            if (statusEffectManager.ContainsStatusEffect<Poison>()){
+            if (castingCharacter.GetFaction() == Faction.Friendly && statusEffectManager.ContainsStatusEffect<Poison>()){
                 CardHandManager.GetInstance().AddCardFromDeck();
             }
             statusEffectManager.AddStatusEffect(new Poison(_posionStacksToApply));
