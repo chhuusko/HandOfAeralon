@@ -30,6 +30,8 @@ public static class CombatEventManager
     public static event Action<AbilityExecutionData> OnAbilityDataCreated;
 
     public static event Action OnAbilityCast;
+    
+    public static event Action<bool> OnCharacterMove;
 
     public static void InvokeCombatStateChanged(CombatState newState)
         => OnCombatStateChange?.Invoke(newState);
@@ -82,4 +84,7 @@ public static class CombatEventManager
 
     public static void InvokeOnAbilityCast()
        => OnAbilityCast?.Invoke();
+    
+    public static void InvokeOnCharacterMove(bool isMoving)
+        => OnCharacterMove?.Invoke(isMoving);
 }

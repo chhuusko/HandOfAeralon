@@ -67,6 +67,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         {
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
+            CardHandManager.GetInstance().ChangeMana(-_containedCard.cost);
             _containedCard.PlayCard();
             CardHandManager.GetInstance().RemoveCard(this);   
         }

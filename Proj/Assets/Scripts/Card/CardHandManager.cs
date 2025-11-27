@@ -63,22 +63,23 @@ public class CardHandManager : MonoBehaviour
     }
     public void AddCardFromDeck()
     {
-        CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
-        _cardsInHand.Add(newCardContainer);
-        newCardContainer.AddCard(_cardsInDeck[0]);
-        _cardsInDeck.RemoveAt(0);
-        AddSpaceing();
+        AddRandomCardFromDeck();
     }
     public void AddCardFromDeck(int amount)
     {
-        for(int i = 0; i < _cardsInHand.Count; i++)
+        for(int i = 0; i < amount; i++)
         {
-            CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
-            _cardsInHand.Add(newCardContainer);
-            newCardContainer.AddCard(_cardsInDeck[0]);
-            _cardsInDeck.RemoveAt(0);
+            AddRandomCardFromDeck();
         }
         AddSpaceing();
+    }
+    public void AddRandomCardFromDeck()
+    {
+        CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
+        _cardsInHand.Add(newCardContainer);
+        int newCardIndex = UnityEngine.Random.Range(0, _cardsInDeck.Count);
+        newCardContainer.AddCard(_cardsInDeck[newCardIndex]);
+        _cardsInDeck.RemoveAt(newCardIndex);
     }
 
     public void AddSpaceing()
