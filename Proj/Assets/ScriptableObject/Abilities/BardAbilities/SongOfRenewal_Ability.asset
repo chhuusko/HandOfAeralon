@@ -16,16 +16,19 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 0c3bb867d3de52f43ae0e7a74de316d0, type: 3}
   _range: 6
   _cooldown: 1
+  _description: "Restore 25% of a target ally\u2019s max Health, and 10% to all allies
+    in the area. Draw 1 card if the main target was below 50% Health."
   _abilityTag: 10
   _type: 2
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
   _targetType: 0
-  castingEffect: {fileID: 0}
-  hitEffect: {fileID: 0}
-  castingSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  castingTime: 0
-  fromCastToHitTime: 0
+  _castingEffect: {fileID: 0}
+  _hitEffect: {fileID: 0}
+  _castingSound: {fileID: 0}
+  _hitSound: {fileID: 0}
+  _castingTime: 0
+  _fromCastToHitTime: 0
+  _castingRotationTime: 0.3
   _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
   _validTargets: 1
   _radius: 3

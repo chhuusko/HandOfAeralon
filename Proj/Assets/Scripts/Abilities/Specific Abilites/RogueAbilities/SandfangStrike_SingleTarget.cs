@@ -9,6 +9,11 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
     [SerializeField] private float _applyPoisonChance = 0.8f;
     [SerializeField] private int _posionStacksToApply = 3;
 
+    // Description
+
+    // Deal(130% × Damage) Physical damage.
+    // Has an 80% chance to apply 3 stacks of Poison to the target.
+    // If the target already had Poison, draw 1 card.
 
     protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
     {
