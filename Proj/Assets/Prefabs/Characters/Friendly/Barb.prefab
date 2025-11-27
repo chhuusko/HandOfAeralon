@@ -3434,6 +3434,11 @@ PrefabInstance:
       propertyPath: _data._faction
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
+      propertyPath: _factionIndicator
+      value: 
+      objectReference: {fileID: 5417636238834597196}
     - target: {fileID: 5632698098917217084, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
         type: 3}
       propertyPath: m_Name
@@ -3521,6 +3526,12 @@ MonoBehaviour:
 --- !u!4 &1872658821044548318 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4999151439911242118, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 6673640829612358488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5417636238834597196 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1707646618432603668, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
     type: 3}
   m_PrefabInstance: {fileID: 6673640829612358488}
   m_PrefabAsset: {fileID: 0}

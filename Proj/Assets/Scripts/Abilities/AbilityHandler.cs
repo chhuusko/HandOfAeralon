@@ -116,45 +116,21 @@ public class AbilityHandler : MonoBehaviour
     {
         List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
 
-        // When no existing tiles are effected. (first frame)
-        if (!_tilesEffected.Any())
+        // Reset alla gamla effekter
+        foreach (CombatGridTile t in _tilesEffected)
         {
-            foreach(CombatGridTile t in newEffectedTiles)
-            {
-                _tilesEffected.Add(t);
-                t.SetTileColor(Color.red);
-            }
-            return;
-        }
-
-        // Reset old tiles that should not be effected.
-        var previousEffectedTiles = new List<CombatGridTile>(_tilesEffected);
-        foreach (CombatGridTile t in previousEffectedTiles)
-        {
-            if (newEffectedTiles.Contains(t))
-            {
-                continue;
-            }
-
             if (_tilesInRange.Contains(t))
-            {
                 t.SetTileColor(Color.green);
-                _tilesEffected.Remove(t);
-                continue;
-            }
-
-            t.SetTileColor(Color.white);
-            _tilesEffected.Remove(t);
+            else
+                t.SetTileColor(Color.white);
         }
+        _tilesEffected.Clear();
 
-        // Add new tiles effected list and turn them red.
-        foreach(CombatGridTile t in newEffectedTiles)
+        // Applicera nya röda
+        foreach (CombatGridTile t in newEffectedTiles)
         {
-            if (!_tilesEffected.Contains(t))
-            {
-                t.SetTileColor(Color.red);
-                _tilesEffected.Add(t);
-            }
+            t.SetTileColor(Color.red);
+            _tilesEffected.Add(t);
         }
     }
 }
