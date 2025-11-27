@@ -34,10 +34,16 @@ public class GlobalGameManager : ScriptableObject
     private void OnEnable()
     {
         CombatEventManager.OnCharacterDeath += RemoveCharacter;
+        CombatEventManager.OnExitCombatStateEndCombat += GetCombatCoins;
     }
     private void OnDisable()
     {
         CombatEventManager.OnCharacterDeath -= RemoveCharacter;
+        CombatEventManager.OnExitCombatStateEndCombat -= GetCombatCoins;
+    }
+    private void GetCombatCoins()
+    {
+        _currentGame.coins += 100;
     }
 
     private void RemoveCharacter(Character obj)
@@ -109,7 +115,7 @@ public class GlobalGameManager : ScriptableObject
 
         _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
         Debug.Log(_currentGame.cardList.Count);
-        _currentGame.coins = 50;
+        _currentGame.coins = 100;
     }
     public void SaveCards(List<Card> cards)
     {
