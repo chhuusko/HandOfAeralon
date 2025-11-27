@@ -60,6 +60,7 @@ public class CharacterData
         _availableAbilities = ClassData.abilities;
     }
 
+    public void SetClassData(ClassData classData) => _classData = classData;
     public void SetCharacterClass(CharacterClass characterClass) => _characterClass = characterClass;
     public void SetFaction(Faction faction) => _faction = faction;
     public void SetBaseHealthPoints(int health) => _baseHealthPoints = Mathf.Max(1, health);

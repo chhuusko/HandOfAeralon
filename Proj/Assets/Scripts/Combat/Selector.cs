@@ -50,12 +50,19 @@ public class Selector : MonoBehaviour
         CombatEventManager.OnCombatStateChange += HandleCombatStateUpdated;
         CombatEventManager.OnCombatTurnChange += HandleCombatTurnChanged;
         CombatEventManager.OnExitCombatStateTakeTurn += HandleCombatStateTakeTurn;
+        CombatEventManager.OnEnterCombatStateTakeTurn += HandleEnterCombatStateTakeTurn;
+
     }
 
     void Update()
     {
         HandleTileClick();
         HandleTileHover();
+    }
+
+    private void HandleEnterCombatStateTakeTurn(Character character)
+    {
+        SelectCharacterFromUI(character);
     }
 
     private void HandleCombatStateTakeTurn()
@@ -110,6 +117,8 @@ public class Selector : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             CombatGridTile clickedTile = GetTileUnderMouse();
+            if (clickedTile ==null) return;
+
             if (_bDebugSelector && clickedTile != null)
             {
                 DebugLog.MGLog("Clicked on tile " + clickedTile.gameObject);
