@@ -195,6 +195,7 @@ public class CombatUI : MonoBehaviour
         UpdateActivePortrait(c);
         UpdatePortraitColors(_characterPortraits[c]);
         LoadAbilities(c);
+        StartCoroutine(ScrollToBottom());
         
         SetSelectedCharacter(c);
         _currentTurnCharacter = CombatManager._instance.GetCharacterDataDict()[_selectedCharacter];
