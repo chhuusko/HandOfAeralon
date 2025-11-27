@@ -11,12 +11,14 @@ public class CardViewUI : MonoBehaviour
     protected List<GameObject> _cardListUI;
     [SerializeField] protected Transform _cardContent;
 
+    protected Vector3 basePosition;
     public static CardViewUI GetInstance() { return _instance; }
     private void Awake()
     {
         _cardListUI = new List<GameObject>();
         _instance = this;
         gameObject.SetActive(false);
+        basePosition = _cardContent.position;
     }
     public virtual void UpdateCards(List<Card> newCardList)
     {
@@ -24,7 +26,7 @@ public class CardViewUI : MonoBehaviour
 
         if (_cardListUI.Count > 0 ) { ClearUI(); }
         if(newCardList ==  null ) { Debug.Log("Nothing");}
-
+        _cardContent.transform.position = basePosition;
         for (int i = 0; i < newCardList.Count; i++)
         {
             _cardListUI.Add(Instantiate(_cardUI, _cardContent));

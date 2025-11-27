@@ -10,7 +10,7 @@ public class CardViewUIShop : CardViewUI
 
         if (_cardListUI.Count > 0) { ClearUI(); }
         if (newCardList == null) { Debug.Log("Nothing"); }
-
+        _cardContent.transform.position = basePosition;
         for (int i = 0; i < newCardList.Count; i++)
         {
             _cardListUI.Add(Instantiate(_cardUI, _cardContent));
