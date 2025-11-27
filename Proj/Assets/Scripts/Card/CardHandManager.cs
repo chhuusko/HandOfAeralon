@@ -77,6 +77,11 @@ public class CardHandManager : MonoBehaviour
     }
     public void AddRandomCardFromDeck()
     {
+        if (_cardsInDeck.Count == 0)
+        {
+            _cardsInDeck = _cardsInDiscardPile;
+        }
+
         CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
         _cardsInHand.Add(newCardContainer);
         int newCardIndex = UnityEngine.Random.Range(0, _cardsInDeck.Count);
