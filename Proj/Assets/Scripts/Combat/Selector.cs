@@ -415,6 +415,7 @@ public class Selector : MonoBehaviour
             SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.green);
         }
     }
+
     public void StopPreviewAbilityRange()
     {
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
@@ -498,7 +499,7 @@ public class Selector : MonoBehaviour
         }
     }
 
-    private void SetColorOfTiles(List<CombatGridTile> tiles, Color color)
+    public void SetColorOfTiles(List<CombatGridTile> tiles, Color color)
     {
         foreach (CombatGridTile tile in tiles)
         {
