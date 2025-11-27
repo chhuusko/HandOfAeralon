@@ -432,22 +432,29 @@ public class CombatUI : MonoBehaviour
     
     private void LoadAbilities(CharacterData character)
     {
+        StartCoroutine(LoadAbilitiesNextFrame(character));
+    }
+
+    private IEnumerator LoadAbilitiesNextFrame(CharacterData character)
+    {
+        yield return null;
+        
         if (character == null)
         {
             DebugLog.JoppaLog("No selected character");
-            return;
+            yield break;
         }
 
         // Don't show abilities for enemies.
         if (character.Faction == Faction.Enemy)
         {
-            return;
+            yield break;
         }
 
         if (!_bCombatStarted)
         {
             DebugLog.JoppaLog("Combat not started");
-            return;
+            yield break;
         }
 
         ClearAbilityButtons();
@@ -486,6 +493,11 @@ public class CombatUI : MonoBehaviour
     private void UpdateAbilityColors(Character c, AbilityButton abilityButton)
     {
         bool interactable = false;
+
+        DebugLog.JoppaLog($"c == _currentTurnCharacter: {c == _currentTurnCharacter}");
+        DebugLog.JoppaLog($"_selectedCharacter.Faction: {_selectedCharacter.Faction == Faction.Friendly}");
+        DebugLog.JoppaLog($"IsAbilityCooldownActive: {!c.IsAbilityCooldownActive(abilityButton.Ability)}");
+        DebugLog.JoppaLog($"CanAttack: {c.CanAttack}");
         
         if (_bCombatStarted && c && _currentTurnCharacter && _selectedCharacter != null)
         {
