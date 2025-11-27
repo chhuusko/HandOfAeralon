@@ -317,6 +317,9 @@ public class CombatGrid : MonoBehaviour
         characterObject.GetComponent<Character>().SetBaseInitiative(baseSpeed);
         characterObject.GetComponent<Character>().SetBaseDamage(baseDamage);
         characterObject.GetComponent<Character>().SetBaseMovementPoints(baseMovementPoints);
+       
+        
+        
         characterObject.GetComponent<Character>().AddHealthBar();
 
         _charactersGO.Add(characterObject);
