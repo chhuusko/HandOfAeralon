@@ -460,6 +460,15 @@ public class Selector : MonoBehaviour
     private void HandleMovement(CombatGridTile tile)
     {
         _characterMovement.ConfirmPath(tile);
+
+        // MG was here.
+        Character character = tile.GetOccupantCharacter();
+        if (character == null) return;
+        if (character.GetFaction() == Faction.Friendly)
+        {
+            SelectCharacter(character);
+        }
+        // Hade varit nice om ConfirmPath kunde returna true eller false om den faktiskt lockar in en rutt och börjar gå.
     }
 
     private void HandleAbilityCast(CombatGridTile tile)
