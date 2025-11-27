@@ -43,9 +43,14 @@ public class CharacterMovement : MonoBehaviour
         Selector._instance.SetColorOfTiles(_tilesInRange, Color.green);
     }
 
+    public void ForgetMoveRange()
+    {
+        _tilesInRange = new();
+    }
+
     public void PreviewPath(CombatGridTile tile)
     {
-        if (tile == null || !_tilesInRange.Contains(tile) || CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() != Faction.Friendly)
+        if (tile == _character.GetCurrentTileComponent() || tile == null || !_tilesInRange.Contains(tile) || CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() != Faction.Friendly)
         {
             _lastPreviewPathTile = null;
             GridExplorer._instance.ClearPathDrawing();
@@ -70,12 +75,12 @@ public class CharacterMovement : MonoBehaviour
         .ToList();
     }
 
-    public void ConfirmPath(CombatGridTile tile)
+    public bool ConfirmPath(CombatGridTile tile)
     {
-        if (_pathPreview == null || _pathPreview.Count == 0)
+        if (tile == _character.GetCurrentTileComponent() || _pathPreview == null || _pathPreview.Count == 0)
         {
             DebugLog.JLWLog($"CharacterMovement.cs | _pathPreview IS EMPTY!");
-            return;
+            return false;
         }
 
         if (_pathPreview[^1] == tile)
@@ -84,13 +89,15 @@ public class CharacterMovement : MonoBehaviour
             {
                 DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} is out of MP!");
                 _tilesInRange = new();
-                return;
+                return false;
             }
 
             _character.DecreaseCurrentMovementPoints(CalculateMovementCost(_pathPreview));
 
             StartCoroutine(Move(_pathPreview));
         }
+
+        return true;
     }
 
     public void ForceCustomPath(List<CombatGridTile> path)
