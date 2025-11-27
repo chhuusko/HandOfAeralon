@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Sorceress
   m_EditorClassIdentifier: 
   characterClass: 1
-  minHealthPoints: 6
-  maxHealthPoints: 10
-  minSpeed: 3
-  maxSpeed: 5
-  minMovementPoints: 2
-  maxMovementPoints: 4
-  minDamage: 4
-  maxDamage: 6
+  minHealthPoints: 20
+  maxHealthPoints: 22
+  minDamage: 7
+  maxDamage: 8
+  minInitiative: 6
+  maxInitiative: 7
+  minMovementPoints: 3
+  maxMovementPoints: 3
   abilities:
   - {fileID: 11400000, guid: 19698c8f3940fac488a5032799880907, type: 2}
   - {fileID: 11400000, guid: 19698c8f3940fac488a5032799880907, type: 2}
