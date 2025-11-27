@@ -20,6 +20,8 @@ public class CardHandManager : MonoBehaviour
     [SerializeField] private int _maxHand = 3;
     
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
+    [SerializeField] private int turnsTillCard = 4;
+    private int tempTurnsTillCard;
     private int _maxMana = 10;
     private int _mana = 5;
     private int _cardsPlayedThisTurn = 0;
@@ -158,7 +160,19 @@ public class CardHandManager : MonoBehaviour
     }
     private void TurnChanged(CombatTurn t)
     {
-        _cardsPlayedThisTurn = 0;
+        if(t == CombatTurn.PlayerTurn)
+        {
+            _cardsPlayedThisTurn = 0;
+
+            tempTurnsTillCard--;
+            if (tempTurnsTillCard <= 0)
+            {
+                tempTurnsTillCard = turnsTillCard;
+                AddRandomCardFromDeck();
+            }
+        
+        }
+        
     }
     public int GetCardsPlayedThisTurn()
     {
