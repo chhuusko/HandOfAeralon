@@ -186,7 +186,7 @@ public class CombatUI : MonoBehaviour
         
         go.transform.Find("Icon").GetComponent<Image>().sprite = data.Ability.GetIcon();
         go.transform.Find("Text").GetComponent<TMP_Text>().text =
-            $"{data.Caster.Data.ClassData.name} does 4 damage to {data.Target.Data.ClassData.name}";
+            $"{data.Caster.Data.ClassData.name} does {data.Damage} damage to {data.Target.Data.ClassData.name}";
     }
 
     private void PlaceCharacterStarted()
@@ -195,6 +195,7 @@ public class CombatUI : MonoBehaviour
         UpdateActivePortrait(c);
         UpdatePortraitColors(_characterPortraits[c]);
         LoadAbilities(c);
+        StartCoroutine(ScrollToBottom());
         
         SetSelectedCharacter(c);
         _currentTurnCharacter = CombatManager._instance.GetCharacterDataDict()[_selectedCharacter];
