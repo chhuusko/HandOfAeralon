@@ -16,16 +16,19 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: eb285121de8eefa418de80053b7eba77, type: 3}
   _range: 6
   _cooldown: 1
+  _description: "Deals ((40% + 10% per current Mana) \xD7 Damage) Elemental damage.
+    (Enemy always has 6 Mana)"
   _abilityTag: 6
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
   _targetType: 3
-  castingEffect: {fileID: 0}
-  hitEffect: {fileID: 0}
-  castingSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  castingTime: 0
-  fromCastToHitTime: 0
+  _castingEffect: {fileID: 0}
+  _hitEffect: {fileID: 0}
+  _castingSound: {fileID: 0}
+  _hitSound: {fileID: 0}
+  _castingTime: 0
+  _fromCastToHitTime: 0
+  _castingRotationTime: 0.3
   _damageMultiplier: 0.4
   _manaDamageMultiplier: 0.1
   _enemyManaAmount: 6

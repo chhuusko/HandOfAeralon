@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using NUnit.Framework;
+using UnityEngine;
+using static UnityEditor.Rendering.FilterWindow;
 
 [CreateAssetMenu(fileName = "ArcaneBolt_Ability", menuName = "Scriptable Objects/Abilities/Sorceress/Arcane Bolt")]
 public class ArcaneBolt_SingleTarget : SingleTargetAbility
@@ -8,7 +10,9 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
     [SerializeField] private float _manaDamageMultiplier = 0.1f;
     [SerializeField] private int _enemyManaAmount = 6;
 
+    // Description
 
+    // Deals((40% + 10% per current Mana) × Damage) Elemental damage. (Enemy always has 6 Mana)
 
     protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
     {
