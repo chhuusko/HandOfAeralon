@@ -78,7 +78,7 @@ public class SongOfRenewalAOE : RoundAOEAbility
         if (bIsMainTarget)
         {
             // Draw an extra card from your deck if main target was below 50% health.
-            if (affectedCharacter.GetCurrentHealth() < (int) (affectedCharacter.GetMaxHealth() * 0.5f))
+            if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetCurrentHealth() < (int) (affectedCharacter.GetMaxHealth() * 0.5f))
             {
                 CardHandManager.GetInstance().AddCardFromDeck();
             }
