@@ -17,7 +17,8 @@ public class CardHandManager : MonoBehaviour
     [SerializeField] private List<CardContainer> _cardsInHand;
     [SerializeField] private List<Card> _cardsInDeck;
     [SerializeField] private List<Card> _cardsInDiscardPile;
-    [SerializeField] private int _maxHand = 3;
+    private static int _maxHand = 7;
+    private static int beginningDraw = 5;
     
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
     [SerializeField] private int turnsTillCard = 4;
@@ -53,7 +54,7 @@ public class CardHandManager : MonoBehaviour
     public void drawHand()
     {
         _cardsInHand.RemoveAll(o => o == null);
-        while (_maxHand > _cardsInHand.Count)
+        while (beginningDraw > _cardsInHand.Count)
         {
             if(_cardsInDeck.Count == 0)
             {
@@ -90,6 +91,7 @@ public class CardHandManager : MonoBehaviour
         {
             return;
         }
+        if (_maxHand <= _cardsInHand.Count) return;
         CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
         _cardsInHand.Add(newCardContainer);
         int newCardIndex = UnityEngine.Random.Range(0, _cardsInDeck.Count);
