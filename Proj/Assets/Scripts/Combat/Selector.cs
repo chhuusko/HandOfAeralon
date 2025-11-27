@@ -50,12 +50,19 @@ public class Selector : MonoBehaviour
         CombatEventManager.OnCombatStateChange += HandleCombatStateUpdated;
         CombatEventManager.OnCombatTurnChange += HandleCombatTurnChanged;
         CombatEventManager.OnExitCombatStateTakeTurn += HandleCombatStateTakeTurn;
+        CombatEventManager.OnEnterCombatStateTakeTurn += HandleEnterCombatStateTakeTurn;
+
     }
 
     void Update()
     {
         HandleTileClick();
         HandleTileHover();
+    }
+
+    private void HandleEnterCombatStateTakeTurn(Character character)
+    {
+        SelectCharacterFromUI(character);
     }
 
     private void HandleCombatStateTakeTurn()
@@ -77,8 +84,6 @@ public class Selector : MonoBehaviour
     {
         if (turn == CombatTurn.PlayerTurn)
         {
-            DeselectCharacter();
-            SelectCharacterFromUI(CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter());
             _currentState = SelectorState.Idle;
         }
         else
