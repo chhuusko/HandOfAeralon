@@ -71,6 +71,11 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
         type: 3}
+      propertyPath: _factionIndicator
+      value: 
+      objectReference: {fileID: 9003232529615977811}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
       propertyPath: _data._characterClass
       value: 3
       objectReference: {fileID: 0}
@@ -113,3 +118,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tooltip: 
+--- !u!23 &9003232529615977811 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1707646618432603668, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 7729073911263066951}
+  m_PrefabAsset: {fileID: 0}

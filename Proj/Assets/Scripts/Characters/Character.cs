@@ -75,6 +75,8 @@ public class CharacterData
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour
 {
+    [SerializeField] private Renderer _factionIndicator; // JLW
+
     public event Action<int> OnHealthChanged;
     public event Action<int, GameObject> OnTakeDamage;
     public event Action<int, GameObject> OnWasHealed;
@@ -121,6 +123,8 @@ public class Character : MonoBehaviour
 
     private void Start()
     {
+        UpdateFactionIndicator();
+
         if (!TryGetComponent(out _abilityHandler))
         {
             Debug.LogError("Character is missing AbilityHandler component!");
@@ -132,6 +136,17 @@ public class Character : MonoBehaviour
            return;
         }
     }
+
+    private void UpdateFactionIndicator()
+    {
+        if (_factionIndicator == null) return;
+
+        Color c = (GetFaction() == Faction.Friendly) ? new Color(0f, 1f, 0.2f, 0.5f) : new Color(1f, 0.1f, 0.1f, 0.5f);
+
+        var mat = _factionIndicator.material;
+        mat.SetColor("_Color", c);
+    }
+
 
     private void OnDisable()
     {
