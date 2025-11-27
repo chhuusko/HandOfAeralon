@@ -72,6 +72,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
         CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
         CombatEventManager.OnAbilityCast += UpdateAbilityColors;
+        CombatEventManager.OnCharacterMove += CharacterMoving;
 
         StartCoroutine(WaitForSelector());
     }
@@ -88,6 +89,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
         CombatEventManager.OnAbilityDataCreated -= AddCombatLogEntry;
         CombatEventManager.OnAbilityCast -= UpdateAbilityColors;
+        CombatEventManager.OnCharacterMove -= CharacterMoving;
         
         Selector._instance.OnCharacterSelected -= SetSelectedCharacter;
         Selector._instance.OnCharacterSelected -= LoadAbilities;
@@ -493,5 +495,15 @@ public class CombatUI : MonoBehaviour
         }
 
         abilityButton.Button.interactable = interactable;
+    }
+
+    private void CharacterMoving(bool moving)
+    {
+        foreach (var abilityButton in _abilityButtons)
+        {
+            abilityButton.Button.interactable = !moving;
+        }
+        
+        _endTurnButton.interactable = !moving;
     }
 }
