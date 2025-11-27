@@ -20,7 +20,7 @@ public class CardHandManager : MonoBehaviour
     [SerializeField] private int _maxHand = 3;
     
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
-    private int _maxMana = 5;
+    private int _maxMana = 10;
     private int _mana = 5;
     private int _cardsPlayedThisTurn = 0;
 
