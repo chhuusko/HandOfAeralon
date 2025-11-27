@@ -60,11 +60,11 @@ public class Tooltipper : MonoBehaviour
 
                     string dynamicTooltip = GenerateTooltip();
                     _tmpText.text = dynamicTooltip + component.GetTooltip();
+
+                    return;
                 }
-                else
-                {
-                    HideTooltip();
-                }
+
+                HideTooltip();
             }
         }
     }
