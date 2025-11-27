@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor.TerrainTools;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "RC_ObstacleBlock", menuName = "Scriptable Objects/Abilities/Range Calculations/Obstacle Block")]
