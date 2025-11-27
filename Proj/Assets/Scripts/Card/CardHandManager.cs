@@ -80,6 +80,7 @@ public class CardHandManager : MonoBehaviour
         if (_cardsInDeck.Count == 0)
         {
             _cardsInDeck = _cardsInDiscardPile;
+            _cardsInDiscardPile.Clear();
         }
 
         CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
