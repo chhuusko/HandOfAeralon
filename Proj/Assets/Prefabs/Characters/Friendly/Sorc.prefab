@@ -65,6 +65,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
         type: 3}
+      propertyPath: _data._classData
+      value: 
+      objectReference: {fileID: 11400000, guid: c91f57a064803f447a57de754b74d82d,
+        type: 2}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
       propertyPath: _data._characterClass
       value: 1
       objectReference: {fileID: 0}
