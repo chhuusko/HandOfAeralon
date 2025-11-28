@@ -232,7 +232,7 @@ PrefabInstance:
     - target: {fileID: 2624034976232883914, guid: 1ded389e7cf27fd4babb4879d5fddb91,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000030517578
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3114053296980861930, guid: 1ded389e7cf27fd4babb4879d5fddb91,
         type: 3}
@@ -398,6 +398,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: CutsceneManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5781383961519557905, guid: 4e14480202e566a4781d3aa6384022ff,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 7bcdeb3cd99043d408c47b64784773b0, type: 2}
+    - target: {fileID: 5888991273250624878, guid: 4e14480202e566a4781d3aa6384022ff,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6611824564840862240, guid: 4e14480202e566a4781d3aa6384022ff,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -448,7 +458,23 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7336563043897731858, guid: 4e14480202e566a4781d3aa6384022ff,
+        type: 3}
+      propertyPath: _animatorSmoke
+      value: 
+      objectReference: {fileID: 642045933}
+    - target: {fileID: 7336563043897731858, guid: 4e14480202e566a4781d3aa6384022ff,
+        type: 3}
+      propertyPath: _animatorFadeTexture
+      value: 
+      objectReference: {fileID: 1026667103}
+    - target: {fileID: 8554612721853803694, guid: 4e14480202e566a4781d3aa6384022ff,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4930109917654986951, guid: 4e14480202e566a4781d3aa6384022ff, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -499,6 +525,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &642045933 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5781383961519557905, guid: 4e14480202e566a4781d3aa6384022ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 543182583}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &653518533 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8700939102808587917, guid: 2757f80d6f2eac24cb5a719251a32771,
@@ -590,6 +622,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95c491405d1649348abaa805c48842ad, type: 3}
+--- !u!95 &1026667103 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3183066403014809261, guid: 4e14480202e566a4781d3aa6384022ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 543182583}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1121696786
 GameObject:
   m_ObjectHideFlags: 0

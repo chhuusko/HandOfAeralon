@@ -5,7 +5,8 @@ public class CutSceneManager : MonoBehaviour
 
     private static CutSceneManager _instance;
     
-    [SerializeField] private Animator _animator;
+    [SerializeField] private Animator _animatorFadeTexture;
+    [SerializeField] private Animator _animatorSmoke;
 
 
     private void Awake()
@@ -32,16 +33,26 @@ public class CutSceneManager : MonoBehaviour
 
     void Start()
     {
-        if(_animator != null)
-            _animator.enabled = false;
+        if(_animatorFadeTexture != null)
+            _animatorFadeTexture.enabled = false;
+
+        if (_animatorSmoke != null)
+            _animatorSmoke.enabled = false;
     }
 
     private void PlayFadeIn()
     {
-        if (_animator != null)
+        if (_animatorFadeTexture != null)
         {
-            _animator.enabled = true;
-            _animator.Play("CutsceneFadeIn");
+            _animatorFadeTexture.enabled = true;
+            _animatorFadeTexture.Play("CutsceneFadeIn");
+        }
+
+
+        if (_animatorSmoke!= null)
+        {
+            _animatorSmoke.enabled = true;
+            _animatorSmoke.Play("FadeOutSmoke");
         }
     }
 

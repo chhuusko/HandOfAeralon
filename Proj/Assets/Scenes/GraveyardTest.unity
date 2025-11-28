@@ -33089,6 +33089,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 881335418}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &881395227 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3183066403014809261, guid: 4e14480202e566a4781d3aa6384022ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 4851344435745620715}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &882819120
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -63281,6 +63287,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1624254320}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1625273574 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5781383961519557905, guid: 4e14480202e566a4781d3aa6384022ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 4851344435745620715}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1627804838
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -84098,6 +84110,11 @@ PrefabInstance:
       propertyPath: m_CullTransparentMesh
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5781383961519557905, guid: 4e14480202e566a4781d3aa6384022ff,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 7bcdeb3cd99043d408c47b64784773b0, type: 2}
     - target: {fileID: 5888991273250624878, guid: 4e14480202e566a4781d3aa6384022ff,
         type: 3}
       propertyPath: m_Color.a
@@ -84183,6 +84200,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7336563043897731858, guid: 4e14480202e566a4781d3aa6384022ff,
+        type: 3}
+      propertyPath: _animatorSmoke
+      value: 
+      objectReference: {fileID: 1625273574}
+    - target: {fileID: 7336563043897731858, guid: 4e14480202e566a4781d3aa6384022ff,
+        type: 3}
+      propertyPath: _animatorFadeTexture
+      value: 
+      objectReference: {fileID: 881395227}
     - target: {fileID: 8171441307089535942, guid: 4e14480202e566a4781d3aa6384022ff,
         type: 3}
       propertyPath: m_CameraType
@@ -84196,7 +84223,7 @@ PrefabInstance:
     - target: {fileID: 8554612721853803694, guid: 4e14480202e566a4781d3aa6384022ff,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
