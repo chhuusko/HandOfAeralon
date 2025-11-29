@@ -7,6 +7,7 @@ public class CutSceneManager : MonoBehaviour
     
     [SerializeField] private Animator _animatorFadeTexture;
     [SerializeField] private Animator _animatorSmoke;
+    [SerializeField] private Canvas _cutsceneCanvas;
 
 
     private void Awake()
@@ -40,6 +41,7 @@ public class CutSceneManager : MonoBehaviour
             _animatorSmoke.enabled = false;
     }
 
+    public static CutSceneManager GetInstance() { return _instance; }
     private void PlayFadeIn()
     {
         if (_animatorFadeTexture != null)
@@ -54,6 +56,15 @@ public class CutSceneManager : MonoBehaviour
             _animatorSmoke.enabled = true;
             _animatorSmoke.Play("FadeOutSmoke");
         }
+    }
+
+    public void HideCutsceneCanvas()
+    {
+        _cutsceneCanvas.enabled = false;
+    }
+    public void ShowCutsceneCanvas()
+    {
+        _cutsceneCanvas.enabled = true;
     }
 
 }
