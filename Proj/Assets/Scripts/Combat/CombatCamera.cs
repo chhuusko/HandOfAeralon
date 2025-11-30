@@ -127,7 +127,7 @@ public class CombatCamera : MonoBehaviour
 
         ClampToCamerBounds();
 
-        if (Input.GetKeyDown(KeyCode.Escape) && !IsIntroCinematicDone())
+        if (Input.GetKeyDown(KeyCode.Space) && !IsIntroCinematicDone())
             InterruptIntroCinematic();
 
     }

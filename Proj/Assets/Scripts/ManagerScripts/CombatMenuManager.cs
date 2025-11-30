@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-public class MenuManager : MonoBehaviour
+public class CombatMenuManager : MonoBehaviour
 {
     [SerializeField] private Volume _globalVolume;
     [SerializeField] private Canvas _endCombatMenuCanvas;
+    [SerializeField] private CanvasGroup _combatCanvasGroup;
+    [SerializeField] private Animator _endCombatMenuAnimator;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         _endCombatMenuCanvas.enabled = false;    
@@ -14,7 +16,7 @@ public class MenuManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.M))
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
             if (_endCombatMenuCanvas.enabled)
                 HideEndCombatMenuScreen();
@@ -26,13 +28,15 @@ public class MenuManager : MonoBehaviour
     public void ShowEndCombatMenuScreen()
     {
         _endCombatMenuCanvas.enabled = true;
-        _globalVolume.weight = 1.0f;
+        _combatCanvasGroup.interactable = false;
+        _endCombatMenuAnimator.Play("WeightFadeIn");
         Time.timeScale = 0f;
     }
     public void HideEndCombatMenuScreen()
     {
         _endCombatMenuCanvas.enabled = false;
-        _globalVolume.weight = 0.0f;
+        _combatCanvasGroup.interactable = true;
+        _endCombatMenuAnimator.Play("WeightFadeOut");
         Time.timeScale = 1f;
     }
 
