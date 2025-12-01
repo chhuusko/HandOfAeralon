@@ -38,11 +38,16 @@ public class CharacterData
     private StatusEffectManager _statusEffectManager;
     public StatusEffectManager StatusEffectManager => _statusEffectManager;
 
-    public CharacterData(ClassData classData, Faction faction)
+    public CharacterData(ClassData classData, Faction faction, bool generateTraits)
     {
         _classData = classData;
         _faction = faction;
         InitializeClassData();
+        
+        if (generateTraits)
+        {
+            GenerateTraits();
+        }
     }
     
     /// <summary>
@@ -62,8 +67,6 @@ public class CharacterData
         _baseMovementPoints = UnityEngine.Random.Range(ClassData.minMovementPoints, ClassData.maxMovementPoints + 1);
         _characterClass = ClassData.characterClass;
         _availableAbilities = ClassData.abilities;
-        
-        GenerateTraits();
     }
     
     private void GenerateTraits()
