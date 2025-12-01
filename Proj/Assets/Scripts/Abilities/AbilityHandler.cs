@@ -71,12 +71,13 @@ public class AbilityHandler : MonoBehaviour
             Debug.LogError("No pending ability selected, but is still trying to calculate range");
             return;
         }
-        _tilesInRange = GetAvailableTargets(_pendingAbility);
+        _tilesInRange = RemoveUntargetableTiles(GetAvailableTargets(_pendingAbility));
     }
 
     private bool CanCastAbility(Ability ability, CombatGridTile targetTile)
     {
         return IsValidTargetTileForAbility(ability, targetTile) && _tilesInRange.Contains(targetTile);
+        
     }
 
     private List<CombatGridTile> GetAvailableTargets(Ability ability)
@@ -103,6 +104,22 @@ public class AbilityHandler : MonoBehaviour
                 return character != null && character.GetFaction() == _characterCaster.GetFaction();
             default: return false;
         }
+    }
+    private List<CombatGridTile> RemoveUntargetableTiles(List<CombatGridTile> tiles)
+    {
+        List<CombatGridTile> filteredList = new();
+        foreach(CombatGridTile tile in tiles){
+            if (tile.IsWalkable())
+            {
+                filteredList.Add(tile);
+            }
+        }
+
+        if ((_pendingAbility.GetAbilityTargetType() != Ability.ValidTargetOccupant.Any) && (_pendingAbility.GetAbilityTargetType() != Ability.ValidTargetOccupant.Friendly))
+        {
+            filteredList.Remove(_casterTile);
+        }
+        return filteredList;
     }
 
     /// <summary>
