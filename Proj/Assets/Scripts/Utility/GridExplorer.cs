@@ -379,6 +379,11 @@ public class GridExplorer : MonoBehaviour
 
         Vector2Int start = origin.GetComponent<CombatGridTile>().GetTileIndex();
 
+        if (!checkWalkable)
+        {
+            result.Add(origin);
+        }
+
         Vector2Int[] directions = new Vector2Int[]
         {
             new Vector2Int(1, 0),
