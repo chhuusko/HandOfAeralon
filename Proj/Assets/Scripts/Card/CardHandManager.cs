@@ -215,7 +215,7 @@ public class CardHandManager : MonoBehaviour
 
         _activeContainer = container;
 
-        // Instantiate the zoomed card
+        
         _addedZoomedCard = Instantiate(
             _zoomedCard,
             position,
@@ -223,7 +223,7 @@ public class CardHandManager : MonoBehaviour
             CanvasManager.instance.OverlayCanvas.transform
         );
 
-        // IMPORTANT: Use _addedZoomedCard, not _zoomedCard
+
         _addedZoomedCard.GetComponent<CardUI>().SetUpUIElements(container.GetCard());
 
     }
