@@ -2,16 +2,9 @@ using UnityEngine;
 
 public abstract class DirectedAOEPattern : AOEPattern
 {
-    public enum Direction
-    {
-        Up, Down, Left, Right
-    }
+    private DirectedAOEAbility.Direction _direction;
 
-    private Direction _direction;
-
-    public Direction GetDirection => _direction;
-
-    public void SetDirection(Direction direction)
+    public void SetDirection(DirectedAOEAbility.Direction direction)
     {
         _direction = direction;
     }
