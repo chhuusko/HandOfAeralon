@@ -52,14 +52,18 @@ public class CombatCamera : MonoBehaviour
         public float GetHeight() { return _height; }
         public float GetTilt() { return _tilt; }
         public float GetSmoothSpeed() { return _smoothSpeed; }
-
+        
     };
 
     [SerializeField] private PlayableDirector _timelineDirector;
     [SerializeField] private bool bIntroCinematicDone;
-    [SerializeField] private float _cameraSpeed;
     [SerializeField] CameraBounds _cameraBounds;
     [SerializeField] CameraZoomController _cameraZoomController;
+    [SerializeField] Vector3 _lastMousePosition;
+
+
+    [SerializeField] private float _mouseMoveScreenLimitX, _mouseMoveScreenLimitY;
+    [SerializeField] private float _moveSpeed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -82,33 +86,55 @@ public class CombatCamera : MonoBehaviour
     private void Move()
     {
         Vector3 cameraMovement = Vector3.zero;
-        Vector3 cameraSpeedVector = new Vector3(_cameraSpeed, _cameraSpeed, _cameraSpeed);
 
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D) || Input.mousePosition.x > Screen.width - _mouseMoveScreenLimitX)
             cameraMovement += Vector3.right;
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) || Input.mousePosition.x < _mouseMoveScreenLimitX)
             cameraMovement += Vector3.left;
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) || Input.mousePosition.y > Screen.height - _mouseMoveScreenLimitY)
             cameraMovement += Vector3.forward;
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S) || Input.mousePosition.y < _mouseMoveScreenLimitY)
             cameraMovement += Vector3.back;
 
-        cameraMovement = Vector3.Scale(cameraMovement, cameraSpeedVector);
 
-        cameraMovement *= Time.deltaTime;
 
-        if (cameraMovement != Vector3.zero)
-            transform.position = cameraMovement + transform.position;
+        // NOTE (Calle): Moving camera with scroll button pressed
+        if (Input.GetMouseButtonDown(2))
+        {
+            _lastMousePosition = Input.mousePosition;
+        }
+
+        if (Input.GetMouseButton(2))
+        {
+            Vector3 dragDelta = Input.mousePosition - _lastMousePosition;
+
+            // Convert drag delta to world movement
+            Vector3 move = new Vector3(-dragDelta.x, 0, -dragDelta.y) * (_moveSpeed * 0.05f) * Time.deltaTime;
+
+            transform.position += move;
+
+            _lastMousePosition = Input.mousePosition;
+        }
+        else
+        {
+
+            // NOTE (Calle): Normalized for consisten diagonal movement
+            if (cameraMovement != Vector3.zero)
+                transform.position += cameraMovement.normalized * Time.deltaTime * _moveSpeed;
+
+
+        }
 
         ClampToCamerBounds();
 
-        if (Input.GetKeyDown(KeyCode.Escape) && !IsIntroCinematicDone())
+        if (Input.GetKeyDown(KeyCode.Space) && !IsIntroCinematicDone())
             InterruptIntroCinematic();
 
     }
 
     private void InterruptIntroCinematic()
     {
+        CutSceneManager.GetInstance().HideCutsceneCanvas();
         bIntroCinematicDone = true;
         _timelineDirector.Stop();
     }
@@ -121,8 +147,7 @@ public class CombatCamera : MonoBehaviour
 
     private void OnTimelineStopped(PlayableDirector pd)
     {
-        bIntroCinematicDone = true;
-        _timelineDirector.Stop();
+        InterruptIntroCinematic();
     }
 
     private void ClampToCamerBounds()
