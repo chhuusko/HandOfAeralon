@@ -33,9 +33,9 @@ public class CombatGrid : MonoBehaviour
     {
         if (_instance == null)
         {
-            Debug.Log("CombatGrid Awake(), instance = " + CombatGrid._instance);
+            DebugLog.CJLog("CombatGrid Awake(), instance = " + CombatGrid._instance);
             _instance = this;
-            Debug.Log("CombatGrid instance now = " + CombatGrid._instance);
+            DebugLog.CJLog("CombatGrid instance now = " + CombatGrid._instance);
 
             // NOTE (Calle): Can't be a Dont' destroy on load if its a child to the Combat Manager, (So maybe make it root for itself?)
             //DontDestroyOnLoad(gameObject);
