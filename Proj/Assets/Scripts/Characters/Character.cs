@@ -33,12 +33,21 @@ public class CharacterData
     [SerializeField] private List<Ability> _availableAbilities;
     public int CurrentHealthPoints => _currentHealthPoints;
     public IReadOnlyList<Ability> AvailableAbilities => _availableAbilities;
+    
+    [Header("Status Effects")]
+    private StatusEffectManager _statusEffectManager;
+    public StatusEffectManager StatusEffectManager => _statusEffectManager;
 
-    public CharacterData(ClassData classData, Faction faction)
+    public CharacterData(ClassData classData, Faction faction, bool generateTraits)
     {
         _classData = classData;
         _faction = faction;
         InitializeClassData();
+        
+        if (generateTraits)
+        {
+            GenerateTraits();
+        }
     }
     
     /// <summary>
@@ -58,6 +67,11 @@ public class CharacterData
         _baseMovementPoints = UnityEngine.Random.Range(ClassData.minMovementPoints, ClassData.maxMovementPoints + 1);
         _characterClass = ClassData.characterClass;
         _availableAbilities = ClassData.abilities;
+    }
+    
+    private void GenerateTraits()
+    {
+        _statusEffectManager.GenerateTraits();
     }
 
     public void SetClassData(ClassData classData) => _classData = classData;
@@ -96,9 +110,6 @@ public class Character : MonoBehaviour
     private AbilityHandler _abilityHandler;
     private Dictionary<Ability, int> _currentCooldowns = new();
 
-    [Header("Status Effects")]
-    private StatusEffectManager _statusEffectManager;
-
     [Header("State")] 
     public bool CanMove { get; set; } = true;
     public bool CanAttack { get; set; } = true;
@@ -129,11 +140,6 @@ public class Character : MonoBehaviour
         {
             Debug.LogError("Character is missing AbilityHandler component!");
             return;
-        }
-        if (!TryGetComponent(out _statusEffectManager))
-        {
-           Debug.LogError("Character is missing _statusEffectManager component!");
-           return;
         }
     }
 
@@ -205,7 +211,7 @@ public class Character : MonoBehaviour
     public IReadOnlyList<Ability> GetAvailableAbilities() => _data.AvailableAbilities;
 
     // Status Effects.
-    public StatusEffectManager GetStatusEffectManager() => _statusEffectManager;
+    public StatusEffectManager GetStatusEffectManager() => _data.StatusEffectManager;
 
     // Base stats.
     public void SetCharacterClass(CharacterClass characterClass) => _data.SetCharacterClass(characterClass);

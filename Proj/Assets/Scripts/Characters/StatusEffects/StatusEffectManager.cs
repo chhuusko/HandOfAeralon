@@ -6,6 +6,7 @@ using UnityEngine;
 public class StatusEffectManager : MonoBehaviour
 {
     [SerializeField] private StatusEffectDataRegistry _registry;
+    public StatusEffectDataRegistry Registry => _registry;
     
     private List<StatusEffect> _statusEffects = new();
     private Character _character;
@@ -33,6 +34,18 @@ public class StatusEffectManager : MonoBehaviour
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
+    }
+
+    /// <summary>
+    /// Adds one positive and one negative trait for the character.
+    /// </summary>
+    public void GenerateTraits()
+    {
+        IReadOnlyList<TraitData> positiveTraits = _registry.GetAllTraitsOfType(true);
+        IReadOnlyList<TraitData> negativeTraits = _registry.GetAllTraitsOfType(false);
+
+        AddStatusEffect(positiveTraits[UnityEngine.Random.Range(0, positiveTraits.Count)].CreateInstance());
+        AddStatusEffect(negativeTraits[UnityEngine.Random.Range(0, positiveTraits.Count)].CreateInstance());
     }
     
     public void AddStatusEffect(StatusEffect statusEffect)
@@ -70,6 +83,8 @@ public class StatusEffectManager : MonoBehaviour
         }
         
         List<StatusEffect> statusEffectsToRemove = new();
+        
+        // TODO: Don't tick permanent status effects.
         
         foreach (var statusEffect in _statusEffects)
         {
