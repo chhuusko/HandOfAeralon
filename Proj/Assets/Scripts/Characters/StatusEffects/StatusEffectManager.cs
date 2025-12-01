@@ -30,18 +30,6 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
     }
 
-    /// <summary>
-    /// Adds one positive and one negative trait for the character.
-    /// </summary>
-    public void GenerateTraits()
-    {
-        IReadOnlyList<TraitData> positiveTraits = StatusEffectDataRegistry.Instance.GetAllTraitsOfType(true);
-        IReadOnlyList<TraitData> negativeTraits = StatusEffectDataRegistry.Instance.GetAllTraitsOfType(false);
-
-        AddStatusEffect(positiveTraits[UnityEngine.Random.Range(0, positiveTraits.Count)].CreateInstance());
-        AddStatusEffect(negativeTraits[UnityEngine.Random.Range(0, negativeTraits.Count)].CreateInstance());
-    }
-
     public void AddStatusEffect(StatusEffect statusEffect)
     {
         _statusEffects.AddStatusEffect(statusEffect);

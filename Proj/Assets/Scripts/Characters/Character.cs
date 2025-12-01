@@ -35,13 +35,16 @@ public class CharacterData
     public IReadOnlyList<Ability> AvailableAbilities => _availableAbilities;
     
     [Header("Status Effects")]
-    private StatusEffectManager _statusEffectManager;
-    public StatusEffectManager StatusEffectManager => _statusEffectManager;
+    private CharacterStatusEffects _statusEffects;
+    public CharacterStatusEffects StatusEffects => _statusEffects;
 
     public CharacterData(ClassData classData, Faction faction, bool generateTraits)
     {
         _classData = classData;
         _faction = faction;
+
+        _statusEffects = new CharacterStatusEffects();
+        
         InitializeClassData();
         
         if (generateTraits)
@@ -71,7 +74,7 @@ public class CharacterData
     
     private void GenerateTraits()
     {
-        _statusEffectManager.GenerateTraits();
+        _statusEffects.GenerateTraits();
     }
 
     public void SetClassData(ClassData classData) => _classData = classData;
@@ -114,6 +117,9 @@ public class Character : MonoBehaviour
     public bool CanMove { get; set; } = true;
     public bool CanAttack { get; set; } = true;
 
+    [Header("Status effects")]
+    private StatusEffectManager _statusEffectManager;
+    
     [Header("Misc")]
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
@@ -211,7 +217,7 @@ public class Character : MonoBehaviour
     public IReadOnlyList<Ability> GetAvailableAbilities() => _data.AvailableAbilities;
 
     // Status Effects.
-    public StatusEffectManager GetStatusEffectManager() => _data.StatusEffectManager;
+    public StatusEffectManager GetStatusEffectManager() => _statusEffectManager;
 
     // Base stats.
     public void SetCharacterClass(CharacterClass characterClass) => _data.SetCharacterClass(characterClass);
