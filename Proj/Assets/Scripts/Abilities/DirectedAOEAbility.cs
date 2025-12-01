@@ -7,11 +7,11 @@ public abstract class DirectedAOEAbility : AOEAbility
     {
         // Calculate all tiles around within pattern and apply effect to all of them.
 
-        DirectedAOEPattern directedAOEPattern = (DirectedAOEPattern)_pattern;
+        var directedAOEPattern = _pattern as DirectedAOEPattern;
 
         if (directedAOEPattern == null)
         {
-            Debug.LogError("Directed AOE ability tried using a pattern not containing a direction");
+            Debug.LogError("Pattern is not a DirectedAOEPattern");
             return;
         }
 
@@ -36,10 +36,10 @@ public abstract class DirectedAOEAbility : AOEAbility
     {
         // Calculate direction based of index of caster and target tile.
 
-        Vector2Int casterIndex = casterTile.GetTileIndex();
         Vector2Int targetIndex = targetTile.GetTileIndex();
+        Vector2Int casterIndex = casterTile.GetTileIndex();
 
-        Vector2Int compareIndex = casterIndex - targetIndex;
+        Vector2Int compareIndex = targetIndex - casterIndex;
 
         switch (compareIndex.x, compareIndex.y)
         {

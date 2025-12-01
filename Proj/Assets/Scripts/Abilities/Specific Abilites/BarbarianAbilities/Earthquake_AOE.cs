@@ -1,5 +1,7 @@
+using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [CreateAssetMenu(fileName = "Earthquake_Ability", menuName = "Scriptable Objects/Abilities/Barbarian/Earthquake_Ability")]
 
@@ -11,6 +13,14 @@ public class Earthquake_AOE : AOEAbility
     [SerializeField] private int _slowDuration = 2;
     [SerializeField] private int _charactersSlowedToGetMana = 2;
     [SerializeField] private int _manaGain = 1;
+
+    // Description
+
+    // Slam the ground, dealing(90% × Damage) Physical damage to all characters in the area.
+    // Every character hit has a 60% chance to become Slowed for 2 turns.
+    // Gain 1 Mana if at least two enemies become Slowed.
+
+
 
     private int slowedEnemyCounter;
 
@@ -30,7 +40,7 @@ public class Earthquake_AOE : AOEAbility
                 ApplyEffectOnTile(casterTile, tile);
             }
         }
-        if(slowedEnemyCounter >= _charactersSlowedToGetMana)
+        if (slowedEnemyCounter >= _charactersSlowedToGetMana)
         {
             CardHandManager.GetInstance().ChangeMana(_manaGain);
         }
@@ -54,7 +64,7 @@ public class Earthquake_AOE : AOEAbility
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
             {
                 statusEffectManager.AddStatusEffect(new Slowed(_slowDuration));
-                if(castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
+                if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
                 {
                     slowedEnemyCounter++;
                 }

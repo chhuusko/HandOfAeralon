@@ -40,9 +40,9 @@ public class HousePattern : DirectedAOEPattern
         List<CombatGridTile> squareWithoutCaster = new();
         Vector2Int startIndex = topRightTileOfSquare.GetTileIndex();
 
-        for (int i = startIndex.x; startIndex.x >= startIndex.x - _size; i--)
+        for (int i = startIndex.x; i > startIndex.x - _size; i--)
         {
-            for (int j = startIndex.y; startIndex.y >= startIndex.y - _size; j--)
+            for (int j = startIndex.y; j > startIndex.y - _size; j--)
             {
                 GameObject tileObj = CombatGrid._instance.GetTileAtCoord(i, j);
                 if(tileObj == null) continue;
