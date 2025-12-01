@@ -140,6 +140,8 @@ public class Character : MonoBehaviour
 
     private void Start()
     {
+        _statusEffectManager = GetComponent<StatusEffectManager>();
+        
         UpdateFactionIndicator();
 
         if (!TryGetComponent(out _abilityHandler))

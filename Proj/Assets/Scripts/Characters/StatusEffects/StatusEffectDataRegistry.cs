@@ -14,7 +14,7 @@ public class StatusEffectDataRegistry : ScriptableObject
         {
             if (_instance == null)
             {
-                _instance = Resources.Load<StatusEffectDataRegistry>("StatusEffectDataRegistry");
+                _instance = Resources.Load<StatusEffectDataRegistry>("Characters/StatusEffects/StatusEffectDataRegistry");
                 _instance?.Initialize();
             }
 

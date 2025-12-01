@@ -39,6 +39,11 @@ public class CharacterStatusEffects
         IReadOnlyList<TraitData> positiveTraits = StatusEffectDataRegistry.Instance.GetAllTraitsOfType(true);
         IReadOnlyList<TraitData> negativeTraits = StatusEffectDataRegistry.Instance.GetAllTraitsOfType(false);
 
+        if (positiveTraits.Count == 0 || negativeTraits.Count == 0)
+        {
+            return;
+        }
+        
         AddStatusEffect(positiveTraits[UnityEngine.Random.Range(0, positiveTraits.Count)].CreateInstance());
         AddStatusEffect(negativeTraits[UnityEngine.Random.Range(0, negativeTraits.Count)].CreateInstance());
     }
