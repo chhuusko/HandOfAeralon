@@ -7,6 +7,21 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "StatusEffectDataRegistry", menuName = "StatusEffects/StatusEffectDataRegistry")]
 public class StatusEffectDataRegistry : ScriptableObject
 {
+    private static StatusEffectDataRegistry _instance;
+    public static StatusEffectDataRegistry Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = Resources.Load<StatusEffectDataRegistry>("StatusEffectDataRegistry");
+                _instance?.Initialize();
+            }
+
+            return _instance;
+        }
+    }
+    
     [SerializeField] private StatusEffectData[] _entries;
     private static Dictionary<Type, StatusEffectData> _lookup;
 
@@ -38,7 +53,7 @@ public class StatusEffectDataRegistry : ScriptableObject
         return data;
     }
 
-    public static IReadOnlyList<StatusEffectData> GetAllData()
+    public IReadOnlyList<StatusEffectData> GetAllData()
     {
         return _lookup.Values.ToList();
     }
