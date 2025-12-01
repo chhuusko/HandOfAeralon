@@ -56,10 +56,12 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (!CanAfford()) return;
+        if (!CanAfford() || CanPlay()) return;
         _isDragging = true;
         _spawnedParticle = Instantiate(_particleDrag);  
     }
+
+    
 
     public void OnEndDrag(PointerEventData eventData)
     {
@@ -85,7 +87,11 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     {
         return CardHandManager.GetInstance().GetMana() >= _containedCard.cost;
     }
-
+    private bool CanPlay()
+    {
+        return CombatManager._instance.GetCombatState() != CombatState.PlaceCharacters;
+        
+    }
     public void OnPointerExit(PointerEventData eventData)
     {
         CardHandManager.GetInstance().HideHighlightedCard();
