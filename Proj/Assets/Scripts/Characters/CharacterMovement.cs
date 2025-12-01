@@ -30,7 +30,7 @@ public class CharacterMovement : MonoBehaviour
         GameObject currentTile = _character.GetCurrentTileComponent().gameObject;
         if (_character.GetMovementPoints() <= 0 || !_character.CanMove)
         {
-            DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} can't move!");
+            //DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} can't move!");
             _tilesInRange = new();
             return;
         }
