@@ -62,11 +62,27 @@ public class CombatGridTile : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Character"))
         {
+            Character character = other.gameObject.GetComponent<Character>();
+
             // NOTE (Calle): Only set it as occupant if the tile was empty.
             if(!_occupant)
             {
                 _occupant = other.gameObject;
-                _occupant.GetComponent<Character>().SetCurrentTileIndex(GetTileIndex());
+                character.SetCurrentTileIndex(GetTileIndex());
+            }
+
+            switch(GetTileType())
+            {
+                case TileType.Poison:
+                    {
+                        character.GetComponent<StatusEffectManager>().AddStatusEffect(new Poison(3));
+                    } break;
+
+                case TileType.Lava:
+                    {
+                        character.TakeDamage(4);
+                        character.GetComponent<StatusEffectManager>().AddStatusEffect(new Burn(1));
+                    } break;
             }
             
         }

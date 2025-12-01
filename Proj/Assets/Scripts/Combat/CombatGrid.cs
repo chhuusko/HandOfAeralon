@@ -229,6 +229,23 @@ public class CombatGrid : MonoBehaviour
                         }
                     }
                     break;
+                case TileType.Lava:
+                    {
+                        if (inCombatTileMaterial != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(1, 0));
+                        }
+                    } break;
+                case TileType.Poison:
+                    {
+                        if (inCombatTileMaterial != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(2, 0));
+                        }
+                    }
+                    break;
                 default:
                     {
                         if (inCombatTileMaterial != null)
@@ -428,6 +445,24 @@ public class CombatGrid : MonoBehaviour
                         if (meshRend != null)
                         {
                             meshRend.material.SetFloat("_Alpha", 0.0f);
+                        }
+                    }
+                    break;
+                case TileType.Lava:
+                    {
+                        if (inCombatTileMaterial != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(1, 0));
+                        }
+                    }
+                    break;
+                case TileType.Poison:
+                    {
+                        if (inCombatTileMaterial != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(2, 0));
                         }
                     }
                     break;
