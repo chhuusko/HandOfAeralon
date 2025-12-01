@@ -9,7 +9,7 @@ public abstract class StatusEffect
     
     public StatusEffectData Data { get; private set; }
     
-    protected StatusEffect(int duration)
+    protected StatusEffect(int duration = 3)
     {
         Duration = duration;
 
