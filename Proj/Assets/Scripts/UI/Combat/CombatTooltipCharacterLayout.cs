@@ -53,6 +53,8 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         {
             _characterStatValueFieldTMP.text += value + "\n";
         }
+
+
     }
 
     public void RebuildCharacterStatTooltip(Character character)
