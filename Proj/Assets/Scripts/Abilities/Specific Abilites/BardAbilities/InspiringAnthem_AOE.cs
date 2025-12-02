@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "InspiringAnthem_Ability", menuName = "Scriptable Objects/Abilities/Bard/Inspiring Anthem")]
 public class InspiringAnthem_AOE : RoundAOEAbility
 {
     [Header("- Ability Specific values -")]
@@ -34,7 +35,11 @@ public class InspiringAnthem_AOE : RoundAOEAbility
             ApplyEffectOnTile(casterTile, tile);
         }
 
-        if(alliesBuffed >= _alliesBuffedTilBonus)
+        // Check to see if casting character is friendly before changing mana.
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null || (castingCharacter.GetFaction() != Faction.Friendly)) return;
+
+        if (alliesBuffed >= _alliesBuffedTilBonus)
         {
             CardHandManager.GetInstance().ChangeMana(_manaGain);
         }
@@ -51,10 +56,9 @@ public class InspiringAnthem_AOE : RoundAOEAbility
 
         StatusEffect haste = null;
         if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
-          //  statusEffectManager.AddStatusEffect(haste = new Haste(_hasteStacks));
-
+           statusEffectManager.AddStatusEffect(haste = new Haste(_hasteStacks));
         }
-         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, haste);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, haste);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
