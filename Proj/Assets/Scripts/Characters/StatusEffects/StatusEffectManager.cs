@@ -13,10 +13,9 @@ public class StatusEffectManager : MonoBehaviour
     
     private void OnEnable()
     {
-        // CombatEventManager.OnEnterCombatStateLoadNextLevel += Initialize;
-        // CombatEventManager.OnEnterCombatStateLoadNextLevel += OnStartCombat;
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
+        CombatEventManager.OnAbilityDataCreated += OnAbilityUsed;
     }
 
     private void Start()
@@ -37,10 +36,9 @@ public class StatusEffectManager : MonoBehaviour
 
     private void OnDisable()
     {
-        // CombatEventManager.OnEnterCombatStateLoadNextLevel -= Initialize;
-        // CombatEventManager.OnEnterCombatStateLoadNextLevel -= OnStartCombat;
         CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
+        CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
     }
 
     public void SetTraitManager(TraitManager traitManager)
@@ -226,12 +224,17 @@ public class StatusEffectManager : MonoBehaviour
     
     public void OnTakeDamage()
     {
-        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        foreach (var trait in _traitManager.GetAllTraits())
         {
-            if (statusEffect is Trait trait)
-            {
-                trait.OnTakeDamage();
-            }
+            trait.OnTakeDamage();
+        }
+    }
+
+    private void OnAbilityUsed(AbilityExecutionData data)
+    {
+        foreach (var trait in _traitManager.GetAllTraits())
+        {
+            trait.OnAbilityUsed(data.Ability);
         }
     }
 }
