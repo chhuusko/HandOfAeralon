@@ -61,7 +61,7 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
 
     private void UpdateTooltip(Character character)
     {
-
+        RebuildCharacterStatTooltip(character);
     }
 
     public void ShowCharacterTooltip()
