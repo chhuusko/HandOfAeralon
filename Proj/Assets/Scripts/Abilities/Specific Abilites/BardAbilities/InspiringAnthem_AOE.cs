@@ -56,8 +56,7 @@ public class InspiringAnthem_AOE : RoundAOEAbility
 
         StatusEffect haste = null;
         if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
-          //  statusEffectManager.AddStatusEffect(haste = new Haste(_hasteStacks));
-
+           statusEffectManager.AddStatusEffect(haste = new Haste(_hasteStacks));
         }
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, haste);
     }
