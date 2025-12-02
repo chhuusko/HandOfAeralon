@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b3651dfdfac34b49a855527cf48a9ee, type: 3}
-  m_Name: Bulwark's Threshold
+  m_Script: {fileID: 11500000, guid: 4ba6dfca31d6a894682e8a93dd012e22, type: 3}
+  m_Name: Battleborn Momentum
   m_EditorClassIdentifier: 
-  Name: Bulwark's Threshold
+  Name: Battleborn Momentum
   Icon: {fileID: 0}
   Type: 3
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: 81c1505581e4cdb43a60dd13dcd471c6, type: 3}
-  Threshold: 0.5
-  TurnAmount: 2
+  Script: {fileID: 0}
+  Threshold: 3
+  TurnAmount: 3
