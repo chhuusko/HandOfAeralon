@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb490cc49c5cf5d41975e81bd251ef4d, type: 3}
+  m_Name: Desert's Grasp_Ability
+  m_EditorClassIdentifier: 
+  _abilityName: "Desert\u2019s Grasp"
+  _icon: {fileID: 21300000, guid: 2daeff1426025cf4eb6d075fb79f5fbd, type: 3}
+  _range: 0
+  _cooldown: 2
+  _description: "Slash around you, dealing (90% \xD7 Damage) Physical damage to adjacent
+    characters. Every character hit has a 70% chance to gain 3 stacks of Poison.
+    Gain 1 Mana if at least two enemies become Poisoned."
+  _abilityTag: 9
+  _type: 0
+  _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
+  _targetType: 2
+  _castingEffect: {fileID: 0}
+  _hitEffect: {fileID: 0}
+  _castingSound: {fileID: 0}
+  _hitSound: {fileID: 0}
+  _castingTime: 0.5
+  _fromCastToHitTime: 0
+  _castingRotationTime: 0.3
+  _pattern: {fileID: 11400000, guid: d5355e064e976a940a41fc2ec9e2eef7, type: 2}
+  _validTargets: 1
+  _radius: 1
+  _damageMultiplier: 0.9
+  _chanceToApplyPoison: 0.7
+  _poisonStacks: 3

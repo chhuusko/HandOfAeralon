@@ -1,33 +1,27 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
-[CreateAssetMenu(fileName = "Earthquake_Ability", menuName = "Scriptable Objects/Abilities/Barbarian/Earthquake_Ability")]
+[CreateAssetMenu(fileName = "Desert's Grasp", menuName = "Scriptable Objects/Abilities/Rogue/Desert's Grasp")]
 
-public class Earthquake_AOE : DirectedAOEAbility
+public class DesertsGrasp_Ability : RoundAOEAbility
 {
     [Header("- Ability Specific values -")]
-    [SerializeField] private float _damageMultiplier = 0.9f;
-    [SerializeField] private float _slowCharacterHitChance = 0.6f;
-    [SerializeField] private int _slowDuration = 2;
-    [SerializeField] private int _charactersSlowedToGetMana = 2;
+    [SerializeField] private float _damageMultiplier = 0.7f;
+    [SerializeField] private float _chanceToApplyPoison = 0.7f;
+    [SerializeField] private int _poisonStacks = 3;
     [SerializeField] private int _manaGain = 1;
+    [SerializeField] private int _enemiesPoisonedTilBonus = 3;
+
+    private int _enemiesPoisoned = 0;
 
     // Description
 
-    // Slam the ground, dealing(90% × Damage) Physical damage to all characters in the area.
-    // Every character hit has a 60% chance to become Slowed for 2 turns.
-    // Gain 1 Mana if at least two enemies become Slowed.
-
-
-
-    private int slowedEnemyCounter;
+    // All allies in the target area gain Haste for 2 turns.
+    // Gain 1 Mana if at least three allies gain Haste.
 
     public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
     {
         // Works like the base version of GetTilesToEffect but only returns the list when valid target is hovered. 
-        // Also removes caster tile as target. 
 
         if (targetTile == null)
             return null;
@@ -44,49 +38,32 @@ public class Earthquake_AOE : DirectedAOEAbility
         // Calculate which tiles to effect.
         var list = _pattern.CalculateTilesToEffect(targetTile);
 
-        // Remove caster tile. Unnecessary if pattern already removes caster.
-        if (caster.GetCurrentTileComponent())
-        {
-            list.Remove(caster.GetCurrentTileComponent());
-        }
-
         return list;
     }
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
-        // Calculate all tiles around within pattern and apply effect to all of them.
-
-        var directedAOEPattern = _pattern as DirectedAOEPattern;
-
-        if (directedAOEPattern == null)
+        // Calculate all tiles around with in radius and apply effect to all of them.
+        if (_pattern is RoundAOEPattern pattern)
         {
-            Debug.LogError("Pattern is not a DirectedAOEPattern");
-            return;
+            pattern.SetRadius(_radius);
         }
-
-        directedAOEPattern.SetDirection(CalculateDirection(casterTile, targetTile));
-        directedAOEPattern.SetCasterTile(casterTile);
-
         List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
 
-        slowedEnemyCounter = 0;
+        _enemiesPoisoned = 0;
         foreach (CombatGridTile tile in tilesToEffect)
         {
-            if (tile != null)
-            {
-                // Don't apply effect on tiles with invalid targets.
-                if (!IsValidTargetForAbility(casterTile, tile)) continue;
+            if (tile == null) continue;
+            if (!IsValidTargetForAbility(casterTile, tile)) continue;
 
-                ApplyEffectOnTile(casterTile, tile);
-            }
+            ApplyEffectOnTile(casterTile, tile);
         }
 
         // Check to see if casting character is friendly before changing mana.
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null || (castingCharacter.GetFaction() != Faction.Friendly)) return;
 
-        if (slowedEnemyCounter >= _charactersSlowedToGetMana)
+        if (_enemiesPoisoned >= _enemiesPoisonedTilBonus)
         {
             CardHandManager.GetInstance().ChangeMana(_manaGain);
         }
@@ -104,20 +81,17 @@ public class Earthquake_AOE : DirectedAOEAbility
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         affectedCharacter.TakeDamage(damage);
 
-        StatusEffect slow = null;
+        StatusEffect poison = null;
 
-        if (Random.value < _slowCharacterHitChance)
+        if (Random.value < _chanceToApplyPoison)
         {
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
             {
-                statusEffectManager.AddStatusEffect(slow = new Slowed(_slowDuration));
-                if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
-                {
-                    slowedEnemyCounter++;
-                }
+                statusEffectManager.AddStatusEffect(poison = new Poison(_poisonStacks));
+                _enemiesPoisoned++;
             }
         }
-        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, slow);
+        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, poison);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
