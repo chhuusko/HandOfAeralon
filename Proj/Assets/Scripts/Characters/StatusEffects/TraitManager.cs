@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TraitManager
@@ -26,9 +27,19 @@ public class TraitManager
         return _statusEffects.Exists(e => e is T);
     }
 
-    public IReadOnlyList<StatusEffect> GetAllStatusEffects()
+    public IReadOnlyList<StatusEffect> GetAllEffects()
     {
         return _statusEffects;
+    }
+
+    public IReadOnlyList<StatusEffect> GetAllStatusEffects()
+    {
+        return _statusEffects.Where(e => e is not Trait).ToList();
+    }
+
+    public IReadOnlyList<StatusEffect> GetAllTraits()
+    {
+        return _statusEffects.Where(e => e is Trait).ToList();
     }
     
     /// <summary>
