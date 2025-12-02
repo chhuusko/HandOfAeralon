@@ -191,7 +191,7 @@ public class Character : MonoBehaviour
         CombatTooltipManager combatTooltipManager = CombatTooltipManager.GetInstance();
         if (combatTooltipManager != null)
         {
-            combatTooltipManager.GetCharacterLayout().BindEventEventOnTakeDamage(this);
+            combatTooltipManager.GetCharacterLayout().UnBindEventEventOnTakeDamage(this);
         }
     }
 

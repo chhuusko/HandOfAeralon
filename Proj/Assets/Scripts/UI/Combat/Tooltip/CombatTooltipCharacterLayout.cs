@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class CombatTooltipCharacterLayout : MonoBehaviour
@@ -18,12 +19,44 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         BaseMovementPoints
     };
 
+    // Layout
+    [SerializeField] private GameObject _layout;
+    [SerializeField] private Image _characterIcon;
+    [SerializeField] private TMP_Text _characterClassName;
+
+    // Stats Tooltip
     private List<string> _characterStatValues = new List<string>();
     [SerializeField] private TMP_Text _characterStatValueFieldTMP;
+    
+
+    // Traits Tooltip
+    [SerializeField] private GameObject _traitParent;
+    [SerializeField] private GameObject _traitElementPrefab;
+    [SerializeField] private GameObject[] _traitElements = new GameObject[2];
+
+    private void Start()
+    {
+        Selector s = Selector._instance;
+        s.OnCharacterSelected   += UpdateTooltip;
+        s.OnCharacterDeselected += HideToolTip;
+
+        for (int i = 0; i < _traitElements.Length; i++)
+        {
+            _traitElements[i] = Instantiate(_traitElementPrefab);
+            _traitElements[i].transform.SetParent(_traitParent.transform, false);
+            _traitElements[i].SetActive(false);
+        }
+
+    }
 
     private void OnEnable()
     {
-        Selector._instance.OnCharacterSelected += UpdateTooltip;
+        
+    }
+    private void OnDisable()
+    {
+        Selector._instance.OnCharacterSelected   -= UpdateTooltip;
+        Selector._instance.OnCharacterDeselected -= HideToolTip;
     }
 
     public void BindEventEventOnTakeDamage(Character character)
@@ -78,10 +111,33 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         _characterStatValueFieldTMP.text = stats;
     }
 
+    private void HideToolTip()
+    {
+        _layout.SetActive(false);
+    }
+
+    
     private void UpdateTooltip(Character character)
     {
+        _layout.SetActive(true);
+        UpdateCharacterHeaderInfo(character);
         RebuildCharacterStatTooltip(character);
+        UpdateCharacterTraits(character);
     }
+
+    private void UpdateCharacterHeaderInfo(Character character)
+    {
+        ClassData classData = character.GetClassData();
+        Sprite sprite = classData.classImage;
+        _characterIcon.sprite = sprite;
+        _characterClassName.text = classData.name;
+    }
+
+    private void UpdateCharacterTraits(Character character)
+    {
+        IReadOnlyList<Trait> traits = character.GetTraitManager().GetAllTraits();
+    }
+
     private void UpdateTooltip(int health, GameObject character)
     {
         RebuildCharacterStatTooltip(character.GetComponent<Character>());

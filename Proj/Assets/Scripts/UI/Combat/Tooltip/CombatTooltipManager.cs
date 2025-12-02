@@ -9,7 +9,8 @@ public class CombatTooltipManager : MonoBehaviour
 
     [SerializeField] private CombatTooltipCharacterLayout _characterLayout;
     [SerializeField] private Animator _canvasAnimator;
-  
+
+
     private void Awake()
     {
         if(_instance != null && _instance != this)
@@ -24,7 +25,12 @@ public class CombatTooltipManager : MonoBehaviour
     void Start()
     {
         _characterLayout.InitializeCharacterStats();
-    }  
+    }
+
+    private void Update()
+    {
+
+    }
 
     public static CombatTooltipManager GetInstance() { return _instance; }
 
