@@ -1,12 +1,8 @@
 using UnityEngine;
 
-public class Burn : StatusEffect
+public class Aftershock : StatusEffect
 {
-    public Burn(int duration) : base(duration)
-    {
-    }
-
-    public override void OnTurnStart()
+    public override void OnCardPlayed()
     {
         var data = Data as DamageData;
 
