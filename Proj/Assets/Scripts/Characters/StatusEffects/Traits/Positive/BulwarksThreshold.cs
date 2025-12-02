@@ -20,8 +20,15 @@ public class BulwarksThreshold : Trait
             return;
         }
         
+        var data = Data as ThresholdData;
+
+        if (!data)
+        {
+            return;
+        }
+        
         // Cast to avoid loss of fraction.
-        if ((float)Character.GetCurrentHealth() / Character.GetMaxHealth() < 0.5f)
+        if ((float)Character.GetCurrentHealth() / Character.GetMaxHealth() < data.Threshold)
         {
             _effectApplied = true;
             Character.GetStatusEffectManager().AddStatusEffect(new Fortified(2));
