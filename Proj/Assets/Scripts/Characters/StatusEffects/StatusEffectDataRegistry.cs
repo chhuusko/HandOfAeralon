@@ -30,7 +30,7 @@ public class StatusEffectDataRegistry : ScriptableObject
         _lookup = new Dictionary<Type, StatusEffectData>();
         foreach (var entry in _entries)
         {
-            Type type = Type.GetType(entry.Name);
+            Type type = entry.Script.GetClass();
             if (type != null)
             {
                 _lookup[type] = entry;

@@ -64,7 +64,7 @@ public class CombatGridCharacterData
         _faction               = characterScript.GetFaction();
 
         _baseHealthPoints      = characterScript.GetMaxHealth();
-        _baseSpeed             = characterScript.GetBaseSpeed();
+        _baseSpeed             = characterScript.GetBaseInitiative();
         _baseDamage            = characterScript.GetBaseDamage();
         _baseMovementPoints    = characterScript.GetBaseMovementPoints();
 

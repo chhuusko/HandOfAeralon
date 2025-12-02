@@ -8,13 +8,27 @@ public class Slowed : StatusEffect
 
     public override void OnApply()
     {
-        Character.DecreaseCurrentMovementPoints();
-        Character.DecreaseCurrentInitiative();
+        var data = Data as SlowData;
+
+        if (!data)
+        {
+            return;
+        }
+        
+        Character.DecreaseCurrentMovementPoints(data.MovementPoints);
+        Character.DecreaseCurrentInitiative(data.Initiative);
     }
 
     public override void OnExpire()
     {
-        Character.IncreaseCurrentMovementPoints();
-        Character.IncreaseCurrentInitiative();
+        var data = Data as SlowData;
+
+        if (!data)
+        {
+            return;
+        }
+        
+        Character.IncreaseCurrentMovementPoints(data.MovementPoints);
+        Character.IncreaseCurrentInitiative(data.Initiative);
     }
 }

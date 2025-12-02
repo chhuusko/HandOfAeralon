@@ -7,14 +7,6 @@ public class Trait : StatusEffect
     {
     }
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public virtual void OnStartCombat() {}
+    public virtual void OnTakeDamage() {}
 }
