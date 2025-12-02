@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class Slowed : StatusEffect
+public class Haste : StatusEffect
 {
-    public Slowed(int duration) : base(duration)
+    public Haste(int duration) : base(duration)
     {
     }
-
+    
     public override void OnApply()
     {
         var data = Data as SpeedChangeData;
@@ -15,8 +15,8 @@ public class Slowed : StatusEffect
             return;
         }
         
-        Character.DecreaseCurrentMovementPoints(data.MovementPoints);
-        Character.DecreaseCurrentInitiative(data.Initiative);
+        Character.IncreaseCurrentMovementPoints(data.MovementPoints);
+        Character.IncreaseCurrentInitiative(data.Initiative);
     }
 
     public override void OnExpire()
@@ -28,7 +28,7 @@ public class Slowed : StatusEffect
             return;
         }
         
-        Character.IncreaseCurrentMovementPoints(data.MovementPoints);
-        Character.IncreaseCurrentInitiative(data.Initiative);
+        Character.DecreaseCurrentMovementPoints(data.MovementPoints);
+        Character.DecreaseCurrentInitiative(data.Initiative);
     }
 }

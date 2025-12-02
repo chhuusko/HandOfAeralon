@@ -90,8 +90,15 @@ public abstract class Ability : ScriptableObject
     {
         Character caster = casterTile.GetOccupantCharacter();
         if (caster == null) Debug.LogError("CasterTile has no character!");
+
+        // Should not be able to move after performing ability.
         ResetMovementPoints(caster);
-        caster.RotateTowards(targetTile.transform, _castingRotationTime);
+
+        // Rotate towards target if the target is not the caster's tile.
+        if(casterTile != targetTile)
+        {
+            caster.RotateTowards(targetTile.transform, _castingRotationTime);
+        }
 
         if (caster.TryGetComponent<Animator>(out var animator)){
             animator.SetTrigger(_abilityName);
