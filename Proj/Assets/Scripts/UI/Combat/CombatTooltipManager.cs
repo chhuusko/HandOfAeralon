@@ -23,5 +23,6 @@ public class CombatTooltipManager : MonoBehaviour
     void Start()
     {
         _characterLayout.InitializeCharacterStats();
+        Selector s = Selector._instance;
     }  
 }
