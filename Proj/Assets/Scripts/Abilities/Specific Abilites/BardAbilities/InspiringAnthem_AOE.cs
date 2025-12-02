@@ -35,7 +35,11 @@ public class InspiringAnthem_AOE : RoundAOEAbility
             ApplyEffectOnTile(casterTile, tile);
         }
 
-        if(alliesBuffed >= _alliesBuffedTilBonus)
+        // Check to see if casting character is friendly before changing mana.
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null || (castingCharacter.GetFaction() != Faction.Friendly)) return;
+
+        if (alliesBuffed >= _alliesBuffedTilBonus)
         {
             CardHandManager.GetInstance().ChangeMana(_manaGain);
         }
