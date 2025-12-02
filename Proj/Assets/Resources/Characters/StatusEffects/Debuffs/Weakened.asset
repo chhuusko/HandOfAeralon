@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b991492d39e8d2446a0d7666f7170f5a, type: 3}
-  m_Name: Slowed
+  m_Name: Weakened
   m_EditorClassIdentifier: 
-  Name: Slowed
+  Name: Weakened
   Icon: {fileID: 0}
   Type: 1
   IsPermanent: 0
+  Script: {fileID: 11500000, guid: 363acf9f01d80b147bef3691b8584aec, type: 3}
