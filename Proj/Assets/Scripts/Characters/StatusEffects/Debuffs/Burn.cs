@@ -8,6 +8,13 @@ public class Burn : StatusEffect
 
     public override void OnTurnStart()
     {
-        Character.TakeDamage(4);
+        var data = Data as DamageData;
+
+        if (!data)
+        {
+            return;
+        }
+        
+        Character.TakeDamage(data.Damage);
     }
 }

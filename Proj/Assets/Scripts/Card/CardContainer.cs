@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
@@ -57,14 +58,39 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (!CanAfford()) return;
+        if (!CanPlay()) return;
         _isDragging = true;
         _spawnedParticle = Instantiate(_particleDrag);  
     }
+
+    
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (_isDragging)
         {
+            if (_containedCard.type == CardType.Target)
+            {
+                CombatGridTile grid;
+                if (grid = Selector._instance.GetTileUnderMouse())
+                {
+                    if (!grid.GetOccupantCharacter())
+                    {
+                        CancelUse();
+                        return;
+                    }
+                    else
+                    {
+                        CardHandManager.GetInstance().CharacterTarget(grid.GetOccupantCharacter());
+                    }
+                }
+                else
+                {
+                    CancelUse();
+                    return;
+                }
+            }
+            
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
             CardHandManager.GetInstance().ChangeMana(-_containedCard.cost);
@@ -74,25 +100,41 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         
     }
 
+    private void CancelUse()
+    {
+        Destroy(_spawnedParticle);
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
-        StartCoroutine(OnHover(true));
+        //StartCoroutine(OnHover(true));
+        CardHandManager.GetInstance().ShowHighlightedCard(this, transform.position);
+        setVisible(false);
     }
 
     private bool CanAfford()
     {
         return CardHandManager.GetInstance().GetMana() >= _containedCard.cost;
     }
+    private bool CanPlay()
+    {
+        if (CombatManager._instance.GetCombatState() == CombatState.PlaceCharacters) return false;
 
+        return (CombatManager._instance.GetCombatTurnOrder().GetCurrentTurn() == CombatTurn.PlayerTurn);
+            
+        
+    }
     public void OnPointerExit(PointerEventData eventData)
     {
-        StartCoroutine(OnHover(false));
+        CardHandManager.GetInstance().HideHighlightedCard();
+        setVisible(true);
+        //StartCoroutine(OnHover(false));
     }
     IEnumerator OnHover(bool isEnter)
     {
         CombatUI combatCanvas = GameObject.Find("CombatCanvas")?.GetComponent<CombatUI>();
         combatCanvas?.SetCardsActive(isEnter);
-        
+        /*
         float duration = 0.1f; 
         float elapsed = 0f;
         if (isEnter)
@@ -115,6 +157,8 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             }
             
         }
+        */
+        yield return null;
     }
     public void AddCard(Card newCard)
     {
@@ -136,5 +180,17 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!CanAfford()) return;
+    }
+    public void setVisible(bool isVisible)
+    {
+        if (isVisible == true)
+        {
+            GetComponent<CanvasGroup>().alpha = 1;
+        }
+        else
+        {
+            GetComponent<CanvasGroup>().alpha = 0;
+        }
+        
     }
 }

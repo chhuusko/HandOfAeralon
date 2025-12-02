@@ -15,9 +15,13 @@ public class Shop : MonoBehaviour
     [SerializeField] private Transform[] _purchasCharacterPos;
     [SerializeField] private GameObject _purchaseCharacterPrefab;
     [SerializeField] private ClassDatabase _classDatabase;
+    [SerializeField] private Transform _partyHolder;
+    [SerializeField] private GameObject _partyPortrait;
     private List<Card> unlockedCards;
     private List<GameObject> _buyableItemInScene;
-    
+
+    [SerializeField] int _healPrice;
+
     public static Shop GetInstance()
     {
         return _instance;
@@ -28,8 +32,18 @@ public class Shop : MonoBehaviour
         _buyableItemInScene = new List<GameObject>();
         unlockedCards = CardsUnlocked.GetInstance().GetUnlockedCards();
         UpdateMoneyUI();
+        LoadParty();
         LoadBuyCard();
         LoadBuyCharacter();
+
+    }
+
+    private void LoadParty()
+    {
+        foreach (CharacterData character in GlobalGameManager.GetInstance().GetGameData().heroDataList)
+        {
+            Instantiate(_partyPortrait, _partyHolder);
+        }
     }
 
     private void LoadBuyCharacter()
@@ -87,12 +101,31 @@ public class Shop : MonoBehaviour
     }
     public void UpdateMoneyUI()
     {
-        _balanceText.text = "Balance: " + GlobalGameManager.GetInstance().GetGameData().coins;
+        _balanceText.text =  GlobalGameManager.GetInstance().GetGameData().coins + "<voffset=25> <space=3> <sprite name=\"UI_icon_59\">";
     }
 
     public void ChangeCoins(int change)
     {
         GlobalGameManager.GetInstance().ChangeCoins(change);
         UpdateMoneyUI();
+    }
+    public void Heal()
+    {
+        if (CanAfford(_healPrice))
+        {
+            List<CharacterData> heroList = GlobalGameManager.GetInstance().GetGameData().heroDataList;
+            foreach(CharacterData character in heroList)
+            {
+                character.Heal( (int)(character.BaseHealthPoints*0.5f));
+            }
+        }
+    }
+    public bool CanAfford(int cost)
+    {
+        return GlobalGameManager.GetInstance().GetGameData().coins > cost;
+    }
+    public void Bought(int cost)
+    {
+        GlobalGameManager.GetInstance().ChangeCoins(-cost);
     }
 }

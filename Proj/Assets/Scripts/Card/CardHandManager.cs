@@ -11,25 +11,40 @@ public class CardHandManager : MonoBehaviour
     private static CardHandManager _instance;
 
     [SerializeField] private GameObject _CardContainer;
+    [SerializeField] private GameObject _zoomedCard;
     [SerializeField] private Transform _Hand;
     [SerializeField] private Transform _mulligan;
     [SerializeField] private CardList _cardList;
     [SerializeField] private List<CardContainer> _cardsInHand;
     [SerializeField] private List<Card> _cardsInDeck;
     [SerializeField] private List<Card> _cardsInDiscardPile;
-    private static int _maxHand = 7;
-    private static int beginningDraw = 5;
+    
     
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
+    
+    // presets
     [SerializeField] private int turnsTillCard = 4;
     private int tempTurnsTillCard;
     private int _maxMana = 10;
     private int _mana = 5;
     private int _cardsPlayedThisTurn = 0;
+    private static int _maxHand = 7;
+    private static int beginningDraw = 5;
+
+    // Onhover
+    GameObject _addedZoomedCard;
+    CardContainer _activeContainer;
+
+
+    // 
+    bool isCombat;
+
 
     public static Action<int> onManaChange;
+    public static Action<Character> onTargetCharacter;
     public static CardHandManager GetInstance() {return _instance;}
     public void ManaChanged(){ onManaChange?.Invoke(_mana); }
+    public void CharacterTarget(Character targetCharacter) { onTargetCharacter?.Invoke(targetCharacter); }
     private void Awake()
     {
         _instance = this;
@@ -82,7 +97,7 @@ public class CardHandManager : MonoBehaviour
         {
             if(_cardsInDiscardPile.Count > 0)
             {
-                 _cardsInDeck = new List<Card>(_cardsInDiscardPile);
+                _cardsInDeck = new List<Card>(_cardsInDiscardPile);
                 _cardsInDiscardPile.Clear();
             }
             
@@ -193,5 +208,38 @@ public class CardHandManager : MonoBehaviour
     {
         return _cardsPlayedThisTurn;
     }
+    public void ShowHighlightedCard(CardContainer container, Vector3 position)
+    {
+        if (_addedZoomedCard != null)
+        {
+            Destroy(_addedZoomedCard);
+        }
 
+        if (_activeContainer != null)
+        {
+            _activeContainer.setVisible(true);
+        }
+
+        _activeContainer = container;
+
+        
+        _addedZoomedCard = Instantiate(
+            _zoomedCard,
+            position,
+            Quaternion.identity,
+            CanvasManager.instance.OverlayCanvas.transform
+        );
+
+
+        _addedZoomedCard.GetComponent<CardUI>().SetUpUIElements(container.GetCard());
+
+    }
+
+    public void HideHighlightedCard()
+    {
+        if (_addedZoomedCard != null)
+        {
+            Destroy(_addedZoomedCard);
+        }
+    }
 }

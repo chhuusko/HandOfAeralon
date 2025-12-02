@@ -1,9 +1,11 @@
+using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [CreateAssetMenu(fileName = "Earthquake_Ability", menuName = "Scriptable Objects/Abilities/Barbarian/Earthquake_Ability")]
 
-public class Earthquake_AOE : AOEAbility
+public class Earthquake_AOE : DirectedAOEAbility
 {
     [Header("- Ability Specific values -")]
     [SerializeField] private float _damageMultiplier = 0.9f;
@@ -12,11 +14,60 @@ public class Earthquake_AOE : AOEAbility
     [SerializeField] private int _charactersSlowedToGetMana = 2;
     [SerializeField] private int _manaGain = 1;
 
+    // Description
+
+    // Slam the ground, dealing(90% × Damage) Physical damage to all characters in the area.
+    // Every character hit has a 60% chance to become Slowed for 2 turns.
+    // Gain 1 Mana if at least two enemies become Slowed.
+
+
+
     private int slowedEnemyCounter;
+
+    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
+    {
+        // Works like the base version of GetTilesToEffect but only returns the list when valid target is hovered. 
+        // Also removes caster tile as target. 
+
+        if (targetTile == null)
+            return null;
+
+        // Get caster
+        Character caster = GetAbilityHandler().GetCharacterCaster();
+        if (caster == null)
+            return null;
+
+        // Check if ability can be cast on target tile.
+        bool canCast = caster.GetAbilityHandler().CanCastAbility(this, targetTile);
+        if (!canCast) return null;
+
+        // Calculate which tiles to effect.
+        var list = _pattern.CalculateTilesToEffect(targetTile);
+
+        // Remove caster tile. Unnecessary if pattern already removes caster.
+        if (caster.GetCurrentTileComponent())
+        {
+            list.Remove(caster.GetCurrentTileComponent());
+        }
+
+        return list;
+    }
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
-        // Calculate all tiles around with in radius and apply effect to all of them.
+        // Calculate all tiles around within pattern and apply effect to all of them.
+
+        var directedAOEPattern = _pattern as DirectedAOEPattern;
+
+        if (directedAOEPattern == null)
+        {
+            Debug.LogError("Pattern is not a DirectedAOEPattern");
+            return;
+        }
+
+        directedAOEPattern.SetDirection(CalculateDirection(casterTile, targetTile));
+        directedAOEPattern.SetCasterTile(casterTile);
+
         List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
 
         slowedEnemyCounter = 0;
@@ -30,7 +81,12 @@ public class Earthquake_AOE : AOEAbility
                 ApplyEffectOnTile(casterTile, tile);
             }
         }
-        if(slowedEnemyCounter >= _charactersSlowedToGetMana)
+
+        // Check to see if casting character is friendly before changing mana.
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null || (castingCharacter.GetFaction() != Faction.Friendly)) return;
+
+        if (slowedEnemyCounter >= _charactersSlowedToGetMana)
         {
             CardHandManager.GetInstance().ChangeMana(_manaGain);
         }
@@ -47,19 +103,21 @@ public class Earthquake_AOE : AOEAbility
 
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         affectedCharacter.TakeDamage(damage);
-        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0);
+
+        StatusEffect slow = null;
 
         if (Random.value < _slowCharacterHitChance)
         {
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
             {
-                statusEffectManager.AddStatusEffect(new Slowed(_slowDuration));
-                if(castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
+                statusEffectManager.AddStatusEffect(slow = new Slowed(_slowDuration));
+                if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
                 {
                     slowedEnemyCounter++;
                 }
             }
         }
+        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, slow);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)

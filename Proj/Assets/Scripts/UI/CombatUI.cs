@@ -148,6 +148,11 @@ public class CombatUI : MonoBehaviour
         LoadAbilities(Selector._instance.GetSelectedCharacter()?.Data);
     }
 
+    private void SetSelectedCharacter(Character character)
+    {
+        _selectedCharacter = character.Data;
+    }
+
     private void SetSelectedCharacter(CharacterData character)
     {
         _selectedCharacter = character;
@@ -435,6 +440,11 @@ public class CombatUI : MonoBehaviour
     private void LoadAbilities(PortraitButton portraitButton)
     {
         LoadAbilities(portraitButton.Character);
+    }
+
+    private void LoadAbilities(Character c)
+    {
+        LoadAbilities(c.Data);
     }
     
     private void LoadAbilities(CharacterData character)
