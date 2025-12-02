@@ -1,19 +1,21 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+public enum CardType
+{
+    Instant,
+    Target,
+}
+public enum Rarity
+{
+    Common,
+    Uncommon,
+    Rare,
+}
 public class Card : ScriptableObject
 {
-    public enum CardType
-    {
-        Instant,
-        Select,
-    }
-    public enum Rarity
-    {
-        Common,
-        Uncommon,
-        Rare,
-    }
+    
+    
 
     [Header("Info")]
     public CardType type;

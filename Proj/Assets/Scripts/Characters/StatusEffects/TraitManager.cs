@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TraitManager
@@ -26,18 +27,47 @@ public class TraitManager
         return _statusEffects.Exists(e => e is T);
     }
 
-    public IReadOnlyList<StatusEffect> GetAllStatusEffects()
+    public IReadOnlyList<StatusEffect> GetAllEffects()
     {
         return _statusEffects;
+    }
+
+    public IReadOnlyList<StatusEffect> GetAllStatusEffects()
+    {
+        return _statusEffects.Where(e => e is not Trait).ToList();
+    }
+
+    public IReadOnlyList<Trait> GetAllTraits()
+    {
+        List<Trait> all = new();
+        foreach (var statusEffect in _statusEffects)
+        {
+            if (statusEffect is Trait trait)
+            {
+                all.Add(trait);
+            }
+        }
+
+        return all;
     }
     
     /// <summary>
     /// Adds one positive and one negative trait for the character.
     /// </summary>
-    public void GenerateTraits()
+    public void GenerateTraits(CharacterData character)
     {
-        IReadOnlyList<TraitData> positiveTraits = StatusEffectDataRegistry.Instance.GetAllTraitsOfType(true);
-        IReadOnlyList<TraitData> negativeTraits = StatusEffectDataRegistry.Instance.GetAllTraitsOfType(false);
+        IReadOnlyList<TraitData> positiveTraits;
+        
+        if (UnityEngine.Random.Range(0f, 1f) <= GlobalGameManager.GetInstance().ClassTraitChance)
+        {
+            positiveTraits = StatusEffectDataRegistry.Instance.GetAllGlobalTraitsOfType(true);
+        }
+        else
+        {
+            positiveTraits = StatusEffectDataRegistry.Instance.GetAllClassTraits(character);
+        }
+        
+        IReadOnlyList<TraitData> negativeTraits = StatusEffectDataRegistry.Instance.GetAllGlobalTraitsOfType(false);
 
         if (positiveTraits.Count == 0 || negativeTraits.Count == 0)
         {

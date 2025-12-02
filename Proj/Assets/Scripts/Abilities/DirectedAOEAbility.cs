@@ -32,7 +32,7 @@ public abstract class DirectedAOEAbility : AOEAbility
         }
     }
 
-    private DirectedAOEPattern.Direction CalculateDirection(CombatGridTile casterTile, CombatGridTile targetTile)
+    protected DirectedAOEPattern.Direction CalculateDirection(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Calculate direction based of index of caster and target tile.
 
