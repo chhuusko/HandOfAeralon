@@ -15388,7 +15388,7 @@ PrefabInstance:
     - target: {fileID: 2624034976232883914, guid: 1ded389e7cf27fd4babb4879d5fddb91,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0039978027
+      value: 0.00579834
       objectReference: {fileID: 0}
     - target: {fileID: 3311761313986929369, guid: 1ded389e7cf27fd4babb4879d5fddb91,
         type: 3}
@@ -15572,8 +15572,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6593736256243166136, guid: 1ded389e7cf27fd4babb4879d5fddb91,
         type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6593736256243166136, guid: 1ded389e7cf27fd4babb4879d5fddb91,
+        type: 3}
       propertyPath: m_SizeDelta.y
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6593736256243166136, guid: 1ded389e7cf27fd4babb4879d5fddb91,
         type: 3}
@@ -15594,6 +15599,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8514996816757036620, guid: 1ded389e7cf27fd4babb4879d5fddb91,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8514996816757036620, guid: 1ded389e7cf27fd4babb4879d5fddb91,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.006225586
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -72172,7 +72187,7 @@ PrefabInstance:
     - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
       propertyPath: _fileToLoadDEBUG
-      value: Level1Easy13x8
+      value: Tutorial1
       objectReference: {fileID: 0}
     - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}

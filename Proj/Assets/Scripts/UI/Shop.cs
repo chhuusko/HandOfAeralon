@@ -18,6 +18,11 @@ public class Shop : MonoBehaviour
     private List<Card> unlockedCards;
     private List<GameObject> _buyableItemInScene;
     
+    private void FixedUpdate()
+    {
+        GlobalGameManager.GetInstance().ChangeCoins(1);
+        UpdateMoneyUI();
+    }
     public static Shop GetInstance()
     {
         return _instance;
@@ -30,6 +35,7 @@ public class Shop : MonoBehaviour
         UpdateMoneyUI();
         LoadBuyCard();
         LoadBuyCharacter();
+
     }
 
     private void LoadBuyCharacter()
@@ -87,7 +93,7 @@ public class Shop : MonoBehaviour
     }
     public void UpdateMoneyUI()
     {
-        _balanceText.text = "Balance: " + GlobalGameManager.GetInstance().GetGameData().coins;
+        _balanceText.text =  GlobalGameManager.GetInstance().GetGameData().coins + "<voffset=25> <space=3> <sprite name=\"UI_icon_59\">";
     }
 
     public void ChangeCoins(int change)
