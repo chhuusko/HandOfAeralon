@@ -51,17 +51,17 @@ public class StatusEffectManager : MonoBehaviour
 
     public IReadOnlyList<StatusEffect> GetAllEffects()
     {
-        return _statusEffects.GetAllStatusEffects();
+        return _statusEffects.GetAllEffects();
     }
 
     public IReadOnlyList<StatusEffect> GetAllStatusEffects()
     {
-        
+        return _statusEffects.GetAllStatusEffects();
     }
 
     public IReadOnlyList<Trait> GetAllTraits()
     {
-        
+        return _statusEffects.GetAllTraits();
     }
 
     private void UpdateDuration(Character c)
