@@ -18,21 +18,26 @@ public class CardHandManager : MonoBehaviour
     [SerializeField] private List<CardContainer> _cardsInHand;
     [SerializeField] private List<Card> _cardsInDeck;
     [SerializeField] private List<Card> _cardsInDiscardPile;
-    private static int _maxHand = 7;
-    private static int beginningDraw = 5;
+    
     
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
+    
+    // presets
     [SerializeField] private int turnsTillCard = 4;
     private int tempTurnsTillCard;
     private int _maxMana = 10;
     private int _mana = 5;
     private int _cardsPlayedThisTurn = 0;
-
+    private static int _maxHand = 7;
+    private static int beginningDraw = 5;
 
     // Onhover
     GameObject _addedZoomedCard;
     CardContainer _activeContainer;
 
+
+    // 
+    bool isCombat;
 
 
     public static Action<int> onManaChange;
@@ -227,6 +232,7 @@ public class CardHandManager : MonoBehaviour
         _addedZoomedCard.GetComponent<CardUI>().SetUpUIElements(container.GetCard());
 
     }
+
     public void HideHighlightedCard()
     {
         if (_addedZoomedCard != null)
@@ -234,5 +240,4 @@ public class CardHandManager : MonoBehaviour
             Destroy(_addedZoomedCard);
         }
     }
-
 }

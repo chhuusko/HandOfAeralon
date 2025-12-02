@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
@@ -57,14 +58,34 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (!CanAfford()) return;
+        if (!CanPlay()) return;
         _isDragging = true;
         _spawnedParticle = Instantiate(_particleDrag);  
     }
+
+    
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (_isDragging)
         {
+            if (_containedCard.type == CardType.Target)
+            {
+                CombatGridTile grid;
+                if (grid = Selector._instance.GetTileUnderMouse())
+                {
+                    if (!grid.GetOccupantCharacter())
+                    {
+                        CancelUse();
+                        return;
+                    }
+                }
+                else
+                {
+                    CancelUse();
+                    return;
+                }
+            }
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
             CardHandManager.GetInstance().ChangeMana(-_containedCard.cost);
@@ -72,6 +93,11 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             CardHandManager.GetInstance().RemoveCard(this);   
         }
         
+    }
+
+    private void CancelUse()
+    {
+        Destroy(_spawnedParticle);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -85,7 +111,14 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     {
         return CardHandManager.GetInstance().GetMana() >= _containedCard.cost;
     }
+    private bool CanPlay()
+    {
+        if (CombatManager._instance.GetCombatState() == CombatState.PlaceCharacters) return false;
 
+        return (CombatManager._instance.GetCombatTurnOrder().GetCurrentTurn() == CombatTurn.PlayerTurn);
+            
+        
+    }
     public void OnPointerExit(PointerEventData eventData)
     {
         CardHandManager.GetInstance().HideHighlightedCard();
