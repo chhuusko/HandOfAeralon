@@ -48,6 +48,12 @@ public class StatusEffectManager : MonoBehaviour
 
     public void AddStatusEffect(StatusEffect statusEffect)
     {
+        // Sanctified disallows receiving debuffs.
+        if (ContainsStatusEffect<Sanctified>() && statusEffect.Data.Type is StatusEffectType.Debuff)
+        {
+            return;
+        }
+        
         _traitManager.AddStatusEffect(statusEffect);
         statusEffect.Initialize(_character, this);
     }
