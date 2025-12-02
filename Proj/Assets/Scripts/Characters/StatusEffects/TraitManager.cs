@@ -37,9 +37,18 @@ public class TraitManager
         return _statusEffects.Where(e => e is not Trait).ToList();
     }
 
-    public IReadOnlyList<StatusEffect> GetAllTraits()
+    public IReadOnlyList<Trait> GetAllTraits()
     {
-        return _statusEffects.Where(e => e is Trait).ToList();
+        List<Trait> all = new();
+        foreach (var statusEffect in _statusEffects)
+        {
+            if (statusEffect is Trait trait)
+            {
+                all.Add(trait);
+            }
+        }
+
+        return all;
     }
     
     /// <summary>
