@@ -21,11 +21,8 @@ public class GlobalGameManager : ScriptableObject
     [SerializeField] private DeckPreset _deckPreset;
     [SerializeField] private CharacterPrefabLibrary _characterLibrary;
     [SerializeField] private ClassDatabase _classDatabase;
-    [SerializeField] private float _classTraitChance;
     private static GlobalGameManager _instance;
     private GameData _currentGame;
-    
-    public float ClassTraitChance => _classTraitChance;
     public static GlobalGameManager GetInstance()
     {
         if (_instance == null)

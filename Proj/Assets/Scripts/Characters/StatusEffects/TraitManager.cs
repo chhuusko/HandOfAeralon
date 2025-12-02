@@ -54,20 +54,10 @@ public class TraitManager
     /// <summary>
     /// Adds one positive and one negative trait for the character.
     /// </summary>
-    public void GenerateTraits(CharacterData character)
+    public void GenerateTraits()
     {
-        IReadOnlyList<TraitData> positiveTraits;
-        
-        if (UnityEngine.Random.Range(0f, 1f) <= GlobalGameManager.GetInstance().ClassTraitChance)
-        {
-            positiveTraits = StatusEffectDataRegistry.Instance.GetAllGlobalTraitsOfType(true);
-        }
-        else
-        {
-            positiveTraits = StatusEffectDataRegistry.Instance.GetAllClassTraits(character);
-        }
-        
-        IReadOnlyList<TraitData> negativeTraits = StatusEffectDataRegistry.Instance.GetAllGlobalTraitsOfType(false);
+        IReadOnlyList<TraitData> positiveTraits = StatusEffectDataRegistry.Instance.GetAllTraitsOfType(true);
+        IReadOnlyList<TraitData> negativeTraits = StatusEffectDataRegistry.Instance.GetAllTraitsOfType(false);
 
         if (positiveTraits.Count == 0 || negativeTraits.Count == 0)
         {

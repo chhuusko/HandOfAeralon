@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 [CreateAssetMenu(fileName = "SongOfRenewal_Ability", menuName = "Scriptable Objects/Abilities/Bard/SongOfRenewal")]
 public class SongOfRenewalAOE : RoundAOEAbility
@@ -83,7 +85,7 @@ public class SongOfRenewalAOE : RoundAOEAbility
 
         if (bIsMainTarget)
         {
-            // Draw an extra card from your deck if main target was below 50% health and casting Character is a not an enemy.
+            // Draw an extra card from your deck if main target was below 50% health.
             if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetCurrentHealth() < (int) (affectedCharacter.GetMaxHealth() * 0.5f))
             {
                 CardHandManager.GetInstance().AddCardFromDeck();

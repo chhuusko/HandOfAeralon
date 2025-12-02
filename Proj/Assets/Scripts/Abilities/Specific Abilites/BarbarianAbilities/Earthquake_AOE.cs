@@ -81,11 +81,6 @@ public class Earthquake_AOE : DirectedAOEAbility
                 ApplyEffectOnTile(casterTile, tile);
             }
         }
-
-        // Check to see if casting character is friendly before changing mana.
-        Character castingCharacter = casterTile.GetOccupantCharacter();
-        if (castingCharacter == null || (castingCharacter.GetFaction() != Faction.Friendly)) return;
-
         if (slowedEnemyCounter >= _charactersSlowedToGetMana)
         {
             CardHandManager.GetInstance().ChangeMana(_manaGain);
