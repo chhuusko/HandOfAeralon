@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum StatusEffectType { Buff, Debuff, ArenaEffect, Trait, CrowdControl }
 
-[CreateAssetMenu(fileName = "StatusEffectData", menuName = "StatusEffects/StatusEffectData")]
+[CreateAssetMenu(fileName = "StatusEffectData", menuName = "StatusEffectData/StatusEffectData")]
 public class StatusEffectData : ScriptableObject
 {
     public string Name;
