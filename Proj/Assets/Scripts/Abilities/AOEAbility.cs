@@ -9,10 +9,7 @@ public abstract class AOEAbility : Ability
     public enum ValidTargets
     {
         Any,
-        Self,
-        NonSelf,
         Friendlies,
-        NonSelfFriendlies,
         Enemies
     }
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
@@ -61,16 +58,10 @@ public abstract class AOEAbility : Ability
         {
             case AOEAbility.ValidTargets.Any:
                 return true;
-            case AOEAbility.ValidTargets.Self:
-                return casterCharacter == targetCharacter;
-            case AOEAbility.ValidTargets.NonSelf:
-                return casterCharacter != targetCharacter;
-            case AOEAbility.ValidTargets.NonSelfFriendlies:
-                return (casterCharacter != targetCharacter) && casterCharacter.GetFaction() == targetCharacter.GetFaction();
-            case AOEAbility.ValidTargets.Friendlies:
-                return casterCharacter.GetFaction() == targetCharacter.GetFaction();
             case AOEAbility.ValidTargets.Enemies:
                 return casterCharacter.GetFaction() != targetCharacter.GetFaction();
+            case AOEAbility.ValidTargets.Friendlies:
+                return casterCharacter.GetFaction() == targetCharacter.GetFaction();
             default: return false;
         }
     }

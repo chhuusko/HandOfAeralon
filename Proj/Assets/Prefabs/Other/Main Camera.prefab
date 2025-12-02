@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 6878138210104000792}
   - component: {fileID: 1753662456628443831}
   - component: {fileID: 8700939102808587917}
-  - component: {fileID: -5920958414947570063}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -196,6 +195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _timelineDirector: {fileID: 1753662456628443831}
   bIntroCinematicDone: 0
+  _cameraSpeed: 10
   _cameraBounds:
     _southWest: {x: -3, y: 0, z: -8}
     _northWest: {x: -3, y: 0, z: 18}
@@ -260,21 +260,6 @@ MonoBehaviour:
     _minTilt: 20
     _maxTilt: 40
     _scroll: 0
-  _lastMousePosition: {x: 0, y: 0, z: 0}
   _mouseMoveScreenLimitX: 5
   _mouseMoveScreenLimitY: 5
   _moveSpeed: 20
---- !u!114 &-5920958414947570063
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4215152467198644793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nonRigidbodyVelocity: 0
-  attenuationObject: {fileID: 0}

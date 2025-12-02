@@ -8,7 +8,6 @@ public class StatusEffectData : ScriptableObject
 {
     public string Name;
     public Sprite Icon;
-    public string Description;
     public StatusEffectType Type;
     public bool IsPermanent;
     public MonoScript Script;

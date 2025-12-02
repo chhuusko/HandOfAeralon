@@ -20,7 +20,7 @@ public class BulwarksThreshold : Trait
             return;
         }
         
-        var data = Data as FloatThresholdData;
+        var data = Data as ThresholdData;
 
         if (!data)
         {
@@ -31,7 +31,7 @@ public class BulwarksThreshold : Trait
         if ((float)Character.GetCurrentHealth() / Character.GetMaxHealth() < data.Threshold)
         {
             _effectApplied = true;
-            Character.GetStatusEffectManager().AddStatusEffect(new Fortified(data.TurnAmount));
+            Character.GetStatusEffectManager().AddStatusEffect(new Fortified(2));
         }
     }
 }

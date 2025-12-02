@@ -8,7 +8,7 @@ public class Slowed : StatusEffect
 
     public override void OnApply()
     {
-        var data = Data as SpeedChangeData;
+        var data = Data as SlowData;
 
         if (!data)
         {
@@ -21,7 +21,7 @@ public class Slowed : StatusEffect
 
     public override void OnExpire()
     {
-        var data = Data as SpeedChangeData;
+        var data = Data as SlowData;
 
         if (!data)
         {
