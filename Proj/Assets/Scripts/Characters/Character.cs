@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public enum Faction { Friendly, Enemy }
 
@@ -130,11 +129,17 @@ public class Character : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateAbilityCooldowns;
         CombatEventManager.OnEnterCombatStateTakeTurn += ResetCanAttack;
         
-        PopupTextManager damagePopupTextManager= PopupTextManager.GetInstance();
+        PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
         if(damagePopupTextManager != null)
         {
             damagePopupTextManager.BindEventOnTakeDamage(this);
             damagePopupTextManager.BindEventOnWasHealed(this);
+        }
+
+        CombatTooltipManager combatTooltipManager = CombatTooltipManager.GetInstance();
+        if (combatTooltipManager != null)
+        {
+            combatTooltipManager.GetCharacterLayout().BindEventEventOnTakeDamage(this);
         }
     }
 
@@ -172,6 +177,12 @@ public class Character : MonoBehaviour
         {
             damagePopupTextManager.UnBindEventOnTakeDamage(this);
             damagePopupTextManager.UnBindEventOnWasHealed(this);
+        }
+
+        CombatTooltipManager combatTooltipManager = CombatTooltipManager.GetInstance();
+        if (combatTooltipManager != null)
+        {
+            combatTooltipManager.GetCharacterLayout().BindEventEventOnTakeDamage(this);
         }
     }
 

@@ -26,17 +26,26 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         Selector._instance.OnCharacterSelected += UpdateTooltip;
     }
 
+    public void BindEventEventOnTakeDamage(Character character)
+    {
+        character.OnTakeDamage += UpdateTooltip;
+
+    }
+    public void UnBindEventEventOnTakeDamage(Character character)
+    {
+        character.OnTakeDamage -= UpdateTooltip;
+    }
     public void InitializeCharacterStats()
     {
-        _characterStatValues.Insert((int)CharacterStatKey.CurrentHealth, "10");
-        _characterStatValues.Insert((int)CharacterStatKey.CurrentInitiative, "10");
-        _characterStatValues.Insert((int)CharacterStatKey.CurrentDamage, "10");
-        _characterStatValues.Insert((int)CharacterStatKey.CurrentMovementPoints, "10\n");
+        _characterStatValues.Insert((int)CharacterStatKey.CurrentHealth, "");
+        _characterStatValues.Insert((int)CharacterStatKey.CurrentInitiative, "");
+        _characterStatValues.Insert((int)CharacterStatKey.CurrentDamage, "");
+        _characterStatValues.Insert((int)CharacterStatKey.CurrentMovementPoints, "\n");
 
-        _characterStatValues.Insert((int)CharacterStatKey.BaseHealth, "10");
-        _characterStatValues.Insert((int)CharacterStatKey.BaseInitiative, "10");
-        _characterStatValues.Insert((int)CharacterStatKey.BaseDamage, "10");
-        _characterStatValues.Insert((int)CharacterStatKey.BaseMovementPoints, "10");
+        _characterStatValues.Insert((int)CharacterStatKey.BaseHealth, "");
+        _characterStatValues.Insert((int)CharacterStatKey.BaseInitiative, "");
+        _characterStatValues.Insert((int)CharacterStatKey.BaseDamage, "");
+        _characterStatValues.Insert((int)CharacterStatKey.BaseMovementPoints, "");
 
         _characterStatValueFieldTMP.text = "";
 
@@ -48,22 +57,37 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
 
     public void RebuildCharacterStatTooltip(Character character)
     {
-        _characterStatValues.Insert((int)CharacterStatKey.CurrentHealth,         $"{character.GetCurrentHealth()}");
-        _characterStatValues.Insert((int)CharacterStatKey.CurrentInitiative,     $"{character.GetInitiative()}");
-        _characterStatValues.Insert((int)CharacterStatKey.CurrentDamage,         $"{character.GetDamage()}");
-        _characterStatValues.Insert((int)CharacterStatKey.CurrentMovementPoints, $"{character.GetMovementPoints()}" + "\n");
 
-        _characterStatValues.Insert((int)CharacterStatKey.BaseHealth,            $"{character.GetMaxHealth()}");
-        _characterStatValues.Insert((int)CharacterStatKey.BaseInitiative,        $"{character.GetBaseInitiative()}");
-        _characterStatValues.Insert((int)CharacterStatKey.BaseDamage,            $"{character.GetBaseDamage()}");
-        _characterStatValues.Insert((int)CharacterStatKey.BaseMovementPoints,    $"{character.GetBaseMovementPoints()}" + "\n");
+        _characterStatValues[(int)CharacterStatKey.CurrentHealth]          = $"{character.GetCurrentHealth()}";
+        _characterStatValues[(int)CharacterStatKey.CurrentInitiative]      = $"{character.GetInitiative()}";
+        _characterStatValues[(int)CharacterStatKey.CurrentDamage]          = $"{character.GetDamage()}";
+        _characterStatValues[(int)CharacterStatKey.CurrentMovementPoints]  = $"{character.GetMovementPoints()}\n";            
+
+        _characterStatValues[(int)CharacterStatKey.BaseHealth]             = $"{character.GetMaxHealth()}";
+        _characterStatValues[(int)CharacterStatKey.BaseInitiative]         = $"{character.GetBaseInitiative()}";
+        _characterStatValues[(int)CharacterStatKey.BaseDamage]             = $"{character.GetBaseDamage()}";
+        _characterStatValues[(int)CharacterStatKey.BaseMovementPoints]     = $"{character.GetBaseMovementPoints()}";
+
+        string stats = "";
+        foreach (string value in _characterStatValues)
+        {
+            stats += value + "\n";
+        }
+        _characterStatValueFieldTMP.text = stats;
     }
 
     private void UpdateTooltip(Character character)
     {
         RebuildCharacterStatTooltip(character);
     }
-
+    private void UpdateTooltip(int health, GameObject character)
+    {
+        RebuildCharacterStatTooltip(character.GetComponent<Character>());
+    }
+    private void UpdateTooltipOnDamage(int damage, Character character)
+    {
+        RebuildCharacterStatTooltip(character);
+    }
     public void ShowCharacterTooltip()
     {
 
