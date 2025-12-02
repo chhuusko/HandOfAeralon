@@ -10,6 +10,12 @@ public class Empowered : StatusEffect
     public override void ModifyOutgoingDamage(ref float damage, Ability ability)
     {
         var data = Data as DamageModifyingData;
+
+        if (!data)
+        {
+            return;
+        }
+        
         damage *= data.DamageModifier;
     }
 }

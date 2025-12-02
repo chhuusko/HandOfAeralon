@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b991492d39e8d2446a0d7666f7170f5a, type: 3}
+  m_Script: {fileID: 11500000, guid: aea5427431fc81d4ba36f7f7ae4cafe5, type: 3}
   m_Name: Fortified
   m_EditorClassIdentifier: 
   Name: Fortified
@@ -17,3 +17,4 @@ MonoBehaviour:
   Type: 0
   IsPermanent: 0
   Script: {fileID: 11500000, guid: 83943b8dd919bca46b2595c4ca4de819, type: 3}
+  DamageModifier: 1.5

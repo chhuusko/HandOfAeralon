@@ -9,6 +9,13 @@ public class Fortified : StatusEffect
 
     public override void ModifyIncomingDamage(ref float damage, Ability ability)
     {
-        damage /= 1.5f;
+        var data = Data as DamageModifyingData;
+
+        if (!data)
+        {
+            return;
+        }
+        
+        damage /= data.DamageModifier;
     }
 }
