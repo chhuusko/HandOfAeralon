@@ -27,6 +27,15 @@ public abstract class Ability : ScriptableObject
     [SerializeField] private float _castingTime, _fromCastToHitTime;
     [SerializeField] private float _castingRotationTime = 0.3f;
 
+    private AbilityHandler _abilityHandler;
+
+    public AbilityHandler GetAbilityHandler() => _abilityHandler;
+
+    public void SetAbilityHandler(AbilityHandler abilityHandler)
+    {
+        _abilityHandler = abilityHandler;
+    }
+
 
     [System.Flags]
     public enum AbilityTag

@@ -9,18 +9,7 @@ public class HousePattern : DirectedAOEPattern
     
     public override List<CombatGridTile> CalculateTilesToEffect(CombatGridTile targetTile)
     {
-        switch (_direction)
-        {
-            case Direction.Left: return CalculateSquareWithoutCaster(CalculateTopRightTile(0, 1, targetTile));
-            case Direction.Right: return CalculateSquareWithoutCaster(CalculateTopRightTile(2, 1, targetTile));
-            case Direction.Up: return CalculateSquareWithoutCaster(CalculateTopRightTile(1, 2, targetTile));
-            case Direction.Down: return CalculateSquareWithoutCaster(CalculateTopRightTile(1, 0, targetTile));
-            default: 
-                {
-                    Debug.LogError("Something went wrong when calculating housePattern for an ability.");
-                    return null;
-                }
-        }
+       return CalculateSquareWithoutCaster(CalculateTopRightTile(1, 1, targetTile));
     }
 
     private CombatGridTile CalculateTopRightTile(int plusX, int plusY, CombatGridTile targetTile)
@@ -39,10 +28,12 @@ public class HousePattern : DirectedAOEPattern
     {
         List<CombatGridTile> squareWithoutCaster = new();
         Vector2Int startIndex = topRightTileOfSquare.GetTileIndex();
+        int endX = startIndex.x - _size;
+        int endY = startIndex.y - _size;
 
-        for (int i = startIndex.x; i > startIndex.x - _size; i--)
+        for (int i = startIndex.x; i > endX; i--)
         {
-            for (int j = startIndex.y; j > startIndex.y - _size; j--)
+            for (int j = startIndex.y; j > endY; j--)
             {
                 GameObject tileObj = CombatGrid._instance.GetTileAtCoord(i, j);
                 if(tileObj == null) continue;

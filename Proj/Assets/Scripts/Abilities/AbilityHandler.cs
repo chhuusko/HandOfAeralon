@@ -71,10 +71,11 @@ public class AbilityHandler : MonoBehaviour
             Debug.LogError("No pending ability selected, but is still trying to calculate range");
             return;
         }
+        _pendingAbility.SetAbilityHandler(this);
         _tilesInRange = RemoveUntargetableTiles(GetAvailableTargets(_pendingAbility));
     }
 
-    private bool CanCastAbility(Ability ability, CombatGridTile targetTile)
+    public bool CanCastAbility(Ability ability, CombatGridTile targetTile)
     {
         return IsValidTargetTileForAbility(ability, targetTile) && _tilesInRange.Contains(targetTile);
         
@@ -131,6 +132,7 @@ public class AbilityHandler : MonoBehaviour
     /// <param name="tile">The tile currently hovered by the player.</param>
     public void PreviewTargetTiles(CombatGridTile tile)
     {
+
         List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
 
         // Reset alla gamla effekter
@@ -143,9 +145,14 @@ public class AbilityHandler : MonoBehaviour
         }
         _tilesEffected.Clear();
 
+        if(newEffectedTiles == null)
+        {
+            return;
+        }
         // Applicera nya röda
         foreach (CombatGridTile t in newEffectedTiles)
         {
+            if (t == null) return; 
             t.SetTileColor(Color.red);
             _tilesEffected.Add(t);
         }

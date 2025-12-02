@@ -5,7 +5,7 @@ using UnityEngine.TextCore.Text;
 
 [CreateAssetMenu(fileName = "Earthquake_Ability", menuName = "Scriptable Objects/Abilities/Barbarian/Earthquake_Ability")]
 
-public class Earthquake_AOE : AOEAbility
+public class Earthquake_AOE : DirectedAOEAbility
 {
     [Header("- Ability Specific values -")]
     [SerializeField] private float _damageMultiplier = 0.9f;
@@ -24,9 +24,50 @@ public class Earthquake_AOE : AOEAbility
 
     private int slowedEnemyCounter;
 
+    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
+    {
+        // Works like the base version of GetTilesToEffect but only returns the list when valid target is hovered. 
+        // Also removes caster tile as target. 
+
+        if (targetTile == null)
+            return null;
+
+        // Get caster
+        Character caster = GetAbilityHandler().GetCharacterCaster();
+        if (caster == null)
+            return null;
+
+        // Check if ability can be cast on target tile.
+        bool canCast = caster.GetAbilityHandler().CanCastAbility(this, targetTile);
+        if (!canCast) return null;
+
+        // Calculate which tiles to effect.
+        var list = _pattern.CalculateTilesToEffect(targetTile);
+
+        // Remove caster tile. Unnecessary if pattern already removes caster.
+        if (caster.GetCurrentTileComponent())
+        {
+            list.Remove(caster.GetCurrentTileComponent());
+        }
+
+        return list;
+    }
+
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
-        // Calculate all tiles around with in radius and apply effect to all of them.
+        // Calculate all tiles around within pattern and apply effect to all of them.
+
+        var directedAOEPattern = _pattern as DirectedAOEPattern;
+
+        if (directedAOEPattern == null)
+        {
+            Debug.LogError("Pattern is not a DirectedAOEPattern");
+            return;
+        }
+
+        directedAOEPattern.SetDirection(CalculateDirection(casterTile, targetTile));
+        directedAOEPattern.SetCasterTile(casterTile);
+
         List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
 
         slowedEnemyCounter = 0;
