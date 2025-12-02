@@ -74,7 +74,6 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private Character _currentSelectedCharacter;
 
 
-    private CombatState _combatState;
 
     [Header("Combat State")]
     [SerializeField] private CombatState _debugCurrentState;
@@ -129,7 +128,6 @@ public class CombatManager : MonoBehaviour
 
     void Start()
     {
-        _combatState = CombatState.LoadCombatLevel;
         _selector = GetComponent<Selector>();
         _selectorOverHead = Instantiate(_selectorOverHeadPrefab, Vector3.zero, Quaternion.identity);
         _selectorOverHead.SetActive(false);
@@ -193,7 +191,7 @@ public class CombatManager : MonoBehaviour
 
     public CombatState GetCombatState()
     {
-        return _combatState;
+        return _currentCombatState.GetState();
     }
 
     public CombatCamera GetCombatCamera() { return _combatCamera; }

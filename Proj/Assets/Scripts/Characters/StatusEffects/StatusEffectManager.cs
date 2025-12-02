@@ -6,17 +6,18 @@ using UnityEngine;
 public class StatusEffectManager : MonoBehaviour
 {
     private Character _character;
-    private CharacterStatusEffects _statusEffects;
+    private TraitManager _statusEffects;
     
     private void OnEnable()
     {
+        CombatEventManager.OnEnterCombatStateLoadNextLevel += OnStartCombat;
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
     }
 
     private void Awake()
     {
-        _statusEffects = new CharacterStatusEffects();
+        _statusEffects = new TraitManager();
     }
 
     private void Start()
@@ -26,6 +27,7 @@ public class StatusEffectManager : MonoBehaviour
 
     private void OnDisable()
     {
+        CombatEventManager.OnEnterCombatStateLoadNextLevel -= OnStartCombat;
         CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
     }
@@ -33,7 +35,7 @@ public class StatusEffectManager : MonoBehaviour
     public void AddStatusEffect(StatusEffect statusEffect)
     {
         _statusEffects.AddStatusEffect(statusEffect);
-        statusEffect.OnApply();
+        statusEffect.Initialize(_character, this);
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect)
@@ -60,8 +62,6 @@ public class StatusEffectManager : MonoBehaviour
         }
         
         List<StatusEffect> statusEffectsToRemove = new();
-        
-        // TODO: Don't tick permanent status effects.
         
         foreach (var statusEffect in _statusEffects.GetAllStatusEffects())
         {
@@ -184,5 +184,28 @@ public class StatusEffectManager : MonoBehaviour
         }
 
         return heal;
+    }
+    
+    // Traits.
+    public void OnStartCombat()
+    {
+        foreach (var statusEffect in _statusEffects.GetAllStatusEffects())
+        {
+            if (statusEffect is Trait trait)
+            {
+                trait.OnStartCombat();
+            }
+        } 
+    }
+    
+    public void OnTakeDamage()
+    {
+        foreach (var statusEffect in _statusEffects.GetAllStatusEffects())
+        {
+            if (statusEffect is Trait trait)
+            {
+                trait.OnTakeDamage();
+            }
+        }
     }
 }

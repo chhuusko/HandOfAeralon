@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterStatusEffects
+public class TraitManager
 {
     private List<StatusEffect> _statusEffects = new();
     

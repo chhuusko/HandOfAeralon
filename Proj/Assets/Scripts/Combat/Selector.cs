@@ -23,7 +23,7 @@ public class Selector : MonoBehaviour
     [SerializeField] private bool _bDebugSelector = true;
     private CharacterMovement _characterMovement;
 
-    public event Action<CharacterData> OnCharacterSelected;
+    public event Action<Character> OnCharacterSelected;
     public event Action OnCharacterDeselected;
 
     public enum CharacterActionType
@@ -401,7 +401,7 @@ public class Selector : MonoBehaviour
     private void ShowCharacterUI(Character character)
     {
         // Activates character UI without options since the character can't perform actions at the moment.
-        OnCharacterSelected?.Invoke(character.Data);
+        OnCharacterSelected?.Invoke(character);
     }
     public void PreviewAbilityRange(Ability ability)
     {

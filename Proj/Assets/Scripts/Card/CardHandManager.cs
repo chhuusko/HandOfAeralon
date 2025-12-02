@@ -11,6 +11,7 @@ public class CardHandManager : MonoBehaviour
     private static CardHandManager _instance;
 
     [SerializeField] private GameObject _CardContainer;
+    [SerializeField] private GameObject _zoomedCard;
     [SerializeField] private Transform _Hand;
     [SerializeField] private Transform _mulligan;
     [SerializeField] private CardList _cardList;
@@ -26,6 +27,13 @@ public class CardHandManager : MonoBehaviour
     private int _maxMana = 10;
     private int _mana = 5;
     private int _cardsPlayedThisTurn = 0;
+
+
+    // Onhover
+    GameObject _addedZoomedCard;
+    CardContainer _activeContainer;
+
+
 
     public static Action<int> onManaChange;
     public static CardHandManager GetInstance() {return _instance;}
@@ -192,6 +200,39 @@ public class CardHandManager : MonoBehaviour
     public int GetCardsPlayedThisTurn()
     {
         return _cardsPlayedThisTurn;
+    }
+    public void ShowHighlightedCard(CardContainer container, Vector3 position)
+    {
+        if (_addedZoomedCard != null)
+        {
+            Destroy(_addedZoomedCard);
+        }
+
+        if (_activeContainer != null)
+        {
+            _activeContainer.setVisible(true);
+        }
+
+        _activeContainer = container;
+
+        
+        _addedZoomedCard = Instantiate(
+            _zoomedCard,
+            position,
+            Quaternion.identity,
+            CanvasManager.instance.OverlayCanvas.transform
+        );
+
+
+        _addedZoomedCard.GetComponent<CardUI>().SetUpUIElements(container.GetCard());
+
+    }
+    public void HideHighlightedCard()
+    {
+        if (_addedZoomedCard != null)
+        {
+            Destroy(_addedZoomedCard);
+        }
     }
 
 }
