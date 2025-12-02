@@ -153,6 +153,19 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
+    private void OnCardUsed()
+    {
+        if (!_character)
+        {
+            return;
+        } 
+        
+        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        {
+            statusEffect.OnCardPlayed();
+        }
+    }
+
     public float ModifyIncomingDamage(float damage, Ability ability)
     {
         if (!_character)
@@ -211,7 +224,7 @@ public class StatusEffectManager : MonoBehaviour
     }
     
     // Traits.
-    public void OnStartCombat()
+    private void OnStartCombat()
     {
         foreach (var statusEffect in _traitManager.GetAllStatusEffects())
         {
@@ -232,6 +245,11 @@ public class StatusEffectManager : MonoBehaviour
 
     private void OnAbilityUsed(AbilityExecutionData data)
     {
+        if (data.Caster != _character)
+        {
+            return;
+        }
+        
         foreach (var trait in _traitManager.GetAllTraits())
         {
             trait.OnAbilityUsed(data.Ability);
