@@ -63,18 +63,33 @@ public class StatusEffectDataRegistry : ScriptableObject
         return _entries.OfType<TraitData>().ToList();
     }
 
-    public IReadOnlyList<TraitData> GetAllTraitsOfType(bool isPositive)
+    public IReadOnlyList<TraitData> GetAllGlobalTraitsOfType(bool isPositive)
     {
         List<TraitData> traitsOfType = new();
 
         foreach (TraitData trait in GetAllTraits())
         {
-            if (trait.IsPositive == isPositive)
+            if (trait.Class == CharacterClass.None && trait.IsPositive == isPositive)
             {
                 traitsOfType.Add(trait);
             }
         }
 
         return traitsOfType;
+    }
+
+    public IReadOnlyList<TraitData> GetAllClassTraits(CharacterData character)
+    {
+        List<TraitData> traits = new();
+
+        foreach (TraitData trait in GetAllTraits())
+        {
+            if (trait.Class == character.CharacterClass)
+            {
+                traits.Add(trait);
+            }
+        }
+        
+        return traits;
     }
 }

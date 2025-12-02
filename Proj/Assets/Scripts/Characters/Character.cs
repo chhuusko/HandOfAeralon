@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public enum Faction { Friendly, Enemy }
 
@@ -35,17 +34,16 @@ public class CharacterData
     public IReadOnlyList<Ability> AvailableAbilities => _availableAbilities;
     
     [Header("Status Effects")]
-    private TraitManager _statusEffects;
-    public TraitManager StatusEffects => _statusEffects;
+    private TraitManager _traitManager = new();
+    public TraitManager TraitManager => _traitManager;
 
     public CharacterData(ClassData classData, Faction faction, bool generateTraits)
     {
         _classData = classData;
         _faction = faction;
-
-        _statusEffects = new TraitManager();
         
         InitializeClassData();
+        InitializeTraits();
         
         if (generateTraits)
         {
@@ -71,10 +69,18 @@ public class CharacterData
         _characterClass = ClassData.characterClass;
         _availableAbilities = ClassData.abilities;
     }
+
+    public void InitializeTraits()
+    {
+        if (_traitManager == null)
+        {
+            _traitManager = new TraitManager();
+        }
+    }
     
     private void GenerateTraits()
     {
-        _statusEffects.GenerateTraits();
+        _traitManager.GenerateTraits(this);
     }
 
     public void SetClassData(ClassData classData) => _classData = classData;
@@ -102,8 +108,6 @@ public class Character : MonoBehaviour
     public const int MOVEMENT_POINTS = 5;
     public const float DEATH_COOLDOWN = 2.5f;
     
-    // TODO: Traits.
-    
     [Header("Current stats")]
     [SerializeField] private int _currentInitiative;
     [SerializeField] private int _currentDamage;
@@ -130,17 +134,27 @@ public class Character : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateAbilityCooldowns;
         CombatEventManager.OnEnterCombatStateTakeTurn += ResetCanAttack;
         
-        PopupTextManager damagePopupTextManager= PopupTextManager.GetInstance();
+        PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
         if(damagePopupTextManager != null)
         {
             damagePopupTextManager.BindEventOnTakeDamage(this);
             damagePopupTextManager.BindEventOnWasHealed(this);
         }
+
+        CombatTooltipManager combatTooltipManager = CombatTooltipManager.GetInstance();
+        if (combatTooltipManager != null)
+        {
+            combatTooltipManager.GetCharacterLayout().BindEventEventOnTakeDamage(this);
+        }
     }
 
-    private void Start()
+    private void Awake()
     {
         _statusEffectManager = GetComponent<StatusEffectManager>();
+        
+        // Enemies aren't created via character data, so traits have to be created at start.
+        _statusEffectManager.SetTraitManager(_data?.TraitManager);
+        _data?.InitializeTraits();
         
         UpdateFactionIndicator();
 
@@ -172,6 +186,12 @@ public class Character : MonoBehaviour
         {
             damagePopupTextManager.UnBindEventOnTakeDamage(this);
             damagePopupTextManager.UnBindEventOnWasHealed(this);
+        }
+
+        CombatTooltipManager combatTooltipManager = CombatTooltipManager.GetInstance();
+        if (combatTooltipManager != null)
+        {
+            combatTooltipManager.GetCharacterLayout().BindEventEventOnTakeDamage(this);
         }
     }
 
@@ -220,6 +240,7 @@ public class Character : MonoBehaviour
 
     // Status Effects.
     public StatusEffectManager GetStatusEffectManager() => _statusEffectManager;
+    public TraitManager GetTraitManager() => _data.TraitManager;
 
     // Base stats.
     public void SetCharacterClass(CharacterClass characterClass) => _data.SetCharacterClass(characterClass);
