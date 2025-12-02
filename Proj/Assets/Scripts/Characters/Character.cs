@@ -201,7 +201,7 @@ public class Character : MonoBehaviour
     
     // Base stats.
     public int GetMaxHealth() => _data.BaseHealthPoints;
-    public int GetBaseSpeed() => _data.BaseInitiative;
+    public int GetBaseInitiative() => _data.BaseInitiative;
     public int GetBaseDamage() => _data.BaseDamage;
     public int GetBaseMovementPoints() => _data.BaseMovementPoints;
     
