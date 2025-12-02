@@ -28,14 +28,15 @@ public class HousePattern : DirectedAOEPattern
     {
         List<CombatGridTile> squareWithoutCaster = new();
         Vector2Int startIndex = topRightTileOfSquare.GetTileIndex();
-        int endX = startIndex.x - _size;
-        int endY = startIndex.y - _size;
 
-        for (int i = startIndex.x; i > endX; i--)
+        for (int x = startIndex.x; x > startIndex.x - _size; x--)
         {
-            for (int j = startIndex.y; j > endY; j--)
+            for (int y = startIndex.y; y > startIndex.y - _size; y--)
             {
-                GameObject tileObj = CombatGrid._instance.GetTileAtCoord(i, j);
+                if (x < 0 || x >= CombatGrid._instance.GetGridWidth()) continue;
+                if (y < 0 || y >= CombatGrid._instance.GetGridHeight()) continue;
+
+                GameObject tileObj = CombatGrid._instance.GetTileAtCoord(x, y);
                 if(tileObj == null) continue;
                 CombatGridTile tile = tileObj.GetComponent<CombatGridTile>();
                 if(tile == null) continue;
