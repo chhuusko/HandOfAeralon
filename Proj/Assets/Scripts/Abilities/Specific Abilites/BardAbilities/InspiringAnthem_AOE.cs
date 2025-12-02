@@ -10,8 +10,8 @@ public class InspiringAnthem_AOE : RoundAOEAbility
 
     // Description
 
-    // Restore 25% of a target ally’s max Health, and 10% to all allies in the area.
-    // Draw 1 card if the main target was below 50% Health.
+    // All allies in the target area gain Haste for 2 turns.
+    // Gain 1 Mana if at least three allies gain Haste.
 
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
