@@ -9,18 +9,7 @@ public class HousePattern : DirectedAOEPattern
     
     public override List<CombatGridTile> CalculateTilesToEffect(CombatGridTile targetTile)
     {
-        switch (_direction)
-        {
-            case Direction.Left: return CalculateSquareWithoutCaster(CalculateTopRightTile(0, 1, targetTile));
-            case Direction.Right: return CalculateSquareWithoutCaster(CalculateTopRightTile(2, 1, targetTile));
-            case Direction.Up: return CalculateSquareWithoutCaster(CalculateTopRightTile(1, 2, targetTile));
-            case Direction.Down: return CalculateSquareWithoutCaster(CalculateTopRightTile(1, 0, targetTile));
-            default: 
-                {
-                    Debug.LogError("Something went wrong when calculating housePattern for an ability.");
-                    return null;
-                }
-        }
+       return CalculateSquareWithoutCaster(CalculateTopRightTile(1, 1, targetTile));
     }
 
     private CombatGridTile CalculateTopRightTile(int plusX, int plusY, CombatGridTile targetTile)
@@ -40,11 +29,14 @@ public class HousePattern : DirectedAOEPattern
         List<CombatGridTile> squareWithoutCaster = new();
         Vector2Int startIndex = topRightTileOfSquare.GetTileIndex();
 
-        for (int i = startIndex.x; i > startIndex.x - _size; i--)
+        for (int x = startIndex.x; x > startIndex.x - _size; x--)
         {
-            for (int j = startIndex.y; j > startIndex.y - _size; j--)
+            for (int y = startIndex.y; y > startIndex.y - _size; y--)
             {
-                GameObject tileObj = CombatGrid._instance.GetTileAtCoord(i, j);
+                if (x < 0 || x >= CombatGrid._instance.GetGridWidth()) continue;
+                if (y < 0 || y >= CombatGrid._instance.GetGridHeight()) continue;
+
+                GameObject tileObj = CombatGrid._instance.GetTileAtCoord(x, y);
                 if(tileObj == null) continue;
                 CombatGridTile tile = tileObj.GetComponent<CombatGridTile>();
                 if(tile == null) continue;
