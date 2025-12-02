@@ -21,9 +21,9 @@ public class Tooltipper : MonoBehaviour
     [SerializeField] private RectTransform _panel;
     [SerializeField] private TMP_Text _tmpText;
     [SerializeField] private Vector2 _offset = new Vector2(15, -15);
-    [SerializeField] private float hoverTime = 1f;
+    //[SerializeField] private float hoverTime = 1f;
     private Vector3 _lastMousePos;
-    private float _hoverTimer = 0f;
+    //private float _hoverTimer = 0f;
     private GameObject _currentObject = null;
     private Canvas _canvas;
 

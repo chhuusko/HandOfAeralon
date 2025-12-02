@@ -340,7 +340,7 @@ public class Selector : MonoBehaviour
             _characterMovement = character.GetComponent<CharacterMovement>();
             if (_characterMovement != null)
             {
-                DebugLog.JLWLog($"Selector.cs | Drawing move range for {character.name}");
+                //DebugLog.JLWLog($"Selector.cs | Drawing move range for {character.name}");
                 _characterMovement.DrawMoveRange();
             }
 

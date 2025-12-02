@@ -99,7 +99,7 @@ public class CombatManager : MonoBehaviour
     {
         if (_instance == null)
         {
-            Debug.Log("CombatManager Awake()");
+            DebugLog.CJLog("CombatManager Awake()");
             _instance = this;
             //DontDestroyOnLoad(gameObject);
         }
