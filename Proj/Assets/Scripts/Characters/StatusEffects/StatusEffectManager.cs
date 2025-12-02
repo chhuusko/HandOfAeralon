@@ -49,9 +49,19 @@ public class StatusEffectManager : MonoBehaviour
         return _statusEffects.ContainsStatusEffect<T>();
     }
 
-    public IReadOnlyList<StatusEffect> GetAllStatusEffects()
+    public IReadOnlyList<StatusEffect> GetAllEffects()
     {
         return _statusEffects.GetAllStatusEffects();
+    }
+
+    public IReadOnlyList<StatusEffect> GetAllStatusEffects()
+    {
+        
+    }
+
+    public IReadOnlyList<Trait> GetAllTraits()
+    {
+        
     }
 
     private void UpdateDuration(Character c)

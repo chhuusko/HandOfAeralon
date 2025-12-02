@@ -11,7 +11,7 @@ public class PurewatersTouch : Card
         Character character = Selector._instance.GetTileUnderMouse().GetOccupantCharacter();
         if (character != null && character.GetFaction() == Faction.Friendly)
         {
-            List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllStatusEffects());
+            List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffects());
             List<StatusEffect> debuffs = new List<StatusEffect>();
             foreach (StatusEffect status in statuses)
             {
