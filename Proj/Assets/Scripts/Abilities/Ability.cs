@@ -91,7 +91,7 @@ public abstract class Ability : ScriptableObject
         Character caster = casterTile.GetOccupantCharacter();
         if (caster == null) Debug.LogError("CasterTile has no character!");
 
-        // Can't walk while performing ability.
+        // Should not be able to move after performing ability.
         ResetMovementPoints(caster);
 
         // Rotate towards target if the target is not the caster's tile.
