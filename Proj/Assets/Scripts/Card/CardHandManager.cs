@@ -60,9 +60,6 @@ public class CardHandManager : MonoBehaviour
     {
         CombatEventManager.OnCombatTurnChange += TurnChanged;
     }
-
-    
-
     private void OnDisable()
     {
         CombatEventManager.OnCombatTurnChange -= TurnChanged;
@@ -235,6 +232,7 @@ public class CardHandManager : MonoBehaviour
         _addedZoomedCard.GetComponent<CardUI>().SetUpUIElements(container.GetCard());
 
     }
+
     public void HideHighlightedCard()
     {
         if (_addedZoomedCard != null)

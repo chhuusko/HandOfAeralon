@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
@@ -68,6 +69,23 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     {
         if (_isDragging)
         {
+            if (_containedCard.type == CardType.Target)
+            {
+                CombatGridTile grid;
+                if (grid = Selector._instance.GetTileUnderMouse())
+                {
+                    if (!grid.GetOccupantCharacter())
+                    {
+                        CancelUse();
+                        return;
+                    }
+                }
+                else
+                {
+                    CancelUse();
+                    return;
+                }
+            }
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
             CardHandManager.GetInstance().ChangeMana(-_containedCard.cost);
@@ -75,6 +93,11 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             CardHandManager.GetInstance().RemoveCard(this);   
         }
         
+    }
+
+    private void CancelUse()
+    {
+        Destroy(_spawnedParticle);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
