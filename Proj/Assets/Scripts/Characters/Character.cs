@@ -35,15 +35,15 @@ public class CharacterData
     public IReadOnlyList<Ability> AvailableAbilities => _availableAbilities;
     
     [Header("Status Effects")]
-    private CharacterStatusEffects _statusEffects;
-    public CharacterStatusEffects StatusEffects => _statusEffects;
+    private TraitManager _statusEffects;
+    public TraitManager StatusEffects => _statusEffects;
 
     public CharacterData(ClassData classData, Faction faction, bool generateTraits)
     {
         _classData = classData;
         _faction = faction;
 
-        _statusEffects = new CharacterStatusEffects();
+        _statusEffects = new TraitManager();
         
         InitializeClassData();
         
