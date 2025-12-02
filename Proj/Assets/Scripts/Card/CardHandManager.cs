@@ -41,8 +41,10 @@ public class CardHandManager : MonoBehaviour
 
 
     public static Action<int> onManaChange;
+    public static Action<Character> onTargetCharacter;
     public static CardHandManager GetInstance() {return _instance;}
     public void ManaChanged(){ onManaChange?.Invoke(_mana); }
+    public void CharacterTarget(Character targetCharacter) { onTargetCharacter?.Invoke(targetCharacter); }
     private void Awake()
     {
         _instance = this;
@@ -95,7 +97,7 @@ public class CardHandManager : MonoBehaviour
         {
             if(_cardsInDiscardPile.Count > 0)
             {
-                 _cardsInDeck = new List<Card>(_cardsInDiscardPile);
+                _cardsInDeck = new List<Card>(_cardsInDiscardPile);
                 _cardsInDiscardPile.Clear();
             }
             
