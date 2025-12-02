@@ -33,9 +33,9 @@ public class CombatGrid : MonoBehaviour
     {
         if (_instance == null)
         {
-            Debug.Log("CombatGrid Awake(), instance = " + CombatGrid._instance);
+            DebugLog.CJLog("CombatGrid Awake(), instance = " + CombatGrid._instance);
             _instance = this;
-            Debug.Log("CombatGrid instance now = " + CombatGrid._instance);
+            DebugLog.CJLog("CombatGrid instance now = " + CombatGrid._instance);
 
             // NOTE (Calle): Can't be a Dont' destroy on load if its a child to the Combat Manager, (So maybe make it root for itself?)
             //DontDestroyOnLoad(gameObject);
@@ -229,6 +229,23 @@ public class CombatGrid : MonoBehaviour
                         }
                     }
                     break;
+                case TileType.Lava:
+                    {
+                        if (inCombatTileMaterial != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(1, 0));
+                        }
+                    } break;
+                case TileType.Poison:
+                    {
+                        if (inCombatTileMaterial != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(2, 0));
+                        }
+                    }
+                    break;
                 default:
                     {
                         if (inCombatTileMaterial != null)
@@ -317,6 +334,9 @@ public class CombatGrid : MonoBehaviour
         characterObject.GetComponent<Character>().SetBaseInitiative(baseSpeed);
         characterObject.GetComponent<Character>().SetBaseDamage(baseDamage);
         characterObject.GetComponent<Character>().SetBaseMovementPoints(baseMovementPoints);
+       
+        
+        
         characterObject.GetComponent<Character>().AddHealthBar();
 
         _charactersGO.Add(characterObject);
@@ -425,6 +445,24 @@ public class CombatGrid : MonoBehaviour
                         if (meshRend != null)
                         {
                             meshRend.material.SetFloat("_Alpha", 0.0f);
+                        }
+                    }
+                    break;
+                case TileType.Lava:
+                    {
+                        if (inCombatTileMaterial != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(1, 0));
+                        }
+                    }
+                    break;
+                case TileType.Poison:
+                    {
+                        if (inCombatTileMaterial != null)
+                        {
+                            meshRend.material = inCombatTileMaterial;
+                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(2, 0));
                         }
                     }
                     break;

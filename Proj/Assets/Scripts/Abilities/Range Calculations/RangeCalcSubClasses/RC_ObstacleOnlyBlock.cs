@@ -19,9 +19,11 @@ public class RC_ObstacleBlock : RangeCalculation
     {
         // Gets all tiles in range from Grid Explorer.
         List<GameObject> objects = GridExplorer._instance.GetTilesInRange(tile.gameObject, range, false);
+
         // Filteres out tile objects with other objects in LOS.
         List<GameObject> filteredObjects = FilterBlockedObjects(tile.gameObject, objects);
         // Returns CombatGridTile instances of the tile objects.
+
         return ConvertToGridTiles(filteredObjects);
     }
 

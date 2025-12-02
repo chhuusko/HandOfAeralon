@@ -33,6 +33,7 @@ public class AbilityHandler : MonoBehaviour
                 DebugLog.MGLog("Tried casting ability, but it failed");
             return false;
         }
+        _characterCaster.CanAttack = false;
         CombatEventManager.InvokeOnAbilityCast();
         StartCoroutine(ability.StartAbilityEffects(_casterTile, targetTile));
         _characterCaster.StartAbilityCooldown(ability);
@@ -70,12 +71,13 @@ public class AbilityHandler : MonoBehaviour
             Debug.LogError("No pending ability selected, but is still trying to calculate range");
             return;
         }
-        _tilesInRange = GetAvailableTargets(_pendingAbility);
+        _tilesInRange = RemoveUntargetableTiles(GetAvailableTargets(_pendingAbility));
     }
 
     private bool CanCastAbility(Ability ability, CombatGridTile targetTile)
     {
         return IsValidTargetTileForAbility(ability, targetTile) && _tilesInRange.Contains(targetTile);
+        
     }
 
     private List<CombatGridTile> GetAvailableTargets(Ability ability)
@@ -103,6 +105,22 @@ public class AbilityHandler : MonoBehaviour
             default: return false;
         }
     }
+    private List<CombatGridTile> RemoveUntargetableTiles(List<CombatGridTile> tiles)
+    {
+        List<CombatGridTile> filteredList = new();
+        foreach(CombatGridTile tile in tiles){
+            if (tile.IsWalkable())
+            {
+                filteredList.Add(tile);
+            }
+        }
+
+        if ((_pendingAbility.GetAbilityTargetType() != Ability.ValidTargetOccupant.Any) && (_pendingAbility.GetAbilityTargetType() != Ability.ValidTargetOccupant.Friendly))
+        {
+            filteredList.Remove(_casterTile);
+        }
+        return filteredList;
+    }
 
     /// <summary>
     /// Updates the visual preview of which tiles will be affected by the pending ability
@@ -115,45 +133,21 @@ public class AbilityHandler : MonoBehaviour
     {
         List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
 
-        // When no existing tiles are effected. (first frame)
-        if (!_tilesEffected.Any())
+        // Reset alla gamla effekter
+        foreach (CombatGridTile t in _tilesEffected)
         {
-            foreach(CombatGridTile t in newEffectedTiles)
-            {
-                _tilesEffected.Add(t);
-                t.SetTileColor(Color.red);
-            }
-            return;
-        }
-
-        // Reset old tiles that should not be effected.
-        var previousEffectedTiles = new List<CombatGridTile>(_tilesEffected);
-        foreach (CombatGridTile t in previousEffectedTiles)
-        {
-            if (newEffectedTiles.Contains(t))
-            {
-                continue;
-            }
-
             if (_tilesInRange.Contains(t))
-            {
                 t.SetTileColor(Color.green);
-                _tilesEffected.Remove(t);
-                continue;
-            }
-
-            t.SetTileColor(Color.white);
-            _tilesEffected.Remove(t);
+            else
+                t.SetTileColor(Color.white);
         }
+        _tilesEffected.Clear();
 
-        // Add new tiles effected list and turn them red.
-        foreach(CombatGridTile t in newEffectedTiles)
+        // Applicera nya röda
+        foreach (CombatGridTile t in newEffectedTiles)
         {
-            if (!_tilesEffected.Contains(t))
-            {
-                t.SetTileColor(Color.red);
-                _tilesEffected.Add(t);
-            }
+            t.SetTileColor(Color.red);
+            _tilesEffected.Add(t);
         }
     }
 }

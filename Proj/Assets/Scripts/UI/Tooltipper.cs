@@ -18,11 +18,12 @@ public class Tooltipper : MonoBehaviour
         }
     }
 
+    [SerializeField] private RectTransform _panel;
     [SerializeField] private TMP_Text _tmpText;
     [SerializeField] private Vector2 _offset = new Vector2(15, -15);
-    [SerializeField] private float hoverTime = 1f;
+    //[SerializeField] private float hoverTime = 1f;
     private Vector3 _lastMousePos;
-    private float _hoverTimer = 0f;
+    //private float _hoverTimer = 0f;
     private GameObject _currentObject = null;
     private Canvas _canvas;
 
@@ -34,12 +35,70 @@ public class Tooltipper : MonoBehaviour
         {
             Debug.LogError("Tooltipper.cs | Canvas not found!");
         }
+
+        HideTooltip();
     }
 
     void Update()
     {
-        if (_canvas == null)
-            return;
+        ScanForTooltip();
+        UpdatePosition();
+    }
+
+    private void ScanForTooltip()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, 999f))
+        {
+            if (hit.collider.gameObject != _currentObject)
+            {
+                _currentObject = hit.collider.gameObject;
+
+                if (_currentObject.TryGetComponent(out TooltipComponent component))
+                {
+                    ShowTooltip();
+
+                    string dynamicTooltip = GenerateTooltip();
+                    _tmpText.text = dynamicTooltip + component.GetTooltip();
+
+                    return;
+                }
+
+                HideTooltip();
+            }
+        }
+    }
+
+    private void UpdatePosition()
+    {
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_tmpText.rectTransform);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_panel);
+
+        RectTransform tooltipRect = _panel;
+        Vector2 tooltipSize = tooltipRect.rect.size;
+        Vector2 pivot = tooltipRect.pivot;
+
+        Vector2 pos = (Vector2)Input.mousePosition + _offset;
+
+        // Clamp X
+        if (pos.x + tooltipSize.x * (1 - pivot.x) > Screen.width)
+            pos.x = Screen.width - tooltipSize.x * (1 - pivot.x);
+        if (pos.x - tooltipSize.x * pivot.x < 0)
+            pos.x = tooltipSize.x * pivot.x;
+
+        // Clamp Y
+        if (pos.y + tooltipSize.y * (1 - pivot.y) > Screen.height)
+            pos.y = Screen.height - tooltipSize.y * (1 - pivot.y);
+        if (pos.y - tooltipSize.y * pivot.y < 0)
+            pos.y = tooltipSize.y * pivot.y;
+
+        tooltipRect.position = pos;
+    }
+
+    /*
+    void Update()
+    {
+        if (_canvas == null) return;
 
         Vector3 mousePos = Input.mousePosition;
 
@@ -72,11 +131,16 @@ public class Tooltipper : MonoBehaviour
 
                 if (_currentObject.TryGetComponent(out TooltipComponent component))
                 {
-                    _tmpText.text = component.GetTooltip();
+                    ShowTooltip();
+
+                    string dynamicTooltip = GenerateTooltip();
+
+                    _tmpText.text = dynamicTooltip + component.GetTooltip();
 
                     LayoutRebuilder.ForceRebuildLayoutImmediate(_tmpText.rectTransform);
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(_panel);
 
-                    RectTransform tooltipRect = _tmpText.rectTransform;
+                    RectTransform tooltipRect = _panel;
                     Vector2 tooltipSize = tooltipRect.rect.size;
                     Vector2 pivot = tooltipRect.pivot;
 
@@ -96,7 +160,6 @@ public class Tooltipper : MonoBehaviour
 
                     tooltipRect.position = pos;
 
-                    ShowTooltip();
                     return;
                 }
 
@@ -104,16 +167,32 @@ public class Tooltipper : MonoBehaviour
             }
         }
     }
+    */
 
     private void ShowTooltip()
     {
-        _tmpText.alpha = 1f;
+        _panel.gameObject.SetActive(true);
     }
 
     private void HideTooltip()
     {
         _currentObject = null;
         _tmpText.text = "";
-        _tmpText.alpha = 0f;
+        _panel.gameObject.SetActive(false);
+    }
+
+    private string GenerateTooltip()
+    {
+        string result = "";
+
+        if (_currentObject.TryGetComponent<Character>(out Character c))
+        {
+            result += $"Faction: {c.GetFaction()}"
+                    + $"\nClass: {c.GetCharacterClass()}" 
+                    + $"\nHP: {c.GetCurrentHealth()}/{c.GetMaxHealth()}" 
+                    + $"\n";
+        }
+
+        return result;
     }
 }

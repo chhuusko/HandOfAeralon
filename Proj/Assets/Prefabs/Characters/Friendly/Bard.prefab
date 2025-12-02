@@ -65,6 +65,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
         type: 3}
+      propertyPath: _data._classData
+      value: 
+      objectReference: {fileID: 11400000, guid: e8d14e2fc1a8ad842ad4d20b7eb74775,
+        type: 2}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
+      propertyPath: _factionIndicator
+      value: 
+      objectReference: {fileID: 9003232529615977811}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
       propertyPath: _data._characterClass
       value: 3
       objectReference: {fileID: 0}
@@ -106,4 +117,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 903adc99111b781459e8a7a6b146d838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tooltip: Bard
+  _tooltip: 
+--- !u!23 &9003232529615977811 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1707646618432603668, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 7729073911263066951}
+  m_PrefabAsset: {fileID: 0}

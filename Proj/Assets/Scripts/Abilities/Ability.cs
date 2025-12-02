@@ -9,6 +9,7 @@ public abstract class Ability : ScriptableObject
     [SerializeField] private Sprite _icon;
     [SerializeField] private int _range;
     [SerializeField] private int _cooldown;
+    [SerializeField] private string _description;
 
     [Header("- Tags -")]
     [SerializeField] private AbilityTag _abilityTag;
@@ -62,7 +63,7 @@ public abstract class Ability : ScriptableObject
     public Sprite GetIcon() => _icon;
     public float GetRange() => _range;
     public int GetCooldown() => _cooldown;
-
+    public string GetDescription() => _description;
     public void SetCooldown(int cooldown)
     {
         _cooldown = cooldown;
@@ -98,4 +99,6 @@ public abstract class Ability : ScriptableObject
     {
         character.SetCurrentMovementPoints(0);
     }
-    protected abstract void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile);}
+    protected abstract void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile);
+}
+

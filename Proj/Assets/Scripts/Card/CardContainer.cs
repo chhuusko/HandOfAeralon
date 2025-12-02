@@ -67,6 +67,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         {
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
+            CardHandManager.GetInstance().ChangeMana(-_containedCard.cost);
             _containedCard.PlayCard();
             CardHandManager.GetInstance().RemoveCard(this);   
         }
@@ -75,7 +76,9 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        StartCoroutine(OnHover(true));
+        //StartCoroutine(OnHover(true));
+        CardHandManager.GetInstance().ShowHighlightedCard(this, transform.position);
+        setVisible(false);
     }
 
     private bool CanAfford()
@@ -85,13 +88,15 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        StartCoroutine(OnHover(false));
+        CardHandManager.GetInstance().HideHighlightedCard();
+        setVisible(true);
+        //StartCoroutine(OnHover(false));
     }
     IEnumerator OnHover(bool isEnter)
     {
         CombatUI combatCanvas = GameObject.Find("CombatCanvas")?.GetComponent<CombatUI>();
         combatCanvas?.SetCardsActive(isEnter);
-        
+        /*
         float duration = 0.1f; 
         float elapsed = 0f;
         if (isEnter)
@@ -114,6 +119,8 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             }
             
         }
+        */
+        yield return null;
     }
     public void AddCard(Card newCard)
     {
@@ -135,5 +142,17 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!CanAfford()) return;
+    }
+    public void setVisible(bool isVisible)
+    {
+        if (isVisible == true)
+        {
+            GetComponent<CanvasGroup>().alpha = 1;
+        }
+        else
+        {
+            GetComponent<CanvasGroup>().alpha = 0;
+        }
+        
     }
 }

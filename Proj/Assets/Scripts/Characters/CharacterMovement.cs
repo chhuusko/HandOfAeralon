@@ -20,13 +20,6 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-    public void Reset()
-    {
-        _tilesInRange = new();
-        _pathPreview = new();
-        _lastPreviewPathTile = null;
-    }
-
     public bool IsMoving()
     {
         return _bIsMoving;
@@ -42,25 +35,31 @@ public class CharacterMovement : MonoBehaviour
             return;
         }
 
-        DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} move range drawn.");
+        //DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} move range drawn.");
         _tilesInRange = GridExplorer._instance.GetTilesInRange(currentTile, _character.GetMovementPoints(), true)
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
         .ToList();
+        Selector._instance.SetColorOfTiles(_tilesInRange, Color.green);
+    }
+
+    public void ForgetMoveRange()
+    {
+        _tilesInRange = new();
     }
 
     public void PreviewPath(CombatGridTile tile)
     {
-        if (tile == null || !_tilesInRange.Contains(tile))
+        if (tile == _character.GetCurrentTileComponent() || tile == null || !_tilesInRange.Contains(tile) || CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() != Faction.Friendly)
         {
             _lastPreviewPathTile = null;
-            GridExplorer._instance.Clear();
+            GridExplorer._instance.ClearPathDrawing();
             return;
         }
 
         if (_bIsMoving || tile == _lastPreviewPathTile || _character.GetMovementPoints() <= 0)
         {
-            DebugLog.JLWLog($"CharacterMovement::PreviewPath() skipped");
+            //DebugLog.JLWLog($"CharacterMovement::PreviewPath() skipped");
             return;
         }
 
@@ -69,34 +68,36 @@ public class CharacterMovement : MonoBehaviour
         GameObject currentTile = null;
         currentTile = _character.GetCurrentTileComponent().gameObject;
 
-        DebugLog.JLWLog($"CharacterMovement::PreviewPath() called A*");
+        //DebugLog.JLWLog($"CharacterMovement::PreviewPath() called A*");
         _pathPreview = GridExplorer._instance.FindPathAStar(currentTile, tile.gameObject)
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
         .ToList();
     }
 
-    public void ConfirmPath(CombatGridTile tile)
+    public bool ConfirmPath(CombatGridTile tile)
     {
-        if (_pathPreview == null || _pathPreview.Count == 0)
+        if (tile == _character.GetCurrentTileComponent() || _pathPreview == null || _pathPreview.Count == 0)
         {
-            DebugLog.JLWLog($"CharacterMovement.cs | _pathPreview IS EMPTY!");
-            return;
+            //DebugLog.JLWLog($"CharacterMovement.cs | _pathPreview IS EMPTY!");
+            return false;
         }
 
         if (_pathPreview[^1] == tile)
         {
             if (_character.GetMovementPoints() <= 0)
             {
-                DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} is out of MP!");
+                //DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} is out of MP!");
                 _tilesInRange = new();
-                return;
+                return false;
             }
 
-            _character.DecreaseCurrentMovementPoints(_pathPreview.Count - 1);
+            _character.DecreaseCurrentMovementPoints(CalculateMovementCost(_pathPreview));
 
             StartCoroutine(Move(_pathPreview));
         }
+
+        return true;
     }
 
     public void ForceCustomPath(List<CombatGridTile> path)
@@ -113,8 +114,16 @@ public class CharacterMovement : MonoBehaviour
     private IEnumerator Move(List<CombatGridTile> path)
     {
         _bIsMoving = true;
-        GridExplorer._instance.Clear();
-        float moveSpeed = 4f; // Måste matcha animationerna
+        CombatEventManager.InvokeOnCharacterMove(_bIsMoving);
+        GridExplorer._instance.ClearPathDrawing();
+        float moveSpeed = 4f; // Mï¿½ste matcha animationerna
+
+        Animator animator = null;
+        if (_character.TryGetComponent<Animator>(out animator))
+        {
+            //Debug.LogError($"{_character.name} gï¿½r!");
+            animator.SetBool("IsMoving", true);
+        }
 
         foreach (var step in path)
         {
@@ -128,7 +137,7 @@ public class CharacterMovement : MonoBehaviour
                 transform.rotation = Quaternion.LookRotation(direction);
             }
 
-            DebugLog.JLWLog($"CharacterMovement.cs | {this.name} moving towards {targetPos}");
+            //DebugLog.JLWLog($"CharacterMovement.cs | {this.name} moving towards {targetPos}");
 
             while (Vector3.Distance(transform.position, targetPos) > 0.01f)
             {
@@ -145,6 +154,31 @@ public class CharacterMovement : MonoBehaviour
         }
 
         _bIsMoving = false;
+        CombatEventManager.InvokeOnCharacterMove(_bIsMoving);
+
+        if (animator != null)
+        {
+            //Debug.LogError($"{_character.name} stannade!");
+            animator.SetBool("IsMoving", false);
+        }
+
         DrawMoveRange();
+    }
+
+    private int CalculateMovementCost(List<CombatGridTile> path)
+    {
+        int result = 0;
+
+        for (int i = 1; i < path.Count; i++)
+        {
+            Vector2Int a = path[i - 1].GetTileIndex();
+            Vector2Int b = path[i].GetTileIndex();
+
+            bool diagonal = Mathf.Abs(a.x - b.x) == 1 && Mathf.Abs(a.y - b.y) == 1;
+
+            result += diagonal ? 2 : 1;
+        }
+
+        return result;
     }
 }

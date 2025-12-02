@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public enum Faction { Friendly, Enemy }
 
@@ -32,12 +33,24 @@ public class CharacterData
     [SerializeField] private List<Ability> _availableAbilities;
     public int CurrentHealthPoints => _currentHealthPoints;
     public IReadOnlyList<Ability> AvailableAbilities => _availableAbilities;
+    
+    [Header("Status Effects")]
+    private TraitManager _statusEffects;
+    public TraitManager StatusEffects => _statusEffects;
 
-    public CharacterData(ClassData classData, Faction faction)
+    public CharacterData(ClassData classData, Faction faction, bool generateTraits)
     {
         _classData = classData;
         _faction = faction;
+
+        _statusEffects = new TraitManager();
+        
         InitializeClassData();
+        
+        if (generateTraits)
+        {
+            GenerateTraits();
+        }
     }
     
     /// <summary>
@@ -52,13 +65,19 @@ public class CharacterData
             
         // Set values from class data.
         _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(ClassData.minHealthPoints, ClassData.maxHealthPoints + 1);
-        _baseInitiative =  UnityEngine.Random.Range(ClassData.minSpeed, ClassData.maxSpeed + 1);
+        _baseInitiative =  UnityEngine.Random.Range(ClassData.minInitiative, ClassData.maxInitiative + 1);
         _baseDamage = UnityEngine.Random.Range(ClassData.minDamage, ClassData.maxDamage + 1);
         _baseMovementPoints = UnityEngine.Random.Range(ClassData.minMovementPoints, ClassData.maxMovementPoints + 1);
         _characterClass = ClassData.characterClass;
         _availableAbilities = ClassData.abilities;
     }
+    
+    private void GenerateTraits()
+    {
+        _statusEffects.GenerateTraits();
+    }
 
+    public void SetClassData(ClassData classData) => _classData = classData;
     public void SetCharacterClass(CharacterClass characterClass) => _characterClass = characterClass;
     public void SetFaction(Faction faction) => _faction = faction;
     public void SetBaseHealthPoints(int health) => _baseHealthPoints = Mathf.Max(1, health);
@@ -73,13 +92,15 @@ public class CharacterData
 [RequireComponent(typeof(Rigidbody))]
 public class Character : MonoBehaviour
 {
+    [SerializeField] private Renderer _factionIndicator; // JLW
+
     public event Action<int> OnHealthChanged;
     public event Action<int, GameObject> OnTakeDamage;
     public event Action<int, GameObject> OnWasHealed;
 
 
     public const int MOVEMENT_POINTS = 5;
-    public const float DEATH_COOLDOWN = 1f;
+    public const float DEATH_COOLDOWN = 2.5f;
     
     // TODO: Traits.
     
@@ -92,13 +113,13 @@ public class Character : MonoBehaviour
     private AbilityHandler _abilityHandler;
     private Dictionary<Ability, int> _currentCooldowns = new();
 
-    [Header("Status Effects")]
-    private StatusEffectManager _statusEffectManager;
-
     [Header("State")] 
     public bool CanMove { get; set; } = true;
     public bool CanAttack { get; set; } = true;
 
+    [Header("Status effects")]
+    private StatusEffectManager _statusEffectManager;
+    
     [Header("Misc")]
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
@@ -106,7 +127,8 @@ public class Character : MonoBehaviour
 
     private void OnEnable()
     {
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateAbilityCooldowns;
+        CombatEventManager.OnEnterCombatStateTakeTurn += ResetCanAttack;
         
         PopupTextManager damagePopupTextManager= PopupTextManager.GetInstance();
         if(damagePopupTextManager != null)
@@ -114,27 +136,36 @@ public class Character : MonoBehaviour
             damagePopupTextManager.BindEventOnTakeDamage(this);
             damagePopupTextManager.BindEventOnWasHealed(this);
         }
-            
-       
     }
 
     private void Start()
     {
+        _statusEffectManager = GetComponent<StatusEffectManager>();
+        
+        UpdateFactionIndicator();
+
         if (!TryGetComponent(out _abilityHandler))
         {
             Debug.LogError("Character is missing AbilityHandler component!");
             return;
         }
-        if (!TryGetComponent(out _statusEffectManager))
-        {
-           Debug.LogError("Character is missing _statusEffectManager component!");
-           return;
-        }
     }
+
+    private void UpdateFactionIndicator()
+    {
+        if (_factionIndicator == null) return;
+
+        Color c = (GetFaction() == Faction.Friendly) ? new Color(0f, 1f, 0.2f, 0.5f) : new Color(1f, 0.1f, 0.1f, 0.5f);
+
+        var mat = _factionIndicator.material;
+        mat.SetColor("_Color", c);
+    }
+
 
     private void OnDisable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= ResetCanAttack;
 
         PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
         if (damagePopupTextManager != null)
@@ -170,7 +201,7 @@ public class Character : MonoBehaviour
     
     // Base stats.
     public int GetMaxHealth() => _data.BaseHealthPoints;
-    public int GetBaseSpeed() => _data.BaseInitiative;
+    public int GetBaseInitiative() => _data.BaseInitiative;
     public int GetBaseDamage() => _data.BaseDamage;
     public int GetBaseMovementPoints() => _data.BaseMovementPoints;
     
@@ -202,6 +233,7 @@ public class Character : MonoBehaviour
     public void SetCurrentHealthPoints(int healthPoints)
     {
         _data.SetCurrentHealthPoints(healthPoints);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
         if (_data.CurrentHealthPoints <= 0)
         {
             StartCoroutine(RemoveCharacter());
@@ -257,6 +289,11 @@ public class Character : MonoBehaviour
         }
     }
 
+    private void ResetCanAttack(Character c)
+    {
+        CanAttack = true;
+    }
+
     private void UpdateAbilityCooldowns(Character c)
     {
         // Only update cooldowns for this character.
@@ -267,7 +304,7 @@ public class Character : MonoBehaviour
         
         var finishedAbilities = new List<Ability>();
         
-        foreach (var ability in _currentCooldowns.Keys)
+        foreach (var ability in _currentCooldowns.Keys.ToList())
         {
             _currentCooldowns[ability]--;
             if (_currentCooldowns[ability] <= 0)
@@ -335,13 +372,31 @@ public class Character : MonoBehaviour
         {
             StartCoroutine(RemoveCharacter());
         }
+        else
+        {
+            Animator animator = null;
+            if (TryGetComponent<Animator>(out animator))
+            {
+                animator.SetTrigger("TakeDamage");
+            }
+        }
     }
      
     private IEnumerator RemoveCharacter()
     {
         CombatEventManager.InvokeOnCharacterDeath(this);
-        // TODO: Play animation.
-        yield return new WaitForSeconds(DEATH_COOLDOWN);
+
+        float deathCooldown = DEATH_COOLDOWN;
+        
+        Animator animator = null;
+        if (TryGetComponent<Animator>(out animator))
+        {
+            animator.SetTrigger("Death");
+            AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            deathCooldown = animatorStateInfo.length;
+        }
+
+        yield return new WaitForSeconds(deathCooldown);
         Destroy(gameObject);
     }
 

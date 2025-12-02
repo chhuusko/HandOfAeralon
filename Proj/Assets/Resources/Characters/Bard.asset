@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Bard
   m_EditorClassIdentifier: 
   characterClass: 3
-  minHealthPoints: 5
-  maxHealthPoints: 9
-  minSpeed: 2
-  maxSpeed: 4
-  minMovementPoints: 2
-  maxMovementPoints: 4
-  minDamage: 3
+  minHealthPoints: 24
+  maxHealthPoints: 26
+  minDamage: 4
   maxDamage: 5
+  minInitiative: 7
+  maxInitiative: 8
+  minMovementPoints: 4
+  maxMovementPoints: 4
   abilities:
   - {fileID: 11400000, guid: ae3a3b1c967a3fe49bb022202ac983e2, type: 2}
   - {fileID: 11400000, guid: ae3a3b1c967a3fe49bb022202ac983e2, type: 2}

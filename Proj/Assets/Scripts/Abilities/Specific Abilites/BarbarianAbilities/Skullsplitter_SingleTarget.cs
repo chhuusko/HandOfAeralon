@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
@@ -7,6 +8,10 @@ public class Skullsplitter_Ability : SingleTargetAbility
     [Header("- Ability Specific values -")]
     [SerializeField] private float _damageMultiplier = 1.6f;
 
+    // Description
+
+    // Deal(100% × Damage) Physical damage.
+    // If the target is below 50% Health, deal (160% × Damage) damage instead and draw 1 card.
 
     protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
     {

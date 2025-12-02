@@ -34,10 +34,16 @@ public class GlobalGameManager : ScriptableObject
     private void OnEnable()
     {
         CombatEventManager.OnCharacterDeath += RemoveCharacter;
+        CombatEventManager.OnExitCombatStateEndCombat += GetCombatCoins;
     }
     private void OnDisable()
     {
         CombatEventManager.OnCharacterDeath -= RemoveCharacter;
+        CombatEventManager.OnExitCombatStateEndCombat -= GetCombatCoins;
+    }
+    private void GetCombatCoins()
+    {
+        _currentGame.coins += 100;
     }
 
     private void RemoveCharacter(Character obj)
@@ -77,7 +83,7 @@ public class GlobalGameManager : ScriptableObject
     public void StartNewGame(int slot)
     {
         GetTemp();
-        SceneManager.LoadScene("ShopScene"); //TODO
+        SceneManager.LoadScene("Graveyard12x10_Easy"); //TODO
     }
     public void JSONWrite()
     {
@@ -101,15 +107,15 @@ public class GlobalGameManager : ScriptableObject
             _characterLibrary.GetPrefab(CharacterClass.Bard).GetComponent<Character>()
         };
         _currentGame.heroDataList = new List<CharacterData>(){
-            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Barbarian], Faction.Friendly),
-            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Rogue], Faction.Friendly),
-            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Bard], Faction.Friendly),
-            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Sorceress], Faction.Friendly)
+            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Barbarian], Faction.Friendly, true),
+            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Rogue], Faction.Friendly, true),
+            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Bard], Faction.Friendly, true),
+            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Sorceress], Faction.Friendly, true)
         };
 
         _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
-        Debug.Log(_currentGame.cardList.Count);
-        _currentGame.coins = 50;
+        DebugLog.AlexLog($"_currentGame.cardList.Count");
+        _currentGame.coins = 100;
     }
     public void SaveCards(List<Card> cards)
     {

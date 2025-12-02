@@ -8,6 +8,7 @@ public class CombatStateEndCombat : CombatStateBase
     {
         base.Enter();
         CombatEventManager.InvokeEnterCombatStateEndCombat();
+
     }
 
     public override void Exit()
@@ -20,4 +21,5 @@ public class CombatStateEndCombat : CombatStateBase
     {
         CombatEventManager.InvokeExitCombatStateEndCombat();
     }
+
 }

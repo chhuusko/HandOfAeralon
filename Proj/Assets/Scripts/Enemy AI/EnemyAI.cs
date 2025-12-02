@@ -16,8 +16,6 @@ public class EnemyAI : MonoBehaviour
     private Character _targetCharacter = null;
     private GameObject _closestOpponentTile = null;
 
-    [SerializeField] private bool _bDebug = false;
-
 
     private void OnEnable()
     {
@@ -43,14 +41,14 @@ public class EnemyAI : MonoBehaviour
 
         if (_currentCharacter == null || _currentCharacter.GetFaction() != controlledFaction)
         {
-            if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | Not {this.name}'s turn...");
+            //DebugLog.JLWLog($"EnemyAI.cs | Not {this.name}'s turn...");
             return;
         }
         DebugLog.JLWLog($"EnemyAI.cs | {this.name}'s turn.");
-        if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | _currentCharacter: {_currentCharacter.name}");
+        //DebugLog.JLWLog($"EnemyAI.cs | _currentCharacter: {_currentCharacter.name}");
         _currentMoveRange = _currentCharacter.GetMovementPoints();
         _currentAttackRange = 1; // Bör vara -> occupantCharacter.GetAttackRange()
-        if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | _currentMoveRange: {_currentMoveRange}, _currentAttackRange: {_currentAttackRange}");
+        //DebugLog.JLWLog($"EnemyAI.cs | _currentMoveRange: {_currentMoveRange}, _currentAttackRange: {_currentAttackRange}");
 
         GameObject currentTile = _currentCharacter.GetCurrentTileComponent().gameObject;
         if (currentTile == null)
@@ -65,7 +63,7 @@ public class EnemyAI : MonoBehaviour
             DebugLog.JLWLog($"EnemyAI.cs | _targetCharacter NOT FOUND IN SCENE!");
             return;
         }
-        if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | _targetCharacter: {_targetCharacter.name}");
+        //DebugLog.JLWLog($"EnemyAI.cs | _targetCharacter: {_targetCharacter.name}");
 
         _closestOpponentTile = _targetCharacter.GetCurrentTileComponent().gameObject;
         if (_closestOpponentTile == null)
@@ -96,7 +94,7 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        if (_bDebug && _movePath == null && _movePath.Count != 0) DebugLog.JLWLog($"EnemyAI.cs | Moving {_currentCharacter.name} to {_movePath[_movePath.Count - 1].GetComponent<CombatGridTile>().GetTileIndex()}");
+        //DebugLog.JLWLog($"EnemyAI.cs | Moving {_currentCharacter.name} to {_movePath[_movePath.Count - 1].GetComponent<CombatGridTile>().GetTileIndex()}");
 
         StartCoroutine(WaitForMovementCompletion());
     }
@@ -174,7 +172,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (!attacker.CanAttack)
         {
-            if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | {attacker.name} can't attack!");
+            //DebugLog.JLWLog($"EnemyAI.cs | {attacker.name} can't attack!");
             return;
         }
 
@@ -189,11 +187,11 @@ public class EnemyAI : MonoBehaviour
             }
 
             target.TakeDamage(_currentCharacter.GetDamage()); // Bör använda en ability istället
-            if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name} strikes {target.name} for {_currentCharacter.GetDamage()} damage.");
+            //DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name} strikes {target.name} for {_currentCharacter.GetDamage()} damage.");
             return;
         }
 
-        if (_bDebug) DebugLog.JLWLog($"EnemyAI.cs | {target.name} is out of attack range!");
+        //DebugLog.JLWLog($"EnemyAI.cs | {target.name} is out of attack range!");
     }
 
     private List<GameObject> FindPath(GameObject currentTile, GameObject opponentTile)

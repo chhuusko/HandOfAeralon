@@ -175,7 +175,7 @@ public class GridExplorer : MonoBehaviour
 
         if (start == goal)
         {
-            Clear();
+            ClearPathDrawing();
             return new List<GameObject>();
         }
 
@@ -251,7 +251,7 @@ public class GridExplorer : MonoBehaviour
             }
         }
 
-        Clear();
+        ClearPathDrawing();
         return new List<GameObject>();
     }
 
@@ -280,7 +280,7 @@ public class GridExplorer : MonoBehaviour
         if (start == goal)
         {
             DebugLog.JLWLog($"GridExplorer.cs | start {start} == goal {goal}");
-            Clear();
+            ClearPathDrawing();
             return new List<GameObject>();
         }
 
@@ -329,7 +329,7 @@ public class GridExplorer : MonoBehaviour
             }
         }
 
-        Clear();
+        ClearPathDrawing();
         return new List<GameObject>(); // No path found
     }
 
@@ -379,6 +379,11 @@ public class GridExplorer : MonoBehaviour
 
         Vector2Int start = origin.GetComponent<CombatGridTile>().GetTileIndex();
 
+        if (!checkWalkable)
+        {
+            result.Add(origin);
+        }
+
         Vector2Int[] directions = new Vector2Int[]
         {
             new Vector2Int(1, 0),
@@ -417,7 +422,7 @@ public class GridExplorer : MonoBehaviour
         if (_bPaintTiles) _paintStartTile = CombatGrid._instance.GetTileAtCoord(start.x, start.y);
         if (_bPaintTiles) _paintReachableTiles = result;
         */
-        PaintReachableTiles(result, Color.green);
+       
         return result;
     }
 
@@ -462,7 +467,7 @@ public class GridExplorer : MonoBehaviour
         }
     }
 
-    public void Clear()
+    public void ClearPathDrawing()
     {
         if (_activeLineRenderer != null)
         {
@@ -472,15 +477,15 @@ public class GridExplorer : MonoBehaviour
 
     private void PaintReachableTiles(List<GameObject> tileObjects, Color color)
     {
-        Debug.Log("PaintReachableTiles()");
+        //Debug.Log("PaintReachableTiles()");
         if (tileObjects != null && tileObjects.Count > 0)
         {
-            Debug.Log("GameObjects found!");
+            //Debug.Log("GameObjects found!");
             foreach (var element in tileObjects)
             {
                 if (element.TryGetComponent<CombatGridTile>(out CombatGridTile component))
                 {
-                    Debug.Log("CombatGridTile component found!");
+                    //Debug.Log("CombatGridTile component found!");
                     component.SetTileColor(color);
                 }
             }

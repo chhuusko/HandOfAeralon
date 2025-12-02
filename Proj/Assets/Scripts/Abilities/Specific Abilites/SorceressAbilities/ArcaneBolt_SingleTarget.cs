@@ -8,7 +8,9 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
     [SerializeField] private float _manaDamageMultiplier = 0.1f;
     [SerializeField] private int _enemyManaAmount = 6;
 
+    // Description
 
+    // Deals((40% + 10% per current Mana) × Damage) Elemental damage. (Enemy always has 6 Mana)
 
     protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
     {
@@ -34,20 +36,15 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
         // 6. EnemyTraits
         // 7. Enemy Buffs / Debuffs
 
-        int damage = castingCharacter.GetBaseDamage();
-        damage = (int)(damage * _damageMultiplier);
+        int baseDamage = castingCharacter.GetBaseDamage();
+        int mana = castingCharacter.GetFaction() == Faction.Friendly ? CardHandManager.GetInstance().GetMana() : _enemyManaAmount;
 
-        if (castingCharacter.GetFaction() == Faction.Friendly)
-        {
-            damage += (int)(_manaDamageMultiplier * CardHandManager.GetInstance().GetMana());
-        }
-        else
-        {
-            damage += (int)(_manaDamageMultiplier * _enemyManaAmount);
-        }
-        
-        damage = (int) castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
-        damage = (int) affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
+        float totalMultiplier = _damageMultiplier + (_manaDamageMultiplier * mana);
+        int damage = (int)(baseDamage * totalMultiplier);
+
+
+        damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
 
         return damage;
     }

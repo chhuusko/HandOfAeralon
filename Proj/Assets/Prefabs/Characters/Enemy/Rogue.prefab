@@ -65,6 +65,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
         type: 3}
+      propertyPath: _data._classData
+      value: 
+      objectReference: {fileID: 11400000, guid: fc96843e5aaf46f4b8f16561c40bde52,
+        type: 2}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
       propertyPath: _data._characterClass
       value: 2
       objectReference: {fileID: 0}
@@ -106,4 +112,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 903adc99111b781459e8a7a6b146d838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tooltip: Enemy Rogue.
+  _tooltip: 

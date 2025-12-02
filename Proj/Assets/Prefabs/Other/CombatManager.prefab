@@ -54,6 +54,7 @@ MonoBehaviour:
   _selectorOverHeadStartPos: {x: 0, y: 0, z: 0}
   _selectorCubePrefab: {fileID: 1556502904549677550, guid: 5d7a2055e59b1164283434b489d22345,
     type: 3}
+  _currentSelectedCharacter: {fileID: 0}
   _debugCurrentState: 0
   _currentCombatState:
     rid: -2
@@ -63,7 +64,8 @@ MonoBehaviour:
     _charactersInTurnOrder: []
     _turnCountFullRound: 0
     _turnCountCurrent: 0
-  _enemyAI: {fileID: 0}
+  _enemyAI: {fileID: 8379955821282121603, guid: b50cf4c38c2c0f24ab87673e0ef21cb3,
+    type: 3}
   _classAbilities: []
   TurnStart:
     m_PersistentCalls:
