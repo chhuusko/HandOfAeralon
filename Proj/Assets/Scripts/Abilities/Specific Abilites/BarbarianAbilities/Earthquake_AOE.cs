@@ -98,19 +98,21 @@ public class Earthquake_AOE : DirectedAOEAbility
 
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         affectedCharacter.TakeDamage(damage);
-        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0);
+
+        StatusEffect slow = null;
 
         if (Random.value < _slowCharacterHitChance)
         {
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
             {
-                statusEffectManager.AddStatusEffect(new Slowed(_slowDuration));
+                statusEffectManager.AddStatusEffect(slow = new Slowed(_slowDuration));
                 if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
                 {
                     slowedEnemyCounter++;
                 }
             }
         }
+        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, slow);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
