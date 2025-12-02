@@ -79,6 +79,10 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
                         CancelUse();
                         return;
                     }
+                    else
+                    {
+                        CardHandManager.GetInstance().CharacterTarget(grid.GetOccupantCharacter());
+                    }
                 }
                 else
                 {
@@ -86,6 +90,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
                     return;
                 }
             }
+            
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
             CardHandManager.GetInstance().ChangeMana(-_containedCard.cost);
