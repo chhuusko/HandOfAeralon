@@ -1,23 +1,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "LightningStorm_Ability", menuName = "Scriptable Objects/Abilities/Sorceress/Lightning Storm")]
 
-[CreateAssetMenu(fileName = "RuptureOfTheWilds_Ability", menuName = "Scriptable Objects/Abilities/Barbarian/Rupture of the Wilds")]
-
-public class RuptureOfTheWildsAOE : DirectedAOEAbility
+public class LightningStorm_Ability : RoundAOEAbility
 {
     [Header("- Ability Specific values -")]
-    [SerializeField] private float _damageMultiplier = 1f;
-    [SerializeField] private float _slowedTargetDamageMultiplier = 1.5f;
-    [SerializeField] private float _stunCharacterHitChance = 0.3f;
-    [SerializeField] private int _stunDuration = 2;
+    [SerializeField] private float _damageMultiplier = 0.8f;
+    [SerializeField] private float _stunCharacterHitChance = 0.25f;
+    [SerializeField] private int _stunDuration = 1;
+    [SerializeField] private int _stunnedEnemiesTilBonus = 1;
 
-    // Description
+    bool enemyStunned;
 
-    // Send primal energy through the ground, dealing (100 % × Damage) Elemental damage.
-    // If the target is Slowed, deal (150% × Damage) instead.
-    // Every character hit has a 30% chance to become Stunned for 2 turns.
-    // Draw 1 card per enemy Stunned by this ability.
+    public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Calculate all tiles around with in radius and apply effect to all of them.
+        if (_pattern is RoundAOEPattern pattern)
+        {
+            pattern.SetRadius(_radius);
+        }
+        List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
+
+        enemyStunned = false;
+
+        foreach (CombatGridTile tile in tilesToEffect)
+        {
+            if (tile == null) continue;
+            if (!IsValidTargetForAbility(casterTile, tile)) continue;
+
+            ApplyEffectOnTile(casterTile, tile);
+        }
+
+        // Check to see if casting character is friendly before drawing card.
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null || (castingCharacter.GetFaction() != Faction.Friendly)) return;
+
+        if (enemyStunned)
+        {
+            CardHandManager.GetInstance().AddCardFromDeck();
+        }
+    }
 
     protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
     {
@@ -38,10 +61,7 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
             {
                 statusEffectManager.AddStatusEffect(new Stunned(_stunDuration));
-                if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
-                {
-                    CardHandManager.GetInstance().AddCardFromDeck();
-                }
+                enemyStunned = true;
             }
         }
         AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun);
@@ -51,13 +71,8 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
     {
         // Get base damage.
         int baseDamage = castingCharacter.GetBaseDamage();
-        var statusEffectsManager = affectedCharacter.GetComponent<StatusEffectManager>();
-        if (statusEffectsManager == null) return 0;
 
-        // If character is slowed, deal more damage.
-        bool targetIsSlowed = statusEffectsManager.GetStatusEffect<Slowed>() != null;
-
-        int damage = targetIsSlowed ? (int)(baseDamage * _damageMultiplier) : (int)(baseDamage * _slowedTargetDamageMultiplier);
+        int damage = (int) (baseDamage * _damageMultiplier);
 
         damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
