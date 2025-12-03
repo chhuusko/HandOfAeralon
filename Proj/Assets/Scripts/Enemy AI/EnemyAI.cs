@@ -234,6 +234,7 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
+        /*
         Ability chosenAbility = _currentAbilities[Random.Range(0, _currentAbilities.Count)];
         CombatGridTile targetTile = target.GetCurrentTileComponent();
 
@@ -241,6 +242,7 @@ public class EnemyAI : MonoBehaviour
         DebugLog.JLWLog($"EnemyAI.cs | {chosenAbility.name} set as pending ability.");
         _currentAbilityHandler.UseAbility(chosenAbility, targetTile);
         DebugLog.JLWLog($"EnemyAI.cs | {chosenAbility.name} cast on tile {targetTile.GetTileIndex()}");
+        */
 
         if (GridExplorer._instance.ChebyshevDistance(attacker.GetCurrentTileIndex(), target.GetCurrentTileIndex()) <= _currentAttackRange)
         {
