@@ -5,11 +5,13 @@ public class Stealth : StatusEffect
     public override void OnApply()
     {
         Character.IsTargetable = false;
+        Character.gameObject.GetComponent<Renderer>().material.SetFloat("_Camo", 1);
     }
 
     public override void OnExpire()
     {
         Character.IsTargetable = true;
+        Character.gameObject.GetComponent<Renderer>().material.SetFloat("_Camo", 0);
     }
 
     // Effect breaks on taking damage.

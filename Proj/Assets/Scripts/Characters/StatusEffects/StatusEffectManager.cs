@@ -6,10 +6,8 @@ using UnityEngine;
 
 public class StatusEffectManager : MonoBehaviour
 {
-    [SerializeField] private float _classTraitChance;
-    
     private Character _character;
-    private TraitManager _traitManager;
+    [SerializeField] private TraitManager _traitManager;
     
     private void OnEnable()
     {
@@ -34,6 +32,8 @@ public class StatusEffectManager : MonoBehaviour
         {
             _traitManager = _character.GetTraitManager();
         }
+        
+        AddStatusEffect(new Stealth());
     }
 
     private void OnDisable()
