@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[Serializable]
 public class TraitManager
 {
-    private List<StatusEffect> _statusEffects = new();
+    [SerializeReference] private List<StatusEffect> _statusEffects = new();
     
     public void AddStatusEffect(StatusEffect statusEffect)
     {
@@ -20,6 +21,27 @@ public class TraitManager
     public void RemoveStatusEffect(StatusEffect statusEffect)
     {
         _statusEffects.Remove(statusEffect);
+    }
+
+    public int ClearStatusEffects(StatusEffectType type)
+    {
+        int amount = 0;
+        List<StatusEffect> statusEffectsToRemove = new();
+
+        foreach (var statusEffect in _statusEffects)
+        {
+            if (statusEffect.Data.Type == type)
+            {
+                statusEffectsToRemove.Add(statusEffect);
+                amount++;
+            }
+        }
+
+        foreach (var statusEffect in statusEffectsToRemove)
+        {
+            _statusEffects.Remove(statusEffect);
+        }
+        return amount;
     }
 
     public bool ContainsStatusEffect<T>() where T : StatusEffect

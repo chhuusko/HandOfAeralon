@@ -6,10 +6,8 @@ using UnityEngine;
 
 public class StatusEffectManager : MonoBehaviour
 {
-    [SerializeField] private float _classTraitChance;
-    
     private Character _character;
-    private TraitManager _traitManager;
+    [SerializeField] private TraitManager _traitManager;
     
     private void OnEnable()
     {
@@ -68,6 +66,11 @@ public class StatusEffectManager : MonoBehaviour
         statusEffect.OnExpire();
         _traitManager.RemoveStatusEffect(statusEffect);
         CombatEventManager.InvokeOnStatusEffectExpiredOnCharacter(_character, statusEffect);
+    }
+
+    public int ClearStatusEffects(StatusEffectType type)
+    {
+        return _traitManager.ClearStatusEffects(type);
     }
 
     public bool ContainsStatusEffect<T>() where T : StatusEffect
