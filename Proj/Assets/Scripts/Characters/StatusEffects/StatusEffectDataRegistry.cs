@@ -30,6 +30,18 @@ public class StatusEffectDataRegistry : ScriptableObject
         _lookup = new Dictionary<Type, StatusEffectData>();
         foreach (var entry in _entries)
         {
+            if (entry == null)
+            {
+                DebugLog.JoppaLog("No entry");
+                continue;
+            }
+            
+            if (entry.Script == null)
+            {
+                DebugLog.JoppaLog("Empty script: " + entry.name);
+                continue;
+            }
+            
             Type type = entry.Script.GetClass();
             if (type != null)
             {
