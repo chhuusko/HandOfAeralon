@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "LinePattern", menuName = "Scriptable Objects/Abilities/Patterns/LinePattern")]
 public class LinePattern : DirectedAOEPattern
 {
-    private int _totalLength = 6;
+    [SerializeField] private int _totalLength = 6;
 
     public override List<CombatGridTile> CalculateTilesToEffect(CombatGridTile targetTile)
     {
@@ -26,7 +26,7 @@ public class LinePattern : DirectedAOEPattern
         }
 
         Vector2Int currentTileCoordinate = targetTile.GetTileIndex();
-        for (int i = 1; i < _totalLength; i++)
+        for (int i = 0; i < _totalLength; i++)
         {
             var tileObj = CombatGrid._instance.GetTileAtCoord(currentTileCoordinate.x, currentTileCoordinate.y);
 
