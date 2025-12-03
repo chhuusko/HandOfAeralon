@@ -6,10 +6,8 @@ using UnityEngine;
 
 public class StatusEffectManager : MonoBehaviour
 {
-    [SerializeField] private float _classTraitChance;
-    
     private Character _character;
-    private TraitManager _traitManager;
+    [SerializeField] private TraitManager _traitManager;
     
     private void OnEnable()
     {

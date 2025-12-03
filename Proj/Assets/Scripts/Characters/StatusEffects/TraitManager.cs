@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[Serializable]
 public class TraitManager
 {
-    private List<StatusEffect> _statusEffects = new();
+    [SerializeReference] private List<StatusEffect> _statusEffects = new();
     
     public void AddStatusEffect(StatusEffect statusEffect)
     {
