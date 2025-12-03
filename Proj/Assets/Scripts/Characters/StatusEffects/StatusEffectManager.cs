@@ -16,6 +16,8 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
         CombatEventManager.OnAbilityDataCreated += OnAbilityUsed;
+
+        CardHandManager.onTargetCharacter += OnCardPlayed;
     }
 
     private void Start()
@@ -39,6 +41,8 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
         CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
+        
+        CardHandManager.onTargetCharacter -= OnCardPlayed;
     }
 
     public void SetTraitManager(TraitManager traitManager)
@@ -114,7 +118,7 @@ public class StatusEffectManager : MonoBehaviour
             return;
         } 
         
-        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        foreach (var statusEffect in _traitManager.GetAllEffects())
         {
             statusEffect.OnApply();
         }
@@ -127,7 +131,7 @@ public class StatusEffectManager : MonoBehaviour
             return;
         } 
         
-        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        foreach (var statusEffect in _traitManager.GetAllEffects())
         {
             statusEffect.OnExpire();
         }
@@ -140,7 +144,7 @@ public class StatusEffectManager : MonoBehaviour
             return;
         }
         
-        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        foreach (var statusEffect in _traitManager.GetAllEffects())
         {
             statusEffect.OnTurnStart();
         }
@@ -153,22 +157,32 @@ public class StatusEffectManager : MonoBehaviour
             return;
         } 
         
-        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        foreach (var statusEffect in _traitManager.GetAllEffects())
         {
             statusEffect.OnTurnEnd();
         }
     }
 
-    private void OnCardUsed()
+    private void OnCardPlayed(Character c)
     {
         if (!_character)
         {
             return;
         } 
         
-        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        foreach (var statusEffect in _traitManager.GetAllEffects())
         {
             statusEffect.OnCardPlayed();
+        }
+
+        if (c != _character)
+        {
+            return;
+        }
+        
+        foreach (var statusEffect in _traitManager.GetAllEffects())
+        {
+            statusEffect.OnTargetedByCard();
         }
     }
 
@@ -179,7 +193,7 @@ public class StatusEffectManager : MonoBehaviour
             return damage;
         } 
         
-        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        foreach (var statusEffect in _traitManager.GetAllEffects())
         {
             statusEffect.ModifyIncomingDamage(ref damage, ability);
         }
@@ -193,7 +207,7 @@ public class StatusEffectManager : MonoBehaviour
             return damage;
         } 
         
-        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        foreach (var statusEffect in _traitManager.GetAllEffects())
         {
             statusEffect.ModifyOutgoingDamage(ref damage, ability);
         }
@@ -207,7 +221,7 @@ public class StatusEffectManager : MonoBehaviour
             return heal;
         } 
         
-        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        foreach (var statusEffect in _traitManager.GetAllEffects())
         {
             statusEffect.ModifyIncomingHeal(ref heal, ability);
         }
@@ -221,7 +235,7 @@ public class StatusEffectManager : MonoBehaviour
             return heal;
         } 
         
-        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        foreach (var statusEffect in _traitManager.GetAllEffects())
         {
             statusEffect.ModifyOutgoingHeal(ref heal, ability);
         }
@@ -232,7 +246,7 @@ public class StatusEffectManager : MonoBehaviour
     // Traits.
     private void OnStartCombat()
     {
-        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        foreach (var statusEffect in _traitManager.GetAllEffects())
         {
             if (statusEffect is Trait trait)
             {

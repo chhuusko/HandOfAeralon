@@ -56,6 +56,7 @@ public abstract class StatusEffect
     public virtual void OnTurnStart() {}
     public virtual void OnTurnEnd() {}
     public virtual void OnCardPlayed() {}
+    public virtual void OnTargetedByCard() {}
     public virtual void ModifyIncomingDamage(ref float damage, Ability ability) {}
     public virtual void ModifyOutgoingDamage(ref float damage, Ability ability) {}
     public virtual void ModifyIncomingHeal(ref float heal, Ability ability) {}
