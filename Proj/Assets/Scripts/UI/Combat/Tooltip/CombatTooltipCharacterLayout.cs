@@ -49,6 +49,8 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         // NOTE (Calle): Tooltip only needs to be updated directly if the selected character is the one
         // getting a status effect applied, otherwise it will be update when selecting the one it was applied to.
         CombatEventManager.OnStatusEffectAppliedToCharacter += UpdateSelectedCharacter;
+        CombatEventManager.OnStatusEffectExpiredOnCharacter += RemoveStatusEffectOnSelectedCharacter;
+        CombatEventManager.OnStatusEffectDurationChanged += UpdateSelectedCharacter;
 
         for (int i = 0; i < _traitElements.Length; i++)
         {
@@ -148,6 +150,16 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         Character selectedCharacter = Selector._instance.GetSelectedCharacter();
 
         if(selectedCharacter == characterSubject)
+        {
+            UpdateTooltip(characterSubject);
+        }
+    }
+
+    private void RemoveStatusEffectOnSelectedCharacter(Character characterSubject, StatusEffect status)
+    {
+        Character selectedCharacter = Selector._instance.GetSelectedCharacter();
+
+        if (selectedCharacter == characterSubject)
         {
             UpdateTooltip(characterSubject);
         }

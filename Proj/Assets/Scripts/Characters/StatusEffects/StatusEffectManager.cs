@@ -113,12 +113,15 @@ public class StatusEffectManager : MonoBehaviour
             {
                 statusEffectsToRemove.Add(statusEffect);
             }
+            CombatEventManager.InvokeOnStatusEffectDurationChanged(_character, statusEffect);
         }
 
         foreach (var statusEffect in statusEffectsToRemove)
         {
             RemoveStatusEffect(statusEffect);
         }
+
+        
     }
 
     private void OnApply()
