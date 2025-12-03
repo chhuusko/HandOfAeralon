@@ -32,16 +32,11 @@ public class LinePattern : DirectedAOEPattern
 
             if (!OutOfBounds(currentTileCoordinate) && tileObj.TryGetComponent<CombatGridTile>(out var tile))
             {
-                if (!OutOfBounds(currentTileCoordinate))
-                {
-                    list.Add(tile);
-                }
+                list.Add(tile);
             }
             currentTileCoordinate.x += xDirection;
             currentTileCoordinate.y += yDirection;
         }
         return list;
     }
-
-
 }
