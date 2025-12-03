@@ -3,6 +3,48 @@ using UnityEngine;
 
 public abstract class DirectedAOEAbility : AOEAbility
 {
+    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
+    {
+        // Works like the base version of GetTilesToEffect but only returns the list when valid target is hovered. 
+        // Also removes caster tile as target. 
+
+        if (targetTile == null)
+            return null;
+
+        // Get caster
+        Character caster = GetAbilityHandler().GetCharacterCaster();
+        if (caster == null) return null;
+
+        // Check if ability can be cast on target tile.
+        bool canCast = caster.GetAbilityHandler().CanCastAbility(this, targetTile);
+        if (!canCast) return null;
+
+        var tile = caster.GetCurrentTileComponent();
+
+        if (tile == null) return null;
+
+        var directedAOEPattern = _pattern as DirectedAOEPattern;
+
+        if (directedAOEPattern == null)
+        {
+            Debug.LogError("Pattern is not a DirectedAOEPattern");
+            return null;
+        }
+
+        directedAOEPattern.SetDirection(CalculateDirection(tile, targetTile));
+
+        // Calculate which tiles to effect.
+        var list = _pattern.CalculateTilesToEffect(targetTile);
+
+        // Remove caster tile. Unnecessary if pattern already removes caster.
+        if (caster.GetCurrentTileComponent())
+        {
+            list.Remove(caster.GetCurrentTileComponent());
+        }
+
+        return list;
+    }
+
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Calculate all tiles around within pattern and apply effect to all of them.

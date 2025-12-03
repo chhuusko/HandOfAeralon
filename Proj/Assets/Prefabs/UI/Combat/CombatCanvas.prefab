@@ -1533,8 +1533,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -110}
-  m_SizeDelta: {x: 350, y: 175}
+  m_AnchoredPosition: {x: 0, y: -90}
+  m_SizeDelta: {x: 350, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6707651785629181372
 CanvasRenderer:
@@ -1564,7 +1564,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bf4c33021d551754f8e1d0e3b3ae1fd4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2faeb5c197ed27b4390a10a2065a1594, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1592,7 +1592,7 @@ MonoBehaviour:
     m_Top: 20
     m_Bottom: 20
   m_ChildAlignment: 4
-  m_Spacing: 0
+  m_Spacing: 15
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -1737,7 +1737,7 @@ MonoBehaviour:
   _endTurnButton: {fileID: 2767202164179268512}
   _abilityButtonPrefab: {fileID: 3267717621754287583, guid: e6a0b6ec1faba5446b4c1af9f3a69767,
     type: 3}
-  _characterPortraitButtonPrefab: {fileID: 3320840960465630, guid: e0604acf35576954bb8b49405d849ce8,
+  _characterPortraitButtonPrefab: {fileID: 986005965116311107, guid: e0604acf35576954bb8b49405d849ce8,
     type: 3}
   _placeCharactersPanel: {fileID: 7668318786330276250}
   _mana: {fileID: 4826794601199300524}
@@ -2955,7 +2955,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -247}
+  m_AnchoredPosition: {x: 0, y: -220}
   m_SizeDelta: {x: 250, y: 7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5267642165116478331
@@ -3116,7 +3116,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5454048352317089740}
   m_HandleRect: {fileID: 7683974624865042462}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
