@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,11 +29,15 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
     private List<string> _characterStatValues = new List<string>();
     [SerializeField] private TMP_Text _characterStatValueFieldTMP;
     
-
     // Traits Tooltip
     [SerializeField] private GameObject _traitParent;
     [SerializeField] private GameObject _traitElementPrefab;
-    [SerializeField] private GameObject[] _traitElements = new GameObject[2];
+    [SerializeField] private GameObject[] _traitElements = new GameObject[2]; // You can only have 2 traits so convenient with array;
+
+    // Status Effects Tooltip
+    [SerializeField] private GameObject _statusEffectParent;
+    [SerializeField] private GameObject _statusEffectPrefab;
+    [SerializeField] private List<GameObject> _statusEffects; // Number of status effects is dynamic so convenient with a list
 
     private void Start()
     {
@@ -59,6 +64,21 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         Selector._instance.OnCharacterDeselected -= HideToolTip;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Return))
+        {
+            GameObject statusEffect = Instantiate(_statusEffectPrefab);
+            statusEffect.transform.SetParent(_statusEffectParent.transform, false);
+            _statusEffects.Add(statusEffect);
+        }
+
+        if (Input.GetKeyUp(KeyCode.Backspace))
+        {
+            Destroy(_statusEffects.LastOrDefault());
+            _statusEffects.Remove(_statusEffects.LastOrDefault());
+        }
+    }
     public void BindEventEventOnTakeDamage(Character character)
     {
         character.OnTakeDamage += UpdateTooltip;
