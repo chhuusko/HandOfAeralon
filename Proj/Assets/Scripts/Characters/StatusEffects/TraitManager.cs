@@ -23,6 +23,11 @@ public class TraitManager
         _statusEffects.Remove(statusEffect);
     }
 
+    public void ClearStatusEffects()
+    {
+        _statusEffects.Clear();
+    }
+
     public bool ContainsStatusEffect<T>() where T : StatusEffect
     {
         return _statusEffects.Exists(e => e is T);
