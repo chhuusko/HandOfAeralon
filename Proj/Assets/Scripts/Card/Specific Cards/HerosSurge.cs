@@ -10,7 +10,7 @@ public class HerosSurge : Card
         Character targetCharacter = Selector._instance.GetTileUnderMouse().GetOccupantCharacter();
         if (targetCharacter != null && targetCharacter.GetFaction() == Faction.Friendly)
         {
-            //targetCharacter.GetStatusEffectManager().AddStatusEffect(new Haste(2));
+            targetCharacter.GetStatusEffectManager().AddStatusEffect(new Haste(2));
             targetCharacter.GetStatusEffectManager().AddStatusEffect(new Empowered(2));
         }
     }
