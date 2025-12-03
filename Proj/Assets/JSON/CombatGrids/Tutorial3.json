@@ -656,7 +656,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 3,
+            "_tileType": 2,
             "_tileIndex": {
                 "x": 4,
                 "y": 4
@@ -671,7 +671,7 @@
                 "y": 0.009999999776482582,
                 "z": 2.0
             },
-            "_bWalkable": true
+            "_bWalkable": false
         },
         {
             "_tileType": 4,
@@ -800,7 +800,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 2,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 4,
                 "y": 5
@@ -815,7 +815,7 @@
                 "y": 0.009999999776482582,
                 "z": 2.0
             },
-            "_bWalkable": false
+            "_bWalkable": true
         },
         {
             "_tileType": 1,
@@ -888,14 +888,14 @@
             },
             "_rotation": {
                 "x": 0.0,
-                "y": 0.0,
+                "y": -0.7071068286895752,
                 "z": 0.0,
-                "w": 1.0
+                "w": 0.7071068286895752
             },
-            "_baseHealthPoints": 0,
-            "_baseSpeed": 0,
-            "_baseDamage": 0,
-            "_baseMovementPoints": 0,
+            "_baseHealthPoints": 1,
+            "_baseSpeed": 1,
+            "_baseDamage": 1,
+            "_baseMovementPoints": 1,
             "_currentHealthPoints": 0,
             "_currentSpeed": 0,
             "_currentDamage": 0,
@@ -920,14 +920,14 @@
             },
             "_rotation": {
                 "x": 0.0,
-                "y": 0.0,
+                "y": -0.7071068286895752,
                 "z": 0.0,
-                "w": 1.0
+                "w": 0.7071068286895752
             },
-            "_baseHealthPoints": 0,
-            "_baseSpeed": 0,
-            "_baseDamage": 0,
-            "_baseMovementPoints": 0,
+            "_baseHealthPoints": 1,
+            "_baseSpeed": 1,
+            "_baseDamage": 1,
+            "_baseMovementPoints": 1,
             "_currentHealthPoints": 0,
             "_currentSpeed": 0,
             "_currentDamage": 0,
@@ -952,14 +952,14 @@
             },
             "_rotation": {
                 "x": 0.0,
-                "y": 0.0,
+                "y": -0.7071068286895752,
                 "z": 0.0,
-                "w": 1.0
+                "w": 0.7071068286895752
             },
-            "_baseHealthPoints": 0,
-            "_baseSpeed": 0,
-            "_baseDamage": 0,
-            "_baseMovementPoints": 0,
+            "_baseHealthPoints": 1,
+            "_baseSpeed": 1,
+            "_baseDamage": 1,
+            "_baseMovementPoints": 1,
             "_currentHealthPoints": 0,
             "_currentSpeed": 0,
             "_currentDamage": 0,
