@@ -67,11 +67,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e4480b38edbea24491984ea0a14d024, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _containedCard: {fileID: 11400000, guid: e5cbee363fa51c6418a17c1c26eb8a77, type: 2}
+  _containedCard: {fileID: 0}
   _particleDrag: {fileID: 1361114507126267239, guid: cf874b3f9cbf38e43979aef774e8339f,
     type: 3}
   _particleDrop: {fileID: 1361114507126267239, guid: acb8268e254158d408af698f26801663,
     type: 3}
+  angle: {x: 1, y: 1, z: 1}
+  speed: 2
 --- !u!114 &6192851031653505733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1239,7 +1241,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Surging Might
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 32bce4bf390578c4bb61bdcff6ab18ba, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: -1081037343011590677, guid: 32bce4bf390578c4bb61bdcff6ab18ba,
     type: 2}
   m_fontSharedMaterials: []
