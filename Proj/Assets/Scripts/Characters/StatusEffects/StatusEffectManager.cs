@@ -66,6 +66,11 @@ public class StatusEffectManager : MonoBehaviour
         _traitManager.RemoveStatusEffect(statusEffect);
     }
 
+    public int ClearStatusEffects(StatusEffectType type)
+    {
+        return _traitManager.ClearStatusEffects(type);
+    }
+
     public bool ContainsStatusEffect<T>() where T : StatusEffect
     {
         return _traitManager.ContainsStatusEffect<T>();
