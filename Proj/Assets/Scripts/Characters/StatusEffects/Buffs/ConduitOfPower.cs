@@ -4,7 +4,7 @@ public class ConduitOfPower : StatusEffect
 {
     float combinedDamageModifier;
 
-    public override void OnCardPlayed()
+    public override void OnTargetedByCard()
     {
         var data = Data as DamageModifyingData;
 
