@@ -423,7 +423,7 @@ GameObject:
   - component: {fileID: 7047877838103067808}
   - component: {fileID: 565155451732103811}
   m_Layer: 11
-  m_Name: Trait
+  m_Name: StatusEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -497,6 +497,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6763087308039172735}
   - component: {fileID: 3572915942919194896}
+  - component: {fileID: 1015048686639924016}
   m_Layer: 11
   m_Name: StatusEffectElement
   m_TagString: Untagged
@@ -550,6 +551,21 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1015048686639924016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7810270610449101031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3b1e386ffc7176449a41b0b1cd66cce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _statusEffectIcon: {fileID: 2191191436495859288}
+  _statusEffectTitle: {fileID: 1303560638027612719}
+  _statusEffectTurns: {fileID: 306765410478680900}
 --- !u!1 &7997983691743476987
 GameObject:
   m_ObjectHideFlags: 0

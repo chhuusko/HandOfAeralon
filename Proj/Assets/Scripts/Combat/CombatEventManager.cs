@@ -9,6 +9,7 @@ public static class CombatEventManager
     public static event Action<CombatState> OnCombatStateChange;
     public static event Action<CombatTurn> OnCombatTurnChange;
 
+    // Enter Combat States
     public static event Action OnEnterCombatStateLoadNextLevel;
     public static event Action OnEnterCombatStateIntroCinematic;
     public static event Action OnEnterCombatStatePlaceCharacter;
@@ -16,6 +17,7 @@ public static class CombatEventManager
     public static event Action OnEnterCombatStateEndTurn;
     public static event Action OnEnterCombatStateEndCombat;
 
+    // Exit Combat States
     public static event Action OnExitCombatStateLoadNextLevel;
     public static event Action OnExitCombatStateIntroCinematic;
     public static event Action OnExitCombatStatePlaceCharacter;
@@ -32,6 +34,9 @@ public static class CombatEventManager
     public static event Action OnAbilityCast;
     
     public static event Action<bool> OnCharacterMove;
+
+    public static event Action<Character, StatusEffect> OnStatusEffectAppliedToCharacter;
+    public static event Action<Character, StatusEffect> OnStatusEffectExpiredOnCharacter;
 
     public static void InvokeCombatStateChanged(CombatState newState)
         => OnCombatStateChange?.Invoke(newState);
@@ -87,4 +92,11 @@ public static class CombatEventManager
     
     public static void InvokeOnCharacterMove(bool isMoving)
         => OnCharacterMove?.Invoke(isMoving);
+
+    public static void InvokeOnStatusEffectAppliedToCharacter(Character character, StatusEffect statusEffect)
+        => OnStatusEffectAppliedToCharacter?.Invoke(character, statusEffect);
+
+    public static void InvokeOnStatusEffectExpiredOnCharacter(Character character, StatusEffect statusEffect)
+    => OnStatusEffectExpiredOnCharacter?.Invoke(character, statusEffect);
+
 }

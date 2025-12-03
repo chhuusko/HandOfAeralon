@@ -39,11 +39,16 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
     [SerializeField] private GameObject _statusEffectPrefab;
     [SerializeField] private List<GameObject> _statusEffects; // Number of status effects is dynamic so convenient with a list
 
+
     private void Start()
     {
         Selector s = Selector._instance;
         s.OnCharacterSelected   += UpdateTooltip;
         s.OnCharacterDeselected += HideToolTip;
+        
+        // NOTE (Calle): Tooltip only needs to be updated directly if the selected character is the one
+        // getting a status effect applied, otherwise it will be update when selecting the one it was applied to.
+        CombatEventManager.OnStatusEffectAppliedToCharacter += UpdateSelectedCharacter;
 
         for (int i = 0; i < _traitElements.Length; i++)
         {
@@ -58,10 +63,12 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
     {
         
     }
+
     private void OnDisable()
     {
-        Selector._instance.OnCharacterSelected   -= UpdateTooltip;
-        Selector._instance.OnCharacterDeselected -= HideToolTip;
+        Selector._instance.OnCharacterSelected              -= UpdateTooltip;
+        Selector._instance.OnCharacterDeselected            -= HideToolTip;
+        CombatEventManager.OnStatusEffectAppliedToCharacter -= UpdateSelectedCharacter;
     }
 
     private void Update()
@@ -79,11 +86,13 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
             _statusEffects.Remove(_statusEffects.LastOrDefault());
         }
     }
+
     public void BindEventEventOnTakeDamage(Character character)
     {
         character.OnTakeDamage += UpdateTooltip;
 
     }
+
     public void UnBindEventEventOnTakeDamage(Character character)
     {
         character.OnTakeDamage -= UpdateTooltip;
@@ -106,8 +115,6 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         {
             _characterStatValueFieldTMP.text += value + "\n";
         }
-
-
     }
 
     public void RebuildCharacterStatTooltip(Character character)
@@ -136,13 +143,23 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         _layout.SetActive(false);
     }
 
-    
+    private void UpdateSelectedCharacter(Character characterSubject, StatusEffect statusEffect)
+    {
+        Character selectedCharacter = Selector._instance.GetSelectedCharacter();
+
+        if(selectedCharacter == characterSubject)
+        {
+            UpdateTooltip(characterSubject);
+        }
+    }
+
     private void UpdateTooltip(Character character)
     {
         _layout.SetActive(true);
         UpdateCharacterHeaderInfo(character);
         RebuildCharacterStatTooltip(character);
         UpdateCharacterTraits(character);
+        UpdateCharacterStatusEffects(character);
     }
 
     private void UpdateCharacterHeaderInfo(Character character)
@@ -156,6 +173,58 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
     private void UpdateCharacterTraits(Character character)
     {
         IReadOnlyList<Trait> traits = character.GetTraitManager().GetAllTraits();
+        for(int i = 0; i < traits.Count; i++)
+        {
+            Trait trait = _traitElements[i].GetComponent<Trait>();
+            trait = traits[i];
+        }
+    }
+
+    private void UpdateCharacterStatusEffects(Character character)  
+    {
+        IReadOnlyList<StatusEffect> statusEffects = character.GetStatusEffectManager().GetAllStatusEffects();
+
+        // NOTE (Calle): If a character has no statuseffects, destroy and remove all effects and clear the 
+        // list.
+        if(statusEffects.Count == 0)
+        {
+            foreach(GameObject statusEffect in _statusEffects)
+            {
+                Destroy(statusEffect);
+            }
+            _statusEffects.Clear();
+        }
+
+        foreach (StatusEffect statusEffect in statusEffects) 
+        {
+            // NOTE (Calle): First check if the status effect exist, in that case, just set effect data on
+            // each UI element.
+            string statusEffectName = statusEffect.Data.name;
+            Transform existingStatusEffectTransform = _statusEffectParent.transform.Find(statusEffectName);
+            
+            if (existingStatusEffectTransform)
+            {
+                GameObject existingStatusEffect = existingStatusEffectTransform.gameObject;
+                StatusEffectElement existingElementScript = existingStatusEffect.GetComponent<StatusEffectElement>();
+                existingElementScript.SetTurns(statusEffect.Duration);
+                continue;
+            }
+
+            // NOTE (Calle): If the effect didn't exist, instantiate a new one. 
+            GameObject newStatusEffectElement = Instantiate(_statusEffectPrefab.gameObject);
+            StatusEffectElement elementScript = newStatusEffectElement.GetComponent<StatusEffectElement>();
+
+            _statusEffects.Add(newStatusEffectElement);
+            
+            newStatusEffectElement.transform.SetParent(_statusEffectParent.transform, false);
+            newStatusEffectElement.name = statusEffect.Data.name;
+
+            
+            elementScript.SetIcon(statusEffect.Data.Icon);
+            elementScript.SetTitle(statusEffect.Data.name);
+            elementScript.SetTurns(statusEffect.Duration);
+        }
+
     }
 
     private void UpdateTooltip(int health, GameObject character)

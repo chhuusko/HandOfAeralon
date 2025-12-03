@@ -1545,7 +1545,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 167.14003}
+  m_AnchoredPosition: {x: 0, y: 11.139969}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1247270051888329956
@@ -1844,8 +1844,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7385472561311656255}
   m_HandleRect: {fileID: 4142872978523023068}
   m_Direction: 2
-  m_Value: 0.00000009781275
-  m_Size: 0.7621951
+  m_Value: 1
+  m_Size: 0.9578544
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2645,7 +2645,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8a4bb01f598837e47aa5ffad69564467, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4c438b9b7f2174044949b1584b40594c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4818,7 +4818,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _layout: {fileID: 6716840115242357755}
-  _characterIcon: {fileID: 8556312108548137455}
+  _characterIcon: {fileID: 577855634324166770}
   _characterClassName: {fileID: 8766055436067940056}
   _characterStatValueFieldTMP: {fileID: 2310599192842722050}
   _traitParent: {fileID: 5754223381464925081}

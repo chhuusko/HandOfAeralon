@@ -60,12 +60,14 @@ public class StatusEffectManager : MonoBehaviour
         
         _traitManager.AddStatusEffect(statusEffect);
         statusEffect.Initialize(_character, this);
+        CombatEventManager.InvokeOnStatusEffectAppliedToCharacter(_character, statusEffect);
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect)
     {
         statusEffect.OnExpire();
         _traitManager.RemoveStatusEffect(statusEffect);
+        CombatEventManager.InvokeOnStatusEffectExpiredOnCharacter(_character, statusEffect);
     }
 
     public bool ContainsStatusEffect<T>() where T : StatusEffect
