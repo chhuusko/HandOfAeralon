@@ -47,7 +47,8 @@ MonoBehaviour:
   AIEndTurn:
     m_PersistentCalls:
       m_Calls: []
-  controlledFaction: 1
-  _bDebug: 0
-  _bAutoPlay: 0
-  attackSound: {fileID: 8300000, guid: c13003a65da4ef2448f34794fff8fccd, type: 3}
+  _barbData: {fileID: 11400000, guid: 379db16b03291a04c8f6aa4262adf05f, type: 2}
+  _rogueData: {fileID: 11400000, guid: fc96843e5aaf46f4b8f16561c40bde52, type: 2}
+  _sorcData: {fileID: 11400000, guid: c91f57a064803f447a57de754b74d82d, type: 2}
+  _bardData: {fileID: 11400000, guid: e8d14e2fc1a8ad842ad4d20b7eb74775, type: 2}
+  _controlledFaction: 1

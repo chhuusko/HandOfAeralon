@@ -156,14 +156,17 @@ public class Character : MonoBehaviour
         // Enemies aren't created via character data, so traits have to be created at start.
         _statusEffectManager.SetTraitManager(_data?.TraitManager);
         _data?.InitializeTraits();
-        
-        UpdateFactionIndicator();
 
         if (!TryGetComponent(out _abilityHandler))
         {
             Debug.LogError("Character is missing AbilityHandler component!");
             return;
         }
+    }
+
+    private void Start()
+    {
+        UpdateFactionIndicator();
     }
 
     private void UpdateFactionIndicator()
