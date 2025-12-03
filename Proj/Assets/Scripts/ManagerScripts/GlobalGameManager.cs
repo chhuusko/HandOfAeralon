@@ -14,6 +14,10 @@ public struct GameData
     public List<Character> heroList;
     public List<Card> cardList;
 
+    // misc
+    public int reapersLedgerKills;
+
+
 }
 [CreateAssetMenu(fileName = "GlobalGameManager", menuName = "Manager/GlobalGameManager")]
 public class GlobalGameManager : ScriptableObject
@@ -46,7 +50,7 @@ public class GlobalGameManager : ScriptableObject
     }
     private void GetCombatCoins()
     {
-        _currentGame.coins += 100;
+        _currentGame.coins += 200;
     }
 
     private void RemoveCharacter(Character obj)
@@ -119,6 +123,7 @@ public class GlobalGameManager : ScriptableObject
         _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
         DebugLog.AlexLog($"_currentGame.cardList.Count");
         _currentGame.coins = 100;
+        _currentGame.reapersLedgerKills = 0;
     }
     public void SaveCards(List<Card> cards)
     {
@@ -127,6 +132,10 @@ public class GlobalGameManager : ScriptableObject
     public void ChangeCoins(int amount)
     {
         _currentGame.coins += amount;
+    }
+    public void ReapersLedgerKillChange(int change)
+    {
+        _currentGame.reapersLedgerKills += change;
     }
 }
 

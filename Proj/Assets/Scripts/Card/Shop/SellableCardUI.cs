@@ -57,6 +57,6 @@ public class SellableCardUI : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     private void Sell()
     {
         GlobalGameManager.GetInstance().GetGameData().cardList.Remove(_card);
-        Shop.GetInstance().ChangeCoins(10);
+        Shop.GetInstance().ChangeCoins(-30);
     }
 }

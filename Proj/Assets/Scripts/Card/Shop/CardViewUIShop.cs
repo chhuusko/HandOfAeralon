@@ -15,9 +15,6 @@ public class CardViewUIShop : CardViewUI
         {
             _cardListUI.Add(Instantiate(_cardUI, _cardContent));
             _cardListUI[i].GetComponent<SellableCardUI>().SetCard(newCardList[i]);
-            int layer = i / 5;
-            Vector3 position = transform.position + new Vector3(-600f + (i % 5 * 300f), (layer - 1) * -400f, 0);
-            _cardListUI[i].transform.position = position;
         }
     }
 }
