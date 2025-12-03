@@ -44,7 +44,7 @@ public class Shop : MonoBehaviour
         LoadBuyCharacter();
     }
 
-    private void LoadParty()
+    public void LoadParty()
     {
         if (_partyPortraitInstances.Count > 0)
         {
