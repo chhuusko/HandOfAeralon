@@ -20,4 +20,9 @@ public class ConduitOfPower : StatusEffect
     {
         damage *= combinedDamageModifier;
     }
+
+    public override void OnCombatEnded()
+    {
+        Manager.RemoveStatusEffect(this);
+    }
 }
