@@ -6,9 +6,8 @@ using UnityEngine;
 public class DissonantChordAOE : RoundAOEAbility
 {
     [Header("- Ability Specific values -")]
-    [SerializeField] private int _hasteStacks = 2;
-    [SerializeField] private int _manaGain = 1;
-    [SerializeField] private int _enemiseDebuffedTilBonus = 2;
+
+    [SerializeField] private int _enemiesDebuffedTilBonus = 2;
 
     // Description
 
@@ -40,7 +39,7 @@ public class DissonantChordAOE : RoundAOEAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null || (castingCharacter.GetFaction() != Faction.Friendly)) return;
 
-        if (enemiesDebuffed >= _enemiseDebuffedTilBonus)
+        if (enemiesDebuffed >= _enemiesDebuffedTilBonus)
         {
             CardHandManager.GetInstance().AddCardFromDeck();
         }
@@ -57,10 +56,10 @@ public class DissonantChordAOE : RoundAOEAbility
 
         if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
         {
-           // statusEffectManager.);
+            int buffsCleared = statusEffectManager.ClearStatusEffects(StatusEffectType.Buff);
 
             if(castingCharacter.GetFaction() != affectedCharacter.GetFaction()){
-                enemiesDebuffed++;
+                enemiesDebuffed+=buffsCleared;
             }
         }
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, null);
