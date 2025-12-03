@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _abilityName: Throwing Knives
   _icon: {fileID: 21300000, guid: e7d2c4ccaf4933b47b734c7e029b2498, type: 3}
-  _range: 0
+  _range: 1
   _cooldown: 2
   _description: "Throw knives in a line, dealing (60% + (10% \xD7 current hand size)
     \xD7 Damage) Physical damage. Every character hit has a 60% chance to gain 3
