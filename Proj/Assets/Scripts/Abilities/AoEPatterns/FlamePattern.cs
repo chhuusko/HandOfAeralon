@@ -44,7 +44,7 @@ public class FlamePattern : DirectedAOEPattern
         }
 
         Vector2Int currentTileCoordinate = targetTile.GetTileIndex();
-        for (int i = 1; i<_totalLength; i++)
+        for (int i = 0; i<_totalLength; i++)
         {
             var tileObj = CombatGrid._instance.GetTileAtCoord(currentTileCoordinate.x, currentTileCoordinate.y);
 
