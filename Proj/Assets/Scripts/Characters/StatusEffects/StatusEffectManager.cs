@@ -32,8 +32,6 @@ public class StatusEffectManager : MonoBehaviour
         {
             _traitManager = _character.GetTraitManager();
         }
-        
-        AddStatusEffect(new Stealth());
     }
 
     private void OnDisable()
