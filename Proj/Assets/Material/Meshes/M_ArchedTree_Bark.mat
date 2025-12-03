@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4889280041141246203
+--- !u!114 &-2002822280736619426
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_IvyStem
+  m_Name: M_ArchedTree_Bark
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -43,11 +43,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 8ba7248e0e582844ca6f2eccc70d80ec, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9a58dd5d1843a7c449f1f7dab1a2f6c3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 69c89f8c70727ec4ba50722b6026bb23, type: 3}
+        m_Texture: {fileID: 2800000, guid: cadf2b9116382ee42b5b95d6dc8c9733, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -67,19 +67,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 8ba7248e0e582844ca6f2eccc70d80ec, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9a58dd5d1843a7c449f1f7dab1a2f6c3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: 8aa517e1a3a13674dac073c3391d6174, type: 3}
+        m_Texture: {fileID: 2800000, guid: 09c138f3cab96e6489a97ec06d3bffb4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 2800000, guid: 8aa517e1a3a13674dac073c3391d6174, type: 3}
+        m_Texture: {fileID: 2800000, guid: 09c138f3cab96e6489a97ec06d3bffb4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
-        m_Texture: {fileID: 2800000, guid: 8aa517e1a3a13674dac073c3391d6174, type: 3}
+        m_Texture: {fileID: 2800000, guid: 09c138f3cab96e6489a97ec06d3bffb4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -123,7 +123,7 @@ Material:
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0.703
+    - _Smoothness: 0.9
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
