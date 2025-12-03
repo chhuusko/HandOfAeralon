@@ -27,6 +27,11 @@ public class TraitManager
         return _statusEffects.Exists(e => e is T);
     }
 
+    public StatusEffect GetStatusEffect<T>() where T : StatusEffect
+    {
+        return _statusEffects.Find(e => e.GetType() == typeof(T));
+    }
+
     public IReadOnlyList<StatusEffect> GetAllEffects()
     {
         return _statusEffects;

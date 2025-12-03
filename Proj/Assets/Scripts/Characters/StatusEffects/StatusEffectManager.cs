@@ -73,6 +73,11 @@ public class StatusEffectManager : MonoBehaviour
         return _traitManager.ContainsStatusEffect<T>();
     }
 
+    public StatusEffect GetStatusEffect<T>() where T : StatusEffect
+    {
+        return _traitManager.GetStatusEffect<T>();
+    }
+
     public IReadOnlyList<StatusEffect> GetAllEffects()
     {
         return _traitManager.GetAllEffects();
