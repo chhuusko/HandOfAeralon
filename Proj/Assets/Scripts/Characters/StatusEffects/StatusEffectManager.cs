@@ -14,6 +14,7 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
         CombatEventManager.OnAbilityDataCreated += OnAbilityUsed;
+        CombatEventManager.OnEnterCombatStateEndCombat += OnCombatEnded;
 
         CardHandManager.onTargetCharacter += OnCardPlayed;
     }
@@ -32,6 +33,8 @@ public class StatusEffectManager : MonoBehaviour
         {
             _traitManager = _character.GetTraitManager();
         }
+        
+        // AddStatusEffect(new Stealth(3));
     }
 
     private void OnDisable()
@@ -39,6 +42,7 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
         CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
+        CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
         
         CardHandManager.onTargetCharacter -= OnCardPlayed;
     }
@@ -199,6 +203,17 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
+    public void OnCombatEnded()
+    {
+        foreach (var statusEffect in _traitManager.GetAllEffects())
+        {
+            if (statusEffect is Trait trait)
+            {
+                trait.OnStartCombat();
+            }
+        } 
+    }
+
     public float ModifyIncomingDamage(float damage, Ability ability)
     {
         if (!_character)
@@ -259,6 +274,11 @@ public class StatusEffectManager : MonoBehaviour
     // Traits.
     private void OnStartCombat()
     {
+        if (!_character)
+        {
+            return;
+        }
+        
         foreach (var statusEffect in _traitManager.GetAllEffects())
         {
             if (statusEffect is Trait trait)
@@ -270,6 +290,11 @@ public class StatusEffectManager : MonoBehaviour
     
     public void OnTakeDamage()
     {
+        if (!_character)
+        {
+            return;
+        }
+        
         foreach (var trait in _traitManager.GetAllTraits())
         {
             trait.OnTakeDamage();
@@ -278,6 +303,11 @@ public class StatusEffectManager : MonoBehaviour
 
     private void OnAbilityUsed(AbilityExecutionData data)
     {
+        if (!_character)
+        {
+            return;
+        }
+        
         if (data.Caster != _character)
         {
             return;

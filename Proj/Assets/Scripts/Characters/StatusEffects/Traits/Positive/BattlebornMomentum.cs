@@ -4,10 +4,6 @@ public class BattlebornMomentum : Trait
 {
     private int _abilitiesUsed;
     private bool _effectApplied;
-    
-    public BattlebornMomentum(int duration) : base(duration)
-    {
-    }
 
     public override void OnStartCombat()
     {

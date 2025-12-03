@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class Stealth : StatusEffect
 {
+    public Stealth(int duration)
+    {
+    }
+    
     public override void OnApply()
     {
         Character.IsTargetable = false;

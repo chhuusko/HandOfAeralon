@@ -18,7 +18,7 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private void Awake()
     {
         _fillImage.fillAmount = 0;
-
+        
     }
     private void Update()
     {
