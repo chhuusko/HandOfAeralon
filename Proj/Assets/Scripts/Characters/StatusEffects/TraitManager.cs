@@ -23,9 +23,25 @@ public class TraitManager
         _statusEffects.Remove(statusEffect);
     }
 
-    public void ClearStatusEffects()
+    public int ClearStatusEffects(StatusEffectType type)
     {
-        _statusEffects.Clear();
+        int amount = 0;
+        List<StatusEffect> statusEffectsToRemove = new();
+
+        foreach (var statusEffect in _statusEffects)
+        {
+            if (statusEffect.Data.Type == type)
+            {
+                statusEffectsToRemove.Add(statusEffect);
+                amount++;
+            }
+        }
+
+        foreach (var statusEffect in statusEffectsToRemove)
+        {
+            _statusEffects.Remove(statusEffect);
+        }
+        return amount;
     }
 
     public bool ContainsStatusEffect<T>() where T : StatusEffect
