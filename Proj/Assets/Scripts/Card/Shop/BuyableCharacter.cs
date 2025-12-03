@@ -18,7 +18,7 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private void Awake()
     {
         _fillImage.fillAmount = 0;
-
+        
     }
     private void Update()
     {
@@ -55,6 +55,7 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private void Bought()
     {
         GlobalGameManager.GetInstance().GetGameData().heroDataList.Add(_characterData);
+        Shop.GetInstance().LoadParty();
         Shop.GetInstance().ChangeCoins(-10);
     }
     private bool CanAfford()

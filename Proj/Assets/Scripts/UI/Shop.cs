@@ -5,10 +5,11 @@ using TMPro;
 
 public class Shop : MonoBehaviour
 {
-    [SerializeField] private static Shop _instance;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private static Shop _instance;
+
     [SerializeField] public GameObject _mainCanvas, _overlayCanvas;
     [SerializeField] private GameObject _sellTab;
+    [SerializeField] private GameObject _deckTab;
     [SerializeField] private TextMeshProUGUI _balanceText;
     [SerializeField] private Transform[] _purchasCardPos;
     [SerializeField] private GameObject _purchaseCardPrefab;
@@ -17,11 +18,15 @@ public class Shop : MonoBehaviour
     [SerializeField] private ClassDatabase _classDatabase;
     [SerializeField] private Transform _partyHolder;
     [SerializeField] private GameObject _partyPortrait;
-    private List<Card> unlockedCards;
+    [SerializeField] private TextMeshProUGUI _partyMembersText;
+
+    private List<Card> _unlockedCards;
     private List<GameObject> _buyableItemInScene;
+    private List<GameObject> _partyPortraitInstances;
 
+    //Costs
     [SerializeField] int _healPrice;
-
+    [SerializeField] int _refreshPrice;
     public static Shop GetInstance()
     {
         return _instance;
@@ -30,20 +35,33 @@ public class Shop : MonoBehaviour
     {
         _instance = this;
         _buyableItemInScene = new List<GameObject>();
-        unlockedCards = CardsUnlocked.GetInstance().GetUnlockedCards();
+        _partyPortraitInstances = new List<GameObject>();
+        _unlockedCards = CardsUnlocked.GetInstance().GetUnlockedCards();
+
         UpdateMoneyUI();
         LoadParty();
         LoadBuyCard();
         LoadBuyCharacter();
-
     }
 
-    private void LoadParty()
+    public void LoadParty()
     {
+        if (_partyPortraitInstances.Count > 0)
+        {
+            foreach (GameObject partyMembers in _partyPortraitInstances)
+            {
+                Destroy(partyMembers);
+            }
+            _partyPortraitInstances.Clear();
+        }
         foreach (CharacterData character in GlobalGameManager.GetInstance().GetGameData().heroDataList)
         {
-            Instantiate(_partyPortrait, _partyHolder);
+            GameObject newC = Instantiate(_partyPortrait, _partyHolder);
+            newC.GetComponent<PartyMemberUI>().SetUIElements(character);
+            _partyPortraitInstances.Add(newC);
         }
+        _partyMembersText.text = "Party (" + GlobalGameManager.GetInstance().GetGameData().heroDataList.Count + "/4)";
+
     }
 
     private void LoadBuyCharacter()
@@ -68,7 +86,7 @@ public class Shop : MonoBehaviour
     }
     public Card GetRandomUnlockedCard()
     {
-        return unlockedCards[Random.Range(0, unlockedCards.Count)];
+        return _unlockedCards[Random.Range(0, _unlockedCards.Count)];
     }
     public CharacterData GetRandomCharacter()
     {
@@ -80,19 +98,29 @@ public class Shop : MonoBehaviour
         _sellTab.GetComponent<CardViewUI>().UpdateCards(GlobalGameManager.GetInstance().GetGameData().cardList);
         _sellTab.SetActive(true);
     }
+    public void OpenDeckTab()
+    {
+        _deckTab.GetComponent<CardViewUI>().UpdateCards(GlobalGameManager.GetInstance().GetGameData().cardList);
+        _deckTab.SetActive(true);
+    }
     public void SellCard()
     {
         
     }
     public void Refresh()
     {
-        foreach (GameObject item in _buyableItemInScene)
+        if (CanAfford(_refreshPrice))
         {
-            Destroy(item.gameObject);
+            foreach (GameObject item in _buyableItemInScene)
+            {
+                Destroy(item.gameObject);
+            }
+            _buyableItemInScene.Clear();
+            LoadBuyCard();
+            LoadBuyCharacter();
+            Bought(_refreshPrice);
         }
-        _buyableItemInScene.Clear();
-        LoadBuyCard();
-        LoadBuyCharacter();
+        
     }
 
     public void ExitShop()
@@ -116,16 +144,21 @@ public class Shop : MonoBehaviour
             List<CharacterData> heroList = GlobalGameManager.GetInstance().GetGameData().heroDataList;
             foreach(CharacterData character in heroList)
             {
+                Debug.Log((int)(character.BaseHealthPoints * 0.5f) + "healed.");
                 character.Heal( (int)(character.BaseHealthPoints*0.5f));
+                Debug.Log(character.BaseHealthPoints + "current.");
             }
+            Bought(_healPrice);
         }
+        LoadParty();
     }
     public bool CanAfford(int cost)
     {
-        return GlobalGameManager.GetInstance().GetGameData().coins > cost;
+        return GlobalGameManager.GetInstance().GetGameData().coins >= cost;
     }
     public void Bought(int cost)
     {
         GlobalGameManager.GetInstance().ChangeCoins(-cost);
+        UpdateMoneyUI();
     }
 }

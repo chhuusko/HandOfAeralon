@@ -23,7 +23,13 @@ public class CombatMenuManager : MonoBehaviour
 
     void Start()
     {
-        _endCombatMenuCanvas.enabled = false;    
+        _endCombatMenuCanvas.enabled = false;
+        _endCombatMenuAnimator = _globalVolume.GetComponent<Animator>();
+        if (_endCombatMenuAnimator == null)
+            DebugLog.CJLogError("GlobalVolume has no Animator Comonent!");
+        DebugLog.CJLogError("GlobalVolume has no Animator Comonent!");
+        DebugLog.CJLogWarning("GlobalVolume has no Animator Comonent!");
+
     }
 
     private void Update()

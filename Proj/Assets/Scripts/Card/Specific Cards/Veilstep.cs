@@ -9,7 +9,7 @@ public class Veilstep : Card
         Character character = Selector._instance.GetTileUnderMouse().GetOccupantCharacter();
         if (character != null)
         {
-            //TODO needs stealth
+            character.GetStatusEffectManager().AddStatusEffect(new Stealth(2));
         }
     }
 }

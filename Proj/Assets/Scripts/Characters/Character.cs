@@ -120,6 +120,7 @@ public class Character : MonoBehaviour
     [Header("State")] 
     public bool CanMove { get; set; } = true;
     public bool CanAttack { get; set; } = true;
+    public bool IsTargetable { get; set; } = true;
 
     [Header("Status effects")]
     private StatusEffectManager _statusEffectManager;
@@ -191,7 +192,7 @@ public class Character : MonoBehaviour
         CombatTooltipManager combatTooltipManager = CombatTooltipManager.GetInstance();
         if (combatTooltipManager != null)
         {
-            combatTooltipManager.GetCharacterLayout().BindEventEventOnTakeDamage(this);
+            combatTooltipManager.GetCharacterLayout().UnBindEventEventOnTakeDamage(this);
         }
     }
 

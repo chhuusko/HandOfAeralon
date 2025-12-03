@@ -10,6 +10,10 @@ public class CrimsonStrike : Card
         if (targetCharacter != null)
         {
             targetCharacter.TakeDamage((int)(targetCharacter.GetMaxHealth() * 0.25f));
+            if (targetCharacter.GetCurrentHealth() <= 0)
+            {
+                CardHandManager.GetInstance().ChangeMana(2);
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
@@ -18,6 +19,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     Vector3 _startPosition, _hoverEndPosition;
     float _hoverDistance = 120f;
     private bool _isDragging;
+
     private void Awake()
     {
         _controller = new InputController();
@@ -31,10 +33,18 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private void OnEnable()
     {
         _controller.Enable();
+        _controller.Player.Cancel.performed += CancelUse;
     }
+
     private void OnDisable()
     {
         _controller.Disable();
+        _controller.Player.Cancel.performed -= CancelUse;
+    }
+
+    private void CancelUse(InputAction.CallbackContext context)
+    {
+        CancelUse();
     }
     private void FixedUpdate()
     {
@@ -103,6 +113,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private void CancelUse()
     {
         Destroy(_spawnedParticle);
+        _isDragging = false;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
