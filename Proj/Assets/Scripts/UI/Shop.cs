@@ -5,8 +5,8 @@ using TMPro;
 
 public class Shop : MonoBehaviour
 {
-    [SerializeField] private static Shop _instance;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private static Shop _instance;
+
     [SerializeField] public GameObject _mainCanvas, _overlayCanvas;
     [SerializeField] private GameObject _sellTab;
     [SerializeField] private TextMeshProUGUI _balanceText;
@@ -17,8 +17,11 @@ public class Shop : MonoBehaviour
     [SerializeField] private ClassDatabase _classDatabase;
     [SerializeField] private Transform _partyHolder;
     [SerializeField] private GameObject _partyPortrait;
+    [SerializeField] private TextMeshProUGUI _partyMembersText;
+
     private List<Card> unlockedCards;
     private List<GameObject> _buyableItemInScene;
+    private List<GameObject> _partyPortraitInstances;
 
     [SerializeField] int _healPrice;
 
@@ -30,20 +33,32 @@ public class Shop : MonoBehaviour
     {
         _instance = this;
         _buyableItemInScene = new List<GameObject>();
+        _partyPortraitInstances = new List<GameObject>();
         unlockedCards = CardsUnlocked.GetInstance().GetUnlockedCards();
         UpdateMoneyUI();
         LoadParty();
         LoadBuyCard();
         LoadBuyCharacter();
-
     }
 
     private void LoadParty()
     {
+        if (_partyPortraitInstances.Count > 0)
+        {
+            foreach (GameObject partyMembers in _partyPortraitInstances)
+            {
+                Destroy(partyMembers);
+            }
+            _partyPortraitInstances.Clear();
+        }
         foreach (CharacterData character in GlobalGameManager.GetInstance().GetGameData().heroDataList)
         {
-            Instantiate(_partyPortrait, _partyHolder);
+            GameObject newC = Instantiate(_partyPortrait, _partyHolder);
+            newC.GetComponent<PartyMemberUI>().SetUIElements(character);
+            _partyPortraitInstances.Add(newC);
         }
+        _partyMembersText.text = "Party (" + GlobalGameManager.GetInstance().GetGameData().heroDataList.Count + "/4)";
+
     }
 
     private void LoadBuyCharacter()
@@ -116,9 +131,12 @@ public class Shop : MonoBehaviour
             List<CharacterData> heroList = GlobalGameManager.GetInstance().GetGameData().heroDataList;
             foreach(CharacterData character in heroList)
             {
+                Debug.Log((int)(character.BaseHealthPoints * 0.5f) + "healed.");
                 character.Heal( (int)(character.BaseHealthPoints*0.5f));
+                Debug.Log(character.BaseHealthPoints + "current.");
             }
         }
+        LoadParty();
     }
     public bool CanAfford(int cost)
     {
