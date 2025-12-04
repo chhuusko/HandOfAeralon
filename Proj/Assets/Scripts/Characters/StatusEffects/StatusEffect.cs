@@ -6,7 +6,7 @@ public abstract class StatusEffect
 {
     [SerializeField] private string _name;
     public string Name => _name;
-    public int Duration { get; protected set; }
+    public int Duration { get; set; }
     
     protected Character Character { get; private set; }
     protected StatusEffectManager Manager { get; private set; }
