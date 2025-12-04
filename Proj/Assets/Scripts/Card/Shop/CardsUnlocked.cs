@@ -36,7 +36,6 @@ public class CardsUnlocked : ScriptableObject
         cardsUnlocked = new CardsUnlockedStatus[allCards.GetCards().Length];
         for (int i = 0; i < allCards.GetCards().Length; i++)
         {
-            Debug.Log("added");
             cardsUnlocked[i].card = allCards.GetCards()[i];
             cardsUnlocked[i].isUnlocked = false;
         }

@@ -70,16 +70,16 @@ public class StatusEffectDataRegistry : ScriptableObject
         return _lookup.Values.ToList();
     }
 
-    public IReadOnlyList<TraitData> GetAllTraits()
+    private IReadOnlyList<StatusEffectData> GetAllTraits()
     {
-        return _entries.OfType<TraitData>().ToList();
+        return _entries.Where(e => e.Type == StatusEffectType.Trait).ToList();
     }
 
-    public IReadOnlyList<TraitData> GetAllGlobalTraitsOfType(bool isPositive)
+    public IReadOnlyList<StatusEffectData> GetAllGlobalTraitsOfType(bool isPositive)
     {
-        List<TraitData> traitsOfType = new();
+        List<StatusEffectData> traitsOfType = new();
 
-        foreach (TraitData trait in GetAllTraits())
+        foreach (StatusEffectData trait in GetAllTraits())
         {
             if (trait.Class == CharacterClass.None && trait.IsPositive == isPositive)
             {
@@ -90,11 +90,11 @@ public class StatusEffectDataRegistry : ScriptableObject
         return traitsOfType;
     }
 
-    public IReadOnlyList<TraitData> GetAllClassTraits(CharacterData character)
+    public IReadOnlyList<StatusEffectData> GetAllClassTraits(CharacterData character)
     {
-        List<TraitData> traits = new();
-
-        foreach (TraitData trait in GetAllTraits())
+        List<StatusEffectData> traits = new();
+        
+        foreach (StatusEffectData trait in GetAllTraits())
         {
             if (trait.Class == character.CharacterClass)
             {

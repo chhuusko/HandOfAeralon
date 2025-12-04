@@ -9,19 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f872446e8a2c5514f8d9aaa128223ab8, type: 3}
-  m_Name: DissonantChord_Ability
+  m_Script: {fileID: 11500000, guid: e38bd2ce35ac95243926653f69e1e205, type: 3}
+  m_Name: RoarOfTheAncients_Ability
   m_EditorClassIdentifier: 
-  _abilityName: Dissonant Chord
-  _icon: {fileID: 21300000, guid: abb24042aa496f44288a124f024798e4, type: 3}
-  _range: 6
+  _abilityName: Roar of the Ancients
+  _icon: {fileID: 21300000, guid: 987ed8fda16f2cb4a8430bed76e3ac87, type: 3}
+  _range: 0
   _cooldown: 3
-  _description: 'Emit a discordant note that dispels all buffs from characters in
-    the area. Draw 1 card if at least two buffs are dispelled from enemies.  '
-  _abilityTag: 10
+  _description: Unleash a primal roar, enemies in area have a 100% chance to become
+    Slowed and 50% chance to become Weakened for two turns.  Gain 2 Mana if at least
+    two enemies become Weakened.
+  _abilityTag: 9
   _type: 4
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
-  _targetType: 0
+  _targetType: 2
   _castingEffect: {fileID: 0}
   _hitEffect: {fileID: 0}
   _castingSound: {fileID: 0}
@@ -32,4 +33,8 @@ MonoBehaviour:
   _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
   _validTargets: 5
   _radius: 2
-  _enemiesDebuffedTilBonus: 2
+  _chanceToApplyWeakened: 0.5
+  _slowDuration: 2
+  _weakenedDuration: 2
+  _manaGain: 2
+  _enemiesWeakenedTilBonus: 2
