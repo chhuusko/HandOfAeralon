@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b991492d39e8d2446a0d7666f7170f5a, type: 3}
+  m_Name: Reflected Affliction
+  m_EditorClassIdentifier: 
+  Name: Reflected Affliction
+  Icon: {fileID: 21300000, guid: 10ca0546d233b9c4cae8ffe7a214acdc, type: 3}
+  Description: 
+  Type: 3
+  IsPermanent: 0
+  Script: {fileID: 11500000, guid: f4e4638de28335544b3baa15e3edd5c3, type: 3}
+  Class: 4
+  IsPositive: 1

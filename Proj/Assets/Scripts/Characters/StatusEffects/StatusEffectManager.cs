@@ -15,6 +15,7 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
         CombatEventManager.OnAbilityDataCreated += OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat += OnCombatEnded;
+        CombatEventManager.OnStatusEffectAppliedToCharacter += OnStatusEffectApplied;
 
         CardHandManager.onTargetCharacter += OnCardPlayed;
     }
@@ -33,8 +34,6 @@ public class StatusEffectManager : MonoBehaviour
         {
             _traitManager = _character.GetTraitManager();
         }
-        
-        // AddStatusEffect(new Stealth(3));
     }
 
     private void OnDisable()
@@ -43,6 +42,7 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
         CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
+        CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
         
         CardHandManager.onTargetCharacter -= OnCardPlayed;
     }
@@ -52,7 +52,7 @@ public class StatusEffectManager : MonoBehaviour
         _traitManager = traitManager;
     }
 
-    public void AddStatusEffect(StatusEffect statusEffect)
+    public void AddStatusEffect(StatusEffect statusEffect, Character caster)
     {
         // Sanctified disallows receiving debuffs.
         if (ContainsStatusEffect<Sanctified>() && statusEffect.Data.Type is StatusEffectType.Debuff)
@@ -62,7 +62,12 @@ public class StatusEffectManager : MonoBehaviour
         
         _traitManager.AddStatusEffect(statusEffect);
         statusEffect.Initialize(_character, this);
-        CombatEventManager.InvokeOnStatusEffectAppliedToCharacter(_character, statusEffect);
+        CombatEventManager.InvokeOnStatusEffectAppliedToCharacter(caster, _character, statusEffect);
+    }
+
+    public void AddStatusEffect(StatusEffect statusEffect)
+    {
+        AddStatusEffect(statusEffect, null);
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect)
@@ -124,8 +129,6 @@ public class StatusEffectManager : MonoBehaviour
         {
             RemoveStatusEffect(statusEffect);
         }
-
-        
     }
 
     private void OnApply()
@@ -222,7 +225,7 @@ public class StatusEffectManager : MonoBehaviour
         {
             if (statusEffect is Trait trait)
             {
-                trait.OnStartCombat();
+                trait.OnCombatStarted();
             }
         } 
     }
@@ -296,7 +299,7 @@ public class StatusEffectManager : MonoBehaviour
         {
             if (statusEffect is Trait trait)
             {
-                trait.OnStartCombat();
+                trait.OnCombatStarted();
             }
         } 
     }
@@ -329,6 +332,19 @@ public class StatusEffectManager : MonoBehaviour
         foreach (var trait in _traitManager.GetAllTraits())
         {
             trait.OnAbilityUsed(data.Ability);
+        }
+    }
+
+    private void OnStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
+    {
+        if (target != _character)
+        {
+            return;
+        }
+
+        foreach (var trait in _traitManager.GetAllTraits())
+        {
+            trait.OnStatusEffectApplied(caster, statusEffect);
         }
     }
 }

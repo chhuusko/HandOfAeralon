@@ -60,7 +60,7 @@ public class LightningStorm_Ability : RoundAOEAbility
         {
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
             {
-                statusEffectManager.AddStatusEffect(new Stunned(_stunDuration));
+                statusEffectManager.AddStatusEffect(new Stunned(_stunDuration), castingCharacter);
                 enemyStunned = true;
             }
         }
