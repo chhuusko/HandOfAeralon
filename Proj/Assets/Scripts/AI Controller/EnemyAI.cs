@@ -6,6 +6,13 @@ using UnityEngine.Events;
 
 public class EnemyAI : MonoBehaviour
 {
+    protected struct AIAction
+    {
+        CombatGridTile moveTo;
+        Ability chosenAbility;
+        CombatGridTile chosenTarget;
+    }
+
     public UnityEvent AIEndTurn;
 
     [SerializeField] private ClassData _barbData, _rogueData, _sorcData, _bardData;
@@ -23,7 +30,6 @@ public class EnemyAI : MonoBehaviour
     private GameObject _targetTile = null;
     private List<CombatGridTile> _movePath = new();
 
-
     private void OnEnable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
@@ -40,52 +46,8 @@ public class EnemyAI : MonoBehaviour
         {
             // Run();
 
-            _movePath = FindPath(_currentTile, _targetTile)
-                .Select(obj => obj.GetComponent<CombatGridTile>())
-                .Where(ch => ch != null)
-                .ToList();
-
-            if (_currentCharacter.CanMove)
-            {
-                _currentCharacter.GetComponent<CharacterMovement>().ForceCustomPath(_movePath);
-                StartCoroutine(WaitForMovement());
-            }
-            else
-            {
-                TryAttack(_currentCharacter, _targetCharacter);
-                EndTurn();
-            }
+            RunOld();
         }
-    }
-
-    private void Run()
-    {
-        List<CombatGridTile> moveArea = new();
-
-        if (_currentCharacter.CanMove && _currentMoveRange > 0)
-        {
-            moveArea = GridExplorer._instance.GetTilesInRange(_currentTile, _currentMoveRange, true)
-                .Select(obj => obj.GetComponent<CombatGridTile>())
-                .Where(ch => ch != null)
-                .ToList();
-        }
-        else
-        {
-            moveArea.Add(_currentTile.GetComponent<CombatGridTile>());
-        }
-
-        foreach (var tile in moveArea)
-        {
-            foreach (var ability in _currentAbilities)
-            {
-                _currentAbilityHandler.SetPendingAbility(ability);
-                _currentAbilityHandler.GetTilesInRange();
-            }
-        }
-
-        // Betygs�tt movement + ability anv�ndning
-
-        // Utf�r det b�sta draget
     }
 
     private bool TurnStartedProperly() // Caching and null checks
@@ -148,6 +110,61 @@ public class EnemyAI : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void Run()
+    {
+        List<CombatGridTile> moveArea = new();
+
+        if (_currentCharacter.CanMove && _currentMoveRange > 0)
+        {
+            moveArea = GridExplorer._instance.GetTilesInRange(_currentTile, _currentMoveRange, true)
+                .Select(obj => obj.GetComponent<CombatGridTile>())
+                .Where(ch => ch != null)
+                .ToList();
+        }
+        else
+        {
+            moveArea.Add(_currentTile.GetComponent<CombatGridTile>());
+        }
+
+        foreach (var pos in moveArea)
+        {
+            foreach (var ability in _currentAbilities)
+            {
+                _currentAbilityHandler.SetPendingAbility(ability);
+                _currentAbilityHandler.CalculateAbilityRange(pos);
+                List<CombatGridTile> targetTiles = _currentAbilityHandler.GetTilesInRange();
+
+                foreach (var tile in targetTiles)
+                {
+                    // Check if any damage or healing is done and add score
+                }
+            }
+        }
+
+        // Betygs�tt movement + ability anv�ndning
+
+        // Utf�r det b�sta draget
+    }
+
+    private void RunOld()
+    {
+        _movePath = FindPath(_currentTile, _targetTile)
+                .Select(obj => obj.GetComponent<CombatGridTile>())
+                .Where(ch => ch != null)
+                .ToList();
+
+        if (_currentCharacter.CanMove)
+        {
+            _currentCharacter.GetComponent<CharacterMovement>().ForceCustomPath(_movePath);
+            StartCoroutine(WaitForMovement());
+        }
+        else
+        {
+            TryAttack(_currentCharacter, _targetCharacter);
+            EndTurn();
+        }
     }
 
     private Character FindClosestTarget(Character currentCharacter)
