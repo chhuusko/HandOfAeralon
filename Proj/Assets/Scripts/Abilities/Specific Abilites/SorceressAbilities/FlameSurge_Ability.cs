@@ -13,7 +13,7 @@ public class FlameSurge_Ability : DirectedAOEAbility
 
     // Description
 
-    // Unleash a burst of fire, dealing(100% × Damage) Elemental damage to all characters in area.
+    // Unleash a burst of fire, dealing(100% ï¿½ Damage) Elemental damage to all characters in area.
     // Every character hit has a 50% chance to gain Burn for 2 turns.
     // Gain 1 Mana if at least two enemies become Burned.
 
@@ -120,7 +120,7 @@ public class FlameSurge_Ability : DirectedAOEAbility
         {
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
             {
-                statusEffectManager.AddStatusEffect(slow = new Slowed(_burnDuration));
+                statusEffectManager.AddStatusEffect(slow = new Slowed(_burnDuration), castingCharacter);
                 if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
                 {
                     burnedEnemiesCounter++;

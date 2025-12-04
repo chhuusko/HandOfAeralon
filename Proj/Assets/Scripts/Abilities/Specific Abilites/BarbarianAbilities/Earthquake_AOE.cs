@@ -16,7 +16,7 @@ public class Earthquake_AOE : DirectedAOEAbility
 
     // Description
 
-    // Slam the ground, dealing(90% × Damage) Physical damage to all characters in the area.
+    // Slam the ground, dealing(90% ï¿½ Damage) Physical damage to all characters in the area.
     // Every character hit has a 60% chance to become Slowed for 2 turns.
     // Gain 1 Mana if at least two enemies become Slowed.
 
@@ -110,7 +110,7 @@ public class Earthquake_AOE : DirectedAOEAbility
         {
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
             {
-                statusEffectManager.AddStatusEffect(slow = new Slowed(_slowDuration));
+                statusEffectManager.AddStatusEffect(slow = new Slowed(_slowDuration), castingCharacter);
                 if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
                 {
                     slowedEnemyCounter++;

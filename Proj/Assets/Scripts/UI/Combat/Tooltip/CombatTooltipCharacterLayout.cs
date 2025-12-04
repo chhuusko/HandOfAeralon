@@ -145,6 +145,16 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         _layout.SetActive(false);
     }
 
+    private void UpdateSelectedCharacter(Character caster, Character characterSubject, StatusEffect statusEffect)
+    {
+        Character selectedCharacter = Selector._instance.GetSelectedCharacter();
+
+        if(selectedCharacter == characterSubject)
+        {
+            UpdateTooltip(characterSubject);
+        }
+    }
+    
     private void UpdateSelectedCharacter(Character characterSubject, StatusEffect statusEffect)
     {
         Character selectedCharacter = Selector._instance.GetSelectedCharacter();
@@ -187,8 +197,10 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         IReadOnlyList<Trait> traits = character.GetTraitManager().GetAllTraits();
         for(int i = 0; i < traits.Count; i++)
         {
+            /*
             Trait trait = _traitElements[i].GetComponent<Trait>();
             trait = traits[i];
+            */
         }
     }
 

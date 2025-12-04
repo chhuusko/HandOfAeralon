@@ -403,6 +403,7 @@ GameObject:
   - component: {fileID: 1130652569201087464}
   - component: {fileID: 3084058062679360854}
   - component: {fileID: 4900675660030671799}
+  - component: {fileID: -5501198741199042680}
   m_Layer: 5
   m_Name: CardHandManager
   m_TagString: Untagged
@@ -463,6 +464,18 @@ MonoBehaviour:
   _cardsInDiscardPile: []
   _deckPreset: {fileID: 11400000, guid: 525dee4f8af029b44b3a76a418dd003e, type: 2}
   turnsTillCard: 4
+--- !u!225 &-5501198741199042680
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8067438011519287914}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8117799210593407533
 GameObject:
   m_ObjectHideFlags: 0

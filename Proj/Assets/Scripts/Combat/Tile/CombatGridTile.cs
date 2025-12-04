@@ -75,13 +75,15 @@ public class CombatGridTile : MonoBehaviour
             {
                 case TileType.Poison:
                     {
-                        character.GetComponent<StatusEffectManager>().AddStatusEffect(new Poison(3));
+                        StatusEffectManager statusEffectManager = character.GetComponent<StatusEffectManager>();
+                        statusEffectManager.AddStatusEffect(new Poison(3));
                     } break;
 
                 case TileType.Lava:
                     {
                         character.TakeDamage(4);
-                        character.GetComponent<StatusEffectManager>().AddStatusEffect(new Burn(1));
+                        StatusEffectManager statusEffectManager = character.GetComponent<StatusEffectManager>();
+                        statusEffectManager.AddStatusEffect(new Burn(1));
                     } break;
             }
             

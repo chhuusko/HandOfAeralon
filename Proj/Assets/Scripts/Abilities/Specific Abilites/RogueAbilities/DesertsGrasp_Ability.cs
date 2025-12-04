@@ -87,7 +87,7 @@ public class DesertsGrasp_Ability : RoundAOEAbility
         {
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
             {
-                statusEffectManager.AddStatusEffect(poison = new Poison(_poisonStacks));
+                statusEffectManager.AddStatusEffect(poison = new Poison(_poisonStacks), castingCharacter);
                 _enemiesPoisoned++;
             }
         }

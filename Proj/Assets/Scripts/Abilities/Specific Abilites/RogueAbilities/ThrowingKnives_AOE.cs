@@ -12,7 +12,7 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
 
     // Description
 
-    // Throw knives in a line, dealing (60 % +(10 % × current hand size) × Damage) Physical damage.
+    // Throw knives in a line, dealing (60 % +(10 % ï¿½ current hand size) ï¿½ Damage) Physical damage.
     // Every character hit has a 60% chance to gain 3 stacks of Poison.
 
     protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
@@ -33,7 +33,7 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
         {
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
             {
-                statusEffectManager.AddStatusEffect(poison = new Poison(_poisonStacks));
+                statusEffectManager.AddStatusEffect(poison = new Poison(_poisonStacks), castingCharacter);
 
             }
         }
