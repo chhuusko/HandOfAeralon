@@ -119,7 +119,7 @@ public class Character : MonoBehaviour
 
     [Header("State")] 
     public bool CanMove { get; set; } = true;
-    public bool CanAttack { get; set; } = true;
+    public bool CanUseAbility { get; set; } = true;
     public bool IsTargetable { get; set; } = true;
 
     [Header("Status effects")]
@@ -316,7 +316,7 @@ public class Character : MonoBehaviour
 
     private void ResetCanAttack(Character c)
     {
-        CanAttack = true;
+        CanUseAbility = true;
     }
 
     private void UpdateAbilityCooldowns(Character c)
