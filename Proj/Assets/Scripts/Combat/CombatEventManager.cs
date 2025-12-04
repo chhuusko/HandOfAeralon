@@ -35,7 +35,7 @@ public static class CombatEventManager
     
     public static event Action<bool> OnCharacterMove;
 
-    public static event Action<Character, StatusEffect> OnStatusEffectAppliedToCharacter;
+    public static event Action<Character, Character, StatusEffect> OnStatusEffectAppliedToCharacter;
     public static event Action<Character, StatusEffect> OnStatusEffectExpiredOnCharacter;
     public static event Action<Character, StatusEffect> OnStatusEffectDurationChanged;
 
@@ -94,8 +94,8 @@ public static class CombatEventManager
     public static void InvokeOnCharacterMove(bool isMoving)
         => OnCharacterMove?.Invoke(isMoving);
 
-    public static void InvokeOnStatusEffectAppliedToCharacter(Character character, StatusEffect statusEffect)
-        => OnStatusEffectAppliedToCharacter?.Invoke(character, statusEffect);
+    public static void InvokeOnStatusEffectAppliedToCharacter(Character caster, Character target, StatusEffect statusEffect)
+        => OnStatusEffectAppliedToCharacter?.Invoke(caster, target, statusEffect);
 
     public static void InvokeOnStatusEffectExpiredOnCharacter(Character character, StatusEffect statusEffect)
     => OnStatusEffectExpiredOnCharacter?.Invoke(character, statusEffect);

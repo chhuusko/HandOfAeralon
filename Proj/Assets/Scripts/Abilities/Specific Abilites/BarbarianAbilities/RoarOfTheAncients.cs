@@ -87,7 +87,7 @@ public class RoarOfTheAncients : RoundAOEAbility
         if (Random.value < _chanceToApplyWeakened)
         {
             StatusEffect weakened = new Weakened(_weakenedDuration);
-            statusEffectManager.AddStatusEffect(weakened);
+            statusEffectManager.AddStatusEffect(weakened, castingCharacter);
             AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, weakened);
 
             _enemiesWeakened++;

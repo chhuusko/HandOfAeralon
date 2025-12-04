@@ -32,7 +32,7 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
             if (castingCharacter.GetFaction() == Faction.Friendly && statusEffectManager.ContainsStatusEffect<Poison>()){
                 CardHandManager.GetInstance().AddCardFromDeck();
             }
-            statusEffectManager.AddStatusEffect(poison = new Poison(_posionStacksToApply));
+            statusEffectManager.AddStatusEffect(poison = new Poison(_posionStacksToApply), castingCharacter);
         }
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, poison);
     }

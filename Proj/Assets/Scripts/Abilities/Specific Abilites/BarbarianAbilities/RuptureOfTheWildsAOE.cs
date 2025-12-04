@@ -14,8 +14,8 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
 
     // Description
 
-    // Send primal energy through the ground, dealing (100 % × Damage) Elemental damage.
-    // If the target is Slowed, deal (150% × Damage) instead.
+    // Send primal energy through the ground, dealing (100 % ï¿½ Damage) Elemental damage.
+    // If the target is Slowed, deal (150% ï¿½ Damage) instead.
     // Every character hit has a 30% chance to become Stunned for 2 turns.
     // Draw 1 card per enemy Stunned by this ability.
 
@@ -37,7 +37,7 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
         {
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
             {
-                statusEffectManager.AddStatusEffect(new Stunned(_stunDuration));
+                statusEffectManager.AddStatusEffect(new Stunned(_stunDuration), castingCharacter);
                 if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
                 {
                     CardHandManager.GetInstance().AddCardFromDeck();
