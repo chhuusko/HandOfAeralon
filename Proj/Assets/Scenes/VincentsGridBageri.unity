@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  m_Fog: 0
+  m_Fog: 1
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.01
@@ -502,42 +502,42 @@ PrefabInstance:
     - target: {fileID: 8951032765782811620, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.65
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8951032765782811620, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 17.17
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8951032765782811620, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10.12
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8951032765782811620, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.91909623
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8951032765782811620, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.39403322
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8951032765782811620, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8951032765782811620, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8951032765782811620, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 46.411
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8951032765782811620, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
