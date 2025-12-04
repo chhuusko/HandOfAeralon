@@ -47,7 +47,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (TurnStartedProperly())
         {
-            // Run();
+            //Run();
 
             RunOld();
         }
@@ -135,7 +135,7 @@ public class EnemyAI : MonoBehaviour
             AIAction moveOnly = new AIAction { movement = pos };
 
             Character closestOpponent = FindClosestOpponentCharacter(_currentCharacter);
-            int distance = GridExplorer._instance.ChebyshevDistance(pos.GetTileIndex(), closestOpponent.GetCurrentTileIndex());
+            int distance = GridExplorer._instance.ManhattanDistance(pos.GetTileIndex(), closestOpponent.GetCurrentTileIndex());
             switch (_currentClass)
             {
                 case CharacterClass.Barbarian: score -= distance; break;
@@ -171,11 +171,29 @@ public class EnemyAI : MonoBehaviour
 
         foreach (var entry in _scoredActions)
         {
-            DebugLog.JLWLogWarning($"Move to: {entry.Key.movement.GetTileIndex()}, Ability: {entry.Key.ability}, Target: {entry.Key.target.GetTileIndex()}, Score: {entry.Value}.");
+            string ability = entry.Key.ability != null ? entry.Key.ability.name : "None";
+            string target = entry.Key.target != null ? entry.Key.target.GetTileIndex().ToString() : "None";
+
+            DebugLog.JLWLogWarning($"EnemyAI.cs | Move to: {entry.Key.movement.GetTileIndex()}, Ability: {ability}, Target: {target}, Score: {entry.Value}.");
         }
 
+        string chosenAbility = _chosenAction.ability != null ? _chosenAction.ability.name : "None";
+        string chosenTarget = _chosenAction.target != null ? _chosenAction.target.GetTileIndex().ToString() : "None";
         _chosenAction = _scoredActions.OrderByDescending(x => x.Value).First().Key;
-        DebugLog.JLWLogWarning($"CHOSEN ACTION = Move to: {_chosenAction.movement.GetTileIndex()}, Ability: {_chosenAction.ability}, Target: {_chosenAction.target.GetTileIndex()}.");
+        DebugLog.JLWLogWarning($"EnemyAI.cs | CHOSEN ACTION = Move to: {_chosenAction.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, Score: {_scoredActions[_chosenAction]}.");
+
+        if (_currentCharacter.CanMove)
+        {
+            _movePath = FindPath(_currentTile, _chosenAction.movement.gameObject)
+                .Select(obj => obj.GetComponent<CombatGridTile>())
+                .Where(ch => ch != null)
+                .ToList();
+
+            _currentCharacter.GetComponent<CharacterMovement>().ForceCustomPath(_movePath);
+            StartCoroutine(WaitForMovement());
+        }
+
+        // Use chosen ability
     }
 
     private void RunOld()
