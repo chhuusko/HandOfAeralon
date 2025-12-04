@@ -12,25 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38bd2ce35ac95243926653f69e1e205, type: 3}
   m_Name: RoarOfTheAncients_Ability
   m_EditorClassIdentifier: 
-  _abilityName: 
-  _icon: {fileID: 0}
+  _abilityName: Roar of the Ancients
+  _icon: {fileID: 21300000, guid: 987ed8fda16f2cb4a8430bed76e3ac87, type: 3}
   _range: 0
-  _cooldown: 0
-  _description: 
-  _abilityTag: 0
-  _type: 0
-  _rangeCalculation: {fileID: 0}
-  _targetType: 0
+  _cooldown: 3
+  _description: Unleash a primal roar, enemies in area have a 100% chance to become
+    Slowed and 50% chance to become Weakened for two turns.  Gain 2 Mana if at least
+    two enemies become Weakened.
+  _abilityTag: 9
+  _type: 4
+  _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
+  _targetType: 2
   _castingEffect: {fileID: 0}
   _hitEffect: {fileID: 0}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0
+  _castingTime: 0.5
   _fromCastToHitTime: 0
   _castingRotationTime: 0.3
-  _pattern: {fileID: 0}
-  _validTargets: 0
-  _radius: 0
+  _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
+  _validTargets: 5
+  _radius: 2
   _chanceToApplyWeakened: 0.5
   _slowDuration: 2
   _weakenedDuration: 2
