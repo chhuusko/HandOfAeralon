@@ -190,9 +190,9 @@ public class EnemyAI : MonoBehaviour
                 .ToList();
 
             _currentCharacter.GetComponent<CharacterMovement>().ForceCustomPath(_movePath);
-            StartCoroutine(WaitForMovement());
         }
 
+        StartCoroutine(WaitForMovement());
         // Use chosen ability
     }
 
