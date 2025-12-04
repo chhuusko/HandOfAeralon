@@ -6,9 +6,13 @@ public class SagesInsight : Card
     {
         for (int i = 0; i < 2; i++)
         {
-            CardHandManager.GetInstance().AddCardFromDeck();
-            //Debug.Log(CardHandManager.GetInstance().GetCardsInHand()[CardHandManager.GetInstance().GetCardsInHand().Count - 1].GetCard().cost);
-            //CardHandManager.GetInstance().GetCardsInHand()[CardHandManager.GetInstance().GetCardsInHand().Count - 1].GetCard().cost -= 1;
+            CardContainer newCard = CardHandManager.GetInstance().AddCardFromDeck();
+            if (newCard != null)
+            {
+                Debug.Log(newCard.GetCard());
+                newCard.GetCard().cost -= 1;
+                newCard.UppdateCardUI();
+            }
         }
     }
 }

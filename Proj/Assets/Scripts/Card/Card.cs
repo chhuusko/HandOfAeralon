@@ -28,9 +28,13 @@ public class Card : ScriptableObject
     public List<InfoPanel> info;
     public virtual void PlayCard()
     {
-        
         //när den spelas
     }
-    
+    public T Clone<T>() where T : ScriptableObject
+    {
+        // Create a new instance in memory (not saved as an asset)
+        T copy = Instantiate(this) as T;
+        return copy;
+    }
 }
 
