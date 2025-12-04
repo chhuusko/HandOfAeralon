@@ -10,7 +10,7 @@ public class SagesInsight : Card
             if (newCard != null)
             {
                 Debug.Log(newCard.GetCard());
-                newCard.GetCard().cost -= 1;
+                newCard.GetCard().TempModifyCost(-1);
                 newCard.UppdateCardUI();
             }
         }
