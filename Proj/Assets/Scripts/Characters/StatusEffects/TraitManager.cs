@@ -83,8 +83,6 @@ public class TraitManager
     /// </summary>
     public void GenerateTraits(CharacterData character)
     {
-        Debug.Log("Generating traits");
-        
         IReadOnlyList<StatusEffectData> positiveTraits;
         
         if (UnityEngine.Random.Range(0f, 1f) <= GlobalGameManager.GetInstance().ClassTraitChance)
