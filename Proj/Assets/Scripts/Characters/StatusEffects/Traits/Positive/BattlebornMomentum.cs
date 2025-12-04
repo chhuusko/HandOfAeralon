@@ -20,7 +20,7 @@ public class BattlebornMomentum : Trait
             return;
         }
         
-        if (++_abilitiesUsed >= 3 && !_effectApplied)
+        if (++_abilitiesUsed >= data.Threshold && !_effectApplied)
         {
             _abilitiesUsed = 0;
             _effectApplied = true;
