@@ -29,9 +29,10 @@ public class CharacterData
     
     [Header("Current stats")]
     [SerializeField] private int _currentHealthPoints;
-    [SerializeField] private List<Ability> _availableAbilities;
+    [SerializeField] private List<Ability> _abilities;
     public int CurrentHealthPoints => _currentHealthPoints;
-    public IReadOnlyList<Ability> AvailableAbilities => _availableAbilities;
+    public IReadOnlyList<Ability> Abilities => _abilities;
+    public List<Ability> CurrentAbilities { get; set; }
     
     [Header("Status Effects")]
     private TraitManager _traitManager = new();
@@ -60,14 +61,19 @@ public class CharacterData
         {
             return;
         }
-            
-        // Set values from class data.
-        _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(ClassData.minHealthPoints, ClassData.maxHealthPoints + 1);
-        _baseInitiative =  UnityEngine.Random.Range(ClassData.minInitiative, ClassData.maxInitiative + 1);
-        _baseDamage = UnityEngine.Random.Range(ClassData.minDamage, ClassData.maxDamage + 1);
-        _baseMovementPoints = UnityEngine.Random.Range(ClassData.minMovementPoints, ClassData.maxMovementPoints + 1);
+
+        if (_faction == Faction.Friendly)
+        {
+            // Set values from class data.
+            _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(ClassData.minHealthPoints, ClassData.maxHealthPoints + 1);
+            _baseInitiative =  UnityEngine.Random.Range(ClassData.minInitiative, ClassData.maxInitiative + 1);
+            _baseDamage = UnityEngine.Random.Range(ClassData.minDamage, ClassData.maxDamage + 1);
+            _baseMovementPoints = UnityEngine.Random.Range(ClassData.minMovementPoints, ClassData.maxMovementPoints + 1);
+        }
+        
         _characterClass = ClassData.characterClass;
-        _availableAbilities = ClassData.abilities;
+        _abilities = ClassData.abilities;
+        CurrentAbilities = _abilities;
     }
 
     public void InitializeTraits()
@@ -92,7 +98,8 @@ public class CharacterData
     public void SetBaseMovementPoints(int movementPoints) => _baseMovementPoints = Mathf.Max(movementPoints, 1);
     public void SetCurrentHealthPoints(int health) => _currentHealthPoints = Mathf.Max(health, 0);
     public void Heal(int amount) => SetCurrentHealthPoints(Mathf.Min(CurrentHealthPoints + amount, _baseHealthPoints));
-    public void SetCurrentAbilities(List<Ability> abilities) => _availableAbilities = new List<Ability>(abilities);
+    public void SetAbilities(List<Ability> abilities) => _abilities = new List<Ability>(abilities);
+    public void SetCurrentAbilities(List<Ability> abilities) => CurrentAbilities = abilities;
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -119,7 +126,7 @@ public class Character : MonoBehaviour
 
     [Header("State")] 
     public bool CanMove { get; set; } = true;
-    public bool CanAttack { get; set; } = true;
+    public bool CanUseAbility { get; set; } = true;
     public bool IsTargetable { get; set; } = true;
 
     [Header("Status effects")]
@@ -240,7 +247,7 @@ public class Character : MonoBehaviour
     
     // Abilities.
     public AbilityHandler GetAbilityHandler() => _abilityHandler;
-    public IReadOnlyList<Ability> GetAvailableAbilities() => _data.AvailableAbilities;
+    public IReadOnlyList<Ability> GetAvailableAbilities() => _data.Abilities;
 
     // Status Effects.
     public StatusEffectManager GetStatusEffectManager() => _statusEffectManager;
@@ -316,7 +323,7 @@ public class Character : MonoBehaviour
 
     private void ResetCanAttack(Character c)
     {
-        CanAttack = true;
+        CanUseAbility = true;
     }
 
     private void UpdateAbilityCooldowns(Character c)

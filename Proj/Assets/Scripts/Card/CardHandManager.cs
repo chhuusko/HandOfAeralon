@@ -54,7 +54,12 @@ public class CardHandManager : MonoBehaviour
         }
         else
         {
-            _cardsInDeck = new List<Card>(_deckPreset.GetCards());
+            _cardsInDeck = new List<Card>(_deckPreset.GetCards().Count);
+            foreach (Card card in _deckPreset.GetCards())
+            {
+                Card clone = Instantiate(card);
+                _cardsInDeck.Add(clone);
+            }
         }
         drawHand();
     }
@@ -79,19 +84,15 @@ public class CardHandManager : MonoBehaviour
         }
         AddSpaceing();
     }
-    public void AddCardFromDeck()
-    {
-        AddRandomCardFromDeck();
-    }
     public void AddCardFromDeck(int amount)
     {
         for(int i = 0; i < amount; i++)
         {
-            AddRandomCardFromDeck();
+            AddCardFromDeck();
         }
         AddSpaceing();
     }
-    public void AddRandomCardFromDeck()
+    public CardContainer AddCardFromDeck()
     {
         if (_cardsInDeck.Count == 0)
         {
@@ -104,15 +105,17 @@ public class CardHandManager : MonoBehaviour
         }
         if (_cardsInDeck.Count == 0)
         {
-            return;
+            return null;
         }
-        if (_maxHand <= _cardsInHand.Count) return;
+        if (_maxHand <= _cardsInHand.Count) return null;
+
         CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
         _cardsInHand.Add(newCardContainer);
         int newCardIndex = UnityEngine.Random.Range(0, _cardsInDeck.Count);
         newCardContainer.AddCard(_cardsInDeck[newCardIndex]);
         _cardsInDeck.RemoveAt(newCardIndex);
         AddSpaceing();
+        return newCardContainer;
     }
 
     public void AddSpaceing()
@@ -198,7 +201,7 @@ public class CardHandManager : MonoBehaviour
             if (tempTurnsTillCard <= 0)
             {
                 tempTurnsTillCard = turnsTillCard;
-                AddRandomCardFromDeck();
+                AddCardFromDeck();
             }
         
         }
@@ -229,10 +232,7 @@ public class CardHandManager : MonoBehaviour
             Quaternion.identity,
             CanvasManager.instance.OverlayCanvas.transform
         );
-
-
         _addedZoomedCard.GetComponent<CardUI>().SetUpUIElements(container.GetCard());
-
     }
 
     public void HideHighlightedCard()

@@ -6,18 +6,19 @@ public abstract class StatusEffect
 {
     [SerializeField] private string _name;
     public string Name => _name;
-    public int Duration { get; protected set; }
+    public int Duration { get; set; }
     
     protected Character Character { get; private set; }
     protected StatusEffectManager Manager { get; private set; }
     
-    public StatusEffectData Data { get; private set; }
+    [SerializeField] private StatusEffectData _data;
+    public StatusEffectData Data => _data;
     
     protected StatusEffect(int duration = 3)
     {
         Duration = duration;
 
-        Data = StatusEffectDataRegistry.GetDataForType(GetType());
+        _data = StatusEffectDataRegistry.GetDataForType(GetType());
         
         _name = Data.Name;
     }
@@ -64,9 +65,11 @@ public abstract class StatusEffect
     public virtual void OnTurnEnd() {}
     public virtual void OnCardPlayed() {}
     public virtual void OnTargetedByCard() {}
+    public virtual void OnBurnApplied() {}
     public virtual void OnCombatEnded() {}
     public virtual void ModifyIncomingDamage(ref float damage, Ability ability) {}
     public virtual void ModifyOutgoingDamage(ref float damage, Ability ability) {}
     public virtual void ModifyIncomingHeal(ref float heal, Ability ability) {}
     public virtual void ModifyOutgoingHeal(ref float heal, Ability ability) {}
+    public virtual void ModifyBurnDamage(ref int damage) {}
 }

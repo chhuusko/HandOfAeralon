@@ -1,9 +1,18 @@
+using System;
 using UnityEngine;
 
 public class Burn : StatusEffect
 {
-    public Burn(int duration) : base(duration)
+    private Character _source;
+    
+    public Burn(int duration, Character source) : base(duration)
     {
+        _source = source;
+    }
+
+    public override void OnApply()
+    {
+        Manager.OnBurnApplied(Character);
     }
 
     public override void OnTurnStart()
@@ -15,6 +24,13 @@ public class Burn : StatusEffect
             return;
         }
         
-        Character.TakeDamage(data.Damage);
+        var damage = data.Damage;
+
+        if (_source != null)
+        {
+            _source.GetStatusEffectManager().ApplyBurnDamageModifiers(damage);
+        }
+        
+        Character.TakeDamage(damage);
     }
 }

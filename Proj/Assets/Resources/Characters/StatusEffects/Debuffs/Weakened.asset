@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Weakened
   Icon: {fileID: 21300000, guid: 99a6de8053902374c8cf27d3493d321b, type: 3}
-  Description: 
+  Description: Character deals 50% less Damage
   Type: 1
   IsPermanent: 0
   Script: {fileID: 11500000, guid: 363acf9f01d80b147bef3691b8584aec, type: 3}
+  Class: 4
+  IsPositive: 0
   DamageModifier: 1.5

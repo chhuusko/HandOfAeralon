@@ -33,7 +33,7 @@ public class AbilityHandler : MonoBehaviour
                 DebugLog.MGLog("Tried casting ability, but it failed");
             return false;
         }
-        _characterCaster.CanAttack = false;
+        _characterCaster.CanUseAbility = false;
         CombatEventManager.InvokeOnAbilityCast();
         StartCoroutine(ability.StartAbilityEffects(_casterTile, targetTile));
         _characterCaster.StartAbilityCooldown(ability);
@@ -149,7 +149,7 @@ public class AbilityHandler : MonoBehaviour
         {
             return;
         }
-        // Applicera nya röda
+        // Applicera nya rï¿½da
         foreach (CombatGridTile t in newEffectedTiles)
         {
             if (t == null) return; 

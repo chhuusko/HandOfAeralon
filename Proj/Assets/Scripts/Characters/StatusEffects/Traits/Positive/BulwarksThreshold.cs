@@ -4,7 +4,7 @@ public class BulwarksThreshold : Trait
 {
     private bool _effectApplied;
 
-    public override void OnStartCombat()
+    public override void OnCombatStarted()
     {
         _effectApplied = false;
     }

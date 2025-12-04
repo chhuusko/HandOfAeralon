@@ -64,7 +64,7 @@ public class CombatStateCharacterPlacement : CombatStateBase
                 }
                 else
                 {
-                    DebugLog.CJLog("Show ERROR UI to place on a deploy tile.");
+                    //DebugLog.CJLog("Show ERROR UI to place on a deploy tile.");
                 }
             }
         }

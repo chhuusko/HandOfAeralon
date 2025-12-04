@@ -5,7 +5,7 @@ public class BattlebornMomentum : Trait
     private int _abilitiesUsed;
     private bool _effectApplied;
 
-    public override void OnStartCombat()
+    public override void OnCombatStarted()
     {
         _effectApplied = false;
         _abilitiesUsed = 0;
@@ -20,7 +20,7 @@ public class BattlebornMomentum : Trait
             return;
         }
         
-        if (++_abilitiesUsed >= 3 && !_effectApplied)
+        if (++_abilitiesUsed >= data.Threshold && !_effectApplied)
         {
             _abilitiesUsed = 0;
             _effectApplied = true;

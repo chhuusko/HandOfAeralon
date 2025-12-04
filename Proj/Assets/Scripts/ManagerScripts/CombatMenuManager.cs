@@ -7,8 +7,10 @@ public class CombatMenuManager : MonoBehaviour
 
     [SerializeField] private Volume _globalVolume;
     [SerializeField] private Canvas _endCombatMenuCanvas;
-    [SerializeField] private CanvasGroup _combatCanvasGroup;
-    [SerializeField] private Animator _endCombatMenuAnimator;
+    [SerializeField] private CanvasGroup _combatHUDCanvasGroup;
+    [SerializeField] private CanvasGroup _combatCardCanvasGroup;
+    [SerializeField] private CanvasGroup _combatTooltipCanvasGroup;
+    private Animator _endCombatMenuAnimator;
 
     private void Awake()
     {
@@ -27,8 +29,7 @@ public class CombatMenuManager : MonoBehaviour
         _endCombatMenuAnimator = _globalVolume.GetComponent<Animator>();
         if (_endCombatMenuAnimator == null)
             DebugLog.CJLogError("GlobalVolume has no Animator Comonent!");
-        DebugLog.CJLogError("GlobalVolume has no Animator Comonent!");
-        DebugLog.CJLogWarning("GlobalVolume has no Animator Comonent!");
+        
 
     }
 
@@ -45,16 +46,25 @@ public class CombatMenuManager : MonoBehaviour
 
     public void ShowEndCombatMenuScreen()
     {
-        _endCombatMenuCanvas.enabled = true;
-        _combatCanvasGroup.interactable = false;
+        _endCombatMenuCanvas.enabled           = true;
+        _combatHUDCanvasGroup.interactable     = false;
+        _combatTooltipCanvasGroup.interactable = false;
+        _combatCardCanvasGroup.interactable    = false;
+
         _endCombatMenuAnimator.Play("WeightFadeIn");
+
         Time.timeScale = 0f;
+
     }
     public void HideEndCombatMenuScreen()
     {
-        _endCombatMenuCanvas.enabled = false;
-        _combatCanvasGroup.interactable = true;
+        _endCombatMenuCanvas.enabled           = false;
+        _combatHUDCanvasGroup.interactable     = true;
+        _combatTooltipCanvasGroup.interactable = true;
+        _combatCardCanvasGroup.interactable    = true;
+
         _endCombatMenuAnimator.Play("WeightFadeOut");
+
         Time.timeScale = 1f;
     }
 

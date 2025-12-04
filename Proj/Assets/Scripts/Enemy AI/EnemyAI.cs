@@ -69,11 +69,11 @@ public class EnemyAI : MonoBehaviour
             // Nuvarande tile == min move range
         }
 
-        // Provkör alla abilities från alla tiles i min move range
+        // Provkï¿½r alla abilities frï¿½n alla tiles i min move range
 
-        // Betygsätt movement + ability användning
+        // Betygsï¿½tt movement + ability anvï¿½ndning
 
-        // Utför det bästa draget
+        // Utfï¿½r det bï¿½sta draget
     }
 
     private bool TurnStartedProperly() // Caching and null checks
@@ -229,7 +229,7 @@ public class EnemyAI : MonoBehaviour
 
     private void TryAttack(Character attacker, Character target)
     {
-        if (!attacker.CanAttack)
+        if (!attacker.CanUseAbility)
         {
             return;
         }

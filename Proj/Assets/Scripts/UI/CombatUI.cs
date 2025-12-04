@@ -478,7 +478,7 @@ public class CombatUI : MonoBehaviour
         
         _abilityPanel.gameObject.SetActive(true);
 
-        for (int i = 0; i < character.AvailableAbilities.Count; i++)
+        for (int i = 0; i < character.Abilities.Count; i++)
         {
             var buttonGO = Instantiate(_abilityButtonPrefab.gameObject);
             buttonGO.SetActive(false);
@@ -486,7 +486,7 @@ public class CombatUI : MonoBehaviour
             
             var button = buttonGO.GetComponent<Button>();
             
-            var ability = character.AvailableAbilities[i];
+            var ability = character.Abilities[i];
             button.image.sprite = ability.GetIcon();
             button.GetComponent<AbilityButton>().Ability = ability;
             
@@ -514,14 +514,14 @@ public class CombatUI : MonoBehaviour
         DebugLog.JoppaLog($"c == _currentTurnCharacter: {c == _currentTurnCharacter}");
         DebugLog.JoppaLog($"_selectedCharacter.Faction: {_selectedCharacter.Faction == Faction.Friendly}");
         DebugLog.JoppaLog($"IsAbilityCooldownActive: {!c.IsAbilityCooldownActive(abilityButton.Ability)}");
-        DebugLog.JoppaLog($"CanAttack: {c.CanAttack}");
+        DebugLog.JoppaLog($"CanAttack: {c.CanUseAbility}");
         
         if (_bCombatStarted && c && _currentTurnCharacter && _selectedCharacter != null)
         {
             interactable = c == _currentTurnCharacter &&
                            _selectedCharacter.Faction == Faction.Friendly &&
                            !c.IsAbilityCooldownActive(abilityButton.Ability) &&
-                           c.CanAttack;
+                           c.CanUseAbility && c.Data.CurrentAbilities.Contains(abilityButton.Ability);
         }
 
         abilityButton.Button.interactable = interactable;

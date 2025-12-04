@@ -32,7 +32,7 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
     // Traits Tooltip
     [SerializeField] private GameObject _traitParent;
     [SerializeField] private GameObject _traitElementPrefab;
-    [SerializeField] private GameObject[] _traitElements = new GameObject[2]; // You can only have 2 traits so convenient with array;
+    [SerializeField] private List<GameObject> _traitElements; // You can only have 2 traits so convenient with array;
 
     // Status Effects Tooltip
     [SerializeField] private GameObject _statusEffectParent;
@@ -52,12 +52,6 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         CombatEventManager.OnStatusEffectExpiredOnCharacter += RemoveStatusEffectOnSelectedCharacter;
         CombatEventManager.OnStatusEffectDurationChanged += UpdateSelectedCharacter;
 
-        for (int i = 0; i < _traitElements.Length; i++)
-        {
-            _traitElements[i] = Instantiate(_traitElementPrefab);
-            _traitElements[i].transform.SetParent(_traitParent.transform, false);
-            _traitElements[i].SetActive(false);
-        }
 
     }
 
@@ -145,6 +139,16 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         _layout.SetActive(false);
     }
 
+    private void UpdateSelectedCharacter(Character caster, Character characterSubject, StatusEffect statusEffect)
+    {
+        Character selectedCharacter = Selector._instance.GetSelectedCharacter();
+
+        if(selectedCharacter == characterSubject)
+        {
+            UpdateTooltip(characterSubject);
+        }
+    }
+    
     private void UpdateSelectedCharacter(Character characterSubject, StatusEffect statusEffect)
     {
         Character selectedCharacter = Selector._instance.GetSelectedCharacter();
@@ -184,11 +188,28 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
 
     private void UpdateCharacterTraits(Character character)
     {
+        // NOTE (Calle): Each character can only have 2 traits, so if a character already has traits, don't add more i.e return.
+
         IReadOnlyList<Trait> traits = character.GetTraitManager().GetAllTraits();
-        for(int i = 0; i < traits.Count; i++)
+
+        foreach(GameObject trait in _traitElements)
         {
-            Trait trait = _traitElements[i].GetComponent<Trait>();
-            trait = traits[i];
+            Destroy(trait);
+        }
+        _traitElements.Clear();
+
+        for (int i = 0; i < traits.Count; i++)
+        {
+            Trait trait = traits[i];
+
+            GameObject newTrait = Instantiate(_traitElementPrefab);
+            _traitElements.Add(newTrait);
+            _traitElements[i].transform.SetParent(_traitParent.transform, false);
+
+            TooltipTraitElement traitElementScript = _traitElements[i].GetComponent<TooltipTraitElement>();
+            traitElementScript.SetTraitIcon(trait.Data.Icon);
+            traitElementScript.SetTraitTitle(trait.Data.name);
+            traitElementScript.SetTraitDescription(trait.Data.Description);
         }
     }
 
@@ -217,14 +238,14 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
             if (existingStatusEffectTransform)
             {
                 GameObject existingStatusEffect = existingStatusEffectTransform.gameObject;
-                StatusEffectElement existingElementScript = existingStatusEffect.GetComponent<StatusEffectElement>();
+                TooltipStatusEffectElement existingElementScript = existingStatusEffect.GetComponent<TooltipStatusEffectElement>();
                 existingElementScript.SetTurns(statusEffect.Duration);
                 continue;
             }
 
             // NOTE (Calle): If the effect didn't exist, instantiate a new one. 
             GameObject newStatusEffectElement = Instantiate(_statusEffectPrefab.gameObject);
-            StatusEffectElement elementScript = newStatusEffectElement.GetComponent<StatusEffectElement>();
+            TooltipStatusEffectElement elementScript = newStatusEffectElement.GetComponent<TooltipStatusEffectElement>();
 
             _statusEffects.Add(newStatusEffectElement);
             

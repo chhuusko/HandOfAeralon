@@ -143,6 +143,8 @@ public class CombatManager : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale <= 0.0f)
+            return;
         if(_currentCombatState != null)
         {
             _currentCombatState?.Update();
