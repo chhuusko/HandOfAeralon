@@ -62,8 +62,9 @@ public class Card : ScriptableObject
         {
             tempCost = cost;
         }
-
+        
         tempCost += changeInCost;
+        if (tempCost < 0) { tempCost = 0; }
     }
 }
 
