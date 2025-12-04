@@ -55,7 +55,7 @@ public class CardHandManager : MonoBehaviour
         else
         {
             _cardsInDeck = new List<Card>(_deckPreset.GetCards().Count);
-            foreach (var card in _deckPreset.GetCards())
+            foreach (Card card in _deckPreset.GetCards())
             {
                 Card clone = Instantiate(card);
                 _cardsInDeck.Add(clone);
@@ -232,10 +232,7 @@ public class CardHandManager : MonoBehaviour
             Quaternion.identity,
             CanvasManager.instance.OverlayCanvas.transform
         );
-
-
         _addedZoomedCard.GetComponent<CardUI>().SetUpUIElements(container.GetCard());
-
     }
 
     public void HideHighlightedCard()

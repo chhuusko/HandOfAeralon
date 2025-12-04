@@ -62,7 +62,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         _title.text = card.title;
         _description.text = card.description;
-        _mana.text = "" + card.cost;
+        _mana.text = "" + card.Getcost();
         _image.sprite = card.icon;
         SetInfoPanel(card.info);
     }
