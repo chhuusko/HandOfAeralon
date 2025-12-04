@@ -197,8 +197,10 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         IReadOnlyList<Trait> traits = character.GetTraitManager().GetAllTraits();
         for(int i = 0; i < traits.Count; i++)
         {
+            /*
             Trait trait = _traitElements[i].GetComponent<Trait>();
             trait = traits[i];
+            */
         }
     }
 
