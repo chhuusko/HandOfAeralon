@@ -27,12 +27,12 @@ public class CombatStateEndTurn : CombatStateBase
         if (CombatGrid._instance.GetAllEnemyCharacters().Count == 0)
         {
             // TODO (Calle): All enemies killed, do something specific to that.
-            CombatManager._instance.ChangeCombatState(new CombatStateEndCombat());
+            CombatManager._instance.ChangeCombatState(new CombatStateEndCombat(true));
         }
         else if (CombatGrid._instance.GetAllFriendlyCharacters().Count == 0)
         {
             // TODO (Calle): All heroes killed, do something specific to that.
-            CombatManager._instance.ChangeCombatState(new CombatStateEndCombat());
+            CombatManager._instance.ChangeCombatState(new CombatStateEndCombat(false));
         }
         else
         {

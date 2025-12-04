@@ -8,7 +8,6 @@ public class CombatTooltipManager : MonoBehaviour
     private static CombatTooltipManager _instance;
 
     [SerializeField] private CombatTooltipCharacterLayout _characterLayout;
-    [SerializeField] private Animator _canvasAnimator;
 
 
     private void Awake()
@@ -38,17 +37,17 @@ public class CombatTooltipManager : MonoBehaviour
 
     public void HideTooltipCanvas()
     {
-        if(_canvasAnimator != null)
+        if(_characterLayout != null)
         {
-            _canvasAnimator.Play("Hide");
+            _characterLayout.HideCanvas();
         }
     }
 
     public void ShowTooltipCanvas()
     {
-        if (_canvasAnimator != null)
+        if (_characterLayout != null)
         {
-            _canvasAnimator.Play("Show");
+            _characterLayout.ShowCanvas();
         }
     }
 }

@@ -294,6 +294,9 @@ public class CombatGrid : MonoBehaviour
         List<GameObject> enemyCharacters = new List<GameObject>();
         foreach (GameObject character in _charactersGO)
         {
+            if (character == null)
+                continue;
+
             Character characterScript = character.GetComponent<Character>();
             if (characterScript != null) 
             {

@@ -219,7 +219,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void OnCombatEnded()
+    public void OnCombatEnded(bool playerWon)
     {
         foreach (var statusEffect in _traitManager.GetAllEffects())
         {

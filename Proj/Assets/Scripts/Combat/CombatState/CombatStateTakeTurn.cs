@@ -79,11 +79,27 @@ public class CombatStateTakeTurn : CombatStateBase
                 HandleEnemyTurn();
                 break;
         }
+
+        HandleWinCondition();
     }
 
     private void EndTurn()
     {
         CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
+    }
+
+    private void HandleWinCondition()
+    {
+        if (CombatGrid._instance.GetAllEnemyCharacters().Count == 0)
+        {
+            // TODO (Calle): All enemies killed, Go directly to EndCombat State.
+            CombatManager._instance.ChangeCombatState(new CombatStateEndCombat(true));
+        }
+        else if(CombatGrid._instance.GetAllFriendlyCharacters().Count == 0)
+        {
+            // TODO (Calle): All heroes killed, Go directly to EndCombat State.
+            CombatManager._instance.ChangeCombatState(new CombatStateEndCombat(false));
+        }
     }
 
     private void HandlePlayerTurn()

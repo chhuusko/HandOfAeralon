@@ -3,12 +3,18 @@ using UnityEngine;
 public class CombatStateEndCombat : CombatStateBase
 {
     public override CombatState _state => CombatState.EndCombat;
+    [SerializeField] private bool _playerWon;
+
+    public CombatStateEndCombat(bool playerWon)
+    {
+        _playerWon = playerWon;
+    }
 
     public override void Enter()
     {
         base.Enter();
-        CombatEventManager.InvokeEnterCombatStateEndCombat();
-
+        CombatEventManager.InvokeEnterCombatStateEndCombat(_playerWon);
+        CombatMenuManager.GetInstance().OnGoToShopButtonPressed += OnGoToShop;
     }
 
     public override void Exit()
@@ -19,7 +25,11 @@ public class CombatStateEndCombat : CombatStateBase
 
     public override void Update()
     {
-        CombatEventManager.InvokeExitCombatStateEndCombat();
+        
     }
 
+    private void OnGoToShop()
+    {
+        CombatEventManager.InvokeExitCombatStateEndCombat(_playerWon);
+    }
 }
