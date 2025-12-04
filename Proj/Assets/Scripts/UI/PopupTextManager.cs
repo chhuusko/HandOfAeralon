@@ -6,7 +6,6 @@ public class PopupTextManager : MonoBehaviour
     private static PopupTextManager _instance;
 
     [SerializeField] private Canvas _worldCanvasPrefab;
-    [SerializeField] private Canvas _worldCanvas;
 
     [SerializeField] GameObject _popupTextPrefabToSpawnDamage;
     [SerializeField] GameObject _popupTextPrefabToSpawnCriticalDamage;
@@ -85,7 +84,7 @@ public class PopupTextManager : MonoBehaviour
     private void SetTextHealthChangedAmount(GameObject popupText, int amount)
     {
         PopupText text = popupText.GetComponent<PopupText>();
-        TMP_Text textMesh = text.GetComponent<TMP_Text>();
+        TMP_Text textMesh = text.GetTextMesh();
         textMesh.text = amount.ToString();
 
     }

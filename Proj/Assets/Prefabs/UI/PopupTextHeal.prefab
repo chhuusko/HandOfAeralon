@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1512053456288518696}
   - component: {fileID: 8448712724063940749}
   - component: {fileID: 6679825396231021474}
-  - component: {fileID: -8616190466670754607}
   - component: {fileID: 532271671153414452}
   m_Layer: 5
   m_Name: PopupTextHeal
@@ -140,23 +139,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &-8616190466670754607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3622600758543142800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49c6200d09db1b449bab5428d5e8c480, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _destroyTime: 1
-  _randomStartPositionRange: {x: 0.2, y: 0.2, z: 0.2}
-  _characterTarget: {fileID: 0}
-  _canvasParent: {fileID: 0}
-  _fixedYPos: 2
 --- !u!95 &532271671153414452
 Animator:
   serializedVersion: 7
