@@ -6,11 +6,11 @@ using UnityEngine.Events;
 
 public class EnemyAI : MonoBehaviour
 {
-    protected struct AIAction
+    struct AIAction
     {
-        CombatGridTile moveTo;
-        Ability chosenAbility;
-        CombatGridTile chosenTarget;
+        CombatGridTile movement;
+        Ability ability;
+        CombatGridTile target;
     }
 
     public UnityEvent AIEndTurn;
@@ -24,11 +24,12 @@ public class EnemyAI : MonoBehaviour
     private AbilityHandler _currentAbilityHandler = null;
     private List<Ability> _currentAbilities = new();
     private int _currentMoveRange = 0;
-    //private int _currentAttackRange = 0;
 
     private Character _targetCharacter = null;
     private GameObject _targetTile = null;
     private List<CombatGridTile> _movePath = new();
+
+    private List<AIAction> _scoredActions = new();
 
     private void OnEnable()
     {
@@ -93,7 +94,6 @@ public class EnemyAI : MonoBehaviour
         }
 
         _currentMoveRange = _currentCharacter.GetMovementPoints();
-        //_currentAttackRange = 1;
 
         _targetCharacter = FindClosestTarget(_currentCharacter);
         if (_targetCharacter == null)
@@ -286,10 +286,10 @@ public class EnemyAI : MonoBehaviour
         _currentAbilityHandler = null;
         _currentAbilities = new();
         _currentMoveRange = 0;
-        //_currentAttackRange = 0;
         _targetCharacter = null;
         _targetTile = null;
         _movePath = new();
+        _scoredActions = new();
 
         AIEndTurn.Invoke();
     }
