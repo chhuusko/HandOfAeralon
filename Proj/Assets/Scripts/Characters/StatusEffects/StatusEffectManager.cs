@@ -203,7 +203,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    private void OnBurnApplied(Character c)
+    public void OnBurnApplied(Character c)
     {
         if (c != _character)
         {
