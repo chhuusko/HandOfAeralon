@@ -203,6 +203,19 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
+    private void OnBurnApplied(Character c)
+    {
+        if (c != _character)
+        {
+            return;
+        }
+
+        foreach (var statusEffect in _traitManager.GetAllEffects())
+        {
+            statusEffect.OnBurnApplied();
+        }
+    }
+
     public void OnCombatEnded()
     {
         foreach (var statusEffect in _traitManager.GetAllEffects())
