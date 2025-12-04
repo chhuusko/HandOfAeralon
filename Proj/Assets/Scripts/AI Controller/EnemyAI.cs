@@ -243,15 +243,7 @@ public class EnemyAI : MonoBehaviour
     {
         yield return new WaitWhile(() => _currentCharacter.IsMoving());
 
-        _currentTile = _currentCharacter.GetCurrentTileComponent().gameObject;
-        if (_currentTile != null)
-        {
-            TryAttack(_currentCharacter, _targetCharacter);
-        }
-        else
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | currentTile NOT FOUND!");
-        }
+        TryAttack(_currentCharacter, _targetCharacter);
 
         EndTurn();
     }
@@ -274,12 +266,13 @@ public class EnemyAI : MonoBehaviour
             }
 
             target.TakeDamage(_currentCharacter.GetDamage());
-            return;
         }
     }
 
     private void EndTurn()
     {
+        //Debug.LogWarning("EnemyAI.cs | Turn ended!");
+
         _currentCharacter = null;
         _currentTile = null;
         _currentClass = CharacterClass.None;
