@@ -61,12 +61,20 @@ public class AbilityHandler : MonoBehaviour
         return _pendingAbility;
     }
 
-    public void CalculateAbilityRange()
+    public void CalculateAbilityRange(CombatGridTile specificTile = null)
     {
         ClearAbilityTargetRange();
-        _casterTile = _characterCaster.GetCurrentTileComponent();
+        
+        if (specificTile != null)
+        {
+            _casterTile = specificTile;
+        }
+        else
+        {
+            _casterTile = _characterCaster.GetCurrentTileComponent();
+        }
 
-        if(_pendingAbility == null)
+        if (_pendingAbility == null)
         {
             Debug.LogError("No pending ability selected, but is still trying to calculate range");
             return;

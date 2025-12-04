@@ -60,16 +60,28 @@ public class EnemyAI : MonoBehaviour
 
     private void Run()
     {
-        if (_currentCharacter.CanMove)
+        List<CombatGridTile> moveArea = new();
+
+        if (_currentCharacter.CanMove && _currentMoveRange > 0)
         {
-            // Samla alla tiles i min move range
+            moveArea = GridExplorer._instance.GetTilesInRange(_currentTile, _currentMoveRange, true)
+                .Select(obj => obj.GetComponent<CombatGridTile>())
+                .Where(ch => ch != null)
+                .ToList();
         }
         else
         {
-            // Nuvarande tile == min move range
+            moveArea.Add(_currentTile.GetComponent<CombatGridTile>());
         }
 
-        // Provk�r alla abilities fr�n alla tiles i min move range
+        foreach (var tile in moveArea)
+        {
+            foreach (var ability in _currentAbilities)
+            {
+                _currentAbilityHandler.SetPendingAbility(ability);
+                _currentAbilityHandler.GetTilesInRange();
+            }
+        }
 
         // Betygs�tt movement + ability anv�ndning
 
@@ -234,15 +246,7 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        Ability chosenAbility = _currentAbilities[Random.Range(0, _currentAbilities.Count)];
-        CombatGridTile targetTile = target.GetCurrentTileComponent();
-
-        _currentAbilityHandler.SetPendingAbility(chosenAbility);
-        _currentAbilityHandler.UseAbility(chosenAbility, targetTile);
-        DebugLog.JLWLog($"EnemyAI.cs | {chosenAbility.name} cast at tile {targetTile.GetTileIndex()}");
-
-        /*
-        if (GridExplorer._instance.ChebyshevDistance(attacker.GetCurrentTileIndex(), target.GetCurrentTileIndex()) <= _currentAttackRange)
+        if (GridExplorer._instance.ChebyshevDistance(attacker.GetCurrentTileIndex(), target.GetCurrentTileIndex()) <= 1)
         {
             Vector3 direction = (target.transform.position - _currentCharacter.transform.position).normalized;
             direction.y = 0f;
@@ -255,7 +259,6 @@ public class EnemyAI : MonoBehaviour
             target.TakeDamage(_currentCharacter.GetDamage());
             return;
         }
-        */
     }
 
     private void EndTurn()
