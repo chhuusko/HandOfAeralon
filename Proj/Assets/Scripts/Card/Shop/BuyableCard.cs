@@ -40,7 +40,7 @@ public class BuyableCard : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         _card = card;
         _price = (int)(card.rarity+1)*50;
-        _priceText.text = "<color=yellow>200</color><voffset=12><space=15><sprite name=\"UI_icon_59\"/>";
+        _priceText.text = "<color=yellow>50</color><voffset=12><space=15><sprite name=\"UI_icon_59\"/>";
         GetComponent<CardUI>().SetUpUIElements(card);
     }
     public void OnPointerDown(PointerEventData eventData)

@@ -20,6 +20,9 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     float _hoverDistance = 120f;
     private bool _isDragging;
 
+    private float time;
+    [SerializeField] private Vector3 angle;
+    public float speed = 2f;
     private void Awake()
     {
         _controller = new InputController();
@@ -49,6 +52,13 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private void FixedUpdate()
     {
         //AnimationMabye
+        
+        time += Time.fixedDeltaTime;
+        float x = Mathf.Sin(time * speed) * angle.x;
+        float y = Mathf.Sin(time * speed) * angle.y;
+        float z = Mathf.Sin(time * speed) * angle.z;
+        
+        _rect.localRotation = Quaternion.Euler(x, y, z);
 
     }
 
@@ -141,36 +151,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         setVisible(true);
         //StartCoroutine(OnHover(false));
     }
-    IEnumerator OnHover(bool isEnter)
-    {
-        CombatUI combatCanvas = GameObject.Find("CombatCanvas")?.GetComponent<CombatUI>();
-        combatCanvas?.SetCardsActive(isEnter);
-        /*
-        float duration = 0.1f; 
-        float elapsed = 0f;
-        if (isEnter)
-        {
-            while (Vector3.Distance(_spriteTransform.position, _hoverEndPosition) != 0)
-            {
-                _spriteTransform.position = Vector3.Lerp(_startPosition, _hoverEndPosition, elapsed/duration);
-                elapsed += Time.deltaTime;
-                yield return null;
-            }
-        }
-        else
-        {
-            while (Vector3.Distance(_spriteTransform.position, _startPosition) != 0)
-            {
-                _spriteTransform.position = Vector3.Lerp(_hoverEndPosition, _startPosition, elapsed / duration);
-                elapsed += Time.deltaTime;
-                yield return null;
-                
-            }
-            
-        }
-        */
-        yield return null;
-    }
+    
     public void AddCard(Card newCard)
     {
         _containedCard = newCard;
