@@ -149,7 +149,7 @@ public class CardHandManager : MonoBehaviour
     {
         CardViewUI.GetInstance().UpdateCards(_cardsInDiscardPile);
     }
-    public void RemoveCard(CardContainer cardContainer)
+    public void RemoveCardFromHand(CardContainer cardContainer)
     {
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
@@ -225,7 +225,6 @@ public class CardHandManager : MonoBehaviour
 
         _activeContainer = container;
 
-        
         _addedZoomedCard = Instantiate(
             _zoomedCard,
             position,
@@ -241,5 +240,9 @@ public class CardHandManager : MonoBehaviour
         {
             Destroy(_addedZoomedCard);
         }
+    }
+    public void AddCard(Card newCard)
+    {
+        
     }
 }

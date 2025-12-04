@@ -6,6 +6,10 @@ public enum CardType
     Instant,
     Target,
 }
+public enum CardTag
+{
+    Etherial
+}
 public enum Rarity
 {
     Common,
@@ -24,6 +28,7 @@ public class Card : ScriptableObject
     public Sprite icon;
     public Sprite CardTemplate;
     public List<InfoPanel> info;
+    public List<CardTag> tags;
 
     private int tempCost;
 
