@@ -1393,6 +1393,7 @@ GameObject:
   - component: {fileID: 2930316088563464734}
   - component: {fileID: 1829894416350298730}
   - component: {fileID: 4271344588360548153}
+  - component: {fileID: 1540214721440840404}
   m_Layer: 11
   m_Name: CombatToolTipCanvas
   m_TagString: Untagged
@@ -1507,6 +1508,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!225 &1540214721440840404
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1891408799915883294}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2296794444676017504
 GameObject:
   m_ObjectHideFlags: 0
@@ -1843,8 +1856,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7385472561311656255}
   m_HandleRect: {fileID: 4142872978523023068}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.9578544
+  m_Value: 1.0000014
+  m_Size: 0.9578545
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Tooltipper : MonoBehaviour
@@ -45,28 +46,37 @@ public class Tooltipper : MonoBehaviour
         UpdatePosition();
     }
 
+    private bool IsMouseOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
+    }
     private void ScanForTooltip()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, 999f))
+
+        if (!IsMouseOverUI()) 
         {
-            if (hit.collider.gameObject != _currentObject)
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, 999f))
             {
-                _currentObject = hit.collider.gameObject;
-
-                if (_currentObject.TryGetComponent(out TooltipComponent component))
+                if (hit.collider.gameObject != _currentObject)
                 {
-                    ShowTooltip();
+                    _currentObject = hit.collider.gameObject;
 
-                    string dynamicTooltip = GenerateTooltip();
-                    _tmpText.text = dynamicTooltip + component.GetTooltip();
+                    if (_currentObject.TryGetComponent(out TooltipComponent component))
+                    {
+                        ShowTooltip();
 
-                    return;
+                        string dynamicTooltip = GenerateTooltip();
+                        _tmpText.text = dynamicTooltip + component.GetTooltip();
+
+                        return;
+                    }
+
+                    HideTooltip();
                 }
-
-                HideTooltip();
             }
         }
+        
     }
 
     private void UpdatePosition()
