@@ -287,6 +287,18 @@ public class StatusEffectManager : MonoBehaviour
         return heal;
     }
     
+    public int ApplyBurnDamageModifiers(int baseDamage)
+    {
+        int damage = baseDamage;
+
+        foreach (var statusEffect in _traitManager.GetAllEffects())
+        {
+            statusEffect.ModifyBurnDamage(ref damage);
+        }
+        
+        return damage;
+    }
+    
     // Traits.
     private void OnStartCombat()
     {
