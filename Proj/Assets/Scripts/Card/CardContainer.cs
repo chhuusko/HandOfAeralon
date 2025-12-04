@@ -157,6 +157,10 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         _containedCard = newCard;
         GetComponent<CardUI>().SetUpUIElements(_containedCard);
     }
+    public void UppdateCardUI()
+    {
+        GetComponent<CardUI>().SetUpUIElements(_containedCard);
+    }
     public void SetPos(Vector3 newStarterPoint)
     {
         _startPosition = newStarterPoint;
