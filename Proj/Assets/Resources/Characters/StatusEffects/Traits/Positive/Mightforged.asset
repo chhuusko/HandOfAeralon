@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aea5427431fc81d4ba36f7f7ae4cafe5, type: 3}
-  m_Name: Conduit Of Power
+  m_Name: Mightforged
   m_EditorClassIdentifier: 
-  Name: Conduit Of Power
-  Icon: {fileID: 21300000, guid: cc6e28ee61a304948ad2e705cf27af99, type: 3}
+  Name: Mightforged
+  Icon: {fileID: 21300000, guid: fc407fe7bddd6fb4997de40eedb3c2e6, type: 3}
   Description: 
-  Type: 0
+  Type: 3
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: f65730bf17b379e49acb8171b59b040c, type: 3}
+  Script: {fileID: 11500000, guid: 072728a9222917447a9d9c785540c4ec, type: 3}
   Class: 4
-  IsPositive: 0
-  DamageModifier: 0.1
+  IsPositive: 1
+  DamageModifier: 1.25
