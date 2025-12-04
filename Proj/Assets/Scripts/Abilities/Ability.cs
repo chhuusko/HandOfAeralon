@@ -85,6 +85,8 @@ public abstract class Ability : ScriptableObject
     {
         return _rangeCalculation.CalculateTilesInRange(casterTile, _range);
     }
+    
+    public Type GetAbilityType() => _type;
 
     public IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
     {
