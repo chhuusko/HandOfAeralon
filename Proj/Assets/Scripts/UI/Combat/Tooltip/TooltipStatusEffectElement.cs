@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StatusEffectElement : MonoBehaviour
+public class TooltipStatusEffectElement : MonoBehaviour
 {
     [SerializeField] private Image _statusEffectIcon;
     [SerializeField] private TMP_Text _statusEffectTitle;

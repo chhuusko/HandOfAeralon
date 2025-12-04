@@ -65591,6 +65591,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3923383617070795098, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: _traitElements.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4752778620403498373, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -82821,7 +82826,7 @@ PrefabInstance:
     - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
       propertyPath: _fileToLoadDEBUG
-      value: Level1Easy12x10
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}

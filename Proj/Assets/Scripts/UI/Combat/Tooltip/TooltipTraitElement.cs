@@ -8,7 +8,8 @@ public class TooltipTraitElement : MonoBehaviour
     [SerializeField] private TMP_Text _traitTitle;
     [SerializeField] private TMP_Text _traitDescription;
 
-    public void SetTraitImage(Image image) { _traitImage = image; }
+    public void SetTraitIcon(Image image) { _traitImage.sprite = image.sprite; }
+    public void SetTraitIcon(Sprite sprite) { _traitImage.sprite = sprite; }
     public void SetTraitTitle(string title) { _traitTitle.text = title; }
     public void SetTraitDescription(string description) { _traitDescription.text = description; }
 
