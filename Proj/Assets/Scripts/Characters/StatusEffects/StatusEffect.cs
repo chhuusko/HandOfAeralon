@@ -11,13 +11,14 @@ public abstract class StatusEffect
     protected Character Character { get; private set; }
     protected StatusEffectManager Manager { get; private set; }
     
-    public StatusEffectData Data { get; private set; }
+    [SerializeField] private StatusEffectData _data;
+    public StatusEffectData Data => _data;
     
     protected StatusEffect(int duration = 3)
     {
         Duration = duration;
 
-        Data = StatusEffectDataRegistry.GetDataForType(GetType());
+        _data = StatusEffectDataRegistry.GetDataForType(GetType());
         
         _name = Data.Name;
     }
