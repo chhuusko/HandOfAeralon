@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aea5427431fc81d4ba36f7f7ae4cafe5, type: 3}
-  m_Name: Enraged
+  m_Name: Everflame
   m_EditorClassIdentifier: 
-  Name: Enraged
-  Icon: {fileID: 21300000, guid: d56f6d3f1cf06d446b6462d01314ff2c, type: 3}
-  Description: Character deals 100% more damage
-  Type: 0
-  IsPermanent: 0
-  Script: {fileID: 11500000, guid: 1c36362087c7e82449623b8bd30011d7, type: 3}
-  Class: 4
-  IsPositive: 0
-  DamageModifier: 2
+  Name: Everflame
+  Icon: {fileID: 21300000, guid: 14773e8d51115364dbf0088d062028bb, type: 3}
+  Description: Burn applied by this character deal +1 additional damage per turn
+  Type: 3
+  IsPermanent: 1
+  Script: {fileID: 11500000, guid: 7ddd0eae60304b746b297761f9d2f00a, type: 3}
+  Class: 1
+  IsPositive: 1
+  DamageModifier: 1
