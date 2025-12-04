@@ -55,7 +55,7 @@ MonoBehaviour:
   _selectorCubePrefab: {fileID: 1556502904549677550, guid: 5d7a2055e59b1164283434b489d22345,
     type: 3}
   _currentSelectedCharacter: {fileID: 0}
-  _debugCurrentState: 0
+  _debugCurrentState: 1
   _currentCombatState:
     rid: -2
   _combatTurnOrder:
@@ -164,5 +164,6 @@ MonoBehaviour:
   _bCombatGridLoaded: 0
   _tilesGO: []
   _charactersGO: []
-  inCombatTileMaterial: {fileID: 0}
+  inCombatTileMaterial: {fileID: 2100000, guid: 45cc862a2ec7a7842aa80f0b9bdeb563,
+    type: 2}
   _fileToLoadDEBUG: 

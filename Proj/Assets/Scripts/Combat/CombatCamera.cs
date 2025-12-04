@@ -80,21 +80,6 @@ public class CombatCamera : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            PointerEventData pointer = new PointerEventData(EventSystem.current)
-            {
-                position = Input.mousePosition
-            };
-
-            var results = new System.Collections.Generic.List<RaycastResult>();
-            EventSystem.current.RaycastAll(pointer, results);
-
-            foreach (var r in results)
-            {
-                DebugLog.CJLog("Hit UI: " + r.gameObject.name);
-            }
-        }
         Move();
         ZoomCamera();
     }

@@ -1,8 +1,10 @@
 using System.Security.Cryptography;
+using TMPro;
 using UnityEngine;
 
 public class PopupText : MonoBehaviour
 {
+    [SerializeField] private TMP_Text _text;
     [SerializeField] private float _destroyTime;
     [SerializeField] private Vector3 _randomStartPositionRange;
     private Vector3 _randomStartPosition;
@@ -79,6 +81,8 @@ public class PopupText : MonoBehaviour
 
         transform.position += _randomStartPosition;
     }
+
+    public TMP_Text GetTextMesh() { return _text; }
 
 }
 
