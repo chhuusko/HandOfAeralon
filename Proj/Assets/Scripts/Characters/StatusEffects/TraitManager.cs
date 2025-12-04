@@ -83,7 +83,9 @@ public class TraitManager
     /// </summary>
     public void GenerateTraits(CharacterData character)
     {
-        IReadOnlyList<TraitData> positiveTraits;
+        Debug.Log("Generating traits");
+        
+        IReadOnlyList<StatusEffectData> positiveTraits;
         
         if (UnityEngine.Random.Range(0f, 1f) <= GlobalGameManager.GetInstance().ClassTraitChance)
         {
@@ -94,14 +96,20 @@ public class TraitManager
             positiveTraits = StatusEffectDataRegistry.Instance.GetAllClassTraits(character);
         }
         
-        IReadOnlyList<TraitData> negativeTraits = StatusEffectDataRegistry.Instance.GetAllGlobalTraitsOfType(false);
+        IReadOnlyList<StatusEffectData> negativeTraits = StatusEffectDataRegistry.Instance.GetAllGlobalTraitsOfType(false);
 
-        if (positiveTraits.Count == 0 || negativeTraits.Count == 0)
+        if (positiveTraits.Count == 0)
         {
             return;
         }
         
         AddStatusEffect(positiveTraits[UnityEngine.Random.Range(0, positiveTraits.Count)].CreateInstance());
+        
+        if (negativeTraits.Count == 0)
+        {
+            return;
+        }
+        
         AddStatusEffect(negativeTraits[UnityEngine.Random.Range(0, negativeTraits.Count)].CreateInstance());
     }
 }

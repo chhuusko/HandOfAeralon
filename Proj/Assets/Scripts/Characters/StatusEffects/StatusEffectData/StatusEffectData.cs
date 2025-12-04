@@ -6,12 +6,17 @@ public enum StatusEffectType { Buff, Debuff, ArenaEffect, Trait, CrowdControl }
 [CreateAssetMenu(fileName = "StatusEffectData", menuName = "StatusEffectData/StatusEffectData")]
 public class StatusEffectData : ScriptableObject
 {
+    [Header("General Info")]
     public string Name;
     public Sprite Icon;
     public string Description;
     public StatusEffectType Type;
     public bool IsPermanent;
     public MonoScript Script;
+    
+    [Header("Traits")]
+    public CharacterClass Class;
+    public bool IsPositive;
 
     /// <summary>
     /// Factory method for generating a status effect from the data.
@@ -19,7 +24,7 @@ public class StatusEffectData : ScriptableObject
     /// </summary>
     /// <param name="duration">The amount of turns the status effect lasts.</param>
     /// <returns></returns>
-    public StatusEffect CreateInstance(int duration = 3)
+    public StatusEffect CreateInstance(int duration)
     {
         var type = Script.GetClass();
 
@@ -29,5 +34,17 @@ public class StatusEffectData : ScriptableObject
         }
         
         return (StatusEffect)System.Activator.CreateInstance(type, duration);
+    }
+
+    public StatusEffect CreateInstance()
+    {
+        var type = Script.GetClass();
+
+        if (!typeof(StatusEffect).IsAssignableFrom(type))
+        {
+            return null;
+        }
+        
+        return (StatusEffect)System.Activator.CreateInstance(type);
     }
 }
