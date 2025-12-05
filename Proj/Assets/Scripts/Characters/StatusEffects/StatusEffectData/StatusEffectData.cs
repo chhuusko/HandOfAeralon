@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-public enum StatusEffectType { Buff, Debuff, ArenaEffect, Trait, CrowdControl }
+public enum StatusEffectType { Buff, Debuff, ArenaEffect, Trait }
 
 [CreateAssetMenu(fileName = "StatusEffectData", menuName = "StatusEffectData/StatusEffectData")]
 public class StatusEffectData : ScriptableObject

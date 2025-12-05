@@ -9,7 +9,7 @@ public class FlameMark : Card
         Character character = Selector._instance.GetTileUnderMouse().GetOccupantCharacter();
         if (character != null)
         {
-            character.GetStatusEffectManager().AddStatusEffect(new Burn(2, null));
+            character.GetStatusEffectManager().AddStatusEffect(new Burn(null, 2));
             if (character.GetStatusEffectManager().ContainsStatusEffect<Burn>())
             {
                 character.TakeDamage(15);

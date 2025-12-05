@@ -72,4 +72,5 @@ public abstract class StatusEffect
     public virtual void ModifyIncomingHeal(ref float heal, Ability ability) {}
     public virtual void ModifyOutgoingHeal(ref float heal, Ability ability) {}
     public virtual void ModifyBurnDamage(ref int damage) {}
+    public virtual void ModifyBurnApplicationChance(ref float chance) {}
 }
