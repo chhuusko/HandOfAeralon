@@ -82,9 +82,6 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         _isDragging = true;
         _spawnedParticle = Instantiate(_particleDrag);  
     }
-
-    
-
     public void OnEndDrag(PointerEventData eventData)
     {
         if (_isDragging)
@@ -116,7 +113,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             CardHandManager.GetInstance().ChangeMana(-_containedCard.Getcost());
             _containedCard.PlayCard();
             _containedCard.AfterCardPlay();
-            CardHandManager.GetInstance().RemoveCard(this);   
+            CardHandManager.GetInstance().RemoveCardFromHand(this);   
         }
         
     }

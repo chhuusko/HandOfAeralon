@@ -74,8 +74,9 @@ public class CardHandManager : MonoBehaviour
     public void drawHand()
     {
         _cardsInHand.RemoveAll(o => o == null);
-        while (beginningDraw > _cardsInHand.Count)
+        while (beginningDraw > _cardsInHand.Count && _cardsInDeck.Count != 0)
         {
+            
             if(_cardsInDeck.Count == 0)
             {
                 _cardsInDeck = _cardsInDiscardPile;
@@ -149,11 +150,14 @@ public class CardHandManager : MonoBehaviour
     {
         CardViewUI.GetInstance().UpdateCards(_cardsInDiscardPile);
     }
-    public void RemoveCard(CardContainer cardContainer)
+    public void RemoveCardFromHand(CardContainer cardContainer)
     {
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
-        _cardsInDiscardPile.Add(cardContainer.GetCard());
+        if (!cardContainer.GetCard().tags.Contains(CardTag.Etherial))
+        {
+            _cardsInDiscardPile.Add(cardContainer.GetCard());
+        }
         AddSpaceing();
         _cardsPlayedThisTurn++;
     }
@@ -203,7 +207,19 @@ public class CardHandManager : MonoBehaviour
                 tempTurnsTillCard = turnsTillCard;
                 AddCardFromDeck();
             }
-        
+        }
+        //handle etherial
+        List<CardContainer> removeList = new List<CardContainer>();
+        for (int i = 0; i < _cardsInHand.Count; i++)
+        {
+            if (_cardsInHand[i].GetCard().tags.Contains(CardTag.Etherial))
+            {
+                removeList.Add(_cardsInHand[i]);
+            }
+        }
+        foreach (CardContainer card in removeList)
+        {
+            RemoveCardFromHand(card);
         }
         
     }
@@ -225,7 +241,6 @@ public class CardHandManager : MonoBehaviour
 
         _activeContainer = container;
 
-        
         _addedZoomedCard = Instantiate(
             _zoomedCard,
             position,
@@ -241,5 +256,12 @@ public class CardHandManager : MonoBehaviour
         {
             Destroy(_addedZoomedCard);
         }
+    }
+    public void AddCardToHand(Card newCard)
+    {
+        CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
+        _cardsInHand.Add(newCardContainer);
+        newCardContainer.AddCard(newCard);
+
     }
 }

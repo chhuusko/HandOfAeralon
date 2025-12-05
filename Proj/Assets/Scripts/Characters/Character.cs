@@ -32,7 +32,7 @@ public class CharacterData
     [SerializeField] private List<Ability> _abilities;
     public int CurrentHealthPoints => _currentHealthPoints;
     public IReadOnlyList<Ability> Abilities => _abilities;
-    public List<Ability> CurrentAbilities { get; set; }
+    public List<Ability> ActiveAbilities { get; set; }
     
     [Header("Status Effects")]
     private TraitManager _traitManager = new();
@@ -73,7 +73,7 @@ public class CharacterData
         
         _characterClass = ClassData.characterClass;
         _abilities = ClassData.abilities;
-        CurrentAbilities = _abilities;
+        ActiveAbilities = _abilities;
     }
 
     public void InitializeTraits()
@@ -99,7 +99,7 @@ public class CharacterData
     public void SetCurrentHealthPoints(int health) => _currentHealthPoints = Mathf.Max(health, 0);
     public void Heal(int amount) => SetCurrentHealthPoints(Mathf.Min(CurrentHealthPoints + amount, _baseHealthPoints));
     public void SetAbilities(List<Ability> abilities) => _abilities = new List<Ability>(abilities);
-    public void SetCurrentAbilities(List<Ability> abilities) => CurrentAbilities = abilities;
+    public void SetActiveAbilities(List<Ability> abilities) => ActiveAbilities = abilities;
 }
 
 [RequireComponent(typeof(Rigidbody))]

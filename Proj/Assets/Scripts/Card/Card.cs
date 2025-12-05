@@ -6,6 +6,10 @@ public enum CardType
     Instant,
     Target,
 }
+public enum CardTag
+{
+    Etherial
+}
 public enum Rarity
 {
     Common,
@@ -24,12 +28,17 @@ public class Card : ScriptableObject
     public Sprite icon;
     public Sprite CardTemplate;
     public List<InfoPanel> info;
+    public List<CardTag> tags;
 
     private int tempCost;
-
+    private bool isTempCost;
+    private void Awake()
+    {
+        
+    }
     public int Getcost()
     {
-        if (tempCost != 0)
+        if (isTempCost)
         {
             return tempCost;
         }
@@ -44,7 +53,8 @@ public class Card : ScriptableObject
     }
     public virtual void AfterCardPlay()
     {
-        tempCost = 0;
+        tempCost = cost;
+        isTempCost = false;
     }
     public T Clone<T>() where T : ScriptableObject
     {
@@ -54,15 +64,13 @@ public class Card : ScriptableObject
     }
     public void TempSetCost(int newTempCost)
     {
+        isTempCost = true;
         tempCost = newTempCost;
+        if (tempCost < 0) { tempCost = 0; }
     }
     public void TempModifyCost(int changeInCost)
     {
-        if (tempCost == 0)
-        {
-            tempCost = cost;
-        }
-        
+        isTempCost = true;
         tempCost += changeInCost;
         if (tempCost < 0) { tempCost = 0; }
     }

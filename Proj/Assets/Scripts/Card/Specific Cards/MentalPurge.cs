@@ -12,7 +12,7 @@ public class MentalPurge : Card
 
         foreach (CardContainer card in cards)
         {
-            cardHandManager.RemoveCard(card);
+            cardHandManager.RemoveCardFromHand(card);
         }
         cardHandManager.AddCardFromDeck(count);
     }
