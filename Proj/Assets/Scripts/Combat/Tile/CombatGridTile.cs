@@ -83,7 +83,7 @@ public class CombatGridTile : MonoBehaviour
                     {
                         character.TakeDamage(4);
                         StatusEffectManager statusEffectManager = character.GetComponent<StatusEffectManager>();
-                        statusEffectManager.AddStatusEffect(new Burn(1, null));
+                        statusEffectManager.AddStatusEffect(new Burn(null, 1));
                     } break;
             }
             
