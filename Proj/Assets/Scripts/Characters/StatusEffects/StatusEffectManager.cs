@@ -16,8 +16,9 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnAbilityDataCreated += OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat += OnCombatEnded;
         CombatEventManager.OnStatusEffectAppliedToCharacter += OnStatusEffectApplied;
+        CardHandManager.onCardUse += OnCardPlayed;
 
-        CardHandManager.onTargetCharacter += OnCardPlayed;
+        CardHandManager.onTargetCharacter += OnTargetCharacter;
     }
 
     private void Start()
@@ -49,7 +50,7 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
         CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
         
-        CardHandManager.onTargetCharacter -= OnCardPlayed;
+        CardHandManager.onTargetCharacter -= OnTargetCharacter;
 
         _character.OnTakeDamage -= OnTakeDamage;
     }
@@ -191,17 +192,12 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    private void OnCardPlayed(Character c)
+    private void OnTargetCharacter(Character c)
     {
         if (!_character)
         {
             return;
         } 
-        
-        foreach (var statusEffect in _traitManager.GetAllEffects())
-        {
-            statusEffect.OnCardPlayed();
-        }
 
         if (c != _character)
         {
@@ -440,6 +436,14 @@ public class StatusEffectManager : MonoBehaviour
         foreach (var trait in _traitManager.GetAllTraits())
         {
             trait.OnStatusEffectRemoved(statusEffect);
+        }
+    }
+
+    private void OnCardPlayed(Card card)
+    {
+        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        {
+            statusEffect.OnCardPlayed(card);
         }
     }
     
