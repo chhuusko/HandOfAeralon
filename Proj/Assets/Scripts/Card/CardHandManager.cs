@@ -153,7 +153,10 @@ public class CardHandManager : MonoBehaviour
     {
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
-        _cardsInDiscardPile.Add(cardContainer.GetCard());
+        if (!cardContainer.GetCard().tags.Contains(CardTag.Etherial))
+        {
+            _cardsInDiscardPile.Add(cardContainer.GetCard());
+        }
         AddSpaceing();
         _cardsPlayedThisTurn++;
     }
@@ -241,8 +244,10 @@ public class CardHandManager : MonoBehaviour
             Destroy(_addedZoomedCard);
         }
     }
-    public void AddCard(Card newCard)
+    public void AddCardToHand(Card newCard)
     {
-        
+        CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
+        _cardsInHand.Add(newCardContainer);
+        newCardContainer.AddCard(newCard);
     }
 }
