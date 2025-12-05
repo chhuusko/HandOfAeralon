@@ -131,7 +131,7 @@ public class EnemyAI : MonoBehaviour
         // Filter reachable tiles
         foreach (var tile in moveRange)
         {
-            List<GameObject> pathSample = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, tile.gameObject, true);
+            List<GameObject> pathSample = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, tile.gameObject, false);
 
             if (pathSample != null && pathSample.Count > 0)
             {
@@ -265,7 +265,7 @@ public class EnemyAI : MonoBehaviour
     private List<GameObject> FindPath(GameObject currentTile, GameObject opponentTile)
     {
         List<GameObject> result = new();
-        List<GameObject> path = GridExplorer._instance.FindPathAStar(currentTile, opponentTile);
+        List<GameObject> path = GridExplorer._instance.FindPathAStar(currentTile, opponentTile, false);
 
         if (path == null || path.Count <= 1)
         {
