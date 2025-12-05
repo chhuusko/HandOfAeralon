@@ -515,7 +515,7 @@ public class Character : MonoBehaviour
     }
 
     /// <summary>
-    /// Tries applying stun on the target character, based on the base chance.
+    /// Tries applying stun to the target character, based on the base chance.
     /// </summary>
     /// <param name="target">The target character.</param>
     /// <param name="baseChance">The base chance of stun to succeed.</param>
