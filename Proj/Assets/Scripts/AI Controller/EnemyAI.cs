@@ -289,10 +289,13 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator WaitForMovement()
     {
-        yield return new WaitWhile(() => _currentCharacter.IsMoving());
-
-        TryAttack(_currentCharacter, _targetCharacter);
-
+        CharacterMovement movementComponent = null;
+        if (_currentCharacter.TryGetComponent<CharacterMovement>(out movementComponent))
+        {
+            yield return new WaitWhile(() => movementComponent.IsMoving());
+            TryAttack(_currentCharacter, _targetCharacter);
+        }
+        
         EndTurn();
     }
 
@@ -319,7 +322,7 @@ public class EnemyAI : MonoBehaviour
 
     private void EndTurn()
     {
-        //Debug.LogWarning("EnemyAI.cs | Turn ended!");
+        Debug.LogWarning("EnemyAI.cs | Turn ended!");
 
         _currentCharacter = null;
         _currentTile = null;
