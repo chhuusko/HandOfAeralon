@@ -39,11 +39,12 @@ public class CardHandManager : MonoBehaviour
     // 
     bool isCombat;
 
-
+    public static Action<Card> onCardUse;
     public static Action<int> onManaChange;
     public static Action<Character> onTargetCharacter;
     public static CardHandManager GetInstance() {return _instance;}
     public void ManaChanged(){ onManaChange?.Invoke(_mana); }
+    public void CardUsed(Card usedCard) { onCardUse?.Invoke(usedCard); }
     public void CharacterTarget(Character targetCharacter) { onTargetCharacter?.Invoke(targetCharacter); }
     private void Awake()
     {
