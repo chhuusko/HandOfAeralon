@@ -33,7 +33,7 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         bool died = affectedCharacter.TakeDamage(damage);
 
-        affectedCharacter.Data.SetCurrentAbilities(abilitiesAvailablePostLuteSmash); 
+        affectedCharacter.Data.SetActiveAbilities(abilitiesAvailablePostLuteSmash); 
 
         StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
         if (statusEffectManager == null) return;
