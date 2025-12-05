@@ -318,6 +318,18 @@ public class StatusEffectManager : MonoBehaviour
         
         return chance;
     }
+
+    public float ApplyStunApplicationChanceModifiers(ref float baseChance)
+    {
+        float chance = baseChance;
+
+        foreach (var statusEffect in _traitManager.GetAllEffects())
+        {
+            statusEffect.ModifyStunApplicationChance(ref chance);
+        }
+
+        return chance;
+    }
     
     // Traits.
     private void OnStartCombat()
