@@ -492,24 +492,4 @@ public class Character : MonoBehaviour
             HealthBarManager._instance.Unregister(this);
         }
     }
-    
-    // Status effects.
-    /// <summary>
-    /// Tries applying the burn to the target, with chance influenced by all this character's modifiers.
-    /// </summary>
-    /// <returns>Whether burn was applied.</returns>
-    public bool TryApplyBurn(Character target, float baseChance)
-    {
-        float finalChance = baseChance;
-        
-        _statusEffectManager.ApplyBurnApplicationChanceModifiers(ref finalChance);
-
-        if (UnityEngine.Random.value < finalChance)
-        {
-            _statusEffectManager.AddStatusEffect(new Burn(this));
-            _statusEffectManager.OnBurnApplied(this);
-            return true;
-        }
-        return false;
-    }
 }

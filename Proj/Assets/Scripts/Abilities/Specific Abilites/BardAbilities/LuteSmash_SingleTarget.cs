@@ -32,15 +32,16 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
         // TODO:
         // remove the ability to use Song of Renewal and Inspiring Anthem
 
-        StatusEffect stun = null;
-        if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager) && Random.value <= _applyStunChance)
+        StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
+        if (statusEffectManager == null) return;
+
+        StatusEffect stun = statusEffectManager.TryApplyStun(affectedCharacter, 0, _stunDuration);
+
+        if (stun != null && castingCharacter.GetFaction() == Faction.Friendly)
         {
-            if (castingCharacter.GetFaction() == Faction.Friendly)
-            {
-                CardHandManager.GetInstance().ChangeMana(_manaGain);
-            }
-            statusEffectManager.AddStatusEffect(stun = new Stunned(_stunDuration));
+            CardHandManager.GetInstance().ChangeMana(_manaGain);
         }
+
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun, died);
     }
 

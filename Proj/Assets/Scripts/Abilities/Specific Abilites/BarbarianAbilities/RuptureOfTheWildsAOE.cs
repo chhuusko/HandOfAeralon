@@ -31,19 +31,17 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         bool died = affectedCharacter.TakeDamage(damage);
 
-        StatusEffect stun = null;
 
-        if (Random.value < _stunCharacterHitChance)
+        StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
+        if (statusEffectManager == null) return;
+
+        StatusEffect stun = statusEffectManager.TryApplyStun(affectedCharacter, _stunCharacterHitChance, _stunDuration);
+
+        if (stun != null && castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
         {
-            if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
-            {
-                statusEffectManager.AddStatusEffect(new Stunned(_stunDuration), castingCharacter);
-                if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
-                {
-                    CardHandManager.GetInstance().AddCardFromDeck();
-                }
-            }
+            CardHandManager.GetInstance().AddCardFromDeck();
         }
+
         AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun, died);
     }
 
