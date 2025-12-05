@@ -26,6 +26,7 @@ public class CombatTooltipManager : MonoBehaviour
     {
         _characterLayout.InitializeCharacterStats();
         TooltipStatusEffectElement.OnMouseHoverEnter += ShowHoverTooltip;
+        TooltipStatusEffectElement.OnMouseHoverExit += HideHoverTooltip;
     }
 
     private void Update()
@@ -39,7 +40,12 @@ public class CombatTooltipManager : MonoBehaviour
 
     public void ShowHoverTooltip(string title, string description)
     {
-        _combatHoverTooltip.UpdateText(title, description);
+        _combatHoverTooltip.Show(title, description);
+    }
+    public void HideHoverTooltip()
+    {
+        _combatHoverTooltip.Hide();
+
     }
     public void HideTooltipCanvas()
     {
