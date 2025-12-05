@@ -30,6 +30,11 @@ public class StatusEffectManager : MonoBehaviour
     {
         _character = GetComponent<Character>();
 
+        if (_character != null)
+        {
+            _character.OnTakeDamage += OnTakeDamage;
+        }
+
         if (_traitManager == null)
         {
             _traitManager = _character.GetTraitManager();
@@ -45,6 +50,8 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
         
         CardHandManager.onTargetCharacter -= OnCardPlayed;
+
+        _character.OnTakeDamage -= OnTakeDamage;
     }
 
     public void SetTraitManager(TraitManager traitManager)
@@ -219,7 +226,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void OnCombatEnded()
+    public void OnCombatEnded(bool playerWon)
     {
         foreach (var statusEffect in _traitManager.GetAllEffects())
         {
@@ -287,6 +294,30 @@ public class StatusEffectManager : MonoBehaviour
         return heal;
     }
     
+    public int ApplyBurnDamageModifiers(int baseDamage)
+    {
+        int damage = baseDamage;
+
+        foreach (var statusEffect in _traitManager.GetAllEffects())
+        {
+            statusEffect.ModifyBurnDamage(ref damage);
+        }
+        
+        return damage;
+    }
+    
+    public float ApplyBurnApplicationChanceModifiers(ref float baseChance)
+    {
+        float chance = baseChance;
+
+        foreach (var statusEffect in _traitManager.GetAllEffects())
+        {
+            statusEffect.ModifyBurnApplicationChance(ref chance);
+        }
+        
+        return chance;
+    }
+    
     // Traits.
     private void OnStartCombat()
     {
@@ -304,7 +335,7 @@ public class StatusEffectManager : MonoBehaviour
         } 
     }
     
-    public void OnTakeDamage()
+    private void OnTakeDamage(int damage, GameObject c)
     {
         if (!_character)
         {

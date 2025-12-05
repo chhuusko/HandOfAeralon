@@ -3,8 +3,11 @@ using UnityEngine;
 
 public class Burn : StatusEffect
 {
-    public Burn(int duration) : base(duration)
+    private Character _source;
+    
+    public Burn(Character source, int duration = 3) : base(duration)
     {
+        _source = source;
     }
 
     public override void OnApply()
@@ -21,6 +24,13 @@ public class Burn : StatusEffect
             return;
         }
         
-        Character.TakeDamage(data.Damage);
+        var damage = data.Damage;
+
+        if (_source != null)
+        {
+            _source.GetStatusEffectManager().ApplyBurnDamageModifiers(damage);
+        }
+        
+        Character.TakeDamage(damage);
     }
 }

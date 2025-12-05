@@ -3,9 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnemyAI : MonoBehaviour
 {
+    private struct AIAction
+    {
+        public CombatGridTile movement;
+        public Ability ability;
+        public CombatGridTile target;
+    }
+
     public UnityEvent AIEndTurn;
 
     [SerializeField] private ClassData _barbData, _rogueData, _sorcData, _bardData;
@@ -17,12 +25,13 @@ public class EnemyAI : MonoBehaviour
     private AbilityHandler _currentAbilityHandler = null;
     private List<Ability> _currentAbilities = new();
     private int _currentMoveRange = 0;
-    private int _currentAttackRange = 0;
 
     private Character _targetCharacter = null;
     private GameObject _targetTile = null;
     private List<CombatGridTile> _movePath = new();
 
+    private Dictionary<AIAction, int> _scoredActions = new();
+    private AIAction _chosenAction = new();
 
     private void OnEnable()
     {
@@ -38,42 +47,10 @@ public class EnemyAI : MonoBehaviour
     {
         if (TurnStartedProperly())
         {
-            // Run();
+            //Run();
 
-            _movePath = FindPath(_currentTile, _targetTile)
-                .Select(obj => obj.GetComponent<CombatGridTile>())
-                .Where(ch => ch != null)
-                .ToList();
-
-            if (_currentCharacter.CanMove)
-            {
-                _currentCharacter.GetComponent<CharacterMovement>().ForceCustomPath(_movePath);
-                StartCoroutine(WaitForMovement());
-            }
-            else
-            {
-                TryAttack(_currentCharacter, _targetCharacter);
-                EndTurn();
-            }
+            RunOld();
         }
-    }
-
-    private void Run()
-    {
-        if (_currentCharacter.CanMove)
-        {
-            // Samla alla tiles i min move range
-        }
-        else
-        {
-            // Nuvarande tile == min move range
-        }
-
-        // Provk�r alla abilities fr�n alla tiles i min move range
-
-        // Betygs�tt movement + ability anv�ndning
-
-        // Utf�r det b�sta draget
     }
 
     private bool TurnStartedProperly() // Caching and null checks
@@ -119,9 +96,8 @@ public class EnemyAI : MonoBehaviour
         }
 
         _currentMoveRange = _currentCharacter.GetMovementPoints();
-        _currentAttackRange = 1;
 
-        _targetCharacter = FindClosestTarget(_currentCharacter);
+        _targetCharacter = FindClosestOpponentCharacter(_currentCharacter);
         if (_targetCharacter == null)
         {
             DebugLog.JLWLog($"EnemyAI.cs | _targetCharacter NOT FOUND!");
@@ -138,7 +114,108 @@ public class EnemyAI : MonoBehaviour
         return true;
     }
 
-    private Character FindClosestTarget(Character currentCharacter)
+    private void Run()
+    {
+        List<CombatGridTile> moveRange = new();
+        if (_currentCharacter.CanMove && _currentMoveRange > 0)
+        {
+            moveRange = GridExplorer._instance.GetTilesInRange(_currentTile, _currentMoveRange, true)
+                .Select(obj => obj.GetComponent<CombatGridTile>())
+                .Where(ch => ch != null)
+                .ToList();
+        }
+        else
+        {
+            moveRange.Add(_currentTile.GetComponent<CombatGridTile>());
+        }
+
+        foreach (var pos in moveRange)
+        {
+            int score = 0;
+            AIAction moveOnly = new AIAction { movement = pos };
+
+            Character closestOpponent = FindClosestOpponentCharacter(_currentCharacter);
+            int distance = GridExplorer._instance.ManhattanDistance(pos.GetTileIndex(), closestOpponent.GetCurrentTileIndex());
+            switch (_currentClass)
+            {
+                case CharacterClass.Barbarian: score -= distance; break;
+                case CharacterClass.Bard: score += distance; break;
+                case CharacterClass.Rogue: score -= distance; break;
+                case CharacterClass.Sorceress: score += distance; break;
+            }
+
+            _scoredActions[moveOnly] = score;
+
+            foreach (var ability in _currentAbilities)
+            {
+                _currentAbilityHandler.SetPendingAbility(ability);
+                _currentAbilityHandler.CalculateAbilityRange(pos);
+                List<CombatGridTile> abilityRange = _currentAbilityHandler.GetTilesInRange();
+
+                foreach (var tile in abilityRange)
+                {
+                    AIAction moveAndUseAbility = new AIAction { movement = pos, ability = ability, target = tile };
+                    int newScore = score;
+
+                    if (tile.GetOccupantCharacter() != null && tile.GetOccupantCharacter().GetFaction() != _controlledFaction)
+                    {
+                        newScore += 10;
+                        _scoredActions[moveAndUseAbility] = newScore;
+                    }
+
+                    // Get ability area of effect
+                    // Check if any damage or healing is done and add score
+                }
+            }
+        }
+
+        foreach (var entry in _scoredActions)
+        {
+            string ability = entry.Key.ability != null ? entry.Key.ability.name : "None";
+            string target = entry.Key.target != null ? entry.Key.target.GetTileIndex().ToString() : "None";
+
+            DebugLog.JLWLogWarning($"EnemyAI.cs | Move to: {entry.Key.movement.GetTileIndex()}, Ability: {ability}, Target: {target}, Score: {entry.Value}.");
+        }
+
+        string chosenAbility = _chosenAction.ability != null ? _chosenAction.ability.name : "None";
+        string chosenTarget = _chosenAction.target != null ? _chosenAction.target.GetTileIndex().ToString() : "None";
+        _chosenAction = _scoredActions.OrderByDescending(x => x.Value).First().Key;
+        DebugLog.JLWLogWarning($"EnemyAI.cs | CHOSEN ACTION = Move to: {_chosenAction.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, Score: {_scoredActions[_chosenAction]}.");
+
+        if (_currentCharacter.CanMove)
+        {
+            _movePath = FindPath(_currentTile, _chosenAction.movement.gameObject)
+                .Select(obj => obj.GetComponent<CombatGridTile>())
+                .Where(ch => ch != null)
+                .ToList();
+
+            _currentCharacter.GetComponent<CharacterMovement>().ForceCustomPath(_movePath);
+        }
+
+        StartCoroutine(WaitForMovement());
+        // Use chosen ability
+    }
+
+    private void RunOld()
+    {
+        _movePath = FindPath(_currentTile, _targetTile)
+                .Select(obj => obj.GetComponent<CombatGridTile>())
+                .Where(ch => ch != null)
+                .ToList();
+
+        if (_currentCharacter.CanMove)
+        {
+            _currentCharacter.GetComponent<CharacterMovement>().ForceCustomPath(_movePath);
+            StartCoroutine(WaitForMovement());
+        }
+        else
+        {
+            TryAttack(_currentCharacter, _targetCharacter);
+            EndTurn();
+        }
+    }
+
+    private Character FindClosestOpponentCharacter(Character currentCharacter)
     {
         Character result = null;
         List<Character> opponentCharacters = new();
@@ -190,7 +267,7 @@ public class EnemyAI : MonoBehaviour
             GameObject tile = path[i];
             int distToEnemy = GridExplorer._instance.ManhattanDistance(tile.GetComponent<CombatGridTile>().GetTileIndex(), opponentTile.GetComponent<CombatGridTile>().GetTileIndex());
 
-            if (distToEnemy == _currentAttackRange)
+            if (distToEnemy == 1)
             {
                 result.Add(tile);
                 return result;
@@ -214,15 +291,7 @@ public class EnemyAI : MonoBehaviour
     {
         yield return new WaitWhile(() => _currentCharacter.IsMoving());
 
-        _currentTile = _currentCharacter.GetCurrentTileComponent().gameObject;
-        if (_currentTile != null)
-        {
-            TryAttack(_currentCharacter, _targetCharacter);
-        }
-        else
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | currentTile NOT FOUND!");
-        }
+        TryAttack(_currentCharacter, _targetCharacter);
 
         EndTurn();
     }
@@ -234,17 +303,7 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        /*
-        Ability chosenAbility = _currentAbilities[Random.Range(0, _currentAbilities.Count)];
-        CombatGridTile targetTile = target.GetCurrentTileComponent();
-
-        _currentAbilityHandler.SetPendingAbility(chosenAbility);
-        DebugLog.JLWLog($"EnemyAI.cs | {chosenAbility.name} set as pending ability.");
-        _currentAbilityHandler.UseAbility(chosenAbility, targetTile);
-        DebugLog.JLWLog($"EnemyAI.cs | {chosenAbility.name} cast on tile {targetTile.GetTileIndex()}");
-        */
-
-        if (GridExplorer._instance.ChebyshevDistance(attacker.GetCurrentTileIndex(), target.GetCurrentTileIndex()) <= _currentAttackRange)
+        if (GridExplorer._instance.ChebyshevDistance(attacker.GetCurrentTileIndex(), target.GetCurrentTileIndex()) <= 1)
         {
             Vector3 direction = (target.transform.position - _currentCharacter.transform.position).normalized;
             direction.y = 0f;
@@ -255,22 +314,24 @@ public class EnemyAI : MonoBehaviour
             }
 
             target.TakeDamage(_currentCharacter.GetDamage());
-            return;
         }
     }
 
     private void EndTurn()
     {
+        //Debug.LogWarning("EnemyAI.cs | Turn ended!");
+
         _currentCharacter = null;
         _currentTile = null;
         _currentClass = CharacterClass.None;
         _currentAbilityHandler = null;
         _currentAbilities = new();
         _currentMoveRange = 0;
-        _currentAttackRange = 0;
         _targetCharacter = null;
         _targetTile = null;
         _movePath = new();
+        _scoredActions = new();
+        _chosenAction = new();
 
         AIEndTurn.Invoke();
     }

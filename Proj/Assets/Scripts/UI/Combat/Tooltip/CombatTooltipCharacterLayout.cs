@@ -24,7 +24,9 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
     [SerializeField] private GameObject _layout;
     [SerializeField] private Image _characterIcon;
     [SerializeField] private TMP_Text _characterClassName;
-
+    [SerializeField] private Animator _animatorShowHideButton;
+    private Animator _animator;
+    
     // Stats Tooltip
     private List<string> _characterStatValues = new List<string>();
     [SerializeField] private TMP_Text _characterStatValueFieldTMP;
@@ -52,6 +54,7 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         CombatEventManager.OnStatusEffectExpiredOnCharacter += RemoveStatusEffectOnSelectedCharacter;
         CombatEventManager.OnStatusEffectDurationChanged += UpdateSelectedCharacter;
 
+        _animator = GetComponent<Animator>();
 
     }
 
@@ -132,6 +135,18 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
             stats += value + "\n";
         }
         _characterStatValueFieldTMP.text = stats;
+    }
+
+    public void HideCanvas()
+    {
+        _animator.Play("Hide");
+        _animatorShowHideButton.Play("BlinkOn");
+    }
+
+    public void ShowCanvas()
+    {
+        _animator.Play("Show");
+        _animatorShowHideButton.Play("BlinkOff");
     }
 
     private void HideToolTip()

@@ -73,13 +73,16 @@ public abstract class Ability : ScriptableObject
     public float GetRange() => _range;
     public int GetCooldown() => _cooldown;
     public string GetDescription() => _description;
+    public float GetCastingRotationTime() => _castingRotationTime;
+    public float GetCastingTime() => _castingTime;  
+    public float GetFromCastToHitTime() => _fromCastToHitTime;
     public void SetCooldown(int cooldown)
     {
         _cooldown = cooldown;
     }
     public ValidTargetOccupant GetAbilityTargetType() => _targetType;
 
-    public RangeCalculation GetRangeCalculation => _rangeCalculation;
+    public RangeCalculation GetRangeCalculation() => _rangeCalculation;
 
     public List<CombatGridTile> GetAvailableTargets(CombatGridTile casterTile)
     {
@@ -88,7 +91,7 @@ public abstract class Ability : ScriptableObject
     
     public Type GetAbilityType() => _type;
 
-    public IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
+    public virtual IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         Character caster = casterTile.GetOccupantCharacter();
         if (caster == null) Debug.LogError("CasterTile has no character!");

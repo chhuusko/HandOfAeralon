@@ -262,7 +262,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterLayout: {fileID: 5439981643615826940}
-  _canvasAnimator: {fileID: 4271344588360548153}
 --- !u!1 &186559143019193527
 GameObject:
   m_ObjectHideFlags: 0
@@ -2035,7 +2034,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 310, y: 307}
-  m_SizeDelta: {x: 80, y: 80}
+  m_SizeDelta: {x: 120, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &893004104385294796
 CanvasRenderer:
@@ -2141,7 +2140,7 @@ Animator:
   m_GameObject: {fileID: 2808564170086303615}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3c975b970d45ddc4f8b4bdaeab414ece, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3297,6 +3296,7 @@ GameObject:
   - component: {fileID: 2141129235437875565}
   - component: {fileID: 6638300355159702934}
   - component: {fileID: 6824301237100227187}
+  - component: {fileID: 2481587952441418728}
   m_Layer: 11
   m_Name: CloseButton
   m_TagString: Untagged
@@ -3418,6 +3418,28 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!95 &2481587952441418728
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4639302559269253763}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4935998511988733895
 GameObject:
   m_ObjectHideFlags: 0
@@ -4738,6 +4760,7 @@ GameObject:
   - component: {fileID: 4975281972219120708}
   - component: {fileID: 4786900338054193033}
   - component: {fileID: 5439981643615826940}
+  - component: {fileID: 8818560254770925049}
   m_Layer: 11
   m_Name: CharacterLayoutPanel
   m_TagString: Untagged
@@ -4764,7 +4787,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -568.99994, y: 0}
   m_SizeDelta: {x: 600, y: 800}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &4975281972219120708
@@ -4820,6 +4843,7 @@ MonoBehaviour:
   _layout: {fileID: 6716840115242357755}
   _characterIcon: {fileID: 8556312108548137455}
   _characterClassName: {fileID: 8766055436067940056}
+  _animatorShowHideButton: {fileID: 6100944234095259584}
   _characterStatValueFieldTMP: {fileID: 2310599192842722050}
   _traitParent: {fileID: 5754223381464925081}
   _traitElementPrefab: {fileID: 365476414395509756, guid: ddee54f6c26117a4ca2a93a07e38bf54,
@@ -4831,6 +4855,28 @@ MonoBehaviour:
   _statusEffectPrefab: {fileID: 7810270610449101031, guid: 83d990e295901ff478e1d67c839460eb,
     type: 3}
   _statusEffects: []
+--- !u!95 &8818560254770925049
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8604865444752852893}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d2d125a105732b948ac01193e8d19a66, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8764175567194353653
 GameObject:
   m_ObjectHideFlags: 0

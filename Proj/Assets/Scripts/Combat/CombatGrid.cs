@@ -279,8 +279,12 @@ public class CombatGrid : MonoBehaviour
         List<GameObject> friendlyCharacters = new List<GameObject>();
         foreach (GameObject character in _charactersGO)
         {
-            if (character.GetComponent<Character>().GetFaction() == Faction.Friendly)
-                friendlyCharacters.Add(character);
+            Character characterScript = character.GetComponent<Character>();
+            if (characterScript != null)
+            {
+                if (characterScript.GetFaction() == Faction.Friendly)
+                    friendlyCharacters.Add(character);
+            }
         }
         return friendlyCharacters;
     }
@@ -290,8 +294,16 @@ public class CombatGrid : MonoBehaviour
         List<GameObject> enemyCharacters = new List<GameObject>();
         foreach (GameObject character in _charactersGO)
         {
-            if (character.GetComponent<Character>().GetFaction() == Faction.Enemy)
-                enemyCharacters.Add(character);
+            if (character == null)
+                continue;
+
+            Character characterScript = character.GetComponent<Character>();
+            if (characterScript != null) 
+            {
+                if (characterScript.GetFaction() == Faction.Enemy)
+                    enemyCharacters.Add(character);
+            }
+            
         }
         return enemyCharacters;
     }
@@ -454,6 +466,7 @@ public class CombatGrid : MonoBehaviour
                         {
                             meshRend.material = inCombatTileMaterial;
                             meshRend.material.SetVector("_TextureTileCoord", new Vector2(1, 0));
+                            meshRend.material.SetColor("_TileColor", Color.white);
                         }
                     }
                     break;
@@ -463,6 +476,7 @@ public class CombatGrid : MonoBehaviour
                         {
                             meshRend.material = inCombatTileMaterial;
                             meshRend.material.SetVector("_TextureTileCoord", new Vector2(2, 0));
+                            meshRend.material.SetColor("_TileColor", Color.white);
                         }
                     }
                     break;

@@ -15,7 +15,7 @@ public static class CombatEventManager
     public static event Action OnEnterCombatStatePlaceCharacter;
     public static event Action<Character> OnEnterCombatStateTakeTurn;
     public static event Action OnEnterCombatStateEndTurn;
-    public static event Action OnEnterCombatStateEndCombat;
+    public static event Action<bool> OnEnterCombatStateEndCombat;
 
     // Exit Combat States
     public static event Action OnExitCombatStateLoadNextLevel;
@@ -23,7 +23,7 @@ public static class CombatEventManager
     public static event Action OnExitCombatStatePlaceCharacter;
     public static event Action OnExitCombatStateTakeTurn;
     public static event Action OnExitCombatStateEndTurn;
-    public static event Action OnExitCombatStateEndCombat;
+    public static event Action<bool> OnExitCombatStateEndCombat;
 
     public static event Action<IReadOnlyList<Character>> OnTurnOrderChanged;
 
@@ -59,8 +59,8 @@ public static class CombatEventManager
 
     public static void InvokeEnterCombatStateEndTurn()
         => OnEnterCombatStateEndTurn?.Invoke();
-    public static void InvokeEnterCombatStateEndCombat()
-        => OnEnterCombatStateEndCombat?.Invoke();
+    public static void InvokeEnterCombatStateEndCombat(bool playerWon)
+        => OnEnterCombatStateEndCombat?.Invoke(playerWon);
 
     public static void InvokeExitCombatStateLoadNextLevel()
     => OnExitCombatStateLoadNextLevel?.Invoke();
@@ -76,8 +76,8 @@ public static class CombatEventManager
 
     public static void InvokeExitCombatStateEndTurn()
         => OnExitCombatStateEndTurn?.Invoke();
-    public static void InvokeExitCombatStateEndCombat()
-        => OnExitCombatStateEndCombat?.Invoke();
+    public static void InvokeExitCombatStateEndCombat(bool playerWon)
+        => OnExitCombatStateEndCombat?.Invoke(playerWon);
 
     public static void InvokeOnCharacterDeath(Character character)
         => OnCharacterDeath?.Invoke(character);

@@ -48,7 +48,7 @@ public class GlobalGameManager : ScriptableObject
         CombatEventManager.OnCharacterDeath -= RemoveCharacter;
         CombatEventManager.OnExitCombatStateEndCombat -= GetCombatCoins;
     }
-    private void GetCombatCoins()
+    private void GetCombatCoins(bool playerWon)
     {
         _currentGame.coins += 200;
     }

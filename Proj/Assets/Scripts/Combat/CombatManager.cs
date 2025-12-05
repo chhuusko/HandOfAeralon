@@ -185,7 +185,7 @@ public class CombatManager : MonoBehaviour
         newCombatState?.Enter();
     }
 
-    private void HandleEndCombat()
+    private void HandleEndCombat(bool playerWon)
     {
         _currentCombatState = null;
         LevelManager.GetInstance().StartNextLevel();
