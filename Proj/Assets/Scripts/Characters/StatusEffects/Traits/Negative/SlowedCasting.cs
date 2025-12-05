@@ -9,7 +9,7 @@ public class SlowedCasting : Trait
         _effectApplied = false;
     }
 
-    public override void OnAbilityUsed(Ability ability)
+    public override void OnAbilityUsed(AbilityExecutionData abilityData)
     {
         if (_effectApplied)
         {
@@ -24,6 +24,7 @@ public class SlowedCasting : Trait
         }
         
         _effectApplied = true;
+        var ability = abilityData.Ability;
         ability.SetCooldown(ability.GetCooldown() + data.Modifier);
     }
 }

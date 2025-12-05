@@ -82,6 +82,7 @@ public class StatusEffectManager : MonoBehaviour
         statusEffect.OnExpire();
         _traitManager.RemoveStatusEffect(statusEffect);
         CombatEventManager.InvokeOnStatusEffectExpiredOnCharacter(_character, statusEffect);
+        OnStatusEffectRemoved(statusEffect);
     }
 
     public int ClearStatusEffects(StatusEffectType type)
@@ -348,21 +349,21 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    private void OnAbilityUsed(AbilityExecutionData data)
+    private void OnAbilityUsed(AbilityExecutionData abilityData)
     {
         if (!_character)
         {
             return;
         }
         
-        if (data.Caster != _character)
+        if (abilityData.Caster != _character)
         {
             return;
         }
         
         foreach (var trait in _traitManager.GetAllTraits())
         {
-            trait.OnAbilityUsed(data.Ability);
+            trait.OnAbilityUsed(abilityData);
         }
     }
 
@@ -376,6 +377,14 @@ public class StatusEffectManager : MonoBehaviour
         foreach (var trait in _traitManager.GetAllTraits())
         {
             trait.OnStatusEffectApplied(caster, statusEffect);
+        }
+    }
+
+    private void OnStatusEffectRemoved(StatusEffect statusEffect)
+    {
+        foreach (var trait in _traitManager.GetAllTraits())
+        {
+            trait.OnStatusEffectRemoved(statusEffect);
         }
     }
 }

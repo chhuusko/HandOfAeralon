@@ -9,9 +9,9 @@ public class RhythmicFury : Trait
         _totalDamageIncrease = 1;
     }
 
-    public override void OnAbilityUsed(Ability ability)
+    public override void OnAbilityUsed(AbilityExecutionData abilityData)
     {
-        var abilityType = ability.GetAbilityType();
+        var abilityType = abilityData.Ability.GetAbilityType();
         if (abilityType is Ability.Type.Elemental or Ability.Type.Physical)
         {
             return;
