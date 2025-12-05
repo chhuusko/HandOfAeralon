@@ -11,6 +11,8 @@ public class FlameSurge_Ability : DirectedAOEAbility
     [SerializeField] private int _charactersBurnedToGainMana = 2;
     [SerializeField] private int _manaGain = 1;
 
+
+
     // Description
 
     // Unleash a burst of fire, dealing(100% � Damage) Elemental damage to all characters in area.

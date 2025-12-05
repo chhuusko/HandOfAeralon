@@ -8,6 +8,11 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
     [SerializeField] private float _manaDamageMultiplier = 0.1f;
     [SerializeField] private int _enemyManaAmount = 6;
 
+    [Header("- Emberwake Effects -")]
+    [SerializeField] private float _emberwakeBurnChance = 0.25f;
+    [SerializeField] private int _emberwakeBurnAmount = 2;
+
+
     // Description
 
     // Deals((40% + 10% per current Mana) × Damage) Elemental damage. (Enemy always has 6 Mana)
@@ -23,7 +28,13 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
 
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         bool died = affectedCharacter.TakeDamage(damage);
-        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, null, died);
+
+        StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
+        if (statusEffectManager == null) return;
+
+        StatusEffect burn = castingCharacter.TryApplyBurn(affectedCharacter, _emberwakeBurnChance, _emberwakeBurnAmount);
+
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, burn, died);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
