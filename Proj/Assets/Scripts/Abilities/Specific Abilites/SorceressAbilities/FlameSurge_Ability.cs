@@ -11,6 +11,11 @@ public class FlameSurge_Ability : DirectedAOEAbility
     [SerializeField] private int _charactersBurnedToGainMana = 2;
     [SerializeField] private int _manaGain = 1;
 
+    [Header("- Emberwake Effects -")]
+    [SerializeField] private int _emberwakeBurnAmount = 2;
+
+
+
     // Description
 
     // Unleash a burst of fire, dealing(100% � Damage) Elemental damage to all characters in area.
@@ -114,20 +119,19 @@ public class FlameSurge_Ability : DirectedAOEAbility
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         bool died = affectedCharacter.TakeDamage(damage);
 
-        StatusEffect slow = null;
 
-        if (Random.value < _chanceToBurnCharacters)
+        StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
+        if (statusEffectManager == null) return;
+
+        int burnDuration = Mathf.Max(_emberwakeBurnAmount, _burnDuration);
+        StatusEffect burn = statusEffectManager.TryApplyBurn(affectedCharacter, _chanceToBurnCharacters, burnDuration);
+
+        if (burn != null)
         {
-            if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
-            {
-                statusEffectManager.AddStatusEffect(slow = new Slowed(_burnDuration), castingCharacter);
-                if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
-                {
-                    burnedEnemiesCounter++;
-                }
-            }
+            burnedEnemiesCounter++;
         }
-        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, slow, died);
+
+        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, burn, died);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)

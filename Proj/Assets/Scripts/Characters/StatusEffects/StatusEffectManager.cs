@@ -307,7 +307,50 @@ public class StatusEffectManager : MonoBehaviour
         return damage;
     }
     
-    public float ApplyBurnApplicationChanceModifiers(ref float baseChance)
+    // Status effects.
+    /// <summary>
+    /// Tries applying the burn to the target, with chance influenced by all this character's modifiers.
+    /// </summary>
+    /// <returns>The applied burn, or null if no burn was applied.</returns>
+    public Burn TryApplyBurn(Character target, float baseChance, int duration)
+    {
+        float finalChance = baseChance;
+        
+        ApplyBurnApplicationChanceModifiers(ref finalChance);
+
+        if (UnityEngine.Random.value < finalChance)
+        {
+            Burn burn = new Burn(_character, duration);
+            AddStatusEffect(burn);
+            OnBurnApplied(_character);
+            return burn;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Tries applying stun to the target character, based on the base chance.
+    /// </summary>
+    /// <param name="target">The target character.</param>
+    /// <param name="baseChance">The base chance of stun to succeed.</param>
+    /// <param name="duration">The amount of turns for the target to be stunned.</param>
+    /// <returns>The applied stun, or null if no stun was applied.</returns>
+    public Stunned TryApplyStun(Character target, float baseChance, int duration)
+    {
+        float finalChance = baseChance;
+        
+        ApplyStunApplicationChanceModifiers(ref finalChance);
+
+        if (UnityEngine.Random.value < finalChance)
+        {
+            Stunned stun = new Stunned(duration);
+            AddStatusEffect(stun);
+            return stun;
+        }
+        return null;
+    }
+    
+    private float ApplyBurnApplicationChanceModifiers(ref float baseChance)
     {
         float chance = baseChance;
 
@@ -316,6 +359,18 @@ public class StatusEffectManager : MonoBehaviour
             statusEffect.ModifyBurnApplicationChance(ref chance);
         }
         
+        return chance;
+    }
+
+    private float ApplyStunApplicationChanceModifiers(ref float baseChance)
+    {
+        float chance = baseChance;
+
+        foreach (var statusEffect in _traitManager.GetAllEffects())
+        {
+            statusEffect.ModifyStunApplicationChance(ref chance);
+        }
+
         return chance;
     }
     
@@ -386,5 +441,17 @@ public class StatusEffectManager : MonoBehaviour
         {
             trait.OnStatusEffectRemoved(statusEffect);
         }
+    }
+    
+    public int ApplyAoEModifiers(ref int baseAoE)
+    {
+        int AoE = baseAoE;
+
+        foreach (var trait in _traitManager.GetAllTraits())
+        {
+            trait.ModifyAoE(ref AoE);
+        }
+        
+        return AoE;
     }
 }
