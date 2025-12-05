@@ -212,6 +212,7 @@ public class CardHandManager : MonoBehaviour
         List<CardContainer> removeList = new List<CardContainer>();
         for (int i = 0; i < _cardsInHand.Count; i++)
         {
+            if (_cardsInHand[i].GetCard().tags.Contains(CardTag.Etherial))
             {
                 removeList.Add(_cardsInHand[i]);
             }
