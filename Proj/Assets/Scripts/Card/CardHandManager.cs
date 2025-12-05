@@ -249,5 +249,6 @@ public class CardHandManager : MonoBehaviour
         CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
         _cardsInHand.Add(newCardContainer);
         newCardContainer.AddCard(newCard);
+
     }
 }
