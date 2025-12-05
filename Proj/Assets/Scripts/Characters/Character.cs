@@ -392,7 +392,13 @@ public class Character : MonoBehaviour
         }
     }
     
-    public void TakeDamage(int damage)
+    
+    /// <summary>
+    /// Takes damages.
+    /// </summary>
+    /// <param name="damage">The amount of damage to take.</param>
+    /// <returns>Whether the character died.</returns>
+    public bool TakeDamage(int damage)
     {
         _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
@@ -403,15 +409,16 @@ public class Character : MonoBehaviour
         if (_data.CurrentHealthPoints <= 0)
         {
             StartCoroutine(RemoveCharacter());
+            return true;
         }
-        else
+        
+        Animator animator = null;
+        if (TryGetComponent<Animator>(out animator))
         {
-            Animator animator = null;
-            if (TryGetComponent<Animator>(out animator))
-            {
-                animator.SetTrigger("TakeDamage");
-            }
+            animator.SetTrigger("TakeDamage");
         }
+
+        return false;
     }
      
     private IEnumerator RemoveCharacter()

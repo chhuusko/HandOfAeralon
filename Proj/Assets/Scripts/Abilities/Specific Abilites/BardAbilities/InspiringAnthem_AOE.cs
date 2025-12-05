@@ -58,7 +58,7 @@ public class InspiringAnthem_AOE : RoundAOEAbility
         if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
            statusEffectManager.AddStatusEffect(haste = new Haste(_hasteStacks), castingCharacter);
         }
-        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, haste);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, haste, false);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)

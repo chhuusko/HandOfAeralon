@@ -49,7 +49,7 @@ public class SongOfRenewalAOE : RoundAOEAbility
 
         int healAmount = CalculateHealAmount(castingCharacter, affectedCharacter, false);
         affectedCharacter.Heal(healAmount);
-        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, healAmount, null);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, healAmount, null, false);
     }
 
     private void ApplyEffectOnMainTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
@@ -63,7 +63,7 @@ public class SongOfRenewalAOE : RoundAOEAbility
 
         int healAmount = CalculateHealAmount(castingCharacter, affectedCharacter, true);
         affectedCharacter.Heal(healAmount);
-        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, healAmount, null);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, healAmount, null, false);
     }
 
     private int CalculateHealAmount(Character castingCharacter, Character affectedCharacter, bool bIsMainTarget)

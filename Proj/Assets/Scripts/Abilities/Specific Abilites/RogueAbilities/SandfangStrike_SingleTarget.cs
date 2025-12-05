@@ -25,7 +25,7 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
         if (castingCharacter == null) return;
 
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
-        affectedCharacter.TakeDamage(damage);
+        bool died = affectedCharacter.TakeDamage(damage);
 
         StatusEffect poison = null;
         if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
@@ -34,7 +34,7 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
             }
             statusEffectManager.AddStatusEffect(poison = new Poison(_posionStacksToApply), castingCharacter);
         }
-        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, poison);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, poison, died);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b3651dfdfac34b49a855527cf48a9ee, type: 3}
+  m_Name: Fragile
+  m_EditorClassIdentifier: 
+  Name: Fragile
+  Icon: {fileID: 21300000, guid: 99a6de8053902374c8cf27d3493d321b, type: 3}
+  Description: First time you fall below 50% HP each combat, become Vulnerable for
+    2 turns
+  Type: 3
+  IsPermanent: 1
+  Script: {fileID: 11500000, guid: bed5fba5757715d4aa93c0b27b987976, type: 3}
+  Class: 4
+  IsPositive: 0
+  Threshold: 0.5
+  TurnAmount: 2

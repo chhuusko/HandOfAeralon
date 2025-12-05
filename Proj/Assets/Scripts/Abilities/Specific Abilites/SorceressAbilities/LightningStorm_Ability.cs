@@ -52,7 +52,7 @@ public class LightningStorm_Ability : RoundAOEAbility
         if (castingCharacter == null) return;
 
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
-        affectedCharacter.TakeDamage(damage);
+        bool died = affectedCharacter.TakeDamage(damage);
 
         StatusEffect stun = null;
 
@@ -64,7 +64,7 @@ public class LightningStorm_Ability : RoundAOEAbility
                 enemyStunned = true;
             }
         }
-        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun);
+        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun, died);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
