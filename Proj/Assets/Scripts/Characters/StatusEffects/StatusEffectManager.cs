@@ -348,21 +348,21 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    private void OnAbilityUsed(AbilityExecutionData data)
+    private void OnAbilityUsed(AbilityExecutionData abilityData)
     {
         if (!_character)
         {
             return;
         }
         
-        if (data.Caster != _character)
+        if (abilityData.Caster != _character)
         {
             return;
         }
         
         foreach (var trait in _traitManager.GetAllTraits())
         {
-            trait.OnAbilityUsed(data.Ability);
+            trait.OnAbilityUsed(abilityData);
         }
     }
 
