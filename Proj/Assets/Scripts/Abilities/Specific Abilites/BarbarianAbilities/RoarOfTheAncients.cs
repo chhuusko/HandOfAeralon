@@ -88,11 +88,11 @@ public class RoarOfTheAncients : RoundAOEAbility
         {
             StatusEffect weakened = new Weakened(_weakenedDuration);
             statusEffectManager.AddStatusEffect(weakened, castingCharacter);
-            AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, weakened);
+            AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, weakened, false);
 
             _enemiesWeakened++;
         }
-        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, slow);
+        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, slow, false);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)

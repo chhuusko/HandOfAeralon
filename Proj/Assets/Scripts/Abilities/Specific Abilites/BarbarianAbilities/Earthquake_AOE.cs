@@ -102,7 +102,7 @@ public class Earthquake_AOE : DirectedAOEAbility
         if (castingCharacter == null) return;
 
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
-        affectedCharacter.TakeDamage(damage);
+        bool died = affectedCharacter.TakeDamage(damage);
 
         StatusEffect slow = null;
 
@@ -117,7 +117,7 @@ public class Earthquake_AOE : DirectedAOEAbility
                 }
             }
         }
-        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, slow);
+        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, slow, died);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)

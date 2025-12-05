@@ -79,7 +79,7 @@ public class DesertsGrasp_Ability : RoundAOEAbility
         if (castingCharacter == null) return;
 
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
-        affectedCharacter.TakeDamage(damage);
+        bool died = affectedCharacter.TakeDamage(damage);
 
         StatusEffect poison = null;
 
@@ -91,7 +91,7 @@ public class DesertsGrasp_Ability : RoundAOEAbility
                 _enemiesPoisoned++;
             }
         }
-        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, poison);
+        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, poison, died);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
