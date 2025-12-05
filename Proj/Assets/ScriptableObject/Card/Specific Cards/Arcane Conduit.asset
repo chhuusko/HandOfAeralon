@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77e82eecbb854cf42ab9213ef52c1857, type: 3}
-  m_Name: Seismic Bolt
+  m_Script: {fileID: 11500000, guid: 133bc4d7aaac04547904190d272aa0b4, type: 3}
+  m_Name: Arcane Conduit
   m_EditorClassIdentifier: 
   type: 1
   rarity: 0
-  title: Seismic Bolt
-  description: Deal 5 damage and apply Aftershock to target for 1 turn
-  cost: 3
-  icon: {fileID: 21300000, guid: 8fb51d21f99ca4842931224f1ad85aab, type: 3}
+  title: Arcane Conduit
+  description: Grant target character Conduit of Power until the end of combat
+  cost: 4
+  icon: {fileID: 21300000, guid: 7e7dcf2d37d27b64ea5589fcb8dac226, type: 3}
   CardTemplate: {fileID: 0}
   info: []
   tags: 
