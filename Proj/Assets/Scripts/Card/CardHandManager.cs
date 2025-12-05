@@ -74,8 +74,9 @@ public class CardHandManager : MonoBehaviour
     public void drawHand()
     {
         _cardsInHand.RemoveAll(o => o == null);
-        while (beginningDraw > _cardsInHand.Count)
+        while (beginningDraw > _cardsInHand.Count && _cardsInDeck.Count != 0)
         {
+            
             if(_cardsInDeck.Count == 0)
             {
                 _cardsInDeck = _cardsInDiscardPile;
@@ -206,7 +207,18 @@ public class CardHandManager : MonoBehaviour
                 tempTurnsTillCard = turnsTillCard;
                 AddCardFromDeck();
             }
-        
+        }
+        //handle etherial
+        List<CardContainer> removeList = new List<CardContainer>();
+        for (int i = 0; i < _cardsInHand.Count; i++)
+        {
+            {
+                removeList.Add(_cardsInHand[i]);
+            }
+        }
+        foreach (CardContainer card in removeList)
+        {
+            RemoveCardFromHand(card);
         }
         
     }
