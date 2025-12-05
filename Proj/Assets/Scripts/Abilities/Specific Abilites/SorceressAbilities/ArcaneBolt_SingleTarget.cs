@@ -22,8 +22,8 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
         if (castingCharacter == null) return;
 
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
-        affectedCharacter.TakeDamage(damage);
-        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, null);
+        bool died = affectedCharacter.TakeDamage(damage);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, null, died);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)

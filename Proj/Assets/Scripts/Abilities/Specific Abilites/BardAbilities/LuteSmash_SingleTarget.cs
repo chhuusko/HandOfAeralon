@@ -27,7 +27,7 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
         if (castingCharacter == null) return;
 
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
-        affectedCharacter.TakeDamage(damage);
+        bool died = affectedCharacter.TakeDamage(damage);
 
         // TODO:
         // remove the ability to use Song of Renewal and Inspiring Anthem
@@ -41,7 +41,7 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
             }
             statusEffectManager.AddStatusEffect(stun = new Stunned(_stunDuration));
         }
-        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun, died);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
