@@ -270,6 +270,7 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
             
             elementScript.SetIcon(statusEffect.Data.Icon);
             elementScript.SetTitle(statusEffect.Data.name);
+            elementScript.SetDescription(statusEffect.Data.Description);
             elementScript.SetTurns(statusEffect.Duration);
         }
 

@@ -8,6 +8,7 @@ public class CombatTooltipManager : MonoBehaviour
     private static CombatTooltipManager _instance;
 
     [SerializeField] private CombatTooltipCharacterLayout _characterLayout;
+    [SerializeField] private CombatHoverTooltip _combatHoverTooltip;
 
 
     private void Awake()
@@ -24,6 +25,7 @@ public class CombatTooltipManager : MonoBehaviour
     void Start()
     {
         _characterLayout.InitializeCharacterStats();
+        TooltipStatusEffectElement.OnMouseHoverEnter += ShowHoverTooltip;
     }
 
     private void Update()
@@ -35,6 +37,10 @@ public class CombatTooltipManager : MonoBehaviour
 
     public CombatTooltipCharacterLayout GetCharacterLayout() { return _characterLayout; }
 
+    public void ShowHoverTooltip(string title, string description)
+    {
+        _combatHoverTooltip.UpdateText(title, description);
+    }
     public void HideTooltipCanvas()
     {
         if(_characterLayout != null)
