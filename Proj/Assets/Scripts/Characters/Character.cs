@@ -492,47 +492,4 @@ public class Character : MonoBehaviour
             HealthBarManager._instance.Unregister(this);
         }
     }
-    
-    // Status effects.
-    /// <summary>
-    /// Tries applying the burn to the target, with chance influenced by all this character's modifiers.
-    /// </summary>
-    /// <returns>The applied burn, or null if no burn was applied.</returns>
-    public Burn TryApplyBurn(Character target, float baseChance, int duration)
-    {
-        float finalChance = baseChance;
-        
-        _statusEffectManager.ApplyBurnApplicationChanceModifiers(ref finalChance);
-
-        if (UnityEngine.Random.value < finalChance)
-        {
-            Burn burn = new Burn(this, duration);
-            _statusEffectManager.AddStatusEffect(burn);
-            _statusEffectManager.OnBurnApplied(this);
-            return burn;
-        }
-        return null;
-    }
-
-    /// <summary>
-    /// Tries applying stun to the target character, based on the base chance.
-    /// </summary>
-    /// <param name="target">The target character.</param>
-    /// <param name="baseChance">The base chance of stun to succeed.</param>
-    /// <param name="duration">The amount of turns for the target to be stunned.</param>
-    /// <returns>The applied stun, or null if no stun was applied.</returns>
-    public Stunned TryApplyStun(Character target, float baseChance, int duration)
-    {
-        float finalChance = baseChance;
-        
-        _statusEffectManager.ApplyStunApplicationChanceModifiers(ref finalChance);
-
-        if (UnityEngine.Random.value < finalChance)
-        {
-            Stunned stun = new Stunned(duration);
-            _statusEffectManager.AddStatusEffect(stun);
-            return stun;
-        }
-        return null;
-    }
 }

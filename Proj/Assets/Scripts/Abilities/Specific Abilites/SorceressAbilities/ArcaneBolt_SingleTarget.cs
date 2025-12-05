@@ -31,7 +31,7 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
         StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
         if (statusEffectManager == null) return;
 
-        StatusEffect burn = castingCharacter.TryApplyBurn(affectedCharacter, 0, _emberwakeBurnAmount);
+        StatusEffect burn = statusEffectManager.TryApplyBurn(affectedCharacter, 0, _emberwakeBurnAmount);
 
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, burn, died);
     }

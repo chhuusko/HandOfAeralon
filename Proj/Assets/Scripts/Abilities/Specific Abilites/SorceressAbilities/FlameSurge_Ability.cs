@@ -124,7 +124,7 @@ public class FlameSurge_Ability : DirectedAOEAbility
         if (statusEffectManager == null) return;
 
         int burnDuration = Mathf.Max(_emberwakeBurnAmount, _burnDuration);
-        StatusEffect burn = castingCharacter.TryApplyBurn(affectedCharacter, _chanceToBurnCharacters, burnDuration);
+        StatusEffect burn = statusEffectManager.TryApplyBurn(affectedCharacter, _chanceToBurnCharacters, burnDuration);
 
         if (burn != null)
         {
