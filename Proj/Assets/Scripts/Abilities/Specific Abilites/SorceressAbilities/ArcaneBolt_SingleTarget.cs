@@ -9,7 +9,6 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
     [SerializeField] private int _enemyManaAmount = 6;
 
     [Header("- Emberwake Effects -")]
-    [SerializeField] private float _emberwakeBurnChance = 0.25f;
     [SerializeField] private int _emberwakeBurnAmount = 2;
 
 
@@ -32,7 +31,7 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
         StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
         if (statusEffectManager == null) return;
 
-        StatusEffect burn = castingCharacter.TryApplyBurn(affectedCharacter, _emberwakeBurnChance, _emberwakeBurnAmount);
+        StatusEffect burn = castingCharacter.TryApplyBurn(affectedCharacter, 0, _emberwakeBurnAmount);
 
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, burn, died);
     }
