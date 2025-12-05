@@ -11,6 +11,9 @@ public class LightningStorm_Ability : RoundAOEAbility
     [SerializeField] private int _stunDuration = 1;
     [SerializeField] private int _stunnedEnemiesTilBonus = 1;
 
+    [Header("- Emberwake Effects -")]
+    [SerializeField] private int _burnDuration = 1;
+
     bool enemyStunned;
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
@@ -54,17 +57,14 @@ public class LightningStorm_Ability : RoundAOEAbility
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         bool died = affectedCharacter.TakeDamage(damage);
 
-        StatusEffect stun = null;
+        StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
+        if (statusEffectManager == null) return;
 
-        if (Random.value < _stunCharacterHitChance)
-        {
-            if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
-            {
-                statusEffectManager.AddStatusEffect(new Stunned(_stunDuration), castingCharacter);
-                enemyStunned = true;
-            }
-        }
+        StatusEffect stun = statusEffectManager.TryApplyStun(affectedCharacter, _stunCharacterHitChance, _stunDuration);
+        StatusEffect burn = statusEffectManager.TryApplyBurn(affectedCharacter, 0, _burnDuration);
+
         AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun, died);
+        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, burn, died);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
