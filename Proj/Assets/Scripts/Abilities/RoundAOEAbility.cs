@@ -10,7 +10,11 @@ public abstract class RoundAOEAbility : AOEAbility
         // Calculate all tiles around with in radius and apply effect to all of them.
         if (_pattern is RoundAOEPattern pattern)
         {
-            pattern.SetRadius(_radius);
+            if (GetCharacterCaster().TryGetComponent<StatusEffectManager>(out var statusEffectManager))
+            {
+                int radius = statusEffectManager.ApplyAoEModifiers(ref _radius);
+                pattern.SetRadius(radius);
+            }
         }
         List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
 
@@ -26,7 +30,11 @@ public abstract class RoundAOEAbility : AOEAbility
     {
         if (_pattern is RoundAOEPattern pattern)
         {
-            pattern.SetRadius(_radius);
+            if (GetCharacterCaster().TryGetComponent<StatusEffectManager>(out var statusEffectManager))
+            {
+                int radius = statusEffectManager.ApplyAoEModifiers(ref _radius);
+                pattern.SetRadius(radius);
+            }
         }
         return _pattern.CalculateTilesToEffect(tile);
     }
