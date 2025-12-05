@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SlowedCasting : Trait
+public class Fragile : Trait
 {
     private bool _effectApplied;
 
@@ -9,22 +9,25 @@ public class SlowedCasting : Trait
         _effectApplied = false;
     }
 
-    public override void OnAbilityUsed(AbilityExecutionData abilityData)
+    public override void OnTakeDamage()
     {
         if (_effectApplied)
         {
             return;
         }
 
-        var data = Data as IntModifierData;
+        var data = Data as FloatThresholdData;
 
         if (!data)
         {
             return;
         }
-        
+
+        if (Character.GetCurrentHealth() >= data.Threshold)
+        {
+            return;
+        }
         _effectApplied = true;
-        var ability = abilityData.Ability;
-        ability.SetCooldown(ability.GetCooldown() + data.Modifier);
+        Manager.AddStatusEffect(new Vulnerable(data.TurnAmount));
     }
 }

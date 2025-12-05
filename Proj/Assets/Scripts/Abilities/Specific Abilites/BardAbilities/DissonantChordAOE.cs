@@ -62,7 +62,7 @@ public class DissonantChordAOE : RoundAOEAbility
                 enemiesDebuffed+=buffsCleared;
             }
         }
-        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, null);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, null, false);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)

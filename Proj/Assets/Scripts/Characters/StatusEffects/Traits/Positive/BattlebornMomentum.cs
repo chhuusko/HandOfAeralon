@@ -11,7 +11,7 @@ public class BattlebornMomentum : Trait
         _abilitiesUsed = 0;
     }
 
-    public override void OnAbilityUsed(Ability ability)
+    public override void OnAbilityUsed(AbilityExecutionData abilityData)
     {
         var data = Data as IntThresholdData;
 

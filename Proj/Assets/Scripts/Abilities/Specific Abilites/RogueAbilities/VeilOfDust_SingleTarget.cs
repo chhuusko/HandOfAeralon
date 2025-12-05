@@ -64,7 +64,7 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
             CardHandManager.GetInstance().ChangeMana(_manaGain);
         }
 
-        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, stealth);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, stealth, false);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
