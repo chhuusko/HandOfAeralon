@@ -63,7 +63,7 @@ public abstract class StatusEffect
     public virtual void OnExpire() {}
     public virtual void OnTurnStart() {}
     public virtual void OnTurnEnd() {}
-    public virtual void OnCardPlayed() {}
+    public virtual void OnCardPlayed(Card card) {}
     public virtual void OnTargetedByCard() {}
     public virtual void OnBurnApplied() {}
     public virtual void OnCombatEnded() {}

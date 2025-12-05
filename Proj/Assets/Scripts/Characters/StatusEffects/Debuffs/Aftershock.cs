@@ -6,7 +6,7 @@ public class Aftershock : StatusEffect
     {
     }
     
-    public override void OnCardPlayed()
+    public override void OnCardPlayed(Card card)
     {
         var data = Data as DamageData;
 

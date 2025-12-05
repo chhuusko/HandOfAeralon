@@ -55,6 +55,7 @@ public class Card : ScriptableObject
     {
         tempCost = cost;
         isTempCost = false;
+        CardHandManager.GetInstance().CardUsed(this);
     }
     public T Clone<T>() where T : ScriptableObject
     {
