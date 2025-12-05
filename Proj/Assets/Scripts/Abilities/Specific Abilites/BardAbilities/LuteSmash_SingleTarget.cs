@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "LuteSmash_Ability", menuName = "Scriptable Objects/Abilities/Bard/Lute Smash")]
 public class LuteSmash_SingleTarget : SingleTargetAbility
@@ -8,6 +9,9 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
     [SerializeField] private float _applyStunChance = 0.35f;
     [SerializeField] private int _stunDuration = 1;
     [SerializeField] private int _manaGain = 2;
+
+    [Header("- Available Abilities after LuteSmash -")]
+    [SerializeField] List<Ability> abilitiesAvailablePostLuteSmash;
 
     // Description
 
@@ -29,8 +33,7 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         bool died = affectedCharacter.TakeDamage(damage);
 
-        // TODO:
-        // remove the ability to use Song of Renewal and Inspiring Anthem
+        affectedCharacter.Data.SetCurrentAbilities(abilitiesAvailablePostLuteSmash); 
 
         StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
         if (statusEffectManager == null) return;
