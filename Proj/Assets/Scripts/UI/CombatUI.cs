@@ -557,11 +557,18 @@ public class CombatUI : MonoBehaviour
 
     private void CharacterMoving(bool moving)
     {
-        foreach (var abilityButton in _abilityButtons)
-        {
-            abilityButton.Button.interactable = !moving;
-        }
-        
         _endTurnButton.interactable = !moving;
+
+        if (moving)
+        {
+            foreach (var abilityButton in _abilityButtons)
+            {
+                abilityButton.Button.interactable = false;
+            }
+        }
+        else
+        {
+            UpdateAbilityColors();
+        }
     }
 }
