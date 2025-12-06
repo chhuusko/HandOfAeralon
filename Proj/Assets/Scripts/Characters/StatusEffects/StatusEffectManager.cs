@@ -27,6 +27,19 @@ public class StatusEffectManager : MonoBehaviour
         OnStartCombat();
     }
 
+    private void OnDisable()
+    {
+        CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
+        CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
+        CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
+        CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
+        
+        CardHandManager.onTargetCharacter -= OnTargetCharacter;
+
+        _character.OnTakeDamage -= OnTakeDamage;
+    }
+    
     private void Initialize()
     {
         _character = GetComponent<Character>();
@@ -40,19 +53,17 @@ public class StatusEffectManager : MonoBehaviour
         {
             _traitManager = _character.GetTraitManager();
         }
-    }
 
-    private void OnDisable()
-    {
-        CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
-        CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
-        CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
-        CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
-        
-        CardHandManager.onTargetCharacter -= OnTargetCharacter;
+        if (_traitManager == null || !_character)
+        {
+            return;
+        }
 
-        _character.OnTakeDamage -= OnTakeDamage;
+        // Traits need to be initialized on combat start, once character has been created.
+        foreach (var trait in _traitManager.GetAllTraits())
+        {
+            trait.Initialize(_character, this);
+        }
     }
 
     public void SetTraitManager(TraitManager traitManager)
