@@ -43,6 +43,7 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _combatLogScrollbar;
     [SerializeField] private GameObject _combatLogButton;
     [SerializeField] private Transform _combatLogViewPort;
+    [SerializeField] private ScrollRect _combatLogScrollRect;
     
     // Cards.
     [SerializeField] private GameObject _hand;
@@ -191,8 +192,41 @@ public class CombatUI : MonoBehaviour
         var go = Instantiate(_combatLogEntryPrefab, _combatLogViewPort);
         
         go.transform.Find("Icon").GetComponent<Image>().sprite = data.Ability.GetIcon();
-        go.transform.Find("Text").GetComponent<TMP_Text>().text =
-            $"{data.Caster.Data.ClassData.name} does {data.Damage} damage to {data.Target.Data.ClassData.name}";
+        // go.transform.Find("Text").GetComponent<TMP_Text>().text =
+        //     $"{data.Caster.Data.ClassData.name} does {data.Damage} damage to {data.Target.Data.ClassData.name}";
+
+        if (!data.Ability || !data.Target || !data.Caster)
+        {
+            return;
+        }
+
+        string text;
+        
+        // Check for type of ability.
+        if (data.Ability.GetAbilityType() is Ability.Type.Elemental or Ability.Type.Physical)
+        {
+            text = $"{data.Caster.Data.ClassData.name} used {data.Ability.GetAbilityName()} and dealt " +
+                   $"{data.Damage} damage to{(data.Target.GetFaction() == Faction.Friendly ? " " : " enemy")}" +
+                   $" {data.Target.Data.ClassData.name}";
+        }
+        else
+        {
+            text = $"{data.Caster.Data.ClassData.name} used {data.Ability.GetAbilityName()}" +
+                   $" on{(data.Target.GetFaction() == Faction.Friendly ? " " : " enemy")} " +
+                   $"{data.Target.Data.ClassData.name}";
+        }
+        
+        go.transform.Find("Text").GetComponent<TMP_Text>().text = text;
+        
+        StartCoroutine(ScrollToTop());
+    }
+
+    private IEnumerator ScrollToTop()
+    {
+        yield return null;
+        
+        // Set scroll to bottom.
+        _combatLogScrollRect.verticalNormalizedPosition = 1;
     }
 
     private void PlaceCharacterStarted()
@@ -510,11 +544,6 @@ public class CombatUI : MonoBehaviour
     private void UpdateAbilityColors(Character c, AbilityButton abilityButton)
     {
         bool interactable = false;
-
-        DebugLog.JoppaLog($"c == _currentTurnCharacter: {c == _currentTurnCharacter}");
-        DebugLog.JoppaLog($"_selectedCharacter.Faction: {_selectedCharacter.Faction == Faction.Friendly}");
-        DebugLog.JoppaLog($"IsAbilityCooldownActive: {!c.IsAbilityCooldownActive(abilityButton.Ability)}");
-        DebugLog.JoppaLog($"CanAttack: {c.CanUseAbility}");
         
         if (_bCombatStarted && c && _currentTurnCharacter && _selectedCharacter != null)
         {
