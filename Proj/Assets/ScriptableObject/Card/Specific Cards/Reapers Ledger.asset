@@ -15,9 +15,10 @@ MonoBehaviour:
   type: 1
   rarity: 0
   title: "Reaper\u2019s Ledger"
-  description: Deal 15 damage plus 5 for each enemy killed by any copy of this card
-    during the current run
+  description: Deal 10 damage plus 5 for each enemy killed by any copy of this card
+    during the current run  then destroy this card for the remainder of this combat.
   cost: 4
   icon: {fileID: 21300000, guid: d0866846edb1b274da6afaaea9a82573, type: 3}
   CardTemplate: {fileID: 0}
   info: []
+  tags: 
