@@ -141,7 +141,6 @@ public class CombatUI : MonoBehaviour
         
         _startCombatButton.gameObject.SetActive(false);
         _endTurnButton.gameObject.SetActive(true);
-        _abilityPanel.gameObject.SetActive(true);
         _hand.SetActive(true);
         _placeCharactersPanel.SetActive(false);
         
