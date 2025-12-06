@@ -202,7 +202,7 @@ public class EnemyAI : MonoBehaviour
 
         string chosenAbility = _chosenAction.ability != null ? _chosenAction.ability.name : "None";
         string chosenTarget = _chosenAction.target != null ? _chosenAction.target.GetTileIndex().ToString() : "None";
-        DebugLog.JLWLogWarning($"EnemyAI.cs | Move {_currentCharacter.name} to: {_chosenAction.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, ActionScore: {_scoredActions[_chosenAction]}.");
+        DebugLog.JLWLog($"EnemyAI.cs | Move {_currentCharacter.name} to: {_chosenAction.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, ActionScore: {_scoredActions[_chosenAction]}.");
 
         if (_currentCharacter.CanMove)
         {
@@ -362,7 +362,7 @@ public class EnemyAI : MonoBehaviour
 
     private void EndTurn()
     {
-        Debug.LogWarning($"EnemyAI.cs | {_currentCharacter.name}'s turn ended!");
+        DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name}'s turn ended!");
 
         _currentCharacter = null;
         _currentTile = null;
