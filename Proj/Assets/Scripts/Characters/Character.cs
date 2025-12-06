@@ -404,7 +404,7 @@ public class Character : MonoBehaviour
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
         OnTakeDamage?.Invoke(damage, gameObject);
 
-        Debug.Log($"Taking {damage} damage. New health: {GetCurrentHealth()}");
+        Debug.Log($"{this.name} took {damage} damage! Remaining health: {GetCurrentHealth()}");
         
         if (_data.CurrentHealthPoints <= 0)
         {

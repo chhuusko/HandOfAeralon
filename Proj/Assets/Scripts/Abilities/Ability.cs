@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class Ability : ScriptableObject
@@ -28,12 +29,20 @@ public abstract class Ability : ScriptableObject
     [SerializeField] private float _castingRotationTime = 0.3f;
 
     private AbilityHandler _abilityHandler;
+    private Character _characterCaster;
+
 
     public AbilityHandler GetAbilityHandler() => _abilityHandler;
+    public Character GetCharacterCaster() => _characterCaster;
+
 
     public void SetAbilityHandler(AbilityHandler abilityHandler)
     {
         _abilityHandler = abilityHandler;
+    }
+    public void SetCharacterCaster(Character caster)
+    {
+        _characterCaster = caster;
     }
 
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -47,9 +46,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (TurnStartedProperly())
         {
-            //Run();
-
-            RunOld();
+            Run();
         }
     }
 
@@ -116,7 +113,9 @@ public class EnemyAI : MonoBehaviour
 
     private void Run()
     {
+        // Check move range
         List<CombatGridTile> moveRange = new();
+        List<CombatGridTile> canReach = new();
         if (_currentCharacter.CanMove && _currentMoveRange > 0)
         {
             moveRange = GridExplorer._instance.GetTilesInRange(_currentTile, _currentMoveRange, true)
@@ -129,7 +128,19 @@ public class EnemyAI : MonoBehaviour
             moveRange.Add(_currentTile.GetComponent<CombatGridTile>());
         }
 
-        foreach (var pos in moveRange)
+        // Filter reachable tiles
+        foreach (var tile in moveRange)
+        {
+            List<GameObject> pathSample = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, tile.gameObject, false);
+
+            if (pathSample != null && pathSample.Count > 0)
+            {
+                canReach.Add(tile);
+            }
+        }
+
+        // Check all movement + ability combinations and score them
+        foreach (var pos in canReach)
         {
             int score = 0;
             AIAction moveOnly = new AIAction { movement = pos };
@@ -177,9 +188,10 @@ public class EnemyAI : MonoBehaviour
             DebugLog.JLWLogWarning($"EnemyAI.cs | Move to: {entry.Key.movement.GetTileIndex()}, Ability: {ability}, Target: {target}, Score: {entry.Value}.");
         }
 
+        _chosenAction = _scoredActions.OrderByDescending(x => x.Value).First().Key;
+
         string chosenAbility = _chosenAction.ability != null ? _chosenAction.ability.name : "None";
         string chosenTarget = _chosenAction.target != null ? _chosenAction.target.GetTileIndex().ToString() : "None";
-        _chosenAction = _scoredActions.OrderByDescending(x => x.Value).First().Key;
         DebugLog.JLWLogWarning($"EnemyAI.cs | CHOSEN ACTION = Move to: {_chosenAction.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, Score: {_scoredActions[_chosenAction]}.");
 
         if (_currentCharacter.CanMove)
@@ -193,7 +205,6 @@ public class EnemyAI : MonoBehaviour
         }
 
         StartCoroutine(WaitForMovement());
-        // Use chosen ability
     }
 
     private void RunOld()
@@ -254,7 +265,7 @@ public class EnemyAI : MonoBehaviour
     private List<GameObject> FindPath(GameObject currentTile, GameObject opponentTile)
     {
         List<GameObject> result = new();
-        List<GameObject> path = GridExplorer._instance.FindPathAStar(currentTile, opponentTile);
+        List<GameObject> path = GridExplorer._instance.FindPathAStar(currentTile, opponentTile, false);
 
         if (path == null || path.Count <= 1)
         {
@@ -289,11 +300,26 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator WaitForMovement()
     {
-        yield return new WaitWhile(() => _currentCharacter.IsMoving());
-
-        TryAttack(_currentCharacter, _targetCharacter);
-
+        CharacterMovement movementComponent = null;
+        if (_currentCharacter.TryGetComponent<CharacterMovement>(out movementComponent))
+        {
+            yield return new WaitWhile(() => movementComponent.IsMoving());
+            UseAbility(_chosenAction.ability, _chosenAction.target);
+        }
+        
         EndTurn();
+    }
+
+    private void UseAbility(Ability ability, CombatGridTile target)
+    {
+        if (!_currentCharacter.CanUseAbility)
+        {
+            return;
+        }
+
+        _currentAbilityHandler.SetPendingAbility(ability);
+        _currentAbilityHandler.CalculateAbilityRange();
+        _currentAbilityHandler.UseAbility(ability, target);
     }
 
     private void TryAttack(Character attacker, Character target)
@@ -313,13 +339,14 @@ public class EnemyAI : MonoBehaviour
                 _currentCharacter.transform.rotation = Quaternion.LookRotation(direction);
             }
 
+            Debug.LogWarning($"EnemyAI.cs | {attacker.name} strikes {target.name} for {_currentCharacter.GetDamage()} damage!");
             target.TakeDamage(_currentCharacter.GetDamage());
         }
     }
 
     private void EndTurn()
     {
-        //Debug.LogWarning("EnemyAI.cs | Turn ended!");
+        Debug.LogWarning("EnemyAI.cs | Turn ended!");
 
         _currentCharacter = null;
         _currentTile = null;

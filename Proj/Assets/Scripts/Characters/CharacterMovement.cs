@@ -121,7 +121,6 @@ public class CharacterMovement : MonoBehaviour
         Animator animator = null;
         if (_character.TryGetComponent<Animator>(out animator))
         {
-            //Debug.LogError($"{_character.name} g�r!");
             animator.SetBool("IsMoving", true);
         }
 
@@ -158,7 +157,6 @@ public class CharacterMovement : MonoBehaviour
 
         if (animator != null)
         {
-            //Debug.LogError($"{_character.name} stannade!");
             animator.SetBool("IsMoving", false);
         }
 
