@@ -55,7 +55,7 @@ public class CharacterData
     /// <summary>
     /// Generates a new friendly character based on the class data.
     /// </summary>
-    private void InitializeClassData()
+    public void InitializeClassData()
     {
         if (ClassData == null)
         {
