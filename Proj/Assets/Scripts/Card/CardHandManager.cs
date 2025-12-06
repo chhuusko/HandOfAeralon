@@ -21,6 +21,8 @@ public class CardHandManager : MonoBehaviour
     
     
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
+
+    
     
     // presets
     [SerializeField] private int turnsTillCard = 4;
@@ -35,6 +37,8 @@ public class CardHandManager : MonoBehaviour
     GameObject _addedZoomedCard;
     CardContainer _activeContainer;
 
+    //
+    public List<TurnEffect> turnEffects; 
 
     // 
     bool isCombat;
@@ -42,10 +46,12 @@ public class CardHandManager : MonoBehaviour
     public static Action<Card> onCardUse;
     public static Action<int> onManaChange;
     public static Action<Character> onTargetCharacter;
+    public static Action<Character, Card> onCardTargetCharacter;
     public static CardHandManager GetInstance() {return _instance;}
     public void ManaChanged(){ onManaChange?.Invoke(_mana); }
     public void CardUsed(Card usedCard) { onCardUse?.Invoke(usedCard); }
     public void CharacterTarget(Character targetCharacter) { onTargetCharacter?.Invoke(targetCharacter); }
+    public void CardTargetCharacter(Card usedCard, Character target) { onCardTargetCharacter?.Invoke(target, usedCard); }
     private void Awake()
     {
         _instance = this;
@@ -222,7 +228,7 @@ public class CardHandManager : MonoBehaviour
         {
             RemoveCardFromHand(card);
         }
-        
+        turnEffects.Clear();
     }
     public int GetCardsPlayedThisTurn()
     {
@@ -265,4 +271,9 @@ public class CardHandManager : MonoBehaviour
         newCardContainer.AddCard(newCard);
 
     }
+    public void OverrideManager()
+    {
+
+    }
+
 }

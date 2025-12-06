@@ -8,7 +8,8 @@ public enum CardType
 }
 public enum CardTag
 {
-    Etherial
+    Etherial,
+    Exhaust
 }
 public enum Rarity
 {
@@ -51,6 +52,11 @@ public class Card : ScriptableObject
     {
         //när den spelas
     }
+    public virtual void PlayTargetCard(Character character)
+    {
+        //när den spelas på en target
+        PlayCard();
+    }
     public virtual void AfterCardPlay()
     {
         tempCost = cost;
@@ -59,7 +65,6 @@ public class Card : ScriptableObject
     }
     public T Clone<T>() where T : ScriptableObject
     {
-        // Create a new instance in memory (not saved as an asset)
         T copy = Instantiate(this) as T;
         return copy;
     }
