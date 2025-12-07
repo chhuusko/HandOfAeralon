@@ -23,7 +23,7 @@ public abstract class Ability : ScriptableObject
     [SerializeField] private ValidTargetOccupant _targetType;
 
     [Header("- Visuals & Audio - ")]
-    [SerializeField] private ParticleSystem _castingEffect, _hitEffect;
+    [SerializeField] private AbilityVFXSequence _abilityVFXSequence;
     [SerializeField] private AudioClip _castingSound, _hitSound;
     [SerializeField] private float _castingTime, _fromCastToHitTime;
     [SerializeField] private float _castingRotationTime = 0.3f;
@@ -117,12 +117,25 @@ public abstract class Ability : ScriptableObject
         if (caster.TryGetComponent<Animator>(out var animator)){
             animator.SetTrigger(_abilityName);
         }
-        // Play Animation.
-        // Play casting sound.
-        yield return new WaitForSeconds(_castingTime);
-        InitiateParticles(casterTile, targetTile);
-        // Play hit sound.
-        yield return new WaitForSeconds(_fromCastToHitTime);
+
+        if (_abilityVFXSequence != null)
+        {
+            VFXData data = new VFXData
+            {
+                Caster = caster,
+                OriginPosition = casterTile.transform.position,
+                TargetTile = targetTile,
+                TargetPosition = targetTile.transform.position,
+                Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
+
+                CastingFXDuration = _castingTime,
+                TravelFXDuration = _fromCastToHitTime
+            };
+            caster.StartCoroutine(_abilityVFXSequence.RunSequence(data)
+            );
+        }
+
+        yield return new WaitForSeconds(_castingTime + _fromCastToHitTime);
         RunAbility(casterTile, targetTile);
     }
     protected void ResetMovementPoints(Character character)

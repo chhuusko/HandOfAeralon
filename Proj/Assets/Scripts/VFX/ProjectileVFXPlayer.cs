@@ -8,11 +8,11 @@ public class ProjectileVFXPlayer : VFXPlayer
 
     private Vector3 target;
 
-    public void PlayProjectile(Vector3 start, Vector3 end)
+    public Coroutine PlayProjectile(Vector3 start, Vector3 end)
     {
         transform.position = start;
         target = end;
-        StartCoroutine(Move());
+        return StartCoroutine(Move());
     }
 
     IEnumerator Move()
@@ -25,12 +25,6 @@ public class ProjectileVFXPlayer : VFXPlayer
                 speed * Time.deltaTime
             );
             yield return null;
-        }
-
-        if (impactVFX != null)
-        {
-            var impact = Instantiate(impactVFX);
-            impact.Play(target);
         }
 
         Destroy(gameObject);
