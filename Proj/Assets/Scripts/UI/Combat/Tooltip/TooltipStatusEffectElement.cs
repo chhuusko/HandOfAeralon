@@ -14,7 +14,7 @@ public class TooltipStatusEffectElement : MonoBehaviour, IPointerEnterHandler, I
 
     public static event Action<string, string> OnMouseHoverEnter;
     public static event Action OnMouseHoverExit;
-
+        
     public void OnPointerEnter(PointerEventData eventData)
     {
         OnMouseHoverEnter?.Invoke(_statusEffectTitle.text, _description);
