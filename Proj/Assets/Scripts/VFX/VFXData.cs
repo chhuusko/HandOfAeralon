@@ -7,5 +7,5 @@ public struct VFXData
     public Vector3 TargetPosition;
     public Vector3 OriginPosition;
     public Vector3 Direction;
-    public int CastingFXDuration, TravelFXDuration, ImpactFXDuration;
+    public float CastingFXDuration, TravelFXDuration, ImpactFXDuration;
 }

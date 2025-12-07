@@ -1,7 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "VFXSequence", menuName = "Scriptable Objects/VFX/Sequences/BaseSequence")]
+
 public class AbilityVFXSequence : ScriptableObject
 {
     [SerializeField] private VFXPlayer castFX;
