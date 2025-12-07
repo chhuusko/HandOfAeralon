@@ -24,7 +24,7 @@ public class FadingBoon : Trait
         }
         
         _effectApplied = true;
-        statusEffect.Duration = Mathf.FloorToInt(statusEffect.Duration / data.DamageModifier);
+        statusEffect.SetDuration(Mathf.FloorToInt(statusEffect.Duration / data.DamageModifier));
         if (statusEffect.Duration <= 0)
         {
             Manager.RemoveStatusEffect(statusEffect);

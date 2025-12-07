@@ -55,7 +55,7 @@ public class CharacterData
     /// <summary>
     /// Generates a new friendly character based on the class data.
     /// </summary>
-    private void InitializeClassData()
+    public void InitializeClassData()
     {
         if (ClassData == null)
         {
@@ -404,7 +404,7 @@ public class Character : MonoBehaviour
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
         OnTakeDamage?.Invoke(damage, gameObject);
 
-        Debug.Log($"{this.name} took {damage} damage! Remaining health: {GetCurrentHealth()}");
+        Debug.Log($"{name} took {damage} damage! Remaining health: {GetCurrentHealth()}");
         
         if (_data.CurrentHealthPoints <= 0)
         {
@@ -419,6 +419,16 @@ public class Character : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool TakeDamage(int damage, Character source)
+    {
+        if (source)
+        {
+            Debug.Log($"{name} took {damage} damage from {source.GetFaction()} {source.name}! Remaining health: {GetCurrentHealth()}");
+        }
+        
+        return TakeDamage(damage);
     }
      
     private IEnumerator RemoveCharacter()

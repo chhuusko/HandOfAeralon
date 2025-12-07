@@ -157,8 +157,16 @@ public class EnemyAI : MonoBehaviour
 
             _scoredActions[moveOnly] = score;
 
+            if (_currentAbilities == null || !_currentAbilities.Any())
+            {
+                Debug.LogError($"{_currentCharacter.name} has no abilities!");
+                continue;
+            }
+
             foreach (var ability in _currentAbilities)
             {
+                if (ability == null) continue;
+
                 _currentAbilityHandler.SetPendingAbility(ability);
                 _currentAbilityHandler.CalculateAbilityRange(pos);
                 List<CombatGridTile> abilityRange = _currentAbilityHandler.GetTilesInRange();
@@ -180,6 +188,7 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
+        /*
         foreach (var entry in _scoredActions)
         {
             string ability = entry.Key.ability != null ? entry.Key.ability.name : "None";
@@ -187,16 +196,17 @@ public class EnemyAI : MonoBehaviour
 
             DebugLog.JLWLogWarning($"EnemyAI.cs | Move to: {entry.Key.movement.GetTileIndex()}, Ability: {ability}, Target: {target}, Score: {entry.Value}.");
         }
+        */
 
         _chosenAction = _scoredActions.OrderByDescending(x => x.Value).First().Key;
 
         string chosenAbility = _chosenAction.ability != null ? _chosenAction.ability.name : "None";
         string chosenTarget = _chosenAction.target != null ? _chosenAction.target.GetTileIndex().ToString() : "None";
-        DebugLog.JLWLogWarning($"EnemyAI.cs | CHOSEN ACTION = Move to: {_chosenAction.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, Score: {_scoredActions[_chosenAction]}.");
+        DebugLog.JLWLog($"EnemyAI.cs | Move {_currentCharacter.name} to: {_chosenAction.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, ActionScore: {_scoredActions[_chosenAction]}.");
 
         if (_currentCharacter.CanMove)
         {
-            _movePath = FindPath(_currentTile, _chosenAction.movement.gameObject)
+            _movePath = GridExplorer._instance.FindPathAStar(_currentTile, _chosenAction.movement.gameObject, false)
                 .Select(obj => obj.GetComponent<CombatGridTile>())
                 .Where(ch => ch != null)
                 .ToList();
@@ -207,6 +217,7 @@ public class EnemyAI : MonoBehaviour
         StartCoroutine(WaitForMovement());
     }
 
+    /*
     private void RunOld()
     {
         _movePath = FindPath(_currentTile, _targetTile)
@@ -225,6 +236,7 @@ public class EnemyAI : MonoBehaviour
             EndTurn();
         }
     }
+    */
 
     private Character FindClosestOpponentCharacter(Character currentCharacter)
     {
@@ -262,6 +274,7 @@ public class EnemyAI : MonoBehaviour
         return result;
     }
 
+    /*
     private List<GameObject> FindPath(GameObject currentTile, GameObject opponentTile)
     {
         List<GameObject> result = new();
@@ -297,6 +310,7 @@ public class EnemyAI : MonoBehaviour
 
         return result;
     }
+    */
 
     private IEnumerator WaitForMovement()
     {
@@ -312,7 +326,7 @@ public class EnemyAI : MonoBehaviour
 
     private void UseAbility(Ability ability, CombatGridTile target)
     {
-        if (!_currentCharacter.CanUseAbility)
+        if (!_currentCharacter.CanUseAbility || ability == null)
         {
             return;
         }
@@ -322,6 +336,7 @@ public class EnemyAI : MonoBehaviour
         _currentAbilityHandler.UseAbility(ability, target);
     }
 
+    /*
     private void TryAttack(Character attacker, Character target)
     {
         if (!attacker.CanUseAbility)
@@ -343,10 +358,11 @@ public class EnemyAI : MonoBehaviour
             target.TakeDamage(_currentCharacter.GetDamage());
         }
     }
+    */
 
     private void EndTurn()
     {
-        Debug.LogWarning("EnemyAI.cs | Turn ended!");
+        DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name}'s turn ended!");
 
         _currentCharacter = null;
         _currentTile = null;

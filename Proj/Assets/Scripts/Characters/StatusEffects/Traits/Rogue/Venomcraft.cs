@@ -16,6 +16,6 @@ public class Venomcraft : Trait
             return;
         }
 
-        statusEffect.Duration += data.Modifier;
+        statusEffect.IncreaseDuration(data.Modifier);
     }
 }

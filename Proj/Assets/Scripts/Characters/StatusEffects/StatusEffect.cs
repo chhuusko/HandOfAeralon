@@ -6,7 +6,8 @@ public abstract class StatusEffect
 {
     [SerializeField] private string _name;
     public string Name => _name;
-    public int Duration { get; set; }
+    [SerializeField] private int _duration;
+    public int Duration => _duration;
     
     protected Character Character { get; private set; }
     protected StatusEffectManager Manager { get; private set; }
@@ -14,9 +15,11 @@ public abstract class StatusEffect
     [SerializeField] private StatusEffectData _data;
     public StatusEffectData Data => _data;
     
+    public void SetDuration(int duration) => _duration = duration;
+    
     protected StatusEffect(int duration = 3)
     {
-        Duration = duration;
+        _duration = duration;
 
         _data = StatusEffectDataRegistry.GetDataForType(GetType());
         
@@ -33,12 +36,12 @@ public abstract class StatusEffect
 
     public virtual void IncreaseDuration(int amount = 1)
     {
-        Duration = Mathf.Max(Duration, amount);
+        _duration = Mathf.Max(Duration, amount);
     }
 
     public void DecreaseDuration(int amount = 1)
     {
-        Duration -= amount;
+        _duration -= amount;
         if (Duration <= 0)
         {
             Manager.RemoveStatusEffect(this);
@@ -55,7 +58,7 @@ public abstract class StatusEffect
         {
             return true;
         }
-        return --Duration > 0;
+        return --_duration > 0;
     }
     
     // Virtual methods. Overriden and implemented in subclasses as needed.

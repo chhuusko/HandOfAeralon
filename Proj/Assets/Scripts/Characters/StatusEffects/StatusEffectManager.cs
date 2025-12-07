@@ -27,6 +27,19 @@ public class StatusEffectManager : MonoBehaviour
         OnStartCombat();
     }
 
+    private void OnDisable()
+    {
+        CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
+        CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
+        CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
+        CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
+        
+        CardHandManager.onTargetCharacter -= OnTargetCharacter;
+
+        _character.OnTakeDamage -= OnTakeDamage;
+    }
+    
     private void Initialize()
     {
         _character = GetComponent<Character>();
@@ -40,19 +53,17 @@ public class StatusEffectManager : MonoBehaviour
         {
             _traitManager = _character.GetTraitManager();
         }
-    }
 
-    private void OnDisable()
-    {
-        CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
-        CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
-        CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
-        CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
-        
-        CardHandManager.onTargetCharacter -= OnTargetCharacter;
+        if (_traitManager == null || !_character)
+        {
+            return;
+        }
 
-        _character.OnTakeDamage -= OnTakeDamage;
+        // Traits need to be initialized on combat start, once character has been created.
+        foreach (var trait in _traitManager.GetAllTraits())
+        {
+            trait.Initialize(_character, this);
+        }
     }
 
     public void SetTraitManager(TraitManager traitManager)
@@ -60,7 +71,7 @@ public class StatusEffectManager : MonoBehaviour
         _traitManager = traitManager;
     }
 
-    public void AddStatusEffect(StatusEffect statusEffect, Character caster)
+    public void AddStatusEffect(StatusEffect statusEffect, Character caster = null)
     {
         // Sanctified disallows receiving debuffs.
         if (ContainsStatusEffect<Sanctified>() && statusEffect.Data.Type is StatusEffectType.Debuff)
@@ -71,11 +82,6 @@ public class StatusEffectManager : MonoBehaviour
         _traitManager.AddStatusEffect(statusEffect);
         statusEffect.Initialize(_character, this);
         CombatEventManager.InvokeOnStatusEffectAppliedToCharacter(caster, _character, statusEffect);
-    }
-
-    public void AddStatusEffect(StatusEffect statusEffect)
-    {
-        AddStatusEffect(statusEffect, null);
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect)

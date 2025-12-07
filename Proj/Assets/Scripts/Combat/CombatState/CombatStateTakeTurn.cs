@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.TextCore.Text;
 
 public class CombatStateTakeTurn : CombatStateBase
 {
@@ -51,8 +52,27 @@ public class CombatStateTakeTurn : CombatStateBase
                 break;
         }
 
-        foreach(Character character in CombatGrid._instance.GetAllCharacterScripts())
+        switch (activeCharacter.GetCurrentTileComponent().GetTileType())
+        {
+            case TileType.Poison:
+                {
+                    StatusEffectManager statusEffectManager = activeCharacter.GetComponent<StatusEffectManager>();
+                    statusEffectManager.AddStatusEffect(new Poison(3));
+                }
+                break;
+            case TileType.Lava:
+                {
+                    StatusEffectManager statusEffectManager = activeCharacter.GetComponent<StatusEffectManager>();
+                    statusEffectManager.AddStatusEffect(new Burn(null, 1));
+                }
+                break;
+        }
+
+        foreach (Character character in CombatGrid._instance.GetAllCharacterScripts())
+        {
             character.ResetCurrentMovementPoints();
+        }
+        
 
         CombatEventManager.InvokeEnterCombatStateTakeTurn(activeCharacter);
     }

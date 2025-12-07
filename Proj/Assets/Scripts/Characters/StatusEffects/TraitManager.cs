@@ -10,9 +10,12 @@ public class TraitManager
     
     public void AddStatusEffect(StatusEffect statusEffect)
     {
-        if (_statusEffects.Contains(statusEffect))
+        StatusEffect existing = _statusEffects
+            .FirstOrDefault(e => e.GetType() == statusEffect.GetType());
+        
+        if (existing != null)
         {
-            statusEffect.IncreaseDuration(statusEffect.Duration);
+            existing.IncreaseDuration(statusEffect.Duration);
             return;
         }
         _statusEffects.Add(statusEffect);
