@@ -1,16 +1,35 @@
+using PilotoStudio;
 using UnityEngine;
 
 public class VFXPlayer : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private ParticleHandler particleHandler;
+    [SerializeField] private float fallbackLifetime = 5f;
+
+    public void Play(Vector3 position,Vector3? direction = null)
     {
-        
+        transform.position = position;
+
+        if (direction.HasValue && direction.Value != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(direction.Value);
+
+        if (particleHandler != null)
+        {
+            particleHandler.Cast();
+            Destroy(gameObject, EstimateLifetime());
+        }
+        else
+        {
+            // fallback: play all ParticleSystems
+            foreach (var ps in GetComponentsInChildren<ParticleSystem>())
+                ps.Play();
+
+            Destroy(gameObject, fallbackLifetime);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private float EstimateLifetime()
     {
-        
+        return fallbackLifetime;
     }
 }
