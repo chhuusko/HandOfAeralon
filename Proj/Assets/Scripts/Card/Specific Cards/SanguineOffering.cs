@@ -4,19 +4,19 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Sanguine Offering", menuName = "Item/Card Data/Sanguine Offering", order = 1)]
 public class SanguineOffering : Card
 {
-    public override void PlayCard()
+    public override void PlayCardOnTarget(Character character)
     {
-        Character targetCharacter = Selector._instance.GetTileUnderMouse().GetOccupantCharacter();
-        if (targetCharacter != null && targetCharacter.GetFaction() == Faction.Friendly)
+        
+        if (character != null && character.GetFaction() == Faction.Friendly)
         {
-            targetCharacter.TakeDamage(10);
+            character.TakeDamage(10);
         }
-        List<Character> characterList = CombatGrid._instance.GetAllCharacterScripts();
-        foreach (Character character in characterList)
+        List<Character> friendlyList = CombatGrid._instance.GetCharacterScriptsByFaction(Faction.Friendly);
+        foreach (Character friendly in friendlyList)
         {
-            if (character.GetFaction() == Faction.Friendly && character != targetCharacter)
+            if (friendly.GetFaction() == Faction.Friendly && friendly != character)
             {
-                character.Heal(10);
+                friendly.Heal(10);
             }
         }
     }

@@ -77,8 +77,6 @@ public class CardHandManager : MonoBehaviour
         onCardTargetCharacter += TurnEffects;
     }
 
-    
-
     private void OnDisable()
     {
         CombatEventManager.OnCombatTurnChange -= TurnChanged;
@@ -221,7 +219,8 @@ public class CardHandManager : MonoBehaviour
                 AddCardFromDeck();
             }
         }
-        //handle etherial
+
+        //handle etherial cards
         List<CardContainer> removeList = new List<CardContainer>();
         for (int i = 0; i < _cardsInHand.Count; i++)
         {
@@ -230,6 +229,7 @@ public class CardHandManager : MonoBehaviour
                 removeList.Add(_cardsInHand[i]);
             }
         }
+
         foreach (CardContainer card in removeList)
         {
             RemoveCardFromHand(card);

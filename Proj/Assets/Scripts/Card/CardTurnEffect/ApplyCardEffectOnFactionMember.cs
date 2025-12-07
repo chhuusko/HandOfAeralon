@@ -11,9 +11,8 @@ public class ApplyCardEffectOnFactionMember : TurnEffect
         if (character.GetFaction() == affectedFaction)
         {
             List<Character> factiomList = CombatGrid._instance.GetCharacterScriptsByFaction(character.GetFaction());
-            int num = Random.Range(0, factiomList.Count);
-            Debug.Log(num);
-            card.PlayCardOnTarget(factiomList[num]);
+
+            card.PlayCardOnTarget(factiomList[Random.Range(0, factiomList.Count)]);
         }
         
     }

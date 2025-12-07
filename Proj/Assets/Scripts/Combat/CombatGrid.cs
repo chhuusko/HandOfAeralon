@@ -112,7 +112,6 @@ public class CombatGrid : MonoBehaviour
                 }
             }
         }
-        Debug.Log(characterScritps.Count + "factioncharacters");
         return characterScritps;
     }
 
