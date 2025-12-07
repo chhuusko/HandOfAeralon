@@ -70,13 +70,19 @@ public class CardHandManager : MonoBehaviour
         }
         drawHand();
     }
+
     private void OnEnable()
     {
         CombatEventManager.OnCombatTurnChange += TurnChanged;
+        onCardTargetCharacter += TurnEffects;
     }
+
+    
+
     private void OnDisable()
     {
         CombatEventManager.OnCombatTurnChange -= TurnChanged;
+        onCardTargetCharacter -= TurnEffects;
     }
     public void drawHand()
     {
@@ -270,6 +276,13 @@ public class CardHandManager : MonoBehaviour
         _cardsInHand.Add(newCardContainer);
         newCardContainer.AddCard(newCard);
 
+    }
+    private void TurnEffects(Character character, Card card)
+    {
+        foreach(TurnEffect effect in turnEffects)
+        {
+            effect.Effect(character, card);
+        }
     }
     public void OverrideManager()
     {

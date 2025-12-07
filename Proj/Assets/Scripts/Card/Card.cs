@@ -52,7 +52,7 @@ public class Card : ScriptableObject
     {
         //när den spelas
     }
-    public virtual void PlayTargetCard(Character character)
+    public virtual void PlayCardOnTarget(Character character)
     {
         //när den spelas på en target
         PlayCard();

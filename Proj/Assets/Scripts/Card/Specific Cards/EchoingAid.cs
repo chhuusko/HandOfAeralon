@@ -6,6 +6,6 @@ public class EchoingAid : Card
     [SerializeField] private ApplyCardEffectOnFactionMember effect;
     public override void PlayCard()
     {
-        CardHandManager.GetInstance().turnEffects.Add(effect);
+        CardHandManager.GetInstance().turnEffects.Add(Instantiate(effect));
     }
 }
