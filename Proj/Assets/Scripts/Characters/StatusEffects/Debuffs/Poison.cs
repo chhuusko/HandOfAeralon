@@ -8,7 +8,7 @@ public class Poison : StatusEffect
 
     public override void IncreaseDuration(int amount = 1)
     {
-        Duration += amount;
+        SetDuration(Duration + amount);
     }
 
     public override void OnTurnStart()

@@ -71,7 +71,7 @@ public class StatusEffectManager : MonoBehaviour
         _traitManager = traitManager;
     }
 
-    public void AddStatusEffect(StatusEffect statusEffect, Character caster)
+    public void AddStatusEffect(StatusEffect statusEffect, Character caster = null)
     {
         // Sanctified disallows receiving debuffs.
         if (ContainsStatusEffect<Sanctified>() && statusEffect.Data.Type is StatusEffectType.Debuff)
@@ -82,11 +82,6 @@ public class StatusEffectManager : MonoBehaviour
         _traitManager.AddStatusEffect(statusEffect);
         statusEffect.Initialize(_character, this);
         CombatEventManager.InvokeOnStatusEffectAppliedToCharacter(caster, _character, statusEffect);
-    }
-
-    public void AddStatusEffect(StatusEffect statusEffect)
-    {
-        AddStatusEffect(statusEffect, null);
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect)
