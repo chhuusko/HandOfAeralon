@@ -5,10 +5,9 @@ using UnityEngine.UIElements;
 [CreateAssetMenu(fileName = "Purewaters Touch", menuName = "Item/Card Data/Purewaters Touch", order = 1)]
 public class PurewatersTouch : Card
 {
-    public override void PlayCard()
+    public override void PlayCardOnTarget(Character character)
     {
         //TODO Needs to know what effect is debuff. needs a list of effekts
-        Character character = Selector._instance.GetTileUnderMouse().GetOccupantCharacter();
         if (character != null && character.GetFaction() == Faction.Friendly)
         {
             List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffects());

@@ -4,22 +4,20 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Life Reaver", menuName = "Item/Card Data/Life Reaver", order = 1)]
 public class LifeReaver : Card
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public override void PlayCard()
+    public override void PlayCardOnTarget(Character character)
     {
-        Character targetCharacter = Selector._instance.GetTileUnderMouse().GetOccupantCharacter();
-        if (targetCharacter != null)
+        if (character != null && character.GetFaction() == Faction.Enemy)
         {
-            targetCharacter.TakeDamage(10);
+            character.TakeDamage(10);
         }
 
-        List<Character> characterList = CombatGrid._instance.GetAllCharacterScripts();
-        Character lowestHP = characterList[0];
-        foreach (Character character in characterList)
+        List<Character> friendlyList = CombatGrid._instance.GetCharacterScriptsByFaction(Faction.Friendly);
+        Character lowestHP = friendlyList[0];
+        foreach (Character friendly in friendlyList)
         {
-            if (character.GetCurrentHealth() < lowestHP.GetCurrentHealth())
+            if (friendly.GetCurrentHealth() < lowestHP.GetCurrentHealth())
             {
-                lowestHP = character;
+                lowestHP = friendly;
             }
         }
         lowestHP.Heal(10);

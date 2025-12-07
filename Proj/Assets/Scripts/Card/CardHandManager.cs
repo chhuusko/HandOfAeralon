@@ -21,6 +21,8 @@ public class CardHandManager : MonoBehaviour
     
     
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
+
+    
     
     // presets
     [SerializeField] private int turnsTillCard = 4;
@@ -35,6 +37,8 @@ public class CardHandManager : MonoBehaviour
     GameObject _addedZoomedCard;
     CardContainer _activeContainer;
 
+    //
+    public List<TurnEffect> turnEffects; 
 
     // 
     bool isCombat;
@@ -42,10 +46,12 @@ public class CardHandManager : MonoBehaviour
     public static Action<Card> onCardUse;
     public static Action<int> onManaChange;
     public static Action<Character> onTargetCharacter;
+    public static Action<Character, Card> onCardTargetCharacter;
     public static CardHandManager GetInstance() {return _instance;}
     public void ManaChanged(){ onManaChange?.Invoke(_mana); }
     public void CardUsed(Card usedCard) { onCardUse?.Invoke(usedCard); }
     public void CharacterTarget(Character targetCharacter) { onTargetCharacter?.Invoke(targetCharacter); }
+    public void CardTargetCharacter(Card usedCard, Character target) { onCardTargetCharacter?.Invoke(target, usedCard); }
     private void Awake()
     {
         _instance = this;
@@ -64,13 +70,17 @@ public class CardHandManager : MonoBehaviour
         }
         drawHand();
     }
+
     private void OnEnable()
     {
         CombatEventManager.OnCombatTurnChange += TurnChanged;
+        onCardTargetCharacter += TurnEffects;
     }
+
     private void OnDisable()
     {
         CombatEventManager.OnCombatTurnChange -= TurnChanged;
+        onCardTargetCharacter -= TurnEffects;
     }
     public void drawHand()
     {
@@ -209,7 +219,8 @@ public class CardHandManager : MonoBehaviour
                 AddCardFromDeck();
             }
         }
-        //handle etherial
+
+        //handle etherial cards
         List<CardContainer> removeList = new List<CardContainer>();
         for (int i = 0; i < _cardsInHand.Count; i++)
         {
@@ -218,11 +229,12 @@ public class CardHandManager : MonoBehaviour
                 removeList.Add(_cardsInHand[i]);
             }
         }
+
         foreach (CardContainer card in removeList)
         {
             RemoveCardFromHand(card);
         }
-        
+        turnEffects.Clear();
     }
     public int GetCardsPlayedThisTurn()
     {
@@ -265,4 +277,16 @@ public class CardHandManager : MonoBehaviour
         newCardContainer.AddCard(newCard);
 
     }
+    private void TurnEffects(Character character, Card card)
+    {
+        foreach(TurnEffect effect in turnEffects)
+        {
+            effect.Effect(character, card);
+        }
+    }
+    public void OverrideManager()
+    {
+
+    }
+
 }
