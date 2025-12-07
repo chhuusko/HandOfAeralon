@@ -62,7 +62,6 @@ public class CombatStateTakeTurn : CombatStateBase
                 break;
             case TileType.Lava:
                 {
-                    activeCharacter.TakeDamage(4);
                     StatusEffectManager statusEffectManager = activeCharacter.GetComponent<StatusEffectManager>();
                     statusEffectManager.AddStatusEffect(new Burn(null, 1));
                 }

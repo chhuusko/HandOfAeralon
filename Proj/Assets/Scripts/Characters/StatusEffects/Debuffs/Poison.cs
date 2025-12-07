@@ -8,7 +8,15 @@ public class Poison : StatusEffect
 
     public override void IncreaseDuration(int amount = 1)
     {
-        Duration += amount;
+        var data = Data as IntCapData;
+
+        if (!data)
+        {
+            return;
+        }
+        
+        // Stacks can never be more than the cap.
+        SetDuration(Mathf.Min(Duration + amount, data.Cap));
     }
 
     public override void OnTurnStart()
