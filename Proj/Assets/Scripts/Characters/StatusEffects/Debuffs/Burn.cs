@@ -10,6 +10,11 @@ public class Burn : StatusEffect
         _source = source;
     }
 
+    public override void IncreaseDuration(int amount = 1)
+    {
+        Duration += amount;
+    }
+
     public override void OnApply()
     {
         Manager.OnBurnApplied(Character);
