@@ -236,6 +236,7 @@ public class GridExplorer : MonoBehaviour
                 if (closed.Contains(next)) continue;
 
                 float moveCost = (IsDiagonal(dir) ? 1.4f : 1f);
+                moveCost += (IsHazardous(next) ? 99f : 0f);
                 float tentativeG = gCost[current] + moveCost;
 
                 if (!gCost.ContainsKey(next) || tentativeG < gCost[next])
@@ -351,6 +352,30 @@ public class GridExplorer : MonoBehaviour
     private bool IsDiagonal(Vector2Int dir)
     {
         return Mathf.Abs(dir.x) + Mathf.Abs(dir.y) == 2;
+    }
+
+    private bool IsHazardous(Vector2Int dir)
+    {
+        GameObject tileObj = CombatGrid._instance.GetTileAtCoord(dir.x, dir.y);
+
+        if (tileObj == null)
+        {
+            return false;
+        }
+
+        CombatGridTile tile = tileObj.GetComponent<CombatGridTile>();
+
+        if (tile == null)
+        {
+            return false;
+        }
+
+        if (tile.GetTileType() == TileType.Lava || tile.GetTileType() == TileType.Poison)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>

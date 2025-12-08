@@ -150,25 +150,25 @@ public class CombatGrid : MonoBehaviour
         
         if (_tilesGO == null)
         {
-            DebugLog.JLWLog("GetTileAtCoord FAILED: _tilesGO is NULL!");
+            DebugLog.CJLog("GetTileAtCoord FAILED: _tilesGO is NULL!");
             return null;
         }
 
         if (_tilesGO.Length == 0)
         {
-            DebugLog.JLWLog("GetTileAtCoord FAILED: _tilesGO is EMPTY!");
+            DebugLog.CJLog("GetTileAtCoord FAILED: _tilesGO is EMPTY!");
             return null;
         }
 
         if (index < 0 || index >= _tilesGO.Length)
         {
-            DebugLog.JLWLog($"GetTileAtCoord FAILED: index {index} OUT OF RANGE (length={_tilesGO.Length})");
+            DebugLog.CJLog($"GetTileAtCoord FAILED: index {index} OUT OF RANGE (length={_tilesGO.Length})");
             return null;
         }
 
         if (_tilesGO[index] == null)
         {
-            DebugLog.JLWLog($"GetTileAtCoord FAILED: tile at index {index} is NULL!");
+            DebugLog.CJLog($"GetTileAtCoord FAILED: tile at index {index} is NULL!");
             return null;
         }
 
