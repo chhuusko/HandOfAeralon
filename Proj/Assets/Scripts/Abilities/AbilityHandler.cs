@@ -148,7 +148,7 @@ public class AbilityHandler : MonoBehaviour
 
         List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
 
-        // Reset alla gamla effekter
+        // Reset all tiles
         foreach (CombatGridTile t in _tilesEffected)
         {
             if (_tilesInRange.Contains(t))
@@ -162,7 +162,7 @@ public class AbilityHandler : MonoBehaviour
         {
             return;
         }
-        // Applicera nya r�da
+        // Paint new tiles red and add them to tilesEffected.
         foreach (CombatGridTile t in newEffectedTiles)
         {
             if (t == null) return; 
