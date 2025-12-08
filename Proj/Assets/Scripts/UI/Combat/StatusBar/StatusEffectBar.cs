@@ -32,7 +32,8 @@ public class StatusEffectBar : MonoBehaviour
         StatusEffectBarElement statusEffectBarElement = statusEffectBarElementObject.GetComponent<StatusEffectBarElement>();
         
         statusEffectBarElement.SetSprite(statusEffect.Data.Icon);
-
+        statusEffectBarElement.SetTitle(statusEffect.Data.name);
+        statusEffectBarElement.SetDescription(statusEffect.Data.Description);
         _statusEffectBarElements.Add(statusEffectBarElement);
      
      

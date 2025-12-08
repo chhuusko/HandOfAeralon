@@ -33,7 +33,9 @@ public class CombatTooltipManager : MonoBehaviour
         TooltipStatusEffectElement.OnMouseHoverExit  += HideHoverTooltip;
         AbilityButton.OnMouseHoverEnter              += ShowHoverTooltip;
         AbilityButton.OnMouseHoverExit               += HideHoverTooltip;
-        
+        StatusEffectBarElement.OnMouseHoverEnter     += ShowHoverTooltip;
+        StatusEffectBarElement.OnMouseHoverExit      += HideHoverTooltip;
+
     }
 
     private void OnDisable()
@@ -42,6 +44,8 @@ public class CombatTooltipManager : MonoBehaviour
         TooltipStatusEffectElement.OnMouseHoverExit  -= HideHoverTooltip;
         AbilityButton.OnMouseHoverEnter              -= ShowHoverTooltip;
         AbilityButton.OnMouseHoverExit               -= HideHoverTooltip;
+        StatusEffectBarElement.OnMouseHoverEnter     -= ShowHoverTooltip;
+        StatusEffectBarElement.OnMouseHoverExit      -= HideHoverTooltip;
 
     }
     private void Update()
