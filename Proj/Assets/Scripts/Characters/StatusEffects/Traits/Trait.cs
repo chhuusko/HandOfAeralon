@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class Trait : StatusEffect
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public Trait(int duration) : base(duration)
-    {
-    }
-
-    public virtual void OnStartCombat() {}
+    public virtual void OnCombatStarted() {}
     public virtual void OnTakeDamage() {}
+    public virtual void OnAbilityUsed(AbilityExecutionData abilityData) {}
+    public virtual void OnStatusEffectApplied(Character caster, StatusEffect statusEffect) {}
+    public virtual void OnStatusEffectRemoved(StatusEffect statusEffect) {}
+    public virtual void ModifyAoE(ref int AoE) {}
 }

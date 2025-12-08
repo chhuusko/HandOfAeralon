@@ -4,10 +4,20 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "DeckPreset", menuName = "Item/Deck Preset", order = 1)]
 public class DeckPreset : ScriptableObject
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] private List<Card> _cards;
     public List<Card> GetCards()
     {
-        return _cards;
+        List<Card> list = new List<Card>();
+
+        foreach (Card card in _cards)
+        {
+            if (card == null) continue;
+
+            Card clone = Instantiate(card);
+            clone.hideFlags = HideFlags.DontSave;
+            list.Add(clone);
+        }
+
+        return list;
     }
 }

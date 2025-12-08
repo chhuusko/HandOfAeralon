@@ -1,0 +1,75 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "VeilOfDust_Ability", menuName = "Scriptable Objects/Abilities/Rogue/Veil Of Dust")]
+public class VeilOfDust_SingleTarget : SingleTargetAbility
+{
+    [Header("- Ability Specific values -")]
+    [SerializeField] private int _buffsRemovedTilBonus = 1;
+    [SerializeField] private int _stealthDuration = 3;
+    [SerializeField] private int _manaGain = 1;
+
+    // Description
+
+    // Cleanse all debuffs from self and gain Stealth for 3 turns.
+    // You can move after using this ability.
+    // If a debuff is cleansed, gain 1 Mana.
+
+    public override IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Same as base class "Ability", but the movement points are not reset.
+
+        Character caster = casterTile.GetOccupantCharacter();
+        if (caster == null) Debug.LogError("CasterTile has no character!");
+
+        // Rotate towards target if the target is not the caster's tile.
+        if (casterTile != targetTile)
+        {
+            caster.RotateTowards(targetTile.transform, GetCastingRotationTime());
+        }
+
+        if (caster.TryGetComponent<Animator>(out var animator))
+        {
+            animator.SetTrigger(GetAbilityName());
+        }
+        // Play Animation.
+        // Play casting sound.
+        yield return new WaitForSeconds(GetCastingTime());
+        InitiateParticles(casterTile, targetTile);
+        // Play hit sound.
+        yield return new WaitForSeconds(GetFromCastToHitTime());
+        RunAbility(casterTile, targetTile);
+    }
+
+    protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
+    {
+        if (tileToEffect == null) return;
+
+        Character affectedCharacter = tileToEffect.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        StatusEffectManager statusEffectManager = affectedCharacter.GetStatusEffectManager();
+        if (statusEffectManager == null) return;
+
+        int effectsRemoved = statusEffectManager.ClearStatusEffects(StatusEffectType.Debuff);
+
+        StatusEffect stealth;
+        statusEffectManager.AddStatusEffect(stealth = new Stealth(_stealthDuration));
+
+        if (effectsRemoved > 0 && castingCharacter.GetFaction() == Faction.Friendly)
+        {
+            CardHandManager.GetInstance().ChangeMana(_manaGain);
+        }
+
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, stealth, false);
+    }
+
+    protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Spawn and direct VFX to target location.
+    }
+
+}

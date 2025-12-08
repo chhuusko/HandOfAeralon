@@ -6,9 +6,8 @@ using UnityEngine;
 public class BattleRhythm : Card
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public override void PlayCard()
+    public override void PlayCardOnTarget(Character character)
     {
-        Character character = Selector._instance.GetTileUnderMouse().GetOccupantCharacter();
 
         if (character != null)
         {

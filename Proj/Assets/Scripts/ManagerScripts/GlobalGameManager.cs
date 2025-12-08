@@ -14,6 +14,10 @@ public struct GameData
     public List<Character> heroList;
     public List<Card> cardList;
 
+    // misc
+    public int reapersLedgerKills;
+
+
 }
 [CreateAssetMenu(fileName = "GlobalGameManager", menuName = "Manager/GlobalGameManager")]
 public class GlobalGameManager : ScriptableObject
@@ -21,8 +25,14 @@ public class GlobalGameManager : ScriptableObject
     [SerializeField] private DeckPreset _deckPreset;
     [SerializeField] private CharacterPrefabLibrary _characterLibrary;
     [SerializeField] private ClassDatabase _classDatabase;
+    [SerializeField] private float _classTraitChance;
     private static GlobalGameManager _instance;
     private GameData _currentGame;
+
+    [SerializeField] private int baseCoinReward = 200;
+    [SerializeField] private int CoinRewardIncreasePerLevel = 50;
+
+    public float ClassTraitChance => _classTraitChance;
     public static GlobalGameManager GetInstance()
     {
         if (_instance == null)
@@ -41,9 +51,9 @@ public class GlobalGameManager : ScriptableObject
         CombatEventManager.OnCharacterDeath -= RemoveCharacter;
         CombatEventManager.OnExitCombatStateEndCombat -= GetCombatCoins;
     }
-    private void GetCombatCoins()
+    private void GetCombatCoins(bool playerWon)
     {
-        _currentGame.coins += 100;
+        _currentGame.coins += (baseCoinReward+(CoinRewardIncreasePerLevel*LevelManager.GetInstance().Getlevel()));
     }
 
     private void RemoveCharacter(Character obj)
@@ -116,6 +126,7 @@ public class GlobalGameManager : ScriptableObject
         _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
         DebugLog.AlexLog($"_currentGame.cardList.Count");
         _currentGame.coins = 100;
+        _currentGame.reapersLedgerKills = 0;
     }
     public void SaveCards(List<Card> cards)
     {
@@ -124,6 +135,10 @@ public class GlobalGameManager : ScriptableObject
     public void ChangeCoins(int amount)
     {
         _currentGame.coins += amount;
+    }
+    public void ReapersLedgerKillChange(int change)
+    {
+        _currentGame.reapersLedgerKills += change;
     }
 }
 

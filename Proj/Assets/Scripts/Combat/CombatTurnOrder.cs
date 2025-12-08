@@ -23,7 +23,7 @@ public class CombatTurnOrder
         _charactersInTurnOrder = new List<Character>();
     }
 
-    private void HandleEndCombat()
+    private void HandleEndCombat(bool playerWon)
     {
         CombatEventManager.OnCharacterDeath -= HandleCharacterDeath;
         CombatEventManager.OnExitCombatStateEndCombat -= HandleEndCombat;

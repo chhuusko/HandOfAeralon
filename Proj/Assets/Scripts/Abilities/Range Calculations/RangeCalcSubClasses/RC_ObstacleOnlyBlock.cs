@@ -33,7 +33,7 @@ public class RC_ObstacleBlock : RangeCalculation
     /// <param name="casterTile">The tile the ability originates from.</param>
     /// <param name="targets">All potential target tiles in range.</param>
     /// <returns>List of GameObjects with clear line of sight.</returns>
-    private List<GameObject> FilterBlockedObjects(GameObject casterTile, List<GameObject> targets)
+    protected List<GameObject> FilterBlockedObjects(GameObject casterTile, List<GameObject> targets)
     {
         List<GameObject> filteredList = new();
 

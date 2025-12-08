@@ -3,12 +3,8 @@ using UnityEngine;
 public class BulwarksThreshold : Trait
 {
     private bool _effectApplied;
-    
-    public BulwarksThreshold(int duration) : base(duration)
-    {
-    }
 
-    public override void OnStartCombat()
+    public override void OnCombatStarted()
     {
         _effectApplied = false;
     }
@@ -20,7 +16,7 @@ public class BulwarksThreshold : Trait
             return;
         }
         
-        var data = Data as ThresholdData;
+        var data = Data as FloatThresholdData;
 
         if (!data)
         {
@@ -31,7 +27,7 @@ public class BulwarksThreshold : Trait
         if ((float)Character.GetCurrentHealth() / Character.GetMaxHealth() < data.Threshold)
         {
             _effectApplied = true;
-            Character.GetStatusEffectManager().AddStatusEffect(new Fortified(2));
+            Character.GetStatusEffectManager().AddStatusEffect(new Fortified(data.TurnAmount));
         }
     }
 }

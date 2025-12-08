@@ -1,7 +1,8 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
@@ -17,8 +18,14 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     Vector3 _startPosition, _hoverEndPosition;
     float _hoverDistance = 120f;
     private bool _isDragging;
+
+    private float time;
+    [SerializeField] private Vector3 angle;
+    private Vector3 offset;
+    public float speed = 2f;
     private void Awake()
     {
+        offset = new Vector3(Random.Range(-2, 2), Random.Range(-2, 2), Random.Range(-2, 2));
         _controller = new InputController();
         _spriteTransform = GetComponent<RectTransform>();
     }
@@ -30,14 +37,29 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private void OnEnable()
     {
         _controller.Enable();
+        _controller.Player.Cancel.performed += CancelUse;
     }
+
     private void OnDisable()
     {
         _controller.Disable();
+        _controller.Player.Cancel.performed -= CancelUse;
+    }
+
+    private void CancelUse(InputAction.CallbackContext context)
+    {
+        CancelUse();
     }
     private void FixedUpdate()
     {
         //AnimationMabye
+        
+        time += Time.fixedDeltaTime;
+        float x = Mathf.Sin(time * speed + offset.x) * angle.x ;
+        float y = Mathf.Sin(time * speed + offset.y) * angle.y ;
+        float z = Mathf.Sin(time * speed + offset.z) * angle.z ;
+        
+        _rect.localRotation = Quaternion.Euler(x, y, z);
 
     }
 
@@ -51,80 +73,106 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             if (Physics.Raycast(ray, out hit))
             {
                 _spawnedParticle.transform.position = hit.point;
+                
             }
         }
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (!CanAfford()) return;
+        if (!CanPlay()) return;
         _isDragging = true;
-        _spawnedParticle = Instantiate(_particleDrag);  
+        _spawnedParticle = Instantiate(_particleDrag);
+        CardHandManager.GetInstance().Dragged(true);  
     }
-
     public void OnEndDrag(PointerEventData eventData)
     {
         if (_isDragging)
         {
+            _isDragging = false;
+            CardHandManager.GetInstance().Dragged(false);
+            if (_containedCard.type == CardType.Target)
+            {
+                CombatGridTile grid;
+                if (grid = Selector._instance.GetTileUnderMouse())
+                {
+                    if (!grid.GetOccupantCharacter())
+                    {
+                        CancelUse();
+                        return;
+                    }
+                    else
+                    {
+                        Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
+                        Destroy(_spawnedParticle);
+                        CardHandManager.GetInstance().CharacterTarget(grid.GetOccupantCharacter());
+                        CardHandManager.GetInstance().CardTargetCharacter(_containedCard, grid.GetOccupantCharacter());
+                        _containedCard.PlayCardOnTarget(grid.GetOccupantCharacter());
+                    }
+                }
+                else
+                {
+                    CancelUse();
+                    return;
+                }
+            }
+            else
+            {
+                
+                _containedCard.PlayCard();
+                
+                
+            }
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
-            CardHandManager.GetInstance().ChangeMana(-_containedCard.cost);
-            _containedCard.PlayCard();
-            CardHandManager.GetInstance().RemoveCard(this);   
+            _containedCard.AfterCardPlay();
+            CardHandManager.GetInstance().ChangeMana(-_containedCard.Getcost());
+            CardHandManager.GetInstance().RemoveCardFromHand(this);   
         }
-        
+    }
+
+    private void CancelUse()
+    {
+        CardHandManager.GetInstance().Dragged(false);
+        Destroy(_spawnedParticle);
+        _isDragging = false;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         //StartCoroutine(OnHover(true));
         CardHandManager.GetInstance().ShowHighlightedCard(this, transform.position);
+        CardHandManager.GetInstance().Hovered(true);
         setVisible(false);
     }
 
     private bool CanAfford()
     {
-        return CardHandManager.GetInstance().GetMana() >= _containedCard.cost;
+        return CardHandManager.GetInstance().GetMana() >= _containedCard.Getcost();
     }
+    private bool CanPlay()
+    {
+        if (CombatManager._instance.GetCombatState() == CombatState.PlaceCharacters) return false;
 
+        return (CombatManager._instance.GetCombatTurnOrder().GetCurrentTurn() == CombatTurn.PlayerTurn);
+            
+        
+    }
     public void OnPointerExit(PointerEventData eventData)
     {
         CardHandManager.GetInstance().HideHighlightedCard();
+        CardHandManager.GetInstance().Hovered(false);
         setVisible(true);
         //StartCoroutine(OnHover(false));
     }
-    IEnumerator OnHover(bool isEnter)
-    {
-        CombatUI combatCanvas = GameObject.Find("CombatCanvas")?.GetComponent<CombatUI>();
-        combatCanvas?.SetCardsActive(isEnter);
-        /*
-        float duration = 0.1f; 
-        float elapsed = 0f;
-        if (isEnter)
-        {
-            while (Vector3.Distance(_spriteTransform.position, _hoverEndPosition) != 0)
-            {
-                _spriteTransform.position = Vector3.Lerp(_startPosition, _hoverEndPosition, elapsed/duration);
-                elapsed += Time.deltaTime;
-                yield return null;
-            }
-        }
-        else
-        {
-            while (Vector3.Distance(_spriteTransform.position, _startPosition) != 0)
-            {
-                _spriteTransform.position = Vector3.Lerp(_hoverEndPosition, _startPosition, elapsed / duration);
-                elapsed += Time.deltaTime;
-                yield return null;
-                
-            }
-            
-        }
-        */
-        yield return null;
-    }
+    
     public void AddCard(Card newCard)
     {
         _containedCard = newCard;
+        GetComponent<CardUI>().SetUpUIElements(_containedCard);
+    }
+    public void UppdateCardUI()
+    {
         GetComponent<CardUI>().SetUpUIElements(_containedCard);
     }
     public void SetPos(Vector3 newStarterPoint)

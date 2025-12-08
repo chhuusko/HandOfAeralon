@@ -12,6 +12,8 @@ public readonly struct AbilityExecutionData
     public Character Target { get; }
     public CombatGridTile TargetTile { get; }
 
+    public StatusEffect Effect { get; }
+
     /// <summary>
     /// Amount of damage dealt by this ability execution.
     /// Zero if no damage was dealt.
@@ -24,7 +26,12 @@ public readonly struct AbilityExecutionData
     /// </summary>
     public int Heal { get; }
 
-    public AbilityExecutionData(Ability ability, Character caster, Character target, CombatGridTile tile, int damage, int heal)
+    /// <summary>
+    /// Is true if character died after taking damage.
+    /// </summary>
+    public bool CharacterDied { get; }
+
+    public AbilityExecutionData(Ability ability, Character caster, Character target, CombatGridTile tile, int damage, int heal, StatusEffect effect, bool characterDied)
     {
         Ability = ability;
         Caster = caster;
@@ -32,14 +39,16 @@ public readonly struct AbilityExecutionData
         TargetTile = tile;
         Damage = damage;
         Heal = heal;
+        Effect = effect;
+        CharacterDied = characterDied;
     }
     /// <summary>
     /// Creates a new AbilityExecutionData instance and notifies all listeners
     /// that an ability has been executed.
     /// </summary>
-    public static AbilityExecutionData Create(Ability ability, Character caster, Character target, CombatGridTile tile, int damage, int heal)
+    public static AbilityExecutionData Create(Ability ability, Character caster, Character target, CombatGridTile tile, int damage, int heal, StatusEffect effect, bool characterDied)
     {
-        var data = new AbilityExecutionData(ability, caster, target, tile, damage, heal);
+        var data = new AbilityExecutionData(ability, caster, target, tile, damage, heal, effect, characterDied);
         CombatEventManager.InvokeOnAbilityDataCreated(data);
         return data;
     }

@@ -21,13 +21,13 @@ MonoBehaviour:
     for 2 turns. Gain 1 Mana if at least two enemies become Slowed."
   _abilityTag: 9
   _type: 0
-  _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
+  _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
   _targetType: 0
   _castingEffect: {fileID: 0}
   _hitEffect: {fileID: 0}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0
+  _castingTime: 1
   _fromCastToHitTime: 0
   _castingRotationTime: 0.3
   _pattern: {fileID: 11400000, guid: 129687a3acdf70e4cba2536129786496, type: 2}

@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 126b42a47fa07964688e55e15b1a86f8, type: 3}
   m_Name: Chaotic Burst
   m_EditorClassIdentifier: 
-  type: 1
+  type: 0
   rarity: 0
   title: Chaotic Burst
-  description: Deal 15 damage randomly split among all characters. Draw 1 card.
+  description: Deal 30 damage randomly split among all characters. Draw 1 card.
   cost: 3
   icon: {fileID: 21300000, guid: bf376f9352e84dc4fa2ed30a13b6fd47, type: 3}
   CardTemplate: {fileID: 21300000, guid: 5e28a94fa22af0842b621c08706c9958, type: 3}
   info: []
+  tags: 

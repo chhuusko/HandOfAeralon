@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class Ability : ScriptableObject
@@ -22,10 +23,29 @@ public abstract class Ability : ScriptableObject
     [SerializeField] private ValidTargetOccupant _targetType;
 
     [Header("- Visuals & Audio - ")]
-    [SerializeField] private ParticleSystem _castingEffect, _hitEffect;
+    [SerializeField] private AbilityVFXSequence _abilityVFXSequence;
     [SerializeField] private AudioClip _castingSound, _hitSound;
     [SerializeField] private float _castingTime, _fromCastToHitTime;
     [SerializeField] private float _castingRotationTime = 0.3f;
+
+    private AbilityHandler _abilityHandler;
+    private Character _characterCaster;
+
+
+    public AbilityHandler GetAbilityHandler() => _abilityHandler;
+    public Character GetCharacterCaster() => _characterCaster;
+
+    public AbilityVFXSequence GetAbilityVFXSequence() => _abilityVFXSequence;
+
+
+    public void SetAbilityHandler(AbilityHandler abilityHandler)
+    {
+        _abilityHandler = abilityHandler;
+    }
+    public void SetCharacterCaster(Character caster)
+    {
+        _characterCaster = caster;
+    }
 
 
     [System.Flags]
@@ -64,35 +84,60 @@ public abstract class Ability : ScriptableObject
     public float GetRange() => _range;
     public int GetCooldown() => _cooldown;
     public string GetDescription() => _description;
+    public float GetCastingRotationTime() => _castingRotationTime;
+    public float GetCastingTime() => _castingTime;  
+    public float GetFromCastToHitTime() => _fromCastToHitTime;
     public void SetCooldown(int cooldown)
     {
         _cooldown = cooldown;
     }
     public ValidTargetOccupant GetAbilityTargetType() => _targetType;
 
-    public RangeCalculation GetRangeCalculation => _rangeCalculation;
+    public RangeCalculation GetRangeCalculation() => _rangeCalculation;
 
     public List<CombatGridTile> GetAvailableTargets(CombatGridTile casterTile)
     {
         return _rangeCalculation.CalculateTilesInRange(casterTile, _range);
     }
+    
+    public Type GetAbilityType() => _type;
 
-    public IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
+    public virtual IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         Character caster = casterTile.GetOccupantCharacter();
         if (caster == null) Debug.LogError("CasterTile has no character!");
+
+        // Should not be able to move after performing ability.
         ResetMovementPoints(caster);
-        caster.RotateTowards(targetTile.transform, _castingRotationTime);
+
+        // Rotate towards target if the target is not the caster's tile.
+        if(casterTile != targetTile)
+        {
+            caster.RotateTowards(targetTile.transform, _castingRotationTime);
+        }
 
         if (caster.TryGetComponent<Animator>(out var animator)){
             animator.SetTrigger(_abilityName);
         }
-        // Play Animation.
-        // Play casting sound.
-        yield return new WaitForSeconds(_castingTime);
-        InitiateParticles(casterTile, targetTile);
-        // Play hit sound.
-        yield return new WaitForSeconds(_fromCastToHitTime);
+
+        if (_abilityVFXSequence != null)
+        {
+            VFXData data = new VFXData
+            {
+                Caster = caster,
+                OriginPosition = casterTile.transform.position,
+                TargetTile = targetTile,
+                TargetPosition = targetTile.transform.position,
+                Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
+
+                CastingFXDuration = _castingTime,
+                TravelFXDuration = _fromCastToHitTime
+            };
+            caster.StartCoroutine(_abilityVFXSequence.RunSequence(data)
+            );
+        }
+
+        yield return new WaitForSeconds(_castingTime + _fromCastToHitTime);
         RunAbility(casterTile, targetTile);
     }
     protected void ResetMovementPoints(Character character)

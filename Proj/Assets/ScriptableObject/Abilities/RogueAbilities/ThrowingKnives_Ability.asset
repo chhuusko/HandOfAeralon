@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdce9554fba4e2a44a78632c9b626d94, type: 3}
+  m_Name: ThrowingKnives_Ability
+  m_EditorClassIdentifier: 
+  _abilityName: Throwing Knives
+  _icon: {fileID: 21300000, guid: e7d2c4ccaf4933b47b734c7e029b2498, type: 3}
+  _range: 1
+  _cooldown: 2
+  _description: "Throw knives in a line, dealing (60% + (10% \xD7 current hand size)
+    \xD7 Damage) Physical damage. Every character hit has a 60% chance to gain 3
+    stacks of Poison."
+  _abilityTag: 10
+  _type: 0
+  _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
+  _targetType: 0
+  _castingEffect: {fileID: 0}
+  _hitEffect: {fileID: 0}
+  _castingSound: {fileID: 0}
+  _hitSound: {fileID: 0}
+  _castingTime: 0.5
+  _fromCastToHitTime: 0
+  _castingRotationTime: 0.3
+  _pattern: {fileID: 11400000, guid: 563544cd6ba3c45459964c4950b1f39b, type: 2}
+  _validTargets: 2
+  _damageMultiplier: 0.6
+  _chanceToApplyPoison: 0.6
+  _handSizeDamageMultiplier: 0.1
+  _poisonStacks: 3

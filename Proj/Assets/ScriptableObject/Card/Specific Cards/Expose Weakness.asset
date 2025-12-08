@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08a51b8596cd4114ca476115d9cc7265, type: 3}
   m_Name: Expose Weakness
   m_EditorClassIdentifier: 
-  type: 0
+  type: 1
   rarity: 0
   title: Expose Weakness
   description: Grant target character Vulnerable for 2 turns.
-  cost: 1
+  cost: 2
   icon: {fileID: 21300000, guid: 303c513a36c00074caf55bfd1b094fcf, type: 3}
   CardTemplate: {fileID: 0}
   info: []
+  tags: 

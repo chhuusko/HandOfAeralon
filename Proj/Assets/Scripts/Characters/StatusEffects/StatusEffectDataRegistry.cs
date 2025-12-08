@@ -30,6 +30,18 @@ public class StatusEffectDataRegistry : ScriptableObject
         _lookup = new Dictionary<Type, StatusEffectData>();
         foreach (var entry in _entries)
         {
+            if (entry == null)
+            {
+                DebugLog.JoppaLog("No entry");
+                continue;
+            }
+            
+            if (entry.Script == null)
+            {
+                DebugLog.JoppaLog("Empty script: " + entry.name);
+                continue;
+            }
+            
             Type type = entry.Script.GetClass();
             if (type != null)
             {
@@ -58,23 +70,38 @@ public class StatusEffectDataRegistry : ScriptableObject
         return _lookup.Values.ToList();
     }
 
-    public IReadOnlyList<TraitData> GetAllTraits()
+    private IReadOnlyList<StatusEffectData> GetAllTraits()
     {
-        return _entries.OfType<TraitData>().ToList();
+        return _entries.Where(e => e.Type == StatusEffectType.Trait).ToList();
     }
 
-    public IReadOnlyList<TraitData> GetAllTraitsOfType(bool isPositive)
+    public IReadOnlyList<StatusEffectData> GetAllGlobalTraitsOfType(bool isPositive)
     {
-        List<TraitData> traitsOfType = new();
+        List<StatusEffectData> traitsOfType = new();
 
-        foreach (TraitData trait in GetAllTraits())
+        foreach (StatusEffectData trait in GetAllTraits())
         {
-            if (trait.IsPositive == isPositive)
+            if (trait.Class == CharacterClass.None && trait.IsPositive == isPositive)
             {
                 traitsOfType.Add(trait);
             }
         }
 
         return traitsOfType;
+    }
+
+    public IReadOnlyList<StatusEffectData> GetAllClassTraits(CharacterData character)
+    {
+        List<StatusEffectData> traits = new();
+        
+        foreach (StatusEffectData trait in GetAllTraits())
+        {
+            if (trait.Class == character.CharacterClass)
+            {
+                traits.Add(trait);
+            }
+        }
+        
+        return traits;
     }
 }

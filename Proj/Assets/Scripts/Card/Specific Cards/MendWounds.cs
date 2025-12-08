@@ -3,11 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Mend Wounds", menuName = "Item/Card Data/Mend Wounds", order = 1)]
 public class MendWounds : Card
 {
-    public override void PlayCard()
+    public override void PlayCardOnTarget(Character character)
     {
-
-
-        Character character = Selector._instance.GetTileUnderMouse().GetOccupantCharacter();
         if (character != null)
         {
             if ((character.GetCurrentHealth() / character.GetMaxHealth()) < 0.5f)
@@ -16,7 +13,5 @@ public class MendWounds : Card
             }
             character.Heal(10);
         }
-        
-        
     }
 }

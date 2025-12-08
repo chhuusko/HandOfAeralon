@@ -168,7 +168,7 @@ public class GridExplorer : MonoBehaviour
     /// to allow visualization of the final computed path inside the editor.
     /// </remarks>
 
-    public List<GameObject> FindPathAStar(GameObject startTile, GameObject goalTile)
+    public List<GameObject> FindPathAStar(GameObject startTile, GameObject goalTile, bool bDrawPath = true)
     {
         Vector2Int start = startTile.GetComponent<CombatGridTile>().GetTileIndex();
         Vector2Int goal = goalTile.GetComponent<CombatGridTile>().GetTileIndex();
@@ -211,7 +211,7 @@ public class GridExplorer : MonoBehaviour
             if (current == goal)
             {
                 var result = BuildPath(cameFrom, start, goal);
-                DrawPath(result);
+                if (bDrawPath) DrawPath(result);
                 return result;
             }
 
@@ -236,6 +236,7 @@ public class GridExplorer : MonoBehaviour
                 if (closed.Contains(next)) continue;
 
                 float moveCost = (IsDiagonal(dir) ? 1.4f : 1f);
+                moveCost += (IsHazardous(next) ? 99f : 0f);
                 float tentativeG = gCost[current] + moveCost;
 
                 if (!gCost.ContainsKey(next) || tentativeG < gCost[next])
@@ -353,6 +354,30 @@ public class GridExplorer : MonoBehaviour
         return Mathf.Abs(dir.x) + Mathf.Abs(dir.y) == 2;
     }
 
+    private bool IsHazardous(Vector2Int dir)
+    {
+        GameObject tileObj = CombatGrid._instance.GetTileAtCoord(dir.x, dir.y);
+
+        if (tileObj == null)
+        {
+            return false;
+        }
+
+        CombatGridTile tile = tileObj.GetComponent<CombatGridTile>();
+
+        if (tile == null)
+        {
+            return false;
+        }
+
+        if (tile.GetTileType() == TileType.Lava || tile.GetTileType() == TileType.Poison)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// Performs a breadth-first search (BFS) from the given origin tile to find all tiles within the specified range.
     /// </summary>
@@ -380,16 +405,19 @@ public class GridExplorer : MonoBehaviour
         Vector2Int start = origin.GetComponent<CombatGridTile>().GetTileIndex();
 
         if (!checkWalkable)
-        {
             result.Add(origin);
-        }
 
         Vector2Int[] directions = new Vector2Int[]
         {
-            new Vector2Int(1, 0),
-            new Vector2Int(0, 1),
-            new Vector2Int(-1, 0),
-            new Vector2Int(0, -1)
+        new Vector2Int(1, 0),
+        new Vector2Int(0, 1),
+        new Vector2Int(-1, 0),
+        new Vector2Int(0, -1),
+
+        new Vector2Int(1, 1),
+        new Vector2Int(-1, 1),
+        new Vector2Int(1, -1),
+        new Vector2Int(-1, -1)
         };
 
         Queue<Vector2Int> queue = new();
@@ -404,7 +432,8 @@ public class GridExplorer : MonoBehaviour
             foreach (var dir in directions)
             {
                 Vector2Int next = current + dir;
-                int nextCost = cost[current] + 1;
+                int moveCost = (Mathf.Abs(dir.x) + Mathf.Abs(dir.y) == 2 ? 2 : 1);
+                int nextCost = cost[current] + moveCost;
 
                 if (OutOfBounds(next)) continue;
                 if (checkWalkable && !IsWalkable(next)) continue;
@@ -412,19 +441,26 @@ public class GridExplorer : MonoBehaviour
                 if (nextCost > range) continue;
                 if (cost.ContainsKey(next)) continue;
 
+                if (IsDiagonal(dir))
+                {
+                    Vector2Int t1 = new Vector2Int(current.x, next.y);
+                    Vector2Int t2 = new Vector2Int(next.x, current.y);
+
+                    if (!IsWalkable(t1) && !IsWalkable(t2))
+                    {
+                        continue;
+                    }
+                }
+
                 cost[next] = nextCost;
                 queue.Enqueue(next);
                 result.Add(CombatGrid._instance.GetTileAtCoord(next.x, next.y));
             }
         }
 
-        /*
-        if (_bPaintTiles) _paintStartTile = CombatGrid._instance.GetTileAtCoord(start.x, start.y);
-        if (_bPaintTiles) _paintReachableTiles = result;
-        */
-       
         return result;
     }
+
 
     private bool OutOfBounds(Vector2Int pos)
     {

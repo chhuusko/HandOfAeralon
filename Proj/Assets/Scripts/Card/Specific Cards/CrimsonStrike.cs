@@ -4,12 +4,15 @@ using UnityEngine;
 public class CrimsonStrike : Card
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public override void PlayCard()
+    public override void PlayCardOnTarget(Character character)
     {
-        Character targetCharacter = Selector._instance.GetTileUnderMouse().GetOccupantCharacter();
-        if (targetCharacter != null)
+        if (character != null)
         {
-            targetCharacter.TakeDamage((int)(targetCharacter.GetMaxHealth() * 0.25f));
+            character.TakeDamage((int)(character.GetMaxHealth() * 0.25f));
+            if (character.GetCurrentHealth() <= 0)
+            {
+                CardHandManager.GetInstance().ChangeMana(2);
+            }
         }
     }
 }
