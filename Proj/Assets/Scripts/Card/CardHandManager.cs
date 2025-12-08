@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -18,8 +19,9 @@ public class CardHandManager : MonoBehaviour
     [SerializeField] private List<CardContainer> _cardsInHand;
     [SerializeField] private List<Card> _cardsInDeck;
     [SerializeField] private List<Card> _cardsInDiscardPile;
-    
-    
+
+    [SerializeField] private TextMeshProUGUI _deckText, _discardText;
+
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
 
     
@@ -47,8 +49,13 @@ public class CardHandManager : MonoBehaviour
     public static Action<int> onManaChange;
     public static Action<Character> onTargetCharacter;
     public static Action<Character, Card> onCardTargetCharacter;
+
+    public static Action<bool> onDrag;
+    public static Action<bool> onHover;
     public static CardHandManager GetInstance() {return _instance;}
     public void ManaChanged(){ onManaChange?.Invoke(_mana); }
+    public void Dragged(bool isDragEnter) { onDrag?.Invoke(isDragEnter); }
+    public void Hovered(bool isHoverEnter) { onHover?.Invoke(isHoverEnter); }
     public void CardUsed(Card usedCard) { onCardUse?.Invoke(usedCard); }
     public void CharacterTarget(Character targetCharacter) { onTargetCharacter?.Invoke(targetCharacter); }
     public void CardTargetCharacter(Card usedCard, Character target) { onCardTargetCharacter?.Invoke(target, usedCard); }
@@ -69,6 +76,7 @@ public class CardHandManager : MonoBehaviour
             }
         }
         drawHand();
+        UpdatePileTexts();
     }
 
     private void OnEnable()
@@ -171,6 +179,7 @@ public class CardHandManager : MonoBehaviour
         }
         AddSpaceing();
         _cardsPlayedThisTurn++;
+        UpdatePileTexts();
     }
     public void ChangeMana(int change)
     {
@@ -234,6 +243,7 @@ public class CardHandManager : MonoBehaviour
         {
             RemoveCardFromHand(card);
         }
+        UpdatePileTexts();
         turnEffects.Clear();
     }
     public int GetCardsPlayedThisTurn()
@@ -287,6 +297,11 @@ public class CardHandManager : MonoBehaviour
     public void OverrideManager()
     {
 
+    }
+    public void UpdatePileTexts()
+    {
+        _deckText.text = "Deck (" + _cardsInDeck.Count + ")";
+        _discardText.text = "Discard (" + _cardsInDiscardPile.Count + ")";
     }
 
 }
