@@ -372,7 +372,8 @@ public class CombatGrid : MonoBehaviour
         }
   
         characterScript.AddHealthBar();
-        
+        characterScript.Data.InitializeClassData();
+
         _charactersGO.Add(characterObject);
         
         result = characterObject;
