@@ -133,6 +133,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     private void CancelUse()
     {
+        CardHandManager.GetInstance().Dragged(false);
         Destroy(_spawnedParticle);
         _isDragging = false;
     }
