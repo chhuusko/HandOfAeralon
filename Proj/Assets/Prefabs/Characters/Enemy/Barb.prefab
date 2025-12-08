@@ -582,6 +582,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 6321949424963192390}
   m_SourcePrefab: {fileID: 100100000, guid: 73d5169efce4ef746a4c91b639157dc0, type: 3}
+--- !u!1 &924160273750465423 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4659007651709111384, guid: 73d5169efce4ef746a4c91b639157dc0,
+    type: 3}
+  m_PrefabInstance: {fileID: 5511095434314930135}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4664095102674889350 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 73d5169efce4ef746a4c91b639157dc0,
@@ -613,6 +619,12 @@ Animator:
 --- !u!4 &5472402843105439804 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 73d5169efce4ef746a4c91b639157dc0,
+    type: 3}
+  m_PrefabInstance: {fileID: 5511095434314930135}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7272959129352554914 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2924496225021468277, guid: 73d5169efce4ef746a4c91b639157dc0,
     type: 3}
   m_PrefabInstance: {fileID: 5511095434314930135}
   m_PrefabAsset: {fileID: 0}
@@ -684,6 +696,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
+      propertyPath: _bodyMesh
+      value: 
+      objectReference: {fileID: 7272959129352554914}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
+      propertyPath: _weaponMesh
+      value: 
+      objectReference: {fileID: 924160273750465423}
     - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
         type: 3}
       propertyPath: _data._faction
