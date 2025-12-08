@@ -21,7 +21,7 @@ public class DissonantChordAOE : RoundAOEAbility
         // Calculate all tiles around with in radius and apply effect to all of them.
         if (_pattern is RoundAOEPattern pattern)
         {
-            pattern.SetRadius(_radius);
+            SetAbilityRadius(_radius, pattern);
         }
         List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
 
