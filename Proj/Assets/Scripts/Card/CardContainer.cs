@@ -73,6 +73,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             if (Physics.Raycast(ray, out hit))
             {
                 _spawnedParticle.transform.position = hit.point;
+                
             }
         }
     }
@@ -81,13 +82,15 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         if (!CanAfford()) return;
         if (!CanPlay()) return;
         _isDragging = true;
-        _spawnedParticle = Instantiate(_particleDrag);  
+        _spawnedParticle = Instantiate(_particleDrag);
+        CardHandManager.GetInstance().Dragged(true);  
     }
     public void OnEndDrag(PointerEventData eventData)
     {
         if (_isDragging)
         {
             _isDragging = false;
+            CardHandManager.GetInstance().Dragged(false);
             if (_containedCard.type == CardType.Target)
             {
                 CombatGridTile grid;
@@ -138,6 +141,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     {
         //StartCoroutine(OnHover(true));
         CardHandManager.GetInstance().ShowHighlightedCard(this, transform.position);
+        CardHandManager.GetInstance().Hovered(true);
         setVisible(false);
     }
 
@@ -156,6 +160,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     public void OnPointerExit(PointerEventData eventData)
     {
         CardHandManager.GetInstance().HideHighlightedCard();
+        CardHandManager.GetInstance().Hovered(false);
         setVisible(true);
         //StartCoroutine(OnHover(false));
     }
