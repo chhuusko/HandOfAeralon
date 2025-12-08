@@ -3441,6 +3441,16 @@ PrefabInstance:
       objectReference: {fileID: 7998149111319180341}
     - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
         type: 3}
+      propertyPath: _bodyMesh
+      value: 
+      objectReference: {fileID: 7998149111319180341}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
+      propertyPath: _weaponMesh
+      value: 
+      objectReference: {fileID: 434468670871174998}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
       propertyPath: _data._faction
       value: 0
       objectReference: {fileID: 0}
