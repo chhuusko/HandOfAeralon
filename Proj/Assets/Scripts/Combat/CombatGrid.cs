@@ -362,7 +362,7 @@ public class CombatGrid : MonoBehaviour
         characterScript.SetBaseDamage(baseDamage);
         characterScript.SetBaseMovementPoints(baseMovementPoints);
   
-        characterScript.AddHealthBar();
+        characterScript.AddCharacterFrame();
         characterScript.Data.InitializeClassData();
         characterScript.Initialize(characterScript.Data);
 
@@ -411,7 +411,7 @@ public class CombatGrid : MonoBehaviour
         // Assign and initialize
         character.Initialize(data);
 
-        character.AddHealthBar();
+        character.AddCharacterFrame();
 
         _charactersGO.Add(characterGO);
 

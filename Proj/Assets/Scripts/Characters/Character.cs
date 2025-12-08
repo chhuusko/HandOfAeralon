@@ -420,11 +420,11 @@ public class Character : MonoBehaviour
         smr.renderingLayerMask = layerMask;
     }
 
-    public void AddHealthBar()
+    public void AddCharacterFrame()
     {
-        if (HealthBarManager._instance != null)
+        if (CharacterFrameManager._instance != null)
         {
-            HealthBarManager._instance.Register(this);
+            CharacterFrameManager._instance.Register(this);
         }
         else
         {
@@ -536,9 +536,9 @@ public class Character : MonoBehaviour
 
     void OnDestroy()
     {
-        if (HealthBarManager._instance != null)
+        if (CharacterFrameManager._instance != null)
         {
-            HealthBarManager._instance.Unregister(this);
+            CharacterFrameManager._instance.Unregister(this);
         }
     }
 }
