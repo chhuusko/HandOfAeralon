@@ -26,7 +26,8 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
     [SerializeField] private TMP_Text _characterClassName;
     [SerializeField] private Animator _animatorShowHideButton;
     private Animator _animator;
-    
+    private bool _bIsHidden = true;
+
     // Stats Tooltip
     private List<string> _characterStatValues = new List<string>();
     [SerializeField] private TMP_Text _characterStatValueFieldTMP;
@@ -68,22 +69,6 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         Selector._instance.OnCharacterSelected              -= UpdateTooltip;
         Selector._instance.OnCharacterDeselected            -= HideToolTip;
         CombatEventManager.OnStatusEffectAppliedToCharacter -= UpdateSelectedCharacter;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.Return))
-        {
-            GameObject statusEffect = Instantiate(_statusEffectPrefab);
-            statusEffect.transform.SetParent(_statusEffectParent.transform, false);
-            _statusEffects.Add(statusEffect);
-        }
-
-        if (Input.GetKeyUp(KeyCode.Backspace))
-        {
-            Destroy(_statusEffects.LastOrDefault());
-            _statusEffects.Remove(_statusEffects.LastOrDefault());
-        }
     }
 
     public void BindEventEventOnTakeDamage(Character character)
@@ -137,16 +122,19 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
         _characterStatValueFieldTMP.text = stats;
     }
 
+    public bool IsHidden() { return _bIsHidden; }
     public void HideCanvas()
     {
         _animator.Play("Hide");
         _animatorShowHideButton.Play("BlinkOn");
+        _bIsHidden = true;
     }
 
     public void ShowCanvas()
     {
         _animator.Play("Show");
         _animatorShowHideButton.Play("BlinkOff");
+        _bIsHidden = false;
     }
 
     private void HideToolTip()
