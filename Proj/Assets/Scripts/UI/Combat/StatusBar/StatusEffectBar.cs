@@ -26,6 +26,13 @@ public class StatusEffectBar : MonoBehaviour
         if (characterSubject != _ownerCharacter)
             return;
 
+        // NOTE (Calle): Don't add another status effect icon if it already exists.
+        foreach (StatusEffectBarElement existingStatusEffect in _statusEffectBarElements)
+        {
+            if (existingStatusEffect.name.Equals(statusEffect.Data.name))
+                return;
+        }
+
         GameObject statusEffectBarElementObject = Instantiate(_prefabStatusEffectBarElement, transform);
         statusEffectBarElementObject.name = statusEffect.Data.name;
 
@@ -46,10 +53,11 @@ public class StatusEffectBar : MonoBehaviour
 
         foreach (StatusEffectBarElement statusEffect in _statusEffectBarElements)
         {
-            if(statusEffect.name.EndsWith(status.Data.name))
+            if(statusEffect.name.Equals(status.Data.name))
             {
                 _statusEffectBarElements.Remove(statusEffect);
-                Destroy(statusEffect.gameObject);
+                if(statusEffect.gameObject != null)
+                    Destroy(statusEffect.gameObject);
                 break;
             }
         }
