@@ -68,7 +68,10 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
     {
         Selector._instance.OnCharacterSelected              -= UpdateTooltip;
         Selector._instance.OnCharacterDeselected            -= HideToolTip;
+
         CombatEventManager.OnStatusEffectAppliedToCharacter -= UpdateSelectedCharacter;
+        CombatEventManager.OnStatusEffectExpiredOnCharacter -= RemoveStatusEffectOnSelectedCharacter;
+        CombatEventManager.OnStatusEffectDurationChanged    -= UpdateSelectedCharacter;
     }
 
     public void BindEventEventOnTakeDamage(Character character)
