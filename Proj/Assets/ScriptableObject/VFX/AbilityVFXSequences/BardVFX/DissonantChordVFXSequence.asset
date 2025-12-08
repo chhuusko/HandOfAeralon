@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6383c0305810c4cbb86136a8d14596, type: 3}
   m_Name: DissonantChordVFXSequence
   m_EditorClassIdentifier: 
-  castFX: {fileID: 0}
-  travelFX: {fileID: 0}
-  impactFX: {fileID: -5007466841541530457, guid: 82b4ba6d47f53984b8cf31ff3bc45628,
+  _castFX: {fileID: 0}
+  _travelFX: {fileID: 0}
+  _impactFX: {fileID: -5007466841541530457, guid: 82b4ba6d47f53984b8cf31ff3bc45628,
     type: 3}
+  _biggerImpactScale: 2.4
