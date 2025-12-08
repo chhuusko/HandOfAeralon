@@ -296,7 +296,7 @@ public class CardHandManager : MonoBehaviour
     public void UpdatePileTexts()
     {
         _deckText.text = "Deck (" + _cardsInDeck.Count + ")";
-        _discardText.text = "Deck (" + _cardsInDiscardPile.Count + ")";
+        _discardText.text = "Discard (" + _cardsInDiscardPile.Count + ")";
     }
 
 }
