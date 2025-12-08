@@ -13,6 +13,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FactionIndicator
       objectReference: {fileID: 0}
+    - target: {fileID: 473098841463561178, guid: e58c7980e865de746b1b8c64baf42498,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2883981076783563106, guid: e58c7980e865de746b1b8c64baf42498,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -145,6 +150,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 78cb7efc812f9b446bd019a8a1360add,
         type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 78cb7efc812f9b446bd019a8a1360add,
+        type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: e7266cb7206c0e14b9b7a3e4da77098f, type: 2}
@@ -158,6 +168,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BaseCharacter
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 78cb7efc812f9b446bd019a8a1360add,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 78cb7efc812f9b446bd019a8a1360add,
         type: 3}
@@ -246,7 +261,7 @@ MonoBehaviour:
     _baseDamage: 0
     _baseMovementPoints: 0
     _currentHealthPoints: 0
-    _availableAbilities: []
+    _abilities: []
   _currentTileIndex: {x: 0, y: 0}
 --- !u!54 &-5358155644811910876
 Rigidbody:
@@ -322,4 +337,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 446ae561fdd6c9a4f9d98cdc4badb473, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _registry: {fileID: 11400000, guid: 73140fd2fdab2d544aaa9d475106ff8b, type: 2}
+  _traitManager:
+    _statusEffects: []
+  references:
+    version: 2
+    RefIds: []
