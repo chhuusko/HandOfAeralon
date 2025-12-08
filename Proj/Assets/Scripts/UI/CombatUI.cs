@@ -14,6 +14,7 @@ public class CombatUI : MonoBehaviour
     public static CombatUI Instance;
     
     [SerializeField] private Image _abilityPanel;
+    [SerializeField] private GameObject _abilityPanelParent;
     [SerializeField] private Image _characterPortraitPanel;
     [SerializeField] private Image _activeCharacterPortrait;
     [SerializeField] private GameObject _activeCharacterBorder;
@@ -467,7 +468,8 @@ public class CombatUI : MonoBehaviour
             Destroy(_abilityPanel.transform.GetChild(i).gameObject);
         }
         
-        _abilityPanel.gameObject.SetActive(false);
+        // _abilityPanel.gameObject.SetActive(false);
+        _abilityPanelParent.SetActive(false);
     }
     
     /// <summary>
@@ -513,7 +515,8 @@ public class CombatUI : MonoBehaviour
 
         ClearAbilityButtons();
         
-        _abilityPanel.gameObject.SetActive(true);
+        // _abilityPanel.gameObject.SetActive(true);
+        _abilityPanelParent.SetActive(true);
 
         for (int i = 0; i < character.Abilities.Count; i++)
         {

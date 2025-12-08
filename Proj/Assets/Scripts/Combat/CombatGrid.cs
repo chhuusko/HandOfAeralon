@@ -361,18 +361,11 @@ public class CombatGrid : MonoBehaviour
         characterScript.SetBaseInitiative(baseSpeed);
         characterScript.SetBaseDamage(baseDamage);
         characterScript.SetBaseMovementPoints(baseMovementPoints);
-
-        if (faction == Faction.Friendly)
-        {
-            characterObject.layer = LayerMask.NameToLayer("Friendly");
-        }
-        else if (faction == Faction.Enemy)
-        {
-            characterObject.layer = LayerMask.NameToLayer("Enemy");
-        }
   
         characterScript.AddHealthBar();
-        
+        characterScript.Data.InitializeClassData();
+        characterScript.Initialize(characterScript.Data);
+
         _charactersGO.Add(characterObject);
         
         result = characterObject;
