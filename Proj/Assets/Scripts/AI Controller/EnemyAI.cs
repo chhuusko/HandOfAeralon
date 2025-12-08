@@ -176,9 +176,23 @@ public class EnemyAI : MonoBehaviour
                     AIAction moveAndUseAbility = new AIAction { movement = pos, ability = ability, target = tile };
                     int newScore = score;
 
-                    if (tile.GetOccupantCharacter() != null && tile.GetOccupantCharacter().GetFaction() != _controlledFaction)
+                    Character occupant = tile.GetOccupantCharacter();
+
+                    if (occupant != null && occupant.GetFaction() != _controlledFaction)
                     {
                         newScore += 10;
+                        _scoredActions[moveAndUseAbility] = newScore;
+                    }
+
+                    if (occupant != null && _currentCharacter.GetCharacterClass() == CharacterClass.Bard && occupant.GetFaction() == _controlledFaction && occupant != _currentCharacter)
+                    {
+                        newScore += 10;
+
+                        if (ability.name == "SongOfRenewal_Ability" && occupant.GetCurrentHealth() != occupant.GetMaxHealth())
+                        {
+                            newScore += 999;
+                        }
+
                         _scoredActions[moveAndUseAbility] = newScore;
                     }
 
@@ -202,7 +216,7 @@ public class EnemyAI : MonoBehaviour
 
         string chosenAbility = _chosenAction.ability != null ? _chosenAction.ability.name : "None";
         string chosenTarget = _chosenAction.target != null ? _chosenAction.target.GetTileIndex().ToString() : "None";
-        DebugLog.JLWLog($"EnemyAI.cs | Move {_currentCharacter.name} to: {_chosenAction.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, ActionScore: {_scoredActions[_chosenAction]}.");
+        DebugLog.JLWLog($"AI | Move {_currentCharacter.name} to: {_chosenAction.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, ActionScore: {_scoredActions[_chosenAction]}.");
 
         if (_currentCharacter.CanMove)
         {
@@ -216,27 +230,6 @@ public class EnemyAI : MonoBehaviour
 
         StartCoroutine(WaitForMovement());
     }
-
-    /*
-    private void RunOld()
-    {
-        _movePath = FindPath(_currentTile, _targetTile)
-                .Select(obj => obj.GetComponent<CombatGridTile>())
-                .Where(ch => ch != null)
-                .ToList();
-
-        if (_currentCharacter.CanMove)
-        {
-            _currentCharacter.GetComponent<CharacterMovement>().ForceCustomPath(_movePath);
-            StartCoroutine(WaitForMovement());
-        }
-        else
-        {
-            TryAttack(_currentCharacter, _targetCharacter);
-            EndTurn();
-        }
-    }
-    */
 
     private Character FindClosestOpponentCharacter(Character currentCharacter)
     {
@@ -274,44 +267,6 @@ public class EnemyAI : MonoBehaviour
         return result;
     }
 
-    /*
-    private List<GameObject> FindPath(GameObject currentTile, GameObject opponentTile)
-    {
-        List<GameObject> result = new();
-        List<GameObject> path = GridExplorer._instance.FindPathAStar(currentTile, opponentTile, false);
-
-        if (path == null || path.Count <= 1)
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | No path found from {currentTile.GetComponent<CombatGridTile>().GetTileIndex()} to {opponentTile.GetComponent<CombatGridTile>().GetTileIndex()}");
-            return new List<GameObject>();
-        }
-
-        for (int i = 1; i < path.Count && i <= _currentMoveRange; i++)
-        {
-            GameObject tile = path[i];
-            int distToEnemy = GridExplorer._instance.ManhattanDistance(tile.GetComponent<CombatGridTile>().GetTileIndex(), opponentTile.GetComponent<CombatGridTile>().GetTileIndex());
-
-            if (distToEnemy == 1)
-            {
-                result.Add(tile);
-                return result;
-            }
-
-            if (distToEnemy > 0)
-            {
-                result.Add(tile);
-            }
-        }
-
-        if (result == null || result.Count == 0)
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | Path to target NOT FOUND!");
-        }
-
-        return result;
-    }
-    */
-
     private IEnumerator WaitForMovement()
     {
         CharacterMovement movementComponent = null;
@@ -336,33 +291,9 @@ public class EnemyAI : MonoBehaviour
         _currentAbilityHandler.UseAbility(ability, target);
     }
 
-    /*
-    private void TryAttack(Character attacker, Character target)
-    {
-        if (!attacker.CanUseAbility)
-        {
-            return;
-        }
-
-        if (GridExplorer._instance.ChebyshevDistance(attacker.GetCurrentTileIndex(), target.GetCurrentTileIndex()) <= 1)
-        {
-            Vector3 direction = (target.transform.position - _currentCharacter.transform.position).normalized;
-            direction.y = 0f;
-
-            if (direction.sqrMagnitude > 0.0001f)
-            {
-                _currentCharacter.transform.rotation = Quaternion.LookRotation(direction);
-            }
-
-            Debug.LogWarning($"EnemyAI.cs | {attacker.name} strikes {target.name} for {_currentCharacter.GetDamage()} damage!");
-            target.TakeDamage(_currentCharacter.GetDamage());
-        }
-    }
-    */
-
     private void EndTurn()
     {
-        DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name}'s turn ended!");
+        //DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name}'s turn ended!");
 
         _currentCharacter = null;
         _currentTile = null;
