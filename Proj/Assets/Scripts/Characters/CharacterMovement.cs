@@ -50,14 +50,14 @@ public class CharacterMovement : MonoBehaviour
 
     public void PreviewPath(CombatGridTile tile)
     {
-        if (tile == _character.GetCurrentTileComponent() || tile == null || !_tilesInRange.Contains(tile) || CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() != Faction.Friendly)
+        if (_bIsMoving || tile == _character.GetCurrentTileComponent() || tile == null || !_tilesInRange.Contains(tile) || CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() != Faction.Friendly)
         {
             _lastPreviewPathTile = null;
             GridExplorer._instance.ClearPathDrawing();
             return;
         }
 
-        if (_bIsMoving || tile == _lastPreviewPathTile || _character.GetMovementPoints() <= 0)
+        if (tile == _lastPreviewPathTile || _character.GetMovementPoints() <= 0)
         {
             //DebugLog.JLWLog($"CharacterMovement::PreviewPath() skipped");
             return;
@@ -77,7 +77,7 @@ public class CharacterMovement : MonoBehaviour
 
     public bool ConfirmPath(CombatGridTile tile)
     {
-        if (tile == _character.GetCurrentTileComponent() || _pathPreview == null || _pathPreview.Count == 0)
+        if (_bIsMoving || tile == _character.GetCurrentTileComponent() || _pathPreview == null || _pathPreview.Count == 0)
         {
             //DebugLog.JLWLog($"CharacterMovement.cs | _pathPreview IS EMPTY!");
             return false;
