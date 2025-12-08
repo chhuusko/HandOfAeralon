@@ -16,6 +16,5 @@ public class RuntimeInit
         {
             DebugLog.CJLog("CursorDatabase not found in Resources folder.");
         }
-
     }
 }

@@ -348,25 +348,31 @@ public class CombatGrid : MonoBehaviour
 
         GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
         GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, rotation);
-       
+        Character characterScript = characterObject.GetComponent<Character>();
 
-        characterObject.GetComponent<Character>().SetCharacterClass(characterClass);
-        characterObject.GetComponent<Character>().SetFaction(faction);
-        characterObject.GetComponent<Character>().SetCurrentTileIndex(tileIndex);
+        characterScript.SetCharacterClass(characterClass);
+        characterScript.SetFaction(faction);
+        characterScript.SetCurrentTileIndex(tileIndex);
+        characterScript.SetCurrentHealthPoints(currentHealtPoints);
+        characterScript.SetCurrentInitiative(currentSpeed);
+        characterScript.SetCurrentDamage(currentDamage);
+        characterScript.SetCurrentMovementPoints(currentMovementPoints);
+        characterScript.SetBaseHealthPoints(baseHealtPoints);
+        characterScript.SetBaseInitiative(baseSpeed);
+        characterScript.SetBaseDamage(baseDamage);
+        characterScript.SetBaseMovementPoints(baseMovementPoints);
 
-        characterObject.GetComponent<Character>().SetCurrentHealthPoints(currentHealtPoints);
-        characterObject.GetComponent<Character>().SetCurrentInitiative(currentSpeed);
-        characterObject.GetComponent<Character>().SetCurrentDamage(currentDamage);
-        characterObject.GetComponent<Character>().SetCurrentMovementPoints(currentMovementPoints);
+        if (faction == Faction.Friendly)
+        {
+            characterObject.tag = "Friendly";
+        }
+        else if (faction == Faction.Enemy)
+        {
+            characterObject.tag = "Enemy";
+        }
 
-        characterObject.GetComponent<Character>().SetBaseHealthPoints(baseHealtPoints);
-        characterObject.GetComponent<Character>().SetBaseInitiative(baseSpeed);
-        characterObject.GetComponent<Character>().SetBaseDamage(baseDamage);
-        characterObject.GetComponent<Character>().SetBaseMovementPoints(baseMovementPoints);
-       
-        
-        
-        characterObject.GetComponent<Character>().AddHealthBar();
+
+            characterScript.AddHealthBar();
 
         _charactersGO.Add(characterObject);
         
