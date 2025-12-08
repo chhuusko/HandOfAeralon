@@ -28,6 +28,7 @@ Material:
   m_ValidKeywords:
   - _FRESNEL
   - _SURFACE_TYPE_TRANSPARENT
+  - _USERAMP
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -178,7 +179,7 @@ Material:
     - _TransparentZWrite: 0
     - _USEALPHAOVERRIDE: 0
     - _USEPIXELATION: 0
-    - _USERAMP: 0
+    - _USERAMP: 1
     - _USESOFTALPHA: 0
     - _USEUVOFFSET: 0
     - _UVSec: 0
@@ -214,15 +215,15 @@ Material:
     - _Disolve_Fade_Range: {r: -0.25, g: 1, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _FresnelColor: {r: 39.39662, g: 8.784491, b: 0, a: 1}
-    - _LastColor: {r: 0.7075472, g: 0, b: 0, a: 0}
+    - _FresnelColor: {r: 0, g: 34.110775, b: 39.39662, a: 1}
+    - _LastColor: {r: 0, g: 0.2719319, b: 1, a: 0}
     - _MainAlphaChannel: {r: 1, g: 0, b: 0, a: 1}
     - _MainTextureChannel: {r: 1, g: 0.2, b: 0, a: 0}
     - _MainTexturePanning: {r: 0, g: 0, b: 0, a: 0}
-    - _MidColor: {r: 1.509434, g: 0.15844887, b: 0, a: 0}
+    - _MidColor: {r: 0, g: 1.7498661, b: 2.015213, a: 0}
     - _Resolution: {r: 64, g: 64, b: 0, a: 0}
     - _UnlitColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
-    - _WhiteColor: {r: 8, g: 0.47058824, b: 0, a: 0}
+    - _WhiteColor: {r: 2.4787107, g: 10.242347, b: 10.680627, a: 0}
     - _diff_c: {r: 0.1541919, g: 0.4053115, b: 0.7264151, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
