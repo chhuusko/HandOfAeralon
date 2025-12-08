@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SocialPlatforms.Impl;
+using static UnityEditor.PlayerSettings;
 
 public class EnemyAI : MonoBehaviour
 {
+    public const int TOP_N_ACTIONS = 3;
+
     private struct AIAction
     {
         public CombatGridTile movement;
@@ -20,13 +24,12 @@ public class EnemyAI : MonoBehaviour
 
     private Character _currentCharacter = null;
     private GameObject _currentTile = null;
+
     private CharacterClass _currentClass = CharacterClass.None;
     private AbilityHandler _currentAbilityHandler = null;
     private List<Ability> _currentAbilities = new();
-    private int _currentMoveRange = 0;
 
-    private Character _targetCharacter = null;
-    private GameObject _targetTile = null;
+    private int _currentMoveRange = 0;
     private List<CombatGridTile> _movePath = new();
 
     private Dictionary<AIAction, int> _scoredActions = new();
@@ -94,26 +97,11 @@ public class EnemyAI : MonoBehaviour
 
         _currentMoveRange = _currentCharacter.GetMovementPoints();
 
-        _targetCharacter = FindClosestOpponentCharacter(_currentCharacter);
-        if (_targetCharacter == null)
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | _targetCharacter NOT FOUND!");
-            return false;
-        }
-
-        _targetTile = _targetCharacter.GetCurrentTileComponent().gameObject;
-        if (_targetTile == null)
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | _closestOpponentTile NOT FOUND!");
-            return false;
-        }
-
         return true;
     }
 
     private void Run()
     {
-        // Check move range
         List<CombatGridTile> moveRange = new();
         List<CombatGridTile> canReach = new();
         if (_currentCharacter.CanMove && _currentMoveRange > 0)
@@ -128,7 +116,6 @@ public class EnemyAI : MonoBehaviour
             moveRange.Add(_currentTile.GetComponent<CombatGridTile>());
         }
 
-        // Filter reachable tiles
         foreach (var tile in moveRange)
         {
             List<GameObject> pathSample = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, tile.gameObject, false);
@@ -139,13 +126,12 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        // Check all movement + ability combinations and score them
         foreach (var pos in canReach)
         {
+            AIAction move = new AIAction { movement = pos };
             int score = 0;
-            AIAction moveOnly = new AIAction { movement = pos };
 
-            Character closestOpponent = FindClosestOpponentCharacter(_currentCharacter);
+            Character closestOpponent = FindClosestOpponent(_currentCharacter);
             int distance = GridExplorer._instance.ManhattanDistance(pos.GetTileIndex(), closestOpponent.GetCurrentTileIndex());
             switch (_currentClass)
             {
@@ -155,7 +141,7 @@ public class EnemyAI : MonoBehaviour
                 case CharacterClass.Sorceress: score += distance; break;
             }
 
-            _scoredActions[moveOnly] = score;
+            _scoredActions[move] = score;
 
             if (_currentAbilities == null || !_currentAbilities.Any())
             {
@@ -173,7 +159,7 @@ public class EnemyAI : MonoBehaviour
 
                 foreach (var tile in abilityRange)
                 {
-                    AIAction moveAndUseAbility = new AIAction { movement = pos, ability = ability, target = tile };
+                    AIAction action = new AIAction { movement = pos, ability = ability, target = tile };
                     int newScore = score;
 
                     Character occupant = tile.GetOccupantCharacter();
@@ -181,19 +167,27 @@ public class EnemyAI : MonoBehaviour
                     if (occupant != null && occupant.GetFaction() != _controlledFaction)
                     {
                         newScore += 10;
-                        _scoredActions[moveAndUseAbility] = newScore;
+                        _scoredActions[action] = newScore;
                     }
 
                     if (occupant != null && _currentCharacter.GetCharacterClass() == CharacterClass.Bard && occupant.GetFaction() == _controlledFaction && occupant != _currentCharacter)
                     {
                         newScore += 10;
 
-                        if (ability.name == "SongOfRenewal_Ability" && occupant.GetCurrentHealth() != occupant.GetMaxHealth())
+                        if (ability.name == "SongOfRenewal_Ability")
                         {
-                            newScore += 999;
+                            if (occupant.GetCurrentHealth() != occupant.GetMaxHealth())
+                            {
+                                newScore += 999;
+                            } 
+                            else
+                            {
+                                newScore -= 10;
+                            }
+                            
                         }
 
-                        _scoredActions[moveAndUseAbility] = newScore;
+                        _scoredActions[action] = newScore;
                     }
 
                     // Get ability area of effect
@@ -205,18 +199,18 @@ public class EnemyAI : MonoBehaviour
         /*
         foreach (var entry in _scoredActions)
         {
-            string ability = entry.Key.ability != null ? entry.Key.ability.name : "None";
-            string target = entry.Key.target != null ? entry.Key.target.GetTileIndex().ToString() : "None";
-
-            DebugLog.JLWLogWarning($"EnemyAI.cs | Move to: {entry.Key.movement.GetTileIndex()}, Ability: {ability}, Target: {target}, Score: {entry.Value}.");
+            PrintAIAction(entry.Key);
         }
         */
 
-        _chosenAction = _scoredActions.OrderByDescending(x => x.Value).First().Key;
+        var topActions = _scoredActions
+            .OrderByDescending(x => x.Value)
+            .Take(TOP_N_ACTIONS)
+            .ToList();
 
-        string chosenAbility = _chosenAction.ability != null ? _chosenAction.ability.name : "None";
-        string chosenTarget = _chosenAction.target != null ? _chosenAction.target.GetTileIndex().ToString() : "None";
-        DebugLog.JLWLog($"AI | Move {_currentCharacter.name} to: {_chosenAction.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, ActionScore: {_scoredActions[_chosenAction]}.");
+        _chosenAction = topActions[Random.Range(0, topActions.Count)].Key;
+
+        PrintAIAction(_chosenAction);
 
         if (_currentCharacter.CanMove)
         {
@@ -231,7 +225,7 @@ public class EnemyAI : MonoBehaviour
         StartCoroutine(WaitForMovement());
     }
 
-    private Character FindClosestOpponentCharacter(Character currentCharacter)
+    private Character FindClosestOpponent(Character currentCharacter)
     {
         Character result = null;
         List<Character> opponentCharacters = new();
@@ -301,12 +295,23 @@ public class EnemyAI : MonoBehaviour
         _currentAbilityHandler = null;
         _currentAbilities = new();
         _currentMoveRange = 0;
-        _targetCharacter = null;
-        _targetTile = null;
         _movePath = new();
         _scoredActions = new();
         _chosenAction = new();
 
         AIEndTurn.Invoke();
+    }
+
+    private void PrintAIAction(AIAction action) // Action must be scored first
+    {
+        if (!_scoredActions.ContainsKey(action))
+        {
+            Debug.LogError($"EnemyAI.cs | Can't print unscored AIActions!");
+            return;
+        }
+
+        string chosenAbility = action.ability != null ? action.ability.name : "None";
+        string chosenTarget = action.target != null ? action.target.GetTileIndex().ToString() : "None";
+        DebugLog.JLWLog($"AI | Move {_currentCharacter.name} to: {action.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, ActionScore: {_scoredActions[action]}.");
     }
 }
