@@ -133,7 +133,8 @@ public class Character : MonoBehaviour
     private StatusEffectManager _statusEffectManager;
 
     [Header("Misc")] 
-    [SerializeField] private GameObject _mesh;
+    [SerializeField] private GameObject _bodyMesh;
+    [SerializeField] private GameObject _weaponMesh;
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
     public CharacterData Data => _data;
@@ -263,8 +264,10 @@ public class Character : MonoBehaviour
     public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
     
     // Misc.
-    public GameObject GetMesh() => _mesh;
-    public void SetMesh(GameObject mesh) => _mesh = mesh;
+    public GameObject GetBodyMesh() => _bodyMesh;
+    public void SetBodyMesh(GameObject mesh) => _bodyMesh = mesh;
+    public GameObject GetWeaponMesh() => _bodyMesh;
+    public void SetWeaponMesh(GameObject mesh) => _bodyMesh = mesh;
     
     // Health.
     public void SetCurrentHealthPoints(int healthPoints)
@@ -383,6 +386,38 @@ public class Character : MonoBehaviour
         _currentInitiative = _data.BaseInitiative;
         _currentDamage = _data.BaseDamage;
         _currentMovementPoints = _data.BaseMovementPoints;
+        
+        SetMeshLayers(_bodyMesh);
+        SetMeshLayers(_weaponMesh);
+    }
+
+    private void SetMeshLayers(GameObject mesh)
+    {
+        if (!mesh)
+        {
+            return;
+        }
+
+        uint layerMask;
+
+        if (GetFaction() == Faction.Friendly) 
+        {
+            mesh.layer = LayerMask.NameToLayer("Friendly");
+            layerMask = 1 << 2;
+        }
+        else
+        {
+            mesh.layer = LayerMask.NameToLayer("Enemy");
+            layerMask = 1 << 7;
+        }
+        
+        SkinnedMeshRenderer smr = mesh.GetComponent<SkinnedMeshRenderer>();
+        if (!smr)
+        {
+            return;
+        }
+
+        smr.renderingLayerMask = layerMask;
     }
 
     public void AddHealthBar()
@@ -396,7 +431,6 @@ public class Character : MonoBehaviour
             Debug.LogError($"Character.cs | No health bar canvas (prefab by JLW) found in scene!");
         }
     }
-    
     
     /// <summary>
     /// Takes damages.
