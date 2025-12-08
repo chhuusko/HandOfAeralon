@@ -28,7 +28,10 @@ public class GlobalGameManager : ScriptableObject
     [SerializeField] private float _classTraitChance;
     private static GlobalGameManager _instance;
     private GameData _currentGame;
-    
+
+    [SerializeField] private int baseCoinReward = 200;
+    [SerializeField] private int CoinRewardIncreasePerLevel = 50;
+
     public float ClassTraitChance => _classTraitChance;
     public static GlobalGameManager GetInstance()
     {
@@ -50,7 +53,7 @@ public class GlobalGameManager : ScriptableObject
     }
     private void GetCombatCoins(bool playerWon)
     {
-        _currentGame.coins += 200;
+        _currentGame.coins += (baseCoinReward+(CoinRewardIncreasePerLevel*LevelManager.GetInstance().Getlevel()));
     }
 
     private void RemoveCharacter(Character obj)
