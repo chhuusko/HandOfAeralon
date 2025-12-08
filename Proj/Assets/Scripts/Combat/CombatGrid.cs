@@ -361,18 +361,45 @@ public class CombatGrid : MonoBehaviour
         characterScript.SetBaseInitiative(baseSpeed);
         characterScript.SetBaseDamage(baseDamage);
         characterScript.SetBaseMovementPoints(baseMovementPoints);
+        
 
+        // TODO (Calle): This should be in a function on the character script, so it sets
+        // it's own mesh layers.
+        // ALSO ADD THE WEAPON MESH AS A MEMBER FIELD.
         if (faction == Faction.Friendly)
         {
+            GameObject meshObject = characterScript.GetMesh();
+            if(meshObject)
+            {
+                meshObject.layer = LayerMask.NameToLayer("Friendly");
+                SkinnedMeshRenderer smr = meshObject.GetComponent<SkinnedMeshRenderer>();
+                if (smr)
+                {
+                    smr.renderingLayerMask = 1 << 2;
+                }
+            }
             characterObject.layer = LayerMask.NameToLayer("Friendly");
         }
         else if (faction == Faction.Enemy)
         {
+            GameObject meshObject = characterScript.GetMesh();
+
+            if (meshObject)
+            {
+                meshObject.layer = LayerMask.NameToLayer("Enemy");
+                SkinnedMeshRenderer smr = meshObject.GetComponent<SkinnedMeshRenderer>();
+                if (smr)
+                {
+                    smr.renderingLayerMask = 1 << 7;
+                }
+
+            }
             characterObject.layer = LayerMask.NameToLayer("Enemy");
         }
   
         characterScript.AddHealthBar();
-        
+        characterScript.Data.InitializeClassData();
+
         _charactersGO.Add(characterObject);
         
         result = characterObject;

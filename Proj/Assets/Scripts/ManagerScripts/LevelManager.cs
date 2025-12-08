@@ -1,16 +1,24 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 [CreateAssetMenu(fileName = "LevelManager", menuName = "Manager/LevelManager")]
 public class LevelManager : ScriptableObject
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    [SerializeField] private List<string> easyCombatList;
+    [SerializeField] private List<string> mediumCombatList;
+    [SerializeField] private List<string> hardCombatList;
+
     private static LevelManager _instance;
     private string[] _combatList;
     private string[] _generatedList;
     private int _level = 0;
     private int _gameLevels = 10;
+    private int _difficulty = 0;
 
     private CombatGrid _combatGrid;
     public static LevelManager GetInstance()
@@ -38,25 +46,31 @@ public class LevelManager : ScriptableObject
     }
     public void StartNextLevel() 
     {
-        
-        if(SceneManager.GetActiveScene().name == "ShopScene")
+        if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
         {
-            if (_level%2 == 0)
+            _difficulty = _level/5;
+            switch (_difficulty)
             {
-                SceneManager.LoadScene("Graveyard12x10_Easy");
+                case 0:
+                    SceneManager.LoadScene(easyCombatList[Random.Range(0, easyCombatList.Count)]);
+                    break;
+                case 1:
+                    SceneManager.LoadScene(easyCombatList[Random.Range(0, mediumCombatList.Count)]);
+                    break;
+                default:
+                    SceneManager.LoadScene(easyCombatList[Random.Range(0, hardCombatList.Count)]);
+                    break;
             }
-            else
-            {
-                SceneManager.LoadScene("Graveyard13x8_Easy");
-            }
+            _level++;
         }
         else
         {
             SceneManager.LoadScene("ShopScene");
-            _level++;
         }
-        
-        
+    }
+    public int Getlevel()
+    {
+        return _level;
     }
     public CombatGrid GetCombatLevel()
     {
