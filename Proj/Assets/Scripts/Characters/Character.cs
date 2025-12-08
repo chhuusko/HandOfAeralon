@@ -131,8 +131,9 @@ public class Character : MonoBehaviour
 
     [Header("Status effects")]
     private StatusEffectManager _statusEffectManager;
-    
-    [Header("Misc")]
+
+    [Header("Misc")] 
+    [SerializeField] private GameObject _mesh;
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
     public CharacterData Data => _data;
@@ -260,6 +261,10 @@ public class Character : MonoBehaviour
     public void SetBaseInitiative(int initiative) => _data.SetBaseInitiative(initiative);
     public void SetBaseDamage(int damage) => _data.SetBaseDamage(damage);
     public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
+    
+    // Misc.
+    public GameObject GetMesh() => _mesh;
+    public void SetMesh(GameObject mesh) => _mesh = mesh;
     
     // Health.
     public void SetCurrentHealthPoints(int healthPoints)
