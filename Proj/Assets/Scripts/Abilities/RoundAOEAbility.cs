@@ -1,10 +1,61 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public abstract class RoundAOEAbility : AOEAbility
 {
     [Header("- Type Specific values - ")]
     [SerializeField] protected int _radius;
+
+    public override IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        Character caster = casterTile.GetOccupantCharacter();
+        if (caster == null) Debug.LogError("CasterTile has no character!");
+
+        // Should not be able to move after performing ability.
+        ResetMovementPoints(caster);
+
+        // Rotate towards target if the target is not the caster's tile.
+        if (casterTile != targetTile)
+        {
+            caster.RotateTowards(targetTile.transform, GetCastingRotationTime());
+        }
+
+        if (caster.TryGetComponent<Animator>(out var animator))
+        {
+            animator.SetTrigger(GetAbilityName());
+        }
+
+        int aoeDelta = 0;
+
+        if (caster.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
+        {
+            int baseRadius = _radius;
+            int finalRadius = statusEffectManager.ApplyAoEModifiers(ref baseRadius);
+            aoeDelta = finalRadius - baseRadius;
+        }
+
+        if (GetAbilityVFXSequence() != null)
+        {
+            VFXData data = new VFXData
+            {
+                Caster = caster,
+                OriginPosition = casterTile.transform.position,
+                TargetTile = targetTile,
+                TargetPosition = targetTile.transform.position,
+                Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
+                CastingFXDuration = GetCastingTime(),
+                TravelFXDuration = GetFromCastToHitTime(),
+                AoEDelta = aoeDelta
+            };
+            caster.StartCoroutine(GetAbilityVFXSequence().RunSequence(data)
+            );
+        }
+
+        yield return new WaitForSeconds(GetCastingTime() + GetFromCastToHitTime());
+        RunAbility(casterTile, targetTile);
+    }
+
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Calculate all tiles around with in radius and apply effect to all of them.
@@ -31,15 +82,15 @@ public abstract class RoundAOEAbility : AOEAbility
         return _pattern.CalculateTilesToEffect(tile);
     }
 
-    private void SetAbilityRadius(int baseRadius, RoundAOEPattern pattern)
+    protected void SetAbilityRadius(int radius, RoundAOEPattern pattern)
     {
+        int baseRadius = radius;
         if (GetCharacterCaster().TryGetComponent<StatusEffectManager>(out var statusEffectManager))
         {
             int finalRadius = statusEffectManager.ApplyAoEModifiers(ref baseRadius);
             pattern.SetRadius(finalRadius);
             return;
         }
-        pattern.SetRadius(baseRadius);
         Debug.LogError("Could not find StatusEffectManager on object");
     }
 }

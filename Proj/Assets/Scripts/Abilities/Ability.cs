@@ -35,6 +35,8 @@ public abstract class Ability : ScriptableObject
     public AbilityHandler GetAbilityHandler() => _abilityHandler;
     public Character GetCharacterCaster() => _characterCaster;
 
+    public AbilityVFXSequence GetAbilityVFXSequence() => _abilityVFXSequence;
+
 
     public void SetAbilityHandler(AbilityHandler abilityHandler)
     {

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6383c0305810c4cbb86136a8d14596, type: 3}
   m_Name: LightningStormVFXSequence
   m_EditorClassIdentifier: 
-  castFX: {fileID: 0}
-  travelFX: {fileID: 0}
-  impactFX: {fileID: 2891022926164967631, guid: 699cf3b70ab7ace41a4d0a1a485c9c22,
+  _castFX: {fileID: 0}
+  _travelFX: {fileID: 0}
+  _impactFX: {fileID: 2891022926164967631, guid: 699cf3b70ab7ace41a4d0a1a485c9c22,
     type: 3}
+  _biggerImpactScale: 2
