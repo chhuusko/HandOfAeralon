@@ -364,16 +364,15 @@ public class CombatGrid : MonoBehaviour
 
         if (faction == Faction.Friendly)
         {
-            characterObject.tag = "Friendly";
+            characterObject.layer = LayerMask.NameToLayer("Friendly");
         }
         else if (faction == Faction.Enemy)
         {
-            characterObject.tag = "Enemy";
+            characterObject.layer = LayerMask.NameToLayer("Enemy");
         }
-
-
-            characterScript.AddHealthBar();
-
+  
+        characterScript.AddHealthBar();
+        
         _charactersGO.Add(characterObject);
         
         result = characterObject;
@@ -406,7 +405,16 @@ public class CombatGrid : MonoBehaviour
 
         // Get the Character component
         Character character = characterGO.GetComponent<Character>();
+        Faction faction = character.GetFaction();
 
+        if (faction == Faction.Friendly)
+        {
+            characterGO.layer = LayerMask.NameToLayer("Friendly");
+        }
+        else if (faction == Faction.Enemy)
+        {
+            characterGO.layer = LayerMask.NameToLayer("Enemy");
+        }
         // Assign and initialize
         character.Initialize(data);
 
