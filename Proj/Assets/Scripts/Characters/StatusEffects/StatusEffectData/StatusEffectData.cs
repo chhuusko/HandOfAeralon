@@ -36,6 +36,11 @@ public class StatusEffectData : ScriptableObject
         return (StatusEffect)System.Activator.CreateInstance(type, duration);
     }
 
+    /// <summary>
+    /// Factory method for generating a status effect from its data.
+    /// Used when the status effect to create isn't known beforehand.
+    /// </summary>
+    /// <returns>The created status effect.</returns>
     public StatusEffect CreateInstance()
     {
         var type = Script.GetClass();

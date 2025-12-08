@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -22,9 +21,11 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     private float time;
     [SerializeField] private Vector3 angle;
+    private Vector3 offset;
     public float speed = 2f;
     private void Awake()
     {
+        offset = new Vector3(Random.Range(-2, 2), Random.Range(-2, 2), Random.Range(-2, 2));
         _controller = new InputController();
         _spriteTransform = GetComponent<RectTransform>();
     }
@@ -54,9 +55,9 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         //AnimationMabye
         
         time += Time.fixedDeltaTime;
-        float x = Mathf.Sin(time * speed) * angle.x;
-        float y = Mathf.Sin(time * speed) * angle.y;
-        float z = Mathf.Sin(time * speed) * angle.z;
+        float x = Mathf.Sin(time * speed + offset.x) * angle.x ;
+        float y = Mathf.Sin(time * speed + offset.y) * angle.y ;
+        float z = Mathf.Sin(time * speed + offset.z) * angle.z ;
         
         _rect.localRotation = Quaternion.Euler(x, y, z);
 
@@ -82,13 +83,11 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         _isDragging = true;
         _spawnedParticle = Instantiate(_particleDrag);  
     }
-
-    
-
     public void OnEndDrag(PointerEventData eventData)
     {
         if (_isDragging)
         {
+            _isDragging = false;
             if (_containedCard.type == CardType.Target)
             {
                 CombatGridTile grid;
@@ -101,7 +100,11 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
                     }
                     else
                     {
+                        Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
+                        Destroy(_spawnedParticle);
                         CardHandManager.GetInstance().CharacterTarget(grid.GetOccupantCharacter());
+                        CardHandManager.GetInstance().CardTargetCharacter(_containedCard, grid.GetOccupantCharacter());
+                        _containedCard.PlayCardOnTarget(grid.GetOccupantCharacter());
                     }
                 }
                 else
@@ -110,15 +113,19 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
                     return;
                 }
             }
-            
+            else
+            {
+                
+                _containedCard.PlayCard();
+                
+                
+            }
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
-            CardHandManager.GetInstance().ChangeMana(-_containedCard.Getcost());
-            _containedCard.PlayCard();
             _containedCard.AfterCardPlay();
-            CardHandManager.GetInstance().RemoveCard(this);   
+            CardHandManager.GetInstance().ChangeMana(-_containedCard.Getcost());
+            CardHandManager.GetInstance().RemoveCardFromHand(this);   
         }
-        
     }
 
     private void CancelUse()

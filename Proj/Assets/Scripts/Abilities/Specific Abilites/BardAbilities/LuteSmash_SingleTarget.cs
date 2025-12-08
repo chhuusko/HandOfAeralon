@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "LuteSmash_Ability", menuName = "Scriptable Objects/Abilities/Bard/Lute Smash")]
 public class LuteSmash_SingleTarget : SingleTargetAbility
@@ -8,6 +9,9 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
     [SerializeField] private float _applyStunChance = 0.35f;
     [SerializeField] private int _stunDuration = 1;
     [SerializeField] private int _manaGain = 2;
+
+    [Header("- Available Abilities after LuteSmash -")]
+    [SerializeField] List<Ability> abilitiesAvailablePostLuteSmash;
 
     // Description
 
@@ -29,18 +33,18 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         bool died = affectedCharacter.TakeDamage(damage);
 
-        // TODO:
-        // remove the ability to use Song of Renewal and Inspiring Anthem
+        affectedCharacter.Data.SetActiveAbilities(abilitiesAvailablePostLuteSmash); 
 
-        StatusEffect stun = null;
-        if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager) && Random.value <= _applyStunChance)
+        StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
+        if (statusEffectManager == null) return;
+
+        StatusEffect stun = statusEffectManager.TryApplyStun(affectedCharacter, 0, _stunDuration);
+
+        if (stun != null && castingCharacter.GetFaction() == Faction.Friendly)
         {
-            if (castingCharacter.GetFaction() == Faction.Friendly)
-            {
-                CardHandManager.GetInstance().ChangeMana(_manaGain);
-            }
-            statusEffectManager.AddStatusEffect(stun = new Stunned(_stunDuration));
+            CardHandManager.GetInstance().ChangeMana(_manaGain);
         }
+
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun, died);
     }
 

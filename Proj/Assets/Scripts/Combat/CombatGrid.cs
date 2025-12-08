@@ -97,6 +97,23 @@ public class CombatGrid : MonoBehaviour
         }
         return characterScritps; 
     }
+    public List<Character> GetCharacterScriptsByFaction(Faction faction)
+    {
+        List<Character> characterScritps = new List<Character>();
+
+        foreach (GameObject characterGO in GetAllCharacters())
+        {
+            Character character = characterGO.GetComponent<Character>();
+            if (character)
+            {
+                if (character.GetFaction() == faction)
+                {
+                    characterScritps.Add(character);
+                }
+            }
+        }
+        return characterScritps;
+    }
 
     public List<CombatGridTile> GetAllCombatGridTileScripts() 
     {

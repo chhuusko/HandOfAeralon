@@ -13,6 +13,11 @@ public class ReflectedAffliction : Trait
 
     public override void OnStatusEffectApplied(Character caster, StatusEffect statusEffect)
     {
+        if (!caster)
+        {
+            return;
+        }
+        
         Manager.RemoveStatusEffect(statusEffect);
         caster.GetStatusEffectManager().AddStatusEffect(statusEffect);
         _effectApplied = true;

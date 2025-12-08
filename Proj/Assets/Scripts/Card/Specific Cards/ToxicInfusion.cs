@@ -3,9 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Toxic Infusion", menuName = "Item/Card Data/Toxic Infusion", order = 1)]
 public class ToxicInfusion : Card
 {
-    public override void PlayCard()
+    public override void PlayCardOnTarget(Character character)
     {
-        Character character = Selector._instance.GetTileUnderMouse().GetOccupantCharacter();
+
         if (character != null)
         {
             

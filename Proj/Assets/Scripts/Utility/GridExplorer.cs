@@ -168,7 +168,7 @@ public class GridExplorer : MonoBehaviour
     /// to allow visualization of the final computed path inside the editor.
     /// </remarks>
 
-    public List<GameObject> FindPathAStar(GameObject startTile, GameObject goalTile)
+    public List<GameObject> FindPathAStar(GameObject startTile, GameObject goalTile, bool bDrawPath = true)
     {
         Vector2Int start = startTile.GetComponent<CombatGridTile>().GetTileIndex();
         Vector2Int goal = goalTile.GetComponent<CombatGridTile>().GetTileIndex();
@@ -211,7 +211,7 @@ public class GridExplorer : MonoBehaviour
             if (current == goal)
             {
                 var result = BuildPath(cameFrom, start, goal);
-                DrawPath(result);
+                if (bDrawPath) DrawPath(result);
                 return result;
             }
 

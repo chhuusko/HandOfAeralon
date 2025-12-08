@@ -33,6 +33,10 @@ public class AbilityHandler : MonoBehaviour
                 DebugLog.MGLog("Tried casting ability, but it failed");
             return false;
         }
+
+        // Set caster to get information that might alter ability, like extra AOE range.
+        _pendingAbility.SetCharacterCaster(_characterCaster);
+
         _characterCaster.CanUseAbility = false;
         CombatEventManager.InvokeOnAbilityCast();
         StartCoroutine(ability.StartAbilityEffects(_casterTile, targetTile));
@@ -80,6 +84,7 @@ public class AbilityHandler : MonoBehaviour
             return;
         }
         _pendingAbility.SetAbilityHandler(this);
+        _pendingAbility.SetCharacterCaster(_characterCaster);
         _tilesInRange = RemoveUntargetableTiles(GetAvailableTargets(_pendingAbility));
     }
 

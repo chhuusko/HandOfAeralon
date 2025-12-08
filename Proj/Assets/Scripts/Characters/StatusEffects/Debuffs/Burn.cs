@@ -10,6 +10,11 @@ public class Burn : StatusEffect
         _source = source;
     }
 
+    public override void IncreaseDuration(int amount = 1)
+    {
+        SetDuration(Duration + amount);
+    }
+
     public override void OnApply()
     {
         Manager.OnBurnApplied(Character);
@@ -24,13 +29,10 @@ public class Burn : StatusEffect
             return;
         }
         
-        var damage = data.Damage;
+        var baseDamage = data.Damage;
+        var finalDamage = (_source != null) ? _source.GetStatusEffectManager().ApplyBurnDamageModifiers(baseDamage)
+            : baseDamage;
 
-        if (_source != null)
-        {
-            _source.GetStatusEffectManager().ApplyBurnDamageModifiers(damage);
-        }
-        
-        Character.TakeDamage(damage);
+        Character.TakeDamage(finalDamage);
     }
 }

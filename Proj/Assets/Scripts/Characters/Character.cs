@@ -32,7 +32,7 @@ public class CharacterData
     [SerializeField] private List<Ability> _abilities;
     public int CurrentHealthPoints => _currentHealthPoints;
     public IReadOnlyList<Ability> Abilities => _abilities;
-    public List<Ability> CurrentAbilities { get; set; }
+    public List<Ability> ActiveAbilities { get; set; }
     
     [Header("Status Effects")]
     private TraitManager _traitManager = new();
@@ -55,7 +55,7 @@ public class CharacterData
     /// <summary>
     /// Generates a new friendly character based on the class data.
     /// </summary>
-    private void InitializeClassData()
+    public void InitializeClassData()
     {
         if (ClassData == null)
         {
@@ -73,7 +73,7 @@ public class CharacterData
         
         _characterClass = ClassData.characterClass;
         _abilities = ClassData.abilities;
-        CurrentAbilities = _abilities;
+        ActiveAbilities = _abilities;
     }
 
     public void InitializeTraits()
@@ -99,7 +99,7 @@ public class CharacterData
     public void SetCurrentHealthPoints(int health) => _currentHealthPoints = Mathf.Max(health, 0);
     public void Heal(int amount) => SetCurrentHealthPoints(Mathf.Min(CurrentHealthPoints + amount, _baseHealthPoints));
     public void SetAbilities(List<Ability> abilities) => _abilities = new List<Ability>(abilities);
-    public void SetCurrentAbilities(List<Ability> abilities) => CurrentAbilities = abilities;
+    public void SetActiveAbilities(List<Ability> abilities) => ActiveAbilities = abilities;
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -404,7 +404,7 @@ public class Character : MonoBehaviour
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
         OnTakeDamage?.Invoke(damage, gameObject);
 
-        Debug.Log($"Taking {damage} damage. New health: {GetCurrentHealth()}");
+        Debug.Log($"{name} took {damage} damage! Remaining health: {GetCurrentHealth()}");
         
         if (_data.CurrentHealthPoints <= 0)
         {
@@ -419,6 +419,16 @@ public class Character : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool TakeDamage(int damage, Character source)
+    {
+        if (source)
+        {
+            Debug.Log($"{name} took {damage} damage from {source.GetFaction()} {source.name}! Remaining health: {GetCurrentHealth()}");
+        }
+        
+        return TakeDamage(damage);
     }
      
     private IEnumerator RemoveCharacter()
@@ -491,25 +501,5 @@ public class Character : MonoBehaviour
         {
             HealthBarManager._instance.Unregister(this);
         }
-    }
-    
-    // Status effects.
-    /// <summary>
-    /// Tries applying the burn to the target, with chance influenced by all this character's modifiers.
-    /// </summary>
-    /// <returns>Whether burn was applied.</returns>
-    public bool TryApplyBurn(Character target, float baseChance)
-    {
-        float finalChance = baseChance;
-        
-        _statusEffectManager.ApplyBurnApplicationChanceModifiers(ref finalChance);
-
-        if (UnityEngine.Random.value < finalChance)
-        {
-            _statusEffectManager.AddStatusEffect(new Burn(this));
-            _statusEffectManager.OnBurnApplied(this);
-            return true;
-        }
-        return false;
     }
 }

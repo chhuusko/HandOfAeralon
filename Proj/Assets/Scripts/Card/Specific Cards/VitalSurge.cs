@@ -3,16 +3,16 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Vital Surge", menuName = "Item/Card Data/Vital Surge", order = 1)]
 public class VitalSurge : Card
 {
-    public override void PlayCard()
+    public override void PlayCardOnTarget(Character character)
     {
-        Character targetCharacter = Selector._instance.GetTileUnderMouse().GetOccupantCharacter();
-        if (targetCharacter != null)
+
+        if (character != null)
         {
-            if (targetCharacter.GetCurrentHealth() < targetCharacter.GetMaxHealth() / 2)
+            if (character.GetCurrentHealth() < character.GetMaxHealth() / 2)
             {
                 CardHandManager.GetInstance().ChangeMana(1);
             }
-            targetCharacter.Heal((int)(targetCharacter.GetMaxHealth() * 0.25f));
+            character.Heal((int)(character.GetMaxHealth() * 0.25f));
         }
     }
 }

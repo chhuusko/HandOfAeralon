@@ -16,8 +16,9 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnAbilityDataCreated += OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat += OnCombatEnded;
         CombatEventManager.OnStatusEffectAppliedToCharacter += OnStatusEffectApplied;
+        CardHandManager.onCardUse += OnCardPlayed;
 
-        CardHandManager.onTargetCharacter += OnCardPlayed;
+        CardHandManager.onTargetCharacter += OnTargetCharacter;
     }
 
     private void Start()
@@ -26,6 +27,19 @@ public class StatusEffectManager : MonoBehaviour
         OnStartCombat();
     }
 
+    private void OnDisable()
+    {
+        CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
+        CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
+        CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
+        CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
+        
+        CardHandManager.onTargetCharacter -= OnTargetCharacter;
+
+        _character.OnTakeDamage -= OnTakeDamage;
+    }
+    
     private void Initialize()
     {
         _character = GetComponent<Character>();
@@ -39,19 +53,17 @@ public class StatusEffectManager : MonoBehaviour
         {
             _traitManager = _character.GetTraitManager();
         }
-    }
 
-    private void OnDisable()
-    {
-        CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
-        CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
-        CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
-        CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
-        
-        CardHandManager.onTargetCharacter -= OnCardPlayed;
+        if (_traitManager == null || !_character)
+        {
+            return;
+        }
 
-        _character.OnTakeDamage -= OnTakeDamage;
+        // Traits need to be initialized on combat start, once character has been created.
+        foreach (var trait in _traitManager.GetAllTraits())
+        {
+            trait.Initialize(_character, this);
+        }
     }
 
     public void SetTraitManager(TraitManager traitManager)
@@ -59,7 +71,7 @@ public class StatusEffectManager : MonoBehaviour
         _traitManager = traitManager;
     }
 
-    public void AddStatusEffect(StatusEffect statusEffect, Character caster)
+    public void AddStatusEffect(StatusEffect statusEffect, Character caster = null)
     {
         // Sanctified disallows receiving debuffs.
         if (ContainsStatusEffect<Sanctified>() && statusEffect.Data.Type is StatusEffectType.Debuff)
@@ -70,11 +82,6 @@ public class StatusEffectManager : MonoBehaviour
         _traitManager.AddStatusEffect(statusEffect);
         statusEffect.Initialize(_character, this);
         CombatEventManager.InvokeOnStatusEffectAppliedToCharacter(caster, _character, statusEffect);
-    }
-
-    public void AddStatusEffect(StatusEffect statusEffect)
-    {
-        AddStatusEffect(statusEffect, null);
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect)
@@ -191,17 +198,12 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    private void OnCardPlayed(Character c)
+    private void OnTargetCharacter(Character c)
     {
         if (!_character)
         {
             return;
         } 
-        
-        foreach (var statusEffect in _traitManager.GetAllEffects())
-        {
-            statusEffect.OnCardPlayed();
-        }
 
         if (c != _character)
         {
@@ -307,7 +309,50 @@ public class StatusEffectManager : MonoBehaviour
         return damage;
     }
     
-    public float ApplyBurnApplicationChanceModifiers(ref float baseChance)
+    // Status effects.
+    /// <summary>
+    /// Tries applying the burn to the target, with chance influenced by all this character's modifiers.
+    /// </summary>
+    /// <returns>The applied burn, or null if no burn was applied.</returns>
+    public Burn TryApplyBurn(Character target, float baseChance, int duration)
+    {
+        float finalChance = baseChance;
+        
+        ApplyBurnApplicationChanceModifiers(ref finalChance);
+
+        if (UnityEngine.Random.value < finalChance)
+        {
+            Burn burn = new Burn(_character, duration);
+            AddStatusEffect(burn);
+            OnBurnApplied(_character);
+            return burn;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Tries applying stun to the target character, based on the base chance.
+    /// </summary>
+    /// <param name="target">The target character.</param>
+    /// <param name="baseChance">The base chance of stun to succeed.</param>
+    /// <param name="duration">The amount of turns for the target to be stunned.</param>
+    /// <returns>The applied stun, or null if no stun was applied.</returns>
+    public Stunned TryApplyStun(Character target, float baseChance, int duration)
+    {
+        float finalChance = baseChance;
+        
+        ApplyStunApplicationChanceModifiers(ref finalChance);
+
+        if (UnityEngine.Random.value < finalChance)
+        {
+            Stunned stun = new Stunned(duration);
+            AddStatusEffect(stun);
+            return stun;
+        }
+        return null;
+    }
+    
+    private float ApplyBurnApplicationChanceModifiers(ref float baseChance)
     {
         float chance = baseChance;
 
@@ -316,6 +361,18 @@ public class StatusEffectManager : MonoBehaviour
             statusEffect.ModifyBurnApplicationChance(ref chance);
         }
         
+        return chance;
+    }
+
+    private float ApplyStunApplicationChanceModifiers(ref float baseChance)
+    {
+        float chance = baseChance;
+
+        foreach (var statusEffect in _traitManager.GetAllEffects())
+        {
+            statusEffect.ModifyStunApplicationChance(ref chance);
+        }
+
         return chance;
     }
     
@@ -386,5 +443,25 @@ public class StatusEffectManager : MonoBehaviour
         {
             trait.OnStatusEffectRemoved(statusEffect);
         }
+    }
+
+    private void OnCardPlayed(Card card)
+    {
+        foreach (var statusEffect in _traitManager.GetAllStatusEffects())
+        {
+            statusEffect.OnCardPlayed(card);
+        }
+    }
+    
+    public int ApplyAoEModifiers(ref int baseAoE)
+    {
+        int AoE = baseAoE;
+
+        foreach (var trait in _traitManager.GetAllTraits())
+        {
+            trait.ModifyAoE(ref AoE);
+        }
+        
+        return AoE;
     }
 }

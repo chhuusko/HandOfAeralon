@@ -21,6 +21,8 @@ public class CardHandManager : MonoBehaviour
     
     
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
+
+    
     
     // presets
     [SerializeField] private int turnsTillCard = 4;
@@ -35,16 +37,21 @@ public class CardHandManager : MonoBehaviour
     GameObject _addedZoomedCard;
     CardContainer _activeContainer;
 
+    //
+    public List<TurnEffect> turnEffects; 
 
     // 
     bool isCombat;
 
-
+    public static Action<Card> onCardUse;
     public static Action<int> onManaChange;
     public static Action<Character> onTargetCharacter;
+    public static Action<Character, Card> onCardTargetCharacter;
     public static CardHandManager GetInstance() {return _instance;}
     public void ManaChanged(){ onManaChange?.Invoke(_mana); }
+    public void CardUsed(Card usedCard) { onCardUse?.Invoke(usedCard); }
     public void CharacterTarget(Character targetCharacter) { onTargetCharacter?.Invoke(targetCharacter); }
+    public void CardTargetCharacter(Card usedCard, Character target) { onCardTargetCharacter?.Invoke(target, usedCard); }
     private void Awake()
     {
         _instance = this;
@@ -63,19 +70,24 @@ public class CardHandManager : MonoBehaviour
         }
         drawHand();
     }
+
     private void OnEnable()
     {
         CombatEventManager.OnCombatTurnChange += TurnChanged;
+        onCardTargetCharacter += TurnEffects;
     }
+
     private void OnDisable()
     {
         CombatEventManager.OnCombatTurnChange -= TurnChanged;
+        onCardTargetCharacter -= TurnEffects;
     }
     public void drawHand()
     {
         _cardsInHand.RemoveAll(o => o == null);
-        while (beginningDraw > _cardsInHand.Count)
+        while (beginningDraw > _cardsInHand.Count && _cardsInDeck.Count != 0)
         {
+            
             if(_cardsInDeck.Count == 0)
             {
                 _cardsInDeck = _cardsInDiscardPile;
@@ -149,11 +161,14 @@ public class CardHandManager : MonoBehaviour
     {
         CardViewUI.GetInstance().UpdateCards(_cardsInDiscardPile);
     }
-    public void RemoveCard(CardContainer cardContainer)
+    public void RemoveCardFromHand(CardContainer cardContainer)
     {
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
-        _cardsInDiscardPile.Add(cardContainer.GetCard());
+        if (!cardContainer.GetCard().tags.Contains(CardTag.Etherial))
+        {
+            _cardsInDiscardPile.Add(cardContainer.GetCard());
+        }
         AddSpaceing();
         _cardsPlayedThisTurn++;
     }
@@ -203,9 +218,23 @@ public class CardHandManager : MonoBehaviour
                 tempTurnsTillCard = turnsTillCard;
                 AddCardFromDeck();
             }
-        
         }
-        
+
+        //handle etherial cards
+        List<CardContainer> removeList = new List<CardContainer>();
+        for (int i = 0; i < _cardsInHand.Count; i++)
+        {
+            if (_cardsInHand[i].GetCard().tags.Contains(CardTag.Etherial))
+            {
+                removeList.Add(_cardsInHand[i]);
+            }
+        }
+
+        foreach (CardContainer card in removeList)
+        {
+            RemoveCardFromHand(card);
+        }
+        turnEffects.Clear();
     }
     public int GetCardsPlayedThisTurn()
     {
@@ -225,7 +254,6 @@ public class CardHandManager : MonoBehaviour
 
         _activeContainer = container;
 
-        
         _addedZoomedCard = Instantiate(
             _zoomedCard,
             position,
@@ -242,4 +270,23 @@ public class CardHandManager : MonoBehaviour
             Destroy(_addedZoomedCard);
         }
     }
+    public void AddCardToHand(Card newCard)
+    {
+        CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
+        _cardsInHand.Add(newCardContainer);
+        newCardContainer.AddCard(newCard);
+
+    }
+    private void TurnEffects(Character character, Card card)
+    {
+        foreach(TurnEffect effect in turnEffects)
+        {
+            effect.Effect(character, card);
+        }
+    }
+    public void OverrideManager()
+    {
+
+    }
+
 }
