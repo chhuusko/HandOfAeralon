@@ -36,17 +36,7 @@ public class PopupTextManager : MonoBehaviour
 
     private void Update()
     {
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _testCharacter.TakeDamage(1);
-        }
-        if (Input.GetKeyDown(KeyCode.C))
-        {
 
-            _testCharacter.Heal((int)Random.Range(1, 40));
-        }
-#endif
     }
     public void BindEventOnTakeDamage(Character character)
     {
