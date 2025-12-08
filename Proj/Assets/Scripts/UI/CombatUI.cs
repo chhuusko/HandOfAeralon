@@ -25,8 +25,11 @@ public class CombatUI : MonoBehaviour
     
     [SerializeField] private GameObject _placeCharactersPanel;
     
-    [SerializeField] private TextMeshProUGUI _mana;
     [SerializeField] private ScrollRect _turnOrderScrollBar;
+    
+    // Mana.
+    [SerializeField] private TextMeshProUGUI _mana;
+    [SerializeField] private Image _manaFill;
 
     // Turn order.
     [SerializeField] private GameObject _turnOrderPanel;
@@ -406,7 +409,8 @@ public class CombatUI : MonoBehaviour
 
     private void UpdateManaText(int mana)
     {
-        _mana.text = $"Mana\n{mana}/{CardHandManager.GetInstance().GetMaxMana()}";
+        _mana.text = mana.ToString();
+        _manaFill.fillAmount = (float)mana / CardHandManager.GetInstance().GetMaxMana();
     }
 
     private void ClearActivePortrait()
