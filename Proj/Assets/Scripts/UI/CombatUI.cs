@@ -238,6 +238,7 @@ public class CombatUI : MonoBehaviour
     private void PlaceCharacterStarted()
     {
         CharacterData c = GlobalGameManager.GetInstance().GetGameData().heroDataList[0];
+        UpdateCharacterPortraits();
         UpdateActivePortrait(c);
         UpdatePortraitColors(_characterPortraits[c]);
         LoadAbilities(c);
@@ -258,7 +259,6 @@ public class CombatUI : MonoBehaviour
         _combatLogButton.SetActive(true);
         _placeCharactersPanel.SetActive(true);
         
-        UpdateCharacterPortraits();
         UpdateManaText(CardHandManager.GetInstance().GetMana());
     }
 
@@ -401,7 +401,17 @@ public class CombatUI : MonoBehaviour
     
     private void UpdatePortraitColors(Character c) 
     {
-        UpdatePortraitColors(_characterPortraits[c.Data]);
+        if (c == null || c.Data == null)
+        {
+            return;
+        }
+
+        if (!_characterPortraits.TryGetValue(c.Data, out var pb))
+        {
+            return;
+        }
+        
+        UpdatePortraitColors(pb);
     }
 
     private void UpdatePortraitColors(PortraitButton selectedPortrait)
