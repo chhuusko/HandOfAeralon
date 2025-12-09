@@ -19,10 +19,8 @@ public static class DebugLog
 
     private static void LoadSettings()
     {
-        #if UNITY_EDITOR
         if (_settings == null)
             _settings = Resources.Load<DEBUGSettings>("ScriptableObjects/DEBUGSettings");
-        #endif
     }
 
     // Standard Logs
