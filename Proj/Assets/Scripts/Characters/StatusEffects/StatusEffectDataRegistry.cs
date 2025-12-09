@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Profiling.Memory.Experimental;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "StatusEffectDataRegistry", menuName = "StatusEffects/StatusEffectDataRegistry")]
@@ -36,13 +35,7 @@ public class StatusEffectDataRegistry : ScriptableObject
                 continue;
             }
             
-            if (entry.Script == null)
-            {
-                DebugLog.JoppaLog("Empty script: " + entry.name);
-                continue;
-            }
-            
-            Type type = entry.Script.GetClass();
+            Type type = entry.GetEffectType();
             if (type != null)
             {
                 _lookup[type] = entry;

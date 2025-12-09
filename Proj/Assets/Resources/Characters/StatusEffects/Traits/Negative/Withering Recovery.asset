@@ -17,7 +17,8 @@ MonoBehaviour:
   Description: Healing received is reduced by 25%
   Type: 3
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: b1d116a26c5fd1241aa502aa08cdfbb5, type: 3}
+  _typeName: WitheringRecovery, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
   Class: 4
   IsPositive: 0
   DamageModifier: 1.25

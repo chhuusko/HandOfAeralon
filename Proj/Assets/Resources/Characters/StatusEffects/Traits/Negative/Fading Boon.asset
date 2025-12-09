@@ -17,7 +17,7 @@ MonoBehaviour:
   Description: First Buff received each combat has 50% less duration (rounded down)
   Type: 3
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: 4fdbd2963ce42cd4b98d5be342dae272, type: 3}
+  _typeName: FadingBoon, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
   DamageModifier: 2
