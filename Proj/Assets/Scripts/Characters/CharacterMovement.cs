@@ -115,6 +115,7 @@ public class CharacterMovement : MonoBehaviour
     {
         _bIsMoving = true;
         CombatEventManager.InvokeOnCharacterMove(_bIsMoving);
+        Selector._instance.InvokeCharacterActionStarted();
         GridExplorer._instance.ClearPathDrawing();
         float moveSpeed = 4f; // M�ste matcha animationerna
 
