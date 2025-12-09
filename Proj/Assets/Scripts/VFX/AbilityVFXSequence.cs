@@ -9,12 +9,17 @@ public class AbilityVFXSequence : ScriptableObject
     [SerializeField] private ProjectileVFXPlayer _travelFX;   // projectile or null
     [SerializeField] private VFXPlayer _impactFX;
     [SerializeField] private float _biggerImpactScale = 2f;
+    [SerializeField] private float _offsetDistance;
+    [SerializeField] private float _airDistance;
 
     public virtual IEnumerator RunSequence(VFXData data)
     {
         if (_castFX != null)
         {
-            Instantiate(_castFX).Play(data.OriginPosition, data.Direction);
+            Vector3 offset = -data.Direction.normalized * _offsetDistance;
+            offset.y = GetAirDistance();
+
+            Instantiate(_castFX).Play(data.OriginPosition + offset, data.Direction);
         }
         yield return new WaitForSeconds(data.CastingFXDuration);
 
@@ -45,5 +50,13 @@ public class AbilityVFXSequence : ScriptableObject
     public VFXPlayer GetImpactFX()
     {
         return _impactFX;
+    }
+    public float GetOffsetDistance()
+    {
+        return _offsetDistance;
+    }
+    public float GetAirDistance()
+    {
+        return _airDistance;
     }
 }
