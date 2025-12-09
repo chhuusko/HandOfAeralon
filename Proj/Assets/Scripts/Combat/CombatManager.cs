@@ -143,6 +143,8 @@ public class CombatManager : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale <= 0.0f)
+            return;
         if(_currentCombatState != null)
         {
             _currentCombatState?.Update();
@@ -183,7 +185,7 @@ public class CombatManager : MonoBehaviour
         newCombatState?.Enter();
     }
 
-    private void HandleEndCombat()
+    private void HandleEndCombat(bool playerWon)
     {
         _currentCombatState = null;
         LevelManager.GetInstance().StartNextLevel();

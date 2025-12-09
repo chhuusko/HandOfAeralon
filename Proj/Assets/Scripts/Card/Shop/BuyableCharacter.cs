@@ -11,14 +11,14 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private bool _isHeldDown;
     private float _sellTime = 2f;
     private float _timeHeld = 0;
-    private int price = 200;
+    private int price = 100;
     [SerializeField] Image _fillImage;
     [SerializeField] GameObject _aboveText;
     [SerializeField] TextMeshProUGUI _priceText;
     private void Awake()
     {
         _fillImage.fillAmount = 0;
-
+        
     }
     private void Update()
     {
@@ -55,6 +55,7 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private void Bought()
     {
         GlobalGameManager.GetInstance().GetGameData().heroDataList.Add(_characterData);
+        Shop.GetInstance().LoadParty();
         Shop.GetInstance().ChangeCoins(-10);
     }
     private bool CanAfford()

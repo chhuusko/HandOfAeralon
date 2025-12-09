@@ -40,10 +40,10 @@ public class CombatGrid : MonoBehaviour
             // NOTE (Calle): Can't be a Dont' destroy on load if its a child to the Combat Manager, (So maybe make it root for itself?)
             //DontDestroyOnLoad(gameObject);
 
-            // #if UNITY_EDITOR
+
             _tilePrefabLibrary      = Resources.Load<TilePrefabLibrary>("Tiles/TilePrefabLibrary");
             _characterPrefabLibrary = Resources.Load<CharacterPrefabLibrary>("Characters/CharacterPrefabLibrary");
-            // #endif
+
             if (_tilePrefabLibrary == null)
                 DebugLog.CJLog("CombatGrid failed to load TilePrefabLibrary.");
             if (_tilePrefabLibrary == null)
@@ -97,6 +97,23 @@ public class CombatGrid : MonoBehaviour
         }
         return characterScritps; 
     }
+    public List<Character> GetCharacterScriptsByFaction(Faction faction)
+    {
+        List<Character> characterScritps = new List<Character>();
+
+        foreach (GameObject characterGO in GetAllCharacters())
+        {
+            Character character = characterGO.GetComponent<Character>();
+            if (character)
+            {
+                if (character.GetFaction() == faction)
+                {
+                    characterScritps.Add(character);
+                }
+            }
+        }
+        return characterScritps;
+    }
 
     public List<CombatGridTile> GetAllCombatGridTileScripts() 
     {
@@ -133,25 +150,25 @@ public class CombatGrid : MonoBehaviour
         
         if (_tilesGO == null)
         {
-            DebugLog.JLWLog("GetTileAtCoord FAILED: _tilesGO is NULL!");
+            DebugLog.CJLog("GetTileAtCoord FAILED: _tilesGO is NULL!");
             return null;
         }
 
         if (_tilesGO.Length == 0)
         {
-            DebugLog.JLWLog("GetTileAtCoord FAILED: _tilesGO is EMPTY!");
+            DebugLog.CJLog("GetTileAtCoord FAILED: _tilesGO is EMPTY!");
             return null;
         }
 
         if (index < 0 || index >= _tilesGO.Length)
         {
-            DebugLog.JLWLog($"GetTileAtCoord FAILED: index {index} OUT OF RANGE (length={_tilesGO.Length})");
+            DebugLog.CJLog($"GetTileAtCoord FAILED: index {index} OUT OF RANGE (length={_tilesGO.Length})");
             return null;
         }
 
         if (_tilesGO[index] == null)
         {
-            DebugLog.JLWLog($"GetTileAtCoord FAILED: tile at index {index} is NULL!");
+            DebugLog.CJLog($"GetTileAtCoord FAILED: tile at index {index} is NULL!");
             return null;
         }
 
@@ -279,8 +296,12 @@ public class CombatGrid : MonoBehaviour
         List<GameObject> friendlyCharacters = new List<GameObject>();
         foreach (GameObject character in _charactersGO)
         {
-            if (character.GetComponent<Character>().GetFaction() == Faction.Friendly)
-                friendlyCharacters.Add(character);
+            Character characterScript = character.GetComponent<Character>();
+            if (characterScript != null)
+            {
+                if (characterScript.GetFaction() == Faction.Friendly)
+                    friendlyCharacters.Add(character);
+            }
         }
         return friendlyCharacters;
     }
@@ -290,8 +311,16 @@ public class CombatGrid : MonoBehaviour
         List<GameObject> enemyCharacters = new List<GameObject>();
         foreach (GameObject character in _charactersGO)
         {
-            if (character.GetComponent<Character>().GetFaction() == Faction.Enemy)
-                enemyCharacters.Add(character);
+            if (character == null)
+                continue;
+
+            Character characterScript = character.GetComponent<Character>();
+            if (characterScript != null) 
+            {
+                if (characterScript.GetFaction() == Faction.Enemy)
+                    enemyCharacters.Add(character);
+            }
+            
         }
         return enemyCharacters;
     }
@@ -319,25 +348,24 @@ public class CombatGrid : MonoBehaviour
 
         GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
         GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, rotation);
-       
+        Character characterScript = characterObject.GetComponent<Character>();
 
-        characterObject.GetComponent<Character>().SetCharacterClass(characterClass);
-        characterObject.GetComponent<Character>().SetFaction(faction);
-        characterObject.GetComponent<Character>().SetCurrentTileIndex(tileIndex);
-
-        characterObject.GetComponent<Character>().SetCurrentHealthPoints(currentHealtPoints);
-        characterObject.GetComponent<Character>().SetCurrentInitiative(currentSpeed);
-        characterObject.GetComponent<Character>().SetCurrentDamage(currentDamage);
-        characterObject.GetComponent<Character>().SetCurrentMovementPoints(currentMovementPoints);
-
-        characterObject.GetComponent<Character>().SetBaseHealthPoints(baseHealtPoints);
-        characterObject.GetComponent<Character>().SetBaseInitiative(baseSpeed);
-        characterObject.GetComponent<Character>().SetBaseDamage(baseDamage);
-        characterObject.GetComponent<Character>().SetBaseMovementPoints(baseMovementPoints);
-       
-        
-        
-        characterObject.GetComponent<Character>().AddHealthBar();
+        characterScript.SetCharacterClass(characterClass);
+        characterScript.SetFaction(faction);
+        characterScript.SetCurrentTileIndex(tileIndex);
+        characterScript.SetCurrentHealthPoints(currentHealtPoints);
+        characterScript.SetCurrentInitiative(currentSpeed);
+        characterScript.SetCurrentDamage(currentDamage);
+        characterScript.SetCurrentMovementPoints(currentMovementPoints);
+        characterScript.SetBaseHealthPoints(baseHealtPoints);
+        characterScript.SetBaseInitiative(baseSpeed);
+        characterScript.SetBaseDamage(baseDamage);
+        characterScript.SetBaseMovementPoints(baseMovementPoints);
+  
+        characterScript.AddCharacterFrame();
+        characterScript.Data.InitializeClassData();
+        characterScript.Initialize(characterScript.Data);
+        characterScript.Data.GenerateTraits();
 
         _charactersGO.Add(characterObject);
         
@@ -371,11 +399,20 @@ public class CombatGrid : MonoBehaviour
 
         // Get the Character component
         Character character = characterGO.GetComponent<Character>();
+        Faction faction = character.GetFaction();
 
+        if (faction == Faction.Friendly)
+        {
+            characterGO.layer = LayerMask.NameToLayer("Friendly");
+        }
+        else if (faction == Faction.Enemy)
+        {
+            characterGO.layer = LayerMask.NameToLayer("Enemy");
+        }
         // Assign and initialize
         character.Initialize(data);
 
-        character.AddHealthBar();
+        character.AddCharacterFrame();
 
         _charactersGO.Add(characterGO);
 
@@ -454,6 +491,7 @@ public class CombatGrid : MonoBehaviour
                         {
                             meshRend.material = inCombatTileMaterial;
                             meshRend.material.SetVector("_TextureTileCoord", new Vector2(1, 0));
+                            meshRend.material.SetColor("_TileColor", Color.white);
                         }
                     }
                     break;
@@ -463,6 +501,7 @@ public class CombatGrid : MonoBehaviour
                         {
                             meshRend.material = inCombatTileMaterial;
                             meshRend.material.SetVector("_TextureTileCoord", new Vector2(2, 0));
+                            meshRend.material.SetColor("_TileColor", Color.white);
                         }
                     }
                     break;

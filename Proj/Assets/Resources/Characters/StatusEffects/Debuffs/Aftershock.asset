@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19e2ecddaae387643a5b743894991d79, type: 3}
+  m_Name: Aftershock
+  m_EditorClassIdentifier: 
+  Name: Aftershock
+  Icon: {fileID: 21300000, guid: b294c2a924ded964e86abe6213a7d930, type: 3}
+  Description: Character takes 5 damage whenever a card is played
+  Type: 1
+  IsPermanent: 0
+  Script: {fileID: 11500000, guid: d8df4628cc4b8f042834d023a695f456, type: 3}
+  Class: 4
+  IsPositive: 0
+  Damage: 5

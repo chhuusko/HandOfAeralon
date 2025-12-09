@@ -8,11 +8,11 @@ public class ChaoticBurst : Card
     {
 
         int damage = 15;
-        List<Character> character = CombatGrid._instance.GetAllCharacterScripts();
+        List<Character> characters = CombatGrid._instance.GetAllCharacterScripts();
         while (damage > 0) 
         {
             int damageInstance = Random.Range(1, damage + 1);
-            character[Random.Range(0, character.Count)].TakeDamage(damageInstance);
+            characters[Random.Range(0, characters.Count)].TakeDamage(damageInstance);
             damage -= damageInstance;
         }
         CardHandManager.GetInstance().AddCardFromDeck();

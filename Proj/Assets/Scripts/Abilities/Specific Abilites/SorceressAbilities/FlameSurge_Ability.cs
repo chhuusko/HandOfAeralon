@@ -11,9 +11,14 @@ public class FlameSurge_Ability : DirectedAOEAbility
     [SerializeField] private int _charactersBurnedToGainMana = 2;
     [SerializeField] private int _manaGain = 1;
 
+    [Header("- Emberwake Effects -")]
+    [SerializeField] private int _emberwakeBurnAmount = 2;
+
+
+
     // Description
 
-    // Unleash a burst of fire, dealing(100% × Damage) Elemental damage to all characters in area.
+    // Unleash a burst of fire, dealing(100% ï¿½ Damage) Elemental damage to all characters in area.
     // Every character hit has a 50% chance to gain Burn for 2 turns.
     // Gain 1 Mana if at least two enemies become Burned.
 
@@ -112,22 +117,21 @@ public class FlameSurge_Ability : DirectedAOEAbility
         if (castingCharacter == null) return;
 
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
-        affectedCharacter.TakeDamage(damage);
+        bool died = affectedCharacter.TakeDamage(damage);
 
-        StatusEffect slow = null;
 
-        if (Random.value < _chanceToBurnCharacters)
+        StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
+        if (statusEffectManager == null) return;
+
+        int burnDuration = Mathf.Max(_emberwakeBurnAmount, _burnDuration);
+        StatusEffect burn = statusEffectManager.TryApplyBurn(affectedCharacter, _chanceToBurnCharacters, burnDuration);
+
+        if (burn != null)
         {
-            if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
-            {
-                statusEffectManager.AddStatusEffect(slow = new Slowed(_burnDuration));
-                if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
-                {
-                    burnedEnemiesCounter++;
-                }
-            }
+            burnedEnemiesCounter++;
         }
-        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, slow);
+
+        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, burn, died);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)

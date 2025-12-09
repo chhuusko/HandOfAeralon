@@ -15,7 +15,7 @@ MonoBehaviour:
   characterClass: 1
   minHealthPoints: 20
   maxHealthPoints: 22
-  minDamage: 9
+  minDamage: 8
   maxDamage: 10
   minInitiative: 6
   maxInitiative: 7
@@ -23,7 +23,7 @@ MonoBehaviour:
   maxMovementPoints: 3
   abilities:
   - {fileID: 11400000, guid: 19698c8f3940fac488a5032799880907, type: 2}
-  - {fileID: 11400000, guid: 782597c8de89ae0478ec5976e04718cd, type: 2}
-  - {fileID: 11400000, guid: 19698c8f3940fac488a5032799880907, type: 2}
-  - {fileID: 11400000, guid: 19698c8f3940fac488a5032799880907, type: 2}
-  classImage: {fileID: 21300000, guid: c04238735daa02845a5903a7681cb72a, type: 3}
+  - {fileID: 11400000, guid: 9d0659673dcbe654e8a4e3ebc0eb7815, type: 2}
+  - {fileID: 11400000, guid: ba8bb7e1e03a9104eaf82b2f10b70868, type: 2}
+  - {fileID: 11400000, guid: 9343061b801cb7841bed571274cfb07c, type: 2}
+  classImage: {fileID: 21300000, guid: 3a1b48ba3eb2be64683dfdf63f7178d1, type: 3}

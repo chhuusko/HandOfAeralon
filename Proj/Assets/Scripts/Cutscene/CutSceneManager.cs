@@ -51,7 +51,7 @@ public class CutSceneManager : MonoBehaviour
         }
 
 
-        if (_animatorSmoke!= null)
+        if (_animatorSmoke != null)
         {
             _animatorSmoke.enabled = true;
             _animatorSmoke.Play("FadeOutSmoke");

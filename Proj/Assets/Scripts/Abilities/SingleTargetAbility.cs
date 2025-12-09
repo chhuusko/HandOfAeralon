@@ -8,10 +8,21 @@ public abstract class SingleTargetAbility : Ability
         ApplyEffectOnTile(casterTile, targetTile);
     }
 
-    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile tile)
+    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
     {
+        if (targetTile == null)
+            return null;
+
+        // Get caster
+        Character caster = GetAbilityHandler().GetCharacterCaster();
+        if (caster == null) return null;
+
+        // Check if target tile is in range.
+        bool inRange = caster.GetAbilityHandler().GetTilesInRange().Contains(targetTile);
+        if (!inRange) return null;
+
         List<CombatGridTile> TilesToEffect = new();
-        TilesToEffect.Add(tile);
+        TilesToEffect.Add(targetTile);
         return TilesToEffect;
     }
 

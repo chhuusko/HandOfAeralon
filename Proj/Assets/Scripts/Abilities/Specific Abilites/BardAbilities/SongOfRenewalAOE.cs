@@ -19,7 +19,7 @@ public class SongOfRenewalAOE : RoundAOEAbility
         // Calculate all tiles around with in radius and apply effect to all of them.
         if (_pattern is RoundAOEPattern pattern)
         {
-            pattern.SetRadius(_radius);
+            SetAbilityRadius(_radius, pattern);
         }
         List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
 
@@ -49,7 +49,7 @@ public class SongOfRenewalAOE : RoundAOEAbility
 
         int healAmount = CalculateHealAmount(castingCharacter, affectedCharacter, false);
         affectedCharacter.Heal(healAmount);
-        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, healAmount, null);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, healAmount, null, false);
     }
 
     private void ApplyEffectOnMainTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
@@ -63,7 +63,7 @@ public class SongOfRenewalAOE : RoundAOEAbility
 
         int healAmount = CalculateHealAmount(castingCharacter, affectedCharacter, true);
         affectedCharacter.Heal(healAmount);
-        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, healAmount, null);
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, healAmount, null, false);
     }
 
     private int CalculateHealAmount(Character castingCharacter, Character affectedCharacter, bool bIsMainTarget)

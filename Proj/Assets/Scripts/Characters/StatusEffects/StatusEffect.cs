@@ -1,36 +1,47 @@
+using System;
 using UnityEngine;
 
+[Serializable]
 public abstract class StatusEffect
 {
-    public int Duration { get; protected set; }
+    [SerializeField] private string _name;
+    public string Name => _name;
+    [SerializeField] private int _duration;
+    public int Duration => _duration;
     
     protected Character Character { get; private set; }
     protected StatusEffectManager Manager { get; private set; }
     
-    public StatusEffectData Data { get; private set; }
+    [SerializeField] private StatusEffectData _data;
+    public StatusEffectData Data => _data;
+    
+    public void SetDuration(int duration) => _duration = duration;
     
     protected StatusEffect(int duration = 3)
     {
-        Duration = duration;
+        _duration = duration;
 
-        Data = StatusEffectDataRegistry.GetDataForType(GetType());
+        _data = StatusEffectDataRegistry.GetDataForType(GetType());
+        
+        _name = Data.Name;
     }
 
     public void Initialize(Character character, StatusEffectManager manager)
     {
         Character = character;
         Manager = manager;
+        
         OnApply();
     }
 
     public virtual void IncreaseDuration(int amount = 1)
     {
-        Duration = Mathf.Max(Duration, amount);
+        _duration = Mathf.Max(Duration, amount);
     }
 
     public void DecreaseDuration(int amount = 1)
     {
-        Duration -= amount;
+        _duration -= amount;
         if (Duration <= 0)
         {
             Manager.RemoveStatusEffect(this);
@@ -47,7 +58,7 @@ public abstract class StatusEffect
         {
             return true;
         }
-        return --Duration > 0;
+        return --_duration > 0;
     }
     
     // Virtual methods. Overriden and implemented in subclasses as needed.
@@ -55,9 +66,15 @@ public abstract class StatusEffect
     public virtual void OnExpire() {}
     public virtual void OnTurnStart() {}
     public virtual void OnTurnEnd() {}
-    public virtual void OnCardPlayed() {}
+    public virtual void OnCardPlayed(Card card) {}
+    public virtual void OnTargetedByCard() {}
+    public virtual void OnBurnApplied() {}
+    public virtual void OnCombatEnded() {}
     public virtual void ModifyIncomingDamage(ref float damage, Ability ability) {}
     public virtual void ModifyOutgoingDamage(ref float damage, Ability ability) {}
     public virtual void ModifyIncomingHeal(ref float heal, Ability ability) {}
     public virtual void ModifyOutgoingHeal(ref float heal, Ability ability) {}
+    public virtual void ModifyBurnDamage(ref int damage) {}
+    public virtual void ModifyBurnApplicationChance(ref float chance) {}
+    public virtual void ModifyStunApplicationChance(ref float chance) {}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.TextCore.Text;
 
 public class CombatStateTakeTurn : CombatStateBase
 {
@@ -15,10 +16,15 @@ public class CombatStateTakeTurn : CombatStateBase
 
     public override void Enter()
     {
-        base.Enter();   
-        
+        base.Enter();
+
         // TODO (Calle): Should AIEndTurn be in CombatEventManager, and/or should it be a event Action instead of UnityEvent?
-        CombatManager._instance.GetEnemyAI().AIEndTurn.AddListener(EndTurn);
+        EnemyAI enemyAI = CombatManager._instance.GetEnemyAI();
+        if(enemyAI)
+        {
+            enemyAI.AIEndTurn.AddListener(EndTurn);
+        }
+        
         
         CombatTurnOrder combatTurnOrder = CombatManager._instance.GetCombatTurnOrder();
 
@@ -46,8 +52,27 @@ public class CombatStateTakeTurn : CombatStateBase
                 break;
         }
 
-        foreach(Character character in CombatGrid._instance.GetAllCharacterScripts())
+        switch (activeCharacter.GetCurrentTileComponent().GetTileType())
+        {
+            case TileType.Poison:
+                {
+                    StatusEffectManager statusEffectManager = activeCharacter.GetComponent<StatusEffectManager>();
+                    statusEffectManager.AddStatusEffect(new Poison(3));
+                }
+                break;
+            case TileType.Lava:
+                {
+                    StatusEffectManager statusEffectManager = activeCharacter.GetComponent<StatusEffectManager>();
+                    statusEffectManager.AddStatusEffect(new Burn(activeCharacter, 1));
+                }
+                break;
+        }
+
+        foreach (Character character in CombatGrid._instance.GetAllCharacterScripts())
+        {
             character.ResetCurrentMovementPoints();
+        }
+        
 
         CombatEventManager.InvokeEnterCombatStateTakeTurn(activeCharacter);
     }
@@ -74,11 +99,27 @@ public class CombatStateTakeTurn : CombatStateBase
                 HandleEnemyTurn();
                 break;
         }
+
+        HandleWinCondition();
     }
 
     private void EndTurn()
     {
         CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
+    }
+
+    private void HandleWinCondition()
+    {
+        if (CombatGrid._instance.GetAllEnemyCharacters().Count == 0)
+        {
+            // TODO (Calle): All enemies killed, Go directly to EndCombat State.
+            CombatManager._instance.ChangeCombatState(new CombatStateEndCombat(true));
+        }
+        else if(CombatGrid._instance.GetAllFriendlyCharacters().Count == 0)
+        {
+            // TODO (Calle): All heroes killed, Go directly to EndCombat State.
+            CombatManager._instance.ChangeCombatState(new CombatStateEndCombat(false));
+        }
     }
 
     private void HandlePlayerTurn()

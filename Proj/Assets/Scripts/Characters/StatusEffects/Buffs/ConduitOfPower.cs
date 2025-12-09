@@ -4,7 +4,7 @@ public class ConduitOfPower : StatusEffect
 {
     float combinedDamageModifier;
 
-    public override void OnCardPlayed()
+    public override void OnTargetedByCard()
     {
         var data = Data as DamageModifyingData;
 
@@ -19,5 +19,10 @@ public class ConduitOfPower : StatusEffect
     public override void ModifyOutgoingDamage(ref float damage, Ability ability)
     {
         damage *= combinedDamageModifier;
+    }
+
+    public override void OnCombatEnded()
+    {
+        Manager.RemoveStatusEffect(this);
     }
 }

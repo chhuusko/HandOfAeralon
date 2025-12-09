@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -18,9 +19,12 @@ public class CardHandManager : MonoBehaviour
     [SerializeField] private List<CardContainer> _cardsInHand;
     [SerializeField] private List<Card> _cardsInDeck;
     [SerializeField] private List<Card> _cardsInDiscardPile;
-    
-    
+
+    [SerializeField] private TextMeshProUGUI _deckText, _discardText;
+
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
+
+    
     
     // presets
     [SerializeField] private int turnsTillCard = 4;
@@ -35,14 +39,26 @@ public class CardHandManager : MonoBehaviour
     GameObject _addedZoomedCard;
     CardContainer _activeContainer;
 
+    //
+    public List<TurnEffect> turnEffects; 
 
     // 
     bool isCombat;
 
-
+    public static Action<Card> onCardUse;
     public static Action<int> onManaChange;
+    public static Action<Character> onTargetCharacter;
+    public static Action<Character, Card> onCardTargetCharacter;
+
+    public static Action<bool> onDrag;
+    public static Action<bool> onHover;
     public static CardHandManager GetInstance() {return _instance;}
     public void ManaChanged(){ onManaChange?.Invoke(_mana); }
+    public void Dragged(bool isDragEnter) { onDrag?.Invoke(isDragEnter); }
+    public void Hovered(bool isHoverEnter) { onHover?.Invoke(isHoverEnter); }
+    public void CardUsed(Card usedCard) { onCardUse?.Invoke(usedCard); }
+    public void CharacterTarget(Character targetCharacter) { onTargetCharacter?.Invoke(targetCharacter); }
+    public void CardTargetCharacter(Card usedCard, Character target) { onCardTargetCharacter?.Invoke(target, usedCard); }
     private void Awake()
     {
         _instance = this;
@@ -52,23 +68,34 @@ public class CardHandManager : MonoBehaviour
         }
         else
         {
-            _cardsInDeck = new List<Card>(_deckPreset.GetCards());
+            _cardsInDeck = new List<Card>(_deckPreset.GetCards().Count);
+            foreach (Card card in _deckPreset.GetCards())
+            {
+                Card clone = Instantiate(card);
+                _cardsInDeck.Add(clone);
+            }
         }
         drawHand();
+        UpdatePileTexts();
     }
+
     private void OnEnable()
     {
         CombatEventManager.OnCombatTurnChange += TurnChanged;
+        onCardTargetCharacter += TurnEffects;
     }
+
     private void OnDisable()
     {
         CombatEventManager.OnCombatTurnChange -= TurnChanged;
+        onCardTargetCharacter -= TurnEffects;
     }
     public void drawHand()
     {
         _cardsInHand.RemoveAll(o => o == null);
-        while (beginningDraw > _cardsInHand.Count)
+        while (beginningDraw > _cardsInHand.Count && _cardsInDeck.Count != 0)
         {
+            
             if(_cardsInDeck.Count == 0)
             {
                 _cardsInDeck = _cardsInDiscardPile;
@@ -77,40 +104,38 @@ public class CardHandManager : MonoBehaviour
         }
         AddSpaceing();
     }
-    public void AddCardFromDeck()
-    {
-        AddRandomCardFromDeck();
-    }
     public void AddCardFromDeck(int amount)
     {
         for(int i = 0; i < amount; i++)
         {
-            AddRandomCardFromDeck();
+            AddCardFromDeck();
         }
         AddSpaceing();
     }
-    public void AddRandomCardFromDeck()
+    public CardContainer AddCardFromDeck()
     {
         if (_cardsInDeck.Count == 0)
         {
             if(_cardsInDiscardPile.Count > 0)
             {
-                 _cardsInDeck = new List<Card>(_cardsInDiscardPile);
+                _cardsInDeck = new List<Card>(_cardsInDiscardPile);
                 _cardsInDiscardPile.Clear();
             }
             
         }
         if (_cardsInDeck.Count == 0)
         {
-            return;
+            return null;
         }
-        if (_maxHand <= _cardsInHand.Count) return;
+        if (_maxHand <= _cardsInHand.Count) return null;
+
         CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
         _cardsInHand.Add(newCardContainer);
         int newCardIndex = UnityEngine.Random.Range(0, _cardsInDeck.Count);
         newCardContainer.AddCard(_cardsInDeck[newCardIndex]);
         _cardsInDeck.RemoveAt(newCardIndex);
         AddSpaceing();
+        return newCardContainer;
     }
 
     public void AddSpaceing()
@@ -144,13 +169,17 @@ public class CardHandManager : MonoBehaviour
     {
         CardViewUI.GetInstance().UpdateCards(_cardsInDiscardPile);
     }
-    public void RemoveCard(CardContainer cardContainer)
+    public void RemoveCardFromHand(CardContainer cardContainer)
     {
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
-        _cardsInDiscardPile.Add(cardContainer.GetCard());
+        if (!cardContainer.GetCard().tags.Contains(CardTag.Etherial))
+        {
+            _cardsInDiscardPile.Add(cardContainer.GetCard());
+        }
         AddSpaceing();
         _cardsPlayedThisTurn++;
+        UpdatePileTexts();
     }
     public void ChangeMana(int change)
     {
@@ -196,11 +225,26 @@ public class CardHandManager : MonoBehaviour
             if (tempTurnsTillCard <= 0)
             {
                 tempTurnsTillCard = turnsTillCard;
-                AddRandomCardFromDeck();
+                AddCardFromDeck();
             }
-        
         }
-        
+
+        //handle etherial cards
+        List<CardContainer> removeList = new List<CardContainer>();
+        for (int i = 0; i < _cardsInHand.Count; i++)
+        {
+            if (_cardsInHand[i].GetCard().tags.Contains(CardTag.Etherial))
+            {
+                removeList.Add(_cardsInHand[i]);
+            }
+        }
+
+        foreach (CardContainer card in removeList)
+        {
+            RemoveCardFromHand(card);
+        }
+        UpdatePileTexts();
+        turnEffects.Clear();
     }
     public int GetCardsPlayedThisTurn()
     {
@@ -220,17 +264,13 @@ public class CardHandManager : MonoBehaviour
 
         _activeContainer = container;
 
-        
         _addedZoomedCard = Instantiate(
             _zoomedCard,
             position,
             Quaternion.identity,
             CanvasManager.instance.OverlayCanvas.transform
         );
-
-
         _addedZoomedCard.GetComponent<CardUI>().SetUpUIElements(container.GetCard());
-
     }
 
     public void HideHighlightedCard()
@@ -240,4 +280,28 @@ public class CardHandManager : MonoBehaviour
             Destroy(_addedZoomedCard);
         }
     }
+    public void AddCardToHand(Card newCard)
+    {
+        CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
+        _cardsInHand.Add(newCardContainer);
+        newCardContainer.AddCard(newCard);
+
+    }
+    private void TurnEffects(Character character, Card card)
+    {
+        foreach(TurnEffect effect in turnEffects)
+        {
+            effect.Effect(character, card);
+        }
+    }
+    public void OverrideManager()
+    {
+
+    }
+    public void UpdatePileTexts()
+    {
+        _deckText.text = "Deck (" + _cardsInDeck.Count + ")";
+        _discardText.text = "Discard (" + _cardsInDiscardPile.Count + ")";
+    }
+
 }

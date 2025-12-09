@@ -8,25 +8,25 @@
     },
     "_tileData": [
         {
-            "_tileType": 0,
+            "_tileType": 5,
             "_tileIndex": {
                 "x": 0,
                 "y": 0
             },
             "_position": {
-                "x": 0.0,
+                "x": 1.0,
                 "y": 0.0,
-                "z": 0.0
+                "z": 1.0
             },
             "_size": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
+                "x": 2.0,
+                "y": 0.009999999776482582,
+                "z": 2.0
             },
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 5,
             "_tileIndex": {
                 "x": 1,
                 "y": 0
@@ -116,7 +116,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 5,
             "_tileIndex": {
                 "x": 0,
                 "y": 1
@@ -134,7 +134,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 5,
             "_tileIndex": {
                 "x": 1,
                 "y": 1
@@ -224,7 +224,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 5,
             "_tileIndex": {
                 "x": 0,
                 "y": 2
@@ -242,7 +242,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 5,
             "_tileIndex": {
                 "x": 1,
                 "y": 2
@@ -332,7 +332,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 5,
             "_tileIndex": {
                 "x": 0,
                 "y": 3
@@ -350,7 +350,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 5,
             "_tileIndex": {
                 "x": 1,
                 "y": 3
@@ -440,7 +440,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 5,
             "_tileIndex": {
                 "x": 0,
                 "y": 4
@@ -553,70 +553,6 @@
             "_characterClass": 1,
             "_faction": 1,
             "_position": {
-                "x": 1.0,
-                "y": 0.0,
-                "z": 7.0
-            },
-            "_size": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "_rotation": {
-                "x": 0.0,
-                "y": 0.7071068286895752,
-                "z": 0.0,
-                "w": 0.7071068286895752
-            },
-            "_baseHealthPoints": 1,
-            "_baseSpeed": 1,
-            "_baseDamage": 1,
-            "_baseMovementPoints": 1,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 0,
-            "_currentDamage": 0,
-            "_currentMovementPoints": 0,
-            "_currentTileIndex": {
-                "x": 0,
-                "y": 3
-            }
-        },
-        {
-            "_characterClass": 2,
-            "_faction": 1,
-            "_position": {
-                "x": 1.0,
-                "y": 0.0,
-                "z": 1.0
-            },
-            "_size": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "_rotation": {
-                "x": 0.0,
-                "y": 0.7071068286895752,
-                "z": 0.0,
-                "w": 0.7071068286895752
-            },
-            "_baseHealthPoints": 1,
-            "_baseSpeed": 1,
-            "_baseDamage": 1,
-            "_baseMovementPoints": 1,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 0,
-            "_currentDamage": 0,
-            "_currentMovementPoints": 0,
-            "_currentTileIndex": {
-                "x": 0,
-                "y": 0
-            }
-        },
-        {
-            "_characterClass": 1,
-            "_faction": 1,
-            "_position": {
                 "x": 11.0,
                 "y": 0.0,
                 "z": 3.0
@@ -632,14 +568,14 @@
                 "z": 0.0,
                 "w": 0.7071068286895752
             },
-            "_baseHealthPoints": 1,
-            "_baseSpeed": 1,
-            "_baseDamage": 1,
-            "_baseMovementPoints": 1,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 0,
-            "_currentDamage": 0,
-            "_currentMovementPoints": 0,
+            "_baseHealthPoints": 23,
+            "_baseSpeed": 7,
+            "_baseDamage": 9,
+            "_baseMovementPoints": 3,
+            "_currentHealthPoints": 23,
+            "_currentSpeed": 7,
+            "_currentDamage": 9,
+            "_currentMovementPoints": 3,
             "_currentTileIndex": {
                 "x": 5,
                 "y": 1
@@ -664,49 +600,17 @@
                 "z": 0.0,
                 "w": 0.7071068286895752
             },
-            "_baseHealthPoints": 1,
-            "_baseSpeed": 1,
-            "_baseDamage": 1,
-            "_baseMovementPoints": 1,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 0,
-            "_currentDamage": 0,
-            "_currentMovementPoints": 0,
+            "_baseHealthPoints": 36,
+            "_baseSpeed": 5,
+            "_baseDamage": 7,
+            "_baseMovementPoints": 4,
+            "_currentHealthPoints": 36,
+            "_currentSpeed": 5,
+            "_currentDamage": 7,
+            "_currentMovementPoints": 4,
             "_currentTileIndex": {
                 "x": 5,
                 "y": 4
-            }
-        },
-        {
-            "_characterClass": 0,
-            "_faction": 1,
-            "_position": {
-                "x": 1.0,
-                "y": 0.0,
-                "z": 3.0
-            },
-            "_size": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "_rotation": {
-                "x": 0.0,
-                "y": 0.7071068286895752,
-                "z": 0.0,
-                "w": 0.7071068286895752
-            },
-            "_baseHealthPoints": 1,
-            "_baseSpeed": 1,
-            "_baseDamage": 1,
-            "_baseMovementPoints": 1,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 0,
-            "_currentDamage": 0,
-            "_currentMovementPoints": 0,
-            "_currentTileIndex": {
-                "x": 0,
-                "y": 1
             }
         }
     ]

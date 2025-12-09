@@ -16,8 +16,9 @@ MonoBehaviour:
   rarity: 0
   title: Purewaters Touch
   description: Remove a random debuff from target ally and restore 15 Health. If
-    a debuff was removed, gain 2 Mana
-  cost: 2
+    a debuff was removed, gain 2 Mana.
+  cost: 6
   icon: {fileID: 21300000, guid: 7e485958255f9c24e8664fd68e2649ff, type: 3}
   CardTemplate: {fileID: 0}
   info: []
+  tags: 

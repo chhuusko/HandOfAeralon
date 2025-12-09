@@ -31,7 +31,7 @@ public class CombatGridTile : MonoBehaviour
         // Get a ray from the camera through the mouse position
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        // Raycast against this tile’s collider
+        // Raycast against this tileï¿½s collider
         if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Tile")))
         {
             // Check if the hit object is this tile
@@ -75,13 +75,15 @@ public class CombatGridTile : MonoBehaviour
             {
                 case TileType.Poison:
                     {
-                        character.GetComponent<StatusEffectManager>().AddStatusEffect(new Poison(3));
+                        StatusEffectManager statusEffectManager = character.GetComponent<StatusEffectManager>();
+                        statusEffectManager.AddStatusEffect(new Poison(3));
                     } break;
 
                 case TileType.Lava:
                     {
                         character.TakeDamage(4);
-                        character.GetComponent<StatusEffectManager>().AddStatusEffect(new Burn(1));
+                        StatusEffectManager statusEffectManager = character.GetComponent<StatusEffectManager>();
+                        statusEffectManager.AddStatusEffect(new Burn(character, 1));
                     } break;
             }
             

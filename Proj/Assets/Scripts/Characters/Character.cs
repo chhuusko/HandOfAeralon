@@ -29,9 +29,11 @@ public class CharacterData
     
     [Header("Current stats")]
     [SerializeField] private int _currentHealthPoints;
-    [SerializeField] private List<Ability> _availableAbilities;
+    [SerializeField] private List<Ability> _abilities;
+    [SerializeField] private List<Ability> _activeAbilities;
     public int CurrentHealthPoints => _currentHealthPoints;
-    public IReadOnlyList<Ability> AvailableAbilities => _availableAbilities;
+    public IReadOnlyList<Ability> Abilities => _abilities;
+    public List<Ability> ActiveAbilities => _activeAbilities;
     
     [Header("Status Effects")]
     private TraitManager _traitManager = new();
@@ -43,7 +45,6 @@ public class CharacterData
         _faction = faction;
         
         InitializeClassData();
-        InitializeTraits();
         
         if (generateTraits)
         {
@@ -54,20 +55,25 @@ public class CharacterData
     /// <summary>
     /// Generates a new friendly character based on the class data.
     /// </summary>
-    private void InitializeClassData()
+    public void InitializeClassData()
     {
         if (ClassData == null)
         {
             return;
         }
-            
-        // Set values from class data.
-        _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(ClassData.minHealthPoints, ClassData.maxHealthPoints + 1);
-        _baseInitiative =  UnityEngine.Random.Range(ClassData.minInitiative, ClassData.maxInitiative + 1);
-        _baseDamage = UnityEngine.Random.Range(ClassData.minDamage, ClassData.maxDamage + 1);
-        _baseMovementPoints = UnityEngine.Random.Range(ClassData.minMovementPoints, ClassData.maxMovementPoints + 1);
+
+        if (_faction == Faction.Friendly)
+        {
+            // Set values from class data.
+            _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(ClassData.minHealthPoints, ClassData.maxHealthPoints + 1);
+            _baseInitiative =  UnityEngine.Random.Range(ClassData.minInitiative, ClassData.maxInitiative + 1);
+            _baseDamage = UnityEngine.Random.Range(ClassData.minDamage, ClassData.maxDamage + 1);
+            _baseMovementPoints = UnityEngine.Random.Range(ClassData.minMovementPoints, ClassData.maxMovementPoints + 1);
+        }
+        
         _characterClass = ClassData.characterClass;
-        _availableAbilities = ClassData.abilities;
+        _abilities = ClassData.abilities;
+        _activeAbilities = new List<Ability>(_abilities);
     }
 
     public void InitializeTraits()
@@ -78,8 +84,10 @@ public class CharacterData
         }
     }
     
-    private void GenerateTraits()
+    public void GenerateTraits()
     {
+        InitializeTraits();
+        
         _traitManager.GenerateTraits(this);
     }
 
@@ -92,7 +100,11 @@ public class CharacterData
     public void SetBaseMovementPoints(int movementPoints) => _baseMovementPoints = Mathf.Max(movementPoints, 1);
     public void SetCurrentHealthPoints(int health) => _currentHealthPoints = Mathf.Max(health, 0);
     public void Heal(int amount) => SetCurrentHealthPoints(Mathf.Min(CurrentHealthPoints + amount, _baseHealthPoints));
-    public void SetCurrentAbilities(List<Ability> abilities) => _availableAbilities = new List<Ability>(abilities);
+    public void SetAbilities(List<Ability> abilities) => _abilities = new List<Ability>(abilities);
+    public void SetActiveAbilities(List<Ability> abilities)
+    {
+        _activeAbilities = abilities;
+    }
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -119,12 +131,15 @@ public class Character : MonoBehaviour
 
     [Header("State")] 
     public bool CanMove { get; set; } = true;
-    public bool CanAttack { get; set; } = true;
+    public bool CanUseAbility { get; set; } = true;
+    public bool IsTargetable { get; set; } = true;
 
     [Header("Status effects")]
     private StatusEffectManager _statusEffectManager;
-    
-    [Header("Misc")]
+
+    [Header("Misc")] 
+    [SerializeField] private GameObject _bodyMesh;
+    [SerializeField] private GameObject _weaponMesh;
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
     public CharacterData Data => _data;
@@ -155,14 +170,17 @@ public class Character : MonoBehaviour
         // Enemies aren't created via character data, so traits have to be created at start.
         _statusEffectManager.SetTraitManager(_data?.TraitManager);
         _data?.InitializeTraits();
-        
-        UpdateFactionIndicator();
 
         if (!TryGetComponent(out _abilityHandler))
         {
             Debug.LogError("Character is missing AbilityHandler component!");
             return;
         }
+    }
+
+    private void Start()
+    {
+        UpdateFactionIndicator();
     }
 
     private void UpdateFactionIndicator()
@@ -191,7 +209,7 @@ public class Character : MonoBehaviour
         CombatTooltipManager combatTooltipManager = CombatTooltipManager.GetInstance();
         if (combatTooltipManager != null)
         {
-            combatTooltipManager.GetCharacterLayout().BindEventEventOnTakeDamage(this);
+            combatTooltipManager.GetCharacterLayout().UnBindEventEventOnTakeDamage(this);
         }
     }
 
@@ -236,7 +254,7 @@ public class Character : MonoBehaviour
     
     // Abilities.
     public AbilityHandler GetAbilityHandler() => _abilityHandler;
-    public IReadOnlyList<Ability> GetAvailableAbilities() => _data.AvailableAbilities;
+    public IReadOnlyList<Ability> GetAvailableAbilities() => _data.Abilities;
 
     // Status Effects.
     public StatusEffectManager GetStatusEffectManager() => _statusEffectManager;
@@ -249,6 +267,12 @@ public class Character : MonoBehaviour
     public void SetBaseInitiative(int initiative) => _data.SetBaseInitiative(initiative);
     public void SetBaseDamage(int damage) => _data.SetBaseDamage(damage);
     public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
+    
+    // Misc.
+    public GameObject GetBodyMesh() => _bodyMesh;
+    public void SetBodyMesh(GameObject mesh) => _bodyMesh = mesh;
+    public GameObject GetWeaponMesh() => _bodyMesh;
+    public void SetWeaponMesh(GameObject mesh) => _bodyMesh = mesh;
     
     // Health.
     public void SetCurrentHealthPoints(int healthPoints)
@@ -312,7 +336,7 @@ public class Character : MonoBehaviour
 
     private void ResetCanAttack(Character c)
     {
-        CanAttack = true;
+        CanUseAbility = true;
     }
 
     private void UpdateAbilityCooldowns(Character c)
@@ -367,13 +391,45 @@ public class Character : MonoBehaviour
         _currentInitiative = _data.BaseInitiative;
         _currentDamage = _data.BaseDamage;
         _currentMovementPoints = _data.BaseMovementPoints;
+        
+        SetMeshLayers(_bodyMesh);
+        SetMeshLayers(_weaponMesh);
     }
 
-    public void AddHealthBar()
+    private void SetMeshLayers(GameObject mesh)
     {
-        if (HealthBarManager._instance != null)
+        if (!mesh)
         {
-            HealthBarManager._instance.Register(this);
+            return;
+        }
+
+        uint layerMask;
+
+        if (GetFaction() == Faction.Friendly) 
+        {
+            mesh.layer = LayerMask.NameToLayer("Friendly");
+            layerMask = 1 << 2;
+        }
+        else
+        {
+            mesh.layer = LayerMask.NameToLayer("Enemy");
+            layerMask = 1 << 7;
+        }
+        
+        SkinnedMeshRenderer smr = mesh.GetComponent<SkinnedMeshRenderer>();
+        if (!smr)
+        {
+            return;
+        }
+
+        smr.renderingLayerMask = layerMask;
+    }
+
+    public void AddCharacterFrame()
+    {
+        if (CharacterFrameManager._instance != null)
+        {
+            CharacterFrameManager._instance.Register(this);
         }
         else
         {
@@ -381,26 +437,42 @@ public class Character : MonoBehaviour
         }
     }
     
-    public void TakeDamage(int damage)
+    /// <summary>
+    /// Takes damages.
+    /// </summary>
+    /// <param name="damage">The amount of damage to take.</param>
+    /// <returns>Whether the character died.</returns>
+    public bool TakeDamage(int damage)
     {
         _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
         OnTakeDamage?.Invoke(damage, gameObject);
 
-        Debug.Log($"Taking {damage} damage. New health: {GetCurrentHealth()}");
+        Debug.Log($"{name} took {damage} damage! Remaining health: {GetCurrentHealth()}");
         
         if (_data.CurrentHealthPoints <= 0)
         {
             StartCoroutine(RemoveCharacter());
+            return true;
         }
-        else
+        
+        Animator animator = null;
+        if (TryGetComponent<Animator>(out animator))
         {
-            Animator animator = null;
-            if (TryGetComponent<Animator>(out animator))
-            {
-                animator.SetTrigger("TakeDamage");
-            }
+            animator.SetTrigger("TakeDamage");
         }
+
+        return false;
+    }
+
+    public bool TakeDamage(int damage, Character source)
+    {
+        if (source)
+        {
+            Debug.Log($"{name} took {damage} damage from {source.GetFaction()} {source.name}! Remaining health: {GetCurrentHealth()}");
+        }
+        
+        return TakeDamage(damage);
     }
      
     private IEnumerator RemoveCharacter()
@@ -469,9 +541,9 @@ public class Character : MonoBehaviour
 
     void OnDestroy()
     {
-        if (HealthBarManager._instance != null)
+        if (CharacterFrameManager._instance != null)
         {
-            HealthBarManager._instance.Unregister(this);
+            CharacterFrameManager._instance.Unregister(this);
         }
     }
 }

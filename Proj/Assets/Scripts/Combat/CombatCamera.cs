@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Playables;
 
 public class CombatCamera : MonoBehaviour

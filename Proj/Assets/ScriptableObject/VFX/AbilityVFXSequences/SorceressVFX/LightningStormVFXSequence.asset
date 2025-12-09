@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf6383c0305810c4cbb86136a8d14596, type: 3}
+  m_Name: LightningStormVFXSequence
+  m_EditorClassIdentifier: 
+  _castFX: {fileID: 0}
+  _travelFX: {fileID: 0}
+  _impactFX: {fileID: 2891022926164967631, guid: 699cf3b70ab7ace41a4d0a1a485c9c22,
+    type: 3}
+  _biggerImpactScale: 2

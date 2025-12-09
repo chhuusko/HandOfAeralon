@@ -14,6 +14,7 @@ public class CombatUI : MonoBehaviour
     public static CombatUI Instance;
     
     [SerializeField] private Image _abilityPanel;
+    [SerializeField] private GameObject _abilityPanelParent;
     [SerializeField] private Image _characterPortraitPanel;
     [SerializeField] private Image _activeCharacterPortrait;
     [SerializeField] private GameObject _activeCharacterBorder;
@@ -25,8 +26,11 @@ public class CombatUI : MonoBehaviour
     
     [SerializeField] private GameObject _placeCharactersPanel;
     
-    [SerializeField] private TextMeshProUGUI _mana;
     [SerializeField] private ScrollRect _turnOrderScrollBar;
+    
+    // Mana.
+    [SerializeField] private TextMeshProUGUI _mana;
+    [SerializeField] private Image _manaFill;
 
     // Turn order.
     [SerializeField] private GameObject _turnOrderPanel;
@@ -43,6 +47,7 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _combatLogScrollbar;
     [SerializeField] private GameObject _combatLogButton;
     [SerializeField] private Transform _combatLogViewPort;
+    [SerializeField] private ScrollRect _combatLogScrollRect;
     
     // Cards.
     [SerializeField] private GameObject _hand;
@@ -140,7 +145,6 @@ public class CombatUI : MonoBehaviour
         
         _startCombatButton.gameObject.SetActive(false);
         _endTurnButton.gameObject.SetActive(true);
-        _abilityPanel.gameObject.SetActive(true);
         _hand.SetActive(true);
         _placeCharactersPanel.SetActive(false);
         
@@ -191,8 +195,41 @@ public class CombatUI : MonoBehaviour
         var go = Instantiate(_combatLogEntryPrefab, _combatLogViewPort);
         
         go.transform.Find("Icon").GetComponent<Image>().sprite = data.Ability.GetIcon();
-        go.transform.Find("Text").GetComponent<TMP_Text>().text =
-            $"{data.Caster.Data.ClassData.name} does {data.Damage} damage to {data.Target.Data.ClassData.name}";
+        // go.transform.Find("Text").GetComponent<TMP_Text>().text =
+        //     $"{data.Caster.Data.ClassData.name} does {data.Damage} damage to {data.Target.Data.ClassData.name}";
+
+        if (!data.Ability || !data.Target || !data.Caster)
+        {
+            return;
+        }
+
+        string text;
+        
+        // Check for type of ability.
+        if (data.Ability.GetAbilityType() is Ability.Type.Elemental or Ability.Type.Physical)
+        {
+            text = $"{data.Caster.Data.ClassData.name} used {data.Ability.GetAbilityName()} and dealt " +
+                   $"{data.Damage} damage to{(data.Target.GetFaction() == Faction.Friendly ? " " : " enemy")}" +
+                   $" {data.Target.Data.ClassData.name}";
+        }
+        else
+        {
+            text = $"{data.Caster.Data.ClassData.name} used {data.Ability.GetAbilityName()}" +
+                   $" on{(data.Target.GetFaction() == Faction.Friendly ? " " : " enemy")} " +
+                   $"{data.Target.Data.ClassData.name}";
+        }
+        
+        go.transform.Find("Text").GetComponent<TMP_Text>().text = text;
+        
+        StartCoroutine(ScrollToTop());
+    }
+
+    private IEnumerator ScrollToTop()
+    {
+        yield return null;
+        
+        // Set scroll to bottom.
+        _combatLogScrollRect.verticalNormalizedPosition = 1;
     }
 
     private void PlaceCharacterStarted()
@@ -216,6 +253,7 @@ public class CombatUI : MonoBehaviour
         _startCombatButton.gameObject.SetActive(true);
         _cardHandManager.SetActive(true);
         _combatLogButton.SetActive(true);
+        _placeCharactersPanel.SetActive(true);
         
         UpdateCharacterPortraits();
         UpdateManaText(CardHandManager.GetInstance().GetMana());
@@ -373,7 +411,8 @@ public class CombatUI : MonoBehaviour
 
     private void UpdateManaText(int mana)
     {
-        _mana.text = $"Mana\n{mana}/{CardHandManager.GetInstance().GetMaxMana()}";
+        _mana.text = mana.ToString();
+        _manaFill.fillAmount = (float)mana / CardHandManager.GetInstance().GetMaxMana();
     }
 
     private void ClearActivePortrait()
@@ -430,7 +469,7 @@ public class CombatUI : MonoBehaviour
             Destroy(_abilityPanel.transform.GetChild(i).gameObject);
         }
         
-        _abilityPanel.gameObject.SetActive(false);
+        _abilityPanelParent.SetActive(false);
     }
     
     /// <summary>
@@ -476,9 +515,10 @@ public class CombatUI : MonoBehaviour
 
         ClearAbilityButtons();
         
-        _abilityPanel.gameObject.SetActive(true);
+        // _abilityPanel.gameObject.SetActive(true);
+        _abilityPanelParent.SetActive(true);
 
-        for (int i = 0; i < character.AvailableAbilities.Count; i++)
+        for (int i = 0; i < character.Abilities.Count; i++)
         {
             var buttonGO = Instantiate(_abilityButtonPrefab.gameObject);
             buttonGO.SetActive(false);
@@ -486,7 +526,7 @@ public class CombatUI : MonoBehaviour
             
             var button = buttonGO.GetComponent<Button>();
             
-            var ability = character.AvailableAbilities[i];
+            var ability = character.Abilities[i];
             button.image.sprite = ability.GetIcon();
             button.GetComponent<AbilityButton>().Ability = ability;
             
@@ -510,18 +550,13 @@ public class CombatUI : MonoBehaviour
     private void UpdateAbilityColors(Character c, AbilityButton abilityButton)
     {
         bool interactable = false;
-
-        DebugLog.JoppaLog($"c == _currentTurnCharacter: {c == _currentTurnCharacter}");
-        DebugLog.JoppaLog($"_selectedCharacter.Faction: {_selectedCharacter.Faction == Faction.Friendly}");
-        DebugLog.JoppaLog($"IsAbilityCooldownActive: {!c.IsAbilityCooldownActive(abilityButton.Ability)}");
-        DebugLog.JoppaLog($"CanAttack: {c.CanAttack}");
         
         if (_bCombatStarted && c && _currentTurnCharacter && _selectedCharacter != null)
         {
             interactable = c == _currentTurnCharacter &&
                            _selectedCharacter.Faction == Faction.Friendly &&
                            !c.IsAbilityCooldownActive(abilityButton.Ability) &&
-                           c.CanAttack;
+                           c.CanUseAbility && c.Data.ActiveAbilities.Contains(abilityButton.Ability);
         }
 
         abilityButton.Button.interactable = interactable;
@@ -529,11 +564,18 @@ public class CombatUI : MonoBehaviour
 
     private void CharacterMoving(bool moving)
     {
-        foreach (var abilityButton in _abilityButtons)
-        {
-            abilityButton.Button.interactable = !moving;
-        }
-        
         _endTurnButton.interactable = !moving;
+
+        if (moving)
+        {
+            foreach (var abilityButton in _abilityButtons)
+            {
+                abilityButton.Button.interactable = false;
+            }
+        }
+        else
+        {
+            UpdateAbilityColors();
+        }
     }
 }

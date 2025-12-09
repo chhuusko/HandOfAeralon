@@ -3,12 +3,8 @@ using UnityEngine;
 public class BulwarksThreshold : Trait
 {
     private bool _effectApplied;
-    
-    public BulwarksThreshold(int duration) : base(duration)
-    {
-    }
 
-    public override void OnStartCombat()
+    public override void OnCombatStarted()
     {
         _effectApplied = false;
     }

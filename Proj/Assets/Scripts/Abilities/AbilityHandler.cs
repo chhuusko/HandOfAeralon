@@ -33,7 +33,11 @@ public class AbilityHandler : MonoBehaviour
                 DebugLog.MGLog("Tried casting ability, but it failed");
             return false;
         }
-        _characterCaster.CanAttack = false;
+
+        // Set caster to get information that might alter ability, like extra AOE range.
+        _pendingAbility.SetCharacterCaster(_characterCaster);
+
+        _characterCaster.CanUseAbility = false;
         CombatEventManager.InvokeOnAbilityCast();
         StartCoroutine(ability.StartAbilityEffects(_casterTile, targetTile));
         _characterCaster.StartAbilityCooldown(ability);
@@ -61,17 +65,26 @@ public class AbilityHandler : MonoBehaviour
         return _pendingAbility;
     }
 
-    public void CalculateAbilityRange()
+    public void CalculateAbilityRange(CombatGridTile specificTile = null)
     {
         ClearAbilityTargetRange();
-        _casterTile = _characterCaster.GetCurrentTileComponent();
+        
+        if (specificTile != null)
+        {
+            _casterTile = specificTile;
+        }
+        else
+        {
+            _casterTile = _characterCaster.GetCurrentTileComponent();
+        }
 
-        if(_pendingAbility == null)
+        if (_pendingAbility == null)
         {
             Debug.LogError("No pending ability selected, but is still trying to calculate range");
             return;
         }
         _pendingAbility.SetAbilityHandler(this);
+        _pendingAbility.SetCharacterCaster(_characterCaster);
         _tilesInRange = RemoveUntargetableTiles(GetAvailableTargets(_pendingAbility));
     }
 
@@ -135,7 +148,7 @@ public class AbilityHandler : MonoBehaviour
 
         List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
 
-        // Reset alla gamla effekter
+        // Reset all tiles
         foreach (CombatGridTile t in _tilesEffected)
         {
             if (_tilesInRange.Contains(t))
@@ -149,7 +162,7 @@ public class AbilityHandler : MonoBehaviour
         {
             return;
         }
-        // Applicera nya röda
+        // Paint new tiles red and add them to tilesEffected.
         foreach (CombatGridTile t in newEffectedTiles)
         {
             if (t == null) return; 
