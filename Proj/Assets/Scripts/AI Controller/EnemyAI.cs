@@ -27,7 +27,6 @@ public class EnemyAI : MonoBehaviour
     private AbilityHandler _currentAbilityHandler = null;
     private List<Ability> _currentAbilities = new();
 
-    private int _currentMoveRange = 0;
     private List<CombatGridTile> _movePath = new();
 
     private Dictionary<AIAction, int> _scoredActions = new();
@@ -93,8 +92,6 @@ public class EnemyAI : MonoBehaviour
             return false;
         }
 
-        _currentMoveRange = _currentCharacter.GetMovementPoints();
-
         return true;
     }
 
@@ -102,9 +99,9 @@ public class EnemyAI : MonoBehaviour
     {
         List<CombatGridTile> moveRange = new();
         List<CombatGridTile> canReach = new();
-        if (_currentCharacter.CanMove && _currentMoveRange > 0)
+        if (_currentCharacter.CanMove && _currentCharacter.GetMovementPoints() > 0)
         {
-            moveRange = GridExplorer._instance.GetTilesInRange(_currentTile, _currentMoveRange, true)
+            moveRange = GridExplorer._instance.GetReachableTilesWithMovement(_currentTile, _currentCharacter.GetMovementPoints())
                 .Select(obj => obj.GetComponent<CombatGridTile>())
                 .Where(ch => ch != null)
                 .ToList();
@@ -313,7 +310,6 @@ public class EnemyAI : MonoBehaviour
         _currentClass = CharacterClass.None;
         _currentAbilityHandler = null;
         _currentAbilities = new();
-        _currentMoveRange = 0;
         _movePath = new();
         _scoredActions = new();
         _chosenAction = new();

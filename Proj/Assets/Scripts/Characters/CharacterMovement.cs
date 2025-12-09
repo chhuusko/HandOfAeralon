@@ -36,7 +36,7 @@ public class CharacterMovement : MonoBehaviour
         }
 
         //DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} move range drawn.");
-        _tilesInRange = GridExplorer._instance.GetTilesInRange(currentTile, _character.GetMovementPoints(), true)
+        _tilesInRange = GridExplorer._instance.GetReachableTilesWithMovement(currentTile, _character.GetMovementPoints())
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
         .ToList();

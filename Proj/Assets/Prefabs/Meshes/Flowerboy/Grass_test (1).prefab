@@ -78,6 +78,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass_test (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1516327335826533505, guid: e395d5b87146a72439f8bc659b4755e1,
+        type: 3}
+      propertyPath: m_ScaleInLightmap
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194676309968441341, guid: e395d5b87146a72439f8bc659b4755e1,
+        type: 3}
+      propertyPath: m_ScaleInLightmap
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742473837712756890, guid: e395d5b87146a72439f8bc659b4755e1,
+        type: 3}
+      propertyPath: m_FadeMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742473837712756890, guid: e395d5b87146a72439f8bc659b4755e1,
+        type: 3}
+      propertyPath: m_AnimateCrossFading
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742473837712756890, guid: e395d5b87146a72439f8bc659b4755e1,
+        type: 3}
+      propertyPath: m_LODs.Array.data[0].screenRelativeHeight
+      value: 0.30362538
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742473837712756890, guid: e395d5b87146a72439f8bc659b4755e1,
+        type: 3}
+      propertyPath: m_LODs.Array.data[1].screenRelativeHeight
+      value: 0.101704076
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
