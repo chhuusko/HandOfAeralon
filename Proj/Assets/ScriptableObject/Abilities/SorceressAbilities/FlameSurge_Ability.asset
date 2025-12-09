@@ -16,15 +16,14 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: a5896da35bdf5ad4f98b0133ccea1aef, type: 3}
   _range: 1
   _cooldown: 2
-  _description: "Unleash a burst of fire, dealing (100% \xD7 Damage) Elemental damage
+  _description: "Unleash a burst of fire, dealing (85% \xD7 Damage) Elemental damage
     to all characters in area. Every character hit has a 50% chance to gain Burn
     for 2 turns. Gain 1 Mana if at least two enemies become Burned."
   _abilityTag: 9
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
   _targetType: 0
-  _castingEffect: {fileID: 0}
-  _hitEffect: {fileID: 0}
+  _abilityVFXSequence: {fileID: 0}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
   _castingTime: 0.5
@@ -32,8 +31,9 @@ MonoBehaviour:
   _castingRotationTime: 0.3
   _pattern: {fileID: 11400000, guid: 6fd1d109070e26c4780d7665f10fcfe0, type: 2}
   _validTargets: 2
-  _damageMultiplier: 1
+  _damageMultiplier: 0.85
   _chanceToBurnCharacters: 0.5
   _burnDuration: 2
   _charactersBurnedToGainMana: 2
   _manaGain: 1
+  _emberwakeBurnAmount: 2

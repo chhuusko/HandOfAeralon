@@ -6,7 +6,8 @@ using UnityEngine.SocialPlatforms;
 public class Skullsplitter_Ability : SingleTargetAbility
 {
     [Header("- Ability Specific values -")]
-    [SerializeField] private float _damageMultiplier = 1.6f;
+    [SerializeField] private float _damageMultiplier = 1f;
+    [SerializeField] private float _extraDamageMultiplier = 1.6f;
 
     // Description
 
@@ -40,7 +41,7 @@ public class Skullsplitter_Ability : SingleTargetAbility
         int damage = castingCharacter.GetBaseDamage();
 
         //2.
-        damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.GetMaxHealth()) ? (int) (damage * _damageMultiplier) : damage;
+        damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.GetMaxHealth()) ? (int)(damage * _extraDamageMultiplier) : (int)(damage * _damageMultiplier);
 
         damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);

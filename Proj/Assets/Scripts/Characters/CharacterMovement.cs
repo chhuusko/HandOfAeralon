@@ -154,6 +154,7 @@ public class CharacterMovement : MonoBehaviour
 
         _bIsMoving = false;
         CombatEventManager.InvokeOnCharacterMove(_bIsMoving);
+        Selector._instance.InvokeCharacterActionStopped();
 
         if (animator != null)
         {

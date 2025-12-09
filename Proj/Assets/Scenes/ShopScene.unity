@@ -772,7 +772,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Remove card <color=yellow>50</color><voffset=15><space=25><sprite name="UI_icon_59"/>
+  m_text: 'Remove card <color=yellow>25</color><voffset=15><space=25><sprite name="UI_icon_59"/>
 
 '
   m_isRightToLeft: 0
@@ -3879,8 +3879,8 @@ MonoBehaviour:
   _healText: {fileID: 1367921535}
   _healPrice: 50
   _refreshPrice: 25
-  _removeCardPrice: 50
-  _addedRemoveCardPrice: 20
+  _removeCardPrice: 25
+  _addedRemoveCardPrice: 25
 --- !u!1 &1816669657
 GameObject:
   m_ObjectHideFlags: 0

@@ -25,6 +25,10 @@ public class Selector : MonoBehaviour
 
     public event Action<Character> OnCharacterSelected;
     public event Action OnCharacterDeselected;
+    public event Action OnCharacterActionStarted;
+    public event Action OnCharacterActionStopped;
+
+
 
     public enum CharacterActionType
     {
@@ -51,7 +55,6 @@ public class Selector : MonoBehaviour
         CombatEventManager.OnCombatTurnChange += HandleCombatTurnChanged;
         CombatEventManager.OnExitCombatStateTakeTurn += HandleCombatStateTakeTurn;
         CombatEventManager.OnEnterCombatStateTakeTurn += HandleEnterCombatStateTakeTurn;
-
     }
 
     void Update()
@@ -468,22 +471,30 @@ public class Selector : MonoBehaviour
 
     private void HandleMovement(CombatGridTile tile)
     {
-        _characterMovement.ConfirmPath(tile);
+        bool success = _characterMovement.ConfirmPath(tile);
+
+        if (success)
+        {
+            OnCharacterActionStarted.Invoke();
+        }
+
         ResetColorAllTiles();
         // MG was here.
         Character character = tile.GetOccupantCharacter();
         if (character == null) return;
-        if (character.GetFaction() == Faction.Friendly)
-        {
-            SelectCharacter(character);
-            return;
-        }
+        SelectCharacter(character);
         // Hade varit nice om ConfirmPath kunde returna true eller false om den faktiskt lockar in en rutt och börjar gå.
     }
 
     private void HandleAbilityCast(CombatGridTile tile)
     {
         bool success = _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_selectedCharacter.GetAbilityHandler().GetPendingAbility(), tile);
+
+        if (success)
+        {
+            OnCharacterActionStarted.Invoke();
+        }
+
         _selectedCharacter?.GetAbilityHandler()?.SetPendingAbility(null);
         _pendingCharacterActionType = CharacterActionType.Null;
         ResetColorAllTiles();
@@ -533,6 +544,15 @@ public class Selector : MonoBehaviour
         {
             Debug.LogError("No EventSystem in scene!"); return;
         }
+    }
+
+    public void InvokeCharacterActionStarted()
+    {
+        OnCharacterActionStarted.Invoke();
+    }
+    public void InvokeCharacterActionStopped()
+    {
+        OnCharacterActionStopped.Invoke();
     }
 
     public SelectorState GetCurrentState() { return _currentState; }
