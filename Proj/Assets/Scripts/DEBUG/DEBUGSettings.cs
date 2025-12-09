@@ -21,7 +21,7 @@ public static class DebugLog
     {
         #if UNITY_EDITOR
         if (_settings == null)
-            _settings = AssetDatabase.LoadAssetAtPath<DEBUGSettings>("Assets/ScriptableObject/DEBUG/DEBUGSettings.asset");
+            _settings = Resources.Load<DEBUGSettings>("ScriptableObjects/DEBUGSettings");
         #endif
     }
 
