@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class CursorManager : MonoBehaviour
 {
-    public bool useSoftwareCursor = true;
     public static CursorManager Instance;
 
     [SerializeField] private RectTransform _cursorImage;
@@ -16,8 +15,12 @@ public class CursorManager : MonoBehaviour
     private Sprite dragCursor;
     private Sprite hoverCursor;
     
+    private Texture2D defaultCursorTexture;
+    private Texture2D dragCursorTexture;
+    private Texture2D hoverCursorTexture;
+    
     private bool _isDragging;
-
+    
     private void Awake()
     {
         if (Instance == null)
@@ -40,8 +43,9 @@ public class CursorManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (!useSoftwareCursor)
+        if (!_cursorDatabase.useUICursor)
         {
+            _cursorImage.gameObject.SetActive(false);
             return;
         }
 
@@ -59,7 +63,7 @@ public class CursorManager : MonoBehaviour
 
     private void OnApplicationFocus(bool hasFocus)
     {
-        if (hasFocus && useSoftwareCursor)
+        if (hasFocus && _cursorDatabase.useUICursor)
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.None;
@@ -75,6 +79,11 @@ public class CursorManager : MonoBehaviour
     private void LoadCursorDatabase()
     {
         _cursorDatabase = Resources.Load<CursorDatabase>("ScriptableObjects/CursorDatabase");
+        
+        defaultCursorTexture = _cursorDatabase.defaultCursor;
+        dragCursorTexture = _cursorDatabase.dragCursor;
+        hoverCursorTexture = _cursorDatabase.hoverCursor;
+        
         defaultCursor = Sprite.Create(_cursorDatabase.defaultCursor, 
             new Rect(0, 0, _cursorDatabase.defaultCursor.width, _cursorDatabase.defaultCursor.height),
             new Vector2(0.5f, 0.5f));
@@ -84,8 +93,15 @@ public class CursorManager : MonoBehaviour
         hoverCursor = Sprite.Create(_cursorDatabase.hoverCursor, 
             new Rect(0, 0, _cursorDatabase.hoverCursor.width, _cursorDatabase.hoverCursor.height),
             new Vector2(0.5f, 0.5f));
-        
-        SetCursor(defaultCursor);
+
+        if (_cursorDatabase.useUICursor)
+        {
+            SetUICursor(defaultCursor);
+        }
+        else
+        {
+            SetCursor(defaultCursorTexture);
+        }
     }
 
     private void UpdateHoverCursor(bool isHovering)
@@ -94,8 +110,15 @@ public class CursorManager : MonoBehaviour
         {
             return;
         }
-        
-        SetCursor(isHovering ? hoverCursor : defaultCursor);
+
+        if (_cursorDatabase.useUICursor)
+        {
+            SetUICursor(isHovering ? hoverCursor : defaultCursor);
+        }
+        else
+        {
+            SetCursor(isHovering ? hoverCursorTexture : defaultCursorTexture);
+        }
     }
     
     private void UpdateDragCursor(bool isDragging)
@@ -106,11 +129,23 @@ public class CursorManager : MonoBehaviour
         }
         
         _isDragging = isDragging;
-        
-        SetCursor(isDragging ? dragCursor : defaultCursor);
+
+        if (_cursorDatabase.useUICursor)
+        {
+            SetUICursor(isDragging ? dragCursor : defaultCursor);
+        }
+        else
+        {
+            SetCursor(isDragging ? dragCursorTexture : defaultCursorTexture);
+        }
+    }
+    
+    private void SetCursor(Texture2D cursor)
+    {
+        Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
     }
 
-    private void SetCursor(Sprite cursor)
+    private void SetUICursor(Sprite cursor)
     {
         _cursorImage.GetComponent<Image>().sprite = cursor;
     }
