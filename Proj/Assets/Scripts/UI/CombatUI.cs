@@ -7,8 +7,6 @@ using UnityEngine.UI;
 
 public class CombatUI : MonoBehaviour
 {
-    public enum PanelType { Card, Ability }
-
     public event Action OnStartCombatButtonPressed;
     public event Action OnEndTurnButtonPressed;
     public static CombatUI Instance;
@@ -39,7 +37,8 @@ public class CombatUI : MonoBehaviour
     // Colors.
     [SerializeField] private Color _activeColor;
     [SerializeField] private Color _inactiveColor;
-    [SerializeField] private Color _enemyColor;
+    [SerializeField] private Color _enemyActiveColor;
+    [SerializeField] private Color _enemyInactiveColor;
     
     // Combat log.
     [SerializeField] private GameObject _combatLogEntryPrefab;
@@ -310,10 +309,10 @@ public class CombatUI : MonoBehaviour
         
         foreach (CharacterData c in heroList)
         {
-            PortraitButton pb = CreateCharacterPortrait(c, _characterPortraitPanel.transform);
+            PortraitButton pb = CreateCharacterPortrait(CombatManager._instance.GetCharacterDataDict()[c], _characterPortraitPanel.transform);
             pb.Button.image.color = _inactiveColor;
             _portraitButtons.Add(pb);
-            _characterPortraits.TryAdd(pb.Character, pb);
+            _characterPortraits.TryAdd(pb.Character.Data, pb);
         }
     }
 
@@ -330,15 +329,15 @@ public class CombatUI : MonoBehaviour
         }
     }
 
-    private PortraitButton CreateCharacterPortrait(CharacterData c, Transform parent)
+    private PortraitButton CreateCharacterPortrait(Character c, Transform parent)
     {
         Button button = Instantiate(_characterPortraitButtonPrefab, parent);
         
-        button.image.sprite = c.ClassData.classImage;
+        button.image.sprite = c.GetClassData().classImage;
 
-        if (c.Faction == Faction.Enemy)
+        if (c.GetFaction() == Faction.Enemy)
         {
-            button.image.color = _enemyColor;
+            button.image.color = _enemyActiveColor;
         }
         
         PortraitButton pb = button.GetComponent<PortraitButton>();
@@ -363,8 +362,8 @@ public class CombatUI : MonoBehaviour
         // Create portraits for current turn order.
         foreach (Character c in characters)
         {
-            PortraitButton pb = CreateCharacterPortrait(c.Data, _turnOrderPanel.transform);
-            _characterPortraits.TryAdd(pb.Character, pb);
+            PortraitButton pb = CreateCharacterPortrait(c, _turnOrderPanel.transform);
+            _characterPortraits.TryAdd(pb.Character.Data, pb);
         }
         
         StartCoroutine(ScrollToBottom());
@@ -385,11 +384,6 @@ public class CombatUI : MonoBehaviour
             pb.GetComponent<Image>().color = _inactiveColor;
         }
     }
-
-    private void UpdatePortraitColors(CharacterData c)
-    {
-        UpdatePortraitColors(CombatManager._instance.GetCharacterDataDict()[c]);
-    }
     
     private void UpdatePortraitColors(Character c) 
     {
@@ -398,14 +392,18 @@ public class CombatUI : MonoBehaviour
 
     private void UpdatePortraitColors(PortraitButton selectedPortrait)
     {
+        bool friendly; 
+        
         foreach (var pb in _portraitButtons)
         {
-            pb.GetComponent<Image>().color = _inactiveColor;
+            friendly = pb.Character.GetFaction() == Faction.Friendly;
+            pb.GetComponent<Image>().color = friendly ? _inactiveColor : _enemyInactiveColor;
         }
 
         if (selectedPortrait)
         {
-            selectedPortrait.GetComponent<Image>().color = _activeColor;
+            friendly = selectedPortrait.Character.GetFaction() == Faction.Friendly;
+            selectedPortrait.GetComponent<Image>().color = friendly ? _activeColor : _enemyActiveColor;
         }
     }
 

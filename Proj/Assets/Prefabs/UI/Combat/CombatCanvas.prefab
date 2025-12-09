@@ -1551,7 +1551,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3785880294133302629}
   m_HandleRect: {fileID: 6120129593281966388}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2167,8 +2167,9 @@ MonoBehaviour:
   _manaFill: {fileID: 6445969505296810957}
   _turnOrderPanel: {fileID: 7483078133583643469}
   _activeColor: {r: 1, g: 1, b: 1, a: 1}
-  _inactiveColor: {r: 1, g: 1, b: 1, a: 0.5882353}
-  _enemyColor: {r: 1, g: 0.43867922, b: 0.43867922, a: 1}
+  _inactiveColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+  _enemyActiveColor: {r: 1, g: 0.44, b: 0.44, a: 1}
+  _enemyInactiveColor: {r: 1, g: 0.44, b: 0.44, a: 0.5019608}
   _combatLogEntryPrefab: {fileID: 515051203510682649, guid: d029746f98115104494a220ba07147d2,
     type: 3}
   _combatLogPanel: {fileID: 3434080947187420276}
@@ -2650,7 +2651,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9150096576425951834}
   m_HandleRect: {fileID: 1107208553898966523}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
