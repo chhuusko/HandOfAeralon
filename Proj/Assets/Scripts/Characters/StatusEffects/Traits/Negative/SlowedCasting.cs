@@ -26,6 +26,9 @@ public class SlowedCasting : Trait
         _effectApplied = true;
         var ability = abilityData.Ability;
         
-        ability.SetCooldown(ability.GetCooldown() + data.Modifier);
+        if (Character.IsAbilityCooldownActive(ability))
+        {
+            Character.ChangeCooldown(ability, data.Modifier);
+        }
     }
 }

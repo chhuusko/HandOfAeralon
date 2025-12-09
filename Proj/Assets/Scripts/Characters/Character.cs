@@ -374,6 +374,16 @@ public class Character : MonoBehaviour
         return _currentCooldowns.GetValueOrDefault(ability, 0);
     }
 
+    public void ChangeCooldown(Ability ability, int amount)
+    {
+        if (!_currentCooldowns.ContainsKey(ability))
+        {
+            return;
+        }
+        
+        _currentCooldowns[ability] += amount;
+    }
+
     /// <summary>
     /// Generates a new friendly character.
     /// </summary>
