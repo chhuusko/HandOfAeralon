@@ -3874,8 +3874,11 @@ MonoBehaviour:
   _partyPortrait: {fileID: 8572289586900624620, guid: 2f1df8046dcab6e4ba725487a76514d7,
     type: 3}
   _partyMembersText: {fileID: 493886527}
+  _refreshText: {fileID: 928631388}
+  _healText: {fileID: 1367921535}
   _healPrice: 50
-  _refreshPrice: 25
+  _refreshPrice: 40
+  _removeCardPrice: 40
 --- !u!1 &1816669657
 GameObject:
   m_ObjectHideFlags: 0
