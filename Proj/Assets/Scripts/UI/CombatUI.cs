@@ -100,6 +100,8 @@ public class CombatUI : MonoBehaviour
         Selector._instance.OnCharacterSelected -= LoadAbilities;
         Selector._instance.OnCharacterSelected -= UpdatePortraitColors;
         Selector._instance.OnCharacterDeselected -= DeselectCharacter;
+        Selector._instance.OnCharacterActionStarted -= SetEndTurnButtonUninteractable;
+        Selector._instance.OnCharacterActionStopped -= SetEndTurnButtonInteractable;
 
         foreach (var pb in _portraitButtons)
         {
@@ -136,6 +138,8 @@ public class CombatUI : MonoBehaviour
         Selector._instance.OnCharacterSelected += LoadAbilities;
         Selector._instance.OnCharacterSelected += UpdatePortraitColors;
         Selector._instance.OnCharacterDeselected += DeselectCharacter;
+        Selector._instance.OnCharacterActionStarted += SetEndTurnButtonUninteractable;
+        Selector._instance.OnCharacterActionStopped += SetEndTurnButtonInteractable;
     }
 
     public void StartCombat()
@@ -289,6 +293,16 @@ public class CombatUI : MonoBehaviour
         ClearAbilityButtons();
 
         ClearPortraitColors();
+    }
+
+    private void SetEndTurnButtonInteractable()
+    {
+        _endTurnButton.interactable = true;
+    }
+
+    private void SetEndTurnButtonUninteractable()
+    {
+        _endTurnButton.interactable = false;
     }
     
     /// <summary>
@@ -562,8 +576,6 @@ public class CombatUI : MonoBehaviour
 
     private void CharacterMoving(bool moving)
     {
-        _endTurnButton.interactable = !moving;
-
         if (moving)
         {
             foreach (var abilityButton in _abilityButtons)
