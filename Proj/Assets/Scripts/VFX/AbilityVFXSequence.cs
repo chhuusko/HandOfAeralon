@@ -15,8 +15,8 @@ public class AbilityVFXSequence : ScriptableObject
         if (_castFX != null)
         {
             Instantiate(_castFX).Play(data.OriginPosition, data.Direction);
-            yield return new WaitForSeconds(data.CastingFXDuration);
         }
+        yield return new WaitForSeconds(data.CastingFXDuration);
 
         if (_travelFX != null)
         {
