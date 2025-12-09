@@ -229,15 +229,16 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void OnCombatEnded(bool playerWon)
+    private void OnCombatEnded(bool playerWon)
     {
-        foreach (var statusEffect in _traitManager.GetAllEffects())
+        foreach (var trait in _traitManager.GetAllTraits())
         {
-            if (statusEffect is Trait trait)
-            {
-                trait.OnCombatStarted();
-            }
-        } 
+            trait.OnCombatEnded();
+        }
+
+        // Clear all status effects.
+        _traitManager.ClearStatusEffects(StatusEffectType.Buff);
+        _traitManager.ClearStatusEffects(StatusEffectType.Debuff);
     }
 
     public float ModifyIncomingDamage(float damage, Ability ability)
