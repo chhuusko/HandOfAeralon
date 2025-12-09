@@ -6,7 +6,6 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
     [Header("- Ability Specific values -")]
     [SerializeField] private float _damageMultiplier = 0.4f;
     [SerializeField] private float _manaDamageMultiplier = 0.1f;
-    [SerializeField] private int _enemyManaAmount = 6;
 
     [Header("- Emberwake Effects -")]
     [SerializeField] private int _emberwakeBurnAmount = 2;
@@ -47,7 +46,7 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
         // 7. Enemy Buffs / Debuffs
 
         int baseDamage = castingCharacter.GetBaseDamage();
-        int mana = castingCharacter.GetFaction() == Faction.Friendly ? CardHandManager.GetInstance().GetMana() : _enemyManaAmount;
+        int mana = castingCharacter.GetFaction() == Faction.Friendly ? CardHandManager.GetInstance().GetMana() : CombatManager._instance.enemyMana;
 
         float totalMultiplier = _damageMultiplier + (_manaDamageMultiplier * mana);
         int damage = (int)(baseDamage * totalMultiplier);

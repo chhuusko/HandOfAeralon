@@ -92,6 +92,10 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private List<ClassAbilities> _classAbilities;
     private Dictionary<CharacterClass, List<Ability>> _classAbilitiesDictionary;
 
+    [Header("Enemy base stats")] 
+    public int enemyMana = 6;
+    public int enemyManaSpent = 2;
+
     public UnityEvent TurnStart = new();
 
     private void Awake()
@@ -163,14 +167,25 @@ public class CombatManager : MonoBehaviour
         {
             _currentSelectedCharacter = _selector.GetSelectedCharacter();
         }
-        
-
-        if (_currentSelectedCharacter != null && _selectorCube != null)
+        else
         {
-            _selectorCube.SetActive(true);
-            Vector3 pos = _currentSelectedCharacter.gameObject.transform.position;
-            pos.y = _selectorCube.transform.localScale.y / 2.0f;
-            _selectorCube.transform.position= pos;
+            _currentSelectedCharacter = null;
+        }
+
+
+        if (_currentSelectedCharacter != null)
+        {
+            if (_selectorCube != null)
+            {
+                _selectorCube.SetActive(true);
+                Vector3 pos = _currentSelectedCharacter.gameObject.transform.position;
+                pos.y = _selectorCube.transform.localScale.y / 2.0f;
+                _selectorCube.transform.position = pos;
+            }
+        }
+        else
+        {
+            _selectorCube.SetActive(false);
         }
     }
 

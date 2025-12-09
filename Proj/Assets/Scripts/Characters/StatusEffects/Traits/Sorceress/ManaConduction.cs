@@ -28,6 +28,11 @@ public class ManaConduction : Trait
             return;
         }
 
+        if (Character.GetFaction() == Faction.Enemy)
+        {
+            _manaUsed = CombatManager._instance.enemyMana;
+        }
+
         damage *= (_manaUsed * data.DamageModifier);
     }
 }
