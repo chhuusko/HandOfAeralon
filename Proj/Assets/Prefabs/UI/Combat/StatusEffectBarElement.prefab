@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2617689537075943148}
   - component: {fileID: 8709285634820502982}
   - component: {fileID: 5678793642348751866}
+  - component: {fileID: -7268422044414010595}
   m_Layer: 5
   m_Name: StatusEffectBarElement
   m_TagString: Untagged
@@ -89,3 +90,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _icon: {fileID: 8709285634820502982}
+--- !u!225 &-7268422044414010595
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416709885657778252}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 1
