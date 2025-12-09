@@ -51,13 +51,13 @@ public class CombatMenuManager : MonoBehaviour
 
     private void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.Escape))
-        //{
-        //    if (_endCombatMenuCanvas.enabled)
-        //        HideEndCombatMenuScreen();
-        //    else
-        //        ShowEndCombatMenuScreen();
-        //}
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (_combatMenuCanvas.enabled)
+                HideInGameMenu();
+            else
+                ShowInGameMenu();
+        }
     }
 
     public void InvokeEndCombatButtonPressed()
@@ -66,48 +66,76 @@ public class CombatMenuManager : MonoBehaviour
         OnGoToShopButtonPressed?.Invoke();
     }
 
+    private void ShowInGameMenu()
+    {
+        _combatMenuCanvas.enabled = true;
+        HideVictroyScreenLayout();
+        ShowInGameLayout();
+        TurnOFFCombatCanvases();
+        _endCombatMenuAnimator.Play("WeightFadeIn");
+    }
+
+    private void HideInGameMenu()
+    {
+        _combatMenuCanvas.enabled = false;
+        HideVictroyScreenLayout();
+        TurnONCombatCanvases();
+        _endCombatMenuAnimator.Play("WeightFadeOut");
+    }
+
     public void ShowEndCombatMenuScreen(bool playerWon)
     {
+        _combatMenuCanvas.enabled = true;
+
         ShowVictroyScreenLayout();
         HideInGameLayout();
-        _combatMenuCanvas.enabled              = true;
-        _combatHUDCanvasGroup.interactable     = false;
-        _combatTooltipCanvasGroup.interactable = false;
-        _combatCardCanvasGroup.interactable    = false;
+        TurnOFFCombatCanvases();
 
-        _endCombatMenuAnimator.Play("WeightFadeIn");
-
-        Time.timeScale = 0f;
-
+        _endCombatMenuAnimator.Play("WeightFadeIn");  
     }
 
     public void HideEndCombatMenuScreen()
     {
-        _combatMenuCanvas.enabled           = false;
-        _combatHUDCanvasGroup.interactable     = true;
-        _combatTooltipCanvasGroup.interactable = true;
-        _combatCardCanvasGroup.interactable    = true;
+        _combatMenuCanvas.enabled = false;
 
-        _endCombatMenuAnimator.Play("WeightFadeOut");
+        TurnONCombatCanvases();
 
-        Time.timeScale = 1f;
+        _endCombatMenuAnimator.Play("WeightFadeOut");  
     }
 
-    public void ShowInGameLayout()
+    private void ShowInGameLayout()
     {
         _inGameLayout.SetActive(true);
     }
-    public void HideInGameLayout()
+
+    private void HideInGameLayout()
     {
         _inGameLayout.SetActive(false);
     }
-    public void ShowVictroyScreenLayout()
+
+    private void ShowVictroyScreenLayout()
     {
         _victoryScreenLayout.SetActive(true);
     }
-    public void HideVictroyScreenLayout()
+
+    private void HideVictroyScreenLayout()
     {
         _victoryScreenLayout.SetActive(false);
     }
 
+    private void TurnOFFCombatCanvases()
+    {
+        _combatHUDCanvasGroup.interactable     = false;
+        _combatTooltipCanvasGroup.interactable = false;
+        _combatCardCanvasGroup.interactable    = false;
+        Time.timeScale = 0f;
+    }
+
+    private void TurnONCombatCanvases()
+    {
+        _combatHUDCanvasGroup.interactable     = true;
+        _combatTooltipCanvasGroup.interactable = true;
+        _combatCardCanvasGroup.interactable    = true;
+        Time.timeScale = 1f;
+    }
 }
