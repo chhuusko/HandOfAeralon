@@ -168,7 +168,7 @@ public class GridExplorer : MonoBehaviour
     /// to allow visualization of the final computed path inside the editor.
     /// </remarks>
 
-    public List<GameObject> FindPathAStar(GameObject startTile, GameObject goalTile, bool bDrawPath = true)
+    public List<GameObject> FindPathAStar(GameObject startTile, GameObject goalTile, bool bDrawPath = true, List<CombatGridTile> withinCollection = null)
     {
         Vector2Int start = startTile.GetComponent<CombatGridTile>().GetTileIndex();
         Vector2Int goal = goalTile.GetComponent<CombatGridTile>().GetTileIndex();
@@ -223,6 +223,7 @@ public class GridExplorer : MonoBehaviour
 
                 if (OutOfBounds(next)) continue;
                 if (!IsWalkable(next)) continue;
+                if (!IsWithinCollection(withinCollection, next)) continue;
 
                 if (IsDiagonal(dir))
                 {
@@ -349,14 +350,28 @@ public class GridExplorer : MonoBehaviour
         return result;
     }
 
+    private bool IsWithinCollection(List<CombatGridTile> collection, Vector2Int pos)
+    {
+        if (collection == null) return true; // User did not want to search inside a collection
+
+        CombatGridTile posTile = CombatGrid._instance.GetTileAtCoord(pos.x, pos.y).GetComponent<CombatGridTile>();
+
+        if (posTile != null && collection.Contains(posTile))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     private bool IsDiagonal(Vector2Int dir)
     {
         return Mathf.Abs(dir.x) + Mathf.Abs(dir.y) == 2;
     }
 
-    private bool IsHazardous(Vector2Int dir)
+    private bool IsHazardous(Vector2Int pos)
     {
-        GameObject tileObj = CombatGrid._instance.GetTileAtCoord(dir.x, dir.y);
+        GameObject tileObj = CombatGrid._instance.GetTileAtCoord(pos.x, pos.y);
 
         if (tileObj == null)
         {
