@@ -22,7 +22,7 @@ public class LevelManager : ScriptableObject
 
     [SerializeField] private float statIncrease = 1.2f;
     [SerializeField] private int turnsTillStatIncrease = 2;
-
+    private int menuFPSCap = 60;
     private CombatGrid _combatGrid;
     public static LevelManager GetInstance()
     {
@@ -62,10 +62,14 @@ public class LevelManager : ScriptableObject
             SceneManager.LoadScene(easyCombatList[_level]);
             _level++;
 
+            Application.targetFrameRate = -1;
+            QualitySettings.vSyncCount = 1;
         }
         else
         {
             SceneManager.LoadScene("ShopScene");
+            Application.targetFrameRate = menuFPSCap;
+            QualitySettings.vSyncCount = 0;
         }
     }
     private void TieredRandomLevel()
