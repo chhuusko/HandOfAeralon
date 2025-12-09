@@ -27,7 +27,6 @@ public class EnemyAI : MonoBehaviour
     private AbilityHandler _currentAbilityHandler = null;
     private List<Ability> _currentAbilities = new();
 
-    private int _currentMoveRange = 0;
     private List<CombatGridTile> _movePath = new();
 
     private Dictionary<AIAction, int> _scoredActions = new();
@@ -93,8 +92,6 @@ public class EnemyAI : MonoBehaviour
             return false;
         }
 
-        _currentMoveRange = _currentCharacter.GetMovementPoints();
-
         return true;
     }
 
@@ -102,9 +99,9 @@ public class EnemyAI : MonoBehaviour
     {
         List<CombatGridTile> moveRange = new();
         List<CombatGridTile> canReach = new();
-        if (_currentCharacter.CanMove && _currentMoveRange > 0)
+        if (_currentCharacter.CanMove && _currentCharacter.GetMovementPoints() > 0)
         {
-            moveRange = GridExplorer._instance.GetTilesInRange(_currentTile, _currentMoveRange, true)
+            moveRange = GridExplorer._instance.GetReachableTilesWithMovement(_currentTile, _currentCharacter.GetMovementPoints())
                 .Select(obj => obj.GetComponent<CombatGridTile>())
                 .Where(ch => ch != null)
                 .ToList();
@@ -137,6 +134,11 @@ public class EnemyAI : MonoBehaviour
                 case CharacterClass.Bard: score += distance; break;
                 case CharacterClass.Rogue: score -= distance; break;
                 case CharacterClass.Sorceress: score += distance; break;
+            }
+
+            if (_currentCharacter.GetCurrentHealth() < _currentCharacter.GetMaxHealth() / 5)
+            {
+                score += distance * 10;
             }
 
             List<CombatGridTile> path = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, pos.gameObject, false, canReach)
@@ -178,6 +180,12 @@ public class EnemyAI : MonoBehaviour
                     if (occupant != null && occupant.GetFaction() != _controlledFaction)
                     {
                         newScore += 10;
+
+                        if (occupant.GetCurrentHealth() < occupant.GetMaxHealth() / 10)
+                        {
+                            newScore += 99;
+                        }
+
                         _scoredActions[action] = newScore;
                     }
 
@@ -189,7 +197,12 @@ public class EnemyAI : MonoBehaviour
                         {
                             if (occupant.GetCurrentHealth() != occupant.GetMaxHealth())
                             {
-                                newScore += 999;
+                                newScore += 99;
+
+                                if (occupant.GetCurrentHealth() < occupant.GetMaxHealth() / 5)
+                                {
+                                    newScore += 99;
+                                }
                             } 
                             else
                             {
@@ -294,7 +307,7 @@ public class EnemyAI : MonoBehaviour
 
     private void UseAbility(Ability ability, CombatGridTile target)
     {
-        if (!_currentCharacter.CanUseAbility || ability == null)
+        if (!_currentCharacter.CanUseAbility || ability == null || target == null)
         {
             return;
         }
@@ -306,14 +319,13 @@ public class EnemyAI : MonoBehaviour
 
     private void EndTurn()
     {
-        //DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name}'s turn ended!");
+        DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name}'s turn ended!");
 
         _currentCharacter = null;
         _currentTile = null;
         _currentClass = CharacterClass.None;
         _currentAbilityHandler = null;
         _currentAbilities = new();
-        _currentMoveRange = 0;
         _movePath = new();
         _scoredActions = new();
         _chosenAction = new();

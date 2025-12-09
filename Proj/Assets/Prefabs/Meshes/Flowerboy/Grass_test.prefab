@@ -66,7 +66,17 @@ PrefabInstance:
     - target: {fileID: 4742473837712756890, guid: 052939507b922f34c887d6fc0abdb1d5,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742473837712756890, guid: 052939507b922f34c887d6fc0abdb1d5,
+        type: 3}
+      propertyPath: m_LODs.Array.data[0].screenRelativeHeight
+      value: 0.2971095
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742473837712756890, guid: 052939507b922f34c887d6fc0abdb1d5,
+        type: 3}
+      propertyPath: m_LODs.Array.data[1].screenRelativeHeight
+      value: 0.097935446
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
