@@ -1,5 +1,5 @@
 {
-    "_gridWidth": 5,
+    "_gridWidth": 6,
     "_gridHeight": 4,
     "_tileSize": {
         "x": 2.0,
@@ -366,6 +366,78 @@
                 "z": 2.0
             },
             "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 5,
+                "y": 0
+            },
+            "_position": {
+                "x": 11.0,
+                "y": 0.0,
+                "z": 1.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 0.009999999776482582,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 5,
+                "y": 1
+            },
+            "_position": {
+                "x": 11.0,
+                "y": 0.0,
+                "z": 3.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 0.009999999776482582,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 5,
+                "y": 2
+            },
+            "_position": {
+                "x": 11.0,
+                "y": 0.0,
+                "z": 5.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 0.009999999776482582,
+                "z": 2.0
+            },
+            "_bWalkable": true
+        },
+        {
+            "_tileType": 1,
+            "_tileIndex": {
+                "x": 5,
+                "y": 3
+            },
+            "_position": {
+                "x": 11.0,
+                "y": 0.0,
+                "z": 7.0
+            },
+            "_size": {
+                "x": 2.0,
+                "y": 0.009999999776482582,
+                "z": 2.0
+            },
+            "_bWalkable": true
         }
     ],
     "_characterData": [
@@ -373,7 +445,7 @@
             "_characterClass": 0,
             "_faction": 1,
             "_position": {
-                "x": 9.0,
+                "x": 11.0,
                 "y": 0.0,
                 "z": 3.0
             },
@@ -397,7 +469,7 @@
             "_currentDamage": 7,
             "_currentMovementPoints": 4,
             "_currentTileIndex": {
-                "x": 4,
+                "x": 5,
                 "y": 1
             }
         }
