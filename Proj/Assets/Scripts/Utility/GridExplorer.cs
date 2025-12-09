@@ -167,8 +167,11 @@ public class GridExplorer : MonoBehaviour
     /// The method also updates internal debug fields (_debugStartTile, _debugPath and _debugGoalTile) 
     /// to allow visualization of the final computed path inside the editor.
     /// </remarks>
-
-    public List<GameObject> FindPathAStar(GameObject startTile, GameObject goalTile, bool bDrawPath = true, List<CombatGridTile> withinCollection = null)
+    public List<GameObject> FindPathAStar(
+    GameObject startTile,
+    GameObject goalTile,
+    bool bDrawPath = true,
+    List<CombatGridTile> withinCollection = null)
     {
         Vector2Int start = startTile.GetComponent<CombatGridTile>().GetTileIndex();
         Vector2Int goal = goalTile.GetComponent<CombatGridTile>().GetTileIndex();
@@ -181,15 +184,10 @@ public class GridExplorer : MonoBehaviour
 
         Vector2Int[] directions = new Vector2Int[]
         {
-            new Vector2Int(1, 1),
-            new Vector2Int(-1, 1),
-            new Vector2Int(1, -1),
-            new Vector2Int(-1, -1),
-
-            new Vector2Int(1, 0),
-            new Vector2Int(0, 1),
-            new Vector2Int(-1, 0),
-            new Vector2Int(0, -1)
+        new Vector2Int(1, 1), new Vector2Int(-1, 1),
+        new Vector2Int(1, -1), new Vector2Int(-1, -1),
+        new Vector2Int(1, 0), new Vector2Int(0, 1),
+        new Vector2Int(-1, 0), new Vector2Int(0, -1)
         };
 
         PriorityQueue<Vector2Int> open = new PriorityQueue<Vector2Int>();
@@ -199,7 +197,7 @@ public class GridExplorer : MonoBehaviour
         Dictionary<Vector2Int, float> gCost = new();
         Dictionary<Vector2Int, float> fCost = new();
 
-        gCost[start] = 0;
+        gCost[start] = 0f;
         fCost[start] = ManhattanDistance(start, goal);
 
         open.Enqueue(start, fCost[start]);
@@ -229,33 +227,33 @@ public class GridExplorer : MonoBehaviour
                 {
                     Vector2Int t1 = new Vector2Int(current.x, next.y);
                     Vector2Int t2 = new Vector2Int(next.x, current.y);
-
                     if (!IsWalkable(t1) || !IsWalkable(t2)) continue;
                 }
 
                 if (IsOccupied(next) && next != goal) continue;
                 if (closed.Contains(next)) continue;
 
-                float moveCost = (IsDiagonal(dir) ? 1.4f : 1f);
-                moveCost += (IsHazardous(next) ? 99f : 0f);
+                float moveCost = IsDiagonal(dir) ? 2f : 1f;
                 float tentativeG = gCost[current] + moveCost;
+
+                float h = ManhattanDistance(next, goal);
+                float f = tentativeG + h;
 
                 if (!gCost.ContainsKey(next) || tentativeG < gCost[next])
                 {
                     cameFrom[next] = current;
                     gCost[next] = tentativeG;
-
-                    float h = ManhattanDistance(next, goal);
-                    fCost[next] = gCost[next] + h;
-
-                    open.Enqueue(next, fCost[next]);
+                    fCost[next] = f;
+                    open.Enqueue(next, f);
                 }
+
             }
         }
 
         ClearPathDrawing();
         return new List<GameObject>();
     }
+
 
     /// <summary>
     /// Performs a breadth-first search (BFS) from the given start tile to find a path from 'startTile' to 'goalTile'.
@@ -369,6 +367,7 @@ public class GridExplorer : MonoBehaviour
         return Mathf.Abs(dir.x) + Mathf.Abs(dir.y) == 2;
     }
 
+    /*
     private bool IsHazardous(Vector2Int pos)
     {
         GameObject tileObj = CombatGrid._instance.GetTileAtCoord(pos.x, pos.y);
@@ -392,6 +391,7 @@ public class GridExplorer : MonoBehaviour
 
         return false;
     }
+    */
 
     /// <summary>
     /// Performs a breadth-first search (BFS) from the given origin tile to find all tiles within the specified range.
@@ -475,6 +475,79 @@ public class GridExplorer : MonoBehaviour
 
         return result;
     }
+
+    public List<CombatGridTile> GetReachableTilesWithMovement(GameObject origin, int maxMovementPoints)
+    {
+        List<CombatGridTile> result = new();
+        Vector2Int start = origin.GetComponent<CombatGridTile>().GetTileIndex();
+
+        Vector2Int[] directions = new Vector2Int[]
+        {
+        new Vector2Int(1, 1),
+        new Vector2Int(-1, 1),
+        new Vector2Int(1, -1),
+        new Vector2Int(-1, -1),
+
+        new Vector2Int(1, 0),
+        new Vector2Int(0, 1),
+        new Vector2Int(-1, 0),
+        new Vector2Int(0, -1)
+        };
+
+        PriorityQueue<Vector2Int> open = new();
+        Dictionary<Vector2Int, int> cost = new();
+
+        open.Enqueue(start, 0);
+        cost[start] = 0;
+
+        while (open.Count > 0)
+        {
+            Vector2Int current = open.Dequeue();
+            int currentCost = cost[current];
+
+            foreach (var dir in directions)
+            {
+                Vector2Int next = current + dir;
+
+                if (OutOfBounds(next)) continue;
+                if (!IsWalkable(next)) continue;
+
+                if (IsDiagonal(dir))
+                {
+                    Vector2Int t1 = new Vector2Int(current.x, next.y);
+                    Vector2Int t2 = new Vector2Int(next.x, current.y);
+
+                    if (!IsWalkable(t1) && !IsWalkable(t2))
+                        continue;
+                }
+
+                if (IsOccupied(next) && next != start) continue;
+
+                int stepCost = IsDiagonal(dir) ? 2 : 1;
+                int newCost = currentCost + stepCost;
+
+                if (newCost > maxMovementPoints)
+                    continue;
+
+                if (!cost.ContainsKey(next) || newCost < cost[next])
+                {
+                    cost[next] = newCost;
+                    open.Enqueue(next, newCost);
+                }
+            }
+        }
+
+        foreach (var kvp in cost)
+        {
+            if (kvp.Key == start) continue;
+            GameObject tileObj = CombatGrid._instance.GetTileAtCoord(kvp.Key.x, kvp.Key.y);
+            if (tileObj != null)
+                result.Add(tileObj.GetComponent<CombatGridTile>());
+        }
+
+        return result;
+    }
+
 
 
     private bool OutOfBounds(Vector2Int pos)
