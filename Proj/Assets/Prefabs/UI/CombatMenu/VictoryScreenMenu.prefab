@@ -182,7 +182,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd0c06003f99a9459501e463d8ef3f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _title: {fileID: 0}
+  _title: {fileID: 850230965037558485}
+  _info: {fileID: 4930769276581126227}
 --- !u!1 &1249829791946421998
 GameObject:
   m_ObjectHideFlags: 0
@@ -633,7 +634,7 @@ GameObject:
   - component: {fileID: 7394520767228454340}
   - component: {fileID: 850230965037558485}
   m_Layer: 10
-  m_Name: Text (TMP)
+  m_Name: TMP_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -981,7 +982,7 @@ GameObject:
   - component: {fileID: 2935055769731275357}
   - component: {fileID: 4930769276581126227}
   m_Layer: 10
-  m_Name: Text (TMP)
+  m_Name: TMP_Info
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

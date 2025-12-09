@@ -1,7 +1,8 @@
 using NUnit.Framework;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Drawing;
 using TMPro;
+using UnityEngine;
 
 public class Shop : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class Shop : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI _partyMembersText;
 
+    [SerializeField] private TextMeshProUGUI _removeCardText;
     [SerializeField] private TextMeshProUGUI _refreshText;
     [SerializeField] private TextMeshProUGUI _healText;
 
@@ -36,16 +38,18 @@ public class Shop : MonoBehaviour
     [SerializeField] int _healPrice;
     [SerializeField] int _refreshPrice;
     [SerializeField] int _removeCardPrice;
+    [SerializeField] int _addedRemoveCardPrice; 
+
     public static Shop GetInstance()
     {
         return _instance;
     }
     private void Awake()
     {
+        _removeCardText.text = "Remove card <color=yellow>"+_removeCardPrice+"</color><voffset=15><space=25><sprite name=\"UI_icon_59\">";
         _refreshText.text = "Refresh <color=Yellow>"+_refreshPrice+"</color><voffset=15><space=20><sprite name=\"UI_icon_59\">";
         _healText.text = "Heal Party (50%)\r\n<color=Yellow>"+ _healPrice+ "</color><voffset=15><space=20><sprite name=\"UI_icon_59\">";
         _instance = this;
-        Application.targetFrameRate = -1;
 
         _buyableItemInScene = new List<GameObject>();
         _partyPortraitInstances = new List<GameObject>();
@@ -56,7 +60,12 @@ public class Shop : MonoBehaviour
         LoadBuyCard();
         LoadBuyCharacter();
     }
-
+    public static System.Action onSellCard;
+    public void SoldCard() {
+        _removeCardPrice += _addedRemoveCardPrice;
+        _removeCardText.text = "Remove card <color=yellow>" + _removeCardPrice + "</color><voffset=15><space=25><sprite name=\"UI_icon_59\">";
+        onSellCard?.Invoke(); 
+    }
     public void LoadParty()
     {
         if (_partyPortraitInstances.Count > 0)
@@ -116,10 +125,6 @@ public class Shop : MonoBehaviour
         _deckTab.GetComponent<CardViewUI>().UpdateCards(GlobalGameManager.GetInstance().GetGameData().cardList);
         _deckTab.SetActive(true);
     }
-    public void SellCard()
-    {
-        
-    }
     public void Refresh()
     {
         if (CanAfford(_refreshPrice))
@@ -165,7 +170,7 @@ public class Shop : MonoBehaviour
         }
         LoadParty();
     }
-    public bool CanAfford(int cost)
+    public static bool CanAfford(int cost)
     {
         return GlobalGameManager.GetInstance().GetGameData().coins >= cost;
     }
