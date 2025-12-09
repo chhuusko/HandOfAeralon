@@ -57,7 +57,7 @@ public class LevelManager : ScriptableObject
         {
             if (_level > easyCombatList.Count) _level = 0;
             SceneManager.LoadScene(easyCombatList[_level]);
-
+            _level++;
 
         }
         else
