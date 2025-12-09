@@ -17,7 +17,7 @@ MonoBehaviour:
   Description: Arcane Bolt gains +20% damage per mana spent this turn
   Type: 3
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: eae0c22a6206f4b448674f9131da129f, type: 3}
+  _typeName: ManaConduction, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 1
   IsPositive: 1
   DamageModifier: 1.2

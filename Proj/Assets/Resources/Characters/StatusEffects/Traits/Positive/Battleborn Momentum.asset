@@ -17,7 +17,8 @@ MonoBehaviour:
   Description: After using 3 abilities in a combat, gain Empowered for 3 turns
   Type: 3
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: c1e6423ec8170da4f85a3a973881d6ae, type: 3}
+  _typeName: BattlebornMomentum, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
   Class: 4
   IsPositive: 1
   Threshold: 3
