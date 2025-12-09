@@ -15,7 +15,7 @@ MonoBehaviour:
   _abilityName: Earthquake
   _icon: {fileID: 21300000, guid: 130df84cf9f38a04797a3b5afc6b0683, type: 3}
   _range: 1
-  _cooldown: 2
+  _cooldown: 7
   _description: "Slam the ground, dealing (90% \xD7 Damage) Physical damage to all
     characters in the area. Every character hit has a 60% chance to become Slowed
     for 2 turns. Gain 1 Mana if at least two enemies become Slowed."
@@ -23,12 +23,12 @@ MonoBehaviour:
   _type: 0
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
   _targetType: 0
-  _castingEffect: {fileID: 0}
-  _hitEffect: {fileID: 0}
+  _abilityVFXSequence: {fileID: 11400000, guid: b6f8a18d4da6d3b459e8feaf10a414da,
+    type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 1
-  _fromCastToHitTime: 0
+  _castingTime: 0.5
+  _fromCastToHitTime: 0.3
   _castingRotationTime: 0.3
   _pattern: {fileID: 11400000, guid: 129687a3acdf70e4cba2536129786496, type: 2}
   _validTargets: 0

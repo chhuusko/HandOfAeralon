@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7da77a5b395f934dac169d087a8a70f, type: 3}
-  m_Name: EarthquakeVFXSequence
+  m_Name: RuptureOfTheWildsVFXSequence
   m_EditorClassIdentifier: 
-  _castFX: {fileID: 9048421809270265902, guid: aae7104d3f2952441902d44c0ae498f0, type: 3}
+  _castFX: {fileID: -7656764676284321774, guid: 0d247de4b7492a7449b195159a3eaab2,
+    type: 3}
   _travelFX: {fileID: 0}
   _impactFX: {fileID: 0}
   _biggerImpactScale: 0
-  _offsetDistance: 2.2
-  _airDistance: 0.1
