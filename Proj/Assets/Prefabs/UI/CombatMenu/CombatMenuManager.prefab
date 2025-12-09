@@ -443,7 +443,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _globalVolume: {fileID: 0}
-  _endCombatMenuCanvas: {fileID: 6799384361581171505}
+  _combatMenuCanvas: {fileID: 6799384361581171505}
+  _inGameLayout: {fileID: 8058167753123611917}
+  _victoryScreenLayout: {fileID: 8117046479408202318}
   _combatHUDCanvasGroup: {fileID: 0}
   _combatCardCanvasGroup: {fileID: 0}
   _combatTooltipCanvasGroup: {fileID: 0}
@@ -7144,6 +7146,12 @@ MonoBehaviour:
 --- !u!224 &5676340482016100724 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4072241448086407357, guid: 59135147591c6c74982c86a9a002c10d,
+    type: 3}
+  m_PrefabInstance: {fileID: 8522476931532016073}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8117046479408202318 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 495502994429397895, guid: 59135147591c6c74982c86a9a002c10d,
     type: 3}
   m_PrefabInstance: {fileID: 8522476931532016073}
   m_PrefabAsset: {fileID: 0}
