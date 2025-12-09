@@ -26,10 +26,11 @@ public class CombatHoverTooltip : MonoBehaviour
         if( _isHovering )
         {
             Vector2 mousePos = Input.mousePosition;
+            RectTransform canvasRect = _tooltipCanvas.transform as RectTransform;
 
             // Convert the mouse position from screen space to local canvas space
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                _tooltipCanvas.transform as RectTransform,
+                canvasRect,
                 mousePos,
                 _tooltipOverlayCamera,   // Pass the UI camera to handle camera stacking
                 out Vector2 localPoint);
@@ -38,8 +39,22 @@ public class CombatHoverTooltip : MonoBehaviour
             localPoint.x += 80f + _rectTransform.sizeDelta.x/2f;
             localPoint.y += -40f + _rectTransform.sizeDelta.y/2f;
 
+            // --- CLAMP TO SCREEN BOUNDS ---
+            Vector2 tooltipSize = _rectTransform.sizeDelta;
+            Vector2 canvasSize = canvasRect.rect.size;
+
+            float halfW = tooltipSize.x * 0.5f;
+            float halfH = tooltipSize.y * 0.5f;
+
+            float minX = -canvasSize.x * 0.5f + halfW;
+            float maxX = canvasSize.x * 0.5f - halfW;
+            float minY = -canvasSize.y * 0.5f + halfH;
+            float maxY = canvasSize.y * 0.5f - halfH;
+
+            localPoint.x = Mathf.Clamp(localPoint.x, minX, maxX);
+            localPoint.y = Mathf.Clamp(localPoint.y, minY, maxY);
+
             _rectTransform.anchoredPosition = localPoint;
-            //_rectTransform.anchoredPosition = mousePos;
         }
     }
 
