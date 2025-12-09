@@ -23,8 +23,7 @@ MonoBehaviour:
   _type: 0
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
   _targetType: 2
-  _castingEffect: {fileID: 0}
-  _hitEffect: {fileID: 0}
+  _abilityVFXSequence: {fileID: 0}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
   _castingTime: 0.5
@@ -37,4 +36,4 @@ MonoBehaviour:
   _chanceToApplyPoison: 0.7
   _poisonStacks: 3
   _manaGain: 1
-  _enemiesPoisonedTilBonus: 3
+  _enemiesPoisonedTilBonus: 2
