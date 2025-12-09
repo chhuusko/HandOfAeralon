@@ -136,6 +136,11 @@ public class EnemyAI : MonoBehaviour
                 case CharacterClass.Sorceress: score += distance; break;
             }
 
+            if (_currentCharacter.GetCurrentHealth() < _currentCharacter.GetMaxHealth() / 5)
+            {
+                score += distance * 10;
+            }
+
             List<CombatGridTile> path = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, pos.gameObject, false, canReach)
                 .Select(obj => obj.GetComponent<CombatGridTile>())
                 .Where(ch => ch != null)
@@ -175,6 +180,12 @@ public class EnemyAI : MonoBehaviour
                     if (occupant != null && occupant.GetFaction() != _controlledFaction)
                     {
                         newScore += 10;
+
+                        if (occupant.GetCurrentHealth() < occupant.GetMaxHealth() / 10)
+                        {
+                            newScore += 99;
+                        }
+
                         _scoredActions[action] = newScore;
                     }
 
@@ -186,7 +197,12 @@ public class EnemyAI : MonoBehaviour
                         {
                             if (occupant.GetCurrentHealth() != occupant.GetMaxHealth())
                             {
-                                newScore += 999;
+                                newScore += 99;
+
+                                if (occupant.GetCurrentHealth() < occupant.GetMaxHealth() / 5)
+                                {
+                                    newScore += 99;
+                                }
                             } 
                             else
                             {
@@ -291,7 +307,7 @@ public class EnemyAI : MonoBehaviour
 
     private void UseAbility(Ability ability, CombatGridTile target)
     {
-        if (!_currentCharacter.CanUseAbility || ability == null)
+        if (!_currentCharacter.CanUseAbility || ability == null || target == null)
         {
             return;
         }
@@ -303,7 +319,7 @@ public class EnemyAI : MonoBehaviour
 
     private void EndTurn()
     {
-        //DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name}'s turn ended!");
+        DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name}'s turn ended!");
 
         _currentCharacter = null;
         _currentTile = null;
