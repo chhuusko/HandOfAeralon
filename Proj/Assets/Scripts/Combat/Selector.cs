@@ -476,6 +476,7 @@ public class Selector : MonoBehaviour
         if (success)
         {
             //OnCharacterActionStarted.Invoke();
+            InvokeCharacterActionStarted();
         }
 
         ResetColorAllTiles();
@@ -483,7 +484,7 @@ public class Selector : MonoBehaviour
         Character character = tile.GetOccupantCharacter();
         if (character == null) return;
         SelectCharacter(character);
-        // Hade varit nice om ConfirmPath kunde returna true eller false om den faktiskt lockar in en rutt och börjar gå.
+        // Hade varit nice om ConfirmPath kunde returna true eller false om den faktiskt lockar in en rutt och bï¿½rjar gï¿½.
     }
 
     private void HandleAbilityCast(CombatGridTile tile)
@@ -492,7 +493,8 @@ public class Selector : MonoBehaviour
 
         if (success)
         {
-            //OnCharacterActionStarted.Invoke();
+            // OnCharacterActionStarted?.Invoke();
+            InvokeCharacterActionStarted();
         }
 
         _selectedCharacter?.GetAbilityHandler()?.SetPendingAbility(null);
@@ -548,11 +550,11 @@ public class Selector : MonoBehaviour
 
     public void InvokeCharacterActionStarted()
     {
-        OnCharacterActionStarted.Invoke();
+        OnCharacterActionStarted?.Invoke();
     }
     public void InvokeCharacterActionStopped()
     {
-        OnCharacterActionStopped.Invoke();
+        OnCharacterActionStopped?.Invoke();
     }
 
     public SelectorState GetCurrentState() { return _currentState; }
