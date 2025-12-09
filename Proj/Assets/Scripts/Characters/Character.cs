@@ -495,11 +495,11 @@ public class Character : MonoBehaviour
 
     public void Heal(int healAmount)
     {
+        Debug.Log($"Before heal: CurrentHP={GetCurrentHealth()}, MaxHP={Data.BaseHealthPoints}");
         _data.Heal(healAmount);
+        Debug.Log($"After heal: CurrentHP={GetCurrentHealth()}, MaxHP={Data.BaseHealthPoints}");
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
         OnWasHealed?.Invoke(healAmount, gameObject);
-        Debug.Log($"Healing {healAmount} health. New health: {GetCurrentHealth()}");
-        Debug.Log($"{GetCurrentHealth()}/{Data.BaseHealthPoints}");
     }
     
     public bool IsMoving()
