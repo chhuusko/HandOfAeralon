@@ -471,13 +471,7 @@ public class Selector : MonoBehaviour
 
     private void HandleMovement(CombatGridTile tile)
     {
-        bool success = _characterMovement.ConfirmPath(tile);
-
-        if (success)
-        {
-            //OnCharacterActionStarted.Invoke();
-            InvokeCharacterActionStarted();
-        }
+        _characterMovement.ConfirmPath(tile);
 
         ResetColorAllTiles();
         // MG was here.
@@ -493,7 +487,6 @@ public class Selector : MonoBehaviour
 
         if (success)
         {
-            // OnCharacterActionStarted?.Invoke();
             InvokeCharacterActionStarted();
         }
 
