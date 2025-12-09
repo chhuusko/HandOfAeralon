@@ -571,6 +571,11 @@ public class CombatUI : MonoBehaviour
 
     private void UpdateAbilityColors(Character c, AbilityButton abilityButton)
     {
+        if (abilityButton == null || c == null)
+        {
+            return;
+        }
+        
         bool interactable = false;
         
         if (_bCombatStarted && c && _currentTurnCharacter && _selectedCharacter != null)
@@ -582,6 +587,25 @@ public class CombatUI : MonoBehaviour
         }
 
         abilityButton.Button.interactable = interactable;
+        
+        StartCoroutine(SetCooldown(c, abilityButton));
+    }
+
+    private IEnumerator SetCooldown(Character c, AbilityButton abilityButton)
+    {
+        yield return null;
+
+        if (abilityButton == null || abilityButton.CooldownText == null)
+        {
+            yield break;
+        }
+        
+        if (c && 
+            c.IsAbilityCooldownActive(abilityButton.Ability))
+        {
+            abilityButton.SetCooldownTextActive(true);
+            abilityButton.SetCooldownText(c.GetCurrentCooldown(abilityButton.Ability));
+        }
     }
 
     private void CharacterMoving(bool moving)
