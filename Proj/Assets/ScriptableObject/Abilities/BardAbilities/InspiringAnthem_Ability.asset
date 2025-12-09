@@ -15,7 +15,7 @@ MonoBehaviour:
   _abilityName: Inspiring Anthem
   _icon: {fileID: 21300000, guid: 3e96416459f105445a7ba9e3f51bc00d, type: 3}
   _range: 6
-  _cooldown: 3
+  _cooldown: 4
   _description: All allies in the target area gain Haste for 2 turns. Gain 1 Mana
     if at least three allies gain Haste.
   _abilityTag: 10
@@ -30,7 +30,7 @@ MonoBehaviour:
   _fromCastToHitTime: 0
   _castingRotationTime: 0.3
   _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
-  _validTargets: 1
+  _validTargets: 3
   _radius: 2
   _hasteStacks: 2
   _manaGain: 1

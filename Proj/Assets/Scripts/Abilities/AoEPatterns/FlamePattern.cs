@@ -5,7 +5,6 @@ using UnityEngine;
 public class FlamePattern : DirectedAOEPattern
 {
     private int _totalLength = 4;
-    private int _indexWhenExpandingStops = 3;
 
     public override List<CombatGridTile> CalculateTilesToEffect(CombatGridTile targetTile)
     {
@@ -67,17 +66,16 @@ public class FlamePattern : DirectedAOEPattern
     }
     private void AddSideLine(CombatGridTile centerTile, Vector2Int dir, int currentIndex, List<CombatGridTile> list)
     {
+        int _indexWhenExpandingStops = 2;
         // Updates how many tiles should be added on either side based on the current index of the straight line. 
 
-        for (int i = 0; i <= currentIndex; i++)
+        // Keep expanding pattern til a certain point. Then just keep adding tiles with the same width.
+        int maxWidth = Mathf.Min(currentIndex, _indexWhenExpandingStops);
+        Debug.Log(_indexWhenExpandingStops);
+        for (int i = 0; i <= maxWidth; i++)
         {
-            Vector2Int sideTileIndex = centerTile.GetTileIndex();
-
-            // Keep expanding pattern til a certain point. Then just keep adding tiles with the same width.
-            if (i <= _indexWhenExpandingStops)
-            {
-                sideTileIndex += dir * i;
-            }
+            // Calculate tile to the side of center with loop index and direction.
+            Vector2Int sideTileIndex = centerTile.GetTileIndex() + dir * i;
 
             // Don't add if tile is out of bounds.
             if (OutOfBounds(sideTileIndex))
