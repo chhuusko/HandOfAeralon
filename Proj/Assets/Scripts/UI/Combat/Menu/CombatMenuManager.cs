@@ -10,7 +10,9 @@ public class CombatMenuManager : MonoBehaviour
     [SerializeField] private Volume _globalVolume;
     
     // NOTE (Calle): This Menu Canvas
-    [SerializeField] private Canvas _endCombatMenuCanvas;
+    [SerializeField] private Canvas _combatMenuCanvas;
+    [SerializeField] private GameObject _inGameLayout;
+    [SerializeField] private GameObject _victoryScreenLayout;
 
     // NOTE (Calle): Canvases to turn off Interactable on when this menu opens.
     [SerializeField] private CanvasGroup _combatHUDCanvasGroup;
@@ -33,7 +35,7 @@ public class CombatMenuManager : MonoBehaviour
 
     void Start()
     {
-        _endCombatMenuCanvas.enabled = false;
+        _combatMenuCanvas.enabled = false;
         _endCombatMenuAnimator = _globalVolume.GetComponent<Animator>();
         if (_endCombatMenuAnimator == null)
             DebugLog.CJLogError("GlobalVolume has no Animator Comonent!");
@@ -49,13 +51,13 @@ public class CombatMenuManager : MonoBehaviour
 
     private void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.Escape))
-        //{
-        //    if (_endCombatMenuCanvas.enabled)
-        //        HideEndCombatMenuScreen();
-        //    else
-        //        ShowEndCombatMenuScreen();
-        //}
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (_combatMenuCanvas.enabled)
+                HideInGameMenu();
+            else
+                ShowInGameMenu();
+        }
     }
 
     public void InvokeEndCombatButtonPressed()
@@ -64,29 +66,76 @@ public class CombatMenuManager : MonoBehaviour
         OnGoToShopButtonPressed?.Invoke();
     }
 
+    private void ShowInGameMenu()
+    {
+        _combatMenuCanvas.enabled = true;
+        HideVictroyScreenLayout();
+        ShowInGameLayout();
+        TurnOFFCombatCanvases();
+        _endCombatMenuAnimator.Play("WeightFadeIn");
+    }
+
+    private void HideInGameMenu()
+    {
+        _combatMenuCanvas.enabled = false;
+        HideVictroyScreenLayout();
+        TurnONCombatCanvases();
+        _endCombatMenuAnimator.Play("WeightFadeOut");
+    }
+
     public void ShowEndCombatMenuScreen(bool playerWon)
     {
-        _endCombatMenuCanvas.enabled           = true;
+        _combatMenuCanvas.enabled = true;
+
+        ShowVictroyScreenLayout();
+        HideInGameLayout();
+        TurnOFFCombatCanvases();
+
+        _endCombatMenuAnimator.Play("WeightFadeIn");  
+    }
+
+    public void HideEndCombatMenuScreen()
+    {
+        _combatMenuCanvas.enabled = false;
+
+        TurnONCombatCanvases();
+
+        _endCombatMenuAnimator.Play("WeightFadeOut");  
+    }
+
+    private void ShowInGameLayout()
+    {
+        _inGameLayout.SetActive(true);
+    }
+
+    private void HideInGameLayout()
+    {
+        _inGameLayout.SetActive(false);
+    }
+
+    private void ShowVictroyScreenLayout()
+    {
+        _victoryScreenLayout.SetActive(true);
+    }
+
+    private void HideVictroyScreenLayout()
+    {
+        _victoryScreenLayout.SetActive(false);
+    }
+
+    private void TurnOFFCombatCanvases()
+    {
         _combatHUDCanvasGroup.interactable     = false;
         _combatTooltipCanvasGroup.interactable = false;
         _combatCardCanvasGroup.interactable    = false;
-
-        _endCombatMenuAnimator.Play("WeightFadeIn");
-
         Time.timeScale = 0f;
-
     }
-    public void HideEndCombatMenuScreen()
+
+    private void TurnONCombatCanvases()
     {
-        _endCombatMenuCanvas.enabled           = false;
         _combatHUDCanvasGroup.interactable     = true;
         _combatTooltipCanvasGroup.interactable = true;
         _combatCardCanvasGroup.interactable    = true;
-
-        _endCombatMenuAnimator.Play("WeightFadeOut");
-
         Time.timeScale = 1f;
     }
-
-
 }
