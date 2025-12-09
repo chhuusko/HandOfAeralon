@@ -139,6 +139,8 @@ public abstract class Ability : ScriptableObject
 
         yield return new WaitForSeconds(_castingTime + _fromCastToHitTime);
         RunAbility(casterTile, targetTile);
+
+        Selector._instance.InvokeCharacterActionStopped();
     }
     protected void ResetMovementPoints(Character character)
     {
