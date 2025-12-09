@@ -34,7 +34,8 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
         CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
-        
+        CardHandManager.onCardUse -= OnCardPlayed;
+
         CardHandManager.onTargetCharacter -= OnTargetCharacter;
 
         _character.OnTakeDamage -= OnTakeDamage;
