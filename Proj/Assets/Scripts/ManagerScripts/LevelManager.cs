@@ -49,9 +49,27 @@ public class LevelManager : ScriptableObject
     }
     public void StartNextLevel() 
     {
+        StaticLevel();
+    }
+    private void StaticLevel()
+    {
         if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
         {
-            _difficulty = _level/5;
+            if (_level > easyCombatList.Count) _level = 0;
+            SceneManager.LoadScene(easyCombatList[_level]);
+            _level++;
+
+        }
+        else
+        {
+            SceneManager.LoadScene("ShopScene");
+        }
+    }
+    private void TieredRandomLevel()
+    {
+        if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
+        {
+            _difficulty = _level / 5;
             switch (_difficulty)
             {
                 case 0:

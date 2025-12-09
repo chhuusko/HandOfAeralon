@@ -22,6 +22,16 @@ public abstract class StatusEffect
         _duration = duration;
 
         _data = StatusEffectDataRegistry.GetDataForType(GetType());
+
+        if (!_data)
+        {
+            Debug.LogError($"{GetType()} has no status effect data");
+        }
+
+        if (string.IsNullOrEmpty(Data.Name))
+        {
+            Debug.LogError($"{GetType()} has no status effect name");
+        }
         
         _name = Data.Name;
     }
