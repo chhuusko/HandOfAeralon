@@ -67,6 +67,11 @@ public class CombatMenuManager : MonoBehaviour
         OnGoToShopButtonPressed?.Invoke();
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
     private void ShowInGameMenu()
     {
         _combatMenuCanvas.enabled = true;
