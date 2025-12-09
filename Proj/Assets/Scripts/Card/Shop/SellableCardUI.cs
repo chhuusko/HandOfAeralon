@@ -30,6 +30,14 @@ public class SellableCardUI : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         _priceText.text = "<color=Yellow>" + _cost + "</color><voffset=12><space=15><sprite name=\"UI_icon_59\">";
 
     }
+    private void OnEnable()
+    {
+        Shop.onSellCard += UpdateCost;
+    }
+    private void OnDisable()
+    {
+        Shop.onSellCard -= UpdateCost;
+    }
     private void Update()
     {
         if (_isHeldDown)
@@ -44,6 +52,12 @@ public class SellableCardUI : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             }
         }
     }
+    public void UpdateCost()
+    {
+        _cost = Shop.GetInstance().GetRemoveCardPrice();
+        _priceText.text = "<color=Yellow>" + _cost + "</color><voffset=12><space=15><sprite name=\"UI_icon_59\">";
+
+    }
     public void SetCard(Card card)
     {
         _card = card;
@@ -51,7 +65,11 @@ public class SellableCardUI : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        _isHeldDown = true;
+        if (Shop.CanAfford(_cost))
+        {
+            _isHeldDown = true;
+        }
+        
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -67,5 +85,6 @@ public class SellableCardUI : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     {
         GlobalGameManager.GetInstance().GetGameData().cardList.Remove(_card);
         Shop.GetInstance().ChangeCoins(-_cost);
+        Shop.GetInstance().SoldCard();
     }
 }

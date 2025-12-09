@@ -10,7 +10,9 @@ public class CombatMenuManager : MonoBehaviour
     [SerializeField] private Volume _globalVolume;
     
     // NOTE (Calle): This Menu Canvas
-    [SerializeField] private Canvas _endCombatMenuCanvas;
+    [SerializeField] private Canvas _combatMenuCanvas;
+    [SerializeField] private GameObject _inGameLayout;
+    [SerializeField] private GameObject _victoryScreenLayout;
 
     // NOTE (Calle): Canvases to turn off Interactable on when this menu opens.
     [SerializeField] private CanvasGroup _combatHUDCanvasGroup;
@@ -33,7 +35,7 @@ public class CombatMenuManager : MonoBehaviour
 
     void Start()
     {
-        _endCombatMenuCanvas.enabled = false;
+        _combatMenuCanvas.enabled = false;
         _endCombatMenuAnimator = _globalVolume.GetComponent<Animator>();
         if (_endCombatMenuAnimator == null)
             DebugLog.CJLogError("GlobalVolume has no Animator Comonent!");
@@ -66,7 +68,9 @@ public class CombatMenuManager : MonoBehaviour
 
     public void ShowEndCombatMenuScreen(bool playerWon)
     {
-        _endCombatMenuCanvas.enabled           = true;
+        ShowVictroyScreenLayout();
+        HideInGameLayout();
+        _combatMenuCanvas.enabled              = true;
         _combatHUDCanvasGroup.interactable     = false;
         _combatTooltipCanvasGroup.interactable = false;
         _combatCardCanvasGroup.interactable    = false;
@@ -76,9 +80,10 @@ public class CombatMenuManager : MonoBehaviour
         Time.timeScale = 0f;
 
     }
+
     public void HideEndCombatMenuScreen()
     {
-        _endCombatMenuCanvas.enabled           = false;
+        _combatMenuCanvas.enabled           = false;
         _combatHUDCanvasGroup.interactable     = true;
         _combatTooltipCanvasGroup.interactable = true;
         _combatCardCanvasGroup.interactable    = true;
@@ -88,5 +93,21 @@ public class CombatMenuManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
+    public void ShowInGameLayout()
+    {
+        _inGameLayout.SetActive(true);
+    }
+    public void HideInGameLayout()
+    {
+        _inGameLayout.SetActive(false);
+    }
+    public void ShowVictroyScreenLayout()
+    {
+        _victoryScreenLayout.SetActive(true);
+    }
+    public void HideVictroyScreenLayout()
+    {
+        _victoryScreenLayout.SetActive(false);
+    }
 
 }
