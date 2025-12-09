@@ -321,14 +321,15 @@ public class Selector : MonoBehaviour
     {
         DeselectCharacter();
 
-        // Return if character is not friendly.
-        if (character.GetFaction() != Faction.Friendly) return;
-
-        bool bIsCharactersTurn = character == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
-
         // Update selected character and show it's related UI.
         _selectedCharacter = character;
         ShowCharacterUI(character);
+        _currentState = SelectorState.CharacterSelected;
+
+        // Check to see if character is friendly before checking to activate movement.
+        if (character.GetFaction() != Faction.Friendly) return;
+
+        bool bIsCharactersTurn = character == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
 
         // If it's the characters turn, activate logic.
         if (bIsCharactersTurn)
@@ -350,8 +351,6 @@ public class Selector : MonoBehaviour
             }
             return;
         }
-        // Else, just change the selector state.
-        _currentState = SelectorState.CharacterSelected;
     }
 
     /// <summary>
