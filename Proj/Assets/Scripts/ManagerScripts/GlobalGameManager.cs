@@ -93,7 +93,7 @@ public class GlobalGameManager : ScriptableObject
     public void StartNewGame(int slot)
     {
         GetTemp();
-        SceneManager.LoadScene("Graveyard12x10_Easy"); //TODO
+        LevelManager.GetInstance().StartNextLevel();
     }
     public void JSONWrite()
     {
