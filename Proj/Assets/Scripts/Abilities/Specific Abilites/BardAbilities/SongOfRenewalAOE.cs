@@ -90,10 +90,8 @@ public class SongOfRenewalAOE : RoundAOEAbility
             }
         }
 
-        //3-5.
-        // healAmount = castingCharacter.GetStatusEffectManager().ModifyOutgoingHeal(healAmount, this);
-
-        // 6-7 Gets applied withing affected character StatusEffectManager: ModifyOutgoingHeal(healAmount, this);
+        healAmount = (int) castingCharacter.GetStatusEffectManager().ModifyOutgoingHeal(healAmount, this);
+        healAmount = (int) affectedCharacter.GetStatusEffectManager().ModifyOutgoingHeal(healAmount, this);
         
         return healAmount; 
     }
