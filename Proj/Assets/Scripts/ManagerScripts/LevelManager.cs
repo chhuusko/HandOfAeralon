@@ -54,7 +54,7 @@ public class LevelManager : ScriptableObject
     }
     private void StaticLevel()
     {
-        Debug.Log(_level);
+        Debug.Log(_level + " level");
         if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
         {
             Debug.Log("isNotshop");
