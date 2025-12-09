@@ -31,9 +31,20 @@ public abstract class AOEAbility : Ability
             }
         }
     }
-    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile tile)
+    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
     {
-        return _pattern.CalculateTilesToEffect(tile);
+        if (targetTile == null)
+            return null;
+
+        // Get caster
+        Character caster = GetAbilityHandler().GetCharacterCaster();
+        if (caster == null) return null;
+
+        // Check if target tile is in range.
+        bool inRange = caster.GetAbilityHandler().GetTilesInRange().Contains(targetTile);
+        if (!inRange) return null;
+
+        return _pattern.CalculateTilesToEffect(targetTile);
     }
 
     /// <summary>
