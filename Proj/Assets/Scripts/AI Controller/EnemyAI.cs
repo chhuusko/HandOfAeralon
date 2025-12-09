@@ -118,7 +118,7 @@ public class EnemyAI : MonoBehaviour
 
         foreach (var tile in moveRange)
         {
-            List<GameObject> pathSample = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, tile.gameObject, false);
+            List<GameObject> pathSample = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, tile.gameObject, false, moveRange);
 
             if (pathSample != null && pathSample.Count > 0)
             {
@@ -139,6 +139,19 @@ public class EnemyAI : MonoBehaviour
                 case CharacterClass.Bard: score += distance; break;
                 case CharacterClass.Rogue: score -= distance; break;
                 case CharacterClass.Sorceress: score += distance; break;
+            }
+
+            List<CombatGridTile> path = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, pos.gameObject, false, canReach)
+                .Select(obj => obj.GetComponent<CombatGridTile>())
+                .Where(ch => ch != null)
+                .ToList();
+
+            foreach (var step in path)
+            {
+                if (step.GetTileType() == TileType.Lava || step.GetTileType() == TileType.Poison)
+                {
+                    score -= 5;
+                }
             }
 
             _scoredActions[move] = score;
@@ -214,7 +227,7 @@ public class EnemyAI : MonoBehaviour
 
         if (_currentCharacter.CanMove)
         {
-            _movePath = GridExplorer._instance.FindPathAStar(_currentTile, _chosenAction.movement.gameObject, false)
+            _movePath = GridExplorer._instance.FindPathAStar(_currentTile, _chosenAction.movement.gameObject, false, canReach)
                 .Select(obj => obj.GetComponent<CombatGridTile>())
                 .Where(ch => ch != null)
                 .ToList();

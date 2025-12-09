@@ -44,7 +44,6 @@ public class CharacterData
         _faction = faction;
         
         InitializeClassData();
-        InitializeTraits();
         
         if (generateTraits)
         {
@@ -84,8 +83,10 @@ public class CharacterData
         }
     }
     
-    private void GenerateTraits()
+    public void GenerateTraits()
     {
+        InitializeTraits();
+        
         _traitManager.GenerateTraits(this);
     }
 
