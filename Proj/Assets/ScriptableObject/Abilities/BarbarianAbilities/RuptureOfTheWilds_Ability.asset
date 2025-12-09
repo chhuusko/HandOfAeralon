@@ -18,14 +18,13 @@ MonoBehaviour:
   _cooldown: 2
   _description: "Send primal energy through the ground, dealing (100% \xD7 Damage)
     Elemental damage. If the target is Slowed, deal (150% \xD7 Damage) instead. Every
-    character hit has a 30% chance to become Stunned for 2 turns. Draw 1 card per
+    character hit has a 30% chance to become Stunned for 1 turn. Draw 1 card per
     enemy Stunned by this ability."
   _abilityTag: 9
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
   _targetType: 0
-  _castingEffect: {fileID: 0}
-  _hitEffect: {fileID: 0}
+  _abilityVFXSequence: {fileID: 0}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
   _castingTime: 0
@@ -36,4 +35,4 @@ MonoBehaviour:
   _damageMultiplier: 1
   _slowedTargetDamageMultiplier: 1.5
   _stunCharacterHitChance: 0.3
-  _stunDuration: 2
+  _stunDuration: 1
