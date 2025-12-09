@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SocialPlatforms.Impl;
-using static UnityEditor.PlayerSettings;
 
 public class EnemyAI : MonoBehaviour
 {
     public const int TOP_N_ACTIONS = 3;
 
-    private struct AIAction
+    private class AIAction
     {
         public CombatGridTile movement;
         public Ability ability;
@@ -221,7 +219,15 @@ public class EnemyAI : MonoBehaviour
             .Take(TOP_N_ACTIONS)
             .ToList();
 
-        _chosenAction = topActions[Random.Range(0, topActions.Count)].Key;
+        if (topActions.Count == 0)
+        {
+            DebugLog.JLWLogWarning("EnemyAI.cs | No scored actions found! Defaulting to staying still.");
+            _chosenAction = new AIAction { movement = _currentTile.GetComponent<CombatGridTile>() };
+        }
+        else
+        {
+            _chosenAction = topActions[Random.Range(0, topActions.Count)].Key;
+        }
 
         PrintAIAction(_chosenAction);
 
