@@ -15,7 +15,7 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
 
     // Description
 
-    // Deal(170% × Damage) Physical damage.
+    // Deal(170% ï¿½ Damage) Physical damage.
     // Has a 35% chance to Stun the target for 1 turn.
     // Gain 2 Mana if the target gets Stunned by this ability.
     // After using Lute Smash, only Lute Smash and Dissonant Chord can be used for the rest of combat.
@@ -33,7 +33,7 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         bool died = affectedCharacter.TakeDamage(damage);
 
-        affectedCharacter.Data.SetActiveAbilities(abilitiesAvailablePostLuteSmash); 
+        castingCharacter.Data.SetActiveAbilities(abilitiesAvailablePostLuteSmash); 
 
         StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
         if (statusEffectManager == null) return;

@@ -10,15 +10,23 @@ public class Shop : MonoBehaviour
     [SerializeField] public GameObject _mainCanvas, _overlayCanvas;
     [SerializeField] private GameObject _sellTab;
     [SerializeField] private GameObject _deckTab;
+
     [SerializeField] private TextMeshProUGUI _balanceText;
+
     [SerializeField] private Transform[] _purchasCardPos;
     [SerializeField] private GameObject _purchaseCardPrefab;
     [SerializeField] private Transform[] _purchasCharacterPos;
     [SerializeField] private GameObject _purchaseCharacterPrefab;
+
     [SerializeField] private ClassDatabase _classDatabase;
+
     [SerializeField] private Transform _partyHolder;
     [SerializeField] private GameObject _partyPortrait;
+
     [SerializeField] private TextMeshProUGUI _partyMembersText;
+
+    [SerializeField] private TextMeshProUGUI _refreshText;
+    [SerializeField] private TextMeshProUGUI _healText;
 
     private List<Card> _unlockedCards;
     private List<GameObject> _buyableItemInScene;
@@ -27,13 +35,18 @@ public class Shop : MonoBehaviour
     //Costs
     [SerializeField] int _healPrice;
     [SerializeField] int _refreshPrice;
+    [SerializeField] int _removeCardPrice;
     public static Shop GetInstance()
     {
         return _instance;
     }
     private void Awake()
     {
+        _refreshText.text = "Refresh <color=Yellow>"+_refreshPrice+"</color><voffset=15><space=20><sprite name=\"UI_icon_59\">";
+        _healText.text = "Heal Party (50%)\r\n<color=Yellow>"+ _healPrice+ "</color><voffset=15><space=20><sprite name=\"UI_icon_59\">";
         _instance = this;
+        Application.targetFrameRate = -1;
+
         _buyableItemInScene = new List<GameObject>();
         _partyPortraitInstances = new List<GameObject>();
         _unlockedCards = CardsUnlocked.GetInstance().GetUnlockedCards();
@@ -160,5 +173,9 @@ public class Shop : MonoBehaviour
     {
         GlobalGameManager.GetInstance().ChangeCoins(-cost);
         UpdateMoneyUI();
+    }
+    public int GetRemoveCardPrice()
+    {
+        return _removeCardPrice;
     }
 }

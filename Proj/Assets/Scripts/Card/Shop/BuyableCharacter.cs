@@ -11,7 +11,7 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private bool _isHeldDown;
     private float _sellTime = 2f;
     private float _timeHeld = 0;
-    private int price = 200;
+    private int price = 100;
     [SerializeField] Image _fillImage;
     [SerializeField] GameObject _aboveText;
     [SerializeField] TextMeshProUGUI _priceText;
