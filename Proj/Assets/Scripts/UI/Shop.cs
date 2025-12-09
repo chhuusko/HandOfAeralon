@@ -1,7 +1,8 @@
 using NUnit.Framework;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Drawing;
 using TMPro;
+using UnityEngine;
 
 public class Shop : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class Shop : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI _partyMembersText;
 
+    [SerializeField] private TextMeshProUGUI _removeCardText;
     [SerializeField] private TextMeshProUGUI _refreshText;
     [SerializeField] private TextMeshProUGUI _healText;
 
@@ -36,12 +38,15 @@ public class Shop : MonoBehaviour
     [SerializeField] int _healPrice;
     [SerializeField] int _refreshPrice;
     [SerializeField] int _removeCardPrice;
+    [SerializeField] int _addedRemoveCardPrice; 
+
     public static Shop GetInstance()
     {
         return _instance;
     }
     private void Awake()
     {
+        _removeCardText.text = "Remove card <color=yellow>"+_removeCardPrice+"</color><voffset=15><space=25><sprite name=\"UI_icon_59\">";
         _refreshText.text = "Refresh <color=Yellow>"+_refreshPrice+"</color><voffset=15><space=20><sprite name=\"UI_icon_59\">";
         _healText.text = "Heal Party (50%)\r\n<color=Yellow>"+ _healPrice+ "</color><voffset=15><space=20><sprite name=\"UI_icon_59\">";
         _instance = this;
