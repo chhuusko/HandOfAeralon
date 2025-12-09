@@ -29,6 +29,7 @@ public class LevelManager : ScriptableObject
         if (_instance == null)
         {
             _instance = Resources.Load<LevelManager>("LevelManager");
+            _instance._level = 0;
         }
         return _instance;
     }
@@ -53,8 +54,10 @@ public class LevelManager : ScriptableObject
     }
     private void StaticLevel()
     {
+        Debug.Log(_level);
         if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
         {
+            Debug.Log("isNotshop");
             if (_level > easyCombatList.Count) _level = 0;
             SceneManager.LoadScene(easyCombatList[_level]);
             _level++;
