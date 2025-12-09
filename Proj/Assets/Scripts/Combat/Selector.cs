@@ -473,11 +473,7 @@ public class Selector : MonoBehaviour
         // MG was here.
         Character character = tile.GetOccupantCharacter();
         if (character == null) return;
-        if (character.GetFaction() == Faction.Friendly)
-        {
-            SelectCharacter(character);
-            return;
-        }
+        SelectCharacter(character);
         // Hade varit nice om ConfirmPath kunde returna true eller false om den faktiskt lockar in en rutt och börjar gå.
     }
 
