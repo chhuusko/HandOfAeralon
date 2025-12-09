@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SocialPlatforms.Impl;
-using static UnityEditor.PlayerSettings;
 
 public class EnemyAI : MonoBehaviour
 {
     public const int TOP_N_ACTIONS = 3;
 
-    private struct AIAction
+    private class AIAction
     {
         public CombatGridTile movement;
         public Ability ability;
@@ -118,7 +116,7 @@ public class EnemyAI : MonoBehaviour
 
         foreach (var tile in moveRange)
         {
-            List<GameObject> pathSample = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, tile.gameObject, false);
+            List<GameObject> pathSample = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, tile.gameObject, false, moveRange);
 
             if (pathSample != null && pathSample.Count > 0)
             {
@@ -139,6 +137,19 @@ public class EnemyAI : MonoBehaviour
                 case CharacterClass.Bard: score += distance; break;
                 case CharacterClass.Rogue: score -= distance; break;
                 case CharacterClass.Sorceress: score += distance; break;
+            }
+
+            List<CombatGridTile> path = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, pos.gameObject, false, canReach)
+                .Select(obj => obj.GetComponent<CombatGridTile>())
+                .Where(ch => ch != null)
+                .ToList();
+
+            foreach (var step in path)
+            {
+                if (step.GetTileType() == TileType.Lava || step.GetTileType() == TileType.Poison)
+                {
+                    score -= 5;
+                }
             }
 
             _scoredActions[move] = score;
@@ -208,13 +219,21 @@ public class EnemyAI : MonoBehaviour
             .Take(TOP_N_ACTIONS)
             .ToList();
 
-        _chosenAction = topActions[Random.Range(0, topActions.Count)].Key;
+        if (topActions.Count == 0)
+        {
+            DebugLog.JLWLogWarning("EnemyAI.cs | No scored actions found! Defaulting to staying still.");
+            _chosenAction = new AIAction { movement = _currentTile.GetComponent<CombatGridTile>() };
+        }
+        else
+        {
+            _chosenAction = topActions[Random.Range(0, topActions.Count)].Key;
+        }
 
         PrintAIAction(_chosenAction);
 
         if (_currentCharacter.CanMove)
         {
-            _movePath = GridExplorer._instance.FindPathAStar(_currentTile, _chosenAction.movement.gameObject, false)
+            _movePath = GridExplorer._instance.FindPathAStar(_currentTile, _chosenAction.movement.gameObject, false, canReach)
                 .Select(obj => obj.GetComponent<CombatGridTile>())
                 .Where(ch => ch != null)
                 .ToList();

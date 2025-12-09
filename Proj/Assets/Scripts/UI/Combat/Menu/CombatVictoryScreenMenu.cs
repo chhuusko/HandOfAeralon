@@ -36,13 +36,13 @@ public class CombatVictoryScreenMenu : MonoBehaviour
 
     private void SetWinScreen()
     {
-        _title.text = "You Win!";
+        _title.text = "Battle Won!";
         _info.text = "Coins gained: " + 200;
     }
 
     private void SetLoseScreen()
     {
-        _title.text = "You Lose!";
+        _title.text = "Battle Lost!";
         _info.text = "";
     }
 }

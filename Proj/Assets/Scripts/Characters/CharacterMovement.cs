@@ -69,7 +69,7 @@ public class CharacterMovement : MonoBehaviour
         currentTile = _character.GetCurrentTileComponent().gameObject;
 
         //DebugLog.JLWLog($"CharacterMovement::PreviewPath() called A*");
-        _pathPreview = GridExplorer._instance.FindPathAStar(currentTile, tile.gameObject)
+        _pathPreview = GridExplorer._instance.FindPathAStar(currentTile, tile.gameObject, true, _tilesInRange)
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
         .ToList();

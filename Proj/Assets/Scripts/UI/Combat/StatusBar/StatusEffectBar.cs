@@ -18,7 +18,8 @@ public class StatusEffectBar : MonoBehaviour
 
     private void OnDisable()
     {
-        
+        CombatEventManager.OnStatusEffectAppliedToCharacter -= UpdateStatusEffectsBar;
+        CombatEventManager.OnStatusEffectExpiredOnCharacter -= RemoveStatusEffectBarElement;
     }
 
     private void UpdateStatusEffectsBar(Character caster, Character characterSubject, StatusEffect statusEffect)

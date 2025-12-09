@@ -73,13 +73,24 @@ public abstract class RoundAOEAbility : AOEAbility
             }
         }
     }
-    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile tile)
+    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
     {
+        if (targetTile == null)
+            return null;
+
+        // Get caster
+        Character caster = GetAbilityHandler().GetCharacterCaster();
+        if (caster == null) return null;
+
+        // Check if target tile is in range.
+        bool inRange = caster.GetAbilityHandler().GetTilesInRange().Contains(targetTile);
+        if (!inRange) return null;
+
         if (_pattern is RoundAOEPattern pattern)
         {
             SetAbilityRadius(_radius, pattern);
         }
-        return _pattern.CalculateTilesToEffect(tile);
+        return _pattern.CalculateTilesToEffect(targetTile);
     }
 
     protected void SetAbilityRadius(int radius, RoundAOEPattern pattern)

@@ -40,10 +40,10 @@ public class CombatGrid : MonoBehaviour
             // NOTE (Calle): Can't be a Dont' destroy on load if its a child to the Combat Manager, (So maybe make it root for itself?)
             //DontDestroyOnLoad(gameObject);
 
-            // #if UNITY_EDITOR
+
             _tilePrefabLibrary      = Resources.Load<TilePrefabLibrary>("Tiles/TilePrefabLibrary");
             _characterPrefabLibrary = Resources.Load<CharacterPrefabLibrary>("Characters/CharacterPrefabLibrary");
-            // #endif
+
             if (_tilePrefabLibrary == null)
                 DebugLog.CJLog("CombatGrid failed to load TilePrefabLibrary.");
             if (_tilePrefabLibrary == null)
@@ -365,6 +365,7 @@ public class CombatGrid : MonoBehaviour
         characterScript.AddCharacterFrame();
         characterScript.Data.InitializeClassData();
         characterScript.Initialize(characterScript.Data);
+        characterScript.Data.GenerateTraits();
 
         _charactersGO.Add(characterObject);
         

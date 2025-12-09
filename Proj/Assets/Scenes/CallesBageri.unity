@@ -762,7 +762,7 @@ PrefabInstance:
     - target: {fileID: 6436671805441576610, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -100
+      value: -100.00006
       objectReference: {fileID: 0}
     - target: {fileID: 6592980477604158508, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
@@ -1042,7 +1042,7 @@ PrefabInstance:
     - target: {fileID: 9127183573721612193, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -568.9997
+      value: -568.99963
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 61797019472761587, guid: 2735cd7749f79404caa4e6ea6b692acd, type: 3}
@@ -72042,7 +72042,7 @@ PrefabInstance:
     - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
       propertyPath: _fileToLoadDEBUG
-      value: Tutorial3
+      value: Battle1
       objectReference: {fileID: 0}
     - target: {fileID: 616073620153778492, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
@@ -73026,8 +73026,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3062428107220125226, guid: a43b3af574f2ea54f8d05ba36a7f5b4f,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062428107220125226, guid: a43b3af574f2ea54f8d05ba36a7f5b4f,
+        type: 3}
       propertyPath: m_BlockingMask.m_Bits
-      value: 4294967295
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5096884147346783627, guid: a43b3af574f2ea54f8d05ba36a7f5b4f,
         type: 3}

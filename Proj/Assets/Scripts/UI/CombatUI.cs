@@ -253,6 +253,7 @@ public class CombatUI : MonoBehaviour
         _startCombatButton.gameObject.SetActive(true);
         _cardHandManager.SetActive(true);
         _combatLogButton.SetActive(true);
+        _placeCharactersPanel.SetActive(true);
         
         UpdateCharacterPortraits();
         UpdateManaText(CardHandManager.GetInstance().GetMana());
@@ -468,7 +469,6 @@ public class CombatUI : MonoBehaviour
             Destroy(_abilityPanel.transform.GetChild(i).gameObject);
         }
         
-        // _abilityPanel.gameObject.SetActive(false);
         _abilityPanelParent.SetActive(false);
     }
     
