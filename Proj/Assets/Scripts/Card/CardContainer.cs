@@ -91,6 +91,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         {
             _isDragging = false;
             CardHandManager.GetInstance().Dragged(false);
+            CardHandManager.GetInstance().ChangeMana(-_containedCard.Getcost());
             if (_containedCard.type == CardType.Target)
             {
                 CombatGridTile grid;
@@ -126,7 +127,6 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
             _containedCard.AfterCardPlay();
-            CardHandManager.GetInstance().ChangeMana(-_containedCard.Getcost());
             CardHandManager.GetInstance().RemoveCardFromHand(this);   
         }
     }
