@@ -88,7 +88,7 @@ public class TraitManager
     {
         IReadOnlyList<StatusEffectData> positiveTraits;
         
-        if (UnityEngine.Random.value <= GlobalGameManager.GetInstance().ClassTraitChance)
+        if (UnityEngine.Random.value >= GlobalGameManager.GetInstance().ClassTraitChance)
         {
             positiveTraits = StatusEffectDataRegistry.Instance.GetAllGlobalTraitsOfType(true);
         }
