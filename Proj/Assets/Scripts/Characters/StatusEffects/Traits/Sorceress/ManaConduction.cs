@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class ManaConduction : Trait
 {
-    private int _enemyManaUsed = 3;
     private int _manaUsed;
 
     public override void OnTurnStart()
@@ -31,10 +30,9 @@ public class ManaConduction : Trait
 
         if (Character.GetFaction() == Faction.Enemy)
         {
-            _manaUsed = _enemyManaUsed;
+            _manaUsed = CombatManager._instance.enemyMana;
         }
 
-        Debug.Log("Mana used = _manaUsed");
         damage += (_manaUsed * data.DamageModifier);
     }
 }
