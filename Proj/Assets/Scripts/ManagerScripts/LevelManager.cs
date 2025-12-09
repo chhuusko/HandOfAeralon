@@ -58,7 +58,7 @@ public class LevelManager : ScriptableObject
         if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
         {
             Debug.Log("isNotshop");
-            if (_level > easyCombatList.Count) _level = 0;
+            if (_level >= easyCombatList.Count) _level = 0;
             SceneManager.LoadScene(easyCombatList[_level]);
             _level++;
 
