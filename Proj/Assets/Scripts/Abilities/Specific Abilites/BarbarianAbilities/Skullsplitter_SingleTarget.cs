@@ -38,10 +38,10 @@ public class Skullsplitter_Ability : SingleTargetAbility
         // 7. Enemy Buffs / Debuffs
 
         //1.
-        int damage = (int)(_damageMultiplier * castingCharacter.GetBaseDamage());
+        int damage = castingCharacter.GetBaseDamage();
 
         //2.
-        damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.GetMaxHealth()) ? (int) (damage * _damageMultiplier) : damage;
+        damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.GetMaxHealth()) ? (int)(damage * _extraDamageMultiplier) : (int)(damage * _damageMultiplier);
 
         damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
