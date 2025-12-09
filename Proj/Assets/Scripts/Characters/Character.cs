@@ -499,6 +499,7 @@ public class Character : MonoBehaviour
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
         OnWasHealed?.Invoke(healAmount, gameObject);
         Debug.Log($"Healing {healAmount} health. New health: {GetCurrentHealth()}");
+        Debug.Log($"{GetCurrentHealth()}/{Data.BaseHealthPoints}");
     }
     
     public bool IsMoving()
