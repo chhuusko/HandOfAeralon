@@ -12,9 +12,10 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private float _sellTime = 2f;
     private float _timeHeld = 0;
     private int price = 100;
-    [SerializeField] Image _fillImage;
-    [SerializeField] GameObject _aboveText;
-    [SerializeField] TextMeshProUGUI _priceText;
+    [SerializeField] private Image portrait;
+    [SerializeField] private Image _fillImage;
+    [SerializeField] private GameObject _aboveText;
+    [SerializeField] private TextMeshProUGUI _priceText;
     private void Awake()
     {
         _fillImage.fillAmount = 0;
@@ -36,7 +37,7 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     }
     public void SetCharacter(CharacterData characterData)
     {
-        GetComponent<Image>().sprite = characterData.ClassData.classImage;
+        portrait.sprite = characterData.ClassData.classImage;
         _characterData = characterData;
     }
     public void OnPointerDown(PointerEventData eventData)
