@@ -11,7 +11,8 @@ public class FadingBoon : Trait
 
     public override void OnStatusEffectApplied(Character caster, StatusEffect statusEffect)
     {
-        if (_effectApplied)
+        // Trait applies only to buffs.
+        if (_effectApplied || statusEffect.Data.Type is not StatusEffectType.Buff)
         {
             return;
         }
