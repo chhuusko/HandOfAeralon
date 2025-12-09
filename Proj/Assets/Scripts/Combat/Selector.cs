@@ -475,7 +475,7 @@ public class Selector : MonoBehaviour
 
         if (success)
         {
-            OnCharacterActionStarted.Invoke();
+            //OnCharacterActionStarted.Invoke();
         }
 
         ResetColorAllTiles();
@@ -492,7 +492,7 @@ public class Selector : MonoBehaviour
 
         if (success)
         {
-            OnCharacterActionStarted.Invoke();
+            //OnCharacterActionStarted.Invoke();
         }
 
         _selectedCharacter?.GetAbilityHandler()?.SetPendingAbility(null);
