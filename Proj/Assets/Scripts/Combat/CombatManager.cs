@@ -92,6 +92,10 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private List<ClassAbilities> _classAbilities;
     private Dictionary<CharacterClass, List<Ability>> _classAbilitiesDictionary;
 
+    [Header("Enemy base stats")] 
+    public int enemyMana = 6;
+    public int enemyManaSpent = 2;
+
     public UnityEvent TurnStart = new();
 
     private void Awake()
