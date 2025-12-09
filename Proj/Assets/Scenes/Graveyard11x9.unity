@@ -259,6 +259,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 11.139984
       objectReference: {fileID: 0}
+    - target: {fileID: 1901499544258294601, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 36095
+      objectReference: {fileID: 0}
     - target: {fileID: 1942038114287213925, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -108064,7 +108069,7 @@ PrefabInstance:
     - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
       propertyPath: _fileToLoadDEBUG
-      value: Tutorial3
+      value: Level1Standard11x9
       objectReference: {fileID: 0}
     - target: {fileID: 616073620153778492, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
