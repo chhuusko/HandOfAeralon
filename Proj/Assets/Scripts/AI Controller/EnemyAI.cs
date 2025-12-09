@@ -159,6 +159,8 @@ public class EnemyAI : MonoBehaviour
                 _currentAbilityHandler.CalculateAbilityRange(pos);
                 List<CombatGridTile> abilityRange = _currentAbilityHandler.GetTilesInRange();
 
+                //Debug.Log($"From pos {pos.GetTileIndex()} Sorceress can hit {abilityRange.Count} tiles");
+
                 foreach (var tile in abilityRange)
                 {
                     AIAction action = new AIAction { movement = pos, ability = ability, target = tile };
@@ -215,6 +217,8 @@ public class EnemyAI : MonoBehaviour
             PrintAIAction(entry.Key);
         }
         */
+
+        //Debug.Log("Total actions: " + _scoredActions.Count);
 
         var topActions = _scoredActions
             .OrderByDescending(x => x.Value)
@@ -326,7 +330,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (!_scoredActions.ContainsKey(action))
         {
-            Debug.LogError($"EnemyAI.cs | Can't print unscored AIActions!");
+            DebugLog.JLWLogWarning($"EnemyAI.cs | Can't print unscored AIActions!");
             return;
         }
 
