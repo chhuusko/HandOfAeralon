@@ -550,6 +550,11 @@ public class CombatUI : MonoBehaviour
     private void UpdateAbilityColors(Character c, AbilityButton abilityButton)
     {
         bool interactable = false;
+
+        foreach (var ability in c.Data.ActiveAbilities)
+        {
+            Debug.Log(ability.GetAbilityName());
+        }
         
         if (_bCombatStarted && c && _currentTurnCharacter && _selectedCharacter != null)
         {
