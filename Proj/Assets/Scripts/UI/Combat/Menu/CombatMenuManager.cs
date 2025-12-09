@@ -62,6 +62,7 @@ public class CombatMenuManager : MonoBehaviour
 
     public void InvokeEndCombatButtonPressed()
     {
+        Debug.Log("GO TO SHOP");
         HideEndCombatMenuScreen();
         OnGoToShopButtonPressed?.Invoke();
     }
