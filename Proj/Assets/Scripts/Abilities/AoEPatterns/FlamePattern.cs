@@ -71,7 +71,7 @@ public class FlamePattern : DirectedAOEPattern
 
         // Keep expanding pattern til a certain point. Then just keep adding tiles with the same width.
         int maxWidth = Mathf.Min(currentIndex, _indexWhenExpandingStops);
-        Debug.Log(_indexWhenExpandingStops);
+      
         for (int i = 0; i <= maxWidth; i++)
         {
             // Calculate tile to the side of center with loop index and direction.
