@@ -32,8 +32,6 @@ public class ManaConduction : Trait
         {
             _manaUsed = CombatManager._instance.enemyMana;
         }
-
-        Debug.Log("Mana used =" +  _manaUsed);
         damage += (_manaUsed * data.DamageModifier);
     }
 }

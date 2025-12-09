@@ -453,6 +453,10 @@ public class StatusEffectManager : MonoBehaviour
         {
             statusEffect.OnCardPlayed(card);
         }
+        foreach (var trait in _traitManager.GetAllTraits())
+        {
+            trait.OnCardPlayed(card);
+        }
     }
     
     public int ApplyAoEModifiers(ref int baseAoE)
