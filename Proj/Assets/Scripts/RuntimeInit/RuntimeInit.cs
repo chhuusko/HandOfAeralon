@@ -14,7 +14,7 @@ public class RuntimeInit
                 Cursor.visible = false;
             }
             Texture2D cursor = cursorDatabase.defaultCursor;
-            Cursor.SetCursor(cursorDatabase.defaultCursor, Vector2.zero, CursorMode.ForceSoftware);
+            Cursor.SetCursor(cursorDatabase.defaultCursor, Vector2.zero, CursorMode.Auto);
         }
         else
         {

@@ -142,7 +142,7 @@ public class CursorManager : MonoBehaviour
     
     private void SetCursor(Texture2D cursor)
     {
-        Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
+        Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
     }
 
     private void SetUICursor(Sprite cursor)
