@@ -54,6 +54,7 @@ public abstract class RoundAOEAbility : AOEAbility
 
         yield return new WaitForSeconds(GetCastingTime() + GetFromCastToHitTime());
         RunAbility(casterTile, targetTile);
+        Selector._instance.InvokeCharacterActionStopped();
     }
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
