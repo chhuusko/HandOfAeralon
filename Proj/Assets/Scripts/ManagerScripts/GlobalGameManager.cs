@@ -124,7 +124,6 @@ public class GlobalGameManager : ScriptableObject
         };
 
         _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
-        DebugLog.AlexLog($"_currentGame.cardList.Count");
         _currentGame.coins = 100;
         _currentGame.reapersLedgerKills = 0;
     }
