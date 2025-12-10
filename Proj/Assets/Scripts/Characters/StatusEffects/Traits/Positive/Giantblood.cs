@@ -15,6 +15,6 @@ public class Giantblood : Trait
         
         _maxHealth = Character.GetMaxHealth();
         
-        Character.SetBaseHealthPoints(Mathf.RoundToInt(_maxHealth * data.DamageModifier));
+        Character.SetDerivedHealthPoints(Mathf.RoundToInt(_maxHealth * data.DamageModifier));
     }
 }

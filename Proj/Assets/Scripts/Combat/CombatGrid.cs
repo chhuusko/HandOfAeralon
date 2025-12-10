@@ -357,9 +357,9 @@ public class CombatGrid : MonoBehaviour
         characterScript.SetCurrentInitiative(currentSpeed);
         characterScript.SetCurrentDamage(currentDamage);
         characterScript.SetCurrentMovementPoints(currentMovementPoints);
-        characterScript.SetBaseHealthPoints(baseHealtPoints);
+        characterScript.SetDerivedHealthPoints(baseHealtPoints);
         characterScript.SetBaseInitiative(baseSpeed);
-        characterScript.SetBaseDamage(baseDamage);
+        characterScript.SetDerivedDamage(baseDamage);
         characterScript.SetBaseMovementPoints(baseMovementPoints);
   
         characterScript.AddCharacterFrame();

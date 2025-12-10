@@ -27,6 +27,10 @@ public class CharacterData
     public int BaseDamage => _baseDamage;
     public int BaseMovementPoints => _baseMovementPoints;
     
+    [Header("Derived Stats")]
+    [SerializeField] private int _derivedHealthPoints;
+    [SerializeField] private int _derivedDamage;
+    
     [Header("Current stats")]
     [SerializeField] private int _currentHealthPoints;
     [SerializeField] private List<Ability> _abilities;
@@ -91,12 +95,18 @@ public class CharacterData
         _traitManager.GenerateTraits(this);
     }
 
+    public void SetDerivedStats(float factor)
+    {
+        _derivedHealthPoints = Mathf.RoundToInt(_baseHealthPoints * factor);
+        _derivedDamage = Mathf.RoundToInt(_baseDamage * factor);
+    }
+
     public void SetClassData(ClassData classData) => _classData = classData;
     public void SetCharacterClass(CharacterClass characterClass) => _characterClass = characterClass;
     public void SetFaction(Faction faction) => _faction = faction;
-    public void SetBaseHealthPoints(int health) => _baseHealthPoints = Mathf.Max(1, health);
     public void SetBaseInitiative(int initiative) => _baseInitiative = Mathf.Max(1, initiative);
-    public void SetBaseDamage(int damage) => _baseDamage = Mathf.Max(1, damage);
+    public void SetDerivedHealthPoints(int health) => _baseHealthPoints = Mathf.Max(1, health);
+    public void SetDerivedDamage(int damage) => _baseDamage = Mathf.Max(1, damage);
     public void SetBaseMovementPoints(int movementPoints) => _baseMovementPoints = Mathf.Max(movementPoints, 1);
     public void SetCurrentHealthPoints(int health) => _currentHealthPoints = Mathf.Max(health, 0);
     public void Heal(int amount) => SetCurrentHealthPoints(Mathf.Min(CurrentHealthPoints + amount, _baseHealthPoints));
@@ -265,10 +275,10 @@ public class Character : MonoBehaviour
     // Base stats.
     public void SetCharacterClass(CharacterClass characterClass) => _data.SetCharacterClass(characterClass);
     public void SetFaction(Faction faction) => _data.SetFaction(faction);
-    public void SetBaseHealthPoints(int healthPoints) => _data.SetBaseHealthPoints(healthPoints);
     public void SetBaseInitiative(int initiative) => _data.SetBaseInitiative(initiative);
-    public void SetBaseDamage(int damage) => _data.SetBaseDamage(damage);
     public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
+    public void SetDerivedHealthPoints(int healthPoints) => _data.SetDerivedHealthPoints(healthPoints);
+    public void SetDerivedDamage(int damage) => _data.SetDerivedDamage(damage);
     
     // Misc.
     public GameObject GetBodyMesh() => _bodyMesh;
