@@ -8,11 +8,12 @@ public class FlameMark : Card
     {
         if (character != null)
         {
-            character.GetStatusEffectManager().AddStatusEffect(new Burn(null, 2));
+            
             if (character.GetStatusEffectManager().ContainsStatusEffect<Burn>())
             {
                 character.TakeDamage(15);
             }
+            character.GetStatusEffectManager().AddStatusEffect(new Burn(null, 2));
         }
     }
 }

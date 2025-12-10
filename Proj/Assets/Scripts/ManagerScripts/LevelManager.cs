@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.TextCore.Text;
 [CreateAssetMenu(fileName = "LevelManager", menuName = "Manager/LevelManager")]
 public class LevelManager : ScriptableObject
 {
@@ -20,8 +21,12 @@ public class LevelManager : ScriptableObject
     private int _gameLevels = 10;
     private int _difficulty = 0;
 
-    [SerializeField] private float statIncrease = 1.2f;
-    [SerializeField] private int turnsTillStatIncrease = 2;
+    [SerializeField] public float statIncrease = 1.2f;
+    [SerializeField] public int statIncreaseInterval = 1;
+
+    [SerializeField] public float enemyStatIncrease = 1.2f;
+    [SerializeField] public int enemStatIncreaseInterval = 1;
+
     private int menuFPSCap = 60;
     private CombatGrid _combatGrid;
     public static LevelManager GetInstance()
@@ -54,6 +59,7 @@ public class LevelManager : ScriptableObject
     }
     private void StaticLevel()
     {
+        
         Debug.Log(_level + " level");
         if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
         {
@@ -61,6 +67,7 @@ public class LevelManager : ScriptableObject
             if (_level >= easyCombatList.Count) _level = 0;
             SceneManager.LoadScene(easyCombatList[_level]);
             _level++;
+            StatIncrease();
 
             Application.targetFrameRate = -1;
             QualitySettings.vSyncCount = 1;
@@ -70,6 +77,20 @@ public class LevelManager : ScriptableObject
             SceneManager.LoadScene("ShopScene");
             Application.targetFrameRate = menuFPSCap;
             QualitySettings.vSyncCount = 0;
+        }
+    }
+    private void StatIncrease()
+    {
+        
+        foreach (CharacterData character in GlobalGameManager.GetInstance().GetGameData().heroDataList)
+        {
+            //Debug.Log(character.BaseDamage + "before");
+            //character.SetBaseDamage(Mathf.RoundToInt(character.BaseDamage / (statIncrease*(_level/statIncreaseInterval))));
+            //Debug.Log(character.BaseDamage + "removed");
+            //character.SetBaseDamage(Mathf.RoundToInt(character.BaseDamage * (statIncrease*(_level/statIncreaseInterval))));
+            //Debug.Log(character.BaseDamage + "after");
+
+
         }
     }
     private void TieredRandomLevel()
