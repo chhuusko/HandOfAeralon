@@ -6,7 +6,7 @@ public class CombatVictoryScreenMenu : MonoBehaviour
     [SerializeField] private TMP_Text _title;
     [SerializeField] private TMP_Text _info;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         CombatEventManager.OnEnterCombatStateEndCombat += SetScreenData;
