@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad9f937a4d409d442bb94d47179b7c2c, type: 3}
   m_Name: SongOfRenewal_Ability
   m_EditorClassIdentifier: 
-  _abilityName: SongOfRenewal
+  _abilityName: Song of Renewal
   _icon: {fileID: 21300000, guid: 0c3bb867d3de52f43ae0e7a74de316d0, type: 3}
   _range: 6
-  _cooldown: 1
+  _cooldown: 7
   _description: "Restore 20% of a target ally\u2019s max Health, and 10% to all allies
     in the area. Draw 1 card if the main target was below 50% Health. "
   _abilityTag: 10
