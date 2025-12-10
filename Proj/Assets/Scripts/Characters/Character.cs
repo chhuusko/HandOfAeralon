@@ -148,6 +148,7 @@ public class Character : MonoBehaviour
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateAbilityCooldowns;
         CombatEventManager.OnEnterCombatStateTakeTurn += ResetCanAttack;
+        CombatEventManager.OnEnterCombatStateEndCombat += ResetCooldowns;
         
         PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
         if(damagePopupTextManager != null)
@@ -198,6 +199,7 @@ public class Character : MonoBehaviour
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
         CombatEventManager.OnEnterCombatStateTakeTurn -= ResetCanAttack;
+        CombatEventManager.OnEnterCombatStateEndCombat -= ResetCooldowns;
 
         PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
         if (damagePopupTextManager != null)
@@ -339,6 +341,11 @@ public class Character : MonoBehaviour
         CanUseAbility = true;
     }
 
+    private void ResetCooldowns(bool playerWon)
+    {
+        _currentCooldowns = new Dictionary<Ability, int>();
+    }
+
     private void UpdateAbilityCooldowns(Character c)
     {
         // Only update cooldowns for this character.
@@ -372,6 +379,16 @@ public class Character : MonoBehaviour
     public int GetCurrentCooldown(Ability ability)
     {
         return _currentCooldowns.GetValueOrDefault(ability, 0);
+    }
+
+    public void ChangeCooldown(Ability ability, int amount)
+    {
+        if (!_currentCooldowns.ContainsKey(ability))
+        {
+            return;
+        }
+        
+        _currentCooldowns[ability] += amount;
     }
 
     /// <summary>
@@ -408,12 +425,12 @@ public class Character : MonoBehaviour
         if (GetFaction() == Faction.Friendly) 
         {
             mesh.layer = LayerMask.NameToLayer("Friendly");
-            layerMask = 1 << 2;
+            layerMask = (1 << 0) | (1 << 2);
         }
         else
         {
             mesh.layer = LayerMask.NameToLayer("Enemy");
-            layerMask = 1 << 7;
+            layerMask = (1 << 0) | (1 << 7);
         }
         
         SkinnedMeshRenderer smr = mesh.GetComponent<SkinnedMeshRenderer>();
