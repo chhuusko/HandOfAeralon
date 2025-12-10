@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Sanctified : StatusEffect
@@ -11,7 +12,7 @@ public class Sanctified : StatusEffect
         if (damage > 0f)
         {
             damage = 0f;
-            Manager.RemoveStatusEffect(this);
+            ShouldExpire = true;
         }
     }
 }

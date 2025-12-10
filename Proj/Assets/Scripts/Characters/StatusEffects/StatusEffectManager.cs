@@ -253,6 +253,15 @@ public class StatusEffectManager : MonoBehaviour
         {
             statusEffect.ModifyIncomingDamage(ref damage, ability);
         }
+        
+        foreach (var statusEffect in _traitManager.GetAllEffects())
+        {
+            if (statusEffect.ShouldExpire)
+            {
+                RemoveStatusEffect(statusEffect);
+            }
+        }
+        
         return damage;
     }
 
@@ -267,6 +276,15 @@ public class StatusEffectManager : MonoBehaviour
         {
             statusEffect.ModifyOutgoingDamage(ref damage, ability);
         }
+        
+        foreach (var statusEffect in _traitManager.GetAllEffects())
+        {
+            if (statusEffect.ShouldExpire)
+            {
+                RemoveStatusEffect(statusEffect);
+            }
+        }
+        
         return damage;
     }
 

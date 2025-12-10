@@ -16,6 +16,8 @@ public abstract class StatusEffect
     public StatusEffectData Data => _data;
     
     public void SetDuration(int duration) => _duration = duration;
+
+    public bool ShouldExpire;
     
     protected StatusEffect(int duration = 3)
     {
