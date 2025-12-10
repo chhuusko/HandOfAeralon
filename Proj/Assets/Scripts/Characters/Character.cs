@@ -425,12 +425,12 @@ public class Character : MonoBehaviour
         if (GetFaction() == Faction.Friendly) 
         {
             mesh.layer = LayerMask.NameToLayer("Friendly");
-            layerMask = 1 << 2;
+            layerMask = (1 << 0) | (1 << 2);
         }
         else
         {
             mesh.layer = LayerMask.NameToLayer("Enemy");
-            layerMask = 1 << 7;
+            layerMask = (1 << 0) | (1 << 7);
         }
         
         SkinnedMeshRenderer smr = mesh.GetComponent<SkinnedMeshRenderer>();

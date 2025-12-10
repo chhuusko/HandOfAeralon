@@ -23,7 +23,8 @@ public class CombatHoverTooltip : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if( _isHovering )
+        //DEBUGLogRayCastHits();
+        if ( _isHovering )
         {
             Vector2 mousePos = Input.mousePosition;
             RectTransform canvasRect = _tooltipCanvas.transform as RectTransform;
@@ -58,6 +59,22 @@ public class CombatHoverTooltip : MonoBehaviour
         }
     }
 
+    private void DEBUGLogRayCastHits()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit[] hits = Physics.RaycastAll(ray, 1000f);
+
+            Debug.Log($"Raycast hit count: {hits.Length}");
+
+            foreach (var hit in hits)
+            {
+                DebugLog.CJLogWarning("Hit: " + hit.collider.gameObject.name +
+                          " (Layer: " + LayerMask.LayerToName(hit.collider.gameObject.layer) + ")");
+            }
+        }
+    }
 
     public void UpdateText(string title, string description)
     {
