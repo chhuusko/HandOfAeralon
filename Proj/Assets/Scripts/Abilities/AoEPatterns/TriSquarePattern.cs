@@ -40,8 +40,9 @@ public class TriSquarePattern : DirectedAOEPattern
     private void AddTileToList(int x, int y, List<CombatGridTile> list)
     {
         Vector2Int coord = new Vector2Int(x, y);
+        if(OutOfBounds(coord)) return;
         var tileObject = CombatGrid._instance.GetTileAtCoord(x, y);
-        if (!OutOfBounds(coord) && tileObject.TryGetComponent<CombatGridTile>(out var tile))
+        if (tileObject.TryGetComponent<CombatGridTile>(out var tile))
         {
             list.Add(tile);
         }
