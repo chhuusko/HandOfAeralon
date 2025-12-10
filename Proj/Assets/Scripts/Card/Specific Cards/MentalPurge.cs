@@ -8,13 +8,13 @@ public class MentalPurge : Card
     {
         CardHandManager cardHandManager = CardHandManager.GetInstance();
         List<CardContainer> cards = cardHandManager.GetCardsInHand();
-        int count = cards.Count-1;
+        int count = cards.Count;
 
         if (count > 1)
         {
             foreach (CardContainer card in cards)
             {
-                if (!card.GetCard().tags.Contains(CardTag.Etherial) && card.GetCard() != this)
+                if (!card.GetCard().tags.Contains(CardTag.Etherial) || card.GetCard() != this)
                 {
 
                     cardHandManager.GetDiscardPile().Add(card.GetCard());
@@ -24,6 +24,5 @@ public class MentalPurge : Card
             cards.Clear();
             cardHandManager.AddCardFromDeck(count);
         }
-        cardHandManager.AddCardFromDeck(count);
     }
 }
