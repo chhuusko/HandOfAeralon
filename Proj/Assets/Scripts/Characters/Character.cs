@@ -148,6 +148,7 @@ public class Character : MonoBehaviour
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateAbilityCooldowns;
         CombatEventManager.OnEnterCombatStateTakeTurn += ResetCanAttack;
+        CombatEventManager.OnEnterCombatStateEndCombat += ResetCooldowns;
         
         PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
         if(damagePopupTextManager != null)
@@ -198,6 +199,7 @@ public class Character : MonoBehaviour
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
         CombatEventManager.OnEnterCombatStateTakeTurn -= ResetCanAttack;
+        CombatEventManager.OnEnterCombatStateEndCombat -= ResetCooldowns;
 
         PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
         if (damagePopupTextManager != null)
@@ -339,6 +341,11 @@ public class Character : MonoBehaviour
         CanUseAbility = true;
     }
 
+    private void ResetCooldowns(bool playerWon)
+    {
+        _currentCooldowns = new Dictionary<Ability, int>();
+    }
+
     private void UpdateAbilityCooldowns(Character c)
     {
         // Only update cooldowns for this character.
@@ -372,6 +379,16 @@ public class Character : MonoBehaviour
     public int GetCurrentCooldown(Ability ability)
     {
         return _currentCooldowns.GetValueOrDefault(ability, 0);
+    }
+
+    public void ChangeCooldown(Ability ability, int amount)
+    {
+        if (!_currentCooldowns.ContainsKey(ability))
+        {
+            return;
+        }
+        
+        _currentCooldowns[ability] += amount;
     }
 
     /// <summary>
@@ -495,11 +512,11 @@ public class Character : MonoBehaviour
 
     public void Heal(int healAmount)
     {
+        Debug.Log($"Before heal: CurrentHP={GetCurrentHealth()}, MaxHP={Data.BaseHealthPoints}");
         _data.Heal(healAmount);
+        Debug.Log($"After heal: CurrentHP={GetCurrentHealth()}, MaxHP={Data.BaseHealthPoints}");
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
         OnWasHealed?.Invoke(healAmount, gameObject);
-        Debug.Log($"Healing {healAmount} health. New health: {GetCurrentHealth()}");
-        Debug.Log($"{GetCurrentHealth()}/{Data.BaseHealthPoints}");
     }
     
     public bool IsMoving()

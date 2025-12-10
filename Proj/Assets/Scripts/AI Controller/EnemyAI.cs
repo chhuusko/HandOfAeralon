@@ -79,13 +79,11 @@ public class EnemyAI : MonoBehaviour
             return false;
         }
 
-        switch (_currentClass)
+        foreach (var ability in _currentCharacter.GetAvailableAbilities())
         {
-            case CharacterClass.Barbarian: _currentAbilities = _barbData.abilities; break;
-            case CharacterClass.Bard: _currentAbilities = _bardData.abilities; break;
-            case CharacterClass.Rogue: _currentAbilities = _rogueData.abilities; break;
-            case CharacterClass.Sorceress: _currentAbilities = _sorcData.abilities; break;
+            _currentAbilities.Add(ability);
         }
+
         if (_currentAbilities == null || !_currentAbilities.Any())
         {
             DebugLog.JLWLog($"EnemyAI.cs | _currentAbilities NOT FOUND!");
@@ -98,7 +96,6 @@ public class EnemyAI : MonoBehaviour
     private void Run()
     {
         List<CombatGridTile> moveRange = new();
-        List<CombatGridTile> canReach = new();
         if (_currentCharacter.CanMove && _currentCharacter.GetMovementPoints() > 0)
         {
             moveRange = GridExplorer._instance.GetReachableTilesWithMovement(_currentTile, _currentCharacter.GetMovementPoints())
@@ -111,17 +108,9 @@ public class EnemyAI : MonoBehaviour
             moveRange.Add(_currentTile.GetComponent<CombatGridTile>());
         }
 
-        foreach (var tile in moveRange)
-        {
-            List<GameObject> pathSample = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, tile.gameObject, false, moveRange);
+        Debug.LogWarning($"AI | moveRange.Count: {moveRange.Count}");
 
-            if (pathSample != null && pathSample.Count > 0)
-            {
-                canReach.Add(tile);
-            }
-        }
-
-        foreach (var pos in canReach)
+        foreach (var pos in moveRange)
         {
             AIAction move = new AIAction { movement = pos };
             int score = 0;
@@ -141,7 +130,7 @@ public class EnemyAI : MonoBehaviour
                 score += distance * 10;
             }
 
-            List<CombatGridTile> path = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, pos.gameObject, false, canReach)
+            List<CombatGridTile> path = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, pos.gameObject, false, moveRange)
                 .Select(obj => obj.GetComponent<CombatGridTile>())
                 .Where(ch => ch != null)
                 .ToList();
@@ -169,6 +158,8 @@ public class EnemyAI : MonoBehaviour
                 _currentAbilityHandler.SetPendingAbility(ability);
                 _currentAbilityHandler.CalculateAbilityRange(pos);
                 List<CombatGridTile> abilityRange = _currentAbilityHandler.GetTilesInRange();
+
+                //Debug.Log($"From pos {pos.GetTileIndex()} Sorceress can hit {abilityRange.Count} tiles");
 
                 foreach (var tile in abilityRange)
                 {
@@ -227,6 +218,8 @@ public class EnemyAI : MonoBehaviour
         }
         */
 
+        //Debug.Log("Total actions: " + _scoredActions.Count);
+
         var topActions = _scoredActions
             .OrderByDescending(x => x.Value)
             .Take(TOP_N_ACTIONS)
@@ -246,7 +239,7 @@ public class EnemyAI : MonoBehaviour
 
         if (_currentCharacter.CanMove)
         {
-            _movePath = GridExplorer._instance.FindPathAStar(_currentTile, _chosenAction.movement.gameObject, false, canReach)
+            _movePath = GridExplorer._instance.FindPathAStar(_currentTile, _chosenAction.movement.gameObject, false, moveRange)
                 .Select(obj => obj.GetComponent<CombatGridTile>())
                 .Where(ch => ch != null)
                 .ToList();
@@ -337,7 +330,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (!_scoredActions.ContainsKey(action))
         {
-            Debug.LogError($"EnemyAI.cs | Can't print unscored AIActions!");
+            DebugLog.JLWLogWarning($"EnemyAI.cs | Can't print unscored AIActions!");
             return;
         }
 

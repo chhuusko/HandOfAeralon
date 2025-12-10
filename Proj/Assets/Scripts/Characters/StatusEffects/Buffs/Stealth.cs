@@ -21,6 +21,6 @@ public class Stealth : StatusEffect
     // Effect breaks on taking damage.
     public override void ModifyIncomingDamage(ref float damage, Ability ability)
     {
-        Manager.RemoveStatusEffect(this);
+        ShouldExpire = true;
     }
 }
