@@ -20,8 +20,8 @@ public class LevelManager : ScriptableObject
     private int _gameLevels = 10;
     private int _difficulty = 0;
 
-    [SerializeField] private float statIncrease = 1.2f;
-    [SerializeField] private int turnsTillStatIncrease = 2;
+    [SerializeField] readonly float statIncrease = 1.2f;
+    [SerializeField] readonly int turnsTillStatIncrease = 2;
     private int menuFPSCap = 60;
     private CombatGrid _combatGrid;
     public static LevelManager GetInstance()
