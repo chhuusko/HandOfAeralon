@@ -74800,7 +74800,7 @@ PrefabInstance:
     - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
       propertyPath: _fileToLoadDEBUG
-      value: Battle1
+      value: Level1Standard11x9
       objectReference: {fileID: 0}
     - target: {fileID: 616073620153778492, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
@@ -75746,7 +75746,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Camera
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1907746182}
     - target: {fileID: 2478817033009487658, guid: a43b3af574f2ea54f8d05ba36a7f5b4f,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -104286,6 +104286,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4282392999276374299, guid: d0efd5496b7d207459ae1c1ec5eeafac,
     type: 3}
   m_PrefabInstance: {fileID: 1906070241}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &1907746182 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1901499544258294601, guid: 2735cd7749f79404caa4e6ea6b692acd,
+    type: 3}
+  m_PrefabInstance: {fileID: 19583}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1908951508
 PrefabInstance:
