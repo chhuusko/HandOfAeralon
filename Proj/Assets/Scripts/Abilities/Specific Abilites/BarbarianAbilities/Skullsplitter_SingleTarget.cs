@@ -38,10 +38,10 @@ public class Skullsplitter_Ability : SingleTargetAbility
         // 7. Enemy Buffs / Debuffs
 
         //1.
-        int damage = castingCharacter.GetBaseDamage();
+        int baseDamage = (int)(castingCharacter.GetBaseDamage() * _damageMultiplier);
 
         //2.
-        damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.GetMaxHealth()) ? (int)(damage * _extraDamageMultiplier) : (int)(damage * _damageMultiplier);
+        int damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.GetMaxHealth()) ? (int)(baseDamage * _extraDamageMultiplier) : (int)(baseDamage * _damageMultiplier);
 
         damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
@@ -53,5 +53,12 @@ public class Skullsplitter_Ability : SingleTargetAbility
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Spawn and direct VFX to target location.
+    }
+
+    public override int GetDamage()
+    {
+        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return damage;
     }
 }

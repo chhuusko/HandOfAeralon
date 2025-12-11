@@ -36,6 +36,10 @@ public class RoarOfTheAncients : RoundAOEAbility
         if (!canCast) return null;
 
         // Calculate which tiles to effect.
+        if (_pattern is RoundAOEPattern pattern)
+        {
+            pattern.SetRadius(_radius);
+        }
         var list = _pattern.CalculateTilesToEffect(targetTile);
 
         return list;

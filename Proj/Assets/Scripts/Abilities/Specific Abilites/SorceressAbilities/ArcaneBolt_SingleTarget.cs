@@ -62,4 +62,11 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
     {
         // Spawn and direct VFX to target location.
     }
+
+    public override int GetDamage()
+    {
+        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return damage;
+    }
 }

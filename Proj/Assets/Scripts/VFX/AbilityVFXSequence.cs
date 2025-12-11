@@ -11,6 +11,7 @@ public class AbilityVFXSequence : ScriptableObject
     [SerializeField] private float _biggerImpactScale = 2f;
     [SerializeField] private float _offsetDistance;
     [SerializeField] private float _airDistance;
+    [SerializeField] private Vector3 _rotationOffset;
 
     public virtual IEnumerator RunSequence(VFXData data)
     {
@@ -19,7 +20,7 @@ public class AbilityVFXSequence : ScriptableObject
             Vector3 offset = -data.Direction.normalized * _offsetDistance;
             offset.y = GetAirDistance();
 
-            Instantiate(_castFX).Play(data.OriginPosition + offset, data.Direction);
+            Instantiate(_castFX).Play(data.OriginPosition + offset, data.Direction, _rotationOffset);
         }
         yield return new WaitForSeconds(data.CastingFXDuration);
 

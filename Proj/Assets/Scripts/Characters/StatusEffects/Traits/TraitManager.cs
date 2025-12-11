@@ -6,6 +6,8 @@ using UnityEngine;
 [Serializable]
 public class TraitManager
 {
+    public CharacterData CharacterData;
+    
     [SerializeReference] private List<StatusEffect> _statusEffects = new();
     
     public void AddStatusEffect(StatusEffect statusEffect)
@@ -19,11 +21,24 @@ public class TraitManager
             return;
         }
         _statusEffects.Add(statusEffect);
+
+        if (CharacterData == null)
+        {
+            return;
+        }
+
+        CharacterData.CalculateDerivedStats(CharacterData.Faction == Faction.Friendly
+            ? LevelManager.GetInstance().statIncrease
+            : LevelManager.GetInstance().enemyStatIncrease);
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect)
     {
         _statusEffects.Remove(statusEffect);
+        
+        CharacterData.CalculateDerivedStats(CharacterData.Faction == Faction.Friendly
+            ? LevelManager.GetInstance().statIncrease
+            : LevelManager.GetInstance().enemyStatIncrease);
     }
 
     public int ClearStatusEffects(StatusEffectType type)
@@ -44,6 +59,11 @@ public class TraitManager
         {
             _statusEffects.Remove(statusEffect);
         }
+        
+        CharacterData.CalculateDerivedStats(CharacterData.Faction == Faction.Friendly
+            ? LevelManager.GetInstance().statIncrease
+            : LevelManager.GetInstance().enemyStatIncrease);
+        
         return amount;
     }
 
@@ -107,6 +127,14 @@ public class TraitManager
         if (negativeTraits.Count > 0)
         {
             AddStatusEffect(negativeTraits[UnityEngine.Random.Range(0, negativeTraits.Count)].CreateInstance());
+        }
+    }
+
+    public void ModifyDerivedStats(ref float hpFactor, ref float damageFactor)
+    {
+        foreach (var trait in GetAllTraits())
+        {
+            trait.ModifyDerivedStats(ref hpFactor, ref damageFactor);
         }
     }
 }
