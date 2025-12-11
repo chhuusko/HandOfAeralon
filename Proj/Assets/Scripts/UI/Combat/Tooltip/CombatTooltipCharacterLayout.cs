@@ -272,10 +272,12 @@ public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler,
     {
         RebuildCharacterStatTooltip(character.GetComponent<Character>());
     }
+
     private void UpdateTooltipOnDamage(int damage, Character character)
     {
         RebuildCharacterStatTooltip(character);
     }
+
     public void ShowCharacterTooltip()
     {
 

@@ -9,12 +9,12 @@ public class StatusEffectBarElement : MonoBehaviour, IPointerEnterHandler, IPoin
     private string _description;
     private string _title;
 
-    public static event Action<string, string> OnMouseHoverEnter;
+    public static event Action<string, string, RectTransform> OnMouseHoverEnter;
     public static event Action OnMouseHoverExit;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        OnMouseHoverEnter?.Invoke(_title, _description);
+        OnMouseHoverEnter?.Invoke(_title, _description, GetComponent<RectTransform>());
     }
 
     public void OnPointerExit(PointerEventData eventData)
