@@ -92,6 +92,7 @@ public class RoarOfTheAncients : RoundAOEAbility
 
             _enemiesWeakened++;
         }
+        statusEffectManager.AddStatusEffect(slow, castingCharacter);
         AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, slow, false);
     }
 
