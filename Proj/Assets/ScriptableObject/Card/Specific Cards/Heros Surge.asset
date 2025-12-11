@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Heros Surge
   m_EditorClassIdentifier: 
   type: 1
-  rarity: 0
+  rarity: 1
   title: Hero's Surge
   description: Grant target ally Empowered and Haste for 2 turns.
   cost: 4
   icon: {fileID: 21300000, guid: 9f850e152f6eaca4fab5750b240286ec, type: 3}
   CardTemplate: {fileID: 0}
   info: []
+  tags: 
