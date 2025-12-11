@@ -27,6 +27,12 @@ public class CharacterData
     public int BaseDamage => _baseDamage;
     public int BaseMovementPoints => _baseMovementPoints;
     
+    [Header("Derived Stats")]
+    [SerializeField] private int _derivedHealthPoints;
+    [SerializeField] private int _derivedDamage;
+    public int DerivedHealthPoints => _derivedHealthPoints;
+    public int DerivedDamage => _derivedDamage;
+    
     [Header("Current stats")]
     [SerializeField] private int _currentHealthPoints;
     [SerializeField] private List<Ability> _abilities;
@@ -71,6 +77,8 @@ public class CharacterData
             _baseMovementPoints = UnityEngine.Random.Range(ClassData.minMovementPoints, ClassData.maxMovementPoints + 1);
         }
         
+        CalculateDerivedStats(1);
+        
         _characterClass = ClassData.characterClass;
         _abilities = ClassData.abilities;
         _activeAbilities = new List<Ability>(_abilities);
@@ -82,6 +90,8 @@ public class CharacterData
         {
             _traitManager = new TraitManager();
         }
+
+        _traitManager.CharacterData = this;
     }
     
     public void GenerateTraits()
@@ -91,15 +101,51 @@ public class CharacterData
         _traitManager.GenerateTraits(this);
     }
 
+    public void CalculateDerivedStats(float factor)
+    {
+        CalculateDerivedStats(factor, factor);
+    }
+
+    public void CalculateDerivedStats(float hpFactor, float damageFactor)
+    {
+        _traitManager.ModifyDerivedStats(ref hpFactor, ref damageFactor);
+        
+        int derivedHp = Mathf.RoundToInt(_baseHealthPoints * hpFactor);
+        int derivedDamage = Mathf.RoundToInt(_baseDamage * damageFactor);
+        
+        Debug.Log($"Derived hp: {derivedHp}");
+        
+        SetDerivedHealthPoints(derivedHp);
+        SetDerivedDamage(derivedDamage);
+    }
+
     public void SetClassData(ClassData classData) => _classData = classData;
     public void SetCharacterClass(CharacterClass characterClass) => _characterClass = characterClass;
     public void SetFaction(Faction faction) => _faction = faction;
-    public void SetBaseHealthPoints(int health) => _baseHealthPoints = Mathf.Max(1, health);
     public void SetBaseInitiative(int initiative) => _baseInitiative = Mathf.Max(1, initiative);
-    public void SetBaseDamage(int damage) => _baseDamage = Mathf.Max(1, damage);
+    
+    public void SetDerivedHealthPoints(int health)
+    {
+        int oldMax = _derivedHealthPoints;
+        int newMax = Mathf.Max(1, health);
+        
+        _derivedHealthPoints = newMax;
+        
+        Debug.Log($"New max: {newMax}");
+
+        if (oldMax > 0 && oldMax != newMax)
+        {
+            float ratio = (float)newMax / oldMax;
+            _currentHealthPoints = Mathf.RoundToInt(_currentHealthPoints * ratio);
+        }
+        
+        _currentHealthPoints = Mathf.Min(_currentHealthPoints, _derivedHealthPoints);
+    }
+
+    public void SetDerivedDamage(int damage) => _derivedDamage = Mathf.Max(1, damage);
     public void SetBaseMovementPoints(int movementPoints) => _baseMovementPoints = Mathf.Max(movementPoints, 1);
     public void SetCurrentHealthPoints(int health) => _currentHealthPoints = Mathf.Max(health, 0);
-    public void Heal(int amount) => SetCurrentHealthPoints(Mathf.Min(CurrentHealthPoints + amount, _baseHealthPoints));
+    public void Heal(int amount) => SetCurrentHealthPoints(Mathf.Min(CurrentHealthPoints + amount, _derivedHealthPoints));
     public void SetAbilities(List<Ability> abilities) => _abilities = new List<Ability>(abilities);
     public void SetActiveAbilities(List<Ability> abilities)
     {
@@ -115,7 +161,6 @@ public class Character : MonoBehaviour
     public event Action<int> OnHealthChanged;
     public event Action<int, GameObject> OnTakeDamage;
     public event Action<int, GameObject> OnWasHealed;
-
 
     public const int MOVEMENT_POINTS = 5;
     public const float DEATH_COOLDOWN = 2.5f;
@@ -240,9 +285,9 @@ public class Character : MonoBehaviour
     public Faction GetFaction() => _data.Faction;
     
     // Base stats.
-    public int GetMaxHealth() => _data.BaseHealthPoints;
+    public int GetMaxHealth() => _data.DerivedHealthPoints;
     public int GetBaseInitiative() => _data.BaseInitiative;
-    public int GetBaseDamage() => _data.BaseDamage;
+    public int GetBaseDamage() => _data.DerivedDamage;
     public int GetBaseMovementPoints() => _data.BaseMovementPoints;
     
     // Current stats.
@@ -265,10 +310,10 @@ public class Character : MonoBehaviour
     // Base stats.
     public void SetCharacterClass(CharacterClass characterClass) => _data.SetCharacterClass(characterClass);
     public void SetFaction(Faction faction) => _data.SetFaction(faction);
-    public void SetBaseHealthPoints(int healthPoints) => _data.SetBaseHealthPoints(healthPoints);
     public void SetBaseInitiative(int initiative) => _data.SetBaseInitiative(initiative);
-    public void SetBaseDamage(int damage) => _data.SetBaseDamage(damage);
     public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
+    public void SetDerivedHealthPoints(int healthPoints) => _data.SetDerivedHealthPoints(healthPoints);
+    public void SetDerivedDamage(int damage) => _data.SetDerivedDamage(damage);
     
     // Misc.
     public GameObject GetBodyMesh() => _bodyMesh;
@@ -406,8 +451,10 @@ public class Character : MonoBehaviour
             
         // Set values from class data.
         _currentInitiative = _data.BaseInitiative;
-        _currentDamage = _data.BaseDamage;
+        _currentDamage = _data.DerivedDamage;
         _currentMovementPoints = _data.BaseMovementPoints;
+        
+        SetCurrentHealthPoints(_data.DerivedHealthPoints);
         
         SetMeshLayers(_bodyMesh);
         SetMeshLayers(_weaponMesh);
