@@ -20,7 +20,6 @@ public class VFXPlayer : MonoBehaviour
         }
         else
         {
-            // fallback: play all ParticleSystems
             foreach (var ps in GetComponentsInChildren<ParticleSystem>())
                 ps.Play();
 
