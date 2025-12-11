@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,8 +11,10 @@ public class CombatHoverTooltip : MonoBehaviour
 
     [SerializeField] private TMP_Text _title;
     [SerializeField] private TMP_Text _description;
+    [SerializeField] private float _offsetY;
     private bool _isHovering;
     private RectTransform _rectTransform;
+    private Vector2 _buttonPosition;
 
     void Start()
     {
@@ -26,23 +28,26 @@ public class CombatHoverTooltip : MonoBehaviour
         //DEBUGLogRayCastHits();
         if ( _isHovering )
         {
-            Vector2 mousePos = Input.mousePosition;
             RectTransform canvasRect = _tooltipCanvas.transform as RectTransform;
 
-            // Convert the mouse position from screen space to local canvas space
+            // Convert the BUTTON screen position → canvas local position
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 canvasRect,
-                mousePos,
-                _tooltipOverlayCamera,   // Pass the UI camera to handle camera stacking
-                out Vector2 localPoint);
+                _buttonPosition,               // ✔ this is already in screen space
+                _tooltipOverlayCamera,         // camera of the canvas
+                out Vector2 localPoint);    
 
-            // Now set the position
-            localPoint.x += 80f + _rectTransform.sizeDelta.x/2f;
-            localPoint.y += -40f + _rectTransform.sizeDelta.y/2f;
+            // Optional offset so tooltip appears slightly above/right of the button
+            //localPoint.x += 40f;
+            //localPoint.y -= 40f;
+            
 
-            ClampToScreenBounds(localPoint);
+            // Clamp tooltip inside canvas bounds
+            localPoint = ClampToScreenBounds(localPoint, canvasRect.rect.size);
 
+            // Apply position
             _rectTransform.anchoredPosition = localPoint;
+
         }
     }
 
@@ -63,12 +68,9 @@ public class CombatHoverTooltip : MonoBehaviour
         }
     }
 
-    private void ClampToScreenBounds(Vector2 localPoint)
+    private Vector2 ClampToScreenBounds(Vector2 localPoint, Vector2 canvasSize)
     {
-
-        RectTransform canvasRect = _tooltipCanvas.transform as RectTransform;
         Vector2 tooltipSize = _rectTransform.sizeDelta;
-        Vector2 canvasSize = canvasRect.rect.size;
 
         float halfW = tooltipSize.x * 0.5f;
         float halfH = tooltipSize.y * 0.5f;
@@ -80,13 +82,29 @@ public class CombatHoverTooltip : MonoBehaviour
 
         localPoint.x = Mathf.Clamp(localPoint.x, minX, maxX);
         localPoint.y = Mathf.Clamp(localPoint.y, minY, maxY);
+
+        return localPoint;
     }
+
     public void UpdateText(string title, string description)
     {
         SetTitle(title);
         SetDescription(description);
     }
 
+    public void UpdateText(string title, string description, RectTransform targetRect)
+    {
+        SetTitle(title);
+        SetDescription(description);
+        _isHovering = true;
+
+        SetTitle(title);
+        SetDescription(description);
+        _isHovering = true;
+
+
+        _buttonPosition = targetRect.anchoredPosition;
+    }
 
     public void SetIsHovering(bool isHovering) { _isHovering = isHovering; }
     public void SetTitle(string title) { _title.text = title; }
@@ -104,4 +122,12 @@ public class CombatHoverTooltip : MonoBehaviour
         _isHovering = true;
         UpdateText(title, description);
     }
+
+    public void Show(string title, string description, RectTransform position)
+    {
+        _isHovering = true;
+        UpdateText(title, description, position);
+    }
+
+
 }

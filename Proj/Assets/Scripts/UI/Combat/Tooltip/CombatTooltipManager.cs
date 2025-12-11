@@ -68,9 +68,16 @@ public class CombatTooltipManager : MonoBehaviour
     public CombatTooltipCharacterLayout GetCharacterLayout() { return _characterLayout; }
 
 
-    public void ShowHoverTooltip(Ability ability)
+    public void ShowHoverTooltip(AbilityButton button, Ability ability)
     {
-        _combatHoverTooltip.Show(ability.GetAbilityName(), ability.GetDescription());
+        //string description = ability.GetDescription();
+        //
+        //description += "\n\nCooldown: " + ability.GetCooldown() + " turns.";
+        //_combatHoverTooltip.Show(ability.GetAbilityName(), description, button.transform.position);
+        string description = ability.GetDescription();
+        description += "\n\nCooldown: " + ability.GetCooldown() + " turns.";
+
+        _combatHoverTooltip.Show(ability.GetAbilityName(), description, button.GetComponent<RectTransform>());
     }
 
     public void ShowHoverTooltip(string title, string description)
