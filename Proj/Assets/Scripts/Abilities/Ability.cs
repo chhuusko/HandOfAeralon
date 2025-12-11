@@ -147,5 +147,10 @@ public abstract class Ability : ScriptableObject
         character.SetCurrentMovementPoints(0);
     }
     protected abstract void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile);
+
+    public virtual int GetDamage()
+    {
+        return 0;
+    }
 }
 

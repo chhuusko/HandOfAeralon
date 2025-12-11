@@ -40,20 +40,7 @@ public class CombatHoverTooltip : MonoBehaviour
             localPoint.x += 80f + _rectTransform.sizeDelta.x/2f;
             localPoint.y += -40f + _rectTransform.sizeDelta.y/2f;
 
-            // --- CLAMP TO SCREEN BOUNDS ---
-            Vector2 tooltipSize = _rectTransform.sizeDelta;
-            Vector2 canvasSize = canvasRect.rect.size;
-
-            float halfW = tooltipSize.x * 0.5f;
-            float halfH = tooltipSize.y * 0.5f;
-
-            float minX = -canvasSize.x * 0.5f + halfW;
-            float maxX = canvasSize.x * 0.5f - halfW;
-            float minY = -canvasSize.y * 0.5f + halfH;
-            float maxY = canvasSize.y * 0.5f - halfH;
-
-            localPoint.x = Mathf.Clamp(localPoint.x, minX, maxX);
-            localPoint.y = Mathf.Clamp(localPoint.y, minY, maxY);
+            ClampToScreenBounds(localPoint);
 
             _rectTransform.anchoredPosition = localPoint;
         }
@@ -76,6 +63,24 @@ public class CombatHoverTooltip : MonoBehaviour
         }
     }
 
+    private void ClampToScreenBounds(Vector2 localPoint)
+    {
+
+        RectTransform canvasRect = _tooltipCanvas.transform as RectTransform;
+        Vector2 tooltipSize = _rectTransform.sizeDelta;
+        Vector2 canvasSize = canvasRect.rect.size;
+
+        float halfW = tooltipSize.x * 0.5f;
+        float halfH = tooltipSize.y * 0.5f;
+
+        float minX = -canvasSize.x * 0.5f + halfW;
+        float maxX = canvasSize.x * 0.5f - halfW;
+        float minY = -canvasSize.y * 0.5f + halfH;
+        float maxY = canvasSize.y * 0.5f - halfH;
+
+        localPoint.x = Mathf.Clamp(localPoint.x, minX, maxX);
+        localPoint.y = Mathf.Clamp(localPoint.y, minY, maxY);
+    }
     public void UpdateText(string title, string description)
     {
         SetTitle(title);

@@ -48,7 +48,7 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
         // Get base damage.
-        int baseDamage = castingCharacter.GetBaseDamage();
+        int baseDamage = (int) (castingCharacter.GetBaseDamage() * _damageMultiplier);
         var statusEffectsManager = affectedCharacter.GetComponent<StatusEffectManager>();
         if (statusEffectsManager == null) return 0;
 
@@ -65,5 +65,12 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         //
+    }
+
+    public override int GetDamage()
+    {
+        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return damage;
     }
 }

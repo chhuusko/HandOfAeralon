@@ -28,8 +28,8 @@ MonoBehaviour:
     type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0
-  _fromCastToHitTime: 0
+  _castingTime: 0.5
+  _fromCastToHitTime: 0.3
   _castingRotationTime: 0.3
   _pattern: {fileID: 11400000, guid: 3d1a5d34020f2914ab668a0552d0687c, type: 2}
   _validTargets: 2

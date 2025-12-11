@@ -230,16 +230,21 @@ public class CombatManager : MonoBehaviour
 
         List<CombatGridTile> deployTiles = CombatGrid._instance.GetAllDeployTiles();
 
+        CombatGridTile[] offGridTiles = CombatGrid._instance.GetOffGridTiles();
+
         // NOTE (Calle): only placing heroes on the first deploytiles in the list.
         int deployTileIndex = 0;
         foreach(CharacterData data in characterDataList)
         {
             Character playerHero = CombatGrid._instance.SpawnCharacter(data, 
-                                                                       deployTiles[deployTileIndex++].GetTilePosition(),
+                                                                       deployTiles[deployTileIndex].GetTilePosition(),
                                                                        Quaternion.Euler(0.0f, 90.0f, 0.0f));
             playerHero.Initialize(data);
 
             _dataToCharacterDict.Add(data, playerHero);
+
+            //playerHero.gameObject.transform.position = new Vector3(-1, deployTileIndex++, 0);
+            playerHero.gameObject.transform.position = offGridTiles[deployTileIndex++].GetTilePosition();
         }
     }
 
