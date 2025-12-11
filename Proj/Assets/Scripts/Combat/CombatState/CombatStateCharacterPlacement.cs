@@ -24,6 +24,7 @@ public class CombatStateCharacterPlacement : CombatStateBase
         base.Exit();
         CombatUI.Instance.OnStartCombatButtonPressed -= StartTakeTurns;
         CombatEventManager.InvokeExitCombatStatePlaceCharacter();
+        CombatGrid._instance.HideOffGridTiles();
     }
 
     public override void Update()
@@ -72,6 +73,6 @@ public class CombatStateCharacterPlacement : CombatStateBase
 
     private void StartTakeTurns()
     {
-        CombatManager._instance.ChangeCombatState(new CombatStateTakeTurn());
+      CombatManager._instance.ChangeCombatState(new CombatStateTakeTurn());
     }
 }
