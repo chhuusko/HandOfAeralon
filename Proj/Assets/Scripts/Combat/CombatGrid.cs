@@ -434,6 +434,8 @@ public class CombatGrid : MonoBehaviour
         GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
         GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, rotation);
         Character characterScript = characterObject.GetComponent<Character>();
+        
+        characterScript.Data.InitializeClassData();
 
         characterScript.SetCharacterClass(characterClass);
         characterScript.SetFaction(faction);
@@ -442,13 +444,13 @@ public class CombatGrid : MonoBehaviour
         characterScript.SetCurrentInitiative(currentSpeed);
         characterScript.SetCurrentDamage(currentDamage);
         characterScript.SetCurrentMovementPoints(currentMovementPoints);
-        characterScript.SetBaseHealthPoints(baseHealtPoints);
+        characterScript.SetDerivedHealthPoints(baseHealtPoints);
         characterScript.SetBaseInitiative(baseSpeed);
-        characterScript.SetBaseDamage(baseDamage);
+        characterScript.SetDerivedDamage(baseDamage);
         characterScript.SetBaseMovementPoints(baseMovementPoints);
   
         characterScript.AddCharacterFrame();
-        characterScript.Data.InitializeClassData();
+        
         characterScript.Initialize(characterScript.Data);
         characterScript.Data.GenerateTraits();
 
