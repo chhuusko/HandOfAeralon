@@ -227,7 +227,7 @@ public class GridExplorer : MonoBehaviour
                 {
                     Vector2Int t1 = new Vector2Int(current.x, next.y);
                     Vector2Int t2 = new Vector2Int(next.x, current.y);
-                    if (!IsWalkable(t1) || !IsWalkable(t2)) continue;
+                    if (!IsWalkable(t1) && !IsWalkable(t2)) continue;
                 }
 
                 if (IsOccupied(next) && next != goal) continue;
