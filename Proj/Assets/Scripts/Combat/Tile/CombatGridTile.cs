@@ -77,6 +77,10 @@ public class CombatGridTile : MonoBehaviour
                     {
                         StatusEffectManager statusEffectManager = character.GetComponent<StatusEffectManager>();
                         statusEffectManager.AddStatusEffect(new Poison(3));
+
+                        Vector3 positionToSpawnAt = other.gameObject.transform.position;
+                        positionToSpawnAt.y += 2f;
+                        ParticleSpawnerManager.GetInstance().SpawnPoisonExplosion(positionToSpawnAt);
                     } break;
 
                 case TileType.Lava:
@@ -84,6 +88,10 @@ public class CombatGridTile : MonoBehaviour
                         character.TakeDamage(4);
                         StatusEffectManager statusEffectManager = character.GetComponent<StatusEffectManager>();
                         statusEffectManager.AddStatusEffect(new Burn(character, 1));
+                        
+                        Vector3 positionToSpawnAt = other.gameObject.transform.position;
+                        positionToSpawnAt.y += 2f;
+                        ParticleSpawnerManager.GetInstance().SpawnLavaExplosion(positionToSpawnAt);
                     } break;
             }
             
