@@ -15,9 +15,10 @@ MonoBehaviour:
   type: 1
   rarity: 0
   title: Life Reaver
-  description: Deal 10 damage to target enemy character. Restore 10 Health to the
-    ally with the lowest Health.
+  description: Deal 10 damage to target enemy and heal the ally with the highest
+    amount of missing Health by 10.
   cost: 4
   icon: {fileID: 21300000, guid: 869a29bf499259b4a8bfb85ee98b9c99, type: 3}
   CardTemplate: {fileID: 0}
   info: []
+  tags: 

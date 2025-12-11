@@ -251,7 +251,7 @@ public class CombatGrid : MonoBehaviour
                         if (inCombatTileMaterial != null)
                         {
                             meshRend.material = inCombatTileMaterial;
-                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(1, 0));
+                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(0, 1));
                         }
                     } break;
                 case TileType.Poison:
