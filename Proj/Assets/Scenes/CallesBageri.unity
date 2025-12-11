@@ -3907,7 +3907,7 @@ PrefabInstance:
     - target: {fileID: 6436671805441576610, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -100.00006
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 6462865683002578279, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
@@ -5302,7 +5302,7 @@ PrefabInstance:
     - target: {fileID: 9127183573721612193, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -568.9997
+      value: -568.99963
       objectReference: {fileID: 0}
     - target: {fileID: 9153215475294455765, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
@@ -76267,6 +76267,11 @@ PrefabInstance:
       propertyPath: _fileToLoadDEBUG
       value: Battle1
       objectReference: {fileID: 0}
+    - target: {fileID: 261140580672474249, guid: 85800cd360de6f54f9b4f93a19564c85,
+        type: 3}
+      propertyPath: inCombatTileMaterialLava
+      value: 
+      objectReference: {fileID: 2100000, guid: 3989416a00bf97d47b508667c9491f5f, type: 2}
     - target: {fileID: 616073620153778492, guid: 85800cd360de6f54f9b4f93a19564c85,
         type: 3}
       propertyPath: _combatCamera
