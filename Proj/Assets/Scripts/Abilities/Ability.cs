@@ -131,7 +131,6 @@ public abstract class Ability : ScriptableObject
                 TargetTile = targetTile,
                 TargetPosition = targetTile.transform.position,
                 Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
-
                 CastingAnimationDuration = _castingAnimationTime,
                 CastingFXDuration = _castingFXTime,
                 TravelFXDuration = _fromCastToHitTime
@@ -139,12 +138,15 @@ public abstract class Ability : ScriptableObject
             caster.StartCoroutine(_abilityVFXSequence.RunSequence(data)
             );
         }
+
         yield return new WaitForSeconds(GetCastingAnimationTime());
+        // Play casting sound.
 
         yield return new WaitForSeconds(GetCastingTime());
-        InitiateParticles(casterTile, targetTile);
-        // Play hit sound.
+        // Play travel sound.
+
         yield return new WaitForSeconds(GetFromCastToHitTime());
+        // Play hit sound.
         RunAbility(casterTile, targetTile);
 
         Selector._instance.InvokeCharacterActionStopped();
