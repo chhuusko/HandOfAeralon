@@ -2410,6 +2410,11 @@ PrefabInstance:
       propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9036981917216650356, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 5381962499452542561}
     m_RemovedComponents:
     - {fileID: 7388982211152161804, guid: 50e3273e88b66d14e8232055a5dacdc1, type: 3}
     m_RemovedGameObjects: []

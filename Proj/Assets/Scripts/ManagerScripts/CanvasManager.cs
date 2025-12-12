@@ -6,6 +6,7 @@ public class CanvasManager : MonoBehaviour
     public static CanvasManager instance;
     [SerializeField] public GameObject MainCanvas;
     [SerializeField] public GameObject OverlayCanvas;
+    [SerializeField] public GameObject CardInfoPanelCanvas;
     private void Awake()
     {
         instance = this;
