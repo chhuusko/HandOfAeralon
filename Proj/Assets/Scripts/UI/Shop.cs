@@ -46,7 +46,7 @@ public class Shop : MonoBehaviour
     }
     private void Awake()
     {
-        _removeCardText.text = "Remove card <color=yellow>"+_removeCardPrice+"</color><voffset=15><space=25><sprite name=\"UI_icon_59\">";
+        _removeCardText.text = "Hold to Remove Card <color=yellow>" + _removeCardPrice+"</color><voffset=20><space=40><sprite name=\"UI_icon_59\">";
         _refreshText.text = "Refresh <color=Yellow>"+_refreshPrice+"</color><voffset=15><space=20><sprite name=\"UI_icon_59\">";
         _healText.text = "Heal Party (50%)\r\n<color=Yellow>"+ _healPrice+ "</color><voffset=15><space=20><sprite name=\"UI_icon_59\">";
         _instance = this;
@@ -63,7 +63,7 @@ public class Shop : MonoBehaviour
     public static System.Action onSellCard;
     public void SoldCard() {
         _removeCardPrice += _addedRemoveCardPrice;
-        _removeCardText.text = "Remove card <color=yellow>" + _removeCardPrice + "</color><voffset=15><space=25><sprite name=\"UI_icon_59\">";
+        _removeCardText.text = "Hold to Remove Card <color=yellow>" + _removeCardPrice + "</color><voffset=20><space=40><sprite name=\"UI_icon_59\">"; ;
         onSellCard?.Invoke(); 
     }
     public void LoadParty()

@@ -26,7 +26,6 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (gameObject.GetComponent<CardContainer>()) return; 
         isHover = true;
-        Debug.Log("spawnInfoPanel");
         _infoPanelsInScene = Instantiate(_pivotPoint, _pivotPoint.transform.position, Quaternion.identity, CanvasManager.Instance().CardInfoPanelCanvas.transform);
         foreach (InfoPanel info in _infoPanels)
         {

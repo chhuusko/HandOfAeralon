@@ -18,7 +18,7 @@ public class LevelManager : ScriptableObject
     private string[] _combatList;
     private string[] _generatedList;
     private int _level = 0;
-    private int _gameLevels = 10;
+    //private int _gameLevels = 10;
     private int _difficulty = 0;
 
     [SerializeField] public float statIncrease = 1.2f;
