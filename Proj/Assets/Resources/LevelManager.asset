@@ -19,4 +19,6 @@ MonoBehaviour:
   mediumCombatList: []
   hardCombatList: []
   statIncrease: 1.2
-  turnsTillStatIncrease: 2
+  statIncreaseInterval: 2
+  enemyStatIncrease: 1.2
+  enemyStatIncreaseInterval: 2
