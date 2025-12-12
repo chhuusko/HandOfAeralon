@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b991492d39e8d2446a0d7666f7170f5a, type: 3}
+  m_Script: {fileID: 11500000, guid: 0dd8f9f34bbfe2e40a2c17b5cfe751b6, type: 3}
   m_Name: Stealth
   m_EditorClassIdentifier: 
   Name: Stealth
@@ -21,3 +21,5 @@ MonoBehaviour:
   _typeName: Stealth, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
+  DamageModifier: 1.25
+  MovementPointModifier: 1
