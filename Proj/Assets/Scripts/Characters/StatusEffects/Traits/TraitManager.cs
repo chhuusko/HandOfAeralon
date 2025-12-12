@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class TraitManager
 {
-    public CharacterData CharacterData { get; set; }
+    [NonSerialized] public CharacterData CharacterData;
     
     [SerializeReference] private List<StatusEffect> _statusEffects = new();
     
