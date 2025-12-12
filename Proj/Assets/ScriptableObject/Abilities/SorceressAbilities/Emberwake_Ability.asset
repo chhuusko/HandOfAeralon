@@ -28,7 +28,8 @@ MonoBehaviour:
     type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0.5
+  _castingAnimationTime: 0
+  _castingFXTime: 3
   _fromCastToHitTime: 0
   _castingRotationTime: 0.3
   _chanceToApplyBurn: 0.25

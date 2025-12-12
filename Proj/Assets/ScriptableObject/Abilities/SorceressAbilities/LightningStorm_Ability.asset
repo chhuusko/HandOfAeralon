@@ -27,11 +27,13 @@ MonoBehaviour:
     type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0.5
+  _castingAnimationTime: 0
+  _castingFXTime: 0.5
   _fromCastToHitTime: 0
   _castingRotationTime: 0.3
   _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
   _validTargets: 2
+  _abilityAOEVFXSequence: {fileID: 0}
   _radius: 3
   _damageMultiplier: 0.7
   _stunCharacterHitChance: 0.25

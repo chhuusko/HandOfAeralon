@@ -24,7 +24,8 @@ MonoBehaviour:
   _abilityVFXSequence: {fileID: 0}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0
+  _castingAnimationTime: 0
+  _castingFXTime: 0.5
   _fromCastToHitTime: 0
   _castingRotationTime: 0.3
   _damageMultiplier: 0.7

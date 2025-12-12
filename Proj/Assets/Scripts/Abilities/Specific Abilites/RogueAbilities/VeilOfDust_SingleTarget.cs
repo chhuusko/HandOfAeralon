@@ -43,18 +43,21 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
                 TargetTile = targetTile,
                 TargetPosition = targetTile.transform.position,
                 Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
-
+                CastingAnimationDuration = GetCastingAnimationTime(),
                 CastingFXDuration = GetCastingTime(),
                 TravelFXDuration = GetFromCastToHitTime()
             };
             caster.StartCoroutine(GetAbilityVFXSequence().RunSequence(data)
             );
         }
+        yield return new WaitForSeconds(GetCastingAnimationTime());
 
         yield return new WaitForSeconds(GetCastingTime());
         InitiateParticles(casterTile, targetTile);
         // Play hit sound.
         yield return new WaitForSeconds(GetFromCastToHitTime());
+
+
         RunAbility(casterTile, targetTile);
 
         Selector._instance.InvokeCharacterActionStopped();
