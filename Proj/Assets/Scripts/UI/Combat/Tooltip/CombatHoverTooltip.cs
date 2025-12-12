@@ -112,21 +112,19 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerExitHandler
 
         Camera camera = targetRect.GetComponentInParent<Canvas>().worldCamera;
 
-        //_buttonPosition = RectTransformUtility.WorldToScreenPoint(_combatHUDOverlayCamera, topCenter);
         _buttonPosition = RectTransformUtility.WorldToScreenPoint(camera, topCenter);
-
 
 
         RectTransform canvasRect = _tooltipCanvas.transform as RectTransform;
 
-        // Convert the BUTTON screen position → canvas local position
+        // Convert the BUTTON screen position to canvas local position
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect,
-            _buttonPosition,               // ✔ this is already in screen space
-            _tooltipOverlayCamera,         // camera of the canvas
+            _buttonPosition,               
+            _tooltipOverlayCamera,         
             out Vector2 localPoint);
 
-        // Optional offset so tooltip appears slightly above/right of the button
+        
         localPoint.x += _rectTransform.rect.width / 2f + 10f;
         localPoint.y += _rectTransform.rect.height / 2f + 10f;
 
