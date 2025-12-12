@@ -11,7 +11,7 @@ public class SeismicBolt : Card
             if (character != null)
         {
             character.TakeDamage(5);
-            character.GetStatusEffectManager().AddStatusEffect(new Aftershock(1));
+            character.GetStatusEffectManager().AddStatusEffect(new Aftershock(2));
 
         }
     }
