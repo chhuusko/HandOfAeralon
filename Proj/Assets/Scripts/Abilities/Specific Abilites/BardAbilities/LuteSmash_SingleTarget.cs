@@ -38,7 +38,7 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
         StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
         if (statusEffectManager == null) return;
 
-        StatusEffect stun = statusEffectManager.TryApplyStun(affectedCharacter, 0, _stunDuration);
+        StatusEffect stun = statusEffectManager.TryApplyStun(affectedCharacter, _applyStunChance, _stunDuration);
 
         if (stun != null && castingCharacter.GetFaction() == Faction.Friendly)
         {

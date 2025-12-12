@@ -28,7 +28,7 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
         bool died = affectedCharacter.TakeDamage(damage);
 
         StatusEffect poison = null;
-        if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
+        if(Random.value <= _applyPoisonChance && affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
             if (castingCharacter.GetFaction() == Faction.Friendly && statusEffectManager.ContainsStatusEffect<Poison>()){
                 CardHandManager.GetInstance().AddCardFromDeck();
             }

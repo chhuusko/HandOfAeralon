@@ -80,7 +80,7 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
         StatusEffect stealth;
         statusEffectManager.AddStatusEffect(stealth = new Stealth(_stealthDuration));
 
-        if (effectsRemoved > 0 && castingCharacter.GetFaction() == Faction.Friendly)
+        if (effectsRemoved >= _buffsRemovedTilBonus && castingCharacter.GetFaction() == Faction.Friendly)
         {
             CardHandManager.GetInstance().ChangeMana(_manaGain);
         }

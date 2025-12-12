@@ -4,8 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Emberwake_Ability", menuName = "Scriptable Objects/Abilities/Sorceress/Emberwake")]
 public class Emberwake_Singletarget : SingleTargetAbility
 {
-    [SerializeField] private float _chanceToApplyBurn = 0.25f;
-    [SerializeField] private int _reduceCardCost = 1;
     [SerializeField] private int _emberwakeDuration = 3;
 
     // Description
@@ -26,7 +24,7 @@ public class Emberwake_Singletarget : SingleTargetAbility
         if (statusEffectManager == null) return;
 
         StatusEffect emberwake;
-        statusEffectManager.AddStatusEffect(emberwake = new Emberwake(GetCooldown()));
+        statusEffectManager.AddStatusEffect(emberwake = new Emberwake(_emberwakeDuration));
 
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, emberwake, false);
     }
