@@ -113,8 +113,6 @@ public class CharacterData
         int derivedHp = Mathf.RoundToInt(_baseHealthPoints * hpFactor);
         int derivedDamage = Mathf.RoundToInt(_baseDamage * damageFactor);
         
-        Debug.Log($"Derived hp: {derivedHp}");
-        
         SetDerivedHealthPoints(derivedHp);
         SetDerivedDamage(derivedDamage);
     }
@@ -130,8 +128,6 @@ public class CharacterData
         int newMax = Mathf.Max(1, health);
         
         _derivedHealthPoints = newMax;
-        
-        Debug.Log($"New max: {newMax}");
 
         if (oldMax > 0 && oldMax != newMax)
         {
@@ -559,9 +555,7 @@ public class Character : MonoBehaviour
 
     public void Heal(int healAmount)
     {
-        Debug.Log($"Before heal: CurrentHP={GetCurrentHealth()}, MaxHP={Data.BaseHealthPoints}");
         _data.Heal(healAmount);
-        Debug.Log($"After heal: CurrentHP={GetCurrentHealth()}, MaxHP={Data.BaseHealthPoints}");
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
         OnWasHealed?.Invoke(healAmount, gameObject);
     }
