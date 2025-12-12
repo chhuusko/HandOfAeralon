@@ -87,6 +87,20 @@ public class DesertsGrasp_Ability : RoundAOEAbility
 
         StatusEffect poison = null;
 
+        if (_abilityAOEVFXSequence != null)
+        {
+            VFXData data = new VFXData
+            {
+                Caster = GetCharacterCaster(),
+                OriginPosition = casterTile.transform.position,
+                TargetTile = tileToEffect,
+                TargetPosition = tileToEffect.transform.position,
+                Direction = (tileToEffect.transform.position - casterTile.transform.position).normalized,
+            };
+            data.Caster.StartCoroutine(_abilityAOEVFXSequence.RunSequence(data)
+            );
+        }
+
         if (Random.value < _chanceToApplyPoison)
         {
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))

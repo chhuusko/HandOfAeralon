@@ -6,6 +6,8 @@ public abstract class AOEAbility : Ability
     [Header("- Type Specific values - ")]
     [SerializeField] protected AOEPattern _pattern;
     [SerializeField] protected ValidTargets _validTargets;
+    [SerializeField] protected AbilityVFXSequence _abilityAOEVFXSequence;
+
     public enum ValidTargets
     {
         Any,

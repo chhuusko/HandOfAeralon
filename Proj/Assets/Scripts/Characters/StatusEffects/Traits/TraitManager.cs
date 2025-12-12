@@ -8,7 +8,7 @@ public class TraitManager
 {
     public CharacterData CharacterData;
     
-    [SerializeReference] private List<StatusEffect> _statusEffects = new();
+    [SerializeReference] public List<StatusEffect> _statusEffects = new();
     
     public void AddStatusEffect(StatusEffect statusEffect)
     {
