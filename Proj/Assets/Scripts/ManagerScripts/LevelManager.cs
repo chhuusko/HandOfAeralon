@@ -25,7 +25,7 @@ public class LevelManager : ScriptableObject
     [SerializeField] public int statIncreaseInterval = 1;
 
     [SerializeField] public float enemyStatIncrease = 1.2f;
-    [SerializeField] public int enemStatIncreaseInterval = 1;
+    [SerializeField] public int enemyStatIncreaseInterval = 1;
 
     private int menuFPSCap = 60;
     private CombatGrid _combatGrid;
@@ -63,7 +63,6 @@ public class LevelManager : ScriptableObject
         Debug.Log(_level + " level");
         if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
         {
-            Debug.Log("isNotshop");
             if (_level >= easyCombatList.Count) _level = 0;
             SceneManager.LoadScene(easyCombatList[_level]);
             _level++;
@@ -81,17 +80,26 @@ public class LevelManager : ScriptableObject
     }
     private void StatIncrease()
     {
-        
-        foreach (CharacterData character in GlobalGameManager.GetInstance().GetGameData().heroDataList)
+        if (_level % statIncreaseInterval == 0)
         {
-            //Debug.Log(character.BaseDamage + "before");
-            //character.SetBaseDamage(Mathf.RoundToInt(character.BaseDamage / (statIncrease*(_level/statIncreaseInterval))));
-            //Debug.Log(character.BaseDamage + "removed");
-            //character.SetBaseDamage(Mathf.RoundToInt(character.BaseDamage * (statIncrease*(_level/statIncreaseInterval))));
-            //Debug.Log(character.BaseDamage + "after");
-
-
+            Debug.Log("PLAYERSTATSUPPDATED----------------------------------");
+            foreach (CharacterData character in GlobalGameManager.GetInstance().GetGameData().heroDataList)
+            {
+                character.CalculateDerivedStats((statIncrease * (_level / statIncreaseInterval)));
+               // Debug.Log("deriveddamage: " + character.DerivedDamage + " base damage: " + character.BaseDamage); 
+            }
+        } 
+        /*
+        if (_level % enemyStatIncreaseInterval == 0)
+        {
+            foreach (Character character in CombatGrid._instance.GetCharacterScriptsByFaction(Faction.Enemy))
+            {
+                character.Data.CalculateDerivedStats((statIncrease * (_level / statIncreaseInterval)));
+                // Debug.Log("deriveddamage: " + character.DerivedDamage + " base damage: " + character.BaseDamage); 
+            }
         }
+        */
+       
     }
     private void TieredRandomLevel()
     {
