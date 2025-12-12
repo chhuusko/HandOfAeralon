@@ -25,6 +25,8 @@ public static class CombatEventManager
     public static event Action OnExitCombatStateEndTurn;
     public static event Action<bool> OnExitCombatStateEndCombat;
 
+    public static event Action<bool> OnIsHoveringUI;
+
     public static event Action<IReadOnlyList<Character>> OnTurnOrderChanged;
 
     public static event Action<Character> OnCharacterDeath;
@@ -78,6 +80,9 @@ public static class CombatEventManager
         => OnExitCombatStateEndTurn?.Invoke();
     public static void InvokeExitCombatStateEndCombat(bool playerWon)
         => OnExitCombatStateEndCombat?.Invoke(playerWon);
+
+    public static void InvokeOnIsHoveringUI(bool mouseIsHoveringUI)
+        => OnIsHoveringUI?.Invoke(mouseIsHoveringUI);
 
     public static void InvokeOnCharacterDeath(Character character)
         => OnCharacterDeath?.Invoke(character);

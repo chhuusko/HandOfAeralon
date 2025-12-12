@@ -144,6 +144,9 @@ public class CombatUI : MonoBehaviour
 
     public void StartCombat()
     {
+        if (!CombatGrid._instance.AllCharactersPlaced())
+            return;
+
         OnStartCombatButtonPressed?.Invoke();
         
         _startCombatButton.gameObject.SetActive(false);

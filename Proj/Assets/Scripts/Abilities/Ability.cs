@@ -25,7 +25,7 @@ public abstract class Ability : ScriptableObject
     [Header("- Visuals & Audio - ")]
     [SerializeField] private AbilityVFXSequence _abilityVFXSequence;
     [SerializeField] private AudioClip _castingSound, _hitSound;
-    [SerializeField] private float _castingTime, _fromCastToHitTime;
+    [SerializeField] private float _castingAnimationTime, _castingFXTime, _fromCastToHitTime;
     [SerializeField] private float _castingRotationTime = 0.3f;
 
     private AbilityHandler _abilityHandler;
@@ -85,7 +85,8 @@ public abstract class Ability : ScriptableObject
     public int GetCooldown() => _cooldown;
     public string GetDescription() => _description;
     public float GetCastingRotationTime() => _castingRotationTime;
-    public float GetCastingTime() => _castingTime;  
+    public float GetCastingAnimationTime() => _castingAnimationTime;
+    public float GetCastingTime() => _castingFXTime;
     public float GetFromCastToHitTime() => _fromCastToHitTime;
     public void SetCooldown(int cooldown)
     {
@@ -99,7 +100,7 @@ public abstract class Ability : ScriptableObject
     {
         return _rangeCalculation.CalculateTilesInRange(casterTile, _range);
     }
-    
+
     public Type GetAbilityType() => _type;
 
     public virtual IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
@@ -111,12 +112,13 @@ public abstract class Ability : ScriptableObject
         ResetMovementPoints(caster);
 
         // Rotate towards target if the target is not the caster's tile.
-        if(casterTile != targetTile)
+        if (casterTile != targetTile)
         {
             caster.RotateTowards(targetTile.transform, _castingRotationTime);
         }
 
-        if (caster.TryGetComponent<Animator>(out var animator)){
+        if (caster.TryGetComponent<Animator>(out var animator))
+        {
             animator.SetTrigger(_abilityName);
         }
 
@@ -129,15 +131,22 @@ public abstract class Ability : ScriptableObject
                 TargetTile = targetTile,
                 TargetPosition = targetTile.transform.position,
                 Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
-
-                CastingFXDuration = _castingTime,
+                CastingAnimationDuration = _castingAnimationTime,
+                CastingFXDuration = _castingFXTime,
                 TravelFXDuration = _fromCastToHitTime
             };
             caster.StartCoroutine(_abilityVFXSequence.RunSequence(data)
             );
         }
 
-        yield return new WaitForSeconds(_castingTime + _fromCastToHitTime);
+        yield return new WaitForSeconds(GetCastingAnimationTime());
+        // Play casting sound.
+
+        yield return new WaitForSeconds(GetCastingTime());
+        // Play travel sound.
+
+        yield return new WaitForSeconds(GetFromCastToHitTime());
+        // Play hit sound.
         RunAbility(casterTile, targetTile);
 
         Selector._instance.InvokeCharacterActionStopped();
@@ -147,5 +156,10 @@ public abstract class Ability : ScriptableObject
         character.SetCurrentMovementPoints(0);
     }
     protected abstract void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile);
+
+    public virtual int GetDamage()
+    {
+        return 0;
+    }
 }
 

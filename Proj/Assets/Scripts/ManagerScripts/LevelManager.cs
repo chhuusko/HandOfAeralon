@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.TextCore.Text;
 [CreateAssetMenu(fileName = "LevelManager", menuName = "Manager/LevelManager")]
 public class LevelManager : ScriptableObject
 {
@@ -17,11 +18,15 @@ public class LevelManager : ScriptableObject
     private string[] _combatList;
     private string[] _generatedList;
     private int _level = 0;
-    private int _gameLevels = 10;
+    //private int _gameLevels = 10;
     private int _difficulty = 0;
 
-    [SerializeField] private float statIncrease = 1.2f;
-    [SerializeField] private int turnsTillStatIncrease = 2;
+    [SerializeField] public float statIncrease = 1.2f;
+    [SerializeField] public int statIncreaseInterval = 1;
+
+    [SerializeField] public float enemyStatIncrease = 1.2f;
+    [SerializeField] public int enemyStatIncreaseInterval = 1;
+
     private int menuFPSCap = 60;
     private CombatGrid _combatGrid;
     public static LevelManager GetInstance()
@@ -54,13 +59,14 @@ public class LevelManager : ScriptableObject
     }
     private void StaticLevel()
     {
+        
         Debug.Log(_level + " level");
         if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
         {
-            Debug.Log("isNotshop");
             if (_level >= easyCombatList.Count) _level = 0;
             SceneManager.LoadScene(easyCombatList[_level]);
             _level++;
+            StatIncrease();
 
             Application.targetFrameRate = -1;
             QualitySettings.vSyncCount = 1;
@@ -71,6 +77,29 @@ public class LevelManager : ScriptableObject
             Application.targetFrameRate = menuFPSCap;
             QualitySettings.vSyncCount = 0;
         }
+    }
+    private void StatIncrease()
+    {
+        if (_level % statIncreaseInterval == 0)
+        {
+            Debug.Log("PLAYERSTATSUPPDATED----------------------------------");
+            foreach (CharacterData character in GlobalGameManager.GetInstance().GetGameData().heroDataList)
+            {
+                character.CalculateDerivedStats((statIncrease * (_level / statIncreaseInterval)));
+               // Debug.Log("deriveddamage: " + character.DerivedDamage + " base damage: " + character.BaseDamage); 
+            }
+        } 
+        /*
+        if (_level % enemyStatIncreaseInterval == 0)
+        {
+            foreach (Character character in CombatGrid._instance.GetCharacterScriptsByFaction(Faction.Enemy))
+            {
+                character.Data.CalculateDerivedStats((statIncrease * (_level / statIncreaseInterval)));
+                // Debug.Log("deriveddamage: " + character.DerivedDamage + " base damage: " + character.BaseDamage); 
+            }
+        }
+        */
+       
     }
     private void TieredRandomLevel()
     {

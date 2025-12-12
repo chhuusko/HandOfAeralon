@@ -31,12 +31,15 @@ public class Card : ScriptableObject
     public List<InfoPanel> info;
     public List<CardTag> tags;
 
+    private List<Color> rarityColors = new List<Color>()
+    {
+        new Color(0.80f, 0.54f, 0.49f),
+        new Color(1f,1f,1f),
+        new Color(1.00f, 0.66f, 0.14f)
+    };
+
     private int tempCost;
     private bool isTempCost;
-    private void Awake()
-    {
-        
-    }
     public int Getcost()
     {
         if (isTempCost)
@@ -79,6 +82,10 @@ public class Card : ScriptableObject
         isTempCost = true;
         tempCost += changeInCost;
         if (tempCost < 0) { tempCost = 0; }
+    }
+    public Color GetRarityColor(int rarity)
+    {
+        return rarityColors[rarity];
     }
 }
 

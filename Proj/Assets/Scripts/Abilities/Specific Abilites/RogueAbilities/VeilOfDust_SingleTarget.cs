@@ -43,18 +43,21 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
                 TargetTile = targetTile,
                 TargetPosition = targetTile.transform.position,
                 Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
-
+                CastingAnimationDuration = GetCastingAnimationTime(),
                 CastingFXDuration = GetCastingTime(),
                 TravelFXDuration = GetFromCastToHitTime()
             };
             caster.StartCoroutine(GetAbilityVFXSequence().RunSequence(data)
             );
         }
+        yield return new WaitForSeconds(GetCastingAnimationTime());
 
         yield return new WaitForSeconds(GetCastingTime());
         InitiateParticles(casterTile, targetTile);
         // Play hit sound.
         yield return new WaitForSeconds(GetFromCastToHitTime());
+
+
         RunAbility(casterTile, targetTile);
 
         Selector._instance.InvokeCharacterActionStopped();
@@ -77,7 +80,7 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
         StatusEffect stealth;
         statusEffectManager.AddStatusEffect(stealth = new Stealth(_stealthDuration));
 
-        if (effectsRemoved > 0 && castingCharacter.GetFaction() == Faction.Friendly)
+        if (effectsRemoved >= _buffsRemovedTilBonus && castingCharacter.GetFaction() == Faction.Friendly)
         {
             CardHandManager.GetInstance().ChangeMana(_manaGain);
         }

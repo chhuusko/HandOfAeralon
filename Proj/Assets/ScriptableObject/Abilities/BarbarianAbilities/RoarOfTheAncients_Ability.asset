@@ -23,15 +23,17 @@ MonoBehaviour:
   _type: 4
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
   _targetType: 2
-  _castingEffect: {fileID: 0}
-  _hitEffect: {fileID: 0}
+  _abilityVFXSequence: {fileID: 11400000, guid: 197122acc16c671488db91cc6194dbd0,
+    type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0.5
+  _castingAnimationTime: 0.5
+  _castingFXTime: 0
   _fromCastToHitTime: 0
   _castingRotationTime: 0.3
   _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
   _validTargets: 5
+  _abilityAOEVFXSequence: {fileID: 0}
   _radius: 2
   _chanceToApplyWeakened: 0.5
   _slowDuration: 2

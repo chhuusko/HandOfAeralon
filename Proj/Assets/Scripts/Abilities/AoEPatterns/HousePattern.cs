@@ -9,38 +9,34 @@ public class HousePattern : DirectedAOEPattern
     
     public override List<CombatGridTile> CalculateTilesToEffect(CombatGridTile targetTile)
     {
-       return CalculateSquareWithoutCaster(CalculateTopRightTile(1, 1, targetTile));
+        Vector2Int targetIndex = targetTile.GetTileIndex();
+       return CalculateSquareWithoutCaster(CalculateTopRightTile(1, 1, targetIndex));
     }
 
-    private CombatGridTile CalculateTopRightTile(int plusX, int plusY, CombatGridTile targetTile)
+    private Vector2Int CalculateTopRightTile(int plusX, int plusY, Vector2Int targetIndex)
     {
-        Vector2Int startIndex = targetTile.GetTileIndex();
+        Vector2Int startIndex = targetIndex;
         startIndex.x += plusX;
         startIndex.y += plusY;
-        GameObject tileObj = CombatGrid._instance.GetTileAtCoord(startIndex.x, startIndex.y);
-        if (tileObj == null) return null;
-        CombatGridTile tile = tileObj.GetComponent<CombatGridTile>();
-        if (tile == null) return null;
-        return tile;
+       
+        return startIndex;
     }
 
-    private List<CombatGridTile> CalculateSquareWithoutCaster(CombatGridTile topRightTileOfSquare)
+    private List<CombatGridTile> CalculateSquareWithoutCaster(Vector2Int topRightTileIndexOfSquare)
     {
         List<CombatGridTile> squareWithoutCaster = new();
-        Vector2Int startIndex = topRightTileOfSquare.GetTileIndex();
+        Vector2Int currentIndex = topRightTileIndexOfSquare;
 
-        for (int x = startIndex.x; x > startIndex.x - _size; x--)
+        for (int x = currentIndex.x; x > currentIndex.x - _size; x--)
         {
-            for (int y = startIndex.y; y > startIndex.y - _size; y--)
+            for (int y = currentIndex.y; y > currentIndex.y - _size; y--)
             {
-                if (x < 0 || x >= CombatGrid._instance.GetGridWidth()) continue;
-                if (y < 0 || y >= CombatGrid._instance.GetGridHeight()) continue;
+                if (OutOfBounds(new Vector2Int(x, y))) continue;
 
                 GameObject tileObj = CombatGrid._instance.GetTileAtCoord(x, y);
                 if(tileObj == null) continue;
                 CombatGridTile tile = tileObj.GetComponent<CombatGridTile>();
-                if(tile == null) continue;
-                if(tile == _casterTile) continue;
+                if (!tile || tile == _casterTile) continue;
                 squareWithoutCaster.Add(tile);
             }
         }

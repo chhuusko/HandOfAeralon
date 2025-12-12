@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf6383c0305810c4cbb86136a8d14596, type: 3}
+  m_Name: EmberwakeVFXSequence 1
+  m_EditorClassIdentifier: 
+  _castFX: {fileID: -5180166812705019882, guid: de835530094dedd4585a61b0e84ab345,
+    type: 3}
+  _travelFX: {fileID: 0}
+  _impactFX: {fileID: 1947569642881820769, guid: 3907c2ce5abda814d9aaf042ed560796,
+    type: 3}
+  _biggerImpactScale: 0
+  _offsetDistance: 0
+  _airDistance: 0
+  _rotationOffset: {x: 0, y: 0, z: 0}

@@ -55,4 +55,11 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
     {
         //
     }
+
+    public override int GetDamage()
+    {
+        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return damage;
+    }
 }

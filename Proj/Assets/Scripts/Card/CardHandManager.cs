@@ -270,13 +270,14 @@ public class CardHandManager : MonoBehaviour
             Quaternion.identity,
             CanvasManager.instance.OverlayCanvas.transform
         );
-        _addedZoomedCard.GetComponent<CardUI>().SetUpUIElements(container.GetCard());
+        _addedZoomedCard.GetComponent<CardUI>().SetUpUIElements(container.GetCard(), true);
     }
 
     public void HideHighlightedCard()
     {
         if (_addedZoomedCard != null)
         {
+            _addedZoomedCard.GetComponent<CardUI>().SetShowInfoPanel(false);
             Destroy(_addedZoomedCard);
         }
     }
@@ -300,7 +301,7 @@ public class CardHandManager : MonoBehaviour
     }
     public void UpdatePileTexts()
     {
-        _deckText.text = "Deck (" + _cardsInDeck.Count + ")";
+        _deckText.text = "Draw Pile (" + _cardsInDeck.Count + ")";
         _discardText.text = "Discard (" + _cardsInDiscardPile.Count + ")";
     }
 

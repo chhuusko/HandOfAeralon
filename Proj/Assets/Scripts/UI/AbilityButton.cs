@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class AbilityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public static event Action<Ability> OnMouseHoverEnter;
+    public static event Action<AbilityButton, Ability> OnMouseHoverEnter;
     public static event Action OnMouseHoverExit;
     
     public Ability Ability { get; set; }
@@ -23,7 +23,7 @@ public class AbilityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        OnMouseHoverEnter?.Invoke(Ability);
+        OnMouseHoverEnter?.Invoke(this, Ability);
     }
 
     public void OnPointerExit(PointerEventData eventData)

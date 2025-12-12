@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class CardViewUI : MonoBehaviour
+public class CardViewUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected static CardViewUI _instance;
@@ -48,4 +50,20 @@ public class CardViewUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (SceneManager.GetActiveScene().name != "ShopScene")
+        {
+            CombatEventManager.InvokeOnIsHoveringUI(true);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (SceneManager.GetActiveScene().name != "ShopScene")
+        {
+            CombatEventManager.InvokeOnIsHoveringUI(false);
+        }
+        
+    }
 }

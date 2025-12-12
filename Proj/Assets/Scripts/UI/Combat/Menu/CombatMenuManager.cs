@@ -12,6 +12,7 @@ public class CombatMenuManager : MonoBehaviour
     // NOTE (Calle): This Menu Canvas
     [SerializeField] private Canvas _combatMenuCanvas;
     [SerializeField] private GameObject _inGameLayout;
+    [SerializeField] private GameObject _optionsLayout;
     [SerializeField] private GameObject _victoryScreenLayout;
 
     // NOTE (Calle): Canvases to turn off Interactable on when this menu opens.
@@ -40,13 +41,13 @@ public class CombatMenuManager : MonoBehaviour
         if (_endCombatMenuAnimator == null)
             DebugLog.CJLogError("GlobalVolume has no Animator Comonent!");
 
-        CombatEventManager.OnEnterCombatStateEndCombat += ShowEndCombatMenuScreen;
+        CombatEventManager.OnEnterCombatStateEndCombat += OpenVictoryMenuScreen;
     }
 
     public static CombatMenuManager GetInstance() { return _instance; }
     private void OnDisable()
     {
-        CombatEventManager.OnEnterCombatStateEndCombat -= ShowEndCombatMenuScreen;
+        CombatEventManager.OnEnterCombatStateEndCombat -= OpenVictoryMenuScreen;
     }
 
     private void Update()
@@ -54,16 +55,28 @@ public class CombatMenuManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             if (_combatMenuCanvas.enabled)
-                HideInGameMenu();
+            {
+                if(_optionsLayout.activeSelf)
+                {
+                    CloseOptionsMenu();
+                }
+                else
+                {
+                    CloseInGameMenu();
+                }
+                    
+            }
             else
-                ShowInGameMenu();
+            {
+                OpenInGameMenu();
+            }
         }
     }
 
     public void InvokeEndCombatButtonPressed()
     {
         Debug.Log("GO TO SHOP");
-        HideEndCombatMenuScreen();
+        CloseVictoryMenuScreen();
         OnGoToShopButtonPressed?.Invoke();
     }
 
@@ -72,35 +85,43 @@ public class CombatMenuManager : MonoBehaviour
         Application.Quit();
     }
 
-    private void ShowInGameMenu()
+    public void OpenInGameMenu()
     {
         _combatMenuCanvas.enabled = true;
-        HideVictroyScreenLayout();
+        
         ShowInGameLayout();
         TurnOFFCombatCanvases();
         _endCombatMenuAnimator.Play("WeightFadeIn");
     }
 
-    private void HideInGameMenu()
+    public void CloseInGameMenu()
     {
         _combatMenuCanvas.enabled = false;
-        HideVictroyScreenLayout();
         TurnONCombatCanvases();
         _endCombatMenuAnimator.Play("WeightFadeOut");
     }
 
-    public void ShowEndCombatMenuScreen(bool playerWon)
+    public void OpenOptionsMenu()
+    {
+        ShowOptionsLayout();
+    }
+
+    public void CloseOptionsMenu()
+    {
+        ShowInGameLayout();
+    }
+
+    public void OpenVictoryMenuScreen(bool playerWon)
     {
         _combatMenuCanvas.enabled = true;
 
         ShowVictroyScreenLayout();
-        HideInGameLayout();
         TurnOFFCombatCanvases();
 
         _endCombatMenuAnimator.Play("WeightFadeIn");  
     }
 
-    public void HideEndCombatMenuScreen()
+    public void CloseVictoryMenuScreen()
     {
         _combatMenuCanvas.enabled = false;
 
@@ -111,7 +132,21 @@ public class CombatMenuManager : MonoBehaviour
 
     private void ShowInGameLayout()
     {
+        HideVictroyScreenLayout();
+        HideOptionsLayout();
         _inGameLayout.SetActive(true);
+    }
+    private void ShowOptionsLayout()
+    {
+        HideVictroyScreenLayout();
+        HideInGameLayout();
+        _optionsLayout.SetActive(true);
+    }
+    private void ShowVictroyScreenLayout()
+    {
+        HideInGameLayout();
+        HideOptionsLayout();
+        _victoryScreenLayout.SetActive(true);
     }
 
     private void HideInGameLayout()
@@ -119,9 +154,9 @@ public class CombatMenuManager : MonoBehaviour
         _inGameLayout.SetActive(false);
     }
 
-    private void ShowVictroyScreenLayout()
+    private void HideOptionsLayout()
     {
-        _victoryScreenLayout.SetActive(true);
+        _optionsLayout.SetActive(false);
     }
 
     private void HideVictroyScreenLayout()

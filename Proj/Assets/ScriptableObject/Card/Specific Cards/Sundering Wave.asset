@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Sundering Wave
   m_EditorClassIdentifier: 
   type: 0
-  rarity: 0
+  rarity: 1
   title: Sundering Wave
   description: Deal 6 damage to all enemy characters. Slowed enemies take 9 damage
     instead.
@@ -21,3 +21,4 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 42b72f28e8f50fd46a702ab58297aefe, type: 3}
   CardTemplate: {fileID: 0}
   info: []
+  tags: 

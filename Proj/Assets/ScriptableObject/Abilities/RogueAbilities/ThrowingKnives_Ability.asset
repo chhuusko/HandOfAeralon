@@ -26,11 +26,13 @@ MonoBehaviour:
   _abilityVFXSequence: {fileID: 0}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0.5
+  _castingAnimationTime: 0.5
+  _castingFXTime: 0
   _fromCastToHitTime: 0
   _castingRotationTime: 0.3
   _pattern: {fileID: 11400000, guid: 563544cd6ba3c45459964c4950b1f39b, type: 2}
   _validTargets: 2
+  _abilityAOEVFXSequence: {fileID: 0}
   _damageMultiplier: 0.8
   _chanceToApplyPoison: 0.6
   _handSizeDamageMultiplier: 0.05

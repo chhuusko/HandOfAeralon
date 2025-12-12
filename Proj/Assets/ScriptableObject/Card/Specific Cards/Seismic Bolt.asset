@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Seismic Bolt
   m_EditorClassIdentifier: 
   type: 1
-  rarity: 0
+  rarity: 1
   title: Seismic Bolt
-  description: Deal 5 damage and apply Aftershock to target for 1 turn.
-  cost: 3
+  description: Deal 5 damage and apply Aftershock to target for 2 turns.
+  cost: 4
   icon: {fileID: 21300000, guid: 8fb51d21f99ca4842931224f1ad85aab, type: 3}
   CardTemplate: {fileID: 0}
   info: []

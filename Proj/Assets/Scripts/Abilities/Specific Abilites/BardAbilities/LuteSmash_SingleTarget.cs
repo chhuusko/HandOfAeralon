@@ -38,7 +38,7 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
         StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
         if (statusEffectManager == null) return;
 
-        StatusEffect stun = statusEffectManager.TryApplyStun(affectedCharacter, 0, _stunDuration);
+        StatusEffect stun = statusEffectManager.TryApplyStun(affectedCharacter, _applyStunChance, _stunDuration);
 
         if (stun != null && castingCharacter.GetFaction() == Faction.Friendly)
         {
@@ -62,5 +62,12 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Spawn and direct VFX to target location.
+    }
+
+    public override int GetDamage()
+    {
+        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return damage;
     }
 }

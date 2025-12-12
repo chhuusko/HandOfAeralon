@@ -19,6 +19,8 @@ public class VenomHarvest : Card
                 }
             }
             character.TakeDamage(totalDamage);
+            character.GetStatusEffectManager().RemoveStatusEffect(new Poison(1));
         }
+        
     }
 }

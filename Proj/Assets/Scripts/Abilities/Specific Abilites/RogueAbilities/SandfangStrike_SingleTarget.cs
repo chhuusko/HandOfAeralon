@@ -28,7 +28,7 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
         bool died = affectedCharacter.TakeDamage(damage);
 
         StatusEffect poison = null;
-        if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
+        if(Random.value <= _applyPoisonChance && affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
             if (castingCharacter.GetFaction() == Faction.Friendly && statusEffectManager.ContainsStatusEffect<Poison>()){
                 CardHandManager.GetInstance().AddCardFromDeck();
             }
@@ -60,5 +60,12 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Spawn and direct VFX to target location.
+    }
+
+    public override int GetDamage()
+    {
+        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return damage;
     }
 }

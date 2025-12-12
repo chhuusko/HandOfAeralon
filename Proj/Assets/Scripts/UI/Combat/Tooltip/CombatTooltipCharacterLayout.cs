@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [System.Serializable]
-public class CombatTooltipCharacterLayout : MonoBehaviour
+public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private enum CharacterStatKey
     {
@@ -271,12 +272,24 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
     {
         RebuildCharacterStatTooltip(character.GetComponent<Character>());
     }
+
     private void UpdateTooltipOnDamage(int damage, Character character)
     {
         RebuildCharacterStatTooltip(character);
     }
+
     public void ShowCharacterTooltip()
     {
 
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        CombatEventManager.InvokeOnIsHoveringUI(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        CombatEventManager.InvokeOnIsHoveringUI(false);
     }
 }

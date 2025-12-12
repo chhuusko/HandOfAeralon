@@ -36,6 +36,10 @@ public class DesertsGrasp_Ability : RoundAOEAbility
         if (!canCast) return null;
 
         // Calculate which tiles to effect.
+        if (_pattern is RoundAOEPattern pattern)
+        {
+            pattern.SetRadius(_radius);
+        }
         var list = _pattern.CalculateTilesToEffect(targetTile);
 
         return list;
@@ -83,6 +87,20 @@ public class DesertsGrasp_Ability : RoundAOEAbility
 
         StatusEffect poison = null;
 
+        if (_abilityAOEVFXSequence != null)
+        {
+            VFXData data = new VFXData
+            {
+                Caster = GetCharacterCaster(),
+                OriginPosition = casterTile.transform.position,
+                TargetTile = tileToEffect,
+                TargetPosition = tileToEffect.transform.position,
+                Direction = (tileToEffect.transform.position - casterTile.transform.position).normalized,
+            };
+            data.Caster.StartCoroutine(_abilityAOEVFXSequence.RunSequence(data)
+            );
+        }
+
         if (Random.value < _chanceToApplyPoison)
         {
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
@@ -105,5 +123,12 @@ public class DesertsGrasp_Ability : RoundAOEAbility
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         //
+    }
+
+    public override int GetDamage()
+    {
+        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return damage;
     }
 }

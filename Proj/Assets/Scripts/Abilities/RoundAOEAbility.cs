@@ -44,6 +44,7 @@ public abstract class RoundAOEAbility : AOEAbility
                 TargetTile = targetTile,
                 TargetPosition = targetTile.transform.position,
                 Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
+                CastingAnimationDuration = GetCastingAnimationTime(),
                 CastingFXDuration = GetCastingTime(),
                 TravelFXDuration = GetFromCastToHitTime(),
                 AoEDelta = aoeDelta
@@ -52,7 +53,14 @@ public abstract class RoundAOEAbility : AOEAbility
             );
         }
 
-        yield return new WaitForSeconds(GetCastingTime() + GetFromCastToHitTime());
+        yield return new WaitForSeconds(GetCastingAnimationTime());
+        // Play casting sound.
+
+        yield return new WaitForSeconds(GetCastingTime());
+        // Play travel sound.
+
+        yield return new WaitForSeconds(GetFromCastToHitTime());
+        // Play hit sound.
         RunAbility(casterTile, targetTile);
         Selector._instance.InvokeCharacterActionStopped();
     }

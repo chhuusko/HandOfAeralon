@@ -22,11 +22,13 @@ MonoBehaviour:
   _type: 0
   _rangeCalculation: {fileID: 11400000, guid: b26a232b16ceee045899106d2759f853, type: 2}
   _targetType: 3
-  _abilityVFXSequence: {fileID: 0}
+  _abilityVFXSequence: {fileID: 11400000, guid: e073597d7b966a544b99322d738425a4,
+    type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0
-  _fromCastToHitTime: 0
+  _castingAnimationTime: 0.5
+  _castingFXTime: 0
+  _fromCastToHitTime: 0.1
   _castingRotationTime: 0.3
   _damageMultiplier: 1.1
   _applyPoisonChance: 0.8

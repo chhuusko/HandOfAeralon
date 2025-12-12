@@ -10,7 +10,14 @@ public class LibraryCrash : Card
         int damage = 22 - CardHandManager.GetInstance().GetDeck().Count;
         if (character != null)
         {
-            character.TakeDamage(damage);
+            if(damage >= 0)
+            {
+                character.TakeDamage(damage);
+            }
+            else
+            {
+                character.TakeDamage(0);
+            }
         }
     }
 }

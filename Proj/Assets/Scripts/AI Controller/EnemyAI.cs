@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.TextCore.Text;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -46,7 +47,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (TurnStartedProperly())
         {
-            Run();
+            StartCoroutine(QueueRun());
         }
     }
 
@@ -250,6 +251,12 @@ public class EnemyAI : MonoBehaviour
         StartCoroutine(WaitForMovement());
     }
 
+    private IEnumerator QueueRun()
+    {
+        yield return new WaitForSeconds(1f);
+        Run();
+    }
+
     private Character FindClosestOpponent(Character currentCharacter)
     {
         Character result = null;
@@ -294,12 +301,14 @@ public class EnemyAI : MonoBehaviour
             yield return new WaitWhile(() => movementComponent.IsMoving());
             UseAbility(_chosenAction.ability, _chosenAction.target);
         }
-        
-        EndTurn();
+
+        StartCoroutine(EndTurn());
     }
 
     private void UseAbility(Ability ability, CombatGridTile target)
     {
+        if (IsDead()) return;
+
         if (!_currentCharacter.CanUseAbility || ability == null || target == null)
         {
             return;
@@ -310,9 +319,11 @@ public class EnemyAI : MonoBehaviour
         _currentAbilityHandler.UseAbility(ability, target);
     }
 
-    private void EndTurn()
+    private IEnumerator EndTurn()
     {
-        DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name}'s turn ended!");
+        //DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name}'s turn ended!");
+
+        yield return new WaitForSeconds(1f);
 
         _currentCharacter = null;
         _currentTile = null;
@@ -337,5 +348,17 @@ public class EnemyAI : MonoBehaviour
         string chosenAbility = action.ability != null ? action.ability.name : "None";
         string chosenTarget = action.target != null ? action.target.GetTileIndex().ToString() : "None";
         DebugLog.JLWLog($"AI | Move {_currentCharacter.name} to: {action.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, ActionScore: {_scoredActions[action]}.");
+    }
+
+    private bool IsDead()
+    {
+        bool bIsDead = _currentCharacter == null || _currentCharacter.GetCurrentHealth() <= 0;
+
+        if (bIsDead)
+        {
+            StartCoroutine(EndTurn());
+        }
+
+        return bIsDead;
     }
 }

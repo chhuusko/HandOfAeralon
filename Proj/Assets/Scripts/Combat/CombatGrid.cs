@@ -19,10 +19,12 @@ public class CombatGrid : MonoBehaviour
     [SerializeField] private bool _bCombatGridLoaded;
 
     [SerializeField] private GameObject[] _tilesGO;
+    [SerializeField] private GameObject[] _offgridSpawnTilesGO;
     [SerializeField] private List<GameObject> _charactersGO;
     
     [SerializeField] private Material inCombatTileMaterial;
-    
+    [SerializeField] private Material inCombatTileMaterialLava;
+
     [SerializeField] private string _fileToLoadDEBUG;
 
     private GameObject _friendlyCharacterRoot;
@@ -78,6 +80,8 @@ public class CombatGrid : MonoBehaviour
 
         _tileRoot = new GameObject();
         _tileRoot.name = "-GRID TILES-";
+
+        _offgridSpawnTilesGO = new GameObject[4];
     }
 
     public bool IsCombatGridLoaded() { return _bCombatGridLoaded; }
@@ -175,6 +179,45 @@ public class CombatGrid : MonoBehaviour
         return _tilesGO[index];
     }
 
+    public CombatGridTile[] GetOffGridTiles()
+    {
+        CombatGridTile[] tileScripts = new CombatGridTile[4];
+        for(int i = 0; i < tileScripts.Length; i++)
+        {
+            tileScripts[i] = _offgridSpawnTilesGO[i].GetComponent<CombatGridTile>();
+        }
+        
+        return tileScripts;
+    }
+
+    public void HideOffGridTiles()
+    {
+        for(int i = 0; i < _offgridSpawnTilesGO.Length; i++)
+        {
+            _offgridSpawnTilesGO[i].SetActive(false);
+        }
+    }
+
+    public void ShowOffGridTiles()
+    {
+        for (int i = 0; i < _offgridSpawnTilesGO.Length; i++)
+        {
+            _offgridSpawnTilesGO[i].SetActive(true);
+        }
+    }
+
+    public bool AllCharactersPlaced()
+    {
+        for(int i = 0; i < _offgridSpawnTilesGO.Length; i++)
+        {
+            CombatGridTile tileScript = _offgridSpawnTilesGO[i].GetComponent<CombatGridTile>();
+            if (tileScript.GetOccupant() != null)
+                return false;
+        }
+
+        return true;
+    }
+
     public Vector3 GetTileSize() { return _tileSize; }
     public int GetGridWidth() { return _width; }
     public int GetGridHeight() { return _height; }
@@ -190,7 +233,49 @@ public class CombatGrid : MonoBehaviour
     }
 
     public bool ContainsCharacter(GameObject chracter) { return _charactersGO.Contains(chracter); }
+    public GameObject AddOffgridTile(CombatGridTileData tileData)
+    {
+        GameObject result = null;
+        if (tileData.GetTileType() == TileType.UnInitialized)
+            return null;
 
+        Vector2 tileIndex = tileData.GetTileIndex();
+        Vector3 instancePos = tileData.GetTilePosition();
+
+        if (_tilePrefabLibrary != null)
+        {
+            GameObject tilePrefab = _tilePrefabLibrary.GetPrefab(tileData.GetTileType());
+            GameObject tileObject = Object.Instantiate(tilePrefab, instancePos, Quaternion.identity);
+            result = tileObject;
+
+            tileObject.transform.localScale = tileData.GetTileSize();
+            tileObject.GetComponent<CombatGridTile>().SetTilePosition(tileData.GetTilePosition());
+            tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
+            tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
+
+            MeshRenderer meshRend = tileObject.GetComponent<MeshRenderer>();
+            Material inCombatTileMaterial = Resources.Load<Material>("Shaders/Tiles/TileMaterial");
+
+            if (inCombatTileMaterial != null)
+            {
+                meshRend.material = inCombatTileMaterial;
+                meshRend.material.SetColor("_TileColor", Color.white);
+            }
+            else
+            {
+                DebugLog.CJLog("Failed to load TileMaterial.mat");
+
+            }
+
+            _offgridSpawnTilesGO[(int)tileIndex.x + (int)tileIndex.y] = tileObject;
+        }
+        else
+        {
+            DebugLog.CJLog("No TilePrefabLibrary assigned in inspector!");
+        }
+
+        return result;
+    }
     public GameObject AddTile(CombatGridTileData tileData)
     {
         GameObject result = null;
@@ -251,7 +336,7 @@ public class CombatGrid : MonoBehaviour
                         if (inCombatTileMaterial != null)
                         {
                             meshRend.material = inCombatTileMaterial;
-                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(1, 0));
+                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(0, 1));
                         }
                     } break;
                 case TileType.Poison:
@@ -349,6 +434,8 @@ public class CombatGrid : MonoBehaviour
         GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
         GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, rotation);
         Character characterScript = characterObject.GetComponent<Character>();
+        
+        characterScript.Data.InitializeClassData();
 
         characterScript.SetCharacterClass(characterClass);
         characterScript.SetFaction(faction);
@@ -357,13 +444,13 @@ public class CombatGrid : MonoBehaviour
         characterScript.SetCurrentInitiative(currentSpeed);
         characterScript.SetCurrentDamage(currentDamage);
         characterScript.SetCurrentMovementPoints(currentMovementPoints);
-        characterScript.SetBaseHealthPoints(baseHealtPoints);
+        characterScript.SetDerivedHealthPoints(baseHealtPoints);
         characterScript.SetBaseInitiative(baseSpeed);
-        characterScript.SetBaseDamage(baseDamage);
+        characterScript.SetDerivedDamage(baseDamage);
         characterScript.SetBaseMovementPoints(baseMovementPoints);
   
         characterScript.AddCharacterFrame();
-        characterScript.Data.InitializeClassData();
+        
         characterScript.Initialize(characterScript.Data);
         characterScript.Data.GenerateTraits();
 
@@ -447,6 +534,8 @@ public class CombatGrid : MonoBehaviour
         SetTileSize(combatGridSaveData._tileSize);
         DebugLog.CJLog("CombatGrid tileSize: " + combatGridSaveData._tileSize);
 
+
+
         for (int i = 0; i < combatGridSaveData._tileData.Count; i++)
         {
             //DebugLog.CJLog("tiled["+i+"]: " + "\tTileType : " + combatGridSaveData._tileData[i].GetTileType() + 
@@ -454,6 +543,15 @@ public class CombatGrid : MonoBehaviour
 
             AddTile(combatGridSaveData._tileData[i]).transform.SetParent(_tileRoot.transform);
 
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            CombatGridTileData tileData = new CombatGridTileData(TileType.Walkable,
+                                                                 new Vector2Int(0, i),
+                                                                 new Vector3(-2f, 0, 4 + (2 * i)),
+                                                                 new Vector3(2f, 0.1f, 2f));
+            AddOffgridTile(tileData);
         }
 
         for (int i = 0; i < combatGridSaveData._characterData.Count; i++)
@@ -490,7 +588,7 @@ public class CombatGrid : MonoBehaviour
                         if (inCombatTileMaterial != null)
                         {
                             meshRend.material = inCombatTileMaterial;
-                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(1, 0));
+                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(0, 1));
                             meshRend.material.SetColor("_TileColor", Color.white);
                         }
                     }

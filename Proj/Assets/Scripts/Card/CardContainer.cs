@@ -91,7 +91,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         {
             _isDragging = false;
             CardHandManager.GetInstance().Dragged(false);
-            CardHandManager.GetInstance().ChangeMana(-_containedCard.Getcost());
+            
             if (_containedCard.type == CardType.Target)
             {
                 CombatGridTile grid;
@@ -104,11 +104,16 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
                     }
                     else
                     {
-                        Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
-                        Destroy(_spawnedParticle);
-                        CardHandManager.GetInstance().CharacterTarget(grid.GetOccupantCharacter());
-                        CardHandManager.GetInstance().CardTargetCharacter(_containedCard, grid.GetOccupantCharacter());
-                        _containedCard.PlayCardOnTarget(grid.GetOccupantCharacter());
+                        if (grid.GetOccupantCharacter().GetFaction() == Faction.Enemy && grid.GetOccupantCharacter().GetStatusEffectManager().ContainsStatusEffect<Stealth>())
+                        {
+                            Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
+                            Destroy(_spawnedParticle);
+                            CardHandManager.GetInstance().CharacterTarget(grid.GetOccupantCharacter());
+                            CardHandManager.GetInstance().CardTargetCharacter(_containedCard, grid.GetOccupantCharacter());
+                            CardHandManager.GetInstance().ChangeMana(-_containedCard.Getcost());
+                            _containedCard.PlayCardOnTarget(grid.GetOccupantCharacter());
+                        }
+                        
                     }
                 }
                 else
@@ -119,7 +124,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             }
             else
             {
-                
+                CardHandManager.GetInstance().ChangeMana(-_containedCard.Getcost());
                 _containedCard.PlayCard();
                 
                 
