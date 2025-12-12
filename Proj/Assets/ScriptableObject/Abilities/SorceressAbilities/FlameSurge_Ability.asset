@@ -23,7 +23,8 @@ MonoBehaviour:
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
   _targetType: 0
-  _abilityVFXSequence: {fileID: 0}
+  _abilityVFXSequence: {fileID: 11400000, guid: eb9d8798a82a49042a6d0b06ce91f98f,
+    type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
   _castingTime: 0.5
@@ -31,6 +32,7 @@ MonoBehaviour:
   _castingRotationTime: 0.3
   _pattern: {fileID: 11400000, guid: 6fd1d109070e26c4780d7665f10fcfe0, type: 2}
   _validTargets: 2
+  _abilityAOEVFXSequence: {fileID: 0}
   _damageMultiplier: 0.85
   _chanceToBurnCharacters: 0.5
   _burnDuration: 2
