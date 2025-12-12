@@ -106,6 +106,11 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
                     {
                         if (grid.GetOccupantCharacter().GetFaction() == Faction.Enemy && grid.GetOccupantCharacter().GetStatusEffectManager().ContainsStatusEffect<Stealth>())
                         {
+                            CancelUse();
+                            return;
+                        }
+                        else
+                        {
                             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
                             Destroy(_spawnedParticle);
                             CardHandManager.GetInstance().CharacterTarget(grid.GetOccupantCharacter());
