@@ -1,18 +1,33 @@
-using TMPro;
+﻿using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class CombatHoverTooltip : MonoBehaviour
+public class CombatHoverTooltip : MonoBehaviour, IPointerExitHandler
 {
     [SerializeField] private Canvas _tooltipCanvas;
     [SerializeField] private Camera _tooltipOverlayCamera;
+    [SerializeField] private Camera _combatHUDOverlayCamera;
+    
+
+    [SerializeField] private Slider _slider;
+    [SerializeField] private Image _sliderInnerArea;
+    [SerializeField] private float _sliderSpeed;
+    [SerializeField] private Color _defaultColor;
+    [SerializeField] private Color _finishedColor;
+    private bool _bSliderFinished = true;
+    private bool _bTooltipLocked = false;
 
 
     [SerializeField] private TMP_Text _title;
     [SerializeField] private TMP_Text _description;
+    [SerializeField] private float _offsetY;
+    
     private bool _isHovering;
     private RectTransform _rectTransform;
+    private RectTransform _targetRectTransform;
+    private Vector2 _buttonPosition;
 
     void Start()
     {
@@ -24,25 +39,17 @@ public class CombatHoverTooltip : MonoBehaviour
     void Update()
     {
         //DEBUGLogRayCastHits();
-        if ( _isHovering )
+        
+        if(!_bSliderFinished)
         {
-            Vector2 mousePos = Input.mousePosition;
-            RectTransform canvasRect = _tooltipCanvas.transform as RectTransform;
+            UpdateSlider();
+        }
 
-            // Convert the mouse position from screen space to local canvas space
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvasRect,
-                mousePos,
-                _tooltipOverlayCamera,   // Pass the UI camera to handle camera stacking
-                out Vector2 localPoint);
-
-            // Now set the position
-            localPoint.x += 80f + _rectTransform.sizeDelta.x/2f;
-            localPoint.y += -40f + _rectTransform.sizeDelta.y/2f;
-
-            ClampToScreenBounds(localPoint);
-
-            _rectTransform.anchoredPosition = localPoint;
+        if(IsLocked() && 
+           (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)))
+        {
+            Hide();
+            _bTooltipLocked = false;
         }
     }
 
@@ -63,12 +70,9 @@ public class CombatHoverTooltip : MonoBehaviour
         }
     }
 
-    private void ClampToScreenBounds(Vector2 localPoint)
+    private Vector2 ClampToScreenBounds(Vector2 localPoint, Vector2 canvasSize)
     {
-
-        RectTransform canvasRect = _tooltipCanvas.transform as RectTransform;
         Vector2 tooltipSize = _rectTransform.sizeDelta;
-        Vector2 canvasSize = canvasRect.rect.size;
 
         float halfW = tooltipSize.x * 0.5f;
         float halfH = tooltipSize.y * 0.5f;
@@ -80,13 +84,59 @@ public class CombatHoverTooltip : MonoBehaviour
 
         localPoint.x = Mathf.Clamp(localPoint.x, minX, maxX);
         localPoint.y = Mathf.Clamp(localPoint.y, minY, maxY);
-    }
-    public void UpdateText(string title, string description)
-    {
-        SetTitle(title);
-        SetDescription(description);
+
+        return localPoint;
     }
 
+    public void UpdateText(string title, string description, RectTransform targetRect)
+    {
+        if (_bTooltipLocked)
+            return;
+
+        SetTitle(title);
+        SetDescription(description);
+        _isHovering = true;
+
+        SetTitle(title);
+        SetDescription(description);
+        _isHovering = true;
+
+        _targetRectTransform = targetRect;
+        
+        Vector3[] corners = new Vector3[4];
+        targetRect.GetWorldCorners(corners);
+        Vector3 topCenter = (corners[1] + corners[2]) * 0.5f;
+
+        // NOTE (Calle): So you have to pass the camera that the UI-element is rendered in. AbilityButton is rendered
+        // on CombatHUDOverlayCamera for example.
+
+        Camera camera = targetRect.GetComponentInParent<Canvas>().worldCamera;
+
+        //_buttonPosition = RectTransformUtility.WorldToScreenPoint(_combatHUDOverlayCamera, topCenter);
+        _buttonPosition = RectTransformUtility.WorldToScreenPoint(camera, topCenter);
+
+
+
+        RectTransform canvasRect = _tooltipCanvas.transform as RectTransform;
+
+        // Convert the BUTTON screen position → canvas local position
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            _buttonPosition,               // ✔ this is already in screen space
+            _tooltipOverlayCamera,         // camera of the canvas
+            out Vector2 localPoint);
+
+        // Optional offset so tooltip appears slightly above/right of the button
+        localPoint.x += _rectTransform.rect.width / 2f + 10f;
+        localPoint.y += _rectTransform.rect.height / 2f + 10f;
+
+
+        localPoint = ClampToScreenBounds(localPoint, canvasRect.rect.size);
+
+        _rectTransform.anchoredPosition = localPoint;
+
+        StartSlider();
+    }
 
     public void SetIsHovering(bool isHovering) { _isHovering = isHovering; }
     public void SetTitle(string title) { _title.text = title; }
@@ -95,13 +145,49 @@ public class CombatHoverTooltip : MonoBehaviour
     public void Hide()
     {
         _isHovering = false;
+        StopSlider();
         Vector3 pos = transform.position;
         pos.x = -9999;
         transform.position = pos;
     }
-    public void Show(string title, string description)
+    public void Show(string title, string description, RectTransform rectTransform)
     {
         _isHovering = true;
-        UpdateText(title, description);
+        UpdateText(title, description, rectTransform);
+    }
+
+    public void ShowAbility(string title, string description, RectTransform rectTransform)
+    {
+        _isHovering = true;
+        UpdateText(title, description, rectTransform);
+    }
+
+    private void StartSlider() 
+    {
+        _slider.value = 0f;
+        _sliderInnerArea.color = _defaultColor;
+        _bSliderFinished = false; 
+    }
+    private void StopSlider() { _bSliderFinished = true; }
+    private void UpdateSlider()
+    {
+        _slider.value += _sliderSpeed;
+        if(_slider.value >= 1f)
+        {
+            _slider.value = 0f;
+            _sliderInnerArea.color = _finishedColor;
+            _bTooltipLocked = true;
+            StopSlider();
+        }
+    }
+
+    public bool IsLocked() { return _bTooltipLocked; }
+
+    public void SetHoverLockSpeed(float newSpeed) { _sliderSpeed = newSpeed; }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        _bTooltipLocked = false;
+        Hide();
     }
 }

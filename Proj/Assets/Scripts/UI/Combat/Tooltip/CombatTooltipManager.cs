@@ -31,7 +31,7 @@ public class CombatTooltipManager : MonoBehaviour
 
         TooltipStatusEffectElement.OnMouseHoverEnter += ShowHoverTooltip;
         TooltipStatusEffectElement.OnMouseHoverExit  += HideHoverTooltip;
-        AbilityButton.OnMouseHoverEnter              += ShowHoverTooltip;
+        AbilityButton.OnMouseHoverEnter              += ShowHoverTooltipAbility;
         AbilityButton.OnMouseHoverExit               += HideHoverTooltip;
         StatusEffectBarElement.OnMouseHoverEnter     += ShowHoverTooltip;
         StatusEffectBarElement.OnMouseHoverExit      += HideHoverTooltip;
@@ -42,12 +42,13 @@ public class CombatTooltipManager : MonoBehaviour
     {
         TooltipStatusEffectElement.OnMouseHoverEnter -= ShowHoverTooltip;
         TooltipStatusEffectElement.OnMouseHoverExit  -= HideHoverTooltip;
-        AbilityButton.OnMouseHoverEnter              -= ShowHoverTooltip;
+        AbilityButton.OnMouseHoverEnter              -= ShowHoverTooltipAbility;
         AbilityButton.OnMouseHoverExit               -= HideHoverTooltip;
         StatusEffectBarElement.OnMouseHoverEnter     -= ShowHoverTooltip;
         StatusEffectBarElement.OnMouseHoverExit      -= HideHoverTooltip;
 
     }
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.H))
@@ -68,18 +69,22 @@ public class CombatTooltipManager : MonoBehaviour
     public CombatTooltipCharacterLayout GetCharacterLayout() { return _characterLayout; }
 
 
-    public void ShowHoverTooltip(Ability ability)
+    public void ShowHoverTooltipAbility(AbilityButton button, Ability ability)
     {
-        _combatHoverTooltip.Show(ability.GetAbilityName(), ability.GetDescription());
+        string description = ability.GetDescription();
+        description += "\n\nCooldown: " + ability.GetCooldown() + " turns.";
+
+        _combatHoverTooltip.Show(ability.GetAbilityName(), description, button.GetComponent<RectTransform>());
     }
 
-    public void ShowHoverTooltip(string title, string description)
+    public void ShowHoverTooltip(string title, string description, RectTransform rectTransform)
     {
-        _combatHoverTooltip.Show(title, description);
+        _combatHoverTooltip.Show(title, description, rectTransform);
     }
     public void HideHoverTooltip()
     {
-        _combatHoverTooltip.Hide();
+        if(!_combatHoverTooltip.IsLocked())
+            _combatHoverTooltip.Hide();
 
     }
     public void HideTooltipCanvas()
