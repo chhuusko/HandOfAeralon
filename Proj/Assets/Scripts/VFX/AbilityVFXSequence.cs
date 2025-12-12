@@ -15,6 +15,8 @@ public class AbilityVFXSequence : ScriptableObject
 
     public virtual IEnumerator RunSequence(VFXData data)
     {
+        yield return new WaitForSeconds(data.CastingAnimationDuration);
+
         if (_castFX != null)
         {
             Vector3 offset = -data.Direction.normalized * _offsetDistance;
@@ -30,6 +32,9 @@ public class AbilityVFXSequence : ScriptableObject
             yield return projectile.PlayProjectile(data.OriginPosition,data.TargetPosition
             );
         }
+
+        yield return new WaitForSeconds(data.TravelFXDuration);
+
 
         if (_impactFX != null)
         {

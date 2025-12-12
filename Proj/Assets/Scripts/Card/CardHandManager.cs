@@ -270,13 +270,14 @@ public class CardHandManager : MonoBehaviour
             Quaternion.identity,
             CanvasManager.instance.OverlayCanvas.transform
         );
-        _addedZoomedCard.GetComponent<CardUI>().SetUpUIElements(container.GetCard());
+        _addedZoomedCard.GetComponent<CardUI>().SetUpUIElements(container.GetCard(), true);
     }
 
     public void HideHighlightedCard()
     {
         if (_addedZoomedCard != null)
         {
+            _addedZoomedCard.GetComponent<CardUI>().SetShowInfoPanel(false);
             Destroy(_addedZoomedCard);
         }
     }

@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf6383c0305810c4cbb86136a8d14596, type: 3}
-  m_Name: DesertsGraspVFXSequence
+  m_Name: EmberwakeVFXSequence 1
   m_EditorClassIdentifier: 
-  _castFX: {fileID: 3819699066996041917, guid: 96f3f180e352ada4faf65781522d6622, type: 3}
+  _castFX: {fileID: -5180166812705019882, guid: de835530094dedd4585a61b0e84ab345,
+    type: 3}
   _travelFX: {fileID: 0}
-  _impactFX: {fileID: 8526965823575609524, guid: bb1ceb4e03e79ae4987d4559c83eb4d7,
+  _impactFX: {fileID: 1947569642881820769, guid: 3907c2ce5abda814d9aaf042ed560796,
     type: 3}
   _biggerImpactScale: 0
   _offsetDistance: 0
   _airDistance: 1
-  _rotationOffset: {x: 0, y: 0, z: 165}
+  _rotationOffset: {x: 0, y: 0, z: 0}

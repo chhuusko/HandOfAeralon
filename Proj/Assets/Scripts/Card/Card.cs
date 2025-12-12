@@ -40,10 +40,6 @@ public class Card : ScriptableObject
 
     private int tempCost;
     private bool isTempCost;
-    private void Awake()
-    {
-        
-    }
     public int Getcost()
     {
         if (isTempCost)

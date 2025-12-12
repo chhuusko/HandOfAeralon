@@ -27,8 +27,9 @@ MonoBehaviour:
     type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0.2
-  _fromCastToHitTime: 0.1
+  _castingAnimationTime: 4
+  _castingFXTime: 0
+  _fromCastToHitTime: 0.2
   _castingRotationTime: 0.3
   _pattern: {fileID: 11400000, guid: d5355e064e976a940a41fc2ec9e2eef7, type: 2}
   _validTargets: 2
