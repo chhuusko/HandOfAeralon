@@ -1,5 +1,6 @@
 using System;
 using FMODUnity;
+using FMOD.Studio;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -20,5 +21,11 @@ public class AudioManager : MonoBehaviour
     public void PlayOneShot(EventReference sound, Vector3 position)
     {
         RuntimeManager.PlayOneShot(sound, position);
+    }
+
+    public EventInstance CreateInstance(EventReference eventReference)
+    {
+        EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+        return eventInstance;
     }
 }
