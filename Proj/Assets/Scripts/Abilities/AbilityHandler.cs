@@ -106,9 +106,11 @@ public class AbilityHandler : MonoBehaviour
         var occupant = tile.GetOccupant();
         Character character = occupant? occupant.GetComponent<Character>(): null;
 
+        if(CharacterNotTargetable(character)) return false;
+
         switch (ability.GetAbilityTargetType())
         {
-            case Ability.ValidTargetOccupant.Any:
+            case Ability.ValidTargetOccupant.Any: 
                 return tile.IsWalkable();
             case Ability.ValidTargetOccupant.CharacterOccupiedTile:
                 return occupant != null;
@@ -169,5 +171,14 @@ public class AbilityHandler : MonoBehaviour
             t.SetTileColor(Color.red);
             _tilesEffected.Add(t);
         }
+    }
+
+    private bool CharacterNotTargetable(Character targetCharacter)
+    {
+        if(targetCharacter == null) return false;
+
+        if (targetCharacter.GetFaction() == _characterCaster.GetFaction()) return false;
+
+        return !targetCharacter.IsTargetable;
     }
 }
