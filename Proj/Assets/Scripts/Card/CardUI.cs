@@ -13,8 +13,8 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] TextMeshProUGUI _title, _description, _mana;
     [SerializeField] Image _base, _frame, _image;
     [SerializeField] List<InfoPanel> _infoPanels;
-    [SerializeField] List<GameObject> _infoPanelInScene;
-    [SerializeField] Transform _pivotPoint;
+    [SerializeField] GameObject _infoPanelsInScene;
+    [SerializeField] GameObject _pivotPoint;
 
     GameObject _infoPanelPrefab;
     private bool isHover;
@@ -24,11 +24,14 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (gameObject.GetComponent<CardContainer>()) return; 
         isHover = true;
+        Debug.Log("spawnInfoPanel");
+        _infoPanelsInScene = Instantiate(_pivotPoint, _pivotPoint.transform.position, Quaternion.identity, CanvasManager.Instance().CardInfoPanelCanvas.transform);
         foreach (InfoPanel info in _infoPanels)
         {
-            _infoPanelInScene.Add(Instantiate(_infoPanelPrefab, _pivotPoint.position, Quaternion.identity, CanvasManager.Instance().OverlayCanvas.transform));
-            _infoPanelInScene.Last<GameObject>().GetComponent<InfoPanelUI>().SetUpUIElements(info);
+            GameObject newInfo = Instantiate(_infoPanelPrefab, _infoPanelsInScene.transform);
+            newInfo.GetComponent<InfoPanelUI>().SetUpUIElements(info);
             StartCoroutine(FollowParent());
         }
 
@@ -37,20 +40,30 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void OnPointerExit(PointerEventData eventData)
     {
         isHover = false;
-        foreach (GameObject go in _infoPanelInScene)
+        Destroy(_infoPanelsInScene);
+    }
+    public void SetShowInfoPanel(bool isShow)
+    {
+        if (isShow)
         {
-            Destroy(go);
+            foreach (InfoPanel info in _infoPanels)
+            {
+                GameObject newInfo = Instantiate(_infoPanelPrefab, _pivotPoint.transform);
+                newInfo.GetComponent<InfoPanelUI>().SetUpUIElements(info);
+                StartCoroutine(FollowParent());
+            }
         }
-        _infoPanelInScene.Clear();
+        else
+        {
+            Destroy(_infoPanelsInScene);
+        }
     }
     IEnumerator FollowParent()
     {
         while (isHover)
         {
-            foreach(GameObject GO in _infoPanelInScene)
-            {
-                GO.transform.position = _pivotPoint.position;
-            }
+            _infoPanelsInScene.transform.position = _pivotPoint.transform.position;
+            
             yield return new WaitForSeconds(0.01f);
         }
         
@@ -69,5 +82,16 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         _base.color = card.GetRarityColor((int)card.rarity);
         SetInfoPanel(card.info);
     }
-    
+    public void SetUpUIElements(Card card, bool showInfoPanels)
+    {
+        _title.text = card.title;
+        _description.text = card.description;
+        _mana.text = "" + card.Getcost();
+        _image.sprite = card.icon;
+        _frame.color = card.GetRarityColor((int)card.rarity);
+        _base.color = card.GetRarityColor((int)card.rarity);
+        SetInfoPanel(card.info);
+        SetShowInfoPanel(showInfoPanels);
+    }
+
 }
