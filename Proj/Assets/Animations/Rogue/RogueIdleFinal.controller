@@ -56,7 +56,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: SandfangStrike
+    m_ConditionEvent: Sandfang Strike
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1254722660953062761}
@@ -131,13 +131,13 @@ AnimatorController:
   m_Name: RogueIdleFinal
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: SandfangStrike
+  - m_Name: Sandfang Strike
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: DesertsGrasp
+  - m_Name: "Desert\u2019s Grasp"
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -183,7 +183,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: DesertsGrasp
+    m_ConditionEvent: "Desert\u2019s Grasp"
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -46027058441404854}
