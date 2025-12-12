@@ -14,7 +14,7 @@ public class LightningStorm_Ability : RoundAOEAbility
     [Header("- Emberwake Effects -")]
     [SerializeField] private int _burnDuration = 1;
 
-    bool enemyStunned;
+    private int _enemiesStunned;
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
@@ -25,7 +25,7 @@ public class LightningStorm_Ability : RoundAOEAbility
         }
         List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
 
-        enemyStunned = false;
+        _enemiesStunned = 0;
 
         foreach (CombatGridTile tile in tilesToEffect)
         {
@@ -39,7 +39,7 @@ public class LightningStorm_Ability : RoundAOEAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null || (castingCharacter.GetFaction() != Faction.Friendly)) return;
 
-        if (enemyStunned)
+        if (_enemiesStunned >= _stunnedEnemiesTilBonus)
         {
             CardHandManager.GetInstance().AddCardFromDeck();
         }
