@@ -24,6 +24,7 @@ public class CombatGrid : MonoBehaviour
     
     [SerializeField] private Material inCombatTileMaterial;
     [SerializeField] private Material inCombatTileMaterialLava;
+    [SerializeField] private Material inCombatTileMaterialPoison;
 
     [SerializeField] private string _fileToLoadDEBUG;
 
@@ -335,16 +336,16 @@ public class CombatGrid : MonoBehaviour
                     {
                         if (inCombatTileMaterial != null)
                         {
-                            meshRend.material = inCombatTileMaterial;
-                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(0, 1));
+                            meshRend.material = inCombatTileMaterialLava;
+                            //meshRend.material.SetVector("_TextureTileCoord", new Vector2(0, 1));
                         }
                     } break;
                 case TileType.Poison:
                     {
                         if (inCombatTileMaterial != null)
                         {
-                            meshRend.material = inCombatTileMaterial;
-                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(2, 0));
+                            meshRend.material = inCombatTileMaterialPoison;
+                            //meshRend.material.SetVector("_TextureTileCoord", new Vector2(2, 0));
                         }
                     }
                     break;
@@ -587,9 +588,9 @@ public class CombatGrid : MonoBehaviour
                     {
                         if (inCombatTileMaterial != null)
                         {
-                            meshRend.material = inCombatTileMaterial;
-                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(0, 1));
-                            meshRend.material.SetColor("_TileColor", Color.white);
+                            meshRend.material = inCombatTileMaterialLava;
+                            //meshRend.material.SetVector("_TextureTileCoord", new Vector2(0, 1));
+                            //meshRend.material.SetColor("_TileColor", Color.white);
                         }
                     }
                     break;
@@ -597,9 +598,9 @@ public class CombatGrid : MonoBehaviour
                     {
                         if (inCombatTileMaterial != null)
                         {
-                            meshRend.material = inCombatTileMaterial;
-                            meshRend.material.SetVector("_TextureTileCoord", new Vector2(2, 0));
-                            meshRend.material.SetColor("_TileColor", Color.white);
+                            meshRend.material = inCombatTileMaterialPoison;
+                            //meshRend.material.SetVector("_TextureTileCoord", new Vector2(2, 0));
+                            //meshRend.material.SetColor("_TileColor", Color.white);
                         }
                     }
                     break;
