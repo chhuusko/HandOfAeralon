@@ -11,11 +11,16 @@ public class CombatLog : MonoBehaviour
     [SerializeField] private GameObject _combatLogPanel;
     [SerializeField] private GameObject _combatLogScrollbar;
     [SerializeField] private GameObject _combatLogButton;
-    [SerializeField] private Transform _combatLogViewPort;
+    [SerializeField] private Transform _combatLogContent;
     [SerializeField] private ScrollRect _combatLogScrollRect;
     
-    private bool _bCombatLogEnabled;
-    private List<AbilityExecutionData> _combatLogEntries = new();
+    [Header("Prefabs")]
+    [SerializeField] private CombatLogEntry _abilityEntryPrefab;
+    [SerializeField] private CombatLogEntry _characterDeathEntryPrefab;
+    [SerializeField] private CombatLogEntry _cardLogEntryPrefab;
+    [SerializeField] private CombatLogEntry _combatBountyEntryPrefab;
+    
+    private bool _bCombatLogEnabled = true;
     
     private void OnEnable()
     {
@@ -32,43 +37,42 @@ public class CombatLog : MonoBehaviour
 
     private void AddCombatLogEntry(AbilityExecutionData data)
     {
-        _combatLogEntries.Add(data);
-        var go = Instantiate(_combatLogEntryPrefab, _combatLogViewPort);
-        
-        go.transform.Find("Icon").GetComponent<Image>().sprite = data.Ability.GetIcon();
-
-        if (!data.Ability || !data.Target || !data.Caster)
+        AbilityLogData abilityLogData = new AbilityLogData
         {
+            ExecutionData = data
+        };
+        AddCombatLogEntry(abilityLogData);
+    }
+
+    private void AddCombatLogEntry(CombatLogData data)
+    {
+        CombatLogEntry prefab = data switch
+        {
+            AbilityLogData => _abilityEntryPrefab,
+            CharacterDeathLogData => _characterDeathEntryPrefab,
+            CardLogData => _cardLogEntryPrefab,
+            CombatBountyLogData => _combatBountyEntryPrefab,
+            _ => null
+        };
+
+        if (!prefab)
+        {
+            DebugLog.JoppaLog("No prefab found");
             return;
         }
-
-        string text;
         
-        // Check for type of ability.
-        if (data.Ability.GetAbilityType() is Ability.Type.Elemental or Ability.Type.Physical)
-        {
-            text = $"{data.Caster.Data.ClassData.name} used {data.Ability.GetAbilityName()} and dealt " +
-                   $"{data.Damage} damage to{(data.Target.GetFaction() == Faction.Friendly ? " " : " enemy")}" +
-                   $" {data.Target.Data.ClassData.name}";
-        }
-        else
-        {
-            text = $"{data.Caster.Data.ClassData.name} used {data.Ability.GetAbilityName()}" +
-                   $" on{(data.Target.GetFaction() == Faction.Friendly ? " " : " enemy")} " +
-                   $"{data.Target.Data.ClassData.name}";
-        }
+        var entry = Instantiate(prefab, _combatLogContent);
+        entry.Initialize(data);
         
-        go.transform.Find("Text").GetComponent<TMP_Text>().text = text;
-        
-        StartCoroutine(ScrollToTop());
+        StartCoroutine(ScrollToBottom());
     }
     
-    private IEnumerator ScrollToTop()
+    private IEnumerator ScrollToBottom()
     {
         yield return null;
         
         // Set scroll to bottom.
-        _combatLogScrollRect.verticalNormalizedPosition = 1;
+        _combatLogScrollRect.verticalNormalizedPosition = 0;
     }
     
     private void OnDisable()

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class CombatLogData : MonoBehaviour
+public abstract class CombatLogData
 {
     
 }

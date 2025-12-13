@@ -162,7 +162,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 191.19994, y: 74.00006}
+  m_AnchoredPosition: {x: 216.4, y: 74.00006}
   m_SizeDelta: {x: 12, y: 190}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &1134928645595968868
@@ -288,7 +288,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -30.000061, y: 76}
+  m_AnchoredPosition: {x: 2.999939, y: 76}
   m_SizeDelta: {x: 400, y: 242}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6090565712602333969
@@ -813,8 +813,13 @@ MonoBehaviour:
   _combatLogPanel: {fileID: 4526150849383664231}
   _combatLogScrollbar: {fileID: 2312095411896026509}
   _combatLogButton: {fileID: 6749988161067624331}
-  _combatLogViewPort: {fileID: 4499401449079612489}
+  _combatLogContent: {fileID: 4499401449079612489}
   _combatLogScrollRect: {fileID: 3085368872588384015}
+  _abilityEntryPrefab: {fileID: -1773185080026993426, guid: d029746f98115104494a220ba07147d2,
+    type: 3}
+  _characterDeathEntryPrefab: {fileID: 0}
+  _cardLogEntryPrefab: {fileID: 0}
+  _combatBountyEntryPrefab: {fileID: 0}
 --- !u!1 &8191509190501037255
 GameObject:
   m_ObjectHideFlags: 0

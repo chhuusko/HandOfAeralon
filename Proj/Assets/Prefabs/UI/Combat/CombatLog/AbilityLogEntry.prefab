@@ -87,8 +87,9 @@ GameObject:
   - component: {fileID: 5942684069223303462}
   - component: {fileID: 3690827802514738725}
   - component: {fileID: 869761179923741678}
+  - component: {fileID: -1773185080026993426}
   m_Layer: 5
-  m_Name: CombatLogEntry
+  m_Name: AbilityLogEntry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -173,6 +174,18 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &-1773185080026993426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515051203510682649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b93877078e58a744da8fe06ebdde8bc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8397101012318967347
 GameObject:
   m_ObjectHideFlags: 0
