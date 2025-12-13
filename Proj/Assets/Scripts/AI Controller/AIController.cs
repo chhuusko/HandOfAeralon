@@ -301,6 +301,11 @@ public class AIController : MonoBehaviour
                     if (bIsEnemy && occupantPERCENTHP < 0.5f)
                     {
                         result += 5;
+
+                        if (occupantPERCENTHP < 0.2f)
+                        {
+                            result += 5;
+                        }
                     }
                     break;
                 }
@@ -309,6 +314,11 @@ public class AIController : MonoBehaviour
                     if (bIsEnemy)
                     {
                         result += 2;
+
+                        if (occupantPERCENTHP < 0.2f)
+                        {
+                            result += 5;
+                        }
                     }
                     break;
                 }
@@ -317,6 +327,11 @@ public class AIController : MonoBehaviour
                     if (bIsEnemy)
                     {
                         result += 2;
+
+                        if (occupantPERCENTHP < 0.2f)
+                        {
+                            result += 5;
+                        }
                     }
                     break;
                 }
@@ -423,6 +438,11 @@ public class AIController : MonoBehaviour
                     if (bIsEnemy)
                     {
                         result += 5;
+
+                        if (occupantPERCENTHP < 0.2f)
+                        {
+                            result += 5;
+                        }
                     }
                     break;
                 }
@@ -431,6 +451,11 @@ public class AIController : MonoBehaviour
                     if (bIsEnemy)
                     {
                         result += 5;
+
+                        if (occupantPERCENTHP < 0.2f)
+                        {
+                            result += 5;
+                        }
                     }
                     break;
                 }
@@ -439,6 +464,11 @@ public class AIController : MonoBehaviour
                     if (bIsEnemy)
                     {
                         result += 5;
+
+                        if (occupantPERCENTHP < 0.2f)
+                        {
+                            result += 5;
+                        }
                     }
                     break;
                 }
@@ -474,13 +504,6 @@ public class AIController : MonoBehaviour
         return result;
     }
 
-    private void PrintAIAction(AIAction action)
-    {
-        UnityEngine.Debug.LogError($"AIController.cs | Move {_character.name} to {action.movement.GetTileIndex()}," +
-            $" use ability: {(action.ability != null ? action.ability.name : "None")}" +
-            $" at position {(action.target != null ? action.target.GetTileIndex() : "None")}");
-    }
-
     private void PerformAbilityCast(AIAction action)
     {
         AbilityHandler abilityHandler = _character.GetAbilityHandler();
@@ -504,5 +527,12 @@ public class AIController : MonoBehaviour
     private bool IsDead()
     {
         return _character == null || _character.GetCurrentHealth() <= 0;
+    }
+
+    private void PrintAIAction(AIAction action)
+    {
+        UnityEngine.Debug.LogError($"AIController.cs | Move {_character.name} to {action.movement.GetTileIndex()}," +
+            $" use ability: {(action.ability != null ? action.ability.name : "None")}" +
+            $" at position {(action.target != null ? action.target.GetTileIndex() : "None")}");
     }
 }
