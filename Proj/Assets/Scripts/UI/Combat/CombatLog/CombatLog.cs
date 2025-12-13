@@ -36,8 +36,6 @@ public class CombatLog : MonoBehaviour
         var go = Instantiate(_combatLogEntryPrefab, _combatLogViewPort);
         
         go.transform.Find("Icon").GetComponent<Image>().sprite = data.Ability.GetIcon();
-        // go.transform.Find("Text").GetComponent<TMP_Text>().text =
-        //     $"{data.Caster.Data.ClassData.name} does {data.Damage} damage to {data.Target.Data.ClassData.name}";
 
         if (!data.Ability || !data.Target || !data.Caster)
         {
