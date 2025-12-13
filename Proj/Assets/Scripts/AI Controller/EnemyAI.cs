@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.TextCore.Text;
 
 public class EnemyAI : MonoBehaviour
 {
-    public const int TOP_N_ACTIONS = 3;
+    private const int TOP_N_ACTIONS = 3;
+    private const float TURN_START_WAIT_TIME = 1f;
+    private const float TURN_END_WAIT_TIME = 1f;
 
     private class AIAction
     {
@@ -18,20 +19,10 @@ public class EnemyAI : MonoBehaviour
 
     public UnityEvent AIEndTurn;
 
-    [SerializeField] private ClassData _barbData, _rogueData, _sorcData, _bardData;
     [SerializeField] private Faction _controlledFaction = Faction.Enemy;
-
-    private Character _currentCharacter = null;
-    private GameObject _currentTile = null;
-
-    private CharacterClass _currentClass = CharacterClass.None;
-    private AbilityHandler _currentAbilityHandler = null;
-    private List<Ability> _currentAbilities = new();
-
-    private List<CombatGridTile> _movePath = new();
-
-    private Dictionary<AIAction, int> _scoredActions = new();
-    private AIAction _chosenAction = new();
+    private Character _character = null;
+    private List<Character> _allies = new();
+    private List<Character> _enemies = new();
 
     private void OnEnable()
     {
@@ -47,224 +38,27 @@ public class EnemyAI : MonoBehaviour
     {
         if (TurnStartedProperly())
         {
-            StartCoroutine(QueueRun());
+            Run();
         }
     }
 
-    private bool TurnStartedProperly() // Caching and null checks
+    private bool TurnStartedProperly()
     {
-        _currentCharacter = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
-        if (_currentCharacter == null || _currentCharacter.GetFaction() != _controlledFaction)
+        _character = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
+        if (_character == null || _character.GetFaction() != _controlledFaction)
         {
             return false;
         }
-
-        _currentTile = _currentCharacter.GetCurrentTileComponent().gameObject;
-        if (_currentTile == null)
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | _currentTile NOT FOUND!");
-            return false;
-        }
-
-        _currentClass = _currentCharacter.GetCharacterClass();
-        if (_currentClass == CharacterClass.None)
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | _currentClass NOT FOUND!");
-            return false;
-        }
-
-        _currentAbilityHandler = _currentCharacter.GetAbilityHandler();
-        if (_currentAbilityHandler == null)
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | _currentAbilityHandler NOT FOUND!");
-            return false;
-        }
-
-        foreach (var ability in _currentCharacter.GetAvailableAbilities())
-        {
-            _currentAbilities.Add(ability);
-        }
-
-        if (_currentAbilities == null || !_currentAbilities.Any())
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | _currentAbilities NOT FOUND!");
-            return false;
-        }
-
-        return true;
-    }
-
-    private void Run()
-    {
-        List<CombatGridTile> moveRange = new();
-        if (_currentCharacter.CanMove && _currentCharacter.GetMovementPoints() > 0)
-        {
-            moveRange = GridExplorer._instance.GetReachableTilesWithMovement(_currentTile, _currentCharacter.GetMovementPoints())
-                .Select(obj => obj.GetComponent<CombatGridTile>())
-                .Where(ch => ch != null)
-                .ToList();
-        }
-        else
-        {
-            moveRange.Add(_currentTile.GetComponent<CombatGridTile>());
-        }
-
-        Debug.LogWarning($"AI | moveRange.Count: {moveRange.Count}");
-
-        foreach (var pos in moveRange)
-        {
-            AIAction move = new AIAction { movement = pos };
-            int score = 0;
-
-            Character closestOpponent = FindClosestOpponent(_currentCharacter);
-            int distance = GridExplorer._instance.ManhattanDistance(pos.GetTileIndex(), closestOpponent.GetCurrentTileIndex());
-            switch (_currentClass)
-            {
-                case CharacterClass.Barbarian: score -= distance; break;
-                case CharacterClass.Bard: score += distance; break;
-                case CharacterClass.Rogue: score -= distance; break;
-                case CharacterClass.Sorceress: score += distance; break;
-            }
-
-            if (_currentCharacter.GetCurrentHealth() < _currentCharacter.GetMaxHealth() / 5)
-            {
-                score += distance * 10;
-            }
-
-            List<CombatGridTile> path = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, pos.gameObject, false, moveRange)
-                .Select(obj => obj.GetComponent<CombatGridTile>())
-                .Where(ch => ch != null)
-                .ToList();
-
-            foreach (var step in path)
-            {
-                if (step.GetTileType() == TileType.Lava || step.GetTileType() == TileType.Poison)
-                {
-                    score -= 5;
-                }
-            }
-
-            _scoredActions[move] = score;
-
-            if (_currentAbilities == null || !_currentAbilities.Any())
-            {
-                Debug.LogError($"{_currentCharacter.name} has no abilities!");
-                continue;
-            }
-
-            foreach (var ability in _currentAbilities)
-            {
-                if (ability == null) continue;
-
-                _currentAbilityHandler.SetPendingAbility(ability);
-                _currentAbilityHandler.CalculateAbilityRange(pos);
-                List<CombatGridTile> abilityRange = _currentAbilityHandler.GetTilesInRange();
-
-                //Debug.Log($"From pos {pos.GetTileIndex()} Sorceress can hit {abilityRange.Count} tiles");
-
-                foreach (var tile in abilityRange)
-                {
-                    AIAction action = new AIAction { movement = pos, ability = ability, target = tile };
-                    int newScore = score;
-
-                    Character occupant = tile.GetOccupantCharacter();
-
-                    if (occupant != null && occupant.GetFaction() != _controlledFaction)
-                    {
-                        newScore += 10;
-
-                        if (occupant.GetCurrentHealth() < occupant.GetMaxHealth() / 10)
-                        {
-                            newScore += 99;
-                        }
-
-                        _scoredActions[action] = newScore;
-                    }
-
-                    if (occupant != null && _currentCharacter.GetCharacterClass() == CharacterClass.Bard && occupant.GetFaction() == _controlledFaction && occupant != _currentCharacter)
-                    {
-                        newScore += 10;
-
-                        if (ability.name == "SongOfRenewal_Ability")
-                        {
-                            if (occupant.GetCurrentHealth() != occupant.GetMaxHealth())
-                            {
-                                newScore += 99;
-
-                                if (occupant.GetCurrentHealth() < occupant.GetMaxHealth() / 5)
-                                {
-                                    newScore += 99;
-                                }
-                            } 
-                            else
-                            {
-                                newScore -= 10;
-                            }
-                            
-                        }
-
-                        _scoredActions[action] = newScore;
-                    }
-
-                    // Get ability area of effect
-                    // Check if any damage or healing is done and add score
-                }
-            }
-        }
-
-        /*
-        foreach (var entry in _scoredActions)
-        {
-            PrintAIAction(entry.Key);
-        }
-        */
-
-        //Debug.Log("Total actions: " + _scoredActions.Count);
-
-        var topActions = _scoredActions
-            .OrderByDescending(x => x.Value)
-            .Take(TOP_N_ACTIONS)
-            .ToList();
-
-        if (topActions.Count == 0)
-        {
-            DebugLog.JLWLogWarning("EnemyAI.cs | No scored actions found! Defaulting to staying still.");
-            _chosenAction = new AIAction { movement = _currentTile.GetComponent<CombatGridTile>() };
-        }
-        else
-        {
-            _chosenAction = topActions[Random.Range(0, topActions.Count)].Key;
-        }
-
-        PrintAIAction(_chosenAction);
-
-        if (_currentCharacter.CanMove)
-        {
-            _movePath = GridExplorer._instance.FindPathAStar(_currentTile, _chosenAction.movement.gameObject, false, moveRange)
-                .Select(obj => obj.GetComponent<CombatGridTile>())
-                .Where(ch => ch != null)
-                .ToList();
-
-            _currentCharacter.GetComponent<CharacterMovement>().ForceCustomPath(_movePath);
-        }
-
-        StartCoroutine(WaitForMovement());
-    }
-
-    private IEnumerator QueueRun()
-    {
-        yield return new WaitForSeconds(1f);
-        Run();
-    }
-
-    private Character FindClosestOpponent(Character currentCharacter)
-    {
-        Character result = null;
-        List<Character> opponentCharacters = new();
 
         if (_controlledFaction == Faction.Enemy)
         {
-            opponentCharacters = CombatGrid
+            _allies = CombatGrid
+                ._instance.GetAllEnemyCharacters()
+                .Select(obj => obj.GetComponent<Character>())
+                .Where(ch => ch != null)
+                .ToList();
+
+            _enemies = CombatGrid
                 ._instance.GetAllFriendlyCharacters()
                 .Select(obj => obj.GetComponent<Character>())
                 .Where(ch => ch != null)
@@ -272,93 +66,552 @@ public class EnemyAI : MonoBehaviour
         }
         else if (_controlledFaction == Faction.Friendly)
         {
-            opponentCharacters = CombatGrid
+            _allies = CombatGrid
+                ._instance.GetAllFriendlyCharacters()
+                .Select(obj => obj.GetComponent<Character>())
+                .Where(ch => ch != null)
+                .ToList();
+
+            _enemies = CombatGrid
                 ._instance.GetAllEnemyCharacters()
                 .Select(obj => obj.GetComponent<Character>())
                 .Where(ch => ch != null)
                 .ToList();
         }
 
-        float min = float.MaxValue;
-        foreach (var opponentCharacter in opponentCharacters)
+        return true;
+    } // Caching and null checks
+
+    private void Run()
+    {
+        StartCoroutine(AIBehaviour());
+    }
+
+    private IEnumerator AIBehaviour()
+    {
+        yield return new WaitForSeconds(TURN_START_WAIT_TIME);
+
+        List<CombatGridTile> moveRange = FindMoveRange();
+        Dictionary<AIAction, float> scoredActions = EvaluatePossibleActions(moveRange);
+        if (scoredActions == null || !scoredActions.Any())
         {
-            float distance = Vector3.Distance(currentCharacter.transform.position, opponentCharacter.transform.position);
-            if (distance < min)
+            UnityEngine.Debug.LogError($"AIController.cs | AIBehaviour INTERRUPTED!");
+            yield return new WaitForSeconds(TURN_END_WAIT_TIME);
+            EndTurn();
+            yield break;
+        }
+        AIAction chosenAction = SelectAction(scoredActions);
+        //PrintAIAction(chosenAction);
+
+        CharacterMovement movementComponent = null;
+        if (!IsDead() && chosenAction.movement != _character.GetCurrentTileComponent() && _character.CanMove &&
+            _character.GetMovementPoints() > 0 && _character.TryGetComponent<CharacterMovement>(out movementComponent))
+        {
+            List<CombatGridTile> movePath =
+                GridExplorer._instance.FindPathAStar(_character.GetCurrentTileComponent().gameObject, chosenAction.movement.gameObject, false, moveRange)
+                .Select(obj => obj.GetComponent<CombatGridTile>()).Where(cgt => cgt != null).ToList();
+
+            movementComponent.ForceCustomPath(movePath);
+            yield return new WaitWhile(() => movementComponent.IsMoving());
+        }
+
+        if (!IsDead() && _character.CanUseAbility && chosenAction.ability != null && chosenAction.target != null)
+        {
+            //UnityEngine.Debug.LogError($"AIController.cs | {_character.name} tries to cast {chosenAction.ability.name}!");
+            PerformAbilityCast(chosenAction);
+        }
+
+        yield return new WaitForSeconds(TURN_END_WAIT_TIME);
+        EndTurn();
+    }
+
+    private List<CombatGridTile> FindMoveRange()
+    {
+        List<CombatGridTile> result =
+            GridExplorer._instance.GetReachableTilesWithMovement(_character.GetCurrentTileComponent().gameObject, _character.GetMovementPoints())
+            .Select(obj => obj.GetComponent<CombatGridTile>()).Where(cgt => cgt != null).ToList();
+
+        result.Add(_character.GetCurrentTileComponent());
+
+        return result;
+    }
+
+    private Dictionary<AIAction, float> EvaluatePossibleActions(List<CombatGridTile> tiles)
+    {
+        Dictionary<AIAction, float> result = new();
+
+        List<Ability> abilities = GetAbilities();
+        AbilityHandler abilityHandler = _character.GetAbilityHandler();
+        if (abilityHandler == null)
+        {
+            UnityEngine.Debug.LogError($"AIController.cs | AbilityHandler NOT FOUND!");
+            return new Dictionary<AIAction, float>();
+        }
+
+        foreach (var tile in tiles) // Go through all possible movements and score them
+        {
+            AIAction move = new AIAction { movement = tile };
+            float moveScore = 0f;
+
+            if (_enemies.Any()) // Evaluate distance to enemies
             {
-                min = distance;
-                result = opponentCharacter;
+                Character closestEnemy = FindClosestCharacter(_enemies);
+                int enemyDistance = 0;
+                if (closestEnemy != null)
+                {
+                    int currentEnemyDistance = GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), closestEnemy.GetCurrentTileIndex());
+                    int movedEnemyDistance = GridExplorer._instance.ManhattanDistance(tile.GetTileIndex(), closestEnemy.GetCurrentTileIndex());
+                    enemyDistance = movedEnemyDistance - currentEnemyDistance;
+                }
+
+                switch (_character.GetCharacterClass())
+                {
+                    case CharacterClass.Barbarian:  moveScore -= enemyDistance; break;
+                    case CharacterClass.Bard:       moveScore += enemyDistance; break;
+                    case CharacterClass.Rogue:      moveScore -= enemyDistance; break;
+                    case CharacterClass.Sorceress:  moveScore += enemyDistance; break;
+                }
+
+                if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian && _allies.Count > 1)
+                {
+                    moveScore += enemyDistance * 2;
+                }
+            }
+
+            if (_allies.Count > 1) // Evaluate distance to allies
+            {
+                Character closestAlly = FindClosestCharacter(_allies);
+                int allyDistance = 0;
+                if (closestAlly != null)
+                {
+                    int currentAllyDistance = GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), closestAlly.GetCurrentTileIndex());
+                    int movedAllyDistance = GridExplorer._instance.ManhattanDistance(tile.GetTileIndex(), closestAlly.GetCurrentTileIndex());
+                    allyDistance = movedAllyDistance - currentAllyDistance;
+                }
+
+                switch (_character.GetCharacterClass())
+                {
+                    case CharacterClass.Barbarian:  break;
+                    case CharacterClass.Bard:       moveScore -= allyDistance; break;
+                    case CharacterClass.Rogue:      break;
+                    case CharacterClass.Sorceress:  moveScore -= allyDistance; break;
+                }
+
+                if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian)
+                {
+                    moveScore -= allyDistance * 2f;
+                }
+            }
+
+            if (tile != _character.GetCurrentTileComponent()) // Check for hazards
+            {
+                List<CombatGridTile> path =
+                    GridExplorer._instance.FindPathAStar(_character.GetCurrentTileComponent().gameObject, tile.gameObject, false, tiles)
+                    .Select(obj => obj.GetComponent<CombatGridTile>()).Where(ch => ch != null).ToList();
+
+                foreach (var step in path)
+                {
+                    if (step.GetTileType() == TileType.Lava || step.GetTileType() == TileType.Poison)
+                    {
+                        switch (_character.GetCharacterClass())
+                        {
+                            case CharacterClass.Barbarian: moveScore -= 1f; break;
+                            case CharacterClass.Bard: moveScore -= 3f; break;
+                            case CharacterClass.Rogue: moveScore -= 5f; break;
+                            case CharacterClass.Sorceress: moveScore -= 3f; break;
+                        }
+                    }
+                }
+            }
+
+            result[move] = moveScore; // Save movement as it's own possible action, before checking abilities
+
+            foreach (var ability in abilities)
+            {
+                abilityHandler.SetPendingAbility(ability);
+                abilityHandler.CalculateAbilityRange(tile);
+                List<CombatGridTile> targets = abilityHandler.GetTilesInRange();
+
+                foreach (var target in targets) // Go through all possible ability casts and score them
+                {
+                    AIAction act = new AIAction { movement = tile, ability = ability, target = target };
+                    float actScore = moveScore;
+                    actScore += ScoreAbilityUsage(ability, target);
+                    result[act] = actScore;
+                }
             }
         }
 
         return result;
     }
 
-    private IEnumerator WaitForMovement()
+    private List<Ability> GetAbilities()
     {
-        CharacterMovement movementComponent = null;
-        if (_currentCharacter.TryGetComponent<CharacterMovement>(out movementComponent))
+        List<Ability> result = new();
+
+        foreach (var ability in _character.GetAvailableAbilities())
         {
-            yield return new WaitWhile(() => movementComponent.IsMoving());
-            UseAbility(_chosenAction.ability, _chosenAction.target);
+            result.Add(ability);
         }
 
-        StartCoroutine(EndTurn());
+        return result;
     }
 
-    private void UseAbility(Ability ability, CombatGridTile target)
+    private Character FindClosestCharacter(List<Character> characters)
     {
-        if (IsDead()) return;
+        Character result = null;
 
-        if (!_currentCharacter.CanUseAbility || ability == null || target == null)
+        if (characters == null || !characters.Any())
         {
-            return;
+            return null;
         }
 
-        _currentAbilityHandler.SetPendingAbility(ability);
-        _currentAbilityHandler.CalculateAbilityRange();
-        _currentAbilityHandler.UseAbility(ability, target);
+        float min = float.MaxValue;
+        foreach (var character in characters)
+        {
+            float distance = Vector3.Distance(_character.transform.position, character.transform.position);
+            if (distance < min && character != _character)
+            {
+                min = distance;
+                result = character;
+            }
+        }
+
+        return result;
     }
 
-    private IEnumerator EndTurn()
+    private float ScoreAbilityUsage(Ability ability, CombatGridTile target)
     {
-        //DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name}'s turn ended!");
+        float result = 0f;
 
-        yield return new WaitForSeconds(1f);
+        Character occupant = target.GetOccupantCharacter();
+        if (occupant == null)
+        {
+            return result;
+        }
 
-        _currentCharacter = null;
-        _currentTile = null;
-        _currentClass = CharacterClass.None;
-        _currentAbilityHandler = null;
-        _currentAbilities = new();
-        _movePath = new();
-        _scoredActions = new();
-        _chosenAction = new();
+        int occupantHP = occupant.GetCurrentHealth();
+        int occupantMAXHP = occupant.GetMaxHealth();
+        float occupantPERCENTHP = occupantHP / occupantMAXHP;
 
+        bool bIsEnemy = occupant.GetFaction() != _controlledFaction;
+
+        StatusEffectManager occupantStatusEffectManager = occupant.GetStatusEffectManager();
+        if (occupantStatusEffectManager == null)
+        {
+            return result;
+        }
+
+        StatusEffectManager characterStatusEffectManager = _character.GetStatusEffectManager();
+        if (characterStatusEffectManager == null)
+        {
+            return result;
+        }
+
+        switch (ability.name)
+        {
+            // Barbarian
+            case "Skullsplitter_Ability":
+                {
+                    if (bIsEnemy && occupantPERCENTHP < 0.5f)
+                    {
+                        result += 5;
+
+                        if (occupantPERCENTHP < 0.2f)
+                        {
+                            result += 5;
+                        }
+                    }
+                    break;
+                }
+            case "Earthquake_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 1;
+
+                        if (occupantPERCENTHP < 0.2f)
+                        {
+                            result += 2;
+                        }
+
+                        if (!occupantStatusEffectManager.ContainsStatusEffect<Slowed>())
+                        {
+                            result += 4;
+                        }
+                    }
+                    break;
+                }
+            case "RuptureOfTheWilds_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 2;
+
+                        if (occupantPERCENTHP < 0.2f)
+                        {
+                            result += 5;
+                        }
+
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Slowed>())
+                        {
+                            result += 5;
+                        }
+                    }
+                    break;
+                }
+            case "RoarOfTheAncients_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 2;
+
+                        if (!occupantStatusEffectManager.ContainsStatusEffect<Slowed>())
+                        {
+                            result += 5;
+                        }
+                    }
+                    break;
+                }
+
+            // Bard
+            case "InspiringAnthem_Ability":
+                {
+                    if (!bIsEnemy && occupantPERCENTHP >= 0.75f && !occupantStatusEffectManager.ContainsStatusEffect<Haste>())
+                    {
+                        result += 5;
+                    }
+                    break;
+                }
+            case "SongOfRenewal_Ability":
+                {
+                    if (!bIsEnemy && occupantPERCENTHP < 0.75f)
+                    {
+                        result += 10;
+                    }
+                    break;
+                }
+            case "DissonantChord_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 2;
+
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Haste>()) result += 1;
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Empowered>()) result += 1;
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Emberwake>()) result += 1;
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Enraged>()) result += 1;
+                        if (occupantStatusEffectManager.ContainsStatusEffect<ConduitOfPower>()) result += 1;
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Fortified>()) result += 1;
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Sanctified>()) result += 1;
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Stealth>()) result += 1;
+                    }
+                    break;
+                }
+            case "LuteSmash_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        if (occupantPERCENTHP < 0.1f)
+                        {
+                            result += 10f;
+                        }
+
+                        if (_allies.Count == 1)
+                        {
+                            result += 10f;
+                        }
+                    }
+                    break;
+                }
+
+            // Rogue
+            case "SandfangStrike_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 5 / occupantPERCENTHP;
+
+                        if (occupant.GetCharacterClass() == CharacterClass.Sorceress || occupant.GetCharacterClass() == CharacterClass.Bard)
+                        {
+                            result += 5;
+                        }
+
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Poison>())
+                        {
+                            result += 5;
+                        }
+                    }
+                    break;
+                }
+            case "Desert's Grasp_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 5 / occupantPERCENTHP;
+
+                        if (occupant.GetCharacterClass() == CharacterClass.Sorceress || occupant.GetCharacterClass() == CharacterClass.Bard)
+                        {
+                            result += 5;
+                        }
+
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Poison>())
+                        {
+                            result += 5;
+                        }
+                    }
+                    break;
+                }
+            case "ThrowingKnives_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 5 / occupantPERCENTHP;
+
+                        if (occupant.GetCharacterClass() == CharacterClass.Sorceress || occupant.GetCharacterClass() == CharacterClass.Bard)
+                        {
+                            result += 5;
+                        }
+
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Poison>())
+                        {
+                            result += 5;
+                        }
+                    }
+                    break;
+                }
+            case "VeilOfDust_Ability":
+                {
+                    result += 2;
+
+                    if (characterStatusEffectManager.ContainsStatusEffect<Poison>() ||
+                        characterStatusEffectManager.ContainsStatusEffect<Burn>() ||
+                        characterStatusEffectManager.ContainsStatusEffect<Aftershock>() ||
+                        characterStatusEffectManager.ContainsStatusEffect<Vulnerable>() ||
+                        characterStatusEffectManager.ContainsStatusEffect<Weakened>() ||
+                        characterStatusEffectManager.ContainsStatusEffect<Slowed>())
+                    {
+                        result += 10;
+                    }
+                    break;
+                }
+
+            // Sorceress
+            case "ArcaneBolt_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 5;
+
+                        if (occupantPERCENTHP < 0.2f)
+                        {
+                            result += 5;
+                        }
+                    }
+                    break;
+                }
+            case "FlameSurge_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 5;
+
+                        if (occupantPERCENTHP < 0.2f)
+                        {
+                            result += 5;
+                        }
+
+                        if (characterStatusEffectManager.ContainsStatusEffect<Emberwake>())
+                        {
+                            result += 5;
+                        }
+                    }
+                    break;
+                }
+            case "LightningStorm_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 5;
+
+                        if (occupantPERCENTHP < 0.2f)
+                        {
+                            result += 5;
+                        }
+
+                        if (characterStatusEffectManager.ContainsStatusEffect<Emberwake>())
+                        {
+                            result += 5;
+                        }
+                    }
+                    break;
+                }
+            case "Emberwake_Ability":
+                {
+                    result += 2;
+
+                    if (!characterStatusEffectManager.ContainsStatusEffect<Emberwake>())
+                    {
+                        result += 5;
+                    }
+                    break;
+                }
+        }
+
+        return result;
+    }
+
+    private AIAction SelectAction(Dictionary<AIAction, float> dictionary)
+    {
+        AIAction result = null;
+
+        var topActions = dictionary
+            .OrderByDescending(key => key.Value)
+            .Take(TOP_N_ACTIONS)
+            .ToList();
+
+        if (topActions.Count == 0)
+        {
+            UnityEngine.Debug.LogError($"AIController.cs | SelectAction NO ACTIONS FOUND!");
+            result = new AIAction { movement = _character.GetCurrentTileComponent() };
+        }
+        else
+        {
+            result = topActions[Random.Range(0, topActions.Count)].Key;
+        }
+
+        return result;
+    }
+
+    private void PerformAbilityCast(AIAction action)
+    {
+        AbilityHandler abilityHandler = _character.GetAbilityHandler();
+        if (abilityHandler != null)
+        {
+            abilityHandler.SetPendingAbility(action.ability);
+            abilityHandler.CalculateAbilityRange();
+            abilityHandler.UseAbility(action.ability, action.target);
+        }
+    }
+
+    private void EndTurn()
+    {
+        //UnityEngine.Debug.LogError($"AIController.cs | {_character.name} turn ended!");
+        _character = null;
+        _allies = new();
+        _enemies = new();
         AIEndTurn.Invoke();
-    }
-
-    private void PrintAIAction(AIAction action) // Action must be scored first
-    {
-        if (!_scoredActions.ContainsKey(action))
-        {
-            DebugLog.JLWLogWarning($"EnemyAI.cs | Can't print unscored AIActions!");
-            return;
-        }
-
-        string chosenAbility = action.ability != null ? action.ability.name : "None";
-        string chosenTarget = action.target != null ? action.target.GetTileIndex().ToString() : "None";
-        DebugLog.JLWLog($"AI | Move {_currentCharacter.name} to: {action.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, ActionScore: {_scoredActions[action]}.");
     }
 
     private bool IsDead()
     {
-        bool bIsDead = _currentCharacter == null || _currentCharacter.GetCurrentHealth() <= 0;
+        return _character == null || _character.GetCurrentHealth() <= 0;
+    }
 
-        if (bIsDead)
-        {
-            StartCoroutine(EndTurn());
-        }
-
-        return bIsDead;
+    private void PrintAIAction(AIAction action)
+    {
+        UnityEngine.Debug.LogError($"AIController.cs | Move {_character.name} to {action.movement.GetTileIndex()}," +
+            $" use ability: {(action.ability != null ? action.ability.name : "None")}" +
+            $" at position {(action.target != null ? action.target.GetTileIndex() : "None")}");
     }
 }
