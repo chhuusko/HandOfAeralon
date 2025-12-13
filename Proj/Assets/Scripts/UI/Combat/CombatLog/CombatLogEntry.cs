@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class CombatLogEntry : MonoBehaviour
+public abstract class CombatLogEntry : MonoBehaviour
 {
-    
+    public abstract void Initialize(CombatLogData data);
 }

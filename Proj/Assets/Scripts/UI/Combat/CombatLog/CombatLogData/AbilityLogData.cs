@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewMonoBehaviourScript : CombatLogData
+public class AbilityLogData : CombatLogData
 {
-    
+    public Ability Ability;
 }
