@@ -11,57 +11,53 @@ public class CombatUI : MonoBehaviour
     public event Action OnEndTurnButtonPressed;
     public static CombatUI Instance;
     
+    [Header("Abilities")]
     [SerializeField] private Image _abilityPanel;
     [SerializeField] private GameObject _abilityPanelParent;
-    [SerializeField] private Image _characterPortraitPanel;
-    [SerializeField] private Image _activeCharacterPortrait;
-    [SerializeField] private GameObject _activeCharacterBorder;
-    
-    [SerializeField] private Button _startCombatButton;
-    [SerializeField] private Button _endTurnButton;
     [SerializeField] private Button _abilityButtonPrefab;
-    [SerializeField] private Button _characterPortraitButtonPrefab;
     
-    [SerializeField] private GameObject _placeCharactersPanel;
-    
-    [SerializeField] private ScrollRect _turnOrderScrollBar;
-    
-    // Mana.
+    [Header("Mana")]
     [SerializeField] private TextMeshProUGUI _mana;
     [SerializeField] private Image _manaFill;
 
-    // Turn order.
-    [SerializeField] private GameObject _turnOrderPanel;
+    [Header("Characters")]
+    [SerializeField] private GameObject _placeCharactersPanel;
+    [SerializeField] private Image _characterPortraitPanel;
+    [SerializeField] private Image _activeCharacterPortrait;
+    [SerializeField] private GameObject _activeCharacterBorder;
+    [SerializeField] private Button _characterPortraitButtonPrefab;
     private Character _currentTurnCharacter;
+    private CharacterData _selectedCharacter;
     
-    // Colors.
-    [SerializeField] private Color _activeColor;
-    [SerializeField] private Color _inactiveColor;
-    [SerializeField] private Color _enemyActiveColor;
-    [SerializeField] private Color _enemyInactiveColor;
+    [Header("Turn order")]
+    [SerializeField] private GameObject _turnOrderPanel;
+    [SerializeField] private ScrollRect _turnOrderScrollBar;
     
-    // Combat log.
-    [SerializeField] private GameObject _combatLogEntryPrefab;
-    [SerializeField] private GameObject _combatLogPanel;
-    [SerializeField] private GameObject _combatLogScrollbar;
-    [SerializeField] private GameObject _combatLogButton;
-    [SerializeField] private Transform _combatLogViewPort;
-    [SerializeField] private ScrollRect _combatLogScrollRect;
+    [Header("Combat Log")]
+    [SerializeField] private CombatLog _combatLog;
+    [SerializeField] private GameObject _combatLogParent;
     
-    // Cards.
+    [Header("Cards")]
     [SerializeField] private GameObject _hand;
     [SerializeField] private GameObject _cardHandManager;
     [SerializeField] private GameObject _deckButton;
     [SerializeField] private GameObject _discardPileButton;
     [SerializeField] private GameObject _manaPanel;
     
-    private CharacterData _selectedCharacter;
+    [Header("Colors")]
+    [SerializeField] private Color _activeColor;
+    [SerializeField] private Color _inactiveColor;
+    [SerializeField] private Color _enemyActiveColor;
+    [SerializeField] private Color _enemyInactiveColor;
+    
+    [Header("Misc")]
+    [SerializeField] private Button _startCombatButton;
+    [SerializeField] private Button _endTurnButton;
+    
     private bool _bCombatStarted;
-    private bool _bCombatLogEnabled;
     
     private List<PortraitButton> _portraitButtons = new();
     private List<AbilityButton> _abilityButtons = new();
-    private List<AbilityExecutionData> _combatLogEntries = new();
     
     private Dictionary<CharacterData, PortraitButton> _characterPortraits = new();
     
@@ -75,7 +71,6 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateActivePortrait;
         CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
-        CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
         CombatEventManager.OnAbilityCast += UpdateAbilityColors;
         CombatEventManager.OnCharacterMove += CharacterMoving;
 
@@ -92,7 +87,6 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateActivePortrait;
         CombatEventManager.OnTurnOrderChanged -= UpdateTurnOrder;
         CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
-        CombatEventManager.OnAbilityDataCreated -= AddCombatLogEntry;
         CombatEventManager.OnAbilityCast -= UpdateAbilityColors;
         CombatEventManager.OnCharacterMove -= CharacterMoving;
         
@@ -188,56 +182,6 @@ public class CombatUI : MonoBehaviour
         CardHandManager.GetInstance().OpenDiscardPile();
     }
 
-    public void SetCombatLogActive()
-    {
-        _bCombatLogEnabled = !_bCombatLogEnabled;
-        _combatLogPanel.SetActive(_bCombatLogEnabled);
-        _combatLogScrollbar.SetActive(_bCombatLogEnabled);
-    }
-
-    private void AddCombatLogEntry(AbilityExecutionData data)
-    {
-        _combatLogEntries.Add(data);
-        var go = Instantiate(_combatLogEntryPrefab, _combatLogViewPort);
-        
-        go.transform.Find("Icon").GetComponent<Image>().sprite = data.Ability.GetIcon();
-        // go.transform.Find("Text").GetComponent<TMP_Text>().text =
-        //     $"{data.Caster.Data.ClassData.name} does {data.Damage} damage to {data.Target.Data.ClassData.name}";
-
-        if (!data.Ability || !data.Target || !data.Caster)
-        {
-            return;
-        }
-
-        string text;
-        
-        // Check for type of ability.
-        if (data.Ability.GetAbilityType() is Ability.Type.Elemental or Ability.Type.Physical)
-        {
-            text = $"{data.Caster.Data.ClassData.name} used {data.Ability.GetAbilityName()} and dealt " +
-                   $"{data.Damage} damage to{(data.Target.GetFaction() == Faction.Friendly ? " " : " enemy")}" +
-                   $" {data.Target.Data.ClassData.name}";
-        }
-        else
-        {
-            text = $"{data.Caster.Data.ClassData.name} used {data.Ability.GetAbilityName()}" +
-                   $" on{(data.Target.GetFaction() == Faction.Friendly ? " " : " enemy")} " +
-                   $"{data.Target.Data.ClassData.name}";
-        }
-        
-        go.transform.Find("Text").GetComponent<TMP_Text>().text = text;
-        
-        StartCoroutine(ScrollToTop());
-    }
-
-    private IEnumerator ScrollToTop()
-    {
-        yield return null;
-        
-        // Set scroll to bottom.
-        _combatLogScrollRect.verticalNormalizedPosition = 1;
-    }
-
     private void PlaceCharacterStarted()
     {
         CharacterData c = GlobalGameManager.GetInstance().GetGameData().heroDataList[0];
@@ -259,8 +203,8 @@ public class CombatUI : MonoBehaviour
         _manaPanel.gameObject.SetActive(true);
         _startCombatButton.gameObject.SetActive(true);
         _cardHandManager.SetActive(true);
-        _combatLogButton.SetActive(true);
         _placeCharactersPanel.SetActive(true);
+        _combatLogParent.SetActive(true);
         
         UpdateManaText(CardHandManager.GetInstance().GetMana());
     }
