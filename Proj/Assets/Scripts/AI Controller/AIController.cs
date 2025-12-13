@@ -173,7 +173,7 @@ public class AIController : MonoBehaviour
 
                 if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian && _allies.Count > 1)
                 {
-                    moveScore += enemyDistance * 2;
+                    moveScore += enemyDistance * 2f;
                 }
             }
 
@@ -196,7 +196,7 @@ public class AIController : MonoBehaviour
 
                 if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian)
                 {
-                    moveScore -= allyDistance * 2;
+                    moveScore -= allyDistance * 2f;
                 }
             }
 
@@ -212,10 +212,10 @@ public class AIController : MonoBehaviour
                     {
                         switch(_character.GetCharacterClass())
                         {
-                            case CharacterClass.Barbarian:  moveScore -= 1; break;
-                            case CharacterClass.Bard:       moveScore -= 3; break;
-                            case CharacterClass.Rogue:      moveScore -= 5; break;
-                            case CharacterClass.Sorceress:  moveScore -= 3; break;
+                            case CharacterClass.Barbarian:  moveScore -= 1f; break;
+                            case CharacterClass.Bard:       moveScore -= 3f; break;
+                            case CharacterClass.Rogue:      moveScore -= 5f; break;
+                            case CharacterClass.Sorceress:  moveScore -= 3f; break;
                         }
                     }
                 }
@@ -229,59 +229,12 @@ public class AIController : MonoBehaviour
                 abilityHandler.CalculateAbilityRange(tile);
                 List<CombatGridTile> targets = abilityHandler.GetTilesInRange();
 
-                UnityEngine.Debug.LogError($"AIController.cs | {ability.name}");
-
                 foreach (var target in targets) // Go through all possible ability casts and score them
                 {
                     AIAction act = new AIAction { movement = tile, ability = ability, target = target };
                     float actScore = moveScore;
-
-                    switch(ability.name)
-                    {
-                        // Barbarian
-
-                        // Bard
-                        case "SongOfRenewal_Ability":
-                            {
-                                break;
-                            }
-
-                        // Rogue
-                        case "SandfangStrike_Ability":
-                            {
-                                break;
-                            }
-                        case "Desert's Grasp_Ability":
-                            {
-                                break;
-                            }
-                        case "ThrowingKnives_Ability":
-                            {
-                                break;
-                            }
-                        case "VeilOfDust_Ability":
-                            {
-                                break;
-                            }
-
-                        // Sorceress
-                        case "ArcaneBolt_Ability":
-                            {
-                                break;
-                            }
-                        case "FlameSurge_Ability":
-                            {
-                                break;
-                            }
-                        case "LightningStorm_Ability":
-                            {
-                                break;
-                            }
-                        case "Emberwake_Ability":
-                            {
-                                break;
-                            }
-                    }
+                    actScore += ScoreAbilityUsage(ability, target);
+                    result[act] = actScore;
                 }
             }
         }
@@ -319,6 +272,181 @@ public class AIController : MonoBehaviour
                 min = distance;
                 result = character;
             }
+        }
+
+        return result;
+    }
+
+    private float ScoreAbilityUsage(Ability ability, CombatGridTile target)
+    {
+        float result = 0f;
+
+        Character occupant = target.GetOccupantCharacter();
+        if (occupant == null)
+        {
+            return result;
+        }
+
+        int occupantHP = occupant.GetCurrentHealth();
+        int occupantMAXHP = occupant.GetMaxHealth();
+        float occupantPERCENTHP = occupantHP / occupantMAXHP;
+
+        bool bIsEnemy = occupant.GetFaction() != _controlledFaction;
+
+        switch (ability.name)
+        {
+            // Barbarian
+            case "Skullsplitter_Ability":
+                {
+                    if (bIsEnemy && occupantPERCENTHP < 0.5f)
+                    {
+                        result += 5;
+                    }
+                    break;
+                }
+            case "Earthquake_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 2;
+                    }
+                    break;
+                }
+            case "RuptureOfTheWilds_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 2;
+                    }
+                    break;
+                }
+            case "RoarOfTheAncients_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 2;
+                    }
+                    break;
+                }
+
+            // Bard
+            case "InspiringAnthem_Ability":
+                {
+                    if (!bIsEnemy && occupantPERCENTHP >= 0.75f)
+                    {
+                        result += 5;
+                    }
+                    break;
+                }
+            case "SongOfRenewal_Ability":
+                {
+                    if (!bIsEnemy && occupantPERCENTHP < 0.75f)
+                    {
+                        result += 10;
+                    }
+                    break;
+                }
+            case "DissonantChord_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 2;
+                    }
+                    break;
+                }
+            case "LuteSmash_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        if (occupantPERCENTHP < 0.1f)
+                        {
+                            result += 10f;
+                        }
+                        
+                        if (_allies.Count == 1)
+                        {
+                            result += 10f;
+                        }
+                    }
+                    break;
+                }
+
+            // Rogue
+            case "SandfangStrike_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 5 / occupantPERCENTHP;
+
+                        if (occupant.GetCharacterClass() == CharacterClass.Sorceress || occupant.GetCharacterClass() == CharacterClass.Bard)
+                        {
+                            result += 5;
+                        }
+                    }
+                    break;
+                }
+            case "Desert's Grasp_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 5 / occupantPERCENTHP;
+
+                        if (occupant.GetCharacterClass() == CharacterClass.Sorceress || occupant.GetCharacterClass() == CharacterClass.Bard)
+                        {
+                            result += 5;
+                        }
+                    }
+                    break;
+                }
+            case "ThrowingKnives_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 5 / occupantPERCENTHP;
+
+                        if (occupant.GetCharacterClass() == CharacterClass.Sorceress || occupant.GetCharacterClass() == CharacterClass.Bard)
+                        {
+                            result += 5;
+                        }
+                    }
+                    break;
+                }
+            case "VeilOfDust_Ability":
+                {
+                    result += 2;
+                    break;
+                }
+
+            // Sorceress
+            case "ArcaneBolt_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 5;
+                    }
+                    break;
+                }
+            case "FlameSurge_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 5;
+                    }
+                    break;
+                }
+            case "LightningStorm_Ability":
+                {
+                    if (bIsEnemy)
+                    {
+                        result += 5;
+                    }
+                    break;
+                }
+            case "Emberwake_Ability":
+                {
+                    result += 2;
+                    break;
+                }
         }
 
         return result;
