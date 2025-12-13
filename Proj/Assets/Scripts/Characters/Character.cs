@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using FMODUnity;
 using UnityEngine;
 
 public enum Faction { Friendly, Enemy }
@@ -512,6 +513,7 @@ public class Character : MonoBehaviour
         
         if (_data.CurrentHealthPoints <= 0)
         {
+            PlayDamageSound(true);
             StartCoroutine(RemoveCharacter());
             return true;
         }
@@ -522,6 +524,7 @@ public class Character : MonoBehaviour
             animator.SetTrigger("TakeDamage");
         }
 
+        PlayDamageSound(false);
         return false;
     }
 
@@ -533,6 +536,33 @@ public class Character : MonoBehaviour
         }
         
         return TakeDamage(damage);
+    }
+
+    private void PlayDamageSound(bool died)
+    {
+        EventReference sound = default;
+        switch (GetCharacterClass())
+        {
+            case CharacterClass.Barbarian:
+                sound = died ? FMODEvents.Instance.BarbarianDeath : FMODEvents.Instance.BarbarianTakeDamage;
+                break;
+            case CharacterClass.Rogue:
+                sound = died ? FMODEvents.Instance.RogueDeath : FMODEvents.Instance.RogueTakeDamage;
+                break;
+            case CharacterClass.Bard:
+                sound = died ? FMODEvents.Instance.BardDeath : FMODEvents.Instance.BardTakeDamage;
+                break;
+            case CharacterClass.Sorceress:
+                sound = died ? FMODEvents.Instance.SorceressDeath : FMODEvents.Instance.SorceressTakeDamage;
+                break;
+        }
+
+        if (sound.IsNull)
+        {
+            return;
+        }
+        
+        AudioManager.Instance.PlayOneShot(sound, transform.position);
     }
      
     private IEnumerator RemoveCharacter()
