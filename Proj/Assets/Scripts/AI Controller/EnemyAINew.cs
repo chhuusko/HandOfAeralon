@@ -1,11 +1,10 @@
-using FMOD;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class AIController : MonoBehaviour
+public class EnemyAINew : MonoBehaviour
 {
     private const int TOP_N_ACTIONS = 3;
     private const float TURN_START_WAIT_TIME = 1f;
@@ -293,6 +292,18 @@ public class AIController : MonoBehaviour
 
         bool bIsEnemy = occupant.GetFaction() != _controlledFaction;
 
+        StatusEffectManager occupantStatusEffectManager = occupant.GetStatusEffectManager();
+        if (occupantStatusEffectManager == null)
+        {
+            return result;
+        }
+
+        StatusEffectManager characterStatusEffectManager = _character.GetStatusEffectManager();
+        if (characterStatusEffectManager == null)
+        {
+            return result;
+        }
+
         switch (ability.name)
         {
             // Barbarian
@@ -313,11 +324,16 @@ public class AIController : MonoBehaviour
                 {
                     if (bIsEnemy)
                     {
-                        result += 2;
+                        result += 1;
 
                         if (occupantPERCENTHP < 0.2f)
                         {
-                            result += 5;
+                            result += 2;
+                        }
+
+                        if (!occupantStatusEffectManager.ContainsStatusEffect<Slowed>())
+                        {
+                            result += 4;
                         }
                     }
                     break;
@@ -332,6 +348,11 @@ public class AIController : MonoBehaviour
                         {
                             result += 5;
                         }
+
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Slowed>())
+                        {
+                            result += 5;
+                        }
                     }
                     break;
                 }
@@ -340,6 +361,11 @@ public class AIController : MonoBehaviour
                     if (bIsEnemy)
                     {
                         result += 2;
+
+                        if (!occupantStatusEffectManager.ContainsStatusEffect<Slowed>())
+                        {
+                            result += 5;
+                        }
                     }
                     break;
                 }
@@ -347,7 +373,7 @@ public class AIController : MonoBehaviour
             // Bard
             case "InspiringAnthem_Ability":
                 {
-                    if (!bIsEnemy && occupantPERCENTHP >= 0.75f)
+                    if (!bIsEnemy && occupantPERCENTHP >= 0.75f && !occupantStatusEffectManager.ContainsStatusEffect<Haste>())
                     {
                         result += 5;
                     }
@@ -366,6 +392,18 @@ public class AIController : MonoBehaviour
                     if (bIsEnemy)
                     {
                         result += 2;
+
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Haste>() ||
+                            occupantStatusEffectManager.ContainsStatusEffect<Empowered>() ||
+                            occupantStatusEffectManager.ContainsStatusEffect<Emberwake>() ||
+                            occupantStatusEffectManager.ContainsStatusEffect<Enraged>() ||
+                            occupantStatusEffectManager.ContainsStatusEffect<ConduitOfPower>() ||
+                            occupantStatusEffectManager.ContainsStatusEffect<Fortified>() ||
+                            occupantStatusEffectManager.ContainsStatusEffect<Sanctified>() ||
+                            occupantStatusEffectManager.ContainsStatusEffect<Stealth>())
+                        {
+                            result += 10;
+                        }
                     }
                     break;
                 }
@@ -397,6 +435,11 @@ public class AIController : MonoBehaviour
                         {
                             result += 5;
                         }
+
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Poison>())
+                        {
+                            result += 5;
+                        }
                     }
                     break;
                 }
@@ -407,6 +450,11 @@ public class AIController : MonoBehaviour
                         result += 5 / occupantPERCENTHP;
 
                         if (occupant.GetCharacterClass() == CharacterClass.Sorceress || occupant.GetCharacterClass() == CharacterClass.Bard)
+                        {
+                            result += 5;
+                        }
+
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Poison>())
                         {
                             result += 5;
                         }
@@ -423,12 +471,27 @@ public class AIController : MonoBehaviour
                         {
                             result += 5;
                         }
+
+                        if (occupantStatusEffectManager.ContainsStatusEffect<Poison>())
+                        {
+                            result += 5;
+                        }
                     }
                     break;
                 }
             case "VeilOfDust_Ability":
                 {
                     result += 2;
+
+                    if (characterStatusEffectManager.ContainsStatusEffect<Poison>() ||
+                        characterStatusEffectManager.ContainsStatusEffect<Burn>() ||
+                        characterStatusEffectManager.ContainsStatusEffect<Aftershock>() ||
+                        characterStatusEffectManager.ContainsStatusEffect<Vulnerable>() ||
+                        characterStatusEffectManager.ContainsStatusEffect<Weakened>() ||
+                        characterStatusEffectManager.ContainsStatusEffect<Slowed>())
+                    {
+                        result += 10;
+                    }
                     break;
                 }
 
@@ -456,6 +519,11 @@ public class AIController : MonoBehaviour
                         {
                             result += 5;
                         }
+
+                        if (characterStatusEffectManager.ContainsStatusEffect<Emberwake>())
+                        {
+                            result += 5;
+                        }
                     }
                     break;
                 }
@@ -469,12 +537,22 @@ public class AIController : MonoBehaviour
                         {
                             result += 5;
                         }
+
+                        if (characterStatusEffectManager.ContainsStatusEffect<Emberwake>())
+                        {
+                            result += 5;
+                        }
                     }
                     break;
                 }
             case "Emberwake_Ability":
                 {
                     result += 2;
+
+                    if (!characterStatusEffectManager.ContainsStatusEffect<Emberwake>())
+                    {
+                        result += 5;
+                    }
                     break;
                 }
         }

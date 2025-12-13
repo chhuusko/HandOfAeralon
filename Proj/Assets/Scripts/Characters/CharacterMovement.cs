@@ -212,4 +212,11 @@ public class CharacterMovement : MonoBehaviour
 
         return bIsDead;
     }
+
+    /*
+    public bool Footstep()
+    {
+        AudioManager.Instance.PlayOneShot(AAAAAAAH!!!, _character.transform.position);
+    }
+    */
 }

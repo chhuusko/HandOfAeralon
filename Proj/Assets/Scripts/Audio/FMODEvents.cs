@@ -15,6 +15,7 @@ public class FMODEvents : MonoBehaviour
     [SerializeField] private EventReference bardDeath;
     [SerializeField] private EventReference sorceressTakeDamage;
     [SerializeField] private EventReference sorceressDeath;
+    [SerializeField] private EventReference barbarianFootsteps;
     [SerializeField] private string damageParameter;
     
     public EventReference BarbarianTakeDamage => barbarianTakeDamage;
@@ -25,6 +26,7 @@ public class FMODEvents : MonoBehaviour
     public EventReference BardDeath => bardDeath;
     public EventReference SorceressTakeDamage => sorceressTakeDamage;
     public EventReference SorceressDeath => sorceressDeath;
+    public EventReference BarbarianFootsteps => barbarianFootsteps;
     public string DamageParameter => damageParameter;
 
     private void Awake()
