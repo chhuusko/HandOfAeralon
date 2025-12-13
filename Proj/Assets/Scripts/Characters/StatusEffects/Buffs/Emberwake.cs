@@ -15,6 +15,11 @@ public class Emberwake : StatusEffect
 
     public override void OnBurnApplied()
     {
+        if (_effectApplied)
+        {
+            return;
+        }
+        
         var data = Data as ChanceModifyingData;
 
         if (!data)
