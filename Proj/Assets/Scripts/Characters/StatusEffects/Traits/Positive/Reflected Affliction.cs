@@ -13,6 +13,11 @@ public class ReflectedAffliction : Trait
 
     public override void OnStatusEffectApplied(Character caster, StatusEffect statusEffect)
     {
+        if (_effectApplied)
+        {
+            return;
+        }
+        
         if (!caster)
         {
             return;
