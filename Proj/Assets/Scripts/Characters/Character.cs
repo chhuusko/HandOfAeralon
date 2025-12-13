@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using FMODUnity;
 using UnityEngine;
 
 public enum Faction { Friendly, Enemy }
@@ -9,6 +10,8 @@ public enum Faction { Friendly, Enemy }
 [System.Serializable]
 public class CharacterData
 {
+    public event Action OnDerivedStatsChanged;
+    
     [Header("Data")]
     [SerializeField] private ClassData _classData;
     [SerializeField] private CharacterClass _characterClass;
@@ -115,6 +118,8 @@ public class CharacterData
         
         SetDerivedHealthPoints(derivedHp);
         SetDerivedDamage(derivedDamage);
+        
+        OnDerivedStatsChanged?.Invoke();
     }
 
     public void SetClassData(ClassData classData) => _classData = classData;
@@ -154,7 +159,7 @@ public class Character : MonoBehaviour
 {
     [SerializeField] private Renderer _factionIndicator; // JLW
 
-    public event Action<int> OnHealthChanged;
+    public event Action<int, int> OnHealthChanged;
     public event Action<int, GameObject> OnTakeDamage;
     public event Action<int, GameObject> OnWasHealed;
 
@@ -254,6 +259,36 @@ public class Character : MonoBehaviour
         {
             combatTooltipManager.GetCharacterLayout().UnBindEventEventOnTakeDamage(this);
         }
+
+        if (_data != null)
+        {
+            _data.OnDerivedStatsChanged -= DerivedStatsChanged; 
+        }
+    }
+    
+    /// <summary>
+    /// Generates a new friendly character.
+    /// </summary>
+    /// <param name="data">The character data to generate from.</param>
+    public void Initialize(CharacterData data)
+    {
+        _data = data;
+        _data.OnDerivedStatsChanged += DerivedStatsChanged; 
+        
+        if (_data.ClassData == null)
+        {
+            return;
+        }
+            
+        // Set values from class data.
+        _currentInitiative = _data.BaseInitiative;
+        _currentDamage = _data.DerivedDamage;
+        _currentMovementPoints = _data.BaseMovementPoints;
+        
+        SetCurrentHealthPoints(_data.DerivedHealthPoints);
+        
+        SetMeshLayers(_bodyMesh);
+        SetMeshLayers(_weaponMesh);
     }
 
     public void Update()
@@ -308,7 +343,12 @@ public class Character : MonoBehaviour
     public void SetFaction(Faction faction) => _data.SetFaction(faction);
     public void SetBaseInitiative(int initiative) => _data.SetBaseInitiative(initiative);
     public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
-    public void SetDerivedHealthPoints(int healthPoints) => _data.SetDerivedHealthPoints(healthPoints);
+    public void SetDerivedHealthPoints(int healthPoints)
+    {
+        _data.SetDerivedHealthPoints(healthPoints);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
+    }
+
     public void SetDerivedDamage(int damage) => _data.SetDerivedDamage(damage);
     
     // Misc.
@@ -321,7 +361,7 @@ public class Character : MonoBehaviour
     public void SetCurrentHealthPoints(int healthPoints)
     {
         _data.SetCurrentHealthPoints(healthPoints);
-        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
         if (_data.CurrentHealthPoints <= 0)
         {
             StartCoroutine(RemoveCharacter());
@@ -368,6 +408,11 @@ public class Character : MonoBehaviour
         SetCurrentMovementPoints(_currentMovementPoints - amount);
     
     public void SetCurrentTileIndex(Vector2Int tileIndex) => _currentTileIndex = tileIndex;
+
+    private void DerivedStatsChanged()
+    {
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
+    }
 
     public void StartAbilityCooldown(Ability ability)
     {
@@ -432,30 +477,6 @@ public class Character : MonoBehaviour
         _currentCooldowns[ability] += amount;
     }
 
-    /// <summary>
-    /// Generates a new friendly character.
-    /// </summary>
-    /// <param name="data">The character data to generate from.</param>
-    public void Initialize(CharacterData data)
-    {
-        _data = data;
-        
-        if (_data.ClassData == null)
-        {
-            return;
-        }
-            
-        // Set values from class data.
-        _currentInitiative = _data.BaseInitiative;
-        _currentDamage = _data.DerivedDamage;
-        _currentMovementPoints = _data.BaseMovementPoints;
-        
-        SetCurrentHealthPoints(_data.DerivedHealthPoints);
-        
-        SetMeshLayers(_bodyMesh);
-        SetMeshLayers(_weaponMesh);
-    }
-
     private void SetMeshLayers(GameObject mesh)
     {
         if (!mesh)
@@ -504,14 +525,19 @@ public class Character : MonoBehaviour
     /// <returns>Whether the character died.</returns>
     public bool TakeDamage(int damage)
     {
+        float oldHealth = GetCurrentHealth();
+        
         _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
-        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
         OnTakeDamage?.Invoke(damage, gameObject);
+        
+        float newHealth = GetCurrentHealth();
 
         Debug.Log($"{name} took {damage} damage! Remaining health: {GetCurrentHealth()}");
         
         if (_data.CurrentHealthPoints <= 0)
         {
+            PlayDamageSound(true, newHealth / oldHealth);
             StartCoroutine(RemoveCharacter());
             return true;
         }
@@ -522,6 +548,7 @@ public class Character : MonoBehaviour
             animator.SetTrigger("TakeDamage");
         }
 
+        PlayDamageSound(false, newHealth / oldHealth);
         return false;
     }
 
@@ -533,6 +560,33 @@ public class Character : MonoBehaviour
         }
         
         return TakeDamage(damage);
+    }
+
+    private void PlayDamageSound(bool died, float damageScale)
+    {
+        EventReference sound = default;
+        switch (GetCharacterClass())
+        {
+            case CharacterClass.Barbarian:
+                sound = died ? FMODEvents.Instance.BarbarianDeath : FMODEvents.Instance.BarbarianTakeDamage;
+                break;
+            case CharacterClass.Rogue:
+                sound = died ? FMODEvents.Instance.RogueDeath : FMODEvents.Instance.RogueTakeDamage;
+                break;
+            case CharacterClass.Bard:
+                sound = died ? FMODEvents.Instance.BardDeath : FMODEvents.Instance.BardTakeDamage;
+                break;
+            case CharacterClass.Sorceress:
+                sound = died ? FMODEvents.Instance.SorceressDeath : FMODEvents.Instance.SorceressTakeDamage;
+                break;
+        }
+
+        if (sound.IsNull)
+        {
+            return;
+        }
+        
+        AudioManager.Instance.PlayParameterizedOneShot(sound, transform.position, FMODEvents.Instance.DamageParameter, damageScale);
     }
      
     private IEnumerator RemoveCharacter()
@@ -556,7 +610,7 @@ public class Character : MonoBehaviour
     public void Heal(int healAmount)
     {
         _data.Heal(healAmount);
-        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
         OnWasHealed?.Invoke(healAmount, gameObject);
     }
     

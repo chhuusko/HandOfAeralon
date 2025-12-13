@@ -29,6 +29,17 @@ public class AudioManager : MonoBehaviour
         RuntimeManager.PlayOneShot(sound, position);
     }
 
+    public void PlayParameterizedOneShot(EventReference sound, Vector3 position, string parameterName, float parameterValue)
+    {
+        EventInstance instance = RuntimeManager.CreateInstance(sound);
+        
+        instance.set3DAttributes(RuntimeUtils.To3DAttributes(position));
+        instance.setParameterByName(parameterName, parameterValue);
+
+        instance.start();
+        instance.release();
+    }
+
     public EventInstance CreateInstance(EventReference eventReference)
     {
         EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);

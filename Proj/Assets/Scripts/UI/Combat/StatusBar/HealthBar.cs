@@ -22,8 +22,9 @@ public class HealthBar : MonoBehaviour
         }
     }
 
-    private void HandleHealthChanged(int hp)
+    private void HandleHealthChanged(int currentHp, int maxHp)
     {
-        _slider.value = hp;
+        _slider.maxValue = maxHp;
+        _slider.value = currentHp;
     }
 }

@@ -108,3 +108,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba91cfc3f87697b42a29af59f38cf6e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  barbarianTakeDamage:
+    Guid:
+      Data1: -1382251724
+      Data2: 1295586633
+      Data3: 1868687233
+      Data4: 1048009922
+    Path: event:/Sound Design/Diegetic/Characters/Barbarian/take_damage
+  barbarianDeath:
+    Guid:
+      Data1: -74907310
+      Data2: 1329232364
+      Data3: -148357981
+      Data4: 85519170
+    Path: event:/Sound Design/Diegetic/Characters/Barbarian/death
+  rogueTakeDamage:
+    Guid:
+      Data1: 119656159
+      Data2: 1287735992
+      Data3: -982687616
+      Data4: -2111951878
+    Path: event:/Sound Design/Diegetic/Characters/Rouge/take_damage
+  rogueDeath:
+    Guid:
+      Data1: -2019909425
+      Data2: 1094738644
+      Data3: -917375328
+      Data4: -21344727
+    Path: event:/Sound Design/Diegetic/Characters/Rouge/death
+  bardTakeDamage:
+    Guid:
+      Data1: -54973311
+      Data2: 1198705819
+      Data3: 1050751929
+      Data4: 1765012836
+    Path: event:/Sound Design/Diegetic/Characters/Bard/take_damage
+  bardDeath:
+    Guid:
+      Data1: 1129237895
+      Data2: 1284853742
+      Data3: 1250481829
+      Data4: -1959397277
+    Path: event:/Sound Design/Diegetic/Characters/Bard/death
+  sorceressTakeDamage:
+    Guid:
+      Data1: -442636130
+      Data2: 1246408044
+      Data3: 813479072
+      Data4: -1284768266
+    Path: event:/Sound Design/Diegetic/Characters/Sorceress/take_damage
+  sorceressDeath:
+    Guid:
+      Data1: 1535966948
+      Data2: 1158512997
+      Data3: 592751270
+      Data4: -1203163706
+    Path: event:/Sound Design/Diegetic/Characters/Sorceress/death
+  damageParameter: take damage amount
