@@ -137,6 +137,9 @@ public class CharacterData
         }
         
         _currentHealthPoints = Mathf.Min(_currentHealthPoints, _derivedHealthPoints);
+        
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
+        OnWasHealed?.Invoke(healAmount, gameObject);
     }
 
     public void SetDerivedDamage(int damage) => _derivedDamage = Mathf.Max(1, damage);
@@ -505,15 +508,19 @@ public class Character : MonoBehaviour
     /// <returns>Whether the character died.</returns>
     public bool TakeDamage(int damage)
     {
+        float oldHealth = GetCurrentHealth();
+        
         _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
         OnTakeDamage?.Invoke(damage, gameObject);
+        
+        float newHealth = GetCurrentHealth();
 
         Debug.Log($"{name} took {damage} damage! Remaining health: {GetCurrentHealth()}");
         
         if (_data.CurrentHealthPoints <= 0)
         {
-            PlayDamageSound(true);
+            PlayDamageSound(true, newHealth / oldHealth);
             StartCoroutine(RemoveCharacter());
             return true;
         }
@@ -524,7 +531,7 @@ public class Character : MonoBehaviour
             animator.SetTrigger("TakeDamage");
         }
 
-        PlayDamageSound(false);
+        PlayDamageSound(false, newHealth / oldHealth);
         return false;
     }
 
@@ -538,7 +545,7 @@ public class Character : MonoBehaviour
         return TakeDamage(damage);
     }
 
-    private void PlayDamageSound(bool died)
+    private void PlayDamageSound(bool died, float damageScale)
     {
         EventReference sound = default;
         switch (GetCharacterClass())
@@ -562,7 +569,7 @@ public class Character : MonoBehaviour
             return;
         }
         
-        AudioManager.Instance.PlayOneShot(sound, transform.position);
+        AudioManager.Instance.PlayParameterizedOneShot(sound, transform.position, FMODEvents.Instance.DamageParameter, damageScale);
     }
      
     private IEnumerator RemoveCharacter()
