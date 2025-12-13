@@ -23,9 +23,17 @@ public class AbilityHandler : MonoBehaviour
         }
         _casterTile = _characterCaster.GetCurrentTileComponent();
     }
+    /// <summary>
+    /// Attempts to cast the given ability on the selected target tile.
+    /// Validates the tile, triggers ability effects, consumes resources,
+    /// and starts the ability cooldown if successful.
+    /// </summary>
     public bool UseAbility(Ability ability, CombatGridTile targetTile)
     {
-        GetAvailableTargets(ability);
+        // Set caster to get information that might alter ability, like extra AOE range.
+        _pendingAbility.SetCharacterCaster(_characterCaster);
+
+        _tilesInRange = RemoveUntargetableTiles(GetAvailableTargets(_pendingAbility));
         if (!CanCastAbility(ability, targetTile))
         {
             ClearAbilityTargetRange();
@@ -33,9 +41,6 @@ public class AbilityHandler : MonoBehaviour
                 DebugLog.MGLog("Tried casting ability, but it failed");
             return false;
         }
-
-        // Set caster to get information that might alter ability, like extra AOE range.
-        _pendingAbility.SetCharacterCaster(_characterCaster);
 
         _characterCaster.CanUseAbility = false;
         CombatEventManager.InvokeOnAbilityCast();
@@ -47,6 +52,10 @@ public class AbilityHandler : MonoBehaviour
     {
         return _characterCaster;
     }
+    /// <summary>
+    /// Returns the cached list of tiles currently in range for the pending ability.
+    /// Note: Range must be calculated beforehand, otherwise the list may be empty.
+    /// </summary>
     public List<CombatGridTile> GetTilesInRange()
     {
         return _tilesInRange;
@@ -65,6 +74,11 @@ public class AbilityHandler : MonoBehaviour
         return _pendingAbility;
     }
 
+    /// <summary>
+    /// Calculates all tiles that the pending ability can target from the caster's position.
+    /// Fetches tiles from the ability’s range calculation and filters out untargetable tiles.
+    /// Saves the result into _tilesInRange.
+    /// </summary>
     public void CalculateAbilityRange(CombatGridTile specificTile = null)
     {
         ClearAbilityTargetRange();
@@ -88,17 +102,29 @@ public class AbilityHandler : MonoBehaviour
         _tilesInRange = RemoveUntargetableTiles(GetAvailableTargets(_pendingAbility));
     }
 
+    /// <summary>
+    /// Checks whether the ability can legally be cast on the given tile.
+    /// Ensures the tile is valid for this ability AND is inside the computed range.
+    /// </summary>
     public bool CanCastAbility(Ability ability, CombatGridTile targetTile)
     {
         return IsValidTargetTileForAbility(ability, targetTile) && _tilesInRange.Contains(targetTile);
         
     }
 
+    /// <summary>
+    /// Helper wrapper that asks the ability to compute which tiles are in range
+    /// from the caster’s tile using its RangeCalculation.
+    /// </summary>
     private List<CombatGridTile> GetAvailableTargets(Ability ability)
     {
         return ability.GetAvailableTargets(_casterTile);
     }
 
+    /// <summary>
+    /// Determines whether the tile is a valid target for the pending ability.
+    /// Checks walkability, occupant type (enemy/friendly), and custom "targetable" rules.
+    /// </summary>
     private bool IsValidTargetTileForAbility(Ability ability, CombatGridTile tile)
     {
         if (tile == null) return false;
@@ -121,6 +147,11 @@ public class AbilityHandler : MonoBehaviour
             default: return false;
         }
     }
+
+    /// <summary>
+    /// Removes tiles that cannot be targeted (e.g., unwalkable tiles, caster tile when needed)
+    /// from the list returned by the range calculation.
+    /// </summary>
     private List<CombatGridTile> RemoveUntargetableTiles(List<CombatGridTile> tiles)
     {
         List<CombatGridTile> filteredList = new();
@@ -173,6 +204,11 @@ public class AbilityHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Returns false if the character cannot currently be targeted by abilities.
+    /// Used as an extra layer of validation on top of regular targeting rules.
+    /// For use cases such as when Stealth is activated on a character.
+    /// </summary>
     private bool CharacterNotTargetable(Character targetCharacter)
     {
         if(targetCharacter == null) return false;
