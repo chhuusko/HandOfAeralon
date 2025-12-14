@@ -22,4 +22,27 @@ public class ColorDatabase : ScriptableObject
     public Color rogueColor;
     public Color sorceressColor;
     public Color enemyColor;
+    
+    public Color GetCharacterColor(Character c)
+    {
+        if (c == null)
+        {
+            Debug.LogError($"{c} is null");
+            return Color.white;
+        }
+
+        if (c.GetFaction() == Faction.Enemy)
+        {
+            return enemyColor;
+        }
+
+        return c.GetCharacterClass() switch
+        {
+            CharacterClass.Barbarian => barbarianColor,
+            CharacterClass.Bard => bardColor,
+            CharacterClass.Rogue => rogueColor,
+            CharacterClass.Sorceress => sorceressColor,
+            _ => Color.white
+        };
+    }
 }
