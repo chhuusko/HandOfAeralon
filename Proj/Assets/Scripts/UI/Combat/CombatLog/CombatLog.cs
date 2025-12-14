@@ -39,9 +39,23 @@ public class CombatLog : MonoBehaviour
     {
         AbilityLogData abilityLogData = new AbilityLogData
         {
-            ExecutionData = data
+            // ExecutionData = data
+            Caster = data.Caster,
+            Target = data.Target,
+            Ability = data.Ability,
+            Damage = data.Damage,
         };
         AddCombatLogEntry(abilityLogData);
+    }
+
+    public void AddCombatLogEntry(StatusEffect effect)
+    {
+        
+    }
+
+    public void AddCombatLogEntry(Card card)
+    {
+        
     }
 
     private void AddCombatLogEntry(CombatLogData data)
