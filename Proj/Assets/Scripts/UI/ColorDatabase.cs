@@ -17,11 +17,11 @@ public class ColorDatabase : ScriptableObject
         }
     }
     
-    public Color barbarianColor;
-    public Color bardColor;
-    public Color rogueColor;
-    public Color sorceressColor;
-    public Color enemyColor;
+    public Color BarbarianColor;
+    public Color BardColor;
+    public Color RogueColor;
+    public Color SorceressColor;
+    public Color EnemyColor;
     
     public Color GetCharacterColor(Character c)
     {
@@ -33,15 +33,15 @@ public class ColorDatabase : ScriptableObject
 
         if (c.GetFaction() == Faction.Enemy)
         {
-            return enemyColor;
+            return EnemyColor;
         }
 
         return c.GetCharacterClass() switch
         {
-            CharacterClass.Barbarian => barbarianColor,
-            CharacterClass.Bard => bardColor,
-            CharacterClass.Rogue => rogueColor,
-            CharacterClass.Sorceress => sorceressColor,
+            CharacterClass.Barbarian => BarbarianColor,
+            CharacterClass.Bard => BardColor,
+            CharacterClass.Rogue => RogueColor,
+            CharacterClass.Sorceress => SorceressColor,
             _ => Color.white
         };
     }
