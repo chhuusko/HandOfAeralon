@@ -11,6 +11,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 using Object = UnityEngine.Object;
 
 
@@ -155,9 +156,13 @@ public class CombatManager : MonoBehaviour
             Character activeCharacter = _combatTurnOrder.GetActiveCharacter();
             if (activeCharacter)
             {
+                InitiativeHoverSphere hoverSphere = _selectorOverHead.GetComponent<InitiativeHoverSphere>();
+                _selectorOverHead?.SetActive(true);
                 Vector3 selectorOverHeadPosition = activeCharacter.transform.position + (Vector3.up * 3.0f);
-                SetSelectorOverHeadPosition(selectorOverHeadPosition);
-                UpdateSelectorOverHeadPosition();
+                hoverSphere.SetPosition(selectorOverHeadPosition);
+                hoverSphere.SetHoverStartPosition(selectorOverHeadPosition);
+                hoverSphere.SetHoverSpherePosition(selectorOverHeadPosition);
+                hoverSphere.UpdatePosition();
             }
         }
 
@@ -248,34 +253,10 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    public void SetSelectorOverHeadPosition(Vector3 pos)
-    {
-        _selectorOverHead.SetActive(true);
-        _selectorOverHeadStartPos = pos;
-        _selectorOverHead.transform.position = pos;
-    }
-
-    [SerializeField] private float _selectorOverHeadBounceSpeed;
-    [SerializeField] private float _selectorOverHeadBounceInterval;
-    public void UpdateSelectorOverHeadPosition()
-    {
-        
-        float py = _selectorOverHeadStartPos.y + Mathf.Sin(Time.time * _selectorOverHeadBounceSpeed) * _selectorOverHeadBounceInterval;
-        
-        _selectorOverHead.transform.position = new Vector3(_selectorOverHeadStartPos.x, py, _selectorOverHeadStartPos.z);
-    }
-    public void HideSelectorOverhead()
-    {
-        _selectorOverHead.SetActive(false);
-    }
-
     public void SetSelectorOverHeadColor(Color color)
     {
-        MeshRenderer rend = _selectorOverHead.GetComponent<MeshRenderer>();
-        if(rend != null)
-        {
-                rend.material.SetColor("_BaseColor", color); 
-        }
+        InitiativeHoverSphere hoverSphere = _selectorOverHead.GetComponent<InitiativeHoverSphere>();
+        hoverSphere.SetHoverOverheadColor(color);
     }
 
     /// <summary>

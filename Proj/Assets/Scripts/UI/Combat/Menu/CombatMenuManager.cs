@@ -15,6 +15,13 @@ public class CombatMenuManager : MonoBehaviour
     [SerializeField] private GameObject _optionsLayout;
     [SerializeField] private GameObject _victoryScreenLayout;
 
+
+    // (Calle): Cameras to turn on/off Postprocessing for when menu opens
+    [SerializeField] private UniversalAdditionalCameraData _uacCardHUDCamera;
+    [SerializeField] private UniversalAdditionalCameraData _uacCombatHUDCamera;
+    [SerializeField] private UniversalAdditionalCameraData _uacTooltipHUDCamera;
+    [SerializeField] private UniversalAdditionalCameraData _uacCutsceneHUDCamera;
+
     // NOTE (Calle): Canvases to turn off Interactable on when this menu opens.
     [SerializeField] private CanvasGroup _combatHUDCanvasGroup;
     [SerializeField] private CanvasGroup _combatCardCanvasGroup;
@@ -168,6 +175,11 @@ public class CombatMenuManager : MonoBehaviour
 
     private void TurnOFFCombatCanvases()
     {
+        _uacCardHUDCamera.renderPostProcessing     = true;
+        _uacCombatHUDCamera.renderPostProcessing   = true;
+        _uacTooltipHUDCamera.renderPostProcessing  = true;
+        _uacCutsceneHUDCamera.renderPostProcessing = true;
+
         _combatHUDCanvasGroup.interactable     = false;
         _combatTooltipCanvasGroup.interactable = false;
         _combatCardCanvasGroup.interactable    = false;
@@ -176,6 +188,11 @@ public class CombatMenuManager : MonoBehaviour
 
     private void TurnONCombatCanvases()
     {
+        _uacCardHUDCamera.renderPostProcessing     = false;
+        _uacCombatHUDCamera.renderPostProcessing   = false;
+        _uacTooltipHUDCamera.renderPostProcessing  = false;
+        _uacCutsceneHUDCamera.renderPostProcessing = false;
+
         _combatHUDCanvasGroup.interactable     = true;
         _combatTooltipCanvasGroup.interactable = true;
         _combatCardCanvasGroup.interactable    = true;
