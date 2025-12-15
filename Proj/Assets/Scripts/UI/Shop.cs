@@ -123,7 +123,7 @@ public class Shop : MonoBehaviour
     }
     public CharacterData GetRandomCharacter()
     {
-        return new CharacterData(_classDatabase.Classes[Random.Range(0, 3)], Faction.Friendly, true);
+        return new CharacterData(_classDatabase.Classes[Random.Range(0, 4)], Faction.Friendly, true);
     }
     
     public void OpenSellTab()
