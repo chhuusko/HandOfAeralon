@@ -27,7 +27,7 @@ public class AbilityLogEntry : CombatLogEntry
         string casterName = TextMarkupExtensions.Colorize(d.Caster.Data.ClassData.name, casterColor);
         string abilityName =
             TextMarkupExtensions.Colorize(d.Ability.GetAbilityName(), ColorDatabase.Instance.AbilityColor);
-        string damage = TextMarkupExtensions.Colorize(d.Ability.GetDamage().ToString(), damageColor);
+        string damage = TextMarkupExtensions.Colorize(d.Damage.ToString(), damageColor);
 
         string faction;
         if (d.Caster == d.Target)
@@ -46,6 +46,13 @@ public class AbilityLogEntry : CombatLogEntry
             _text.text = $"{(d.Caster.GetFaction() == Faction.Friendly ? "Friendly" : "Enemy")} " +
                          $"{casterName} used {abilityName} and dealt " + 
                          $"{damage} damage to {faction}";
+        }
+        else if (d.Ability.GetAbilityType() is Ability.Type.Heal)
+        {
+            string heal = TextMarkupExtensions.Colorize(d.Heal.ToString(), ColorDatabase.Instance.HealingColor);
+            _text.text = $"{(d.Caster.GetFaction() == Faction.Friendly ? "Friendly" : "Enemy")} " +
+                         $"{casterName} used {abilityName} and restored " + 
+                         $"{heal} health to {faction}";
         }
         else
         {

@@ -47,6 +47,7 @@ public class CombatLog : MonoBehaviour
             Target = data.Target,
             Ability = data.Ability,
             Damage = data.Damage,
+            Heal = data.Heal,
         };
         AddCombatLogEntry(abilityLogData);
     }
