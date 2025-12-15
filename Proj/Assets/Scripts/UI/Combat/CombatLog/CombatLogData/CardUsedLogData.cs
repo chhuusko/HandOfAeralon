@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CardLogData : CombatLogData
+public class CardUsedLogData : CombatLogData
 {
     public Card Card;
 }

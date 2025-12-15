@@ -7,4 +7,5 @@ public class AbilityLogData : CombatLogData
     public Character Target;
     public Ability Ability;
     public int Damage;
+    public int Heal;
 }
