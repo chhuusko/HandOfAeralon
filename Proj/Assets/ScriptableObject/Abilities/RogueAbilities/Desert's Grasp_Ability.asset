@@ -16,9 +16,9 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 2daeff1426025cf4eb6d075fb79f5fbd, type: 3}
   _range: 0
   _cooldown: 2
-  _description: "Slash around you, dealing (90% \xD7 Damage) Physical damage to adjacent
-    characters. Every character hit has a 70% chance to gain 3 stacks of Poison.
-    Gain 1 Mana if at least two enemies become Poisoned."
+  _description: Slash around you, dealing {damage} {physical_damage} to adjacent
+    characters. Every character hit has a 70% chance to gain 3 stacks of {poison}.
+    Gain 1 {mana} if at least two enemies become Poisoned.
   _abilityTag: 9
   _type: 0
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
