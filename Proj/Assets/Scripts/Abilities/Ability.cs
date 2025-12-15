@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class Ability : ScriptableObject
@@ -135,7 +134,7 @@ public abstract class Ability : ScriptableObject
                 CastingFXDuration = _castingFXTime,
                 TravelFXDuration = _fromCastToHitTime
             };
-            caster.StartCoroutine(_abilityVFXSequence.RunSequence(data)
+            yield return caster.StartCoroutine(_abilityVFXSequence.RunSequence(data)
             );
         }
 
