@@ -344,7 +344,7 @@ MonoBehaviour:
   m_Content: {fileID: 4499401449079612489}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -817,12 +817,15 @@ MonoBehaviour:
   _combatLogScrollRect: {fileID: 3085368872588384015}
   _abilityEntryPrefab: {fileID: -1773185080026993426, guid: d029746f98115104494a220ba07147d2,
     type: 3}
-  _characterDeathEntryPrefab: {fileID: 0}
+  _characterDeathEntryPrefab: {fileID: 4343468963409620165, guid: 177bbedc6776bcd4d8d840b61252aa34,
+    type: 3}
   _cardUsedLogEntryPrefab: {fileID: 3862766389435829800, guid: 39d84141dc0875149ad055ac96a7c218,
     type: 3}
   _cardTargetedLogEntryPrefab: {fileID: -8805841298396950255, guid: da9ea02317be8b34c9b97d0d0363c763,
     type: 3}
   _combatBountyEntryPrefab: {fileID: 0}
+  _statusEffectEntryPrefab: {fileID: -1787938578285379161, guid: ce8e43e20c9004b45a2252d039fa2a43,
+    type: 3}
 --- !u!1 &8191509190501037255
 GameObject:
   m_ObjectHideFlags: 0
