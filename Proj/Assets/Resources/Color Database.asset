@@ -12,8 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b802f46805c492e4f91b368cfc18efb8, type: 3}
   m_Name: Color Database
   m_EditorClassIdentifier: 
-  barbarianColor: {r: 0.54509807, g: 0.3529412, b: 0.16862746, a: 1}
-  bardColor: {r: 0.90196085, g: 0.7686275, b: 0.3647059, a: 1}
-  rogueColor: {r: 0.24705884, g: 0.68235296, b: 0.41960788, a: 1}
-  sorceressColor: {r: 0.25882354, g: 0.8862746, b: 1, a: 1}
-  enemyColor: {r: 0.7843138, g: 0.227451, b: 0.227451, a: 1}
+  BarbarianColor: {r: 0.54509807, g: 0.3529412, b: 0.16862746, a: 1}
+  BardColor: {r: 0.90196085, g: 0.7686275, b: 0.3647059, a: 1}
+  RogueColor: {r: 0.24705884, g: 0.68235296, b: 0.41960788, a: 1}
+  SorceressColor: {r: 0.25882354, g: 0.8862746, b: 1, a: 1}
+  EnemyColor: {r: 0.7843138, g: 0.227451, b: 0.227451, a: 1}
+  AbilityColor: {r: 0.8980393, g: 0.8980393, b: 0.9058824, a: 1}
+  ElementalDamageColor: {r: 0.7019608, g: 0.54901963, b: 1, a: 1}
+  PhysicalDamageColor: {r: 0.9607844, g: 0.9607844, b: 0.86274517, a: 1}
+  NonDamagingEffectColor: {r: 0.9333334, g: 0.86274517, b: 0.4784314, a: 1}
+  BurnColor: {r: 1, g: 0.4156863, b: 0.23529413, a: 1}
+  PoisonColor: {r: 0.49411768, g: 0.85098046, b: 0.34117648, a: 1}
+  CardColor: {r: 0.8980393, g: 0.8980393, b: 0.9058824, a: 1}
+  ManaColor: {r: 0.2901961, g: 0.6392157, b: 1, a: 1}
+  HealingColor: {r: 0.47450984, g: 0.89019614, b: 0.4901961, a: 1}
