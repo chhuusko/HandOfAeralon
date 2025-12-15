@@ -16,4 +16,30 @@ public static class GameTextFormatter
         
         return TextMarkupExtensions.Colorize($"{factionName} {className}", color);
     }
+
+    public static string StatusEffectColoredLabel(StatusEffect statusEffect)
+    {
+        if (statusEffect == null)
+        {
+            Debug.LogWarning("StatusEffect is null");
+            return string.Empty;
+        }
+        
+        string name = statusEffect.Name;
+        Color color;
+        if (statusEffect is Burn)
+        {
+            color = ColorDatabase.Instance.BurnColor;
+        }
+        else if (statusEffect is Poison)
+        {
+            color = ColorDatabase.Instance.PoisonColor;
+        }
+        else
+        {
+            color = ColorDatabase.Instance.NonDamagingEffectColor;
+        }
+        
+        return TextMarkupExtensions.Colorize(name, color);
+    }
 }
