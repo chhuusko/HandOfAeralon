@@ -17,7 +17,8 @@ public class CombatLog : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private CombatLogEntry _abilityEntryPrefab;
     [SerializeField] private CombatLogEntry _characterDeathEntryPrefab;
-    [SerializeField] private CombatLogEntry _cardLogEntryPrefab;
+    [SerializeField] private CombatLogEntry _cardUsedLogEntryPrefab;
+    [SerializeField] private CombatLogEntry _cardTargetedLogEntryPrefab;
     [SerializeField] private CombatLogEntry _combatBountyEntryPrefab;
     
     private bool _bCombatLogEnabled = true;
@@ -25,6 +26,8 @@ public class CombatLog : MonoBehaviour
     private void OnEnable()
     {
         CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
+        CardHandManager.onCardUse += AddCombatLogEntry;
+        CardHandManager.onCardTargetCharacter += AddCombatLogEntry;
     }
 
     public void SetCombatLogActive()
@@ -48,12 +51,21 @@ public class CombatLog : MonoBehaviour
         AddCombatLogEntry(abilityLogData);
     }
 
-    public void AddCombatLogEntry(StatusEffect effect)
+    private void AddCombatLogEntry(Card card)
+    {
+        CardUsedLogData cardUsedLogData = new CardUsedLogData()
+        {
+            Card = card
+        };
+        AddCombatLogEntry(cardUsedLogData);
+    }
+
+    private void AddCombatLogEntry(Character character, Card card)
     {
         
     }
-
-    public void AddCombatLogEntry(Card card)
+    
+    private void AddCombatLogEntry(StatusEffect effect)
     {
         
     }
@@ -64,7 +76,8 @@ public class CombatLog : MonoBehaviour
         {
             AbilityLogData => _abilityEntryPrefab,
             CharacterDeathLogData => _characterDeathEntryPrefab,
-            CardLogData => _cardLogEntryPrefab,
+            CardUsedLogData => _cardUsedLogEntryPrefab,
+            CardTargetedLogData => _cardTargetedLogEntryPrefab,
             CombatBountyLogData => _combatBountyEntryPrefab,
             _ => null
         };
@@ -92,5 +105,6 @@ public class CombatLog : MonoBehaviour
     private void OnDisable()
     {
         CombatEventManager.OnAbilityDataCreated -= AddCombatLogEntry;
+        CardHandManager.onCardUse -= AddCombatLogEntry;
     }
 }

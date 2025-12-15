@@ -87,9 +87,9 @@ GameObject:
   - component: {fileID: 5942684069223303462}
   - component: {fileID: 3690827802514738725}
   - component: {fileID: 869761179923741678}
-  - component: {fileID: -1773185080026993426}
+  - component: {fileID: 3862766389435829800}
   m_Layer: 5
-  m_Name: AbilityLogEntry
+  m_Name: CardUsedLogEntry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,7 +174,7 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &-1773185080026993426
+--- !u!114 &3862766389435829800
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 515051203510682649}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b93877078e58a744da8fe06ebdde8bc0, type: 3}
+  m_Script: {fileID: 11500000, guid: aae409d6337cf1748a9d01ed1d7f92aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _image: {fileID: 3983451707349768076}
@@ -282,7 +282,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontSize: 17.1
-  m_fontSizeBase: 18
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 16

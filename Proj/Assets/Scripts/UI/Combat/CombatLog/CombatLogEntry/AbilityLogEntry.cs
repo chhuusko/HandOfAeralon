@@ -12,13 +12,13 @@ public class AbilityLogEntry : CombatLogEntry
         {
             return;
         }
-        
-        _image.sprite = d.Ability.GetIcon();
 
         if (!d.Ability || !d.Target || !d.Caster)
         {
             return;
         }
+        
+        _image.sprite = d.Ability.GetIcon();
 
         Color casterColor = ColorDatabase.Instance.GetCharacterColor(d.Caster);
         Color targetColor = ColorDatabase.Instance.GetCharacterColor(d.Target);
@@ -36,7 +36,7 @@ public class AbilityLogEntry : CombatLogEntry
         }
         else
         {
-            faction = TextMarkupExtensions.Colorize(d.Target.GetFaction() == Faction.Friendly ? "friendly" : "enemy" + 
+            faction = TextMarkupExtensions.Colorize(d.Target.GetFaction() + 
                 $" {d.Target.GetCharacterClass()}", targetColor);
         }
 
