@@ -29,7 +29,7 @@ public class LevelManager : ScriptableObject
 
     private int menuFPSCap = 60;
     private CombatGrid _combatGrid;
-    private bool isTutorialCompleted;
+    private bool _isTutorialCompleted;
 
     public static LevelManager GetInstance()
     {
@@ -37,6 +37,7 @@ public class LevelManager : ScriptableObject
         {
             _instance = Resources.Load<LevelManager>("LevelManager");
             _instance._level = 0;
+            _instance._isTutorialCompleted = false;
         }
         return _instance;
     }
@@ -107,7 +108,7 @@ public class LevelManager : ScriptableObject
     {
         if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
         {
-            if (isTutorialCompleted)
+            if (_isTutorialCompleted)
             {
                 _difficulty = _level / 5;
                 switch (_difficulty)
@@ -143,7 +144,7 @@ public class LevelManager : ScriptableObject
         _level++;
         if (_level == tutorialCombatList.Count-1)
         {
-            isTutorialCompleted = true;
+            _isTutorialCompleted = true;
             _level = 0;
         }
     }
