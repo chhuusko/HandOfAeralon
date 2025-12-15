@@ -12,31 +12,53 @@ public class AbilityLogEntry : CombatLogEntry
         {
             return;
         }
-        
-        _image.sprite = d.Ability.GetIcon();
 
         if (!d.Ability || !d.Target || !d.Caster)
         {
             return;
         }
+        
+        _image.sprite = d.Ability.GetIcon();
 
         Color casterColor = ColorDatabase.Instance.GetCharacterColor(d.Caster);
         Color targetColor = ColorDatabase.Instance.GetCharacterColor(d.Target);
+        Color damageColor = ColorDatabase.Instance.GetDamageColor(d.Ability);
+        
+        string casterName = TextMarkupExtensions.Colorize(d.Caster.Data.ClassData.name, casterColor);
+        string abilityName =
+            TextMarkupExtensions.Colorize(d.Ability.GetAbilityName(), ColorDatabase.Instance.AbilityColor);
+        string damage = TextMarkupExtensions.Colorize(d.Damage.ToString(), damageColor);
+
+        string faction;
+        if (d.Caster == d.Target)
+        {
+            faction = "itself";
+        }
+        else
+        {
+            faction = TextMarkupExtensions.Colorize(d.Target.GetFaction() + 
+                $" {d.Target.GetCharacterClass()}", targetColor);
+        }
 
         // Check for type of ability.
         if (d.Ability.GetAbilityType() is Ability.Type.Elemental or Ability.Type.Physical)
         {
-            _text.text = $"{(d.Target.GetFaction() == Faction.Friendly ? "friendly" : "enemy")} " +
-                         $"{d.Caster.Data.ClassData.name} used {d.Ability.GetAbilityName()} and dealt " + 
-                         $"{d.Damage} damage to {(d.Target.GetFaction() == Faction.Friendly ? "friendly" : "enemy")}" + 
-                         $" {d.Target.Data.ClassData.name}";
+            _text.text = $"{(d.Caster.GetFaction() == Faction.Friendly ? "Friendly" : "Enemy")} " +
+                         $"{casterName} used {abilityName} and dealt " + 
+                         $"{damage} damage to {faction}";
+        }
+        else if (d.Ability.GetAbilityType() is Ability.Type.Heal)
+        {
+            string heal = TextMarkupExtensions.Colorize(d.Heal.ToString(), ColorDatabase.Instance.HealingColor);
+            _text.text = $"{(d.Caster.GetFaction() == Faction.Friendly ? "Friendly" : "Enemy")} " +
+                         $"{casterName} used {abilityName} and restored " + 
+                         $"{heal} health to {faction}";
         }
         else
         {
-            _text.text = $"{(d.Target.GetFaction() == Faction.Friendly ? "friendly" : "enemy")} " + 
-                         $"{d.Caster.Data.ClassData.name} used {d.Ability.GetAbilityName()}" + 
-                         $" on{(d.Target.GetFaction() == Faction.Friendly ? " " : " enemy")} " + 
-                         $"{d.Target.Data.ClassData.name}";
+            _text.text = $"{(d.Caster.GetFaction() == Faction.Friendly ? "Friendly" : "Enemy")} " + 
+                         $"{casterName} used {abilityName} " + 
+                         $"on {faction}";
         }
     }
 }

@@ -293,6 +293,9 @@ public class CombatGrid : MonoBehaviour
             result = tileObject;
 
             tileObject.transform.localScale = tileData.GetTileSize();
+            Vector3 size = tileObject.transform.localScale;
+            size.y = 0.0001f;
+            tileObject.transform.localScale = size;
             tileObject.GetComponent<CombatGridTile>().SetTilePosition(tileData.GetTilePosition());
             tileObject.GetComponent<CombatGridTile>().SetTileType(tileData.GetTileType());
             tileObject.GetComponent<CombatGridTile>().SetTileIndex(tileData.GetTileIndex());
@@ -551,7 +554,7 @@ public class CombatGrid : MonoBehaviour
             CombatGridTileData tileData = new CombatGridTileData(TileType.Walkable,
                                                                  new Vector2Int(0, i),
                                                                  new Vector3(-2f, 0, 4 + (2 * i)),
-                                                                 new Vector3(2f, 0.1f, 2f));
+                                                                 new Vector3(2f, 0.0001f, 2f));
             AddOffgridTile(tileData);
         }
 

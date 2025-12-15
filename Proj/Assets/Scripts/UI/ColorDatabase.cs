@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Color Database", menuName = "UI/Color Database")]
@@ -17,11 +18,29 @@ public class ColorDatabase : ScriptableObject
         }
     }
     
+    [Header("Characters")]
     public Color BarbarianColor;
     public Color BardColor;
     public Color RogueColor;
     public Color SorceressColor;
     public Color EnemyColor;
+
+    [Header("Abilities")] 
+    public Color AbilityColor;
+    public Color ElementalDamageColor;
+    public Color PhysicalDamageColor;
+    
+    [Header("Status Effects")]
+    public Color NonDamagingEffectColor;
+    public Color BurnColor;
+    public Color PoisonColor;
+
+    [Header("Cards")] 
+    public Color CardColor;
+    public Color ManaColor;
+    
+    [Header("Misc")]
+    public Color HealingColor;
     
     public Color GetCharacterColor(Character c)
     {
@@ -43,6 +62,23 @@ public class ColorDatabase : ScriptableObject
             CharacterClass.Rogue => RogueColor,
             CharacterClass.Sorceress => SorceressColor,
             _ => Color.white
+        };
+    }
+
+    public Color GetDamageColor(Ability ability)
+    {
+        if (ability == null)
+        {
+            Debug.LogError($"{ability} is null");
+            return Color.white;
+        }
+        
+        return ability.GetAbilityType() switch
+        {
+            Ability.Type.Elemental => ElementalDamageColor,
+            Ability.Type.Physical => PhysicalDamageColor,
+            Ability.Type.Heal => HealingColor,
+            _ => NonDamagingEffectColor
         };
     }
 }
