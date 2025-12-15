@@ -186,6 +186,7 @@ public class Selector : MonoBehaviour
 
             if (handler == null || handler.GetPendingAbility() == null) return;
             handler.PreviewTargetTiles(hoveredTile);
+            handler.PreviewAbility(handler.GetPendingAbility(), hoveredTile);
         }
     }
 

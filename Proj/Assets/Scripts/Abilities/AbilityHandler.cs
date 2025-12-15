@@ -48,6 +48,19 @@ public class AbilityHandler : MonoBehaviour
         _characterCaster.StartAbilityCooldown(ability);
         return true;
     }
+
+    public void PreviewAbility(Ability ability, CombatGridTile targetTile)
+    {
+        _pendingAbility.SetCharacterCaster(_characterCaster);
+        _tilesInRange = RemoveUntargetableTiles(GetAvailableTargets(_pendingAbility));
+        if (!CanCastAbility(ability, targetTile))
+        {
+            ClearAbilityTargetRange();
+            if (_bDebugAbilityHandler) DebugLog.MGLog("Preview ability, tried running but is run on illegal tile.");
+            return;
+        }
+        ability.PreviewAbilityEffects(_casterTile, targetTile);
+    }
     public Character GetCharacterCaster()
     {
         return _characterCaster;
@@ -82,7 +95,7 @@ public class AbilityHandler : MonoBehaviour
     public void CalculateAbilityRange(CombatGridTile specificTile = null)
     {
         ClearAbilityTargetRange();
-        
+
         if (specificTile != null)
         {
             _casterTile = specificTile;
@@ -109,7 +122,7 @@ public class AbilityHandler : MonoBehaviour
     public bool CanCastAbility(Ability ability, CombatGridTile targetTile)
     {
         return IsValidTargetTileForAbility(ability, targetTile) && _tilesInRange.Contains(targetTile);
-        
+
     }
 
     /// <summary>
@@ -130,13 +143,13 @@ public class AbilityHandler : MonoBehaviour
         if (tile == null) return false;
 
         var occupant = tile.GetOccupant();
-        Character character = occupant? occupant.GetComponent<Character>(): null;
+        Character character = occupant ? occupant.GetComponent<Character>() : null;
 
-        if(CharacterNotTargetable(character)) return false;
+        if (CharacterNotTargetable(character)) return false;
 
         switch (ability.GetAbilityTargetType())
         {
-            case Ability.ValidTargetOccupant.Any: 
+            case Ability.ValidTargetOccupant.Any:
                 return tile.IsWalkable();
             case Ability.ValidTargetOccupant.CharacterOccupiedTile:
                 return occupant != null;
@@ -155,7 +168,8 @@ public class AbilityHandler : MonoBehaviour
     private List<CombatGridTile> RemoveUntargetableTiles(List<CombatGridTile> tiles)
     {
         List<CombatGridTile> filteredList = new();
-        foreach(CombatGridTile tile in tiles){
+        foreach (CombatGridTile tile in tiles)
+        {
             if (tile.IsWalkable())
             {
                 filteredList.Add(tile);
@@ -191,14 +205,14 @@ public class AbilityHandler : MonoBehaviour
         }
         _tilesEffected.Clear();
 
-        if(newEffectedTiles == null)
+        if (newEffectedTiles == null)
         {
             return;
         }
         // Paint new tiles red and add them to tilesEffected.
         foreach (CombatGridTile t in newEffectedTiles)
         {
-            if (t == null) return; 
+            if (t == null) return;
             t.SetTileColor(Color.red);
             _tilesEffected.Add(t);
         }
@@ -211,7 +225,7 @@ public class AbilityHandler : MonoBehaviour
     /// </summary>
     private bool CharacterNotTargetable(Character targetCharacter)
     {
-        if(targetCharacter == null) return false;
+        if (targetCharacter == null) return false;
 
         if (targetCharacter.GetFaction() == _characterCaster.GetFaction()) return false;
 
