@@ -94,6 +94,15 @@ public class StatusEffectManager : MonoBehaviour
         OnStatusEffectRemoved(statusEffect);
     }
 
+    public void DispelStatusEffect(StatusEffect statusEffect)
+    {
+        if (!statusEffect.Data.IsDispellable)
+        {
+            return;
+        }
+        RemoveStatusEffect(statusEffect);
+    }
+
     public int ClearStatusEffects(StatusEffectType type)
     {
         return _traitManager.ClearStatusEffects(type);
