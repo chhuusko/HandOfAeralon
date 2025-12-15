@@ -41,6 +41,7 @@ public class ShopCharacterTooltip : MonoBehaviour
     {
         InitializeCharacterStats();
         instance = this;
+        HideCanvas();
     }
     public static ShopCharacterTooltip GetInstance()
     {
