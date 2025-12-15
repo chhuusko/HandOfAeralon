@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -29,6 +30,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
         CombatEventManager.OnStatusEffectAppliedToCharacter += AddCombatLogEntry;
+        CombatEventManager.OnCharacterDeath += AddCombatLogEntry;
         CardHandManager.onCardUse += AddCombatLogEntry;
         CardHandManager.onCardTargetCharacter += AddCombatLogEntry;
     }
@@ -65,6 +67,22 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private void AddCombatLogEntry(Character character, Card card)
     {
         
+    }
+    
+    private void AddCombatLogEntry(Character character)
+    {
+        StartCoroutine(AddCharacterDeathNextFrame(character));
+    }
+
+    private IEnumerator AddCharacterDeathNextFrame(Character character)
+    {
+        yield return null;
+        
+        CharacterDeathLogData characterDeathLogData = new CharacterDeathLogData()
+        {
+            Character = character
+        };
+        AddCombatLogEntry(characterDeathLogData);
     }
     
     private void AddCombatLogEntry(Character caster, Character target, StatusEffect effect)
@@ -133,6 +151,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         CombatEventManager.OnAbilityDataCreated -= AddCombatLogEntry;
         CombatEventManager.OnStatusEffectAppliedToCharacter -= AddCombatLogEntry;
+        CombatEventManager.OnCharacterDeath -= AddCombatLogEntry;
         CardHandManager.onCardUse -= AddCombatLogEntry;
         CardHandManager.onCardTargetCharacter -= AddCombatLogEntry;
     }
