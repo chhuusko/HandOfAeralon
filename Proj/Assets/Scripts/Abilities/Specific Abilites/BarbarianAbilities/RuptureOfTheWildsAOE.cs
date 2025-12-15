@@ -73,4 +73,11 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }
+
+    public override int GetSecondDamage()
+    {
+        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _slowedTargetDamageMultiplier);
+        damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return damage;
+    }
 }
