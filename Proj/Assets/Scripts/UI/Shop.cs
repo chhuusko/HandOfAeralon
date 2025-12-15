@@ -11,11 +11,12 @@ public class Shop : MonoBehaviour
     [SerializeField] public GameObject _mainCanvas, _overlayCanvas;
     [SerializeField] private GameObject _sellTab;
     [SerializeField] private GameObject _deckTab;
-
+    [SerializeField] private CardPackViewUIShop _cardpackTab;
     [SerializeField] private TextMeshProUGUI _balanceText;
 
     [SerializeField] private Transform[] _purchasCardPos;
     [SerializeField] private GameObject _purchaseCardPrefab;
+    [SerializeField] private GameObject _purchaseCardPackPrefab;
     [SerializeField] private Transform[] _purchasCharacterPos;
     [SerializeField] private GameObject _purchaseCharacterPrefab;
 
@@ -40,6 +41,7 @@ public class Shop : MonoBehaviour
     [SerializeField] int _removeCardPrice;
     [SerializeField] int _addedRemoveCardPrice; 
 
+    public static System.Action onSellCard;
     public static Shop GetInstance()
     {
         return _instance;
@@ -60,7 +62,7 @@ public class Shop : MonoBehaviour
         LoadBuyCard();
         LoadBuyCharacter();
     }
-    public static System.Action onSellCard;
+    
     public void SoldCard() {
         _removeCardPrice += _addedRemoveCardPrice;
         _removeCardText.text = "Hold to Remove Card <color=yellow>" + _removeCardPrice + "</color><voffset=20><space=40><sprite name=\"UI_icon_59\">"; ;
@@ -97,13 +99,22 @@ public class Shop : MonoBehaviour
     }
     public void LoadBuyCard()
     {
-        foreach (Transform t in _purchasCardPos)
+        for (int i = 0; i < _purchasCardPos.Length; i++)
         {
-            GameObject newCardObject = Instantiate(_purchaseCardPrefab, t);
-            Card newCard = GetRandomUnlockedCard();
-            newCardObject.GetComponent<CardUI>().SetUpUIElements(newCard);
-            newCardObject.GetComponent<BuyableCard>().SetCard(newCard);
-            _buyableItemInScene.Add(newCardObject);
+            if (i != _purchasCharacterPos.Length - 1)
+            {
+                GameObject newCardObject = Instantiate(_purchaseCardPrefab, _purchasCardPos[i]);
+                Card newCard = GetRandomUnlockedCard();
+                newCardObject.GetComponent<CardUI>().SetUpUIElements(newCard);
+                newCardObject.GetComponent<BuyableCard>().SetCard(newCard);
+                _buyableItemInScene.Add(newCardObject);
+            }
+            else
+            {
+                GameObject newCardObject = Instantiate(_purchaseCardPackPrefab, _purchasCardPos[i]);
+                _buyableItemInScene.Add(newCardObject);
+            }
+            
         }
     }
     public Card GetRandomUnlockedCard()
@@ -182,5 +193,9 @@ public class Shop : MonoBehaviour
     public int GetRemoveCardPrice()
     {
         return _removeCardPrice;
+    }
+    public CardPackViewUIShop GetCardPack()
+    {
+        return _cardpackTab;
     }
 }

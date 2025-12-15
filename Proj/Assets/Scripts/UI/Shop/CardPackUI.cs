@@ -1,17 +1,42 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class CardPackUI : MonoBehaviour, IPointerClickHandler
+public class CardPackUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] int _cost;
+    private float _sellTime = 1f;
+    private float _timeHeld = 0;
+    [SerializeField] Image _fillImage;
+    [SerializeField] GameObject _aboveText;
+    [SerializeField] TextMeshProUGUI _priceText;
     [SerializeField] int CardAmount;
+    [SerializeField] private int _cost = 50;
     List<Card> cardInPack = new List<Card>();
-    [SerializeField] CardPackViewUIShop cardPackView;
+    private bool _isHeldDown;
+
     private void Awake()
     {
         RandomizeCards();
+        _fillImage.fillAmount = 0;
+        _priceText.text = $"<color=yellow>{_cost}</color><voffset=12><space=15><sprite index=0>";
+    }
+    private void Update()
+    {
+        if (_isHeldDown)
+        {
+            _timeHeld += Time.deltaTime;
+            _fillImage.fillAmount = 1 - (_sellTime - _timeHeld) / _sellTime;
+            if (_timeHeld > _sellTime)
+            {
+                Shop.GetInstance().Bought(_cost);
+                Shop.GetInstance().GetCardPack().UpdateCards(cardInPack);
+                _aboveText.SetActive(true);
+                Destroy(this);
+            }
+        }
     }
     private void RandomizeCards()
     {
@@ -22,12 +47,18 @@ public class CardPackUI : MonoBehaviour, IPointerClickHandler
             cardInPack.Add(temp[Random.Range(0, temp.Count)]);
         }
     }
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)
     {
         if (Shop.CanAfford(_cost))
         {
-           cardPackView.UpdateCards(cardInPack);
+            _isHeldDown = true;
         }
         
+    }
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        _isHeldDown = false;
+        _fillImage.fillAmount = 0;
+        _timeHeld = 0;
     }
 }

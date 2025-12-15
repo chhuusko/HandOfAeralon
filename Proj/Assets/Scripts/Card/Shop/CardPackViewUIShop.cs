@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 public class CardPackViewUIShop : CardViewUI
@@ -20,6 +21,7 @@ public class CardPackViewUIShop : CardViewUI
         {
             _cardListUI.Add(Instantiate(_cardUI, _cardContent));
             _cardListUI[i].GetComponent<CardUI>().SetUpUIElements(newCardList[i]);
+            _cardListUI[i].GetComponent<CardPackCard>().SetCard(newCardList[i]);
             yield return new WaitForSeconds(0.2f);
         }
         
