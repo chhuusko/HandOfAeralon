@@ -7,11 +7,11 @@ public class ProjectileVFXPlayer : VFXPlayer
 
     private Vector3 target;
 
-    public Coroutine PlayProjectile(Vector3 start, Vector3 end)
+    public IEnumerator PlayProjectile(Vector3 start, Vector3 end)
     {
         transform.position = start;
         target = end;
-        return StartCoroutine(Move());
+        yield return Move();
     }
 
     IEnumerator Move()
