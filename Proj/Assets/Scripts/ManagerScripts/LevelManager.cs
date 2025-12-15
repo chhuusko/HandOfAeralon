@@ -58,7 +58,7 @@ public class LevelManager : ScriptableObject
     }
     public void StartNextLevel() 
     {
-        StaticLevel();
+        TieredRandomLevel();
     }
     private void StaticLevel()
     {
