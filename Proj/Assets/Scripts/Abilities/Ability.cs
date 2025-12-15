@@ -78,6 +78,7 @@ public abstract class Ability : ScriptableObject
     public abstract List<CombatGridTile> GetTilesToEffect(CombatGridTile tile);
     protected abstract void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile);
 
+
     public string GetAbilityName() => _abilityName;
     public Sprite GetIcon() => _icon;
     public float GetRange() => _range;
@@ -138,13 +139,6 @@ public abstract class Ability : ScriptableObject
             );
         }
 
-        yield return new WaitForSeconds(GetCastingAnimationTime());
-        // Play casting sound.
-
-        yield return new WaitForSeconds(GetCastingTime());
-        // Play travel sound.
-
-        yield return new WaitForSeconds(GetFromCastToHitTime());
         // Play hit sound.
         RunAbility(casterTile, targetTile);
 
@@ -155,6 +149,17 @@ public abstract class Ability : ScriptableObject
         character.SetCurrentMovementPoints(0);
     }
     protected abstract void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile);
+
+    public virtual void PreviewAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Ability preview is overridden in subclasses if ability actually changes HP.
+        return;
+    }
+    protected virtual void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Preview effect on tile is overridden in subclasses if ability actually changes HP.
+        return;
+    }
 
     public virtual int GetDamage()
     {
