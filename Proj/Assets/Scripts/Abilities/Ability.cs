@@ -161,5 +161,10 @@ public abstract class Ability : ScriptableObject
     {
         return 0;
     }
+
+    public virtual int GetSecondDamage()
+    {
+        return 0;
+    }
 }
 
