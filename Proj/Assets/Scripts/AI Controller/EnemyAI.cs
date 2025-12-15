@@ -147,6 +147,17 @@ public class EnemyAI : MonoBehaviour
         Dictionary<AIAction, float> result = new();
 
         List<Ability> abilities = GetAbilities();
+        for (int i = 0; i < abilities.Count; i++)
+        {
+            /*
+            if (abilities[i].GetCooldown() > 0)
+            {
+                abilities.RemoveAt(i);
+            }
+            */
+        }
+        Debug.LogError($"EnemyAI.cs | Found {abilities.Count} abilities ready to use!");
+
         AbilityHandler abilityHandler = _character.GetAbilityHandler();
         if (abilityHandler == null)
         {
@@ -172,10 +183,10 @@ public class EnemyAI : MonoBehaviour
 
                 switch (_character.GetCharacterClass())
                 {
-                    case CharacterClass.Barbarian:  moveScore -= enemyDistance; break;
-                    case CharacterClass.Bard:       moveScore += enemyDistance; break;
-                    case CharacterClass.Rogue:      moveScore -= enemyDistance; break;
-                    case CharacterClass.Sorceress:  moveScore += enemyDistance; break;
+                    case CharacterClass.Barbarian:  moveScore -= enemyDistance * 2; break;
+                    case CharacterClass.Bard:       moveScore += enemyDistance * 2; break;
+                    case CharacterClass.Rogue:      moveScore -= enemyDistance * 2; break;
+                    case CharacterClass.Sorceress:  moveScore += enemyDistance * 2; break;
                 }
 
                 if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian && _allies.Count > 1)
@@ -198,9 +209,9 @@ public class EnemyAI : MonoBehaviour
                 switch (_character.GetCharacterClass())
                 {
                     case CharacterClass.Barbarian:  break;
-                    case CharacterClass.Bard:       moveScore -= allyDistance; break;
+                    case CharacterClass.Bard:       moveScore -= allyDistance * 2; break;
                     case CharacterClass.Rogue:      break;
-                    case CharacterClass.Sorceress:  moveScore -= allyDistance; break;
+                    case CharacterClass.Sorceress:  moveScore -= allyDistance * 2; break;
                 }
 
                 if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian)
@@ -221,10 +232,10 @@ public class EnemyAI : MonoBehaviour
                     {
                         switch (_character.GetCharacterClass())
                         {
-                            case CharacterClass.Barbarian:  moveScore -= 5f; break;
-                            case CharacterClass.Bard:       moveScore -= 15f; break;
-                            case CharacterClass.Rogue:      moveScore -= 35f; break;
-                            case CharacterClass.Sorceress:  moveScore -= 15f; break;
+                            case CharacterClass.Barbarian:  moveScore -= 20f; break;
+                            case CharacterClass.Bard:       moveScore -= 35f; break;
+                            case CharacterClass.Rogue:      moveScore -= 50f; break;
+                            case CharacterClass.Sorceress:  moveScore -= 35f; break;
                         }
                     }
                 }
@@ -240,6 +251,7 @@ public class EnemyAI : MonoBehaviour
 
                 foreach (var target in targets) // Go through all possible ability casts and score them
                 {
+                    if (!abilityHandler.IsValidTargetTileForAbility(ability, target)) continue;
                     AIAction act = new AIAction { movement = tile, ability = ability, target = target };
                     float actScore = moveScore;
                     actScore += ScoreAbilityUsage(tile, ability, target);
@@ -324,6 +336,10 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
+                    else
+                    {
+                        result -= 5;
+                    }
                     break;
                 }
             case "Earthquake_Ability":
@@ -340,11 +356,11 @@ public class EnemyAI : MonoBehaviour
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
                             float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
-                            if (!isEnemy) result -= 40f;
+                            if (!isEnemy) result -= 60f;
 
                             if (isEnemy)
                             {
-                                result += 20f;
+                                result += 30f;
 
                                 if (occupantSEM != null && !occupantSEM.ContainsStatusEffect<Slowed>())
                                 {
@@ -356,6 +372,10 @@ public class EnemyAI : MonoBehaviour
                                     result += 100f;
                                 }
                             }
+                        }
+                        else
+                        {
+                            result -= 5;
                         }
                     }
                     break;
@@ -374,11 +394,11 @@ public class EnemyAI : MonoBehaviour
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
                             float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
-                            if (!isEnemy) result -= 40f;
+                            if (!isEnemy) result -= 60f;
 
                             if (isEnemy)
                             {
-                                result += 20f;
+                                result += 30f;
 
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Slowed>())
                                 {
@@ -390,6 +410,10 @@ public class EnemyAI : MonoBehaviour
                                     result += 100f;
                                 }
                             }
+                        }
+                        else
+                        {
+                            result -= 5;
                         }
                     }
                     break;
@@ -414,6 +438,10 @@ public class EnemyAI : MonoBehaviour
                                 }
                             }
                         }
+                        else
+                        {
+                            result -= 5;
+                        }
                     }
                     break;
                 }
@@ -434,9 +462,13 @@ public class EnemyAI : MonoBehaviour
                             {
                                 if (occupantSEM != null && !occupantSEM.ContainsStatusEffect<Haste>())
                                 {
-                                    result += 20f;
+                                    result += 50f;
                                 }
                             }
+                        }
+                        else
+                        {
+                            result -= 5;
                         }
                     }
                     break;
@@ -454,11 +486,11 @@ public class EnemyAI : MonoBehaviour
 
                             if (isAlly && occupantPERCENTHP < 1f)
                             {
-                                result += 15;
+                                result += 40;
 
                                 if (occupantPERCENTHP < 0.75f)
                                 {
-                                    result += 5;
+                                    result += 10;
 
                                     if (occupantPERCENTHP < 0.5f)
                                     {
@@ -466,6 +498,10 @@ public class EnemyAI : MonoBehaviour
                                     }
                                 }
                             }
+                        }
+                        else
+                        {
+                            result -= 5;
                         }
                     }
                     break;
@@ -483,15 +519,19 @@ public class EnemyAI : MonoBehaviour
 
                             if (isEnemy)
                             {
-                                if (occupantSEM.ContainsStatusEffect<Haste>()) result += 10f;
-                                if (occupantSEM.ContainsStatusEffect<Empowered>()) result += 10f;
-                                if (occupantSEM.ContainsStatusEffect<Emberwake>()) result += 10f;
-                                if (occupantSEM.ContainsStatusEffect<Enraged>()) result += 10f;
-                                if (occupantSEM.ContainsStatusEffect<ConduitOfPower>()) result += 10f;
-                                if (occupantSEM.ContainsStatusEffect<Fortified>()) result += 10f;
-                                if (occupantSEM.ContainsStatusEffect<Sanctified>()) result += 10f;
-                                if (occupantSEM.ContainsStatusEffect<Stealth>()) result += 10f;
+                                if (occupantSEM.ContainsStatusEffect<Haste>()) result += 25f;
+                                if (occupantSEM.ContainsStatusEffect<Empowered>()) result += 25f;
+                                if (occupantSEM.ContainsStatusEffect<Emberwake>()) result += 25f;
+                                if (occupantSEM.ContainsStatusEffect<Enraged>()) result += 25f;
+                                if (occupantSEM.ContainsStatusEffect<ConduitOfPower>()) result += 25f;
+                                if (occupantSEM.ContainsStatusEffect<Fortified>()) result += 25f;
+                                if (occupantSEM.ContainsStatusEffect<Sanctified>()) result += 25f;
+                                if (occupantSEM.ContainsStatusEffect<Stealth>()) result += 25f;
                             }
+                        }
+                        else
+                        {
+                            result -= 5;
                         }
                     }
                     break;
@@ -525,6 +565,10 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
+                    else
+                    {
+                        result -= 5;
+                    }
                     break;
                 }
 
@@ -540,7 +584,7 @@ public class EnemyAI : MonoBehaviour
 
                         if (isEnemy)
                         {
-                            result += 30f;
+                            result += 35f;
 
                             if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Poison>())
                             {
@@ -559,7 +603,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
                             {
-                                result += 10;
+                                result += 20;
                             }
 
                             if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
@@ -567,6 +611,10 @@ public class EnemyAI : MonoBehaviour
                                 result = 0f;
                             }
                         }
+                    }
+                    else
+                    {
+                        result -= 5;
                     }
                     break;
                 }
@@ -600,11 +648,11 @@ public class EnemyAI : MonoBehaviour
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
                             float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
-                            if (!isEnemy) result -= 40f;
+                            if (!isEnemy) result -= 60f;
 
                             if (isEnemy)
                             {
-                                result += 20f;
+                                result += 30f;
 
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Poison>())
                                 {
@@ -628,9 +676,13 @@ public class EnemyAI : MonoBehaviour
 
                                 if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
                                 {
-                                    result += 10;
+                                    result += 20;
                                 }
                             }
+                        }
+                        else
+                        {
+                            result -= 5;
                         }
                     }
                     break;
@@ -649,11 +701,11 @@ public class EnemyAI : MonoBehaviour
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
                             float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
-                            if (!isEnemy) result -= 40f;
+                            if (!isEnemy) result -= 60f;
 
                             if (isEnemy)
                             {
-                                result += 20f;
+                                result += 30f;
 
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Poison>())
                                 {
@@ -672,9 +724,13 @@ public class EnemyAI : MonoBehaviour
 
                                 if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
                                 {
-                                    result += 10;
+                                    result += 20;
                                 }
                             }
+                        }
+                        else
+                        {
+                            result -= 5;
                         }
                     }
                     break;
@@ -690,6 +746,10 @@ public class EnemyAI : MonoBehaviour
                         if (mySEM.ContainsStatusEffect<Vulnerable>()) result += 10f;
                         if (mySEM.ContainsStatusEffect<Weakened>()) result += 10f;
                         if (mySEM.ContainsStatusEffect<Slowed>()) result += 10f;
+                    }
+                    else
+                    {
+                        result -= 5;
                     }
                     break;
                 }
@@ -719,6 +779,10 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
+                    else
+                    {
+                        result -= 5;
+                    }
                     break;
                 }
             case "FlameSurge_Ability":
@@ -737,7 +801,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (!isEnemy)
                             {
-                                result -= 40f;
+                                result -= 60f;
                                 if (mySEM.ContainsStatusEffect<Emberwake>())
                                 {
                                     result -= 10f;
@@ -746,7 +810,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (isEnemy)
                             {
-                                result += 20f;
+                                result += 30f;
 
                                 if (mySEM.ContainsStatusEffect<Emberwake>())
                                 {
@@ -763,6 +827,10 @@ public class EnemyAI : MonoBehaviour
                                     result += 20f;
                                 }
                             }
+                        }
+                        else
+                        {
+                            result -= 5;
                         }
                     }
                     break;
@@ -781,7 +849,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (!isEnemy)
                             {
-                                result -= 40f;
+                                result -= 60f;
 
                                 if (mySEM.ContainsStatusEffect<Emberwake>())
                                 {
@@ -791,7 +859,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (isEnemy)
                             {
-                                result += 20f;
+                                result += 30f;
 
                                 if (mySEM.ContainsStatusEffect<Emberwake>())
                                 {
@@ -809,12 +877,23 @@ public class EnemyAI : MonoBehaviour
                                 }
                             }
                         }
+                        else
+                        {
+                            result -= 5;
+                        }
                     }
                     break;
                 }
             case "Emberwake_Ability":
                 {
-                    if (!mySEM.ContainsStatusEffect<Emberwake>()) result += 30f;
+                    if (!mySEM.ContainsStatusEffect<Emberwake>())
+                    {
+                        result += 30f;
+                    }
+                    else
+                    {
+                        result -= 5;
+                    }
                     break;
                 }
         }
