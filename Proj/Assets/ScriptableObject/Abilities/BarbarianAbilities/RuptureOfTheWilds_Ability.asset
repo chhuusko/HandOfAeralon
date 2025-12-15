@@ -16,10 +16,10 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: bb6ba2cb9c06eb0448040833714f7c4e, type: 3}
   _range: 1
   _cooldown: 2
-  _description: "Send primal energy through the ground, dealing (100% \xD7 Damage)
-    Elemental damage. If the target is Slowed, deal (150% \xD7 Damage) instead. Every
-    character hit has a 30% chance to become Stunned for 1 turn. Draw 1 card per
-    enemy Stunned by this ability."
+  _description: Send primal energy through the ground, dealing {damage} {elemental_damage}.
+    If the target is Slowed, deal {damage} instead. Every character hit has a 30%
+    chance to become Stunned for 1 turn. Draw 1 {card} per enemy Stunned by this
+    ability.
   _abilityTag: 9
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}

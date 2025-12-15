@@ -23,6 +23,7 @@ public class AbilityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        Ability.SetCharacterCaster(Selector._instance.GetSelectedCharacter());
         OnMouseHoverEnter?.Invoke(this, Ability);
     }
 

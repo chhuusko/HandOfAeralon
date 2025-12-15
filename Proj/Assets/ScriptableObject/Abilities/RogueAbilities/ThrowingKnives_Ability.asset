@@ -16,9 +16,8 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: e7d2c4ccaf4933b47b734c7e029b2498, type: 3}
   _range: 1
   _cooldown: 2
-  _description: "Throw <link=\"KNIVES\"><color=green><knives</color></link> in a
-    line, dealing (80% + (5% \xD7 current hand size) \xD7 Damage) Physical damage.
-    Every character hit has a 60% chance to gain 3 stacks of Poison."
+  _description: Throw knives in a line, dealing {damage} {physical_damage}. Every
+    character hit has a 60% chance to gain 3 stacks of {poison}.
   _abilityTag: 10
   _type: 0
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}

@@ -11,8 +11,6 @@ public class CombatTooltipManager : MonoBehaviour
     [SerializeField] private CombatTooltipCharacterLayout _characterLayout;
     [SerializeField] private CombatHoverTooltip _combatHoverTooltip;
 
-
-
     private void Awake()
     {
         if(_instance != null && _instance != this)
@@ -74,7 +72,10 @@ public class CombatTooltipManager : MonoBehaviour
         string description = ability.GetDescription();
         description += "\n\nCooldown: " + ability.GetCooldown() + " turns.";
 
-        _combatHoverTooltip.Show(ability.GetAbilityName(), description, button.GetComponent<RectTransform>());
+        string advancedDescription = GameTextFormatter.AbilityColoredLabel(ability);
+
+        //_combatHoverTooltip.Show(ability.GetAbilityName(), description, button.GetComponent<RectTransform>());
+        _combatHoverTooltip.Show(ability.GetAbilityName(), advancedDescription, button.GetComponent<RectTransform>());
     }
 
     public void ShowHoverTooltip(string title, string description, RectTransform rectTransform)
