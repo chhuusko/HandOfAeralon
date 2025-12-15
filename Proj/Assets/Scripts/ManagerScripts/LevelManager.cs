@@ -9,7 +9,7 @@ using UnityEngine.TextCore.Text;
 public class LevelManager : ScriptableObject
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-
+    [SerializeField] private List<string> tutorialCombatList;
     [SerializeField] private List<string> easyCombatList;
     [SerializeField] private List<string> mediumCombatList;
     [SerializeField] private List<string> hardCombatList;
@@ -22,13 +22,15 @@ public class LevelManager : ScriptableObject
     private int _difficulty = 0;
 
     [SerializeField] public float statIncrease = 1.2f;
-    [SerializeField] public int statIncreaseInterval = 1;
+    [SerializeField] public int statIncreaseInterval = 3;
 
     [SerializeField] public float enemyStatIncrease = 1.2f;
     [SerializeField] public int enemyStatIncreaseInterval = 1;
 
     private int menuFPSCap = 60;
     private CombatGrid _combatGrid;
+    private bool isTutorialCompleted;
+
     public static LevelManager GetInstance()
     {
         if (_instance == null)
@@ -105,25 +107,44 @@ public class LevelManager : ScriptableObject
     {
         if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
         {
-            _difficulty = _level / 5;
-            switch (_difficulty)
+            if (isTutorialCompleted)
             {
-                case 0:
-                    SceneManager.LoadScene(easyCombatList[Random.Range(0, easyCombatList.Count)]);
-                    break;
-                case 1:
-                    SceneManager.LoadScene(easyCombatList[Random.Range(0, mediumCombatList.Count)]);
-                    break;
-                default:
-                    SceneManager.LoadScene(easyCombatList[Random.Range(0, hardCombatList.Count)]);
-                    break;
+                _difficulty = _level / 5;
+                switch (_difficulty)
+                {
+                    case 0:
+                        SceneManager.LoadScene(easyCombatList[Random.Range(0, easyCombatList.Count)]);
+                        break;
+                    case 1:
+                        SceneManager.LoadScene(mediumCombatList[Random.Range(0, mediumCombatList.Count)]);
+                        break;
+                    default:
+                        SceneManager.LoadScene(hardCombatList[Random.Range(0, hardCombatList.Count)]);
+                        break;
+                }
+                _level++;
             }
-            _level++;
+            else
+            {
+                TutorialLevel();
+            }
+            
 
         }
         else
         {
             SceneManager.LoadScene("ShopScene");
+        }
+    }
+    private void TutorialLevel()
+    {
+        SceneManager.LoadScene(tutorialCombatList[_level]);
+        
+        _level++;
+        if (_level == tutorialCombatList.Count-1)
+        {
+            isTutorialCompleted = true;
+            _level = 0;
         }
     }
     public int Getlevel()

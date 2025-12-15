@@ -12,13 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42c36524a9d795046b4f31b1025b1290, type: 3}
   m_Name: LevelManager
   m_EditorClassIdentifier: 
+  tutorialCombatList:
+  - Tutorial1
+  - Tutorial2
+  - Tutorial3
   easyCombatList:
-  - Graveyard11x9
-  - Graveyard12x8
-  - Graveyard10x9
-  mediumCombatList: []
-  hardCombatList: []
+  - Level1Easy9x8
+  - Level1Easy10x8
+  - Level1Easy11x8
+  - Level1Easy12x10
+  - Level1Easy13x8
+  mediumCombatList:
+  - Level1Medium9x8
+  - Level1Medium10x8
+  - Level1Medium10x9
+  - Level1Medium10x10
+  - Level1Medium11x8
+  hardCombatList:
+  - Level1Hard10x10
+  - Level1Hard11x9
+  - Level1Hard12x8
+  - Level1Hard12x9
+  - Level1Hard12x10
   statIncrease: 1.2
-  statIncreaseInterval: 2
+  statIncreaseInterval: 3
   enemyStatIncrease: 1.2
   enemyStatIncreaseInterval: 2
