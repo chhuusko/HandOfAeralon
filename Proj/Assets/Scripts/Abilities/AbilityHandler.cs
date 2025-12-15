@@ -125,7 +125,7 @@ public class AbilityHandler : MonoBehaviour
     /// Determines whether the tile is a valid target for the pending ability.
     /// Checks walkability, occupant type (enemy/friendly), and custom "targetable" rules.
     /// </summary>
-    private bool IsValidTargetTileForAbility(Ability ability, CombatGridTile tile)
+    public bool IsValidTargetTileForAbility(Ability ability, CombatGridTile tile)
     {
         if (tile == null) return false;
 
