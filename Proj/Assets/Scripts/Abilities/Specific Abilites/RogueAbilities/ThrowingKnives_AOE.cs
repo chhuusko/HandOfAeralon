@@ -110,7 +110,11 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
 
     public override int GetDamage()
     {
-        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        int baseDamage = GetCharacterCaster().GetBaseDamage();
+        int cardsAmount = CardHandManager.GetInstance().GetCardsInHand().Count;
+
+        int damage = (int)(baseDamage * _damageMultiplier);
+        damage += (int)(baseDamage * _handSizeDamageMultiplier * cardsAmount);
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }
