@@ -16,4 +16,9 @@ MonoBehaviour:
   _travelFX: {fileID: 0}
   _impactFX: {fileID: 2891022926164967631, guid: 699cf3b70ab7ace41a4d0a1a485c9c22,
     type: 3}
-  _biggerImpactScale: 2
+  _biggerImpactScale: 0
+  _offsetDistance: 0
+  _airDistance: 0
+  _rotationOffset: {x: 0, y: 0, z: 0}
+  _impactAirDistance: 0
+  _impactRotationOffset: {x: 0, y: 0, z: 0}
