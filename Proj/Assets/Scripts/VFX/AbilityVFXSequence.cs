@@ -25,7 +25,7 @@ public class AbilityVFXSequence : ScriptableObject
             Vector3 offset = -data.Direction.normalized * _offsetDistance;
             offset.y = GetAirDistance();
 
-            Instantiate(_castFX).Play(data.OriginPosition + offset, data.Direction, _rotationOffset);
+            Instantiate(_castFX).Play(data.Caster.transform.position + offset, data.Direction, _rotationOffset);
         }
         yield return new WaitForSeconds(data.CastingFXDuration);
 
