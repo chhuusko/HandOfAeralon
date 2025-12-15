@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
     private CharacterData _characterData;
 
@@ -66,5 +66,12 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private bool RoomInParty()
     {
         return GlobalGameManager.GetInstance().GetGameData().heroDataList.Count < 4;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        
+        ShopCharacterTooltip.GetInstance().ShowCanvas();
+        ShopCharacterTooltip.GetInstance().UpdateTooltip(_characterData);
     }
 }
