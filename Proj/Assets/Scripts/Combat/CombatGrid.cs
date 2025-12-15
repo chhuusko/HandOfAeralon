@@ -98,10 +98,10 @@ public class CombatGrid : MonoBehaviour
             {
                 characterScritps.Add(character);
             }
-            
         }
         return characterScritps; 
     }
+
     public List<Character> GetCharacterScriptsByFaction(Faction faction)
     {
         List<Character> characterScritps = new List<Character>();
