@@ -511,7 +511,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (occupantPERCENTHP < 0.2f)
                             {
-                                result += 100f;
+                                result += 20f;
                             }
 
                             if (_allies.Count == 1)
@@ -547,9 +547,19 @@ public class EnemyAI : MonoBehaviour
                                 result += 10f;
                             }
 
-                            if (occupantPERCENTHP < 0.2f)
+                            if (occupantPERCENTHP < 0.5f)
                             {
-                                result += 100f;
+                                result += 10f;
+
+                                if (occupantPERCENTHP < 0.2f)
+                                {
+                                    result += 100f;
+                                }
+                            }
+
+                            if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
+                            {
+                                result += 10;
                             }
 
                             if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
@@ -606,9 +616,19 @@ public class EnemyAI : MonoBehaviour
                                     result += 20f;
                                 }
 
-                                if (occupantPERCENTHP < 0.2f)
+                                if (occupantPERCENTHP < 0.5f)
                                 {
-                                    result += 100f;
+                                    result += 10f;
+
+                                    if (occupantPERCENTHP < 0.2f)
+                                    {
+                                        result += 100f;
+                                    }
+                                }
+
+                                if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
+                                {
+                                    result += 10;
                                 }
                             }
                         }
@@ -640,9 +660,19 @@ public class EnemyAI : MonoBehaviour
                                     result += 10f;
                                 }
 
-                                if (occupantPERCENTHP < 0.2f)
+                                if (occupantPERCENTHP < 0.5f)
                                 {
-                                    result += 100f;
+                                    result += 10f;
+
+                                    if (occupantPERCENTHP < 0.2f)
+                                    {
+                                        result += 100f;
+                                    }
+                                }
+
+                                if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
+                                {
+                                    result += 10;
                                 }
                             }
                         }
