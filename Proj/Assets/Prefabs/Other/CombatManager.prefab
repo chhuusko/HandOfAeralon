@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _combatCamera: {fileID: 8700939102808587917, guid: 2757f80d6f2eac24cb5a719251a32771,
     type: 3}
-  _selectorOverHeadPrefab: {fileID: 6057364718574362769, guid: 8518d72cc20b6f547adee1398aa3a646,
+  _selectorOverHeadPrefab: {fileID: 4890771127721046608, guid: c98fda8357931704581f709ac6f5ddec,
     type: 3}
   _selectorOverHeadStartPos: {x: 0, y: 0, z: 0}
   _selectorCubePrefab: {fileID: 1556502904549677550, guid: 5d7a2055e59b1164283434b489d22345,
@@ -63,8 +63,8 @@ MonoBehaviour:
     _currentTurn: 0
     _activeCharacter: {fileID: 0}
     _charactersInTurnOrder: []
-    _turnCountFullRound: 0
-    _turnCountCurrent: 0
+    _turnCountFullRound: 1
+    _turnCountCurrent: 1
   _enemyAI: {fileID: 21440665389889202}
   _classAbilities: []
   enemyMana: 6
@@ -72,8 +72,6 @@ MonoBehaviour:
   TurnStart:
     m_PersistentCalls:
       m_Calls: []
-  _selectorOverHeadBounceSpeed: 0
-  _selectorOverHeadBounceInterval: 0
   references:
     version: 2
     RefIds:

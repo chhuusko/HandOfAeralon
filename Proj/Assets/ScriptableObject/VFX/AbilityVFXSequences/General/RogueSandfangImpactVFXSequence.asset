@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf6383c0305810c4cbb86136a8d14596, type: 3}
-  m_Name: RogueImpactVFXSequence
+  m_Name: RogueSandfangImpactVFXSequence
   m_EditorClassIdentifier: 
   _castFX: {fileID: 0}
   _travelFX: {fileID: 0}
@@ -18,5 +18,7 @@ MonoBehaviour:
     type: 3}
   _biggerImpactScale: 0
   _offsetDistance: 0
-  _airDistance: 0
+  _airDistance: 1
   _rotationOffset: {x: 0, y: 0, z: 0}
+  _impactAirDistance: 0
+  _impactRotationOffset: {x: -25, y: 0, z: 0}
