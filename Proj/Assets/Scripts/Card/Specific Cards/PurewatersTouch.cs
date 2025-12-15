@@ -12,6 +12,7 @@ public class PurewatersTouch : Card
         {
             List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffects());
             List<StatusEffect> debuffs = new List<StatusEffect>();
+
             foreach (StatusEffect status in statuses)
             {
                 if (status.Data.Type == StatusEffectType.Debuff)
@@ -21,7 +22,7 @@ public class PurewatersTouch : Card
             }
             if (debuffs.Count > 0)
             {
-                debuffs.RemoveAt(Random.Range(0, debuffs.Count));
+                character.GetStatusEffectManager().RemoveStatusEffect(debuffs[Random.Range(0, debuffs.Count)]);
                 CardHandManager.GetInstance().ChangeMana(2);
             }
             character.Heal(15);
