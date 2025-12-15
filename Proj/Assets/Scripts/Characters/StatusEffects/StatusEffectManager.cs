@@ -88,6 +88,11 @@ public class StatusEffectManager : MonoBehaviour
 
     public void RemoveStatusEffect(StatusEffect statusEffect)
     {
+        if (!statusEffect.Data.IsDispellable)
+        {
+            return;
+        }
+        
         statusEffect.OnExpire();
         _traitManager.RemoveStatusEffect(statusEffect);
         CombatEventManager.InvokeOnStatusEffectExpiredOnCharacter(_character, statusEffect);

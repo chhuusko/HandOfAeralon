@@ -65,7 +65,11 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
 
     public override int GetDamage()
     {
-        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        int baseDamage = GetCharacterCaster().GetBaseDamage();
+        int mana = CardHandManager.GetInstance().GetMana();
+
+        float totalMultiplier = _damageMultiplier + (_manaDamageMultiplier * mana);
+        int damage = (int)(baseDamage * totalMultiplier);
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }
