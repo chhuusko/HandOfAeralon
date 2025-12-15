@@ -303,7 +303,7 @@ public class EnemyAI : MonoBehaviour
             case "Skullsplitter_Ability":
                 {
                     Character occupant = target.GetOccupantCharacter();
-                    if (occupant != null)
+                    if (occupant != null && occupant.GetCurrentHealth() > 0)
                     {
                         StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                         bool isEnemy = occupant.GetFaction() != _controlledFaction;
@@ -334,7 +334,7 @@ public class EnemyAI : MonoBehaviour
                     foreach (var hit in aoe)
                     {
                         Character occupant = hit.GetOccupantCharacter();
-                        if (occupant != null)
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
@@ -368,7 +368,7 @@ public class EnemyAI : MonoBehaviour
                     foreach (var hit in aoe)
                     {
                         Character occupant = hit.GetOccupantCharacter();
-                        if (occupant != null)
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
@@ -400,7 +400,7 @@ public class EnemyAI : MonoBehaviour
                     foreach (var hit in aoe)
                     {
                         Character occupant = hit.GetOccupantCharacter();
-                        if (occupant != null)
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
@@ -425,7 +425,7 @@ public class EnemyAI : MonoBehaviour
                     foreach (var hit in aoe)
                     {
                         Character occupant = hit.GetOccupantCharacter();
-                        if (occupant != null)
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isAlly = occupant.GetFaction() == _controlledFaction;
@@ -447,7 +447,7 @@ public class EnemyAI : MonoBehaviour
                     foreach (var hit in aoe)
                     {
                         Character occupant = hit.GetOccupantCharacter();
-                        if (occupant != null)
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
                             bool isAlly = occupant.GetFaction() == _controlledFaction;
                             float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
@@ -476,7 +476,7 @@ public class EnemyAI : MonoBehaviour
                     foreach (var hit in aoe)
                     {
                         Character occupant = hit.GetOccupantCharacter();
-                        if (occupant != null)
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() == _controlledFaction;
@@ -499,7 +499,7 @@ public class EnemyAI : MonoBehaviour
             case "LuteSmash_Ability":
                 {
                     Character occupant = target.GetOccupantCharacter();
-                    if (occupant != null)
+                    if (occupant != null && occupant.GetCurrentHealth() > 0)
                     {
                         StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                         bool isEnemy = occupant.GetFaction() != _controlledFaction;
@@ -532,7 +532,7 @@ public class EnemyAI : MonoBehaviour
             case "SandfangStrike_Ability":
                 {
                     Character occupant = target.GetOccupantCharacter();
-                    if (occupant != null)
+                    if (occupant != null && occupant.GetCurrentHealth() > 0)
                     {
                         StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                         bool isEnemy = occupant.GetFaction() != _controlledFaction;
@@ -594,7 +594,7 @@ public class EnemyAI : MonoBehaviour
                         {
                             occupant = hit.GetOccupantCharacter();
                         }
-                        if (occupant != null)
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
@@ -643,7 +643,7 @@ public class EnemyAI : MonoBehaviour
                     foreach (var hit in aoe)
                     {
                         Character occupant = hit.GetOccupantCharacter();
-                        if (occupant != null)
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
@@ -698,7 +698,7 @@ public class EnemyAI : MonoBehaviour
             case "ArcaneBolt_Ability":
                 {
                     Character occupant = target.GetOccupantCharacter();
-                    if (occupant != null)
+                    if (occupant != null && occupant.GetCurrentHealth() > 0)
                     {
                         StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                         bool isEnemy = occupant.GetFaction() != _controlledFaction;
@@ -729,7 +729,7 @@ public class EnemyAI : MonoBehaviour
                     foreach (var hit in aoe)
                     {
                         Character occupant = hit.GetOccupantCharacter();
-                        if (occupant != null)
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
@@ -773,7 +773,7 @@ public class EnemyAI : MonoBehaviour
                     foreach (var hit in aoe)
                     {
                         Character occupant = hit.GetOccupantCharacter();
-                        if (occupant != null)
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
