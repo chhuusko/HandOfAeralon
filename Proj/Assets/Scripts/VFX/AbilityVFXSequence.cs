@@ -13,6 +13,9 @@ public class AbilityVFXSequence : ScriptableObject
     [SerializeField] private float _airDistance;
     [SerializeField] private Vector3 _rotationOffset;
 
+    [SerializeField] private float _impactAirDistance;
+    [SerializeField] private Vector3 _impactRotationOffset;
+
     public virtual IEnumerator RunSequence(VFXData data)
     {
         yield return new WaitForSeconds(data.CastingAnimationDuration);
@@ -38,31 +41,30 @@ public class AbilityVFXSequence : ScriptableObject
 
         if (_impactFX != null)
         {
+            data.TargetPosition.y += GetImpactAirDistance();
             var impact = Instantiate(_impactFX);
             Vector3 baseScale = impact.transform.localScale;
             impact.transform.localScale = data.AoEDelta == 0 ? baseScale : Vector3.one * _biggerImpactScale;
-            impact.Play(data.TargetPosition, data.Direction);
+            impact.Play(data.TargetPosition, data.Direction, _impactRotationOffset);
         }
     }
 
-    public VFXPlayer GetCastFX()
-    {
-        return _castFX;
-    }
-    public ProjectileVFXPlayer GetTravelFX()
-    {
-        return _travelFX;
-    }
-    public VFXPlayer GetImpactFX()
-    {
-        return _impactFX;
-    }
-    public float GetOffsetDistance()
-    {
-        return _offsetDistance;
-    }
-    public float GetAirDistance()
-    {
-        return _airDistance;
-    }
+    public VFXPlayer GetCastFX() => _castFX;
+ 
+    public ProjectileVFXPlayer GetTravelFX() => _travelFX;
+   
+    public VFXPlayer GetImpactFX() => _impactFX;
+   
+    public float GetOffsetDistance() => _offsetDistance;
+
+    public float GetBiggerImpactScale() => _biggerImpactScale;
+
+    public float GetAirDistance() => _airDistance;
+   
+    public Vector3 GetRotationOffset() => _rotationOffset;
+
+    public float GetImpactAirDistance() => _impactAirDistance;
+
+    public Vector3 GetImpactRotationOffset() => _impactRotationOffset;
+
 }
