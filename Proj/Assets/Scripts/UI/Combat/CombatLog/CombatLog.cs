@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CombatLog : MonoBehaviour
+public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private GameObject _combatLogEntryPrefab;
     [SerializeField] private GameObject _combatLogPanel;
@@ -17,19 +19,24 @@ public class CombatLog : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private CombatLogEntry _abilityEntryPrefab;
     [SerializeField] private CombatLogEntry _characterDeathEntryPrefab;
-    [SerializeField] private CombatLogEntry _cardLogEntryPrefab;
+    [SerializeField] private CombatLogEntry _cardUsedLogEntryPrefab;
+    [SerializeField] private CombatLogEntry _cardTargetedLogEntryPrefab;
     [SerializeField] private CombatLogEntry _combatBountyEntryPrefab;
+    [SerializeField] private CombatLogEntry _statusEffectEntryPrefab;
     
     private bool _bCombatLogEnabled = true;
     
     private void OnEnable()
     {
         CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
+        CombatEventManager.OnStatusEffectAppliedToCharacter += AddCombatLogEntry;
+        CombatEventManager.OnCharacterDeath += AddCombatLogEntry;
+        CardHandManager.onCardUse += AddCombatLogEntry;
+        CardHandManager.onCardTargetCharacter += AddCombatLogEntry;
     }
 
     public void SetCombatLogActive()
     {
-        Debug.Log("SetCombatLogActive");
         _bCombatLogEnabled = !_bCombatLogEnabled;
         _combatLogPanel.SetActive(_bCombatLogEnabled);
         _combatLogScrollbar.SetActive(_bCombatLogEnabled);
@@ -39,23 +46,62 @@ public class CombatLog : MonoBehaviour
     {
         AbilityLogData abilityLogData = new AbilityLogData
         {
-            // ExecutionData = data
             Caster = data.Caster,
             Target = data.Target,
             Ability = data.Ability,
             Damage = data.Damage,
+            Heal = data.Heal,
         };
         AddCombatLogEntry(abilityLogData);
     }
 
-    public void AddCombatLogEntry(StatusEffect effect)
+    private void AddCombatLogEntry(Card card)
+    {
+        CardUsedLogData cardUsedLogData = new CardUsedLogData()
+        {
+            Card = card
+        };
+        AddCombatLogEntry(cardUsedLogData);
+    }
+
+    private void AddCombatLogEntry(Character character, Card card)
     {
         
     }
-
-    public void AddCombatLogEntry(Card card)
+    
+    private void AddCombatLogEntry(Character character)
     {
+        StartCoroutine(AddCharacterDeathNextFrame(character));
+    }
+
+    private IEnumerator AddCharacterDeathNextFrame(Character character)
+    {
+        yield return null;
         
+        CharacterDeathLogData characterDeathLogData = new CharacterDeathLogData()
+        {
+            Character = character
+        };
+        AddCombatLogEntry(characterDeathLogData);
+    }
+    
+    private void AddCombatLogEntry(Character caster, Character target, StatusEffect effect)
+    {
+        StartCoroutine(AddStatusEffectNextFrame(caster, target, effect));
+    }
+
+    private IEnumerator AddStatusEffectNextFrame(Character caster, Character target, StatusEffect effect)
+    {
+        // Wait one frame. Guarantees ability log is added before status effects.
+        yield return null;
+        
+        StatusEffectLogData statusEffectLogData = new StatusEffectLogData()
+        {
+            StatusEffect = effect,
+            Caster = caster,
+            Target = target,
+        };
+        AddCombatLogEntry(statusEffectLogData);
     }
 
     private void AddCombatLogEntry(CombatLogData data)
@@ -64,8 +110,10 @@ public class CombatLog : MonoBehaviour
         {
             AbilityLogData => _abilityEntryPrefab,
             CharacterDeathLogData => _characterDeathEntryPrefab,
-            CardLogData => _cardLogEntryPrefab,
+            CardUsedLogData => _cardUsedLogEntryPrefab,
+            CardTargetedLogData => _cardTargetedLogEntryPrefab,
             CombatBountyLogData => _combatBountyEntryPrefab,
+            StatusEffectLogData => _statusEffectEntryPrefab,
             _ => null
         };
 
@@ -89,8 +137,22 @@ public class CombatLog : MonoBehaviour
         _combatLogScrollRect.verticalNormalizedPosition = 0;
     }
     
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        CombatEventManager.InvokeOnIsHoveringUI(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        CombatEventManager.InvokeOnIsHoveringUI(false);
+    }
+    
     private void OnDisable()
     {
         CombatEventManager.OnAbilityDataCreated -= AddCombatLogEntry;
+        CombatEventManager.OnStatusEffectAppliedToCharacter -= AddCombatLogEntry;
+        CombatEventManager.OnCharacterDeath -= AddCombatLogEntry;
+        CardHandManager.onCardUse -= AddCombatLogEntry;
+        CardHandManager.onCardTargetCharacter -= AddCombatLogEntry;
     }
 }

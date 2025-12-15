@@ -61,4 +61,11 @@ public class Skullsplitter_Ability : SingleTargetAbility
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }
+
+    public override int GetSecondDamage()
+    {
+        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _extraDamageMultiplier);
+        damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return damage;
+    }
 }

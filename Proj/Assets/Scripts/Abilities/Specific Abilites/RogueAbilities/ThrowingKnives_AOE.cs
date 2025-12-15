@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,14 +16,65 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
     // Throw knives in a line, dealing (60 % +(10 % � current hand size) � Damage) Physical damage.
     // Every character hit has a 60% chance to gain 3 stacks of Poison.
 
+    public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Calculate all tiles around within pattern and apply effect to all of them.
+
+        var directedAOEPattern = _pattern as DirectedAOEPattern;
+
+        if (directedAOEPattern == null)
+        {
+            Debug.LogError("Pattern is not a DirectedAOEPattern");
+            return;
+        }
+
+        directedAOEPattern.SetDirection(CalculateDirection(casterTile, targetTile));
+        directedAOEPattern.SetCasterTile(casterTile);
+
+        List<CombatGridTile> tilesToEffect = directedAOEPattern.CalculateTilesToEffect(targetTile);
+
+        foreach (CombatGridTile tile in tilesToEffect)
+        {
+            if (tile != null)
+            {
+                Character castingCharacter = casterTile.GetOccupantCharacter();
+                VFXData data;
+                if (_abilityAOEVFXSequence == null) continue;
+                
+                    data = new VFXData
+                    {
+                        Caster = castingCharacter,
+                        OriginPosition = castingCharacter.transform.position,
+                        TargetTile = tile,
+                        TargetPosition = tile.transform.position,
+                        Direction = (tile.transform.position - casterTile.transform.position).normalized,
+                    };
+                
+                // Don't apply effect on tiles with invalid targets.
+                // if target is not valid, start effect on the ground instead of player;
+                if (!IsValidTargetForAbility(casterTile, tile))
+                {
+                    data.TargetPosition += new Vector3(0, -_abilityAOEVFXSequence.GetImpactAirDistance(), 0);
+                    castingCharacter.StartCoroutine(_abilityAOEVFXSequence.RunSequence(data));
+                    continue;
+                }
+
+                castingCharacter.StartCoroutine(_abilityAOEVFXSequence.RunSequence(data));
+                ApplyEffectOnTile(casterTile, tile);
+            }
+        }
+    }
+
     protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
     {
+          
         if (tileToEffect == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
 
         Character affectedCharacter = tileToEffect.GetOccupantCharacter();
         if (affectedCharacter == null) return;
-        Character castingCharacter = casterTile.GetOccupantCharacter();
-        if (castingCharacter == null) return;
 
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         bool died = affectedCharacter.TakeDamage(damage);
@@ -58,7 +110,11 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
 
     public override int GetDamage()
     {
-        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        int baseDamage = GetCharacterCaster().GetBaseDamage();
+        int cardsAmount = CardHandManager.GetInstance().GetCardsInHand().Count;
+
+        int damage = (int)(baseDamage * _damageMultiplier);
+        damage += (int)(baseDamage * _handSizeDamageMultiplier * cardsAmount);
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }

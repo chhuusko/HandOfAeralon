@@ -4,7 +4,6 @@ using System.Collections;
 public class ProjectileVFXPlayer : VFXPlayer
 {
     [SerializeField] private float speed = 10f;
-    [SerializeField] private VFXPlayer impactVFX;
 
     private Vector3 target;
 
