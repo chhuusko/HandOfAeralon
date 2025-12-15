@@ -71,6 +71,8 @@ public class CombatMenuManager : MonoBehaviour
                 OpenInGameMenu();
             }
         }
+
+        //DEBUGLogRayCastHits();
     }
 
     public void InvokeEndCombatButtonPressed()
@@ -178,5 +180,23 @@ public class CombatMenuManager : MonoBehaviour
         _combatTooltipCanvasGroup.interactable = true;
         _combatCardCanvasGroup.interactable    = true;
         Time.timeScale = 1f;
+    }
+
+
+    private void DEBUGLogRayCastHits()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit[] hits = Physics.RaycastAll(ray, 1000f);
+
+            Debug.Log($"Raycast hit count: {hits.Length}");
+
+            foreach (var hit in hits)
+            {
+                DebugLog.CJLogWarning("Hit: " + hit.collider.gameObject.name +
+                          " (Layer: " + LayerMask.LayerToName(hit.collider.gameObject.layer) + ")");
+            }
+        }
     }
 }
