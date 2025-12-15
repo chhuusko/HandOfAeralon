@@ -48,7 +48,7 @@ public class TraitManager
 
         foreach (var statusEffect in _statusEffects)
         {
-            if (statusEffect.Data.Type == type)
+            if (statusEffect.Data.Type == type && statusEffect.Data.IsDispellable)
             {
                 statusEffectsToRemove.Add(statusEffect);
                 amount++;
