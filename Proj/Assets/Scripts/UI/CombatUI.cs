@@ -157,10 +157,11 @@ public class CombatUI : MonoBehaviour
         _selectedCharacter = character.Data;
     }
 
-    private void SetSelectedCharacter(CharacterData character)
-    {
-        _selectedCharacter = character;
-    }
+    // private void SetSelectedCharacter(CharacterData character)
+    // {
+    //     _selectedCharacter = character;
+    //     _activeCharacterPortrait.GetComponent<PortraitButton>().Character = character;
+    // }
 
     private void SetSelectedCharacter(PortraitButton portraitButton)
     {
@@ -191,7 +192,7 @@ public class CombatUI : MonoBehaviour
         LoadAbilities(c);
         StartCoroutine(ScrollToBottom());
         
-        SetSelectedCharacter(c);
+        SetSelectedCharacter(CombatManager._instance.GetCharacterDataDict()[c]);
         _currentTurnCharacter = CombatManager._instance.GetCharacterDataDict()[_selectedCharacter];
         
         _characterPortraitPanel.gameObject.SetActive(true);
@@ -227,8 +228,9 @@ public class CombatUI : MonoBehaviour
         UpdateActivePortrait(c);
         UpdatePortraitColors(c);
         
-        SetSelectedCharacter(c.Data);
+        SetSelectedCharacter(c);
         _currentTurnCharacter = c;
+        _activeCharacterPortrait.GetComponent<PortraitButton>().Character = c;
         
         LoadAbilities(_selectedCharacter);
     }
