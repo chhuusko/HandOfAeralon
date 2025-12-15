@@ -8,7 +8,7 @@ public class EnemyAI : MonoBehaviour
 {
     private const int TOP_N_ACTIONS = 3;
     private const float TURN_START_WAIT_TIME = 1f;
-    private const float TURN_END_WAIT_TIME = 1f;
+    private const float TURN_END_WAIT_TIME = 2.5f;
 
     private class AIAction
     {
@@ -95,7 +95,7 @@ public class EnemyAI : MonoBehaviour
         List<CombatGridTile> moveRange = FindMoveRange();
         //Debug.LogError($"EnemyAI.cs | moveRange: {moveRange.Count}");
         Dictionary<AIAction, float> scoredActions = EvaluatePossibleActions(moveRange);
-        //Debug.LogError($"EnemyAI.cs | scoredActions: {scoredActions.Count}");
+        //Debug.LogWarning($"EnemyAI.cs | {_character.name} evaluated {scoredActions.Count} actions.");
         if (scoredActions == null || !scoredActions.Any())
         {
             Debug.LogError($"EnemyAI.cs | AIBehaviour INTERRUPTED!");
@@ -104,10 +104,12 @@ public class EnemyAI : MonoBehaviour
             yield break;
         }
         AIAction chosenAction = SelectAction(scoredActions);
+        /*
         Debug.LogWarning($"EnemyAI.cs | Move {_character.name} to {chosenAction.movement.GetTileIndex()}," +
             $" use ability: {(chosenAction.ability != null ? chosenAction.ability.name : "NONE")}," +
             $" at position: {(chosenAction.target != null ? chosenAction.target.GetTileIndex() : "NONE")}," +
             $" score: {scoredActions[chosenAction]}!");
+        */
 
         CharacterMovement movementComponent = null;
         if (!IsDead() && chosenAction.movement != _character.GetCurrentTileComponent() && _character.CanMove &&
@@ -149,14 +151,12 @@ public class EnemyAI : MonoBehaviour
         List<Ability> abilities = GetAbilities();
         for (int i = 0; i < abilities.Count; i++)
         {
-            /*
-            if (abilities[i].GetCooldown() > 0)
+            if (_character.IsAbilityCooldownActive(abilities[i]))
             {
                 abilities.RemoveAt(i);
             }
-            */
         }
-        Debug.LogError($"EnemyAI.cs | Found {abilities.Count} abilities ready to use!");
+        //Debug.LogError($"EnemyAI.cs | Found {abilities.Count} abilities ready to use!");
 
         AbilityHandler abilityHandler = _character.GetAbilityHandler();
         if (abilityHandler == null)
@@ -169,24 +169,27 @@ public class EnemyAI : MonoBehaviour
         {
             AIAction move = new AIAction { movement = tile };
             float moveScore = 0f;
+            int stepsUsed = GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), tile.GetTileIndex());
+            moveScore += Mathf.Min(stepsUsed, 3) * 5;
 
             if (_enemies.Any()) // Evaluate distance to enemies
             {
                 Character closestEnemy = FindClosestCharacter(_enemies);
                 int enemyDistance = 0;
+                int movedEnemyDistance = 0;
                 if (closestEnemy != null)
                 {
                     int currentEnemyDistance = GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), closestEnemy.GetCurrentTileIndex());
-                    int movedEnemyDistance = GridExplorer._instance.ManhattanDistance(tile.GetTileIndex(), closestEnemy.GetCurrentTileIndex());
+                    movedEnemyDistance = GridExplorer._instance.ManhattanDistance(tile.GetTileIndex(), closestEnemy.GetCurrentTileIndex());
                     enemyDistance = movedEnemyDistance - currentEnemyDistance;
                 }
 
                 switch (_character.GetCharacterClass())
                 {
-                    case CharacterClass.Barbarian:  moveScore -= enemyDistance * 2; break;
-                    case CharacterClass.Bard:       moveScore += enemyDistance * 2; break;
-                    case CharacterClass.Rogue:      moveScore -= enemyDistance * 2; break;
-                    case CharacterClass.Sorceress:  moveScore += enemyDistance * 2; break;
+                    case CharacterClass.Barbarian:  moveScore -= enemyDistance * 15; break;
+                    case CharacterClass.Bard:       moveScore += enemyDistance * 5; break;
+                    case CharacterClass.Rogue:      moveScore -= enemyDistance * 10; break;
+                    case CharacterClass.Sorceress:  moveScore += enemyDistance * 5; break;
                 }
 
                 if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian && _allies.Count > 1)
@@ -209,9 +212,9 @@ public class EnemyAI : MonoBehaviour
                 switch (_character.GetCharacterClass())
                 {
                     case CharacterClass.Barbarian:  break;
-                    case CharacterClass.Bard:       moveScore -= allyDistance * 2; break;
+                    case CharacterClass.Bard:       moveScore -= allyDistance * 10; break;
                     case CharacterClass.Rogue:      break;
-                    case CharacterClass.Sorceress:  moveScore -= allyDistance * 2; break;
+                    case CharacterClass.Sorceress:  moveScore -= allyDistance * 10; break;
                 }
 
                 if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian)
@@ -232,10 +235,10 @@ public class EnemyAI : MonoBehaviour
                     {
                         switch (_character.GetCharacterClass())
                         {
-                            case CharacterClass.Barbarian:  moveScore -= 20f; break;
-                            case CharacterClass.Bard:       moveScore -= 35f; break;
-                            case CharacterClass.Rogue:      moveScore -= 50f; break;
-                            case CharacterClass.Sorceress:  moveScore -= 35f; break;
+                            case CharacterClass.Barbarian:  moveScore -= 50f; break;
+                            case CharacterClass.Bard:       moveScore -= 50f; break;
+                            case CharacterClass.Rogue:      moveScore -= 75f; break;
+                            case CharacterClass.Sorceress:  moveScore -= 50f; break;
                         }
                     }
                 }
@@ -257,6 +260,16 @@ public class EnemyAI : MonoBehaviour
                     actScore += ScoreAbilityUsage(tile, ability, target);
                     result[act] = actScore;
                 }
+            }
+
+            bool canHitInstead = result.Any(kvp =>
+                kvp.Key.movement == tile &&
+                kvp.Key.ability != null &&
+                kvp.Value > moveScore + 10f);
+
+            if (canHitInstead)
+            {
+                result[move] -= 50f;
             }
         }
 
@@ -336,14 +349,11 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    else
-                    {
-                        result -= 5;
-                    }
                     break;
                 }
             case "Earthquake_Ability":
                 {
+                    int hitCount = 0;
                     DirectedAOEPattern.Direction direction = GetDirection(tile, target);
                     _housePattern.SetDirection(direction);
                     List<CombatGridTile> aoe = _housePattern.CalculateTilesToEffect(target);
@@ -356,10 +366,11 @@ public class EnemyAI : MonoBehaviour
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
                             float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
-                            if (!isEnemy) result -= 60f;
+                            if (!isEnemy) result -= 75f;
 
                             if (isEnemy)
                             {
+                                hitCount++;
                                 result += 30f;
 
                                 if (occupantSEM != null && !occupantSEM.ContainsStatusEffect<Slowed>())
@@ -373,15 +384,13 @@ public class EnemyAI : MonoBehaviour
                                 }
                             }
                         }
-                        else
-                        {
-                            result -= 5;
-                        }
                     }
+                    if (hitCount == 0) result -= 100;
                     break;
                 }
             case "RuptureOfTheWilds_Ability":
                 {
+                    int hitCount = 0;
                     DirectedAOEPattern.Direction direction = GetDirection(tile, target);
                     _trisquarePattern.SetDirection(direction);
                     List<CombatGridTile> aoe = _trisquarePattern.CalculateTilesToEffect(target);
@@ -394,10 +403,11 @@ public class EnemyAI : MonoBehaviour
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
                             float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
-                            if (!isEnemy) result -= 60f;
+                            if (!isEnemy) result -= 75f;
 
                             if (isEnemy)
                             {
+                                hitCount++;
                                 result += 30f;
 
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Slowed>())
@@ -411,15 +421,13 @@ public class EnemyAI : MonoBehaviour
                                 }
                             }
                         }
-                        else
-                        {
-                            result -= 5;
-                        }
                     }
+                    if (hitCount == 0) result -= 100;
                     break;
                 }
             case "RoarOfTheAncients_Ability":
                 {
+                    int hitCount = 0;
                     List<CombatGridTile> aoe = DiamondPattern(target, 2);
                     foreach (var hit in aoe)
                     {
@@ -432,23 +440,23 @@ public class EnemyAI : MonoBehaviour
 
                             if (isEnemy)
                             {
+                                hitCount++;
+
                                 if (occupantSEM != null && !occupantSEM.ContainsStatusEffect<Slowed>())
                                 {
                                     result += 40f;
                                 }
                             }
                         }
-                        else
-                        {
-                            result -= 5;
-                        }
                     }
+                    if (hitCount == 0) result -= 100;
                     break;
                 }
 
             // Bard
             case "InspiringAnthem_Ability":
                 {
+                    int hitCount = 0;
                     List<CombatGridTile> aoe = DiamondPattern(target, 2);
                     foreach (var hit in aoe)
                     {
@@ -460,21 +468,21 @@ public class EnemyAI : MonoBehaviour
 
                             if (isAlly)
                             {
+                                hitCount++;
+
                                 if (occupantSEM != null && !occupantSEM.ContainsStatusEffect<Haste>())
                                 {
                                     result += 50f;
                                 }
                             }
                         }
-                        else
-                        {
-                            result -= 5;
-                        }
                     }
+                    if (hitCount == 0) result -= 100;
                     break;
                 }
             case "SongOfRenewal_Ability":
                 {
+                    int hitCount = 0;
                     List<CombatGridTile> aoe = DiamondPattern(target, 3);
                     foreach (var hit in aoe)
                     {
@@ -486,6 +494,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (isAlly && occupantPERCENTHP < 1f)
                             {
+                                hitCount++;
                                 result += 40;
 
                                 if (occupantPERCENTHP < 0.75f)
@@ -499,15 +508,13 @@ public class EnemyAI : MonoBehaviour
                                 }
                             }
                         }
-                        else
-                        {
-                            result -= 5;
-                        }
                     }
+                    if (hitCount == 0) result -= 100;
                     break;
                 }
             case "DissonantChord_Ability":
                 {
+                    int hitCount = 0;
                     List<CombatGridTile> aoe = DiamondPattern(target, 2);
                     foreach (var hit in aoe)
                     {
@@ -519,6 +526,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (isEnemy)
                             {
+                                hitCount++;
                                 if (occupantSEM.ContainsStatusEffect<Haste>()) result += 25f;
                                 if (occupantSEM.ContainsStatusEffect<Empowered>()) result += 25f;
                                 if (occupantSEM.ContainsStatusEffect<Emberwake>()) result += 25f;
@@ -529,11 +537,8 @@ public class EnemyAI : MonoBehaviour
                                 if (occupantSEM.ContainsStatusEffect<Stealth>()) result += 25f;
                             }
                         }
-                        else
-                        {
-                            result -= 5;
-                        }
                     }
+                    if (hitCount == 0) result -= 100;
                     break;
                 }
             case "LuteSmash_Ability":
@@ -565,10 +570,6 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    else
-                    {
-                        result -= 5;
-                    }
                     break;
                 }
 
@@ -584,7 +585,7 @@ public class EnemyAI : MonoBehaviour
 
                         if (isEnemy)
                         {
-                            result += 35f;
+                            result += 40f;
 
                             if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Poison>())
                             {
@@ -612,14 +613,12 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    else
-                    {
-                        result -= 5;
-                    }
                     break;
                 }
             case "Desert's Grasp_Ability":
                 {
+                    result += 50f;
+                    int hitCount = 0;
                     Vector2Int[] directions = new Vector2Int[]
                         {
                         new Vector2Int(1, 1),
@@ -648,10 +647,11 @@ public class EnemyAI : MonoBehaviour
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
                             float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
-                            if (!isEnemy) result -= 60f;
+                            if (!isEnemy) result -= 75f;
 
                             if (isEnemy)
                             {
+                                hitCount++;
                                 result += 30f;
 
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Poison>())
@@ -680,15 +680,22 @@ public class EnemyAI : MonoBehaviour
                                 }
                             }
                         }
-                        else
-                        {
-                            result -= 5;
-                        }
                     }
+                    if (hitCount >= 2)
+                    {
+                        result += 125f;
+                    }
+
+                    if (hitCount >= 3)
+                    {
+                        result += 300f;
+                    }
+                    if (hitCount < 2) result -= 200;
                     break;
                 }
             case "ThrowingKnives_Ability":
                 {
+                    int hitCount = 0;
                     DirectedAOEPattern.Direction direction = GetDirection(tile, target);
                     _linePattern.SetDirection(direction);
                     List<CombatGridTile> aoe = _linePattern.CalculateTilesToEffect(target);
@@ -701,10 +708,11 @@ public class EnemyAI : MonoBehaviour
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
                             float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
-                            if (!isEnemy) result -= 60f;
+                            if (!isEnemy) result -= 100f;
 
                             if (isEnemy)
                             {
+                                hitCount++;
                                 result += 30f;
 
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Poison>())
@@ -728,18 +736,14 @@ public class EnemyAI : MonoBehaviour
                                 }
                             }
                         }
-                        else
-                        {
-                            result -= 5;
-                        }
                     }
+                    if (hitCount == 0) result -= 100;
                     break;
                 }
             case "VeilOfDust_Ability":
                 {
                     if (!mySEM.ContainsStatusEffect<Stealth>())
                     {
-                        result += 10f;
                         if (mySEM.ContainsStatusEffect<Poison>()) result += 10f;
                         if (mySEM.ContainsStatusEffect<Burn>()) result += 10f;
                         if (mySEM.ContainsStatusEffect<Aftershock>()) result += 10f;
@@ -766,7 +770,7 @@ public class EnemyAI : MonoBehaviour
 
                         if (isEnemy)
                         {
-                            result += 30f;
+                            result += 40f;
 
                             if (occupantPERCENTHP < 0.2f)
                             {
@@ -779,14 +783,11 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    else
-                    {
-                        result -= 5;
-                    }
                     break;
                 }
             case "FlameSurge_Ability":
                 {
+                    int hitCount = 0;
                     DirectedAOEPattern.Direction direction = GetDirection(tile, target);
                     _flamePattern.SetDirection(direction);
                     List<CombatGridTile> aoe = _flamePattern.CalculateTilesToEffect(target);
@@ -801,7 +802,8 @@ public class EnemyAI : MonoBehaviour
 
                             if (!isEnemy)
                             {
-                                result -= 60f;
+                                result -= 75f;
+
                                 if (mySEM.ContainsStatusEffect<Emberwake>())
                                 {
                                     result -= 10f;
@@ -810,6 +812,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (isEnemy)
                             {
+                                hitCount++;
                                 result += 30f;
 
                                 if (mySEM.ContainsStatusEffect<Emberwake>())
@@ -824,19 +827,17 @@ public class EnemyAI : MonoBehaviour
 
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
                                 {
-                                    result += 20f;
+                                    result += Random.Range(0f, 20f);
                                 }
                             }
                         }
-                        else
-                        {
-                            result -= 5;
-                        }
                     }
+                    if (hitCount == 0) result -= 100;
                     break;
                 }
             case "LightningStorm_Ability":
                 {
+                    int hitCount = 0;
                     List<CombatGridTile> aoe = DiamondPattern(target, 3);
                     foreach (var hit in aoe)
                     {
@@ -849,7 +850,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (!isEnemy)
                             {
-                                result -= 60f;
+                                result -= 75f;
 
                                 if (mySEM.ContainsStatusEffect<Emberwake>())
                                 {
@@ -859,6 +860,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (isEnemy)
                             {
+                                hitCount++;
                                 result += 30f;
 
                                 if (mySEM.ContainsStatusEffect<Emberwake>())
@@ -873,15 +875,12 @@ public class EnemyAI : MonoBehaviour
 
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
                                 {
-                                    result += 20f;
+                                    result += Random.Range(0f, 20f);
                                 }
                             }
                         }
-                        else
-                        {
-                            result -= 5;
-                        }
                     }
+                    if (hitCount == 0) result -= 100;
                     break;
                 }
             case "Emberwake_Ability":
