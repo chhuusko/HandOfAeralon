@@ -47,16 +47,10 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
                 CastingFXDuration = GetCastingTime(),
                 TravelFXDuration = GetFromCastToHitTime()
             };
-            caster.StartCoroutine(GetAbilityVFXSequence().RunSequence(data)
+            yield return caster.StartCoroutine(GetAbilityVFXSequence().RunSequence(data)
             );
         }
-        yield return new WaitForSeconds(GetCastingAnimationTime());
-
-        yield return new WaitForSeconds(GetCastingTime());
-        InitiateParticles(casterTile, targetTile);
         // Play hit sound.
-        yield return new WaitForSeconds(GetFromCastToHitTime());
-
 
         RunAbility(casterTile, targetTile);
 

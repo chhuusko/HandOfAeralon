@@ -27,6 +27,19 @@ public class Skullsplitter_Ability : SingleTargetAbility
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, null, died);
     }
 
+    protected override void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        if (targetTile == null) return;
+
+        Character affectedCharacter = targetTile.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        affectedCharacter.PreviewHealthChange(-damage);
+    }
+
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
         // 1. Your Base Damage(Kan �kas med traits och eller kort.)
@@ -38,7 +51,7 @@ public class Skullsplitter_Ability : SingleTargetAbility
         // 7. Enemy Buffs / Debuffs
 
         //1.
-        int baseDamage = (int)(castingCharacter.GetBaseDamage() * _damageMultiplier);
+        int baseDamage = (int)(castingCharacter.Data.DerivedDamage * _damageMultiplier);
 
         //2.
         int damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.GetMaxHealth()) ? (int)(baseDamage * _extraDamageMultiplier) : (int)(baseDamage * _damageMultiplier);
@@ -57,14 +70,14 @@ public class Skullsplitter_Ability : SingleTargetAbility
 
     public override int GetDamage()
     {
-        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        int damage = (int)(GetCharacterCaster().Data.DerivedDamage * _damageMultiplier);
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }
 
     public override int GetSecondDamage()
     {
-        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _extraDamageMultiplier);
+        int damage = (int)(GetCharacterCaster().Data.DerivedDamage * _extraDamageMultiplier);
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }

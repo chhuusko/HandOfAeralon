@@ -7,6 +7,10 @@ public abstract class SingleTargetAbility : Ability
     {
         ApplyEffectOnTile(casterTile, targetTile);
     }
+    public override void PreviewAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        PreviewEffectOnTile(casterTile, targetTile);
+    }
 
     public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
     {
@@ -25,5 +29,4 @@ public abstract class SingleTargetAbility : Ability
         TilesToEffect.Add(targetTile);
         return TilesToEffect;
     }
-
 }
