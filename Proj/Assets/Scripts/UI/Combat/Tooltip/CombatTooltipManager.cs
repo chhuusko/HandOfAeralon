@@ -51,7 +51,7 @@ public class CombatTooltipManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.H))
         {
-            if(_characterLayout.IsHidden())
+            if (_characterLayout.IsHidden())
             {
                 _characterLayout.ShowCanvas();
             }

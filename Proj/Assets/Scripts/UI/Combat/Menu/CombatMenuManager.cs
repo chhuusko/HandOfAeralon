@@ -1,4 +1,6 @@
+using FMODUnity;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -29,6 +31,10 @@ public class CombatMenuManager : MonoBehaviour
     private Animator _endCombatMenuAnimator;
 
     public event Action OnGoToShopButtonPressed;
+
+    [SerializeField] private EventReference _menuOpenedSound;
+    [SerializeField] private EventReference _menuClosedSound;
+    [SerializeField] private EventReference _buttonClickSound;
 
     private void Awake()
     {
@@ -101,6 +107,7 @@ public class CombatMenuManager : MonoBehaviour
         ShowInGameLayout();
         TurnOFFCombatCanvases();
         _endCombatMenuAnimator.Play("WeightFadeIn");
+        AudioManager.Instance.PlayOneShot(_menuOpenedSound, transform.position);
     }
 
     public void CloseInGameMenu()
@@ -108,26 +115,27 @@ public class CombatMenuManager : MonoBehaviour
         _combatMenuCanvas.enabled = false;
         TurnONCombatCanvases();
         _endCombatMenuAnimator.Play("WeightFadeOut");
+        AudioManager.Instance.PlayOneShot(_menuClosedSound, transform.position);
     }
 
     public void OpenOptionsMenu()
     {
+        AudioManager.Instance.PlayOneShot(_buttonClickSound, transform.position);
         ShowOptionsLayout();
     }
 
     public void CloseOptionsMenu()
     {
+        AudioManager.Instance.PlayOneShot(_buttonClickSound, transform.position);
         ShowInGameLayout();
     }
 
     public void OpenVictoryMenuScreen(bool playerWon)
     {
-        _combatMenuCanvas.enabled = true;
 
-        ShowVictroyScreenLayout();
-        TurnOFFCombatCanvases();
 
-        _endCombatMenuAnimator.Play("WeightFadeIn");  
+        StartCoroutine(ShowVictoryScreenLayoutAfterDelay());
+ 
     }
 
     public void CloseVictoryMenuScreen()
@@ -158,6 +166,15 @@ public class CombatMenuManager : MonoBehaviour
         _victoryScreenLayout.SetActive(true);
     }
 
+    IEnumerator ShowVictoryScreenLayoutAfterDelay()
+    {
+        yield return new WaitForSeconds(2.0f);
+        _combatMenuCanvas.enabled = true;
+        ShowVictroyScreenLayout();
+        TurnOFFCombatCanvases();
+
+        _endCombatMenuAnimator.Play("WeightFadeIn");
+    }
     private void HideInGameLayout()
     {
         _inGameLayout.SetActive(false);
