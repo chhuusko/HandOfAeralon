@@ -12,6 +12,7 @@ public class CombatVictoryScreenMenu : MonoBehaviour
 
     [SerializeField] private EventReference _victorySound;
     [SerializeField] private EventReference _defeatSound;
+    [SerializeField] private EventReference _buttonClickSound;
 
     public void SetTitle(string title)
     {
@@ -46,5 +47,10 @@ public class CombatVictoryScreenMenu : MonoBehaviour
         _info.text = "";
         _mainMenuButtonText.text = "Quit Game";
         AudioManager.Instance.PlayOneShot(_defeatSound, transform.position);
+    }
+
+    public void PlayOneShotButtonClick()
+    {
+        AudioManager.Instance.PlayOneShot(_buttonClickSound, transform.position);
     }
 }
