@@ -106,8 +106,9 @@ public class LevelManager : ScriptableObject
     }
     private void TieredRandomLevel()
     {
-        if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
+        if (SceneManager.GetActiveScene().name == "ShopScene" || SceneManager.GetActiveScene().name == "MainMenu")
         {
+            //loadCombat
             if (_isTutorialCompleted)
             {
                 _difficulty = _level / 5;
@@ -129,8 +130,6 @@ public class LevelManager : ScriptableObject
             {
                 TutorialLevel();
             }
-            
-
         }
         else
         {
@@ -142,7 +141,7 @@ public class LevelManager : ScriptableObject
         SceneManager.LoadScene(tutorialCombatList[_level]);
         
         _level++;
-        if (_level == tutorialCombatList.Count-1)
+        if (_level == tutorialCombatList.Count)
         {
             _isTutorialCompleted = true;
             _level = 0;

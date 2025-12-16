@@ -61,7 +61,7 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
         // Get base damage.
-        int baseDamage = (int) (castingCharacter.GetBaseDamage() * _damageMultiplier);
+        int baseDamage = (int) (castingCharacter.Data.DerivedDamage * _damageMultiplier);
         var statusEffectsManager = affectedCharacter.GetComponent<StatusEffectManager>();
         if (statusEffectsManager == null) return 0;
 
@@ -82,14 +82,14 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
 
     public override int GetDamage()
     {
-        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        int damage = (int)(GetCharacterCaster().Data.DerivedDamage * _damageMultiplier);
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }
 
     public override int GetSecondDamage()
     {
-        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _slowedTargetDamageMultiplier);
+        int damage = (int)(GetCharacterCaster().Data.DerivedDamage * _slowedTargetDamageMultiplier);
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }

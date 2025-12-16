@@ -61,7 +61,7 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
         // 7. Enemy Buffs / Debuffs
 
      
-        int damage = castingCharacter.GetBaseDamage();
+        int damage = castingCharacter.Data.DerivedDamage;
         damage = (int)(damage * _damageMultiplier);
 
 
@@ -77,7 +77,7 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
 
     public override int GetDamage()
     {
-        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        int damage = (int)(GetCharacterCaster().Data.DerivedDamage * _damageMultiplier);
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }
