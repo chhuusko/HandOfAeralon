@@ -65,7 +65,7 @@ public class CombatUI : MonoBehaviour
     
     private Dictionary<CharacterData, PortraitButton> _characterPortraits = new();
     
-    private void OnEnable()
+    private void Start()
     {
         CardHandManager.onManaChange += UpdateManaText;
         

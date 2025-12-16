@@ -56,16 +56,17 @@ public class CombatGridCharacterData
         if(characterScript == null) 
             return;
 
-        _position               = characterGameObject.transform.position;
-        _size                   = characterGameObject.transform.localScale;
-        _rotation               = characterGameObject.transform.rotation;
+        _position              = characterGameObject.transform.position;
+        _size                  = characterGameObject.transform.localScale;
+        _rotation              = characterGameObject.transform.rotation;
 
         _characterClass        = characterScript.GetCharacterClass();
         _faction               = characterScript.GetFaction();
 
-        _baseHealthPoints      = characterScript.GetMaxHealth();
+        _baseHealthPoints      = characterScript.GetBaseHealth();
         _baseSpeed             = characterScript.GetBaseInitiative();
-        _baseDamage            = characterScript.GetBaseDamage();
+        //_baseDamage            = characterScript.GetBaseDamage();
+        _baseDamage            = characterScript.Data.BaseDamage;
         _baseMovementPoints    = characterScript.GetBaseMovementPoints();
 
         _currentHealthPoints   = characterScript.GetCurrentHealth();
