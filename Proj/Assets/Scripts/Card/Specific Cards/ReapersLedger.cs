@@ -7,7 +7,7 @@ public class ReapersLedger : Card
     {
         if (character != null)
         {
-            character.TakeDamage(15 + (GlobalGameManager.GetInstance().GetGameData().reapersLedgerKills*5));
+            character.TakeDamage(10 + (GlobalGameManager.GetInstance().GetGameData().reapersLedgerKills*5));
             if (character.GetCurrentHealth() <= 0)
             {
                 GlobalGameManager.GetInstance().ReapersLedgerKillChange(1);
