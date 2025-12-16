@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3639886234094255485}
   - component: {fileID: 3316765638426273355}
   - component: {fileID: 5042680120958680253}
+  - component: {fileID: 3037078838075216945}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -26,13 +27,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4518453814777053612}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38064763, y: -0.74915546, z: -0.18361254, w: 0.5100587}
+  m_LocalRotation: {x: 0.60040337, y: -0.39557612, z: 0.003693297, w: 0.6949976}
   m_LocalPosition: {x: 0.2554, y: 0.0686, z: 0.3775}
   m_LocalScale: {x: 0.01, y: 0.010000002, z: 0.010000002}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5724198148514158034}
-  m_LocalEulerAnglesHint: {x: 6.5, y: -114.514, z: -49.688}
+  m_LocalEulerAnglesHint: {x: 56.875, y: -93.56, z: -59.299}
 --- !u!108 &3316765638426273355
 Light:
   m_ObjectHideFlags: 0
@@ -82,7 +83,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 32
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -121,6 +122,21 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!114 &3037078838075216945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4518453814777053612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c8bca95f7c947b4db5fb152a0d693d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anisotropy: 0.25
+  scattering: 1
+  radius: 0.2
 --- !u!1001 &5258751489750331961
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -178,6 +194,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 78792c83c5f308a4cb785a5340ba580c,
+        type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 33
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 78792c83c5f308a4cb785a5340ba580c,
         type: 3}
