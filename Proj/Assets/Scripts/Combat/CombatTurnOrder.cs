@@ -22,7 +22,6 @@ public class CombatTurnOrder
     // can be added at the end of the turn later.
 
     private Character _poppedCharacter = null;
-
     public CombatTurnOrder()
     {
         _charactersInTurnOrder = new List<Character>();
@@ -86,7 +85,15 @@ public class CombatTurnOrder
     public void UpdateCharacterTurnOrderPreTurn()
     {
         if (GetCurrentTurnCount() == 0)
+        {
+            if (_poppedCharacter.GetFaction() == Faction.Friendly)
+                SetCurrentTurn(CombatTurn.PlayerTurn);
+            else
+                SetCurrentTurn(CombatTurn.EnemyTurn);
+            CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
             return;
+        }
+            
                 
         Character nextCharacter = _charactersInTurnOrder[0];
 
