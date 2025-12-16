@@ -486,11 +486,6 @@ public class Selector : MonoBehaviour
     {
         bool success = _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_selectedCharacter.GetAbilityHandler().GetPendingAbility(), tile);
 
-        if (success)
-        {
-            InvokeCharacterActionStarted();
-        }
-
         _selectedCharacter?.GetAbilityHandler()?.SetPendingAbility(null);
         _pendingCharacterActionType = CharacterActionType.Null;
         ResetColorAllTiles();

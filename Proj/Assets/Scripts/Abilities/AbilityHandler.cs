@@ -41,6 +41,7 @@ public class AbilityHandler : MonoBehaviour
                 DebugLog.MGLog("Tried casting ability, but it failed");
             return false;
         }
+        Selector._instance.InvokeCharacterActionStarted();
 
         _characterCaster.CanUseAbility = false;
         CombatEventManager.InvokeOnAbilityCast();
