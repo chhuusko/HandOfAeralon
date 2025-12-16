@@ -32,6 +32,7 @@ public abstract class DirectedAOEAbility : AOEAbility
         }
 
         directedAOEPattern.SetDirection(CalculateDirection(tile, targetTile));
+        directedAOEPattern.SetCasterTile(tile);
 
         // Calculate which tiles to effect.
         var list = _pattern.CalculateTilesToEffect(targetTile);
