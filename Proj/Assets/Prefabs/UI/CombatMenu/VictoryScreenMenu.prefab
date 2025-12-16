@@ -185,6 +185,8 @@ MonoBehaviour:
   _title: {fileID: 850230965037558485}
   _info: {fileID: 4930769276581126227}
   _goToShopButton: {fileID: 6693972678092784970}
+  _mainMenuButton: {fileID: 1987783507732776694}
+  _mainMenuButtonText: {fileID: 5505974664469596077}
 --- !u!1 &1249829791946421998
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,7 +369,7 @@ GameObject:
   - component: {fileID: 4983169697025370703}
   - component: {fileID: 9126515313286171139}
   m_Layer: 10
-  m_Name: Quit Game
+  m_Name: MainMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -499,7 +501,7 @@ GameObject:
   - component: {fileID: 3678863215281766527}
   - component: {fileID: 5505974664469596077}
   m_Layer: 10
-  m_Name: Text (TMP)
+  m_Name: TMP_MainMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -552,7 +554,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quit Game
+  m_text: Quit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6bd24cd4d3d515d48bd7ad1def33fa09, type: 2}
   m_sharedMaterial: {fileID: -5814162066966551001, guid: 6bd24cd4d3d515d48bd7ad1def33fa09,

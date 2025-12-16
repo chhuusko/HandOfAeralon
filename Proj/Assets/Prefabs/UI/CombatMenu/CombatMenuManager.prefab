@@ -1882,6 +1882,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5505974664469596077, guid: 59135147591c6c74982c86a9a002c10d,
         type: 3}
+      propertyPath: m_text
+      value: Quit
+      objectReference: {fileID: 0}
+    - target: {fileID: 5505974664469596077, guid: 59135147591c6c74982c86a9a002c10d,
+        type: 3}
       propertyPath: m_margin.w
       value: -0.4592371
       objectReference: {fileID: 0}
@@ -2049,6 +2054,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 8250037658871187672}
+    - target: {fileID: 9126515313286171139, guid: 59135147591c6c74982c86a9a002c10d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: GoToMainMenu
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

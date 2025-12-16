@@ -15,6 +15,7 @@ public class CombatStateEndCombat : CombatStateBase
         base.Enter();
         CombatEventManager.InvokeEnterCombatStateEndCombat(_playerWon);
         CombatMenuManager.GetInstance().OnGoToShopButtonPressed += OnGoToShop;
+        CombatMenuManager.GetInstance().OnGoToMainMenuPressed   += OnGoToMainMenu;
     }
 
     public override void Exit()
@@ -31,5 +32,10 @@ public class CombatStateEndCombat : CombatStateBase
     private void OnGoToShop()
     {
         CombatEventManager.InvokeExitCombatStateEndCombat(_playerWon);
+    }
+
+    private void OnGoToMainMenu()
+    {
+        CombatEventManager.InvokeExitCombatStateEndCombat(false);
     }
 }

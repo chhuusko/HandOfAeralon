@@ -31,6 +31,7 @@ public class CombatMenuManager : MonoBehaviour
     private Animator _endCombatMenuAnimator;
 
     public event Action OnGoToShopButtonPressed;
+    public event Action OnGoToMainMenuPressed;
 
     [SerializeField] private EventReference _menuOpenedSound;
     [SerializeField] private EventReference _menuClosedSound;
@@ -135,10 +136,10 @@ public class CombatMenuManager : MonoBehaviour
         StartCoroutine(ShowVictoryScreenLayoutAfterDelay(playerWon));
     }
 
-    public void RestartGame(bool playerWon)
+    public void GoToMainMenu()
     {
-        if (!playerWon)
-            LevelManager.GetInstance().RestartGame();
+        Application.Quit();
+        //OnGoToMainMenuPressed?.Invoke();
     }
 
 

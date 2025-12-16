@@ -6,6 +6,8 @@ public class CombatVictoryScreenMenu : MonoBehaviour
     [SerializeField] private TMP_Text _title;
     [SerializeField] private TMP_Text _info;
     [SerializeField] private GameObject _goToShopButton;
+    [SerializeField] private GameObject _mainMenuButton;
+    [SerializeField] private TMP_Text _mainMenuButtonText;
 
     public void SetTitle(string title)
     {
@@ -15,7 +17,7 @@ public class CombatVictoryScreenMenu : MonoBehaviour
     public void SetScreenData(bool playerWon)
     {
         if (playerWon)
-        {
+        { 
             SetWinScreen();
         }
         else
@@ -29,6 +31,7 @@ public class CombatVictoryScreenMenu : MonoBehaviour
         _goToShopButton.SetActive(true);
         _title.text = "Battle Won!";
         _info.text = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins();
+        _mainMenuButtonText.text = "Quit Game";
     }
 
     public void SetLoseScreen()
@@ -36,5 +39,6 @@ public class CombatVictoryScreenMenu : MonoBehaviour
         _goToShopButton.SetActive(false);
         _title.text = "Battle Lost!";
         _info.text = "";
+        _mainMenuButtonText.text = "Quit Game";
     }
 }
