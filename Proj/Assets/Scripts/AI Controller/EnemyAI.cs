@@ -194,7 +194,7 @@ public class EnemyAI : MonoBehaviour
 
                 if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian && _allies.Count > 1)
                 {
-                    moveScore += enemyDistance * 2;
+                    moveScore += enemyDistance * 20;
                 }
             }
 
@@ -219,7 +219,7 @@ public class EnemyAI : MonoBehaviour
 
                 if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian)
                 {
-                    moveScore -= allyDistance * 2f;
+                    moveScore -= allyDistance * 20f;
                 }
             }
 
@@ -322,6 +322,13 @@ public class EnemyAI : MonoBehaviour
             return result;
         }
 
+        TraitManager myTM = _character.GetTraitManager();
+        if (myTM == null)
+        {
+            Debug.LogError($"EnemyAI.cs | {_character.name} TraitManager NOT FOUND!");
+            return result;
+        }
+
         switch (ability.name)
         {
             // Barbarian
@@ -412,7 +419,7 @@ public class EnemyAI : MonoBehaviour
 
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Slowed>())
                                 {
-                                    result += 20f;
+                                    result += 30f;
                                 }
 
                                 if (occupantPERCENTHP < 0.2f)
@@ -444,7 +451,7 @@ public class EnemyAI : MonoBehaviour
 
                                 if (occupantSEM != null && !occupantSEM.ContainsStatusEffect<Slowed>())
                                 {
-                                    result += 40f;
+                                    result += 60f;
                                 }
                             }
                         }
@@ -527,18 +534,18 @@ public class EnemyAI : MonoBehaviour
                             if (isEnemy)
                             {
                                 hitCount++;
-                                if (occupantSEM.ContainsStatusEffect<Haste>()) result += 25f;
-                                if (occupantSEM.ContainsStatusEffect<Empowered>()) result += 25f;
-                                if (occupantSEM.ContainsStatusEffect<Emberwake>()) result += 25f;
-                                if (occupantSEM.ContainsStatusEffect<Enraged>()) result += 25f;
-                                if (occupantSEM.ContainsStatusEffect<ConduitOfPower>()) result += 25f;
-                                if (occupantSEM.ContainsStatusEffect<Fortified>()) result += 25f;
-                                if (occupantSEM.ContainsStatusEffect<Sanctified>()) result += 25f;
-                                if (occupantSEM.ContainsStatusEffect<Stealth>()) result += 25f;
+                                if (occupantSEM.ContainsStatusEffect<Haste>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<Empowered>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<Emberwake>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<Enraged>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<ConduitOfPower>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<Fortified>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<Sanctified>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<Stealth>()) result += 50f;
                             }
                         }
                     }
-                    if (hitCount == 0) result -= 100;
+                    if (hitCount == 0) result -= 999;
                     break;
                 }
             case "LuteSmash_Ability":
@@ -561,7 +568,15 @@ public class EnemyAI : MonoBehaviour
 
                             if (_allies.Count == 1)
                             {
-                                result += 100f;
+                                result += 999f;
+                            }
+
+                            foreach (var trait in myTM.GetAllTraits())
+                            {
+                                if (trait is CrescendoSmash)
+                                {
+                                    result += 999;
+                                }
                             }
 
                             if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
@@ -742,19 +757,19 @@ public class EnemyAI : MonoBehaviour
                 }
             case "VeilOfDust_Ability":
                 {
+                    int hitCount = 0;
                     if (!mySEM.ContainsStatusEffect<Stealth>())
                     {
-                        if (mySEM.ContainsStatusEffect<Poison>()) result += 10f;
-                        if (mySEM.ContainsStatusEffect<Burn>()) result += 10f;
-                        if (mySEM.ContainsStatusEffect<Aftershock>()) result += 10f;
-                        if (mySEM.ContainsStatusEffect<Vulnerable>()) result += 10f;
-                        if (mySEM.ContainsStatusEffect<Weakened>()) result += 10f;
-                        if (mySEM.ContainsStatusEffect<Slowed>()) result += 10f;
+                        if (mySEM.ContainsStatusEffect<Poison>()) hitCount++;
+                        if (mySEM.ContainsStatusEffect<Burn>()) hitCount++;
+                        if (mySEM.ContainsStatusEffect<Aftershock>()) hitCount++;
+                        if (mySEM.ContainsStatusEffect<Weakened>()) hitCount++;
+                        if (mySEM.ContainsStatusEffect<Slowed>()) hitCount++;
                     }
-                    else
-                    {
-                        result -= 5;
-                    }
+                    if (hitCount > 1) result += 150;
+                    if (hitCount > 2) result += 100;
+                    if (hitCount > 3) result += 999;
+                    if (hitCount == 0) result -= 100;
                     break;
                 }
 

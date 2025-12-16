@@ -33,6 +33,24 @@ public abstract class AOEAbility : Ability
             }
         }
     }
+
+    public override void PreviewAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Calculate all tiles around with in radius and apply effect to all of them.
+        List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
+
+        foreach (CombatGridTile tile in tilesToEffect)
+        {
+            if (tile != null)
+            {
+                // Don't apply effect on tiles with invalid targets.
+                if (!IsValidTargetForAbility(casterTile, tile)) continue;
+
+                PreviewEffectOnTile(casterTile, targetTile);
+            }
+        }
+    }
+
     public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
     {
         if (targetTile == null)

@@ -186,7 +186,7 @@ public class Selector : MonoBehaviour
 
             if (handler == null || handler.GetPendingAbility() == null) return;
             handler.PreviewTargetTiles(hoveredTile);
-            handler.PreviewAbility(handler.GetPendingAbility(), hoveredTile);
+            // handler.PreviewAbility(handler.GetPendingAbility(), hoveredTile);
         }
     }
 
@@ -485,11 +485,6 @@ public class Selector : MonoBehaviour
     private void HandleAbilityCast(CombatGridTile tile)
     {
         bool success = _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_selectedCharacter.GetAbilityHandler().GetPendingAbility(), tile);
-
-        if (success)
-        {
-            InvokeCharacterActionStarted();
-        }
 
         _selectedCharacter?.GetAbilityHandler()?.SetPendingAbility(null);
         _pendingCharacterActionType = CharacterActionType.Null;
