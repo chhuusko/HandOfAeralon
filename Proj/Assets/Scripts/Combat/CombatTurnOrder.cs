@@ -17,7 +17,11 @@ public class CombatTurnOrder
     [SerializeField] private List<Character> _charactersInTurnOrder;
     [SerializeField] private int _turnCountFullRound;
     [SerializeField] private int _turnCountCurrent;
+    
+    // NOTE (Calle): This is so that the character that is removed in InitializeTurnOrder()
+    // can be added at the end of the turn later.
 
+    private Character _poppedCharacter = null;
     public CombatTurnOrder()
     {
         _charactersInTurnOrder = new List<Character>();
@@ -45,11 +49,16 @@ public class CombatTurnOrder
         // Sort them byt initiative, highest first
         _charactersInTurnOrder.Sort((a,b) => b.GetInitiative().CompareTo(a.GetInitiative()));
 
-        // T
         _activeCharacter = _charactersInTurnOrder[0];
+        _poppedCharacter = _charactersInTurnOrder[0];
 
-        // Take the next character in turn off of the list
-        //_charactersInTurnOrder.RemoveAt(0);
+        if (_activeCharacter.GetFaction() == Faction.Friendly)
+            SetCurrentTurn(CombatTurn.PlayerTurn);
+        else
+            SetCurrentTurn(CombatTurn.EnemyTurn);
+
+        // Take the first character in turn off of the list
+        _charactersInTurnOrder.RemoveAt(0);
 
         CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
     }
@@ -73,17 +82,26 @@ public class CombatTurnOrder
         CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
     }
 
-    public void UpdateCharacterTurnOrder()
+    public void UpdateCharacterTurnOrderPreTurn()
     {
+        if (GetCurrentTurnCount() == 0)
+        {
+            if (_poppedCharacter.GetFaction() == Faction.Friendly)
+                SetCurrentTurn(CombatTurn.PlayerTurn);
+            else
+                SetCurrentTurn(CombatTurn.EnemyTurn);
+            CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
+            return;
+        }
+            
+                
         Character nextCharacter = _charactersInTurnOrder[0];
-        
-        // Take the next character in turn off of the list
+
+        _poppedCharacter = nextCharacter;        
+
+        // Take the popped character off of the list
         _charactersInTurnOrder.RemoveAt(0);
 
-        // Put it back in on the end of the list
-        _charactersInTurnOrder.Add(nextCharacter);
-
-        _turnCountCurrent++;
 
         if(nextCharacter.GetFaction() == Faction.Friendly)
             SetCurrentTurn(CombatTurn.PlayerTurn);
@@ -93,6 +111,16 @@ public class CombatTurnOrder
         _activeCharacter = nextCharacter;
 
         CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
+    }
+
+    public void UpdateCharacterTurnOrderPostTurn()
+    {
+        // Add the popped character to the list
+        if (_poppedCharacter != null)
+            _charactersInTurnOrder.Add(_poppedCharacter);
+
+
+        _turnCountCurrent++;
     }
 
     private void HandleCharacterDeath(Character character)
