@@ -339,7 +339,7 @@ public class EnemyAI : MonoBehaviour
                     {
                         StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                         bool isEnemy = occupant.GetFaction() != _controlledFaction;
-                        float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                        float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                         if (isEnemy)
                         {
@@ -371,7 +371,7 @@ public class EnemyAI : MonoBehaviour
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
-                            float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                             if (!isEnemy) result -= 75f;
 
@@ -408,7 +408,7 @@ public class EnemyAI : MonoBehaviour
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
-                            float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                             if (!isEnemy) result -= 75f;
 
@@ -443,7 +443,7 @@ public class EnemyAI : MonoBehaviour
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
-                            float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                             if (isEnemy)
                             {
@@ -497,7 +497,7 @@ public class EnemyAI : MonoBehaviour
                         if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
                             bool isAlly = occupant.GetFaction() == _controlledFaction;
-                            float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                             if (isAlly && occupantPERCENTHP < 1f)
                             {
@@ -545,7 +545,7 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    if (hitCount == 0) result -= 999;
+                    if (hitCount == 0) result -= 9999;
                     break;
                 }
             case "LuteSmash_Ability":
@@ -555,7 +555,7 @@ public class EnemyAI : MonoBehaviour
                     {
                         StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                         bool isEnemy = occupant.GetFaction() != _controlledFaction;
-                        float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                        float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                         if (isEnemy)
                         {
@@ -596,7 +596,7 @@ public class EnemyAI : MonoBehaviour
                     {
                         StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                         bool isEnemy = occupant.GetFaction() != _controlledFaction;
-                        float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                        float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                         if (isEnemy)
                         {
@@ -660,7 +660,7 @@ public class EnemyAI : MonoBehaviour
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
-                            float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                             if (!isEnemy) result -= 75f;
 
@@ -721,7 +721,7 @@ public class EnemyAI : MonoBehaviour
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
-                            float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                             if (!isEnemy) result -= 100f;
 
@@ -781,7 +781,7 @@ public class EnemyAI : MonoBehaviour
                     {
                         StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                         bool isEnemy = occupant.GetFaction() != _controlledFaction;
-                        float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                        float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                         if (isEnemy)
                         {
@@ -813,7 +813,7 @@ public class EnemyAI : MonoBehaviour
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
-                            float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                             if (!isEnemy)
                             {
@@ -861,7 +861,7 @@ public class EnemyAI : MonoBehaviour
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
                             bool isEnemy = occupant.GetFaction() != _controlledFaction;
-                            float occupantPERCENTHP = occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                             if (!isEnemy)
                             {

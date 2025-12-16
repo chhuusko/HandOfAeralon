@@ -2984,7 +2984,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Exit
+  m_text: Confirm
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6bd24cd4d3d515d48bd7ad1def33fa09, type: 2}
   m_sharedMaterial: {fileID: -5814162066966551001, guid: 6bd24cd4d3d515d48bd7ad1def33fa09,
@@ -7298,7 +7298,7 @@ GameObject:
   - component: {fileID: 1887037190}
   - component: {fileID: 1887037189}
   m_Layer: 5
-  m_Name: Exit
+  m_Name: Confirm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7322,7 +7322,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 30}
-  m_SizeDelta: {x: 250, y: 100}
+  m_SizeDelta: {x: 425, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1887037189
 MonoBehaviour:
@@ -8398,7 +8398,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 873734730}
   m_Direction: 2
   m_Value: 1.0000002
-  m_Size: 0.65104175
+  m_Size: 0.6510417
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
