@@ -45,7 +45,6 @@ public class CombatTurnOrder
         // Sort them byt initiative, highest first
         _charactersInTurnOrder.Sort((a,b) => b.GetInitiative().CompareTo(a.GetInitiative()));
 
-        // T
         _activeCharacter = _charactersInTurnOrder[0];
 
         // Take the next character in turn off of the list

@@ -37,7 +37,7 @@ public class CombatVictoryScreenMenu : MonoBehaviour
     private void SetWinScreen()
     {
         _title.text = "Battle Won!";
-        _info.text = "Coins gained: " + 200;
+        _info.text = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins();
     }
 
     private void SetLoseScreen()
