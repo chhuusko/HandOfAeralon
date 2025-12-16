@@ -58,7 +58,9 @@ public class CardHandManager : MonoBehaviour
     public void ManaChanged(){ onManaChange?.Invoke(_mana); }
     public void Dragged(bool isDragEnter) { onDrag?.Invoke(isDragEnter); }
     public void Hovered(bool isHoverEnter) { onHover?.Invoke(isHoverEnter); }
-    public void CardUsed(Card usedCard) { onCardUse?.Invoke(usedCard); 
+    public void CardUsed(Card usedCard) { 
+        onCardUse?.Invoke(usedCard);
+        AudioManager.Instance.PlayOneShot(playSound, transform.position);
     }
     public void CharacterTarget(Character targetCharacter) { onTargetCharacter?.Invoke(targetCharacter); }
     public void CardTargetCharacter(Card usedCard, Character target) { onCardTargetCharacter?.Invoke(target, usedCard); 
@@ -122,6 +124,8 @@ public class CardHandManager : MonoBehaviour
         {
             if(_cardsInDiscardPile.Count > 0)
             {
+                //Add discard to draw pile
+                AudioManager.Instance.PlayOneShot(deckShuffleSound, transform.position);
                 _cardsInDeck = new List<Card>(_cardsInDiscardPile);
                 _cardsInDiscardPile.Clear();
             }
