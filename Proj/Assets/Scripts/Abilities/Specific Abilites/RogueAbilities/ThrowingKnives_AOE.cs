@@ -107,7 +107,7 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
-        int baseDamage = castingCharacter.GetBaseDamage();
+        int baseDamage = castingCharacter.Data.DerivedDamage;
         int cardsAmount = castingCharacter.GetFaction() == Faction.Friendly? CardHandManager.GetInstance().GetCardsInHand().Count: 5;
 
         int damage = (int)(baseDamage * _damageMultiplier);
@@ -123,7 +123,7 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
 
     public override int GetDamage()
     {
-        int baseDamage = GetCharacterCaster().GetBaseDamage();
+        int baseDamage = GetCharacterCaster().Data.DerivedDamage;
         int cardsAmount = CardHandManager.GetInstance().GetCardsInHand().Count;
 
         int damage = (int)(baseDamage * _damageMultiplier);

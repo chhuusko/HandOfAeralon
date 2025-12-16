@@ -62,7 +62,7 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
-        int damage = castingCharacter.GetBaseDamage();
+        int damage = castingCharacter.Data.DerivedDamage;
         damage = (int)(damage * _damageMultiplier);
 
 
@@ -78,7 +78,7 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
 
     public override int GetDamage()
     {
-        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        int damage = (int)(GetCharacterCaster().Data.DerivedDamage * _damageMultiplier);
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }
