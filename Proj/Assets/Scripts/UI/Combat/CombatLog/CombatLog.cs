@@ -26,7 +26,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     
     private bool _bCombatLogEnabled = true;
     
-    private void Start()
+    private void OnEnable()
     {
         CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
         CombatEventManager.OnStatusEffectAppliedToCharacter += AddCombatLogEntry;
