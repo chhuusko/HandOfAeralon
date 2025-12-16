@@ -360,10 +360,10 @@ public class EnemyAI : MonoBehaviour
                             {
                                 result += 100f;
                             }
-                            
+
                             if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
                             {
-                                result = 0f;
+                                result = -999f;
                             }
                         }
                     }
@@ -594,7 +594,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
                             {
-                                result = 0f;
+                                result = -999f;
                             }
                         }
                     }
@@ -637,7 +637,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
                             {
-                                result = 0f;
+                                result = -999f;
                             }
                         }
                     }
@@ -807,7 +807,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
                             {
-                                result = 0f;
+                                result = -999f;
                             }
                         }
                     }
