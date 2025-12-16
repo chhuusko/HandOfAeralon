@@ -39,13 +39,17 @@ public class CombatTurnOrder
         // Get all active characters in combat scene
         _charactersInTurnOrder = CombatGrid._instance.GetAllCharacterScripts();
 
-        _turnCountCurrent = 0;
+        _turnCountCurrent       = 0;
         _turnCountFullRound     = _charactersInTurnOrder.Count;
 
         // Sort them byt initiative, highest first
         _charactersInTurnOrder.Sort((a,b) => b.GetInitiative().CompareTo(a.GetInitiative()));
 
+        // T
         _activeCharacter = _charactersInTurnOrder[0];
+
+        // Take the next character in turn off of the list
+        //_charactersInTurnOrder.RemoveAt(0);
 
         CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
     }
