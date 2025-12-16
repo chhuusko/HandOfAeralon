@@ -1,22 +1,27 @@
 fileFormatVersion: 2
-guid: 5e3a09339f36b41478bbf43bc50fe585
+guid: 4d73c5eee1fb08548beee38d75a10480
 SpeedTreeImporter:
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: DeadGrass_A
-    second: {fileID: 2100000, guid: eb7e78b14c1c048499425dc501609821, type: 2}
+    second: {fileID: 2100000, guid: 862697d373a364c49958867c526d37c1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DeadGrass_A_Billboard_LOD3
+    second: {fileID: 2100000, guid: 8a22ca5f65918934490a78185cebcbb6, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: GrassBlades_Dead
-    second: {fileID: 2100000, guid: 2140f11244201de4595f19c473b6a166, type: 2}
+    second: {fileID: 2100000, guid: 8fd41c257355fe7439823be1b9899483, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: GrassStems_Dead
-    second: {fileID: 2100000, guid: d90643825ecc67a4fb10f7d1f7f643d1, type: 2}
+    second: {fileID: 2100000, guid: 49b933d238d373c4fab4c9bb94fdd0b0, type: 2}
   serializedVersion: 7
   mainColor: {r: 1, g: 1, b: 1, a: 1}
   hueVariation: {r: 1, g: 0.5, b: 0, a: 0.1}
@@ -30,10 +35,10 @@ SpeedTreeImporter:
   enableShadowReceiving: 1
   enableLightProbes: 1
   reflectionProbeEnumValue: 1
-  hasBillboard: 0
+  hasBillboard: 1
   lODSettings:
   - enableSettingOverride: 0
-    height: 0.5
+    height: 0.3004566
     castShadows: 1
     receiveShadows: 1
     useLightProbes: 1
@@ -43,7 +48,7 @@ SpeedTreeImporter:
     enableSubsurface: 1
     windQuality: 3
   - enableSettingOverride: 0
-    height: 0.25
+    height: 0.123501785
     castShadows: 1
     receiveShadows: 1
     useLightProbes: 1
@@ -53,15 +58,25 @@ SpeedTreeImporter:
     enableSubsurface: 1
     windQuality: 3
   - enableSettingOverride: 0
+    height: 0.048070665
+    castShadows: 1
+    receiveShadows: 1
+    useLightProbes: 1
+    reflectionProbeUsage: 1
+    enableBump: 1
+    enableHue: 0
+    enableSubsurface: 1
+    windQuality: 3
+  - enableSettingOverride: 1
     height: 0.01
     castShadows: 1
     receiveShadows: 1
-    useLightProbes: 1
-    reflectionProbeUsage: 1
+    useLightProbes: 0
+    reflectionProbeUsage: 0
     enableBump: 1
     enableHue: 0
     enableSubsurface: 1
-    windQuality: 3
+    windQuality: 1
   enableSmoothLODTransition: 1
   animateCrossFading: 1
   billboardTransitionCrossFadeWidth: 0.25
@@ -69,8 +84,8 @@ SpeedTreeImporter:
   scaleFactor: 0.3048
   unitConversionEnumValue: 1
   motionVectorModeEnumValue: 1
-  generateColliders: 1
-  generateRigidbody: 1
+  generateColliders: 0
+  generateRigidbody: 0
   materialVersion: 3
   materialLocation: 1
   fileIDType: 2
