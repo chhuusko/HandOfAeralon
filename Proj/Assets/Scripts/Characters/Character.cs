@@ -42,6 +42,7 @@ public class CharacterData
     [SerializeField] private List<Ability> _activeAbilities;
     public int CurrentHealthPoints => _currentHealthPoints;
     public IReadOnlyList<Ability> Abilities => _abilities;
+    
     public List<Ability> ActiveAbilities => _activeAbilities;
     
     [Header("Status Effects")]
@@ -297,6 +298,11 @@ public class Character : MonoBehaviour
         
         SetMeshLayers(_bodyMesh);
         SetMeshLayers(_weaponMesh);
+
+        if(data.CharacterClass == CharacterClass.Bard)
+        {
+            data.SetActiveAbilities(data.Abilities.ToList());
+        }
     }
 
     public void Update()
