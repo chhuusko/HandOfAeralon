@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Rendering.FilterWindow;
-using UnityEngine.Rendering.PostProcessing;
 
 [CreateAssetMenu(fileName = "LightningStorm_Ability", menuName = "Scriptable Objects/Abilities/Sorceress/Lightning Storm")]
 
