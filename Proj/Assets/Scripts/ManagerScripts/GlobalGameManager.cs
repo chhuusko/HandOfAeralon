@@ -32,6 +32,8 @@ public class GlobalGameManager : ScriptableObject
     [SerializeField] private int baseCoinReward = 200;
     [SerializeField] private int CoinRewardIncreasePerLevel = 50;
 
+
+    [SerializeField] private bool startWithFullParty;
     public float ClassTraitChance => _classTraitChance;
     public static GlobalGameManager GetInstance()
     {
@@ -108,22 +110,24 @@ public class GlobalGameManager : ScriptableObject
         _currentGame.saveSlot = 1;
         _currentGame.seed = 67;
         LevelManager.GetInstance().GenerateMap(_currentGame.seed);
-        
-        _currentGame.heroList = new List<Character>
+        if (startWithFullParty)
         {
-            _characterLibrary.GetPrefab(CharacterClass.Barbarian).GetComponent<Character>(),
-            //_characterLibrary.GetPrefab(CharacterClass.Sorceress).GetComponent<Character>(),
-            //_characterLibrary.GetPrefab(CharacterClass.Rogue).GetComponent<Character>(),
-            //_characterLibrary.GetPrefab(CharacterClass.Bard).GetComponent<Character>()
-        };
-        _currentGame.heroDataList = new List<CharacterData>(){
-            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Barbarian], Faction.Friendly, true),
-            //new CharacterData(_classDatabase.Classes[(int)CharacterClass.Rogue], Faction.Friendly, true),
-            //new CharacterData(_classDatabase.Classes[(int)CharacterClass.Bard], Faction.Friendly, true),
-            //new CharacterData(_classDatabase.Classes[(int)CharacterClass.Sorceress], Faction.Friendly, true)
-        };
+            _currentGame.heroDataList = new List<CharacterData>(){
+                new CharacterData(_classDatabase.Classes[(int)CharacterClass.Barbarian], Faction.Friendly, true),
+                new CharacterData(_classDatabase.Classes[(int)CharacterClass.Rogue], Faction.Friendly, true),
+                new CharacterData(_classDatabase.Classes[(int)CharacterClass.Bard], Faction.Friendly, true),
+                new CharacterData(_classDatabase.Classes[(int)CharacterClass.Sorceress], Faction.Friendly, true)
+            };
+        }
+        else 
+        {
+            _currentGame.heroDataList = new List<CharacterData>(){
+                new CharacterData(_classDatabase.Classes[(int)CharacterClass.Barbarian], Faction.Friendly, true)
+            };
+        }
 
-        _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
+
+            _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
         _currentGame.coins = 100;
         _currentGame.reapersLedgerKills = 0;
     }
