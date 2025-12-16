@@ -40,8 +40,6 @@ public class CombatStateTakeTurn : CombatStateBase
             case Faction.Friendly:
                 { 
                     CardHandManager.GetInstance().ChangeMana(1);
-                    
-                    
                     CombatManager._instance.SetSelectorOverHeadColor(Color.green);
                 }
                 break;

@@ -132,11 +132,15 @@ public class CombatMenuManager : MonoBehaviour
 
     public void OpenVictoryMenuScreen(bool playerWon)
     {
-
-
-        StartCoroutine(ShowVictoryScreenLayoutAfterDelay());
- 
+        StartCoroutine(ShowVictoryScreenLayoutAfterDelay(playerWon));
     }
+
+    public void RestartGame(bool playerWon)
+    {
+        if (!playerWon)
+            LevelManager.GetInstance().RestartGame();
+    }
+
 
     public void CloseVictoryMenuScreen()
     {
@@ -159,22 +163,33 @@ public class CombatMenuManager : MonoBehaviour
         HideInGameLayout();
         _optionsLayout.SetActive(true);
     }
-    private void ShowVictroyScreenLayout()
+    private void ShowVictroyScreenLayout(bool playerWon)
     {
         HideInGameLayout();
         HideOptionsLayout();
-        _victoryScreenLayout.SetActive(true);
+        _victoryScreenLayout.SetActive(true);   
+        CombatVictoryScreenMenu victoryScreen = _victoryScreenLayout.GetComponent<CombatVictoryScreenMenu>();
+
+        if (playerWon)
+        {
+            victoryScreen.SetWinScreen();
+        }
+        else
+        {
+            victoryScreen.SetLoseScreen();
+        }   
     }
 
-    IEnumerator ShowVictoryScreenLayoutAfterDelay()
+    IEnumerator ShowVictoryScreenLayoutAfterDelay(bool playerWon)
     {
         yield return new WaitForSeconds(2.0f);
         _combatMenuCanvas.enabled = true;
-        ShowVictroyScreenLayout();
+        ShowVictroyScreenLayout(playerWon);
         TurnOFFCombatCanvases();
 
         _endCombatMenuAnimator.Play("WeightFadeIn");
     }
+
     private void HideInGameLayout()
     {
         _inGameLayout.SetActive(false);
