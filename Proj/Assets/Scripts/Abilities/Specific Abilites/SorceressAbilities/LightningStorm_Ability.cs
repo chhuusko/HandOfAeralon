@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Rendering.FilterWindow;
+using UnityEngine.Rendering.PostProcessing;
 
 [CreateAssetMenu(fileName = "LightningStorm_Ability", menuName = "Scriptable Objects/Abilities/Sorceress/Lightning Storm")]
 
@@ -15,6 +17,12 @@ public class LightningStorm_Ability : RoundAOEAbility
     [SerializeField] private int _burnDuration = 1;
 
     private int _enemiesStunned;
+
+    // Description
+
+    // Call down a lightning storm that deals(70% × Damage) Elemental damage to all characters in a large area.
+    // Every character hit has a 25% chance to gain Stunned for 1 turn.
+
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
@@ -67,12 +75,25 @@ public class LightningStorm_Ability : RoundAOEAbility
         AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, burn, died);
     }
 
+    protected override void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        if (targetTile == null) return;
+
+        Character affectedCharacter = targetTile.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        affectedCharacter.PreviewHealthChange(-damage);
+    }
+
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
         // Get base damage.
         int baseDamage = castingCharacter.GetBaseDamage();
 
-        int damage = (int) (baseDamage * _damageMultiplier);
+        int damage = (int)(baseDamage * _damageMultiplier);
 
         damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);

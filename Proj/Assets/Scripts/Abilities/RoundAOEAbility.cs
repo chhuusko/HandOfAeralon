@@ -49,18 +49,10 @@ public abstract class RoundAOEAbility : AOEAbility
                 TravelFXDuration = GetFromCastToHitTime(),
                 AoEDelta = aoeDelta
             };
-            caster.StartCoroutine(GetAbilityVFXSequence().RunSequence(data)
+            yield return caster.StartCoroutine(GetAbilityVFXSequence().RunSequence(data)
             );
         }
 
-        yield return new WaitForSeconds(GetCastingAnimationTime());
-        // Play casting sound.
-
-        yield return new WaitForSeconds(GetCastingTime());
-        // Play travel sound.
-
-        yield return new WaitForSeconds(GetFromCastToHitTime());
-        // Play hit sound.
         RunAbility(casterTile, targetTile);
         Selector._instance.InvokeCharacterActionStopped();
     }
@@ -82,6 +74,25 @@ public abstract class RoundAOEAbility : AOEAbility
             }
         }
     }
+
+    public override void PreviewAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Calculate all tiles around with in radius and apply effect to all of them.
+        if (_pattern is RoundAOEPattern pattern)
+        {
+            SetAbilityRadius(_radius, ref pattern);
+        }
+        List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
+
+        foreach (CombatGridTile tile in tilesToEffect)
+        {
+            if (tile != null)
+            {
+                PreviewEffectOnTile(casterTile, tile);
+            }
+        }
+    }
+
     public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
     {
         if (targetTile == null)

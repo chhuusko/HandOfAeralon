@@ -38,6 +38,31 @@ public class SongOfRenewalAOE : RoundAOEAbility
         }
     }
 
+
+    public override void PreviewAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Calculate all tiles around with in radius and apply effect to all of them.
+        if (_pattern is RoundAOEPattern pattern)
+        {
+            SetAbilityRadius(_radius, ref pattern);
+        }
+        List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
+
+        foreach (CombatGridTile tile in tilesToEffect)
+        {
+            if (tile == null) continue;
+
+            if (!IsValidTargetForAbility(casterTile, tile)) continue;
+
+            if (tile == targetTile)
+            {
+                PreviewSongOfRenewalOnTile(casterTile, tile, true);
+                continue;
+            }
+            PreviewSongOfRenewalOnTile(casterTile, tile, false);
+        }
+    }
+
     protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
     {
         if (tileToEffect == null) return;
@@ -68,6 +93,21 @@ public class SongOfRenewalAOE : RoundAOEAbility
         if (healAmount == 0) return;
         affectedCharacter.Heal(healAmount);
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, healAmount, null, false);
+    }
+
+    private void PreviewSongOfRenewalOnTile(CombatGridTile casterTile, CombatGridTile targetTile, bool bIsMainTarget)
+    {
+        if (targetTile == null) return;
+
+        Character affectedCharacter = targetTile.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        int healAmount = CalculateHealAmount(castingCharacter, affectedCharacter, bIsMainTarget);
+
+        if (healAmount == 0) return;
+        affectedCharacter.PreviewHealthChange(healAmount);
     }
 
     private int CalculateHealAmount(Character castingCharacter, Character affectedCharacter, bool bIsMainTarget)
