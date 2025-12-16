@@ -21,11 +21,13 @@ public class LevelManager : ScriptableObject
     //private int _gameLevels = 10;
     private int _difficulty = 0;
 
-    [SerializeField] public float statIncrease = 1.2f;
+    [SerializeField] private float statIncreaseFactor = 1.2f;
     [SerializeField] public int statIncreaseInterval = 3;
+    public float statIncrease { get; private set; }
 
-    [SerializeField] public float enemyStatIncrease = 1.2f;
+    [SerializeField] private float enemyStatIncreaseFactor = 1.2f;
     [SerializeField] public int enemyStatIncreaseInterval = 1;
+    public float enemyStatIncrease { get; private set; }
 
     private int menuFPSCap = 60;
     private CombatGrid _combatGrid;
@@ -38,8 +40,16 @@ public class LevelManager : ScriptableObject
             _instance = Resources.Load<LevelManager>("LevelManager");
             _instance._level = 0;
             _instance._isTutorialCompleted = false;
+            LevelManager.Initialize();
         }
         return _instance;
+    }
+    public static void Initialize()
+    {
+        _instance._level = 0;
+        _instance._isTutorialCompleted = false;
+        _instance.statIncrease = 1;
+        _instance.enemyStatIncrease = 1;
     }
     private void Awake()
     {
@@ -69,7 +79,6 @@ public class LevelManager : ScriptableObject
             if (_level >= easyCombatList.Count) _level = 0;
             SceneManager.LoadScene(easyCombatList[_level]);
             _level++;
-            StatIncrease();
 
             Application.targetFrameRate = -1;
             QualitySettings.vSyncCount = 1;
@@ -81,14 +90,14 @@ public class LevelManager : ScriptableObject
             QualitySettings.vSyncCount = 0;
         }
     }
-    private void StatIncrease()
+    private void IncreaseStat()
     {
         if (_level % statIncreaseInterval == 0)
         {
             Debug.Log("PLAYERSTATSUPPDATED----------------------------------");
             foreach (CharacterData character in GlobalGameManager.GetInstance().GetGameData().heroDataList)
             {
-                character.CalculateDerivedStats((statIncrease * (_level / statIncreaseInterval)));
+                character.CalculateDerivedStats((statIncreaseFactor * (_level / statIncreaseInterval)));
                // Debug.Log("deriveddamage: " + character.DerivedDamage + " base damage: " + character.BaseDamage); 
             }
         } 
@@ -115,9 +124,16 @@ public class LevelManager : ScriptableObject
     {
         if (SceneManager.GetActiveScene().name == "ShopScene" || SceneManager.GetActiveScene().name == "MainMenu")
         {
+            if (_level != 0)
+            {
+                IncreaseStat();
+            }
+            
             //loadCombat
             if (_isTutorialCompleted)
             {
+                Application.targetFrameRate = -1;
+                QualitySettings.vSyncCount = 1;
                 _difficulty = _level / 5;
                 switch (_difficulty)
                 {
@@ -140,6 +156,8 @@ public class LevelManager : ScriptableObject
         }
         else
         {
+            Application.targetFrameRate = menuFPSCap;
+            QualitySettings.vSyncCount = 0;
             SceneManager.LoadScene("ShopScene");
         }
     }
