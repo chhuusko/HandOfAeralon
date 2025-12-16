@@ -2562,6 +2562,131 @@ PrefabInstance:
       propertyPath: _discardText
       value: 
       objectReference: {fileID: 2345543279148227901}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: drawSound.Path
+      value: event:/Sound Design/Non Diegetic/cards/draw card
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: playSound.Path
+      value: event:/Sound Design/Non Diegetic/cards/play card
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: hoverSound.Path
+      value: event:/Sound Design/Non Diegetic/cards/hover card
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: discardSound.Path
+      value: event:/Sound Design/Non Diegetic/cards/discard card
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: drawSound.Guid.Data1
+      value: 410460061
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: drawSound.Guid.Data2
+      value: 1230432577
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: drawSound.Guid.Data3
+      value: -280580711
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: drawSound.Guid.Data4
+      value: -104053189
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: playSound.Guid.Data1
+      value: 359613919
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: playSound.Guid.Data2
+      value: 1250263951
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: playSound.Guid.Data3
+      value: 946008715
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: playSound.Guid.Data4
+      value: 1369286102
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: deckShuffleSound.Path
+      value: event:/Sound Design/Non Diegetic/cards/shuffle cards
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: hoverSound.Guid.Data1
+      value: -2026338056
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: hoverSound.Guid.Data2
+      value: 1252362586
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: hoverSound.Guid.Data3
+      value: 162078142
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: hoverSound.Guid.Data4
+      value: 32515312
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: discardSound.Guid.Data1
+      value: -833694296
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: discardSound.Guid.Data2
+      value: 1082516728
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: discardSound.Guid.Data3
+      value: 540718767
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: discardSound.Guid.Data4
+      value: -1554723843
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: deckShuffleSound.Guid.Data1
+      value: 28068132
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: deckShuffleSound.Guid.Data2
+      value: 1251871076
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: deckShuffleSound.Guid.Data3
+      value: 177131664
+      objectReference: {fileID: 0}
+    - target: {fileID: 8472535621344426361, guid: 50e3273e88b66d14e8232055a5dacdc1,
+        type: 3}
+      propertyPath: deckShuffleSound.Guid.Data4
+      value: 1001427962
+      objectReference: {fileID: 0}
     - target: {fileID: 8555868932920505022, guid: 50e3273e88b66d14e8232055a5dacdc1,
         type: 3}
       propertyPath: m_RenderPostProcessing

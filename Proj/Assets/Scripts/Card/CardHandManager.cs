@@ -1,3 +1,4 @@
+using FMODUnity;
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
@@ -24,8 +25,9 @@ public class CardHandManager : MonoBehaviour
 
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
 
-    
-    
+    [SerializeField] private EventReference drawSound, hoverSound, playSound, deckShuffleSound, discardSound;
+
+
     // presets
     [SerializeField] private int turnsTillCard = 4;
     private int tempTurnsTillCard;
@@ -56,9 +58,11 @@ public class CardHandManager : MonoBehaviour
     public void ManaChanged(){ onManaChange?.Invoke(_mana); }
     public void Dragged(bool isDragEnter) { onDrag?.Invoke(isDragEnter); }
     public void Hovered(bool isHoverEnter) { onHover?.Invoke(isHoverEnter); }
-    public void CardUsed(Card usedCard) { onCardUse?.Invoke(usedCard); }
+    public void CardUsed(Card usedCard) { onCardUse?.Invoke(usedCard); 
+    }
     public void CharacterTarget(Character targetCharacter) { onTargetCharacter?.Invoke(targetCharacter); }
-    public void CardTargetCharacter(Card usedCard, Character target) { onCardTargetCharacter?.Invoke(target, usedCard); }
+    public void CardTargetCharacter(Card usedCard, Character target) { onCardTargetCharacter?.Invoke(target, usedCard); 
+    }
     private void Awake()
     {
         _instance = this;
@@ -180,6 +184,7 @@ public class CardHandManager : MonoBehaviour
         AddSpaceing();
         _cardsPlayedThisTurn++;
         UpdatePileTexts();
+        AudioManager.Instance.PlayOneShot(discardSound, transform.position);
     }
     public void ChangeMana(int change)
     {
@@ -271,6 +276,7 @@ public class CardHandManager : MonoBehaviour
             CanvasManager.instance.OverlayCanvas.transform
         );
         _addedZoomedCard.GetComponent<CardUI>().SetUpUIElements(container.GetCard(), true);
+        AudioManager.Instance.PlayOneShot(hoverSound, transform.position);
     }
 
     public void HideHighlightedCard()
