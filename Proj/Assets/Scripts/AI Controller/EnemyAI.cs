@@ -545,7 +545,7 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    if (hitCount == 0) result -= 999;
+                    if (hitCount == 0) result -= 9999;
                     break;
                 }
             case "LuteSmash_Ability":
