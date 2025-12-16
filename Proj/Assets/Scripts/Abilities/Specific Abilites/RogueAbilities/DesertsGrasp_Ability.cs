@@ -127,7 +127,7 @@ public class DesertsGrasp_Ability : RoundAOEAbility
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
-        int damage = (int)(castingCharacter.GetBaseDamage() * _damageMultiplier);
+        int damage = (int)(castingCharacter.Data.DerivedDamage * _damageMultiplier);
         damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
         return damage;
@@ -140,7 +140,7 @@ public class DesertsGrasp_Ability : RoundAOEAbility
 
     public override int GetDamage()
     {
-        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        int damage = (int)(GetCharacterCaster().Data.DerivedDamage * _damageMultiplier);
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }

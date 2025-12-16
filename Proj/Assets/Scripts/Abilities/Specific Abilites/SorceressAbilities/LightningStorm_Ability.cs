@@ -91,7 +91,7 @@ public class LightningStorm_Ability : RoundAOEAbility
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
         // Get base damage.
-        int baseDamage = castingCharacter.GetBaseDamage();
+        int baseDamage = castingCharacter.Data.DerivedDamage;
 
         int damage = (int)(baseDamage * _damageMultiplier);
 
@@ -107,7 +107,7 @@ public class LightningStorm_Ability : RoundAOEAbility
 
     public override int GetDamage()
     {
-        int damage = (int)(GetCharacterCaster().GetBaseDamage() * _damageMultiplier);
+        int damage = (int)(GetCharacterCaster().Data.DerivedDamage * _damageMultiplier);
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }

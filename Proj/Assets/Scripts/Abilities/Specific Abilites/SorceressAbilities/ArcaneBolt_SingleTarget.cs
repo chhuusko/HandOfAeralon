@@ -58,7 +58,7 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
         // 6. EnemyTraits
         // 7. Enemy Buffs / Debuffs
 
-        int baseDamage = castingCharacter.GetBaseDamage();
+        int baseDamage = castingCharacter.Data.DerivedDamage;
         int mana = castingCharacter.GetFaction() == Faction.Friendly ? CardHandManager.GetInstance().GetMana() : CombatManager._instance.enemyMana;
 
         float totalMultiplier = _damageMultiplier + (_manaDamageMultiplier * mana);
@@ -78,7 +78,7 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
 
     public override int GetDamage()
     {
-        int baseDamage = GetCharacterCaster().GetBaseDamage();
+        int baseDamage = GetCharacterCaster().Data.DerivedDamage;
         int mana = CardHandManager.GetInstance().GetMana();
 
         float totalMultiplier = _damageMultiplier + (_manaDamageMultiplier * mana);
