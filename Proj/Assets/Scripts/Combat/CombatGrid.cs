@@ -440,6 +440,8 @@ public class CombatGrid : MonoBehaviour
         Character characterScript = characterObject.GetComponent<Character>();
         
         characterScript.Data.InitializeClassData();
+        
+        Debug.Log(baseHealtPoints);
 
         characterScript.SetCharacterClass(characterClass);
         characterScript.SetFaction(faction);
@@ -448,9 +450,9 @@ public class CombatGrid : MonoBehaviour
         characterScript.SetCurrentInitiative(currentSpeed);
         characterScript.SetCurrentDamage(currentDamage);
         characterScript.SetCurrentMovementPoints(currentMovementPoints);
-        characterScript.SetDerivedHealthPoints(baseHealtPoints);
+        characterScript.Data.SetBaseHealthPoints(baseHealtPoints);
         characterScript.SetBaseInitiative(baseSpeed);
-        characterScript.SetDerivedDamage(baseDamage);
+        characterScript.Data.SetBaseDamage(baseDamage);
         characterScript.SetBaseMovementPoints(baseMovementPoints);
   
         characterScript.AddCharacterFrame();
