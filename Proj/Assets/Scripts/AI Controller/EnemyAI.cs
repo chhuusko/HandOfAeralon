@@ -271,6 +271,17 @@ public class EnemyAI : MonoBehaviour
             {
                 result[move] -= 50f;
             }
+
+            if (!result.Any())
+            {
+                result[new AIAction
+                {
+                    movement = _character.GetCurrentTileComponent(),
+                    ability = null,
+                    target = null
+                }] = -1f;
+            }
+
         }
 
         return result;
@@ -392,7 +403,7 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    if (hitCount == 0) result -= 100;
+                    if (hitCount < 2) result -= 100;
                     break;
                 }
             case "RuptureOfTheWilds_Ability":
@@ -419,7 +430,7 @@ public class EnemyAI : MonoBehaviour
 
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Slowed>())
                                 {
-                                    result += 30f;
+                                    result += 50f;
                                 }
 
                                 if (occupantPERCENTHP < 0.2f)
@@ -447,15 +458,16 @@ public class EnemyAI : MonoBehaviour
 
                             if (isEnemy)
                             {
-                                hitCount++;
-
                                 if (occupantSEM != null && !occupantSEM.ContainsStatusEffect<Slowed>())
                                 {
-                                    result += 60f;
+                                    hitCount++;
                                 }
                             }
                         }
                     }
+                    if (hitCount > 1) result += 100;
+                    if (hitCount > 2) result += 100;
+                    if (hitCount > 3) result += 100;
                     if (hitCount == 0) result -= 100;
                     break;
                 }
@@ -484,6 +496,7 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
+                    if (hitCount < 2) result -= 50;
                     if (hitCount == 0) result -= 100;
                     break;
                 }
@@ -529,7 +542,7 @@ public class EnemyAI : MonoBehaviour
                         if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
-                            bool isEnemy = occupant.GetFaction() == _controlledFaction;
+                            bool isEnemy = occupant.GetFaction() != _controlledFaction;
 
                             if (isEnemy)
                             {
@@ -545,7 +558,7 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    if (hitCount == 0) result -= 9999;
+                    if (hitCount == 0) result -= 999;
                     break;
                 }
             case "LuteSmash_Ability":
@@ -619,7 +632,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
                             {
-                                result += 20;
+                                result += 50;
                             }
 
                             if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
@@ -691,7 +704,7 @@ public class EnemyAI : MonoBehaviour
 
                                 if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
                                 {
-                                    result += 20;
+                                    result += 50;
                                 }
                             }
                         }
@@ -747,7 +760,7 @@ public class EnemyAI : MonoBehaviour
 
                                 if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
                                 {
-                                    result += 20;
+                                    result += 50;
                                 }
                             }
                         }
@@ -832,7 +845,7 @@ public class EnemyAI : MonoBehaviour
 
                                 if (mySEM.ContainsStatusEffect<Emberwake>())
                                 {
-                                    result += 10f;
+                                    result += 30f;
                                 }
 
                                 if (occupantPERCENTHP < 0.2f)
@@ -847,6 +860,8 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
+                    if (hitCount > 1) result += 50;
+                    if (hitCount > 2) result += 50;
                     if (hitCount == 0) result -= 100;
                     break;
                 }
@@ -880,7 +895,7 @@ public class EnemyAI : MonoBehaviour
 
                                 if (mySEM.ContainsStatusEffect<Emberwake>())
                                 {
-                                    result += 10f;
+                                    result += 30f;
                                 }
 
                                 if (occupantPERCENTHP < 0.2f)
@@ -895,6 +910,8 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
+                    if (hitCount > 1) result += 50;
+                    if (hitCount > 2) result += 50;
                     if (hitCount == 0) result -= 100;
                     break;
                 }
@@ -902,11 +919,24 @@ public class EnemyAI : MonoBehaviour
                 {
                     if (!mySEM.ContainsStatusEffect<Emberwake>())
                     {
-                        result += 30f;
+                        result += 50f;
+
+                        foreach (var cooldownCheck in _character.GetAvailableAbilities())
+                        {
+                            if (cooldownCheck is LightningStorm_Ability && !_character.IsAbilityCooldownActive(cooldownCheck))
+                            {
+                                result += 100f;
+                            }
+
+                            if (cooldownCheck is FlameSurge_Ability && !_character.IsAbilityCooldownActive(cooldownCheck))
+                            {
+                                result += 100f;
+                            }
+                        }
                     }
                     else
                     {
-                        result -= 5;
+                        result -= 999;
                     }
                     break;
                 }
