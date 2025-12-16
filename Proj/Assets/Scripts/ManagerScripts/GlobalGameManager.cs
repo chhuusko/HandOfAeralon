@@ -112,15 +112,15 @@ public class GlobalGameManager : ScriptableObject
         _currentGame.heroList = new List<Character>
         {
             _characterLibrary.GetPrefab(CharacterClass.Barbarian).GetComponent<Character>(),
-            _characterLibrary.GetPrefab(CharacterClass.Sorceress).GetComponent<Character>(),
-            _characterLibrary.GetPrefab(CharacterClass.Rogue).GetComponent<Character>(),
-            _characterLibrary.GetPrefab(CharacterClass.Bard).GetComponent<Character>()
+            //_characterLibrary.GetPrefab(CharacterClass.Sorceress).GetComponent<Character>(),
+            //_characterLibrary.GetPrefab(CharacterClass.Rogue).GetComponent<Character>(),
+            //_characterLibrary.GetPrefab(CharacterClass.Bard).GetComponent<Character>()
         };
         _currentGame.heroDataList = new List<CharacterData>(){
             new CharacterData(_classDatabase.Classes[(int)CharacterClass.Barbarian], Faction.Friendly, true),
-            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Rogue], Faction.Friendly, true),
-            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Bard], Faction.Friendly, true),
-            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Sorceress], Faction.Friendly, true)
+            //new CharacterData(_classDatabase.Classes[(int)CharacterClass.Rogue], Faction.Friendly, true),
+            //new CharacterData(_classDatabase.Classes[(int)CharacterClass.Bard], Faction.Friendly, true),
+            //new CharacterData(_classDatabase.Classes[(int)CharacterClass.Sorceress], Faction.Friendly, true)
         };
 
         _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
