@@ -104,6 +104,13 @@ public class LevelManager : ScriptableObject
         */
        
     }
+    public void RestartGame()
+    {
+        SceneManager.LoadScene("MainMenu");
+        _level = 0;
+        _difficulty = 0;
+        _isTutorialCompleted = false;
+    }
     private void TieredRandomLevel()
     {
         if (SceneManager.GetActiveScene().name == "ShopScene" || SceneManager.GetActiveScene().name == "MainMenu")
