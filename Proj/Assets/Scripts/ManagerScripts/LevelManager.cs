@@ -151,7 +151,6 @@ public class LevelManager : ScriptableObject
         if (_level == tutorialCombatList.Count)
         {
             _isTutorialCompleted = true;
-            _level = 0;
         }
     }
     public int Getlevel()
