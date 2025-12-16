@@ -10,6 +10,7 @@ public class Veilstep : Card
         if (character != null)
         {
             character.GetStatusEffectManager().AddStatusEffect(new Stealth(2));
+            character.GetStatusEffectManager().AddStatusEffect(new Haste(2));
         }
     }
 }
