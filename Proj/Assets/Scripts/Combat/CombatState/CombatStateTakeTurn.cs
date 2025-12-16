@@ -38,7 +38,7 @@ public class CombatStateTakeTurn : CombatStateBase
         switch (activeCharacter.GetFaction())
         {
             case Faction.Friendly:
-                {
+                { 
                     CardHandManager.GetInstance().ChangeMana(1);
                     
                     

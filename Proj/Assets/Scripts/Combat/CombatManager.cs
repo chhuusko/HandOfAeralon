@@ -11,8 +11,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
-using Object = UnityEngine.Object;
+
 
 
 [System.Serializable]
