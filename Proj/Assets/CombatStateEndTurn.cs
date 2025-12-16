@@ -9,6 +9,8 @@ public class CombatStateEndTurn : CombatStateBase
         base.Enter();
         CombatEventManager.InvokeEnterCombatStateEndTurn();
 
+        CombatTurnOrder combatTurnOrder = CombatManager._instance.GetCombatTurnOrder();
+        combatTurnOrder.UpdateCharacterTurnOrderPostTurn();
     }
 
     public override void Exit()
