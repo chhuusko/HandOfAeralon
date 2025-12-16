@@ -22,12 +22,15 @@ public class CombatUI : MonoBehaviour
 
     [Header("Characters")]
     [SerializeField] private GameObject _placeCharactersPanel;
-    [SerializeField] private Image _characterPortraitPanel;
     [SerializeField] private Image _activeCharacterPortrait;
     [SerializeField] private GameObject _activeCharacterBorder;
     [SerializeField] private Button _characterPortraitButtonPrefab;
     private Character _currentTurnCharacter;
     private CharacterData _selectedCharacter;
+    
+    [Header("Party")]
+    [SerializeField] private Image _characterPortraitPanel;
+    [SerializeField] private Transform[] _portraitSlots;
     
     [Header("Turn order")]
     [SerializeField] private GameObject _turnOrderPanel;
@@ -53,6 +56,7 @@ public class CombatUI : MonoBehaviour
     [Header("Misc")]
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
+    [SerializeField] private GameObject _partyPanelText;
     
     private bool _bCombatStarted;
     
@@ -206,6 +210,7 @@ public class CombatUI : MonoBehaviour
         _cardHandManager.SetActive(true);
         _placeCharactersPanel.SetActive(true);
         _combatLogParent.SetActive(true);
+        _partyPanelText.SetActive(true);
         
         UpdateManaText(CardHandManager.GetInstance().GetMana());
     }
@@ -270,9 +275,18 @@ public class CombatUI : MonoBehaviour
         
         ClearCharacterPortraits();
         
-        foreach (CharacterData c in heroList)
+        // foreach (CharacterData c in heroList)
+        // {
+        //     PortraitButton pb = CreateCharacterPortrait(CombatManager._instance.GetCharacterDataDict()[c], _characterPortraitPanel.transform);
+        //     pb.Button.image.color = _inactiveColor;
+        //     _portraitButtons.Add(pb);
+        //     _characterPortraits.TryAdd(pb.Character.Data, pb);
+        // }
+
+        for (int i = 0; i < heroList.Count; i++)
         {
-            PortraitButton pb = CreateCharacterPortrait(CombatManager._instance.GetCharacterDataDict()[c], _characterPortraitPanel.transform);
+            CharacterData c = heroList[i];
+            PortraitButton pb = CreateCharacterPortrait(CombatManager._instance.GetCharacterDataDict()[c], _portraitSlots[i]);
             pb.Button.image.color = _inactiveColor;
             _portraitButtons.Add(pb);
             _characterPortraits.TryAdd(pb.Character.Data, pb);
@@ -286,9 +300,12 @@ public class CombatUI : MonoBehaviour
         // TODO: Clearing character portraits here will cause turn order to break most likely. Need to fix.
         _characterPortraits.Clear();
 
-        for (int i = 0; i < _characterPortraitPanel.transform.childCount; i++)
+        for (int i = 0; i < _portraitSlots.Length; i++)
         {
-            Destroy(_characterPortraitPanel.transform.GetChild(i).gameObject);
+            if (_portraitSlots[i].childCount > 0)
+            {
+                Destroy(_portraitSlots[i].GetChild(0).gameObject);
+            }
         }
     }
 
