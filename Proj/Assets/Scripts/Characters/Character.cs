@@ -324,10 +324,14 @@ public class Character : MonoBehaviour
     public Faction GetFaction() => _data.Faction;
     
     // Base stats.
-    public int GetMaxHealth() => _data.DerivedHealthPoints;
+    public int GetBaseHealth() => Data.BaseHealthPoints;
+    public int GetBaseDamage() => Data.BaseDamage;
     public int GetBaseInitiative() => _data.BaseInitiative;
-    public int GetBaseDamage() => _data.DerivedDamage;
     public int GetBaseMovementPoints() => _data.BaseMovementPoints;
+    
+    // Derived stats.
+    public int GetMaxHealth() => _data.DerivedHealthPoints;
+    public int GetDerivedDamage() => _data.DerivedDamage;
     
     // Current stats.
     public int GetCurrentHealth() => _data.CurrentHealthPoints;
