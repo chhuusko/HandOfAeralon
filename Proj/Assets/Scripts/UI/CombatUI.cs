@@ -22,12 +22,15 @@ public class CombatUI : MonoBehaviour
 
     [Header("Characters")]
     [SerializeField] private GameObject _placeCharactersPanel;
-    [SerializeField] private Image _characterPortraitPanel;
     [SerializeField] private Image _activeCharacterPortrait;
     [SerializeField] private GameObject _activeCharacterBorder;
     [SerializeField] private Button _characterPortraitButtonPrefab;
     private Character _currentTurnCharacter;
     private CharacterData _selectedCharacter;
+    
+    [Header("Party")]
+    [SerializeField] private Image _characterPortraitPanel;
+    [SerializeField] private Transform[] _portraitSlots;
     
     [Header("Turn order")]
     [SerializeField] private GameObject _turnOrderPanel;
@@ -53,6 +56,7 @@ public class CombatUI : MonoBehaviour
     [Header("Misc")]
     [SerializeField] private Button _startCombatButton;
     [SerializeField] private Button _endTurnButton;
+    [SerializeField] private GameObject _partyPanelText;
     
     private bool _bCombatStarted;
     
@@ -73,6 +77,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
         CombatEventManager.OnAbilityCast += UpdateAbilityColors;
         CombatEventManager.OnCharacterMove += CharacterMoving;
+        CombatEventManager.OnCharacterDeath += UpdateCharacterPortraits;
 
         StartCoroutine(WaitForSelector());
     }
@@ -89,6 +94,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
         CombatEventManager.OnAbilityCast -= UpdateAbilityColors;
         CombatEventManager.OnCharacterMove -= CharacterMoving;
+        CombatEventManager.OnCharacterDeath -= UpdateCharacterPortraits;
         
         Selector._instance.OnCharacterSelected -= SetSelectedCharacter;
         Selector._instance.OnCharacterSelected -= LoadAbilities;
@@ -116,9 +122,6 @@ public class CombatUI : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
-        // Player 1 portrait displayed as default when no character has been selected yet.
-        // UpdateSelectedPortrait(GlobalGameManager.GetInstance().GetGameData().heroDataList[0]);
     }
     
     private IEnumerator WaitForSelector()
@@ -185,15 +188,16 @@ public class CombatUI : MonoBehaviour
 
     private void PlaceCharacterStarted()
     {
-        CharacterData c = GlobalGameManager.GetInstance().GetGameData().heroDataList[0];
+        // CharacterData c = GlobalGameManager.GetInstance().GetGameData().heroDataList[0];
+        Character c = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
         UpdateCharacterPortraits();
         UpdateActivePortrait(c);
-        UpdatePortraitColors(_characterPortraits[c]);
+        UpdatePortraitColors(c);
         LoadAbilities(c);
         StartCoroutine(ScrollToBottom());
         
-        SetSelectedCharacter(CombatManager._instance.GetCharacterDataDict()[c]);
-        _currentTurnCharacter = CombatManager._instance.GetCharacterDataDict()[_selectedCharacter];
+        SetSelectedCharacter(c);
+        _currentTurnCharacter = c;
         
         _characterPortraitPanel.gameObject.SetActive(true);
         _deckButton.gameObject.SetActive(true);
@@ -206,6 +210,7 @@ public class CombatUI : MonoBehaviour
         _cardHandManager.SetActive(true);
         _placeCharactersPanel.SetActive(true);
         _combatLogParent.SetActive(true);
+        _partyPanelText.SetActive(true);
         
         UpdateManaText(CardHandManager.GetInstance().GetMana());
     }
@@ -253,6 +258,11 @@ public class CombatUI : MonoBehaviour
     {
         _endTurnButton.interactable = false;
     }
+
+    private void UpdateCharacterPortraits(Character character)
+    {
+        UpdateCharacterPortraits();
+    }
     
     /// <summary>
     /// Sets all character portraits in combat UI to reflect current party.
@@ -270,9 +280,18 @@ public class CombatUI : MonoBehaviour
         
         ClearCharacterPortraits();
         
-        foreach (CharacterData c in heroList)
+        // foreach (CharacterData c in heroList)
+        // {
+        //     PortraitButton pb = CreateCharacterPortrait(CombatManager._instance.GetCharacterDataDict()[c], _characterPortraitPanel.transform);
+        //     pb.Button.image.color = _inactiveColor;
+        //     _portraitButtons.Add(pb);
+        //     _characterPortraits.TryAdd(pb.Character.Data, pb);
+        // }
+
+        for (int i = 0; i < heroList.Count; i++)
         {
-            PortraitButton pb = CreateCharacterPortrait(CombatManager._instance.GetCharacterDataDict()[c], _characterPortraitPanel.transform);
+            CharacterData c = heroList[i];
+            PortraitButton pb = CreateCharacterPortrait(CombatManager._instance.GetCharacterDataDict()[c], _portraitSlots[i]);
             pb.Button.image.color = _inactiveColor;
             _portraitButtons.Add(pb);
             _characterPortraits.TryAdd(pb.Character.Data, pb);
@@ -286,9 +305,12 @@ public class CombatUI : MonoBehaviour
         // TODO: Clearing character portraits here will cause turn order to break most likely. Need to fix.
         _characterPortraits.Clear();
 
-        for (int i = 0; i < _characterPortraitPanel.transform.childCount; i++)
+        for (int i = 0; i < _portraitSlots.Length; i++)
         {
-            Destroy(_characterPortraitPanel.transform.GetChild(i).gameObject);
+            if (_portraitSlots[i].childCount > 0)
+            {
+                Destroy(_portraitSlots[i].GetChild(0).gameObject);
+            }
         }
     }
 
@@ -397,7 +419,7 @@ public class CombatUI : MonoBehaviour
         // UpdateActivePortrait(pb.Character);
     }
 
-    public void UpdateActivePortrait(Character c)
+    private void UpdateActivePortrait(Character c)
     {
         if (!c)
         {
@@ -413,16 +435,12 @@ public class CombatUI : MonoBehaviour
         if (c == null)
         {
             ClearActivePortrait();
-        }
-        
-        if (c.Faction == Faction.Enemy)
-        {
-            DebugLog.JoppaLog("Enemy");
             return;
         }
         
         _activeCharacterPortrait.gameObject.SetActive(true);
         _activeCharacterPortrait.sprite = c.ClassData.classImage;
+        _activeCharacterPortrait.color = c.Faction == Faction.Friendly ? _activeColor : _enemyActiveColor;
     }
     
     public void SetCardsActive(bool active)

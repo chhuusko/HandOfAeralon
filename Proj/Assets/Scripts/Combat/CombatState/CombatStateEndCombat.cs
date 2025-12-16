@@ -14,6 +14,9 @@ public class CombatStateEndCombat : CombatStateBase
     {
         base.Enter();
         CombatEventManager.InvokeEnterCombatStateEndCombat(_playerWon);
+        if (!_playerWon)
+            LevelManager.GetInstance().RestartGame();
+            
         CombatMenuManager.GetInstance().OnGoToShopButtonPressed += OnGoToShop;
     }
 

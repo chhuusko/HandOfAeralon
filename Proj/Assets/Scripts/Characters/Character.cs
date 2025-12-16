@@ -605,6 +605,9 @@ public class Character : MonoBehaviour
      
     private IEnumerator RemoveCharacter()
     {
+
+        Selector._instance.DeselectCharacter();
+
         CombatEventManager.InvokeOnCharacterDeath(this);
 
         float deathCooldown = DEATH_COOLDOWN;
