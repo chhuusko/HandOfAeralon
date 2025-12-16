@@ -128,7 +128,7 @@ public class GlobalGameManager : ScriptableObject
 
 
             _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
-        _currentGame.coins = 100;
+        _currentGame.coins = 0;
         _currentGame.reapersLedgerKills = 0;
     }
     public void SaveCards(List<Card> cards)
