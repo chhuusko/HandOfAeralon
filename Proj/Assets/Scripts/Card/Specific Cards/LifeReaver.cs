@@ -15,7 +15,7 @@ public class LifeReaver : Card
         Character lowestHP = friendlyList[0];
         foreach (Character friendly in friendlyList)
         {
-            if (friendly.GetCurrentHealth() < lowestHP.GetCurrentHealth())
+            if (friendly.Data.DerivedHealthPoints-friendly.GetCurrentHealth() < lowestHP.Data.DerivedHealthPoints - lowestHP.GetCurrentHealth())
             {
                 lowestHP = friendly;
             }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-814421012150570339
+--- !u!114 &-4937062306963434593
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,19 +40,19 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: cfd5d33a1be618a4aad6585b36972ad0, type: 3}
+        m_Texture: {fileID: 2800000, guid: 90acfa6f9cd9dd54887fa146c7339c86, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ExtraTex:
-        m_Texture: {fileID: 2800000, guid: 7741833a2ff5afb4d8a476ac40be1bfa, type: 3}
+        m_Texture: {fileID: 2800000, guid: df810f6ccfaafbe4ca6c2824b87f1bb0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: f47ff29415ed9864ba1b781fb65ea25c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 81d3edbe656fe094f930e0580b823905, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SubsurfaceTex:
-        m_Texture: {fileID: 2800000, guid: 165b164d7dab34b49b2736bdbc0bef3b, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3386cbe3cc25e3c4995f76e866052474, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
