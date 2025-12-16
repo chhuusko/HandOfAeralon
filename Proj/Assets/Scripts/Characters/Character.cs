@@ -111,6 +111,11 @@ public class CharacterData
 
     public void CalculateDerivedStats(float hpFactor, float damageFactor)
     {
+        if (Faction == Faction.Enemy)
+        {
+            Debug.Log($"hpFactor: {hpFactor}, damageFactor: {damageFactor}");
+        }
+        
         _traitManager.ModifyDerivedStats(ref hpFactor, ref damageFactor);
         
         int derivedHp = Mathf.RoundToInt(_baseHealthPoints * hpFactor);
@@ -121,6 +126,9 @@ public class CharacterData
         
         OnDerivedStatsChanged?.Invoke();
     }
+    
+    public void SetBaseHealthPoints(int health) => _baseHealthPoints = Mathf.Max(health, 1);
+    public void SetBaseDamage(int damage) => _baseDamage = Mathf.Max(damage, 1);
 
     public void SetClassData(ClassData classData) => _classData = classData;
     public void SetCharacterClass(CharacterClass characterClass) => _characterClass = characterClass;
@@ -129,6 +137,8 @@ public class CharacterData
     
     public void SetDerivedHealthPoints(int health)
     {
+        Debug.Log($"Set Derived Health Points to {health}");
+        
         int oldMax = _derivedHealthPoints;
         int newMax = Mathf.Max(1, health);
         
@@ -284,8 +294,6 @@ public class Character : MonoBehaviour
         _currentInitiative = _data.BaseInitiative;
         _currentDamage = _data.DerivedDamage;
         _currentMovementPoints = _data.BaseMovementPoints;
-        
-        SetCurrentHealthPoints(_data.DerivedHealthPoints);
         
         SetMeshLayers(_bodyMesh);
         SetMeshLayers(_weaponMesh);
@@ -597,6 +605,9 @@ public class Character : MonoBehaviour
      
     private IEnumerator RemoveCharacter()
     {
+
+        Selector._instance.DeselectCharacter();
+
         CombatEventManager.InvokeOnCharacterDeath(this);
 
         float deathCooldown = DEATH_COOLDOWN;

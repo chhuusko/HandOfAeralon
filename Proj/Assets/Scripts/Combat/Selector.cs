@@ -362,7 +362,7 @@ public class Selector : MonoBehaviour
     /// Hides character UI, stops ability previews, resets tile colors and updates selector state  
     /// based on the current combat state.
     /// </summary>
-    private void DeselectCharacter()
+    public void DeselectCharacter()
     {
         OnCharacterDeselected?.Invoke();
 
