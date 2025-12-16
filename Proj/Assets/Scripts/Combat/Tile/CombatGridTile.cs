@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -6,7 +7,8 @@ public class CombatGridTile : MonoBehaviour
 {
     [SerializeField] private CombatGridTileData _tileData;
     [SerializeField] private GameObject _occupant;
-
+    [SerializeField] private EventReference _poisonTriggerSound;
+    [SerializeField] private EventReference _lavaTriggerSound;
     public CombatGridTile(CombatGridTileData tileData)
     {
         _tileData = new CombatGridTileData(tileData.GetTileType(), 
@@ -81,6 +83,7 @@ public class CombatGridTile : MonoBehaviour
                         Vector3 positionToSpawnAt = other.gameObject.transform.position;
                         positionToSpawnAt.y += 2f;
                         ParticleSpawnerManager.GetInstance().SpawnPoisonExplosion(positionToSpawnAt);
+                        AudioManager.Instance.PlayOneShot(_poisonTriggerSound, transform.position);
                     } break;
 
                 case TileType.Lava:
@@ -92,6 +95,7 @@ public class CombatGridTile : MonoBehaviour
                         Vector3 positionToSpawnAt = other.gameObject.transform.position;
                         positionToSpawnAt.y += 2f;
                         ParticleSpawnerManager.GetInstance().SpawnLavaExplosion(positionToSpawnAt);
+                        AudioManager.Instance.PlayOneShot(_lavaTriggerSound, transform.position);
                     } break;
             }
             

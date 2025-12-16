@@ -262,6 +262,20 @@ MonoBehaviour:
     _size: {x: 0, y: 0, z: 0}
     _bWalkable: 1
   _occupant: {fileID: 0}
+  _poisonTriggerSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  _lavaTriggerSound:
+    Guid:
+      Data1: -1330625647
+      Data2: 1221653907
+      Data3: 1757825942
+      Data4: 291619271
+    Path: event:/Sound Design/Diegetic/Ambience/lava tile
 --- !u!114 &-6197834122342798334
 MonoBehaviour:
   m_ObjectHideFlags: 0

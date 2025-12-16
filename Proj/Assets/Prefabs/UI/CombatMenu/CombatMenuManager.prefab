@@ -972,7 +972,7 @@ PrefabInstance:
     - target: {fileID: 5319836478897208854, guid: 55dfab2e08cec8249ac6c8fd9224614a,
         type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5480397066056211639, guid: 55dfab2e08cec8249ac6c8fd9224614a,
         type: 3}
@@ -2014,6 +2014,56 @@ PrefabInstance:
       propertyPath: _title
       value: 
       objectReference: {fileID: 9045843874319475484}
+    - target: {fileID: 8600682803619907705, guid: 59135147591c6c74982c86a9a002c10d,
+        type: 3}
+      propertyPath: _defeatSound.Path
+      value: event:/Sound Design/Non Diegetic/Stingers/stinger_combat_defeat
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600682803619907705, guid: 59135147591c6c74982c86a9a002c10d,
+        type: 3}
+      propertyPath: _victorySound.Path
+      value: event:/Sound Design/Non Diegetic/Stingers/stinger_combat_victory
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600682803619907705, guid: 59135147591c6c74982c86a9a002c10d,
+        type: 3}
+      propertyPath: _defeatSound.Guid.Data1
+      value: -869243076
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600682803619907705, guid: 59135147591c6c74982c86a9a002c10d,
+        type: 3}
+      propertyPath: _defeatSound.Guid.Data2
+      value: 1091389210
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600682803619907705, guid: 59135147591c6c74982c86a9a002c10d,
+        type: 3}
+      propertyPath: _defeatSound.Guid.Data3
+      value: -1874410848
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600682803619907705, guid: 59135147591c6c74982c86a9a002c10d,
+        type: 3}
+      propertyPath: _defeatSound.Guid.Data4
+      value: 56376863
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600682803619907705, guid: 59135147591c6c74982c86a9a002c10d,
+        type: 3}
+      propertyPath: _victorySound.Guid.Data1
+      value: -2025736828
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600682803619907705, guid: 59135147591c6c74982c86a9a002c10d,
+        type: 3}
+      propertyPath: _victorySound.Guid.Data2
+      value: 1074512194
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600682803619907705, guid: 59135147591c6c74982c86a9a002c10d,
+        type: 3}
+      propertyPath: _victorySound.Guid.Data3
+      value: -1611482232
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600682803619907705, guid: 59135147591c6c74982c86a9a002c10d,
+        type: 3}
+      propertyPath: _victorySound.Guid.Data4
+      value: 1276165068
+      objectReference: {fileID: 0}
     - target: {fileID: 9126515313286171139, guid: 59135147591c6c74982c86a9a002c10d,
         type: 3}
       propertyPath: m_TargetGraphic

@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using FMODUnity;
 
 public class CombatVictoryScreenMenu : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class CombatVictoryScreenMenu : MonoBehaviour
     [SerializeField] private GameObject _goToShopButton;
     [SerializeField] private GameObject _mainMenuButton;
     [SerializeField] private TMP_Text _mainMenuButtonText;
+
+    [SerializeField] private EventReference _victorySound;
+    [SerializeField] private EventReference _defeatSound;
 
     public void SetTitle(string title)
     {
@@ -32,6 +36,7 @@ public class CombatVictoryScreenMenu : MonoBehaviour
         _title.text = "Battle Won!";
         _info.text = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins();
         _mainMenuButtonText.text = "Quit Game";
+        AudioManager.Instance.PlayOneShot(_victorySound, transform.position);
     }
 
     public void SetLoseScreen()
@@ -40,5 +45,6 @@ public class CombatVictoryScreenMenu : MonoBehaviour
         _title.text = "Battle Lost!";
         _info.text = "";
         _mainMenuButtonText.text = "Quit Game";
+        AudioManager.Instance.PlayOneShot(_defeatSound, transform.position);
     }
 }
