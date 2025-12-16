@@ -708,9 +708,29 @@ PrefabInstance:
       objectReference: {fileID: 1960295589974056338}
     - target: {fileID: 8250037658871187672, guid: ec46ab08d894ac3499683b967b8812de,
         type: 3}
+      propertyPath: _CardHUDCanvas
+      value: 
+      objectReference: {fileID: 3995158143433583794}
+    - target: {fileID: 8250037658871187672, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
+      propertyPath: _CombatHUDCanvas
+      value: 
+      objectReference: {fileID: 3018916081672603376}
+    - target: {fileID: 8250037658871187672, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
+      propertyPath: _TooltipHUDCanvas
+      value: 
+      objectReference: {fileID: 6033326030098612428}
+    - target: {fileID: 8250037658871187672, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
       propertyPath: _uacCardHUDCamera
       value: 
       objectReference: {fileID: 1927069151763395214}
+    - target: {fileID: 8250037658871187672, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
+      propertyPath: _CutsceneHUDCanvas
+      value: 
+      objectReference: {fileID: 1047924156787035913}
     - target: {fileID: 8250037658871187672, guid: ec46ab08d894ac3499683b967b8812de,
         type: 3}
       propertyPath: _combatCanvasGroup
@@ -734,6 +754,11 @@ PrefabInstance:
       objectReference: {fileID: 3868838579339467309}
     - target: {fileID: 8250037658871187672, guid: ec46ab08d894ac3499683b967b8812de,
         type: 3}
+      propertyPath: _uacCardHUDCameraData
+      value: 
+      objectReference: {fileID: 1927069151763395214}
+    - target: {fileID: 8250037658871187672, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
       propertyPath: _uacCutsceneHUDCamera
       value: 
       objectReference: {fileID: 4937129441512505108}
@@ -744,9 +769,24 @@ PrefabInstance:
       objectReference: {fileID: 8319607895837016609}
     - target: {fileID: 8250037658871187672, guid: ec46ab08d894ac3499683b967b8812de,
         type: 3}
+      propertyPath: _uacCombatHUDCameraData
+      value: 
+      objectReference: {fileID: 574417935346775513}
+    - target: {fileID: 8250037658871187672, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
+      propertyPath: _uacTooltipHUDCameraData
+      value: 
+      objectReference: {fileID: 4247560044024300392}
+    - target: {fileID: 8250037658871187672, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
       propertyPath: _combatTooltipCanvasGroup
       value: 
       objectReference: {fileID: 7517611445694267506}
+    - target: {fileID: 8250037658871187672, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
+      propertyPath: _uacCutsceneHUDCameraData
+      value: 
+      objectReference: {fileID: 4937129441512505108}
     - target: {fileID: 8374253036918946024, guid: ec46ab08d894ac3499683b967b8812de,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1771,6 +1811,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e14480202e566a4781d3aa6384022ff, type: 3}
+--- !u!223 &1047924156787035913 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 4280679096690193371, guid: 4e14480202e566a4781d3aa6384022ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 3882946765636189394}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4937129441512505108 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8171441307089535942, guid: 4e14480202e566a4781d3aa6384022ff,
@@ -2689,6 +2735,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!223 &3018916081672603376 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 6386503709370384791, guid: 50e3273e88b66d14e8232055a5dacdc1,
+    type: 3}
+  m_PrefabInstance: {fileID: 8161704943107164007}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &3807566794225359342 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 5013353783436238473, guid: 50e3273e88b66d14e8232055a5dacdc1,
@@ -2698,6 +2750,12 @@ Camera:
 --- !u!225 &3868838579339467309 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 4968828662358531402, guid: 50e3273e88b66d14e8232055a5dacdc1,
+    type: 3}
+  m_PrefabInstance: {fileID: 8161704943107164007}
+  m_PrefabAsset: {fileID: 0}
+--- !u!223 &3995158143433583794 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 5059112815922375637, guid: 50e3273e88b66d14e8232055a5dacdc1,
     type: 3}
   m_PrefabInstance: {fileID: 8161704943107164007}
   m_PrefabAsset: {fileID: 0}
@@ -2744,11 +2802,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: CombatTooltipManager
       objectReference: {fileID: 0}
-    - target: {fileID: 263003170194490631, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -568.99994
-      objectReference: {fileID: 0}
     - target: {fileID: 426935158495536439, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -2863,21 +2916,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3366076687135488618, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 3619570644021562760, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
         type: 3}
       propertyPath: m_Size
       value: 0.81699353
-      objectReference: {fileID: 0}
-    - target: {fileID: 3619570644021562760, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
-        type: 3}
-      propertyPath: m_Value
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3693035502447176880, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
         type: 3}
@@ -3024,11 +3067,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4786900338054193033, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
-        type: 3}
-      propertyPath: m_RaycastPadding.z
-      value: 26.21
-      objectReference: {fileID: 0}
     - target: {fileID: 4879408362368186296, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3058,16 +3096,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5187662694957480398, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
-        type: 3}
-      propertyPath: m_RenderPostProcessing
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5187662694957480398, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
-        type: 3}
-      propertyPath: m_VolumeLayerMask.m_Bits
-      value: 1025
       objectReference: {fileID: 0}
     - target: {fileID: 5529004354162486180, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
         type: 3}
@@ -3212,7 +3240,7 @@ PrefabInstance:
     - target: {fileID: 7754627666726287662, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 11.139984
+      value: 11.139923
       objectReference: {fileID: 0}
     - target: {fileID: 8161980209452926533, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
         type: 3}
@@ -3233,11 +3261,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8635594776529222650, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
-        type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 3104
       objectReference: {fileID: 0}
     - target: {fileID: 8677251745091027630, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
         type: 3}
@@ -3285,6 +3308,12 @@ MonoBehaviour:
 --- !u!4 &5329027871789652314 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3816968334510384124, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
+    type: 3}
+  m_PrefabInstance: {fileID: 9010606535265122982}
+  m_PrefabAsset: {fileID: 0}
+--- !u!223 &6033326030098612428 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 3366076687135488618, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
     type: 3}
   m_PrefabInstance: {fileID: 9010606535265122982}
   m_PrefabAsset: {fileID: 0}
