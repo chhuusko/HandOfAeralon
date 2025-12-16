@@ -349,7 +349,7 @@ public class StatusEffectManager : MonoBehaviour
         if (UnityEngine.Random.value < finalChance)
         {
             Burn burn = new Burn(_character, duration);
-            AddStatusEffect(burn);
+            target.GetStatusEffectManager().AddStatusEffect(burn);
             OnBurnApplied(_character);
             return burn;
         }
@@ -372,7 +372,7 @@ public class StatusEffectManager : MonoBehaviour
         if (UnityEngine.Random.value < finalChance)
         {
             Stunned stun = new Stunned(duration);
-            AddStatusEffect(stun);
+            target.GetStatusEffectManager().AddStatusEffect(stun);
             return stun;
         }
         return null;
