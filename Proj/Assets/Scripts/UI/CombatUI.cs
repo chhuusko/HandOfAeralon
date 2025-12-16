@@ -77,6 +77,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
         CombatEventManager.OnAbilityCast += UpdateAbilityColors;
         CombatEventManager.OnCharacterMove += CharacterMoving;
+        CombatEventManager.OnCharacterDeath += UpdateCharacterPortraits;
 
         StartCoroutine(WaitForSelector());
     }
@@ -93,6 +94,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
         CombatEventManager.OnAbilityCast -= UpdateAbilityColors;
         CombatEventManager.OnCharacterMove -= CharacterMoving;
+        CombatEventManager.OnCharacterDeath -= UpdateCharacterPortraits;
         
         Selector._instance.OnCharacterSelected -= SetSelectedCharacter;
         Selector._instance.OnCharacterSelected -= LoadAbilities;
@@ -257,6 +259,11 @@ public class CombatUI : MonoBehaviour
     private void SetEndTurnButtonUninteractable()
     {
         _endTurnButton.interactable = false;
+    }
+
+    private void UpdateCharacterPortraits(Character character)
+    {
+        UpdateCharacterPortraits();
     }
     
     /// <summary>
