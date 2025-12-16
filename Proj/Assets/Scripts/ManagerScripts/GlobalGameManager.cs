@@ -46,16 +46,16 @@ public class GlobalGameManager : ScriptableObject
     private void OnEnable()
     {
         CombatEventManager.OnCharacterDeath += RemoveCharacter;
-        CombatEventManager.OnExitCombatStateEndCombat += GetCombatCoins;
     }
     private void OnDisable()
     {
         CombatEventManager.OnCharacterDeath -= RemoveCharacter;
-        CombatEventManager.OnExitCombatStateEndCombat -= GetCombatCoins;
     }
-    private void GetCombatCoins(bool playerWon)
+    public int GetCombatCoins()
     {
-        _currentGame.coins += (baseCoinReward+(CoinRewardIncreasePerLevel*LevelManager.GetInstance().Getlevel()));
+        int combatCoins = (baseCoinReward + (CoinRewardIncreasePerLevel * LevelManager.GetInstance().Getlevel()));
+        _currentGame.coins += combatCoins;
+        return combatCoins;
     }
 
     private void RemoveCharacter(Character obj)
