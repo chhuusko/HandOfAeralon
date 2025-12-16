@@ -33,7 +33,7 @@ SpeedTreeImporter:
   hasBillboard: 0
   lODSettings:
   - enableSettingOverride: 0
-    height: 0.5
+    height: 0.3004566
     castShadows: 1
     receiveShadows: 1
     useLightProbes: 1
@@ -42,8 +42,8 @@ SpeedTreeImporter:
     enableHue: 0
     enableSubsurface: 1
     windQuality: 3
-  - enableSettingOverride: 0
-    height: 0.25
+  - enableSettingOverride: 1
+    height: 0.10217107
     castShadows: 1
     receiveShadows: 1
     useLightProbes: 1
@@ -51,17 +51,17 @@ SpeedTreeImporter:
     enableBump: 1
     enableHue: 0
     enableSubsurface: 1
-    windQuality: 3
-  - enableSettingOverride: 0
-    height: 0.01
-    castShadows: 1
+    windQuality: 1
+  - enableSettingOverride: 1
+    height: 0.018387917
+    castShadows: 0
     receiveShadows: 1
-    useLightProbes: 1
+    useLightProbes: 0
     reflectionProbeUsage: 1
     enableBump: 1
     enableHue: 0
     enableSubsurface: 1
-    windQuality: 3
+    windQuality: 0
   enableSmoothLODTransition: 1
   animateCrossFading: 1
   billboardTransitionCrossFadeWidth: 0.25
@@ -69,8 +69,8 @@ SpeedTreeImporter:
   scaleFactor: 0.3048
   unitConversionEnumValue: 1
   motionVectorModeEnumValue: 1
-  generateColliders: 1
-  generateRigidbody: 1
+  generateColliders: 0
+  generateRigidbody: 0
   materialVersion: 3
   materialLocation: 1
   fileIDType: 2
