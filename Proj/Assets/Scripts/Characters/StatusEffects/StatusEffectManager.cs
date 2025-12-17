@@ -110,7 +110,18 @@ public class StatusEffectManager : MonoBehaviour
 
     public int ClearStatusEffects(StatusEffectType type)
     {
-        return _traitManager.ClearStatusEffects(type);
+        int removed = 0;
+
+        foreach (var effect in _traitManager.GetAllEffects().ToList())
+        {
+            if (effect.Data.Type == type && effect.Data.IsDispellable)
+            {
+                RemoveStatusEffect(effect);
+                removed++;
+            }
+        }
+        
+        return removed;
     }
 
     public bool ContainsStatusEffect<T>() where T : StatusEffect
@@ -253,8 +264,8 @@ public class StatusEffectManager : MonoBehaviour
         }
 
         // Clear all status effects.
-        _traitManager.ClearStatusEffects(StatusEffectType.Buff);
-        _traitManager.ClearStatusEffects(StatusEffectType.Debuff);
+        ClearStatusEffects(StatusEffectType.Buff);
+        ClearStatusEffects(StatusEffectType.Debuff);
     }
 
     public float ModifyIncomingDamage(float damage, Ability ability)

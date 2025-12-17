@@ -164,6 +164,13 @@ MonoBehaviour:
       Data3: 592751270
       Data4: -1203163706
     Path: event:/Sound Design/Diegetic/Characters/Sorceress/death
+  healed:
+    Guid:
+      Data1: -1432241108
+      Data2: 1312120745
+      Data3: 561586099
+      Data4: -1891188338
+    Path: event:/Sound Design/Non Diegetic/UI/ui_healthpotion
   barbarianFootsteps:
     Guid:
       Data1: -1499412725
@@ -228,6 +235,13 @@ MonoBehaviour:
       Data3: 86911141
       Data4: 1564619790
     Path: event:/Sound Design/Non Diegetic/UI/ui_click
+  startCombat:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   playerDeafeted:
     Guid:
       Data1: -869243076
@@ -242,3 +256,10 @@ MonoBehaviour:
       Data3: -1611482232
       Data4: 1276165068
     Path: event:/Sound Design/Non Diegetic/Stingers/stinger_combat_victory
+  goldGainAfterCombat:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
