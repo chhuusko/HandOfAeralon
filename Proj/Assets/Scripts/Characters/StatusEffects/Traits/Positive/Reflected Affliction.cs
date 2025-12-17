@@ -4,7 +4,6 @@ using UnityEngine;
 public class ReflectedAffliction : Trait
 {
     private bool _effectApplied;
-    private Character _caster;
 
     public override void OnCombatStarted()
     {
@@ -13,15 +12,12 @@ public class ReflectedAffliction : Trait
 
     public override void OnStatusEffectApplied(Character caster, StatusEffect statusEffect)
     {
-        if (_effectApplied)
+        if (_effectApplied || !caster || statusEffect.Data.Type is not StatusEffectType.Debuff)
         {
             return;
         }
         
-        if (!caster)
-        {
-            return;
-        }
+        Debug.Log("Effect Applied!");
         
         Manager.RemoveStatusEffect(statusEffect);
         caster.GetStatusEffectManager().AddStatusEffect(statusEffect);
