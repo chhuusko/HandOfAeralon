@@ -12,10 +12,104 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6383c0305810c4cbb86136a8d14596, type: 3}
   m_Name: RoarOfTheAncientsVFXSequence
   m_EditorClassIdentifier: 
-  _castFX: {fileID: 0}
+  _castFX: {fileID: 8563311299817689082, guid: adfe2eacb956c2244a01a89b14dd7a06, type: 3}
   _travelFX: {fileID: 0}
-  _impactFX: {fileID: 8563311299817689082, guid: adfe2eacb956c2244a01a89b14dd7a06,
-    type: 3}
   _biggerImpactScale: 0
   _offsetDistance: 0
   _airDistance: 0
+  _rotationOffset: {x: 0, y: 0, z: 0}
+  _doCastCameraShake: 1
+  _castShakeDuration: 2
+  _castShakeMagnitude: 0.1
+  _castShakeFrequency: 200
+  _castShakeFade:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0083351135
+      value: 0.004760742
+      inSlope: 3.1847475
+      outSlope: 3.1847475
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.30416667
+      value: 1
+      inSlope: -0.011204551
+      outSlope: -0.011204551
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.67999613
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.71666664
+      value: 1
+      inSlope: 0.014285801
+      outSlope: 0.014285801
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.5882353
+    - serializedVersion: 3
+      time: 1
+      value: 0.0071411133
+      inSlope: -3.5042074
+      outSlope: -3.5042074
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _impactFX: {fileID: 0}
+  _impactAirDistance: 0
+  _impactRotationOffset: {x: 0, y: 0, z: 0}
+  _doImpactCameraShake: 0
+  _impactShakeDuration: 0
+  _impactShakeMagnitude: 0
+  _impactShakeFrequency: 0
+  _impactShakeFade:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0083351135
+      value: 0.004760742
+      inSlope: 3.1847475
+      outSlope: 3.1847475
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.30416667
+      value: 1
+      inSlope: -0.011204551
+      outSlope: -0.011204551
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.67999613
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.71666664
+      value: 1
+      inSlope: 0.014285801
+      outSlope: 0.014285801
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.5882353
+    - serializedVersion: 3
+      time: 1
+      value: 0.0071411133
+      inSlope: -3.5042074
+      outSlope: -3.5042074
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

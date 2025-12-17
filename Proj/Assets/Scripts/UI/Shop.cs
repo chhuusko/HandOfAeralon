@@ -1,3 +1,4 @@
+using FMODUnity;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Drawing;
@@ -35,6 +36,7 @@ public class Shop : MonoBehaviour
     private List<GameObject> _buyableItemInScene;
     private List<GameObject> _partyPortraitInstances;
 
+    [SerializeField] private EventReference bougtSound, errorSound, healSound;
     //Costs
     [SerializeField] int _healPrice;
     [SerializeField] int _refreshPrice;
@@ -177,6 +179,7 @@ public class Shop : MonoBehaviour
                 character.Heal( (int)(character.BaseHealthPoints*0.5f));
                 Debug.Log(character.BaseHealthPoints + "current.");
             }
+            AudioManager.Instance.PlayOneShot(healSound, transform.position);
             Bought(_healPrice);
         }
         LoadParty();
@@ -188,6 +191,7 @@ public class Shop : MonoBehaviour
     public void Bought(int cost)
     {
         GlobalGameManager.GetInstance().ChangeCoins(-cost);
+        AudioManager.Instance.PlayOneShot(bougtSound, transform.position);
         UpdateMoneyUI();
     }
     public int GetRemoveCardPrice()

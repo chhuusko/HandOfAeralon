@@ -6,17 +6,13 @@ using UnityEngine.UI;
 public class ShopCharacterTooltip : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private enum CharacterStatKey
+    private enum ShopCharacterStatKey
     {
         CurrentHealth,
-        CurrentInitiative,
+        MaxHealth,
         CurrentDamage,
-        CurrentMovementPoints,
-
-        BaseHealth,
-        BaseInitiative,
-        BaseDamage,
-        BaseMovementPoints
+        CurrentInitiative,
+        CurrentMovementPoints
     };
 
     private static ShopCharacterTooltip instance;
@@ -49,15 +45,11 @@ public class ShopCharacterTooltip : MonoBehaviour
     }
     public void InitializeCharacterStats()
     {
-        _characterStatValues.Insert((int)CharacterStatKey.CurrentHealth, "");
-        _characterStatValues.Insert((int)CharacterStatKey.CurrentInitiative, "");
-        _characterStatValues.Insert((int)CharacterStatKey.CurrentDamage, "");
-        _characterStatValues.Insert((int)CharacterStatKey.CurrentMovementPoints, "\n");
-
-        _characterStatValues.Insert((int)CharacterStatKey.BaseHealth, "");
-        _characterStatValues.Insert((int)CharacterStatKey.BaseInitiative, "");
-        _characterStatValues.Insert((int)CharacterStatKey.BaseDamage, "");
-        _characterStatValues.Insert((int)CharacterStatKey.BaseMovementPoints, "");
+        _characterStatValues.Insert((int)ShopCharacterStatKey.CurrentHealth, "");
+        _characterStatValues.Insert((int)ShopCharacterStatKey.MaxHealth, "");
+        _characterStatValues.Insert((int)ShopCharacterStatKey.CurrentDamage, "");
+        _characterStatValues.Insert((int)ShopCharacterStatKey.CurrentInitiative, "");
+        _characterStatValues.Insert((int)ShopCharacterStatKey.CurrentMovementPoints, "");
 
         _characterStatValueFieldTMP.text = "";
 
@@ -69,15 +61,12 @@ public class ShopCharacterTooltip : MonoBehaviour
 
     public void RebuildCharacterStatTooltip(CharacterData character)
     {
-        _characterStatValues[(int)CharacterStatKey.CurrentHealth] = $"{character.CurrentHealthPoints}";
-        _characterStatValues[(int)CharacterStatKey.CurrentInitiative] = $"{character.BaseInitiative}";
-        _characterStatValues[(int)CharacterStatKey.CurrentDamage] = $"{character.DerivedDamage}";
-        _characterStatValues[(int)CharacterStatKey.CurrentMovementPoints] = $"{character.BaseMovementPoints}\n";
+        _characterStatValues[(int)ShopCharacterStatKey.CurrentHealth] = $"{character.CurrentHealthPoints}";
+        _characterStatValues[(int)ShopCharacterStatKey.MaxHealth] = $"{character.DerivedHealthPoints}";
+        _characterStatValues[(int)ShopCharacterStatKey.CurrentDamage] = $"{character.DerivedDamage}";
+        _characterStatValues[(int)ShopCharacterStatKey.CurrentInitiative] = $"{character.BaseInitiative}";
+        _characterStatValues[(int)ShopCharacterStatKey.CurrentMovementPoints] = $"{character.BaseMovementPoints}";
 
-        _characterStatValues[(int)CharacterStatKey.BaseHealth] = $"{character.BaseHealthPoints}";
-        _characterStatValues[(int)CharacterStatKey.BaseInitiative] = $"{character.BaseInitiative}";
-        _characterStatValues[(int)CharacterStatKey.BaseDamage] = $"{character.BaseDamage}";
-        _characterStatValues[(int)CharacterStatKey.BaseMovementPoints] = $"{character.BaseMovementPoints}";
 
         string stats = "";
         foreach (string value in _characterStatValues)
