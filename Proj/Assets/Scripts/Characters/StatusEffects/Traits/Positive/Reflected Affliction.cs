@@ -11,7 +11,7 @@ public class ReflectedAffliction : Trait
         _effectApplied = false;
     }
 
-    public override bool OnTryApplyStatusEffect(Character caster, Character target, StatusEffect statusEffect)
+    public override bool BeforeStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
     {
         if (target != Character)
         {
