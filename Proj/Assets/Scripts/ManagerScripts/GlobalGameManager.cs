@@ -85,6 +85,9 @@ public class GlobalGameManager : ScriptableObject
     }
 
     public int GetTotalEnemiesKilled() { return _currentGame.totalEnemiesKilled; }
+    public int GetTotalBattlesWon() { return _currentGame.totalBattlesWon; }
+    public void SetTotalBattlesWon(int battlesWon) { _currentGame.totalBattlesWon = battlesWon; }
+    public void IncrementTotalBattlesWon() { _currentGame.totalBattlesWon++; }
     public void LoadGame(int slot)
     {
         //TODO

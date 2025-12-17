@@ -44,6 +44,8 @@ public class Shop : MonoBehaviour
     [SerializeField] int _addedRemoveCardPrice; 
 
     public static System.Action onSellCard;
+
+    [SerializeField] private TextMeshProUGUI _nextCombatText; // JLW
     public static Shop GetInstance()
     {
         return _instance;
@@ -63,6 +65,7 @@ public class Shop : MonoBehaviour
         LoadParty();
         LoadBuyCard();
         LoadBuyCharacter();
+        UpdateNextCombatText();
     }
     
     public void SoldCard() {
@@ -119,6 +122,12 @@ public class Shop : MonoBehaviour
             
         }
     }
+
+    private void UpdateNextCombatText()
+    {
+        _nextCombatText.text = $"Go to Level {GlobalGameManager.GetInstance().GetTotalBattlesWon() + 1}";
+    }
+
     public Card GetRandomUnlockedCard()
     {
         return _unlockedCards[Random.Range(0, _unlockedCards.Count)];

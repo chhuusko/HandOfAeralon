@@ -2744,7 +2744,7 @@ GameObject:
   - component: {fileID: 703262605}
   - component: {fileID: 703262604}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: NextCombatText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2789,7 +2789,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Go To Combat
+  m_text: Go to Level 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ec2d85607e6c39e44986bd51ac5b198e, type: 2}
   m_sharedMaterial: {fileID: -5878321975634312132, guid: ec2d85607e6c39e44986bd51ac5b198e,
@@ -6941,6 +6941,7 @@ MonoBehaviour:
   _refreshPrice: 25
   _removeCardPrice: 25
   _addedRemoveCardPrice: 25
+  _nextCombatText: {fileID: 703262604}
 --- !u!1 &1785958313
 GameObject:
   m_ObjectHideFlags: 0
@@ -8409,7 +8410,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 873734731}
   m_HandleRect: {fileID: 873734730}
   m_Direction: 2
-  m_Value: 1.0000002
+  m_Value: 1
   m_Size: 0.6510416
   m_NumberOfSteps: 0
   m_OnValueChanged:

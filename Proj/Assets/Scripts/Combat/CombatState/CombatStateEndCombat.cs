@@ -8,6 +8,11 @@ public class CombatStateEndCombat : CombatStateBase
     public CombatStateEndCombat(bool playerWon)
     {
         _playerWon = playerWon;
+
+        if (_playerWon)
+        {
+            GlobalGameManager.GetInstance().IncrementTotalBattlesWon();
+        }
     }
 
     public override void Enter()

@@ -39,7 +39,11 @@ public class CombatUI : MonoBehaviour
     [Header("Combat Log")]
     [SerializeField] private CombatLog _combatLog;
     [SerializeField] private GameObject _combatLogParent;
-    
+
+    [Header("Battle Counter")]
+    [SerializeField] private Image _levelCounterPane;
+    [SerializeField] private TextMeshProUGUI _levelCounter;
+
     [Header("Cards")]
     [SerializeField] private GameObject _hand;
     [SerializeField] private GameObject _cardHandManager;
@@ -211,7 +215,11 @@ public class CombatUI : MonoBehaviour
         _placeCharactersPanel.SetActive(true);
         _combatLogParent.SetActive(true);
         _partyPanelText.SetActive(true);
-        
+
+        _levelCounter.text = $"Level {GlobalGameManager.GetInstance().GetTotalBattlesWon() + 1}";
+        _levelCounter.gameObject.SetActive(true);
+        _levelCounterPane.gameObject.SetActive(true);
+
         UpdateManaText(CardHandManager.GetInstance().GetMana());
     }
 
