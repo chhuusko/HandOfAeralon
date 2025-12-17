@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class ReflectedAffliction : Trait
@@ -10,17 +11,24 @@ public class ReflectedAffliction : Trait
         _effectApplied = false;
     }
 
-    public override void OnStatusEffectApplied(Character caster, StatusEffect statusEffect)
+    public override bool OnTryApplyStatusEffect(Character caster, Character target, StatusEffect statusEffect)
     {
-        if (_effectApplied || !caster || statusEffect.Data.Type is not StatusEffectType.Debuff)
+        if (target != Character)
         {
-            return;
+            return true;
         }
         
-        Debug.Log("Effect Applied!");
+        if (_effectApplied || !caster || statusEffect.Data.Type is not StatusEffectType.Debuff)
+        {
+            return true;
+        }
         
-        Manager.RemoveStatusEffect(statusEffect);
-        caster.GetStatusEffectManager().AddStatusEffect(statusEffect);
         _effectApplied = true;
+        
+        var reflected = statusEffect.Data.CreateInstance(statusEffect.Duration);
+        caster.GetStatusEffectManager().AddStatusEffect(reflected, Character);
+
+        // Block adding the effect.
+        return false;
     }
 }
