@@ -120,7 +120,15 @@ public class EnemyAI : MonoBehaviour
                 .Select(obj => obj.GetComponent<CombatGridTile>()).Where(cgt => cgt != null).ToList();
 
             movementComponent.ForceCustomPath(movePath);
-            yield return new WaitWhile(() => movementComponent.IsMoving());
+            float timeout = 0f;
+
+            yield return new WaitWhile(() =>
+            {
+                timeout += Time.deltaTime;
+                if (timeout >= 10f) Debug.LogError($"{_character.name}'s movement timed out!");
+                return movementComponent.IsMoving() && timeout < 10f;
+            });
+
         }
 
         if (!IsDead() && _character.CanUseAbility && chosenAction.ability != null && chosenAction.target != null)
