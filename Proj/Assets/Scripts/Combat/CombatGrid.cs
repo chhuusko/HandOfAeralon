@@ -551,11 +551,13 @@ public class CombatGrid : MonoBehaviour
 
         }
 
+        float sizeOffGrid = 4f;
+        float startZ = (combatGridSaveData._gridHeight - sizeOffGrid) + 1f;
         for (int i = 0; i < 4; i++)
         {
             CombatGridTileData tileData = new CombatGridTileData(TileType.Walkable,
                                                                  new Vector2Int(0, i),
-                                                                 new Vector3(-2f, 0, 4 + (2 * i)),
+                                                                 new Vector3(-2f, 0, startZ + (2 * i)),
                                                                  new Vector3(2f, 0.0001f, 2f));
             AddOffgridTile(tileData);
         }

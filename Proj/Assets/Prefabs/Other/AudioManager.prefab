@@ -164,6 +164,13 @@ MonoBehaviour:
       Data3: 592751270
       Data4: -1203163706
     Path: event:/Sound Design/Diegetic/Characters/Sorceress/death
+  healed:
+    Guid:
+      Data1: -1432241108
+      Data2: 1312120745
+      Data3: 561586099
+      Data4: -1891188338
+    Path: event:/Sound Design/Non Diegetic/UI/ui_healthpotion
   barbarianFootsteps:
     Guid:
       Data1: -1499412725
@@ -171,4 +178,88 @@ MonoBehaviour:
       Data3: -1000993892
       Data4: -1918932566
     Path: event:/Sound Design/Diegetic/Characters/Barbarian/Footsteps
+  bardFootsteps:
+    Guid:
+      Data1: 808702840
+      Data2: 1279176869
+      Data3: 120225152
+      Data4: 603589766
+    Path: event:/Sound Design/Diegetic/Characters/Bard/Footsteps
+  rogueFootsteps:
+    Guid:
+      Data1: -1597664518
+      Data2: 1233895875
+      Data3: -736342654
+      Data4: 1927160379
+    Path: event:/Sound Design/Diegetic/Characters/Rouge/Footsteps
+  sorceressFootsteps:
+    Guid:
+      Data1: 769923339
+      Data2: 1127526939
+      Data3: -861765756
+      Data4: 858260958
+    Path: event:/Sound Design/Diegetic/Characters/Sorceress/Footsteps
   damageParameter: take damage amount
+  enterPoisonTile:
+    Guid:
+      Data1: 1904906369
+      Data2: 1290553834
+      Data3: -1568143977
+      Data4: -1372768706
+    Path: event:/Sound Design/Diegetic/Ambience/poison tile
+  enterLavaTile:
+    Guid:
+      Data1: -1330625647
+      Data2: 1221653907
+      Data3: 1757825942
+      Data4: 291619271
+    Path: event:/Sound Design/Diegetic/Ambience/lava tile
+  menuOpened:
+    Guid:
+      Data1: -1389732242
+      Data2: 1312234590
+      Data3: 1574657708
+      Data4: -218645247
+    Path: event:/Sound Design/Non Diegetic/UI/ui_pause
+  menuClosed:
+    Guid:
+      Data1: 1075823637
+      Data2: 1229563026
+      Data3: 409098640
+      Data4: -1564654900
+    Path: event:/Sound Design/Non Diegetic/UI/ui_unpause
+  buttonClick:
+    Guid:
+      Data1: -437786682
+      Data2: 1281126852
+      Data3: 86911141
+      Data4: 1564619790
+    Path: event:/Sound Design/Non Diegetic/UI/ui_click
+  startCombat:
+    Guid:
+      Data1: -1237721483
+      Data2: 1125920193
+      Data3: 440586143
+      Data4: -1558441686
+    Path: event:/Sound Design/Non Diegetic/Stingers/stinger_combat_start
+  playerDeafeted:
+    Guid:
+      Data1: -869243076
+      Data2: 1091389210
+      Data3: -1874410848
+      Data4: 56376863
+    Path: event:/Sound Design/Non Diegetic/Stingers/stinger_combat_defeat
+  playerVictory:
+    Guid:
+      Data1: -2025736828
+      Data2: 1074512194
+      Data3: -1611482232
+      Data4: 1276165068
+    Path: event:/Sound Design/Non Diegetic/Stingers/stinger_combat_victory
+  goldGainAfterCombat:
+    Guid:
+      Data1: 522330137
+      Data2: 1173999045
+      Data3: -1349741181
+      Data4: 473229470
+    Path: event:/Sound Design/Non Diegetic/UI/ui_goldgain

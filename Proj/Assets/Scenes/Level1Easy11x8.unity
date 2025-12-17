@@ -169,6 +169,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 323275109783046998, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 10.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 323275109783046998, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 323275109783046998, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -16.62
+      objectReference: {fileID: 0}
     - target: {fileID: 389509259706005512, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -358,6 +373,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1638241277933791445, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1901499544258294601, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
@@ -1509,6 +1529,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9002470682585882196, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9049068156011905174, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -2317,6 +2342,11 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3923998647222326710, guid: a571d2f924eb3a140b73bad4fae76007,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4192797708640025847, guid: a571d2f924eb3a140b73bad4fae76007,
         type: 3}
       propertyPath: m_IsActive
       value: 0

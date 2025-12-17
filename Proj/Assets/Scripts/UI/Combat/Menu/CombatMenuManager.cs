@@ -19,10 +19,16 @@ public class CombatMenuManager : MonoBehaviour
 
 
     // (Calle): Cameras to turn on/off Postprocessing for when menu opens
-    [SerializeField] private UniversalAdditionalCameraData _uacCardHUDCamera;
-    [SerializeField] private UniversalAdditionalCameraData _uacCombatHUDCamera;
-    [SerializeField] private UniversalAdditionalCameraData _uacTooltipHUDCamera;
-    [SerializeField] private UniversalAdditionalCameraData _uacCutsceneHUDCamera;
+    [SerializeField] private UniversalAdditionalCameraData _uacCardHUDCameraData;
+    [SerializeField] private UniversalAdditionalCameraData _uacCombatHUDCameraData;
+    [SerializeField] private UniversalAdditionalCameraData _uacTooltipHUDCameraData;
+    [SerializeField] private UniversalAdditionalCameraData _uacCutsceneHUDCameraData;
+
+    [SerializeField] private Canvas _CardHUDCanvas;
+    [SerializeField] private Canvas _CombatHUDCanvas;
+    [SerializeField] private Canvas _TooltipHUDCanvas;
+    [SerializeField] private Canvas _CutsceneHUDCanvas;
+
 
     // NOTE (Calle): Canvases to turn off Interactable on when this menu opens.
     [SerializeField] private CanvasGroup _combatHUDCanvasGroup;
@@ -32,10 +38,6 @@ public class CombatMenuManager : MonoBehaviour
 
     public event Action OnGoToShopButtonPressed;
     public event Action OnGoToMainMenuPressed;
-
-    [SerializeField] private EventReference _menuOpenedSound;
-    [SerializeField] private EventReference _menuClosedSound;
-    [SerializeField] private EventReference _buttonClickSound;
 
     private void Awake()
     {
@@ -56,6 +58,7 @@ public class CombatMenuManager : MonoBehaviour
             DebugLog.CJLogError("GlobalVolume has no Animator Comonent!");
 
         CombatEventManager.OnEnterCombatStateEndCombat += OpenVictoryMenuScreen;
+
     }
 
     public static CombatMenuManager GetInstance() { return _instance; }
@@ -106,28 +109,28 @@ public class CombatMenuManager : MonoBehaviour
         _combatMenuCanvas.enabled = true;
         
         ShowInGameLayout();
-        TurnOFFCombatCanvases();
+        TurnOFFPostProcessingCombatCanvases();
         _endCombatMenuAnimator.Play("WeightFadeIn");
-        AudioManager.Instance.PlayOneShot(_menuOpenedSound, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.MenuOpened, transform.position);
     }
 
     public void CloseInGameMenu()
     {
         _combatMenuCanvas.enabled = false;
-        TurnONCombatCanvases();
+        TurnONPostProcessingCombatCanvases();
         _endCombatMenuAnimator.Play("WeightFadeOut");
-        AudioManager.Instance.PlayOneShot(_menuClosedSound, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.MenuClosed, transform.position);
     }
 
     public void OpenOptionsMenu()
     {
-        AudioManager.Instance.PlayOneShot(_buttonClickSound, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick, transform.position);
         ShowOptionsLayout();
     }
 
     public void CloseOptionsMenu()
     {
-        AudioManager.Instance.PlayOneShot(_buttonClickSound, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick, transform.position);
         ShowInGameLayout();
     }
 
@@ -147,7 +150,7 @@ public class CombatMenuManager : MonoBehaviour
     {
         _combatMenuCanvas.enabled = false;
 
-        TurnONCombatCanvases();
+        TurnONPostProcessingCombatCanvases();
 
         _endCombatMenuAnimator.Play("WeightFadeOut");  
     }
@@ -183,10 +186,11 @@ public class CombatMenuManager : MonoBehaviour
 
     IEnumerator ShowVictoryScreenLayoutAfterDelay(bool playerWon)
     {
+        HideCanvases();
         yield return new WaitForSeconds(2.0f);
         _combatMenuCanvas.enabled = true;
         ShowVictroyScreenLayout(playerWon);
-        TurnOFFCombatCanvases();
+        TurnOFFPostProcessingCombatCanvases();
 
         _endCombatMenuAnimator.Play("WeightFadeIn");
     }
@@ -206,12 +210,12 @@ public class CombatMenuManager : MonoBehaviour
         _victoryScreenLayout.SetActive(false);
     }
 
-    private void TurnOFFCombatCanvases()
+    private void TurnOFFPostProcessingCombatCanvases()
     {
-        _uacCardHUDCamera.renderPostProcessing     = true;
-        _uacCombatHUDCamera.renderPostProcessing   = true;
-        _uacTooltipHUDCamera.renderPostProcessing  = true;
-        _uacCutsceneHUDCamera.renderPostProcessing = true;
+        _uacCardHUDCameraData.renderPostProcessing     = true;
+        _uacCombatHUDCameraData.renderPostProcessing   = true;
+        _uacTooltipHUDCameraData.renderPostProcessing  = true;
+        _uacCutsceneHUDCameraData.renderPostProcessing = true;
 
         _combatHUDCanvasGroup.interactable     = false;
         _combatTooltipCanvasGroup.interactable = false;
@@ -219,12 +223,12 @@ public class CombatMenuManager : MonoBehaviour
         Time.timeScale = 0f;
     }
 
-    private void TurnONCombatCanvases()
+    private void TurnONPostProcessingCombatCanvases()
     {
-        _uacCardHUDCamera.renderPostProcessing     = false;
-        _uacCombatHUDCamera.renderPostProcessing   = false;
-        _uacTooltipHUDCamera.renderPostProcessing  = false;
-        _uacCutsceneHUDCamera.renderPostProcessing = false;
+        _uacCardHUDCameraData.renderPostProcessing     = false;
+        _uacCombatHUDCameraData.renderPostProcessing   = false;
+        _uacTooltipHUDCameraData.renderPostProcessing  = false;
+        _uacCutsceneHUDCameraData.renderPostProcessing = false;
 
         _combatHUDCanvasGroup.interactable     = true;
         _combatTooltipCanvasGroup.interactable = true;
@@ -232,7 +236,20 @@ public class CombatMenuManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-
+    private void ShowCanvases()
+    {
+        _CardHUDCanvas.enabled     = true;
+        _CombatHUDCanvas.enabled   = true;
+        _TooltipHUDCanvas.enabled  = true;
+        _CutsceneHUDCanvas.enabled = true;
+    }
+    private void HideCanvases()
+    {
+        _CardHUDCanvas.enabled     = false;
+        _CombatHUDCanvas.enabled   = false;
+        _TooltipHUDCanvas.enabled  = false;
+        _CutsceneHUDCanvas.enabled = false;
+    }
     private void DEBUGLogRayCastHits()
     {
         if (Input.GetMouseButtonDown(0))
