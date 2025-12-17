@@ -47,7 +47,8 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
                 Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
                 CastingAnimationDuration = GetCastingAnimationTime(),
                 CastingFXDuration = GetCastingTime(),
-                TravelFXDuration = GetFromCastToHitTime()
+                TravelFXDuration = GetFromCastToHitTime(),
+                ImpactFXDuration = GetImpactTime(),
             };
             yield return caster.StartCoroutine(GetAbilityVFXSequence().RunSequence(data)
             );

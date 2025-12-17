@@ -49,6 +49,7 @@ public abstract class RoundAOEAbility : AOEAbility
                 CastingAnimationDuration = GetCastingAnimationTime(),
                 CastingFXDuration = GetCastingTime(),
                 TravelFXDuration = GetFromCastToHitTime(),
+                ImpactFXDuration = GetImpactTime(),
                 AoEDelta = aoeDelta
             };
             yield return caster.StartCoroutine(GetAbilityVFXSequence().RunSequence(data)
@@ -70,10 +71,10 @@ public abstract class RoundAOEAbility : AOEAbility
 
         foreach (CombatGridTile tile in tilesToEffect)
         {
-            if (tile != null)
-            {
-                ApplyEffectOnTile(casterTile, tile);
-            }
+            if (tile == null) continue;
+            if (!IsValidTargetForAbility(casterTile, tile)) continue;
+
+            ApplyEffectOnTile(casterTile, tile);
         }
     }
 

@@ -25,7 +25,7 @@ public abstract class Ability : ScriptableObject
     [Header("- Visuals & Audio - ")]
     [SerializeField] private AbilityVFXSequence _abilityVFXSequence;
     [SerializeField] private AudioClip _castingSound, _hitSound;
-    [SerializeField] private float _castingAnimationTime, _castingFXTime, _fromCastToHitTime;
+    [SerializeField] private float _castingAnimationTime, _castingFXTime, _fromCastToHitTime, _impactVFXTime;
     [SerializeField] private float _castingRotationTime = 0.3f;
     [field: SerializeField] public EventReference AudioEvent { get; private set; }
 
@@ -90,6 +90,7 @@ public abstract class Ability : ScriptableObject
     public float GetCastingAnimationTime() => _castingAnimationTime;
     public float GetCastingTime() => _castingFXTime;
     public float GetFromCastToHitTime() => _fromCastToHitTime;
+    public float GetImpactTime() => _impactVFXTime;
     public void SetCooldown(int cooldown)
     {
         _cooldown = cooldown;
@@ -136,7 +137,8 @@ public abstract class Ability : ScriptableObject
                 Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
                 CastingAnimationDuration = _castingAnimationTime,
                 CastingFXDuration = _castingFXTime,
-                TravelFXDuration = _fromCastToHitTime
+                TravelFXDuration = _fromCastToHitTime,
+                ImpactFXDuration = _impactVFXTime
             };
             yield return caster.StartCoroutine(_abilityVFXSequence.RunSequence(data)
             );

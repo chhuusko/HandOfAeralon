@@ -44,5 +44,7 @@ public class AbilityVFXSequenceCharacterPos : AbilityVFXSequence
             impact.transform.localScale = data.AoEDelta == 0 ? baseScale : Vector3.one * GetBiggerImpactScale();
             impact.Play(data.TargetPosition, data.Direction, GetImpactRotationOffset());
         }
+
+        yield return new WaitForSeconds(data.ImpactFXDuration);
     }
 }

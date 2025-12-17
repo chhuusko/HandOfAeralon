@@ -33,5 +33,7 @@ public class AbilityVFXSequenceDelayed : AbilityVFXSequence
          
             impact.Play(data.TargetPosition, data.Direction);
         }
+
+        yield return new WaitForSeconds(data.ImpactFXDuration);
     }
 }

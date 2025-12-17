@@ -66,6 +66,8 @@ public class AbilityVFXSequence : ScriptableObject
             impact.transform.localScale = data.AoEDelta == 0 ? baseScale : Vector3.one * _biggerImpactScale;
             impact.Play(data.TargetPosition, data.Direction, _impactRotationOffset);
         }
+
+        yield return new WaitForSeconds(data.ImpactFXDuration);
     }
 
     protected void PlayShake(bool doCamerashake, float shakeDuration, float shakeMagnitude, float shakeFrequency, AnimationCurve shakeFade)
