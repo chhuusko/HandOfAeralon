@@ -11,7 +11,7 @@ public enum CardTag
     Etherial,
     Exhaust
 }
-public enum Rarity
+public enum CardRarity
 {
     Common,
     Uncommon,
@@ -22,7 +22,7 @@ public class Card : ScriptableObject
 
     [Header("Info")]
     public CardType type;
-    public Rarity rarity;
+    public CardRarity rarity;
     public string title;
     public string description;
     [SerializeField] private int cost;
