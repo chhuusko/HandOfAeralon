@@ -90,6 +90,19 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator AIBehaviour()
     {
+        /*
+        StatusEffectManager statusEffectManager = null;
+        if (_character.TryGetComponent<StatusEffectManager>(out statusEffectManager))
+        {
+            if (statusEffectManager.ContainsStatusEffect<Stunned>())
+            {
+                DebugLog.JLWLog($"{_character.name} was Stunned and will pass their turn!");
+                yield return new WaitForSeconds(TURN_START_WAIT_TIME + TURN_END_WAIT_TIME);
+                EndTurn();
+            }
+        }
+        */
+
         yield return new WaitForSeconds(TURN_START_WAIT_TIME);
 
         List<CombatGridTile> moveRange = FindMoveRange();
