@@ -764,7 +764,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _combatHUDCanvasGroup
       value: 
-      objectReference: {fileID: 3868838579339467309}
+      objectReference: {fileID: 7368774067549527640}
     - target: {fileID: 8250037658871187672, guid: ec46ab08d894ac3499683b967b8812de,
         type: 3}
       propertyPath: _uacCardHUDCameraData
@@ -2767,12 +2767,6 @@ Canvas:
 --- !u!20 &3807566794225359342 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 5013353783436238473, guid: 50e3273e88b66d14e8232055a5dacdc1,
-    type: 3}
-  m_PrefabInstance: {fileID: 8161704943107164007}
-  m_PrefabAsset: {fileID: 0}
---- !u!225 &3868838579339467309 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 4968828662358531402, guid: 50e3273e88b66d14e8232055a5dacdc1,
     type: 3}
   m_PrefabInstance: {fileID: 8161704943107164007}
   m_PrefabAsset: {fileID: 0}
