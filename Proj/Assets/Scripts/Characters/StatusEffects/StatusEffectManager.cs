@@ -79,6 +79,10 @@ public class StatusEffectManager : MonoBehaviour
             return;
         }
         
+        // Check if other traits interact.
+        BeforeStatusEffectApplied(caster, _character, statusEffect);
+        
+        // Try adding it.
         bool canAdd = CombatEventManager.InvokeOnTryAddStatusEffect(caster, _character, statusEffect);
         if (!canAdd)
         {
@@ -94,9 +98,9 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void RemoveStatusEffect(StatusEffect statusEffect)
+    public void RemoveStatusEffect(StatusEffect statusEffect, bool forceRemoval = false)
     {
-        if (!statusEffect.Data.IsDispellable)
+        if (!forceRemoval && !statusEffect.Data.IsDispellable)
         {
             return;
         }
@@ -279,12 +283,12 @@ public class StatusEffectManager : MonoBehaviour
         {
             statusEffect.ModifyIncomingDamage(ref damage, ability);
         }
-        
+
         foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
         {
             if (statusEffect.ShouldExpire)
             {
-                RemoveStatusEffect(statusEffect);
+                RemoveStatusEffect(statusEffect, true);
             }
         }
         
@@ -470,7 +474,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    private void OnTryApplyStatusEffect(Character caster, Character target, StatusEffect statusEffect)
+    private void BeforeStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
     {
         if (target != _character)
         {
@@ -479,7 +483,7 @@ public class StatusEffectManager : MonoBehaviour
         
         foreach (var trait in _traitManager.GetAllTraits().ToList())
         {
-            trait.OnTryApplyStatusEffect(caster, target, statusEffect);
+            trait.BeforeStatusEffectApplied(caster, target, statusEffect);
         }
     }
 
