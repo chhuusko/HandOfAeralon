@@ -8,7 +8,7 @@ public class FleetingInsight : Card
     {
         for (int i = 0; i < 3; i++)
         {
-            List<Card> _unlockedCards = CardsUnlocked.GetInstance().GetUnlockedCards();
+            List<Card> _unlockedCards = CardsUnlocked.GetInstance().GetCardsByRarity(CardRarity.Common);
             {
                 Card clone = Instantiate(_unlockedCards[Random.Range(0, _unlockedCards.Count - 1)]);
                 clone.TempSetCost(0);
