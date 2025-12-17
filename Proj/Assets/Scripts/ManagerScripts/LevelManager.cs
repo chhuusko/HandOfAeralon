@@ -33,6 +33,8 @@ public class LevelManager : ScriptableObject
     private CombatGrid _combatGrid;
     private bool _isTutorialCompleted;
 
+    List<string> easyList, mediumList, hardList;
+
     public static LevelManager GetInstance()
     {
         if (_instance == null)
@@ -40,22 +42,25 @@ public class LevelManager : ScriptableObject
             _instance = Resources.Load<LevelManager>("LevelManager");
             _instance._level = 0;
             _instance._isTutorialCompleted = false;
-            LevelManager.Initialize();
+            _instance.Initialize();
         }
         return _instance;
     }
-    public static void Initialize()
+    public void Initialize()
     {
         _instance._level = 0;
         _instance._isTutorialCompleted = false;
         _instance.statIncrease = 1;
         _instance.enemyStatIncrease = 1;
+
+        // tempfix for non-repeat levels
+        easyList = new List<string>(easyCombatList);
+        mediumList = new List<string>(mediumCombatList);
+        hardList = new List<string>(hardCombatList);
     }
     private void Awake()
     {
-        //_instance = this;
-        //_combatList = Directory.GetFiles("Assets/JSON BattleGrids").Where(f => !f.EndsWith(".meta")).ToArray(); 
-        //_generatedList = new string[10];
+        
     }
     public void GenerateMap(int seed)
     {
@@ -116,12 +121,11 @@ public class LevelManager : ScriptableObject
     public void RestartGame()
     {
         SceneManager.LoadScene("MainMenu");
-        _level = 0;
-        _difficulty = 0;
-        _isTutorialCompleted = false;
+        Initialize();
     }
     private void TieredRandomLevel()
     {
+        Debug.Log("current level " +  _level);
         if (SceneManager.GetActiveScene().name == "ShopScene" || SceneManager.GetActiveScene().name == "MainMenu")
         {
             if (_level != 0)
@@ -138,13 +142,13 @@ public class LevelManager : ScriptableObject
                 switch (_difficulty)
                 {
                     case 0:
-                        SceneManager.LoadScene(easyCombatList[Random.Range(0, easyCombatList.Count)]);
+                        LoadScene(easyList);
                         break;
                     case 1:
-                        SceneManager.LoadScene(mediumCombatList[Random.Range(0, mediumCombatList.Count)]);
+                        LoadScene(mediumList);
                         break;
                     default:
-                        SceneManager.LoadScene(hardCombatList[Random.Range(0, hardCombatList.Count)]);
+                        LoadScene(hardList);
                         break;
                 }
                 _level++;
@@ -160,6 +164,20 @@ public class LevelManager : ScriptableObject
             QualitySettings.vSyncCount = 0;
             SceneManager.LoadScene("ShopScene");
         }
+    }
+    private void LoadScene(List<string> sceneList)
+    {
+        
+        if (sceneList.Count == 0)
+        {
+            RestartGame();
+            return;
+        }
+        
+        int sceneIndex = Random.Range(0, sceneList.Count);
+        Debug.Log(sceneList.Count + "sceneCount" + sceneIndex + "Sceneindex");
+        SceneManager.LoadScene(sceneList[sceneIndex]);
+        sceneList.Remove(sceneList[sceneIndex]);
     }
     private void TutorialLevel()
     {
