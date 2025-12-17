@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using FMODUnity;
 using FMOD.Studio;
@@ -9,6 +9,8 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance { get; private set; }
     
     private List<EventInstance> events;
+
+    private VCA masterVCA;
     
     private void Awake()
     {
@@ -22,8 +24,21 @@ public class AudioManager : MonoBehaviour
         }
         
         events = new List<EventInstance>();
+
     }
 
+    private void Start()
+    {
+        //masterVCA = RuntimeManager.GetVCA("vca:/Master");
+        //// 🔍 DEBUG
+        //FMOD.RESULT result = masterVCA.getVolume(out float volume);
+        //Debug.Log($"VCA getVolume result: {result}, volume: {volume}");
+    }
+
+    public void SetMasterVolume(float volume)
+    {   
+        masterVCA.setVolume(volume);
+    }
     public void PlayOneShot(EventReference sound, Vector3 position)
     {
         RuntimeManager.PlayOneShot(sound, position);
