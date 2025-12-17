@@ -97,7 +97,10 @@ public class LevelManager : ScriptableObject
             Debug.Log("PLAYERSTATSUPPDATED----------------------------------");
             foreach (CharacterData character in GlobalGameManager.GetInstance().GetGameData().heroDataList)
             {
-                character.CalculateDerivedStats((statIncreaseFactor * (_level / statIncreaseInterval)));
+                Debug.Log(statIncrease + " pre statincrese " + statIncreaseFactor + " factor " + _level + "interval" + statIncreaseInterval);
+                statIncrease = 1 + (statIncreaseFactor * (_level / statIncreaseInterval));
+                character.CalculateDerivedStats(statIncrease);
+                Debug.Log(statIncrease + "statincrese");
                // Debug.Log("deriveddamage: " + character.DerivedDamage + " base damage: " + character.BaseDamage); 
             }
         } 
