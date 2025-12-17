@@ -1011,6 +1011,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Developer",
+            "id": "4610fc7b-1c3d-4358-8458-ecfdecb65ebc",
+            "actions": [
+                {
+                    "name": "SkipLevel",
+                    "type": "Button",
+                    "id": "b4381c50-96de-496e-9b85-d6b662a871f8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f38d57d4-352b-478c-80fc-901b18fe5b02",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SkipLevel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
