@@ -15,9 +15,9 @@ public class AbilityVFXSequence : ScriptableObject
 
     [Header("Cast Shake")]
     [SerializeField] protected bool _doCastCameraShake = false;
-    [SerializeField] protected float _castShakeDuration = 0.2f;
-    [SerializeField] protected float _castShakeMagnitude = 0.15f;
-    [SerializeField] protected float _castShakeFrequency = 40f;
+    [SerializeField] protected float _castShakeDuration = 1.5f;
+    [SerializeField] protected float _castShakeMagnitude = 0.1f;
+    [SerializeField] protected float _castShakeFrequency = 200f;
     [SerializeField] protected AnimationCurve _castShakeFade;
 
     [Header("Impact")]
@@ -27,9 +27,9 @@ public class AbilityVFXSequence : ScriptableObject
 
     [Header("Impact Shake")]
     [SerializeField] protected bool _doImpactCameraShake = false;
-    [SerializeField] protected float _impactShakeDuration = 0.2f;
-    [SerializeField] protected float _impactShakeMagnitude = 0.15f;
-    [SerializeField] protected float _impactShakeFrequency = 40f;
+    [SerializeField] protected float _impactShakeDuration = 1.5f;
+    [SerializeField] protected float _impactShakeMagnitude = 0.1f;
+    [SerializeField] protected float _impactShakeFrequency = 200f;
     [SerializeField] protected AnimationCurve _impactShakeFade;
 
 
