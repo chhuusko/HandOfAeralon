@@ -530,9 +530,18 @@ public class CombatUI : MonoBehaviour
 
     private void UpdateAbilityColors()
     {
-        foreach (var abilityButton in _abilityButtons)
+        if (_selectedCharacter == null)
         {
-            UpdateAbilityColors(CombatManager._instance.GetCharacterDataDict()[_selectedCharacter], abilityButton);
+            return;
+        }
+        
+        var dict = CombatManager._instance.GetCharacterDataDict();
+        if (dict.TryGetValue(_selectedCharacter, out var character))
+        {
+            foreach (var abilityButton in _abilityButtons)
+            {
+                UpdateAbilityColors(character, abilityButton);
+            }
         }
     }
 
