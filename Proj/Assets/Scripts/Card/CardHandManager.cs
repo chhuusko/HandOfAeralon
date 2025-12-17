@@ -5,11 +5,11 @@ using System.Xml.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CardHandManager : MonoBehaviour
 {
     //Controlls hand 
-
     private static CardHandManager _instance;
 
     [SerializeField] private GameObject _CardContainer;
@@ -25,6 +25,7 @@ public class CardHandManager : MonoBehaviour
 
     [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
 
+    //sounds
     [SerializeField] private EventReference drawSound, hoverSound, playSound, deckShuffleSound, discardSound;
 
 
@@ -41,19 +42,23 @@ public class CardHandManager : MonoBehaviour
     GameObject _addedZoomedCard;
     CardContainer _activeContainer;
 
-    //
-    public List<TurnEffect> turnEffects; 
+    // turneffect
+    public List<TurnEffect> turnEffects;
 
-    // 
+    //
+    InputController _controller;
+
+    //  bool
     bool isCombat;
 
+    // event
     public static Action<Card> onCardUse;
     public static Action<int> onManaChange;
     public static Action<Character> onTargetCharacter;
     public static Action<Character, Card> onCardTargetCharacter;
-
     public static Action<bool> onDrag;
     public static Action<bool> onHover;
+
     public static CardHandManager GetInstance() {return _instance;}
     public void ManaChanged(){ onManaChange?.Invoke(_mana); }
     public void Dragged(bool isDragEnter) { onDrag?.Invoke(isDragEnter); }
@@ -67,6 +72,7 @@ public class CardHandManager : MonoBehaviour
     }
     private void Awake()
     {
+        _controller = new InputController();
         _instance = this;
         if (GlobalGameManager.GetInstance() != null)
         {
@@ -89,12 +95,22 @@ public class CardHandManager : MonoBehaviour
     {
         CombatEventManager.OnCombatTurnChange += TurnChanged;
         onCardTargetCharacter += TurnEffects;
+        _controller.Enable();
+        _controller.Developer.SkipLevel.performed += SkipLevel;
     }
+
+    
 
     private void OnDisable()
     {
         CombatEventManager.OnCombatTurnChange -= TurnChanged;
         onCardTargetCharacter -= TurnEffects;
+        _controller.Disable();
+        _controller.Developer.SkipLevel.performed -= SkipLevel;
+    }
+    private void SkipLevel(InputAction.CallbackContext context)
+    {
+        LevelManager.GetInstance().StartNextLevel();
     }
     public void drawHand()
     {
