@@ -39,10 +39,6 @@ public class CombatMenuManager : MonoBehaviour
     public event Action OnGoToShopButtonPressed;
     public event Action OnGoToMainMenuPressed;
 
-    [SerializeField] private EventReference _menuOpenedSound;
-    [SerializeField] private EventReference _menuClosedSound;
-    [SerializeField] private EventReference _buttonClickSound;
-
     private void Awake()
     {
         if( _instance != null && _instance != this)
@@ -115,7 +111,7 @@ public class CombatMenuManager : MonoBehaviour
         ShowInGameLayout();
         TurnOFFPostProcessingCombatCanvases();
         _endCombatMenuAnimator.Play("WeightFadeIn");
-        AudioManager.Instance.PlayOneShot(_menuOpenedSound, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.MenuOpened, transform.position);
     }
 
     public void CloseInGameMenu()
@@ -123,18 +119,18 @@ public class CombatMenuManager : MonoBehaviour
         _combatMenuCanvas.enabled = false;
         TurnONPostProcessingCombatCanvases();
         _endCombatMenuAnimator.Play("WeightFadeOut");
-        AudioManager.Instance.PlayOneShot(_menuClosedSound, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.MenuClosed, transform.position);
     }
 
     public void OpenOptionsMenu()
     {
-        AudioManager.Instance.PlayOneShot(_buttonClickSound, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick, transform.position);
         ShowOptionsLayout();
     }
 
     public void CloseOptionsMenu()
     {
-        AudioManager.Instance.PlayOneShot(_buttonClickSound, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick, transform.position);
         ShowInGameLayout();
     }
 

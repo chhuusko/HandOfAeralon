@@ -10,10 +10,6 @@ public class CombatVictoryScreenMenu : MonoBehaviour
     [SerializeField] private GameObject _mainMenuButton;
     [SerializeField] private TMP_Text _mainMenuButtonText;
 
-    [SerializeField] private EventReference _victorySound;
-    [SerializeField] private EventReference _defeatSound;
-    [SerializeField] private EventReference _buttonClickSound;
-
     public void SetTitle(string title)
     {
         _title.text = title;
@@ -37,7 +33,7 @@ public class CombatVictoryScreenMenu : MonoBehaviour
         _title.text = "Battle Won!";
         _info.text = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins();
         _mainMenuButtonText.text = "Quit Game";
-        AudioManager.Instance.PlayOneShot(_victorySound, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PlayerVictory, transform.position);
     }
 
     public void SetLoseScreen()
@@ -46,11 +42,11 @@ public class CombatVictoryScreenMenu : MonoBehaviour
         _title.text = "Battle Lost!";
         _info.text = "";
         _mainMenuButtonText.text = "Quit Game";
-        AudioManager.Instance.PlayOneShot(_defeatSound, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PlayerDefeated, transform.position);
     }
 
     public void PlayOneShotButtonClick()
     {
-        AudioManager.Instance.PlayOneShot(_buttonClickSound, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick, transform.position);
     }
 }
