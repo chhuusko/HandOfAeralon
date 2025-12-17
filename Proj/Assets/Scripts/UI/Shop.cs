@@ -36,7 +36,7 @@ public class Shop : MonoBehaviour
     private List<GameObject> _buyableItemInScene;
     private List<GameObject> _partyPortraitInstances;
 
-    [SerializeField] private EventReference bougtSound, errorSound;
+    [SerializeField] private EventReference bougtSound, errorSound, healSound;
     //Costs
     [SerializeField] int _healPrice;
     [SerializeField] int _refreshPrice;
@@ -179,6 +179,7 @@ public class Shop : MonoBehaviour
                 character.Heal( (int)(character.BaseHealthPoints*0.5f));
                 Debug.Log(character.BaseHealthPoints + "current.");
             }
+            AudioManager.Instance.PlayOneShot(healSound, transform.position);
             Bought(_healPrice);
         }
         LoadParty();
