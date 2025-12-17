@@ -9,12 +9,48 @@ public enum CombatTurn
     EnemyTurn
 };
 
+
+/*
+ * 
+ * - PendingList:   Characters that have not yet done their turn
+ * - ExecutedList:  Characters that have done their turn
+ * - FullList:      All Characters composed of [PendingList, ExecutedList]
+ * 
+ *  1. Initialize the turnorder based on initiative
+ *  
+ *     P: 6    5   4   4   3   2   1|
+ *  
+ *  2.  PreTurn: Set Active to be first in the PendingList and move Active to ExecutedList from PendingList
+ *    
+ *    A: (6)
+ *    P: 5   4   4   3   2   1|  
+ *    E: 6
+ * 
+ *  3. ReBuild FulltList:
+ *    
+ *    A: (6)    
+ *    P: 5   4   4   3   2   1|  
+ *    E: 6
+ *    F: 5   4   4   3   2   1|  6
+ *  
+ *  4. PostTurn: Move first in PendingList to first in ExecutedList
+ *     and rebuild the FullList
+ * 
+ * 
+ * 
+ */
+
 [System.Serializable]
 public class CombatTurnOrder
 {
     [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private Character _activeCharacter;
+
     [SerializeField] private List<Character> _charactersInTurnOrder;
+    [SerializeField] private List<Character> _charactersInPendingTurnOrder;
+    [SerializeField] private List<Character> _charactersInExecutedTurnOrder;
+    [SerializeField] private List<Character> _charactersToDisplay;
+
     [SerializeField] private int _turnCountFullRound;
     [SerializeField] private int _turnCountCurrent;
     
@@ -24,20 +60,96 @@ public class CombatTurnOrder
     private Character _poppedCharacter = null;
     public CombatTurnOrder()
     {
-        _charactersInTurnOrder = new List<Character>();
+        _charactersInTurnOrder         = new List<Character>();
+        _charactersInPendingTurnOrder  = new List<Character>();
+        _charactersInExecutedTurnOrder = new List<Character>();
+        _charactersToDisplay           = new List<Character>();
     }
 
     private void HandleEndCombat(bool playerWon)
     {
-        CombatEventManager.OnCharacterDeath -= HandleCharacterDeath;
-        CombatEventManager.OnExitCombatStateEndCombat -= HandleEndCombat;
+        CombatEventManager.OnCharacterDeath             -= HandleCharacterDeath;
+        CombatEventManager.OnExitCombatStateEndCombat   -= HandleEndCombat;
+        CombatEventManager.OnCharacterInitiativeChanged -= RebuildTurnOrder;
     }
 
+    public void Initialize()
+    {
+        CombatEventManager.OnCharacterDeath           += HandleCharacterDeath;
+        CombatEventManager.OnExitCombatStateEndCombat += HandleEndCombat;
+        CombatEventManager.OnCharacterInitiativeChanged += RebuildTurnOrder;
+
+        _charactersInPendingTurnOrder = CombatGrid._instance.GetAllCharacterScripts();
+
+        SortCharacterListByInitiative(_charactersInPendingTurnOrder);
+
+        _activeCharacter = _charactersInPendingTurnOrder[0];
+        
+        _charactersInPendingTurnOrder.RemoveAt(0);
+
+        _charactersInExecutedTurnOrder.Add(_activeCharacter);
+
+        _charactersToDisplay.AddRange(_charactersInPendingTurnOrder);
+        _charactersToDisplay.AddRange(_charactersInExecutedTurnOrder);
+        _turnCountCurrent++;
+
+        if (_activeCharacter.GetFaction() == Faction.Friendly)
+            SetCurrentTurn(CombatTurn.PlayerTurn);
+        else
+            SetCurrentTurn(CombatTurn.EnemyTurn);
+
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay);
+    }
+    
+    public void UpdateTurnOrder()
+    {
+        _activeCharacter = _charactersInPendingTurnOrder[0];
+        
+        _charactersInPendingTurnOrder.RemoveAt(0);
+
+        _charactersInExecutedTurnOrder.Add(_activeCharacter);
+        _turnCountCurrent++;
+
+        _charactersToDisplay.Remove(_activeCharacter);
+        _charactersToDisplay.Add(_activeCharacter);
+
+        if (_charactersInPendingTurnOrder.Count <= 0)
+        {
+            _charactersInPendingTurnOrder.AddRange(_charactersInExecutedTurnOrder);
+            _charactersInExecutedTurnOrder.Clear();
+        }
+
+        if (_activeCharacter.GetFaction() == Faction.Friendly)
+            SetCurrentTurn(CombatTurn.PlayerTurn);
+        else
+            SetCurrentTurn(CombatTurn.EnemyTurn);
+
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay);
+    }
+
+    private void RebuildTurnOrder()
+    {
+        SortCharacterListByInitiative(_charactersInPendingTurnOrder);
+        SortCharacterListByInitiative(_charactersInExecutedTurnOrder);
+
+        _charactersToDisplay.Clear();
+        _charactersToDisplay.AddRange(_charactersInPendingTurnOrder);
+        _charactersToDisplay.AddRange(_charactersInExecutedTurnOrder);
+
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay);
+    }
+
+    private void SortCharacterListByInitiative(List<Character> list)
+    {
+        // Sort them byt initiative, highest first
+        list.Sort((a, b) => b.GetBaseInitiative().CompareTo(a.GetBaseInitiative()));
+    }
     public void InitializeTurnOrder()
     {
+        /*
         // NOTE (Calle): Can't be subscribed to in constructor since it's persistant across combats, as it is
         // an instance in the CombatManager.
-        CombatEventManager.OnCharacterDeath += HandleCharacterDeath;
+        CombatEventManager.OnCharacterDeath           += HandleCharacterDeath;
         CombatEventManager.OnExitCombatStateEndCombat += HandleEndCombat;
 
         // Get all active characters in combat scene
@@ -61,9 +173,11 @@ public class CombatTurnOrder
         _charactersInTurnOrder.RemoveAt(0);
 
         CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
+    */
     }
 
-    public void RebuildTurnOrder()
+    // NOTE (Calle): This should sort the pending characters
+    public void RebuildPendingTurnOrder()
     {
         // If the turn order is change during a turn (eg. from an ability that modifies the characters initiative, the
         // turn order must be rebuilt.
@@ -84,6 +198,7 @@ public class CombatTurnOrder
 
     public void UpdateCharacterTurnOrderPreTurn()
     {
+        /*
         if (GetCurrentTurnCount() == 0)
         {
             if (_poppedCharacter.GetFaction() == Faction.Friendly)
@@ -94,7 +209,6 @@ public class CombatTurnOrder
             return;
         }
             
-                
         Character nextCharacter = _charactersInTurnOrder[0];
 
         _poppedCharacter = nextCharacter;        
@@ -111,6 +225,7 @@ public class CombatTurnOrder
         _activeCharacter = nextCharacter;
 
         CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
+        */
     }
 
     public void UpdateCharacterTurnOrderPostTurn()
@@ -125,9 +240,14 @@ public class CombatTurnOrder
 
     private void HandleCharacterDeath(Character character)
     {
+        _charactersInPendingTurnOrder.Remove(character);
+        _charactersInExecutedTurnOrder.Remove(character);
+        _charactersToDisplay.Remove(character);
+
         _charactersInTurnOrder.Remove(character);
         _turnCountFullRound--;
-        CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
+        //CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay);
     }
 
     public void SetCurrentTurn(CombatTurn nextTurn)

@@ -13,6 +13,7 @@ public class CombatStateLoadLevel : CombatStateBase
         CombatManager._instance.InitializeCharacterDataDict();
         CombatTurnOrder combatTurnOrder = CombatManager._instance.GetCombatTurnOrder();
         combatTurnOrder.InitializeTurnOrder();
+        combatTurnOrder.Initialize();
         CombatEventManager.InvokeEnterCombatStateLoadNextLevel();
 
     }

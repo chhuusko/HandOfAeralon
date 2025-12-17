@@ -391,7 +391,11 @@ public class Character : MonoBehaviour
     // Base stats.
     public void SetCharacterClass(CharacterClass characterClass) => _data.SetCharacterClass(characterClass);
     public void SetFaction(Faction faction) => _data.SetFaction(faction);
-    public void SetBaseInitiative(int initiative) => _data.SetBaseInitiative(initiative);
+    public void SetBaseInitiative(int initiative)
+    {
+        _data.SetBaseInitiative(initiative);
+        CombatEventManager.InvokeOnCharacterInitiativeChanged();
+    }
     public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
     public void SetDerivedHealthPoints(int newMax, float hpFactor)
     {
@@ -421,8 +425,12 @@ public class Character : MonoBehaviour
         SetCurrentHealthPoints(_data.CurrentHealthPoints - amount);
 
     // Initiative.
-    public void SetCurrentInitiative(int initiative) => 
+    public void SetCurrentInitiative(int initiative)
+    {
         _currentInitiative = Mathf.Max(initiative, 0);
+        CombatEventManager.InvokeOnCharacterInitiativeChanged();
+    }
+        
     
     public void IncreaseCurrentInitiative(int amount = 1) => 
         SetCurrentInitiative(_currentInitiative + amount);
