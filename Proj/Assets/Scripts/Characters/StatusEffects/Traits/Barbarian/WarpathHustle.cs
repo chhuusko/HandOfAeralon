@@ -28,4 +28,10 @@ public class WarpathHustle : Trait
 
         _enemiesDamaged++;
     }
+    
+    public override void OnCombatEnded()
+    {
+        // Reset for next combat.
+        _enemiesDamaged = 0;
+    }
 }
