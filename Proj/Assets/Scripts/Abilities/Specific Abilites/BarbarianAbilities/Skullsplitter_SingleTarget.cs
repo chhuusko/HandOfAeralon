@@ -54,7 +54,7 @@ public class Skullsplitter_Ability : SingleTargetAbility
         int baseDamage = (int)(castingCharacter.Data.DerivedDamage * _damageMultiplier);
 
         //2.
-        int damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.GetMaxHealth()) ? (int)(baseDamage * _extraDamageMultiplier) : (int)(baseDamage * _damageMultiplier);
+        int damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.Data.DerivedHealthPoints) ? (int)(baseDamage * _extraDamageMultiplier) : (int)(baseDamage * _damageMultiplier);
 
         damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
