@@ -188,7 +188,7 @@ public class CharacterData
 
     public void SetDerivedDamage(int damage) => _derivedDamage = Mathf.Max(1, damage);
     public void SetBaseMovementPoints(int movementPoints) => _baseMovementPoints = Mathf.Max(movementPoints, 1);
-    public void SetCurrentHealthPoints(int health) => _currentHealthPoints = Mathf.Max(health, 0);
+    public void SetCurrentHealthPoints(int health) => _currentHealthPoints = Mathf.Max(health, 1);
     public void Heal(int amount) => SetCurrentHealthPoints(Mathf.Min(CurrentHealthPoints + amount, _derivedHealthPoints));
     public void SetAbilities(List<Ability> abilities) => _abilities = new List<Ability>(abilities);
     public void SetActiveAbilities(List<Ability> abilities)
@@ -412,10 +412,6 @@ public class Character : MonoBehaviour
     {
         _data.SetCurrentHealthPoints(healthPoints);
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
-        if (_data.CurrentHealthPoints <= 0)
-        {
-            StartCoroutine(RemoveCharacter());
-        }
     }
 
     public void IncreaseCurrentHealthPoints(int amount = 1) => 
