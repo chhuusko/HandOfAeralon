@@ -205,7 +205,7 @@ public class Character : MonoBehaviour
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateAbilityCooldowns;
         CombatEventManager.OnEnterCombatStateTakeTurn += ResetCanAttack;
-        CombatEventManager.OnEnterCombatStateEndCombat += ResetCooldowns;
+        CombatEventManager.OnEnterCombatStateEndCombat += ResetAbilities;
         
         PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
         if(damagePopupTextManager != null)
@@ -256,7 +256,7 @@ public class Character : MonoBehaviour
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
         CombatEventManager.OnEnterCombatStateTakeTurn -= ResetCanAttack;
-        CombatEventManager.OnEnterCombatStateEndCombat -= ResetCooldowns;
+        CombatEventManager.OnEnterCombatStateEndCombat -= ResetAbilities;
 
         PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
         if (damagePopupTextManager != null)
@@ -445,9 +445,12 @@ public class Character : MonoBehaviour
         CanUseAbility = true;
     }
 
-    private void ResetCooldowns(bool playerWon)
+    private void ResetAbilities(bool playerWon)
     {
         _currentCooldowns = new Dictionary<Ability, int>();
+        
+        // Reset which abilities are active.
+        _data.SetActiveAbilities(new List<Ability>(_data.Abilities));
     }
 
     private void UpdateAbilityCooldowns(Character c)
