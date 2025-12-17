@@ -16,7 +16,6 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
         CombatEventManager.OnAbilityDataCreated += OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat += OnCombatEnded;
-        CombatEventManager.OnStatusEffectAppliedToCharacter += OnStatusEffectApplied;
         CardHandManager.onCardUse += OnCardPlayed;
 
         CardHandManager.onTargetCharacter += OnTargetCharacter;
@@ -34,7 +33,6 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
         CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
-        CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
         CardHandManager.onCardUse -= OnCardPlayed;
 
         CardHandManager.onTargetCharacter -= OnTargetCharacter;
@@ -81,9 +79,19 @@ public class StatusEffectManager : MonoBehaviour
             return;
         }
         
-        _traitManager.AddStatusEffect(statusEffect);
+        bool canAdd = CombatEventManager.InvokeOnTryAddStatusEffect(caster, _character, statusEffect);
+        if (!canAdd)
+        {
+            // Blocked.
+            return;
+        }
+        
+        bool added = _traitManager.AddStatusEffect(statusEffect);
         statusEffect.Initialize(_character, this);
-        CombatEventManager.InvokeOnStatusEffectAppliedToCharacter(caster, _character, statusEffect);
+        if (added)
+        {
+            CombatEventManager.InvokeOnStatusEffectAppliedToCharacter(caster, _character, statusEffect);
+        }
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect)
@@ -93,15 +101,27 @@ public class StatusEffectManager : MonoBehaviour
             return;
         }
         
-        statusEffect.OnExpire();
         _traitManager.RemoveStatusEffect(statusEffect);
+        statusEffect.Cleanup();
+        statusEffect.OnExpire();
         CombatEventManager.InvokeOnStatusEffectExpiredOnCharacter(_character, statusEffect);
         OnStatusEffectRemoved(statusEffect);
     }
 
     public int ClearStatusEffects(StatusEffectType type)
     {
-        return _traitManager.ClearStatusEffects(type);
+        int removed = 0;
+
+        foreach (var effect in _traitManager.GetAllEffects().ToList())
+        {
+            if (effect.Data.Type == type && effect.Data.IsDispellable)
+            {
+                RemoveStatusEffect(effect);
+                removed++;
+            }
+        }
+        
+        return removed;
     }
 
     public bool ContainsStatusEffect<T>() where T : StatusEffect
@@ -244,8 +264,8 @@ public class StatusEffectManager : MonoBehaviour
         }
 
         // Clear all status effects.
-        _traitManager.ClearStatusEffects(StatusEffectType.Buff);
-        _traitManager.ClearStatusEffects(StatusEffectType.Debuff);
+        ClearStatusEffects(StatusEffectType.Buff);
+        ClearStatusEffects(StatusEffectType.Debuff);
     }
 
     public float ModifyIncomingDamage(float damage, Ability ability)
@@ -450,16 +470,16 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    private void OnStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
+    private void OnTryApplyStatusEffect(Character caster, Character target, StatusEffect statusEffect)
     {
         if (target != _character)
         {
             return;
         }
-
+        
         foreach (var trait in _traitManager.GetAllTraits().ToList())
         {
-            trait.OnStatusEffectApplied(caster, statusEffect);
+            trait.OnTryApplyStatusEffect(caster, target, statusEffect);
         }
     }
 

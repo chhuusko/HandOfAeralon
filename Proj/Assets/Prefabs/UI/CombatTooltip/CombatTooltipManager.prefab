@@ -263,13 +263,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterLayout: {fileID: 5439981643615826940}
   _combatHoverTooltip: {fileID: 5529004354162486180}
-  _hoverSound:
-    Guid:
-      Data1: 1365615113
-      Data2: 1093341733
-      Data3: -1325407097
-      Data4: -1710004379
-    Path: event:/Sound Design/Non Diegetic/UI/ui_hover
 --- !u!1 &186559143019193527
 GameObject:
   m_ObjectHideFlags: 0
@@ -1453,7 +1446,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 600
   m_TargetDisplay: 0
 --- !u!114 &2930316088563464734
 MonoBehaviour:
@@ -1559,8 +1552,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1041436438291938513}
   - {fileID: 426935158495536439}
+  - {fileID: 1041436438291938513}
   - {fileID: 1401740951675435649}
   m_Father: {fileID: 2470213332779433110}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1644,7 +1637,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 65}
+  m_SizeDelta: {x: 100, y: 72.24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8613324157427977293
 CanvasRenderer:
@@ -1867,7 +1860,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 4142872978523023068}
   m_Direction: 2
   m_Value: 1.0000002
-  m_Size: 0.8169935
+  m_Size: 0.79334855
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3844,7 +3837,7 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: -5
+    m_Top: 5
     m_Bottom: 0
   m_ChildAlignment: 4
   m_Spacing: 6
@@ -4965,7 +4958,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 3104
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -5048,16 +5041,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1389254864151484465, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: _camera
-      value: 
-      objectReference: {fileID: 8635594776529222650}
-    - target: {fileID: 2455607605031226785, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_text
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2563248212429571281, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
         type: 3}
@@ -5243,11 +5226,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8128706942184581934, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_text
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8260822515686263126, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
         type: 3}

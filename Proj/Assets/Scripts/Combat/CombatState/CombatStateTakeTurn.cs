@@ -33,7 +33,11 @@ public class CombatStateTakeTurn : CombatStateBase
         
         //NOTE (Calle): Only make it possible to press "End Turn" button if its a hero
         if(activeCharacter.GetFaction() == Faction.Friendly)
+        {
             CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
+            CombatEventManager.OnCharacterDeath += EndTurn;
+        }
+            
 
         switch (activeCharacter.GetFaction())
         {
@@ -81,7 +85,12 @@ public class CombatStateTakeTurn : CombatStateBase
         CombatEventManager.InvokeExitCombatStateTakeTurn();
 
         if (CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() == Faction.Friendly)
+        {
             CombatUI.Instance.OnEndTurnButtonPressed -= EndTurn;
+            CombatEventManager.OnCharacterDeath -= EndTurn;
+            Selector._instance.DeselectCharacter();
+        }
+            
 
         CombatManager._instance.GetEnemyAI().AIEndTurn.RemoveListener(EndTurn);
     }
@@ -102,6 +111,11 @@ public class CombatStateTakeTurn : CombatStateBase
     }
 
     private void EndTurn()
+    {
+        CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
+    }
+
+    private void EndTurn(Character deadCharacter)
     {
         CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
     }

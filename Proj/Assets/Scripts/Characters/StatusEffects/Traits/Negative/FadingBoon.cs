@@ -9,26 +9,28 @@ public class FadingBoon : Trait
         _effectApplied = false;
     }
 
-    public override void OnStatusEffectApplied(Character caster, StatusEffect statusEffect)
+    public override bool OnTryApplyStatusEffect(Character caster, Character target, StatusEffect statusEffect)
     {
+        if (target != Character)
+        {
+            return true;
+        }
+        
         // Trait applies only to buffs.
         if (_effectApplied || statusEffect.Data.Type is not StatusEffectType.Buff)
         {
-            return;
+            return true;
         }
 
         var data = Data as DamageModifyingData;
 
         if (!data)
         {
-            return;
+            return true;
         }
         
         _effectApplied = true;
         statusEffect.SetDuration(Mathf.FloorToInt(statusEffect.Duration / data.DamageModifier));
-        if (statusEffect.Duration <= 0)
-        {
-            Manager.RemoveStatusEffect(statusEffect);
-        }
+        return statusEffect.Duration > 0;
     }
 }

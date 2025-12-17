@@ -25,6 +25,7 @@ public class CombatStateCharacterPlacement : CombatStateBase
         CombatUI.Instance.OnStartCombatButtonPressed -= StartTakeTurns;
         CombatEventManager.InvokeExitCombatStatePlaceCharacter();
         CombatGrid._instance.HideOffGridTiles();
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.StartCombat, Vector3.zero);
     }
 
     public override void Update()

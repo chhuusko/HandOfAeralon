@@ -33,7 +33,9 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
         {
             animator.SetTrigger(GetAbilityName());
         }
-      
+
+        AudioManager.Instance.PlayOneShot(AudioEvent, caster.transform.position);
+
         if (GetAbilityVFXSequence() != null)
         {
             VFXData data = new VFXData

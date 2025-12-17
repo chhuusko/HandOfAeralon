@@ -651,6 +651,7 @@ public class Character : MonoBehaviour
         _data.Heal(healAmount);
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
         OnWasHealed?.Invoke(healAmount, gameObject);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Healed, transform.position);
     }
     
     public bool IsMoving()

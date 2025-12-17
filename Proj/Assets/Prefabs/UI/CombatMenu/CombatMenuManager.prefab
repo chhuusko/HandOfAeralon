@@ -179,10 +179,14 @@ MonoBehaviour:
   _inGameLayout: {fileID: 8058167753123611917}
   _optionsLayout: {fileID: 2847229630608231235}
   _victoryScreenLayout: {fileID: 8117046479408202318}
-  _uacCardHUDCamera: {fileID: 0}
-  _uacCombatHUDCamera: {fileID: 0}
-  _uacTooltipHUDCamera: {fileID: 0}
-  _uacCutsceneHUDCamera: {fileID: 0}
+  _uacCardHUDCameraData: {fileID: 0}
+  _uacCombatHUDCameraData: {fileID: 0}
+  _uacTooltipHUDCameraData: {fileID: 0}
+  _uacCutsceneHUDCameraData: {fileID: 0}
+  _CardHUDCanvas: {fileID: 0}
+  _CombatHUDCanvas: {fileID: 0}
+  _TooltipHUDCanvas: {fileID: 0}
+  _CutsceneHUDCanvas: {fileID: 0}
   _combatHUDCanvasGroup: {fileID: 0}
   _combatCardCanvasGroup: {fileID: 0}
   _combatTooltipCanvasGroup: {fileID: 0}
