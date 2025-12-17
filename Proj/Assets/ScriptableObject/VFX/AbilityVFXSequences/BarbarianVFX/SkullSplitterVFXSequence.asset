@@ -38,7 +38,25 @@ MonoBehaviour:
   _impactShakeFrequency: 200
   _impactShakeFade:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0026916265
+      value: 0.9977709
+      inSlope: -0.054661315
+      outSlope: -0.054661315
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0039663
+      value: -0.09626973
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4

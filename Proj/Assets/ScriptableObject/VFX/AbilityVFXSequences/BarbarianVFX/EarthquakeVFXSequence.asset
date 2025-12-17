@@ -14,7 +14,75 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _castFX: {fileID: 9048421809270265902, guid: aae7104d3f2952441902d44c0ae498f0, type: 3}
   _travelFX: {fileID: 0}
-  _impactFX: {fileID: 0}
   _biggerImpactScale: 0
   _offsetDistance: 2.2
   _airDistance: 0.1
+  _rotationOffset: {x: 0, y: 0, z: 0}
+  _doCastCameraShake: 1
+  _castShakeDuration: 1.8
+  _castShakeMagnitude: 0.1
+  _castShakeFrequency: 200
+  _castShakeFade:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.20818782
+      value: 0.83738273
+      inSlope: 0.42566076
+      outSlope: 0.42566076
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.29808325
+      value: 0.96721864
+      inSlope: 0.13011055
+      outSlope: 0.13011055
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.61269224
+      value: 0.96780646
+      inSlope: -0.054661315
+      outSlope: -0.054661315
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0166616
+      value: -0.07380879
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _impactFX: {fileID: 0}
+  _impactAirDistance: 0
+  _impactRotationOffset: {x: 0, y: 0, z: 0}
+  _doImpactCameraShake: 0
+  _impactShakeDuration: 1.5
+  _impactShakeMagnitude: 0.1
+  _impactShakeFrequency: 200
+  _impactShakeFade:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
