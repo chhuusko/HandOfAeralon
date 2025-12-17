@@ -10,6 +10,7 @@ public class CharacterMovement : MonoBehaviour
     private List<CombatGridTile> _pathPreview = new();
     private bool _bIsMoving = false;
     private CombatGridTile _lastPreviewPathTile = null;
+    private Animator _animator;
 
     void Start()
     {
@@ -18,6 +19,17 @@ public class CharacterMovement : MonoBehaviour
         {
             Debug.LogError($"CharacterMovement.cs | _character NOT FOUND!");
         }
+
+        _animator = GetComponent<Animator>();
+        if (_animator == null)
+        {
+            Debug.LogError($"CharacterMovement.cs | _animator NOT FOUND!");
+        }
+    }
+
+    void Update()
+    {
+        _animator.SetBool("IsMoving", _bIsMoving);
     }
 
     public bool IsMoving()
@@ -128,16 +140,11 @@ public class CharacterMovement : MonoBehaviour
         if (IsDead()) yield break;
 
         _bIsMoving = true;
+        Debug.LogWarning($"{_character.name} _isMoving = true");
         CombatEventManager.InvokeOnCharacterMove(_bIsMoving);
         Selector._instance.InvokeCharacterActionStarted();
         GridExplorer._instance.ClearPathDrawing();
         float moveSpeed = 4f; // M�ste matcha animationerna
-
-        Animator animator = null;
-        if (_character.TryGetComponent<Animator>(out animator))
-        {
-            animator.SetBool("IsMoving", true);
-        }
 
         foreach (var step in path)
         {
@@ -168,13 +175,9 @@ public class CharacterMovement : MonoBehaviour
         }
 
         _bIsMoving = false;
+        Debug.LogWarning($"{_character.name} _isMoving = false");
         CombatEventManager.InvokeOnCharacterMove(_bIsMoving);
         Selector._instance.InvokeCharacterActionStopped();
-
-        if (animator != null)
-        {
-            animator.SetBool("IsMoving", false);
-        }
 
         DrawMoveRange();
     }
