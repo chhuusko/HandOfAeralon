@@ -94,9 +94,9 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void RemoveStatusEffect(StatusEffect statusEffect)
+    public void RemoveStatusEffect(StatusEffect statusEffect, bool forceRemoval = false)
     {
-        if (!statusEffect.Data.IsDispellable)
+        if (!forceRemoval && !statusEffect.Data.IsDispellable)
         {
             return;
         }
@@ -279,12 +279,12 @@ public class StatusEffectManager : MonoBehaviour
         {
             statusEffect.ModifyIncomingDamage(ref damage, ability);
         }
-        
+
         foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
         {
             if (statusEffect.ShouldExpire)
             {
-                RemoveStatusEffect(statusEffect);
+                RemoveStatusEffect(statusEffect, true);
             }
         }
         

@@ -9,7 +9,7 @@ public class BuriedSecrets : Card
     {
         if (character != null)
         {
-            character.TakeDamage((CardHandManager.GetInstance().GetDiscardPile().Count)*2);
+            character.TakeDamage((CardHandManager.GetInstance().GetDiscardPile().Count)*3);
         }
     }
 }
