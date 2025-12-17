@@ -28,7 +28,7 @@ public class GlobalGameManager : ScriptableObject
     [SerializeField] private float _classTraitChance;
     private static GlobalGameManager _instance;
     private GameData _currentGame;
-
+    [SerializeField] private int startCoins = 100;
     [SerializeField] private int baseCoinReward = 200;
     [SerializeField] private int CoinRewardIncreasePerLevel = 50;
 
@@ -128,7 +128,7 @@ public class GlobalGameManager : ScriptableObject
 
 
             _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
-        _currentGame.coins = 0;
+        _currentGame.coins = startCoins;
         _currentGame.reapersLedgerKills = 0;
     }
     public void SaveCards(List<Card> cards)
