@@ -5,16 +5,33 @@ using UnityEngine;
 
 public class AbilityVFXSequence : ScriptableObject
 {
+    [Header("Cast")]
     [SerializeField] private VFXPlayer _castFX;
     [SerializeField] private ProjectileVFXPlayer _travelFX;   // projectile or null
-    [SerializeField] private VFXPlayer _impactFX;
     [SerializeField] private float _biggerImpactScale = 2f;
     [SerializeField] private float _offsetDistance;
     [SerializeField] private float _airDistance;
     [SerializeField] private Vector3 _rotationOffset;
 
+    [Header("Cast Shake")]
+    [SerializeField] protected bool _doCastCameraShake = false;
+    [SerializeField] protected float _castShakeDuration = 0.2f;
+    [SerializeField] protected float _castShakeMagnitude = 0.15f;
+    [SerializeField] protected float _castShakeFrequency = 40f;
+    [SerializeField] protected AnimationCurve _castShakeFade;
+
+    [Header("Impact")]
+    [SerializeField] private VFXPlayer _impactFX;
     [SerializeField] private float _impactAirDistance;
     [SerializeField] private Vector3 _impactRotationOffset;
+
+    [Header("Impact Shake")]
+    [SerializeField] protected bool _doImpactCameraShake = false;
+    [SerializeField] protected float _impactShakeDuration = 0.2f;
+    [SerializeField] protected float _impactShakeMagnitude = 0.15f;
+    [SerializeField] protected float _impactShakeFrequency = 40f;
+    [SerializeField] protected AnimationCurve _impactShakeFade;
+
 
     public virtual IEnumerator RunSequence(VFXData data)
     {
@@ -22,6 +39,7 @@ public class AbilityVFXSequence : ScriptableObject
 
         if (_castFX != null)
         {
+            PlayShake(_doCastCameraShake, _castShakeDuration, _castShakeMagnitude, _castShakeFrequency, _castShakeFade);
             Vector3 offset = -data.Direction.normalized * _offsetDistance;
             offset.y = GetAirDistance();
 
@@ -32,7 +50,7 @@ public class AbilityVFXSequence : ScriptableObject
         if (_travelFX != null)
         {
             var projectile = Instantiate(_travelFX);
-            yield return projectile.PlayProjectile(data.OriginPosition,data.TargetPosition
+            yield return projectile.PlayProjectile(data.OriginPosition, data.TargetPosition
             );
         }
 
@@ -41,6 +59,7 @@ public class AbilityVFXSequence : ScriptableObject
 
         if (_impactFX != null)
         {
+            PlayShake(_doImpactCameraShake, _impactShakeDuration, _impactShakeMagnitude, _impactShakeFrequency, _impactShakeFade);
             data.TargetPosition.y += GetImpactAirDistance();
             var impact = Instantiate(_impactFX);
             Vector3 baseScale = impact.transform.localScale;
@@ -49,18 +68,26 @@ public class AbilityVFXSequence : ScriptableObject
         }
     }
 
+    protected void PlayShake(bool doCamerashake, float shakeDuration, float shakeMagnitude, float shakeFrequency, AnimationCurve shakeFade)
+    {
+        if (doCamerashake && CameraShakeManager._instance != null)
+        {
+           CameraShakeManager._instance.PlayShake(shakeDuration,shakeMagnitude,shakeFrequency,shakeFade);
+        }
+    }
+
     public VFXPlayer GetCastFX() => _castFX;
- 
+
     public ProjectileVFXPlayer GetTravelFX() => _travelFX;
-   
+
     public VFXPlayer GetImpactFX() => _impactFX;
-   
+
     public float GetOffsetDistance() => _offsetDistance;
 
     public float GetBiggerImpactScale() => _biggerImpactScale;
 
     public float GetAirDistance() => _airDistance;
-   
+
     public Vector3 GetRotationOffset() => _rotationOffset;
 
     public float GetImpactAirDistance() => _impactAirDistance;
