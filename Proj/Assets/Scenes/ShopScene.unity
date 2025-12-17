@@ -734,8 +734,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 893015706}
   - {fileID: 786684308}
+  - {fileID: 893015706}
   m_Father: {fileID: 2126070578}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
@@ -4623,7 +4623,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1211065230
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8106,7 +8106,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: -682.37366}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2010235789
 MonoBehaviour:
@@ -8389,7 +8389,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 873734730}
   m_Direction: 2
   m_Value: 1.0000002
-  m_Size: 0.6510417
+  m_Size: 0.6510416
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8489,8 +8489,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Current Health:\nCurrent Initiative: \nCurrent Damage:\nCurrent MovementPoints:
-    \n\nMax Health:\nMax Initiative: \nMax Damage:\nMax MovementPoints: "
+  m_text: "Health:\nMax Health:\nDamage:\nInitiative: \nMovement Points: "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9874f9c8d38903e499aa5139a008d96d, type: 2}
   m_sharedMaterial: {fileID: 3094104753569673064, guid: 9874f9c8d38903e499aa5139a008d96d,
@@ -8804,7 +8803,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: -1.4700012}
+  m_AnchoredPosition: {x: 0.000061035156, y: -1.4700165}
   m_SizeDelta: {x: 0, y: -19.34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2126070579
