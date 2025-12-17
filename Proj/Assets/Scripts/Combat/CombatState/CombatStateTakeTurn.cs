@@ -35,7 +35,7 @@ public class CombatStateTakeTurn : CombatStateBase
         if(activeCharacter.GetFaction() == Faction.Friendly)
         {
             CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
-            CombatEventManager.OnCharacterDeath += EndTurn;
+            CombatEventManager.OnCharacterDeath += EndTurnOnActiveCharacterDeath;
         }
             
 
@@ -87,7 +87,7 @@ public class CombatStateTakeTurn : CombatStateBase
         if (CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() == Faction.Friendly)
         {
             CombatUI.Instance.OnEndTurnButtonPressed -= EndTurn;
-            CombatEventManager.OnCharacterDeath -= EndTurn;
+            CombatEventManager.OnCharacterDeath -= EndTurnOnActiveCharacterDeath;
             Selector._instance.DeselectCharacter();
         }
             
@@ -115,9 +115,10 @@ public class CombatStateTakeTurn : CombatStateBase
         CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
     }
 
-    private void EndTurn(Character deadCharacter)
+    private void EndTurnOnActiveCharacterDeath(Character deadCharacter)
     {
-        CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
+        if(deadCharacter == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter())
+            CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
     }
 
     private void HandleWinCondition()
