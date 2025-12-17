@@ -34,6 +34,7 @@ public class CombatVictoryScreenMenu : MonoBehaviour
         _info.text = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins();
         _mainMenuButtonText.text = "Quit Game";
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PlayerVictory, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.GoldGainAfterCombat, transform.position);
     }
 
     public void SetLoseScreen()

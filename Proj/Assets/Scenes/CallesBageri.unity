@@ -116394,6 +116394,56 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4140094909464820197, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: startCombat.Path
+      value: event:/Sound Design/Non Diegetic/Stingers/stinger_combat_start
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140094909464820197, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: startCombat.Guid.Data1
+      value: -1237721483
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140094909464820197, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: startCombat.Guid.Data2
+      value: 1125920193
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140094909464820197, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: startCombat.Guid.Data3
+      value: 440586143
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140094909464820197, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: startCombat.Guid.Data4
+      value: -1558441686
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140094909464820197, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: goldGainAfterCombat.Path
+      value: event:/Sound Design/Non Diegetic/UI/ui_goldgain
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140094909464820197, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: goldGainAfterCombat.Guid.Data1
+      value: 522330137
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140094909464820197, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: goldGainAfterCombat.Guid.Data2
+      value: 1173999045
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140094909464820197, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: goldGainAfterCombat.Guid.Data3
+      value: -1349741181
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140094909464820197, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: goldGainAfterCombat.Guid.Data4
+      value: 473229470
+      objectReference: {fileID: 0}
     - target: {fileID: 6207807816301819360, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
         type: 3}
       propertyPath: m_Name
