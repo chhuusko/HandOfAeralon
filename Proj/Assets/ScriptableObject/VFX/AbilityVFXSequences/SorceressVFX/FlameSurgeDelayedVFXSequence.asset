@@ -21,19 +21,46 @@ MonoBehaviour:
   _rotationOffset: {x: 0, y: 0, z: 0}
   _doCastCameraShake: 1
   _castShakeDuration: 3.4
-  _castShakeMagnitude: 0.2
+  _castShakeMagnitude: 0.12
   _castShakeFrequency: 200
   _castShakeFade:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.2856331
-      value: 0.13168335
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
+      time: -0.011268616
+      value: 0.005012512
+      inSlope: 4.0330453
+      outSlope: 4.0330453
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.22506058
+      value: 0.9581389
+      inSlope: 0.24385785
+      outSlope: 0.24385785
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.78293324
+      value: 0.9484787
+      inSlope: -0.38920346
+      outSlope: -0.38920346
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.7156807
+    - serializedVersion: 3
+      time: 1.011261
+      value: 0.014671326
+      inSlope: -4.0897675
+      outSlope: -4.0897675
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
