@@ -279,12 +279,12 @@ public class StatusEffectManager : MonoBehaviour
         {
             statusEffect.ModifyIncomingDamage(ref damage, ability);
         }
-        
+
         foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
         {
             if (statusEffect.ShouldExpire)
             {
-                RemoveStatusEffect(statusEffect);
+                RemoveStatusEffect(statusEffect, true);
             }
         }
         
