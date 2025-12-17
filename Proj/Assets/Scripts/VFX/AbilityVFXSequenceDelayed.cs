@@ -10,6 +10,7 @@ public class AbilityVFXSequenceDelayed : AbilityVFXSequence
 
         if (GetCastFX() != null)
         {
+            PlayShake(_doCastCameraShake, _castShakeDuration, _castShakeMagnitude, _castShakeFrequency, _castShakeFade);
             Vector3 offset = -data.Direction.normalized * GetOffsetDistance();
             offset.y = GetAirDistance();
             Instantiate(GetCastFX()).Play(data.OriginPosition + offset, data.Direction);
@@ -26,6 +27,8 @@ public class AbilityVFXSequenceDelayed : AbilityVFXSequence
 
         if (GetImpactFX() != null)
         {
+            PlayShake(_doImpactCameraShake, _impactShakeDuration, _impactShakeMagnitude, _impactShakeFrequency, _impactShakeFade);
+
             var impact = Instantiate(GetImpactFX());
          
             impact.Play(data.TargetPosition, data.Direction);
