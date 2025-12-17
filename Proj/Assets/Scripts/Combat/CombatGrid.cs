@@ -3,6 +3,7 @@ using Unity.AI.Navigation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.TextCore.Text;
 
 [System.Serializable]
 public class CombatGrid : MonoBehaviour
@@ -451,7 +452,9 @@ public class CombatGrid : MonoBehaviour
         characterScript.SetCurrentDamage(currentDamage);
         characterScript.SetCurrentMovementPoints(currentMovementPoints);
         characterScript.Data.SetBaseHealthPoints(baseHealtPoints);
+        characterScript.Data.InitializeCurrentHealthFromSave(characterData.GetHealthPoints());
         characterScript.Data.SetDerivedHealthPoints(LevelManager.GetInstance().enemyStatIncrease, preserveLoadedCurrent: false);
+     
         characterScript.SetBaseInitiative(baseSpeed);
         characterScript.Data.SetBaseDamage(baseDamage);
         characterScript.SetBaseMovementPoints(baseMovementPoints);

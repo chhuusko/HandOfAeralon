@@ -134,6 +134,7 @@ public class CharacterData
     public void InitializeCurrentHealthFromSave(int currentHealth)
     {
         _currentHealthPoints = Mathf.Clamp(currentHealth, 0, _derivedHealthPoints);
+        _derivedHealthPoints = _baseHealthPoints;
         _healthInitialized = true;
     }
     
