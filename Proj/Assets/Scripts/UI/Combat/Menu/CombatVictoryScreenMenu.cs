@@ -31,7 +31,9 @@ public class CombatVictoryScreenMenu : MonoBehaviour
     {
         _goToShopButton.SetActive(true);
         _title.text = "Battle Won!";
-        _info.text = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins();
+        string summaryInfo = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins() + "\n"
+                             + "Total enemies killed: " + GlobalGameManager.GetInstance().GetTotalEnemiesKilled();
+        _info.text = summaryInfo;
         _mainMenuButtonText.text = "Quit Game";
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PlayerVictory, transform.position);
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.GoldGainAfterCombat, transform.position);
@@ -41,7 +43,8 @@ public class CombatVictoryScreenMenu : MonoBehaviour
     {
         _goToShopButton.SetActive(false);
         _title.text = "Battle Lost!";
-        _info.text = "";
+        string summaryInfo = "Total enemies killed: " + GlobalGameManager.GetInstance().GetTotalEnemiesKilled();
+        _info.text = summaryInfo;
         _mainMenuButtonText.text = "Quit Game";
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PlayerDefeated, transform.position);
     }

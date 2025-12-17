@@ -16,9 +16,10 @@ public struct GameData
 
     // misc
     public int reapersLedgerKills;
-
-
+    public int totalEnemiesKilled;
+    public int totalBattlesWon;
 }
+
 [CreateAssetMenu(fileName = "GlobalGameManager", menuName = "Manager/GlobalGameManager")]
 public class GlobalGameManager : ScriptableObject
 {
@@ -60,6 +61,9 @@ public class GlobalGameManager : ScriptableObject
 
     private void RemoveCharacter(Character obj)
     {
+        if(obj.GetFaction() == Faction.Enemy)
+            _currentGame.totalEnemiesKilled++;
+
         Dictionary<CharacterData, Character> dict = CombatManager._instance.GetCharacterDataDict();
         foreach (var pair in dict)
         {
@@ -79,6 +83,8 @@ public class GlobalGameManager : ScriptableObject
         }
         return _currentGame;
     }
+
+    public int GetTotalEnemiesKilled() { return _currentGame.totalEnemiesKilled; }
     public void LoadGame(int slot)
     {
         //TODO
