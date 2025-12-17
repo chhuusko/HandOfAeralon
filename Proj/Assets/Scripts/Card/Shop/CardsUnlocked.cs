@@ -56,14 +56,26 @@ public class CardsUnlocked : ScriptableObject
     }
     public List<Card> GetUnlockedCards()
     {
-        List<Card> newCard = new List<Card>();
+        List<Card> newCardList = new List<Card>();
         for (int i = 0; i < cardsUnlocked.Length; ++i)
         {
             if (cardsUnlocked[i].isUnlocked)
             {
-                newCard.Add(cardsUnlocked[i].card);
+                newCardList.Add(cardsUnlocked[i].card);
             }
         }
-        return newCard;
+        return newCardList;
+    }
+    public List<Card> GetCardsByRarity(CardRarity rarity)
+    {
+        List<Card> newCardList = new List<Card>();
+        for (int i = 0; i < cardsUnlocked.Length; ++i)
+        {
+            if (cardsUnlocked[i].isUnlocked && cardsUnlocked[i].card.rarity == rarity)
+            {
+                newCardList.Add(cardsUnlocked[i].card);
+            }
+        }
+        return newCardList;
     }
 }
