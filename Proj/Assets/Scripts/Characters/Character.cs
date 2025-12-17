@@ -125,7 +125,7 @@ public class CharacterData
         int derivedHp = Mathf.RoundToInt(_baseHealthPoints * hpFactor);
         int derivedDamage = Mathf.RoundToInt(_baseDamage * damageFactor);
         
-        SetDerivedHealthPoints(derivedHp, hpFactor);
+        SetDerivedHealthPoints(hpFactor);
         SetDerivedDamage(derivedDamage);
         
         OnDerivedStatsChanged?.Invoke();
@@ -134,6 +134,7 @@ public class CharacterData
     public void InitializeCurrentHealthFromSave(int currentHealth)
     {
         _currentHealthPoints = Mathf.Clamp(currentHealth, 0, _derivedHealthPoints);
+        _derivedHealthPoints = _baseHealthPoints;
         _healthInitialized = true;
     }
     
@@ -145,22 +146,44 @@ public class CharacterData
     public void SetFaction(Faction faction) => _faction = faction;
     public void SetBaseInitiative(int initiative) => _baseInitiative = Mathf.Max(1, initiative);
     
-    public void SetDerivedHealthPoints(int newMax, float hpFactor)
+    public void SetDerivedHealthPoints(float hpFactor, bool preserveLoadedCurrent = false)
     {
-        if (_traitManager.ContainsStatusEffect<Giantblood>())
-        {
-            DebugLog.JoppaLog($"SetDerivedHealthPoints called: newMax={newMax}, hpFactor={hpFactor}, baseHP={_baseHealthPoints}");
+        int oldDerived = _derivedHealthPoints;
+        int oldCurrent = _currentHealthPoints;
+        int newDerived = Mathf.Max(1, Mathf.RoundToInt(_baseHealthPoints * hpFactor));
+    
+        if (Faction == Faction.Enemy) 
+        { 
+            DebugLog.JoppaLog($"SetDerivedHealthPoints: oldDerived={oldDerived}, oldCurrent={oldCurrent}, newDerived={newDerived}, hpFactor={hpFactor}, baseHP={_baseHealthPoints}"); 
         }
-        
-        int oldMax = _derivedHealthPoints;
-        _derivedHealthPoints = Mathf.Max(1, newMax);
+    
+        // If derived health hasn't changed, don't recalculate current health
+        if (newDerived == oldDerived && _healthInitialized)
+        {
+            if (Faction == Faction.Enemy) { Debug.Log($"_currentHP={_currentHealthPoints} (unchanged)"); }
+            return;
+        }
+    
+        _derivedHealthPoints = newDerived;
 
-        if (_healthInitialized && oldMax > 0)
+        if (_healthInitialized && oldDerived > 0)
         {
-            _currentHealthPoints = Mathf.CeilToInt(_currentHealthPoints * hpFactor);
-        }
+            // Maintain percentage of current health
+            float healthPercent = (float)oldCurrent / oldDerived;
+            _currentHealthPoints = Mathf.RoundToInt(_derivedHealthPoints * healthPercent);
         
-        _currentHealthPoints = Mathf.Min(_currentHealthPoints, _derivedHealthPoints);
+            if (Faction == Faction.Enemy) 
+            { 
+                DebugLog.JoppaLog($"Calculated: healthPercent={healthPercent}, new _currentHP={_currentHealthPoints}"); 
+            }
+        }
+        else
+        {
+            _currentHealthPoints = _derivedHealthPoints;
+            _healthInitialized = true;
+        }
+    
+        if (Faction == Faction.Enemy) { Debug.Log($"Final _currentHP={_currentHealthPoints}"); }
     }
 
     public void SetDerivedDamage(int damage) => _derivedDamage = Mathf.Max(1, damage);
@@ -372,7 +395,7 @@ public class Character : MonoBehaviour
     public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
     public void SetDerivedHealthPoints(int newMax, float hpFactor)
     {
-        _data.SetDerivedHealthPoints(newMax, hpFactor);
+        _data.SetDerivedHealthPoints(hpFactor);
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
     }
 
