@@ -554,6 +554,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2980759558093993826, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3058097934955405079, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -858,6 +863,46 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138030490505368662, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: _cameraBounds._northEast.x
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138030490505368662, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: _cameraBounds._northEast.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138030490505368662, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: _cameraBounds._northWest.x
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138030490505368662, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: _cameraBounds._northWest.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138030490505368662, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: _cameraBounds._southEast.x
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138030490505368662, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: _cameraBounds._southEast.z
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138030490505368662, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: _cameraBounds._southWest.x
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5138030490505368662, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: _cameraBounds._southWest.z
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 5174024090911428235, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
@@ -2342,6 +2387,11 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3923998647222326710, guid: a571d2f924eb3a140b73bad4fae76007,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4192797708640025847, guid: a571d2f924eb3a140b73bad4fae76007,
         type: 3}
       propertyPath: m_IsActive
       value: 0
