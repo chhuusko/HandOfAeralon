@@ -1,30 +1,34 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class ReflectedAffliction : Trait
 {
     private bool _effectApplied;
-    private Character _caster;
 
     public override void OnCombatStarted()
     {
         _effectApplied = false;
     }
 
-    public override void OnStatusEffectApplied(Character caster, StatusEffect statusEffect)
+    public override bool OnTryApplyStatusEffect(Character caster, Character target, StatusEffect statusEffect)
     {
-        if (_effectApplied)
+        if (target != Character)
         {
-            return;
+            return true;
         }
         
-        if (!caster)
+        if (_effectApplied || !caster || statusEffect.Data.Type is not StatusEffectType.Debuff)
         {
-            return;
+            return true;
         }
         
-        Manager.RemoveStatusEffect(statusEffect);
-        caster.GetStatusEffectManager().AddStatusEffect(statusEffect);
         _effectApplied = true;
+        
+        var reflected = statusEffect.Data.CreateInstance(statusEffect.Duration);
+        caster.GetStatusEffectManager().AddStatusEffect(reflected, Character);
+
+        // Block adding the effect.
+        return false;
     }
 }

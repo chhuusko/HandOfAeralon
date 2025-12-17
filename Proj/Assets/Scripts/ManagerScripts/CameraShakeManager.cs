@@ -5,6 +5,11 @@ public class CameraShakeManager : MonoBehaviour
 {
     public static CameraShakeManager _instance {  get; private set; }
 
+    private bool _cameraShakeEnabled = true;
+
+    private bool _cameraIsShaking;
+
+
     private void Awake()
     {
         if(_instance != null && _instance != this)
@@ -19,7 +24,8 @@ public class CameraShakeManager : MonoBehaviour
 
     private IEnumerator Shake(float duration, float magnitude, float frequency, AnimationCurve fadeCurve)
     {
- 
+        if (!_cameraShakeEnabled || _cameraIsShaking) yield break;
+
         if (fadeCurve == null)
         {
             fadeCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
@@ -30,6 +36,8 @@ public class CameraShakeManager : MonoBehaviour
 
         float timeSinceLastShake = 0f;
         float interval = 1f / frequency;
+
+        _cameraIsShaking = true;
 
         while (elapsed < duration)
         {
@@ -50,11 +58,30 @@ public class CameraShakeManager : MonoBehaviour
 
             yield return null;
         }
-
         transform.localPosition = originalPos;
+        _cameraIsShaking = false;
     }
     public void PlayShake(float duration, float magnitude, float frequency, AnimationCurve fade)
     {
         StartCoroutine(Shake(duration, magnitude, frequency, fade));
+    }
+
+    public void SetCameraShakeEnabled(bool value)
+    {
+        _cameraShakeEnabled = value;
+    }
+    public bool GetCameraShakeEnabled()
+    {
+        return _cameraShakeEnabled;
+    }
+
+    public void SetCameraIsShaking(bool value)
+    {
+        _cameraIsShaking = value;
+    }
+
+    public bool GetCameraIsShaking()
+    {
+        return _cameraIsShaking;
     }
 }

@@ -15,8 +15,66 @@ MonoBehaviour:
   _castFX: {fileID: -2075151297172292651, guid: 106d41d7df139e74ca298edc5b9b6417,
     type: 3}
   _travelFX: {fileID: 0}
-  _impactFX: {fileID: 0}
   _biggerImpactScale: 0
   _offsetDistance: -2
   _airDistance: 1
   _rotationOffset: {x: 0, y: 0, z: 0}
+  _doCastCameraShake: 1
+  _castShakeDuration: 3.4
+  _castShakeMagnitude: 0.12
+  _castShakeFrequency: 200
+  _castShakeFade:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.011268616
+      value: 0.005012512
+      inSlope: 4.0330453
+      outSlope: 4.0330453
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.22506058
+      value: 0.9581389
+      inSlope: 0.24385785
+      outSlope: 0.24385785
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.78293324
+      value: 0.9484787
+      inSlope: -0.38920346
+      outSlope: -0.38920346
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.7156807
+    - serializedVersion: 3
+      time: 1.011261
+      value: 0.014671326
+      inSlope: -4.0897675
+      outSlope: -4.0897675
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _impactFX: {fileID: 0}
+  _impactAirDistance: 0
+  _impactRotationOffset: {x: 0, y: 0, z: 0}
+  _doImpactCameraShake: 0
+  _impactShakeDuration: 3
+  _impactShakeMagnitude: 0.1
+  _impactShakeFrequency: 200
+  _impactShakeFade:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

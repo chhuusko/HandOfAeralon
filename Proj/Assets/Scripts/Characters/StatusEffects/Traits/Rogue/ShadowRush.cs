@@ -2,14 +2,21 @@ using UnityEngine;
 
 public class ShadowRush : Trait
 {
-    public override void OnStatusEffectApplied(Character caster, StatusEffect statusEffect)
+    public override bool OnTryApplyStatusEffect(Character caster, Character target, StatusEffect statusEffect)
     {
+        if (target != Character)
+        {
+            return true;
+        }
+        
         if (statusEffect is not Stealth)
         {
-            return;
+            return true;
         }
         
         AddHaste();
+        
+        return true;
     }
 
     public override void OnStatusEffectRemoved(StatusEffect statusEffect)
