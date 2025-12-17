@@ -30,6 +30,7 @@ MonoBehaviour:
   _castingAnimationTime: 0
   _castingFXTime: 0.5
   _fromCastToHitTime: 0
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
   <AudioEvent>k__BackingField:
     Guid:
@@ -41,8 +42,8 @@ MonoBehaviour:
   _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
   _validTargets: 2
   _abilityAOEVFXSequence: {fileID: 0}
-  _radius: 3
-  _damageMultiplier: 0.7
+  _radius: 2
+  _damageMultiplier: 0.75
   _stunCharacterHitChance: 0.25
   _stunDuration: 1
   _stunnedEnemiesTilBonus: 1
