@@ -33,6 +33,7 @@ public class LevelManager : ScriptableObject
     private CombatGrid _combatGrid;
     private bool _isTutorialCompleted;
 
+    List<string> easyList, mediumList, hardList;
     public static LevelManager GetInstance()
     {
         if (_instance == null)
