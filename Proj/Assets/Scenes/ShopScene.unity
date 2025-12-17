@@ -4623,7 +4623,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1211065230
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6916,6 +6916,27 @@ MonoBehaviour:
   _removeCardText: {fileID: 1228659772}
   _refreshText: {fileID: 928631388}
   _healText: {fileID: 1367921535}
+  bougtSound:
+    Guid:
+      Data1: -1502051221
+      Data2: 1123158267
+      Data3: 1497875640
+      Data4: -337451253
+    Path: event:/Sound Design/Non Diegetic/UI/ui_buy
+  errorSound:
+    Guid:
+      Data1: 106786472
+      Data2: 1219501671
+      Data3: -887648076
+      Data4: 73412180
+    Path: event:/Sound Design/Non Diegetic/UI/ui_invalid
+  healSound:
+    Guid:
+      Data1: -1432241108
+      Data2: 1312120745
+      Data3: 561586099
+      Data4: -1891188338
+    Path: event:/Sound Design/Non Diegetic/UI/ui_healthpotion
   _healPrice: 50
   _refreshPrice: 25
   _removeCardPrice: 25
@@ -8106,7 +8127,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -682.37366}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2010235789
 MonoBehaviour:

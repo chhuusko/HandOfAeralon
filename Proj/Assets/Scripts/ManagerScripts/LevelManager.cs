@@ -128,10 +128,7 @@ public class LevelManager : ScriptableObject
         Debug.Log("current level " +  _level);
         if (SceneManager.GetActiveScene().name == "ShopScene" || SceneManager.GetActiveScene().name == "MainMenu")
         {
-            if (_level != 0)
-            {
-                IncreaseStat();
-            }
+            
             
             //loadCombat
             if (_isTutorialCompleted)
@@ -160,6 +157,11 @@ public class LevelManager : ScriptableObject
         }
         else
         {
+            if (_level != 0)
+            {
+                IncreaseStat();
+                Debug.LogWarning("StatIncrease");
+            }
             Application.targetFrameRate = menuFPSCap;
             QualitySettings.vSyncCount = 0;
             SceneManager.LoadScene("ShopScene");

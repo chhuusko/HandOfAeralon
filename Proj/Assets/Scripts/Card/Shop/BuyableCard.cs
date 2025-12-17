@@ -63,6 +63,6 @@ public class BuyableCard : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private void Bought()
     {
         GlobalGameManager.GetInstance().GetGameData().cardList.Add(_card);
-        Shop.GetInstance().ChangeCoins(-_price);
+        Shop.GetInstance().Bought(_price);
     }
 }
