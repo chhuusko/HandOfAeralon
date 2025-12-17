@@ -35,6 +35,8 @@ public abstract class RoundAOEAbility : AOEAbility
             aoeDelta = finalRadius - baseRadius;
         }
 
+        AudioManager.Instance.PlayOneShot(AudioEvent, caster.transform.position);
+
         if (GetAbilityVFXSequence() != null)
         {
             VFXData data = new VFXData

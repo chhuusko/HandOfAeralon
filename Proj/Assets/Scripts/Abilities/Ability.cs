@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,6 +27,7 @@ public abstract class Ability : ScriptableObject
     [SerializeField] private AudioClip _castingSound, _hitSound;
     [SerializeField] private float _castingAnimationTime, _castingFXTime, _fromCastToHitTime;
     [SerializeField] private float _castingRotationTime = 0.3f;
+    [field: SerializeField] public EventReference AudioEvent { get; private set; }
 
     private AbilityHandler _abilityHandler;
     private Character _characterCaster;
@@ -121,6 +123,7 @@ public abstract class Ability : ScriptableObject
         {
             animator.SetTrigger(_abilityName);
         }
+        AudioManager.Instance.PlayOneShot(AudioEvent, caster.transform.position);
 
         if (_abilityVFXSequence != null)
         {
@@ -139,7 +142,6 @@ public abstract class Ability : ScriptableObject
             );
         }
 
-        // Play hit sound.
         RunAbility(casterTile, targetTile);
 
         Selector._instance.InvokeCharacterActionStopped();

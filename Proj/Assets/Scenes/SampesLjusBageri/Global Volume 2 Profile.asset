@@ -29,7 +29,7 @@ MonoBehaviour:
   active: 1
   distance:
     m_OverrideState: 0
-    m_Value: 64
+    m_Value: 279
   baseHeight:
     m_OverrideState: 1
     m_Value: 0
@@ -43,8 +43,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   density:
-    m_OverrideState: 0
-    m_Value: 0.2
+    m_OverrideState: 1
+    m_Value: 0.25
   attenuationDistance:
     m_OverrideState: 0
     m_Value: 128
@@ -61,11 +61,11 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0.4
   scattering:
-    m_OverrideState: 0
-    m_Value: 0.15
+    m_OverrideState: 1
+    m_Value: 0.45
   tint:
-    m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 0.42352942, g: 0.49803922, b: 0.58431375, a: 1}
   enableAdditionalLightsContribution:
     m_OverrideState: 1
     m_Value: 1

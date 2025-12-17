@@ -263,13 +263,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterLayout: {fileID: 5439981643615826940}
   _combatHoverTooltip: {fileID: 5529004354162486180}
-  _hoverSound:
-    Guid:
-      Data1: 1365615113
-      Data2: 1093341733
-      Data3: -1325407097
-      Data4: -1710004379
-    Path: event:/Sound Design/Non Diegetic/UI/ui_hover
 --- !u!1 &186559143019193527
 GameObject:
   m_ObjectHideFlags: 0
@@ -1453,7 +1446,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 600
   m_TargetDisplay: 0
 --- !u!114 &2930316088563464734
 MonoBehaviour:
@@ -1866,7 +1859,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7385472561311656255}
   m_HandleRect: {fileID: 4142872978523023068}
   m_Direction: 2
-  m_Value: 1.0000002
+  m_Value: 1
   m_Size: 0.8169935
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4965,7 +4958,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 3104
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -5049,16 +5042,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1389254864151484465, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: _camera
-      value: 
-      objectReference: {fileID: 8635594776529222650}
-    - target: {fileID: 2455607605031226785, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_text
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 2563248212429571281, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -5067,26 +5050,6 @@ PrefabInstance:
     - target: {fileID: 2563248212429571281, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2866508058841135193, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2866508058841135193, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2866508058841135193, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2866508058841135193, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2939229615672190021, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
@@ -5099,26 +5062,6 @@ PrefabInstance:
       propertyPath: _tooltipOverlayCamera
       value: 
       objectReference: {fileID: 8635594776529222650}
-    - target: {fileID: 5511825597175019290, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5511825597175019290, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5511825597175019290, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5511825597175019290, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6282673010290107217, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -5242,31 +5185,6 @@ PrefabInstance:
     - target: {fileID: 7198799151386965027, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8128706942184581934, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_text
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8260822515686263126, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8260822515686263126, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8260822515686263126, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8260822515686263126, guid: 6b05f5237ab3cb64cac672a3cf3d12d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

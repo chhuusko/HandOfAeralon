@@ -11,6 +11,9 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
     [SerializeField] private float _handSizeDamageMultiplier = 0.1f;
     [SerializeField] private int _poisonStacks = 3;
 
+    [SerializeField] private int _enemyHandSize = 4;
+
+
     // Description
 
     // Throw knives in a line, dealing (60 % +(10 % � current hand size) � Damage) Physical damage.
@@ -105,15 +108,19 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
         affectedCharacter.PreviewHealthChange(-damage);
     }
 
+    // Throw knives in a line, dealing (60 % +(10 % � current hand size) � Damage) Physical damage.
+    // Every character hit has a 60% chance to gain 3 stacks of Poison.
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
         int baseDamage = castingCharacter.Data.DerivedDamage;
-        int cardsAmount = castingCharacter.GetFaction() == Faction.Friendly? CardHandManager.GetInstance().GetCardsInHand().Count: 5;
+        int handSize = castingCharacter.GetFaction() == Faction.Friendly? CardHandManager.GetInstance().GetCardsInHand().Count: _enemyHandSize;
 
-        int damage = (int)(baseDamage * _damageMultiplier);
-        damage += (int)(baseDamage * _handSizeDamageMultiplier * cardsAmount);
+        float fdamage = (_damageMultiplier + (_handSizeDamageMultiplier * handSize)) * baseDamage;
+
+        int damage = (int)fdamage;
         damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
+
         return damage;
     }
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
@@ -124,10 +131,11 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
     public override int GetDamage()
     {
         int baseDamage = GetCharacterCaster().Data.DerivedDamage;
-        int cardsAmount = CardHandManager.GetInstance().GetCardsInHand().Count;
+        int handSize = GetCharacterCaster().GetFaction() == Faction.Friendly ? CardHandManager.GetInstance().GetCardsInHand().Count : _enemyHandSize;
 
-        int damage = (int)(baseDamage * _damageMultiplier);
-        damage += (int)(baseDamage * _handSizeDamageMultiplier * cardsAmount);
+        float fdamage = (_damageMultiplier + (_handSizeDamageMultiplier * handSize)) * baseDamage;
+
+        int damage = (int)fdamage;
         damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         return damage;
     }

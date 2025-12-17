@@ -2224,13 +2224,19 @@ PrefabInstance:
       propertyPath: m_RenderingLayers
       value: 32
       objectReference: {fileID: 0}
+    - target: {fileID: 8186274436580112938, guid: a571d2f924eb3a140b73bad4fae76007,
+        type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8347845990987784307, guid: a571d2f924eb3a140b73bad4fae76007,
         type: 3}
       propertyPath: m_Name
       value: ENVIRONMENT
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1158827856923530555, guid: a571d2f924eb3a140b73bad4fae76007, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a571d2f924eb3a140b73bad4fae76007, type: 3}

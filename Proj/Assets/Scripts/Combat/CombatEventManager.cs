@@ -37,6 +37,8 @@ public static class CombatEventManager
     
     public static event Action<bool> OnCharacterMove;
 
+    public delegate bool TryAddStatusEffectHandler(Character caster, Character target, StatusEffect statusEffect);
+    public static event TryAddStatusEffectHandler OnTryAddStatusEffect;
     public static event Action<Character, Character, StatusEffect> OnStatusEffectAppliedToCharacter;
     public static event Action<Character, StatusEffect> OnStatusEffectExpiredOnCharacter;
     public static event Action<Character, StatusEffect> OnStatusEffectDurationChanged;
@@ -98,6 +100,28 @@ public static class CombatEventManager
     
     public static void InvokeOnCharacterMove(bool isMoving)
         => OnCharacterMove?.Invoke(isMoving);
+
+    public static bool InvokeOnTryAddStatusEffect(Character caster, Character target, StatusEffect statusEffect)
+    {
+        if (OnTryAddStatusEffect == null)
+        {
+            // No subscribers.
+            return true;
+        }
+
+        foreach (Delegate d in OnTryAddStatusEffect.GetInvocationList())
+        {
+            bool result = (bool)d.DynamicInvoke(caster, target, statusEffect);
+            if (!result)
+            {
+                // A check blocks adding status effect.
+                return false;
+            }
+        }
+
+        // All checks passed.
+        return true;
+    }
 
     public static void InvokeOnStatusEffectAppliedToCharacter(Character caster, Character target, StatusEffect statusEffect)
         => OnStatusEffectAppliedToCharacter?.Invoke(caster, target, statusEffect);
