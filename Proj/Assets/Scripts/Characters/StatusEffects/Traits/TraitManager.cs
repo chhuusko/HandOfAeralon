@@ -10,7 +10,7 @@ public class TraitManager
     
     [SerializeReference] private List<StatusEffect> _statusEffects = new();
     
-    public void AddStatusEffect(StatusEffect statusEffect)
+    public bool AddStatusEffect(StatusEffect statusEffect)
     {
         StatusEffect existing = _statusEffects
             .FirstOrDefault(e => e.GetType() == statusEffect.GetType());
@@ -18,18 +18,19 @@ public class TraitManager
         if (existing != null)
         {
             existing.IncreaseDuration(statusEffect.Duration);
-            return;
+            return false;
         }
         _statusEffects.Add(statusEffect);
 
         if (CharacterData == null)
         {
-            return;
+            return true;
         }
 
         CharacterData.CalculateDerivedStats(CharacterData.Faction == Faction.Friendly
             ? LevelManager.GetInstance().statIncrease
             : LevelManager.GetInstance().enemyStatIncrease);
+        return true;
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect)

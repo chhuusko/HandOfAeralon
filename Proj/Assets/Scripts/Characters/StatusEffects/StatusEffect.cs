@@ -42,8 +42,15 @@ public abstract class StatusEffect
     {
         Character = character;
         Manager = manager;
+
+        CombatEventManager.OnTryAddStatusEffect += OnTryApplyStatusEffect;
         
         OnApply();
+    }
+
+    public void Cleanup()
+    {
+        CombatEventManager.OnTryAddStatusEffect -= OnTryApplyStatusEffect;
     }
 
     public virtual void IncreaseDuration(int amount = 1)
@@ -74,6 +81,10 @@ public abstract class StatusEffect
     }
     
     // Virtual methods. Overriden and implemented in subclasses as needed.
+    public virtual bool OnTryApplyStatusEffect(Character caster, Character target, StatusEffect statusEffect)
+    {
+        return true;
+    }
     public virtual void OnApply() {}
     public virtual void OnExpire() {}
     public virtual void OnTurnStart() {}
