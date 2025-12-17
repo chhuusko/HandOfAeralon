@@ -451,6 +451,7 @@ public class CombatGrid : MonoBehaviour
         characterScript.SetCurrentDamage(currentDamage);
         characterScript.SetCurrentMovementPoints(currentMovementPoints);
         characterScript.Data.SetBaseHealthPoints(baseHealtPoints);
+        characterScript.Data.SetDerivedHealthPoints(LevelManager.GetInstance().enemyStatIncrease, preserveLoadedCurrent: false);
         characterScript.SetBaseInitiative(baseSpeed);
         characterScript.Data.SetBaseDamage(baseDamage);
         characterScript.SetBaseMovementPoints(baseMovementPoints);
