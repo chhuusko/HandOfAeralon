@@ -18,6 +18,7 @@ public class AbilityVFXSequenceCharacterPos : AbilityVFXSequence
 
         if (GetCastFX() != null)
         {
+            PlayShake(_doCastCameraShake, _castShakeDuration, _castShakeMagnitude, _castShakeFrequency, _castShakeFade);
             Vector3 offset = -data.Direction.normalized * GetOffsetDistance();
             offset.y = GetAirDistance();
 
@@ -36,6 +37,7 @@ public class AbilityVFXSequenceCharacterPos : AbilityVFXSequence
 
         if (GetImpactFX() != null)
         {
+            PlayShake(_doImpactCameraShake, _impactShakeDuration, _impactShakeMagnitude, _impactShakeFrequency, _impactShakeFade);
             data.TargetPosition.y += GetImpactAirDistance();
             var impact = Instantiate(GetImpactFX());
             Vector3 baseScale = impact.transform.localScale;
