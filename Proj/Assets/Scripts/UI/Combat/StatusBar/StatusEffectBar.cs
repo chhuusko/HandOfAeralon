@@ -52,6 +52,8 @@ public class StatusEffectBar : MonoBehaviour
         if (characterSubject != _ownerCharacter)
             return;
 
+        Debug.Log("Removing status effect bar element");
+        
         foreach (StatusEffectBarElement statusEffect in _statusEffectBarElements)
         {
             if(statusEffect.name.Equals(status.Data.name))
