@@ -925,6 +925,41 @@ PrefabInstance:
       propertyPath: _uacCutsceneHUDCameraData
       value: 
       objectReference: {fileID: 4937129441512505108}
+    - target: {fileID: 8254238836848568754, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254238836848568754, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254238836848568754, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 3582299927377285378}
+    - target: {fileID: 8254238836848568754, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254238836848568754, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SetHoverLockSpeed
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254238836848568754, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: CombatHoverTooltip, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254238836848568754, guid: ec46ab08d894ac3499683b967b8812de,
+        type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8374253036918946024, guid: ec46ab08d894ac3499683b967b8812de,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2972,7 +3007,7 @@ PrefabInstance:
     - target: {fileID: 263003170194490631, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -568.9999
+      value: -568.99994
       objectReference: {fileID: 0}
     - target: {fileID: 426935158495536439, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
         type: 3}
@@ -3092,12 +3127,12 @@ PrefabInstance:
     - target: {fileID: 3619570644021562760, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
         type: 3}
       propertyPath: m_Size
-      value: 0.79460937
+      value: 0.7946095
       objectReference: {fileID: 0}
     - target: {fileID: 3619570644021562760, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
         type: 3}
       propertyPath: m_Value
-      value: 0.99999976
+      value: 1.0000002
       objectReference: {fileID: 0}
     - target: {fileID: 3693035502447176880, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
         type: 3}
@@ -3470,6 +3505,18 @@ Camera:
     type: 3}
   m_PrefabInstance: {fileID: 9010606535265122982}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3582299927377285378 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5529004354162486180, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,
+    type: 3}
+  m_PrefabInstance: {fileID: 9010606535265122982}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7345e2afde5b0b74a90032a4366d2325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4247560044024300392 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5187662694957480398, guid: e73d4ff6d97ea2d43abf78ee2aa109fb,

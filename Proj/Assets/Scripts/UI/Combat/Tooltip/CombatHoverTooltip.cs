@@ -181,7 +181,15 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerExitHandler
 
     public bool IsLocked() { return _bTooltipLocked; }
 
-    public void SetHoverLockSpeed(float newSpeed) { _sliderSpeed = newSpeed; }
+    public void SetHoverLockSpeed(float newSpeed) 
+    { 
+        //NOTE (Calle): 0.1 is very fast so we should map the newSpeed to values between 0.0 and 0.1,
+        // 0.0 = the hover lock will never lock
+        // 0.1 = the hover lock will lock superquick
+
+        float mappedSpeed = 0.1f * newSpeed;
+        _sliderSpeed = mappedSpeed; 
+    }
 
     public void OnPointerExit(PointerEventData eventData)
     {

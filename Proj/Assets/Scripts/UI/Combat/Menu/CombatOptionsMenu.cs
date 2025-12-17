@@ -6,7 +6,7 @@ public class CombatOptionsMenu : MonoBehaviour
     [SerializeField] private TMP_Text _settingHoverLockSpeed;
     [SerializeField] private TMP_Text _settingMasterVolume;
 
-    public void SetHoverLockSpeed(float newLockSpeed) 
+    public void SetHoverLockSpeedText(float newLockSpeed) 
     { 
         _settingHoverLockSpeed.text = newLockSpeed.ToString("F2");  
     }
