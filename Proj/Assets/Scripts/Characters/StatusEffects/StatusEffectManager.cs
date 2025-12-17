@@ -94,9 +94,9 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void RemoveStatusEffect(StatusEffect statusEffect)
+    public void RemoveStatusEffect(StatusEffect statusEffect, bool forceRemoval = false)
     {
-        if (!statusEffect.Data.IsDispellable)
+        if (!forceRemoval && !statusEffect.Data.IsDispellable)
         {
             return;
         }

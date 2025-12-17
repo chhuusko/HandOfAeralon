@@ -9,7 +9,11 @@ public class Sanctified : StatusEffect
     
     public override void ModifyIncomingDamage(ref float damage, Ability ability)
     {
-        damage = 0f;
-        ShouldExpire = true;
+        if (damage > 0f)
+        {
+            damage = 0f;
+            ShouldExpire = true;
+            Data.IsDispellable = true;
+        }
     }
 }
