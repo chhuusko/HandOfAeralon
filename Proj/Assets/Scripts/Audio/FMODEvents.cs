@@ -15,7 +15,7 @@ public class FMODEvents : MonoBehaviour
     [SerializeField] private EventReference bardDeath;
     [SerializeField] private EventReference sorceressTakeDamage;
     [SerializeField] private EventReference sorceressDeath;
-    [SerializeField] private EventReference barbarianFootsteps, bardFootsteps, rogueFootsteps, sorceressFootsteps;;
+    [SerializeField] private EventReference barbarianFootsteps, bardFootsteps, rogueFootsteps, sorceressFootsteps;
     [SerializeField] private string damageParameter;
 
 
@@ -29,9 +29,10 @@ public class FMODEvents : MonoBehaviour
     [SerializeField] private EventReference buttonClick;
 
     [Header("Game Event SFX")]
+    [SerializeField] private EventReference startCombat;
     [SerializeField] private EventReference playerDeafeted;
     [SerializeField] private EventReference playerVictory;
-
+    [SerializeField] private EventReference goldGainAfterCombat;
 
     public EventReference BarbarianTakeDamage => barbarianTakeDamage;
     public EventReference BarbarianDeath => barbarianDeath;
@@ -50,8 +51,10 @@ public class FMODEvents : MonoBehaviour
     public EventReference MenuOpened => menuOpened;
     public EventReference MenuClosed => menuClosed;
     public EventReference ButtonClick => buttonClick;
+    public EventReference StartCombat => startCombat;
     public EventReference PlayerDefeated => playerDeafeted;
     public EventReference PlayerVictory => playerVictory;
+    public EventReference GoldGainAfterCombat => goldGainAfterCombat;
     public string DamageParameter => damageParameter;
 
     private void Awake()
