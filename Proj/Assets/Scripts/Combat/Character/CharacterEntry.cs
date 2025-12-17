@@ -93,6 +93,8 @@ public class CharacterEntry
         _character.GetComponent<Character>().SetBaseMovementPoints(characterData.GetBaseMovementPoints());
 
         _character.GetComponent<Character>().SetCurrentTileIndex(characterData.GetCurrentTileIndex());
+        
+        _character.GetComponent<Character>().Data.InitializeCurrentHealthFromSave(characterData.GetHealthPoints());
 
         // Save/Load Specific
         _characterClass        = characterData.GetCharacterClass();

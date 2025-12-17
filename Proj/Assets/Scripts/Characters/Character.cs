@@ -49,6 +49,8 @@ public class CharacterData
     private TraitManager _traitManager = new();
     public TraitManager TraitManager => _traitManager;
 
+    private bool _healthInitialized;
+
     public CharacterData(ClassData classData, Faction faction, bool generateTraits)
     {
         _classData = classData;
@@ -82,6 +84,12 @@ public class CharacterData
         }
         
         CalculateDerivedStats(1);
+
+        if (!_healthInitialized)
+        {
+            _currentHealthPoints = _derivedHealthPoints;
+            _healthInitialized = true;
+        }
         
         _characterClass = ClassData.characterClass;
         _abilities = ClassData.abilities;
@@ -112,20 +120,21 @@ public class CharacterData
 
     public void CalculateDerivedStats(float hpFactor, float damageFactor)
     {
-        if (Faction == Faction.Enemy)
-        {
-            Debug.Log($"hpFactor: {hpFactor}, damageFactor: {damageFactor}");
-        }
-        
         _traitManager.ModifyDerivedStats(ref hpFactor, ref damageFactor);
         
         int derivedHp = Mathf.RoundToInt(_baseHealthPoints * hpFactor);
         int derivedDamage = Mathf.RoundToInt(_baseDamage * damageFactor);
         
-        SetDerivedHealthPoints(derivedHp);
+        SetDerivedHealthPoints(derivedHp, hpFactor);
         SetDerivedDamage(derivedDamage);
         
         OnDerivedStatsChanged?.Invoke();
+    }
+
+    public void InitializeCurrentHealthFromSave(int currentHealth)
+    {
+        _currentHealthPoints = Mathf.Clamp(currentHealth, 0, _derivedHealthPoints);
+        _healthInitialized = true;
     }
     
     public void SetBaseHealthPoints(int health) => _baseHealthPoints = Mathf.Max(health, 1);
@@ -136,19 +145,19 @@ public class CharacterData
     public void SetFaction(Faction faction) => _faction = faction;
     public void SetBaseInitiative(int initiative) => _baseInitiative = Mathf.Max(1, initiative);
     
-    public void SetDerivedHealthPoints(int health)
+    public void SetDerivedHealthPoints(int newMax, float hpFactor)
     {
-        Debug.Log($"Set Derived Health Points to {health}");
+        if (_traitManager.ContainsStatusEffect<Giantblood>())
+        {
+            DebugLog.JoppaLog($"SetDerivedHealthPoints called: newMax={newMax}, hpFactor={hpFactor}, baseHP={_baseHealthPoints}");
+        }
         
         int oldMax = _derivedHealthPoints;
-        int newMax = Mathf.Max(1, health);
-        
-        _derivedHealthPoints = newMax;
+        _derivedHealthPoints = Mathf.Max(1, newMax);
 
-        if (oldMax > 0 && oldMax != newMax)
+        if (_healthInitialized && oldMax > 0)
         {
-            float ratio = (float)newMax / oldMax;
-            _currentHealthPoints = Mathf.RoundToInt(_currentHealthPoints * ratio);
+            _currentHealthPoints = Mathf.CeilToInt(_currentHealthPoints * hpFactor);
         }
         
         _currentHealthPoints = Mathf.Min(_currentHealthPoints, _derivedHealthPoints);
@@ -361,9 +370,9 @@ public class Character : MonoBehaviour
     public void SetFaction(Faction faction) => _data.SetFaction(faction);
     public void SetBaseInitiative(int initiative) => _data.SetBaseInitiative(initiative);
     public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
-    public void SetDerivedHealthPoints(int healthPoints)
+    public void SetDerivedHealthPoints(int newMax, float hpFactor)
     {
-        _data.SetDerivedHealthPoints(healthPoints);
+        _data.SetDerivedHealthPoints(newMax, hpFactor);
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
     }
 
