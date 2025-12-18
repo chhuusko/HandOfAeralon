@@ -557,21 +557,42 @@ public class CombatUI : MonoBehaviour
     {
         if (abilityButton == null || c == null)
         {
+            Debug.LogWarning("UpdateAbilityColors: abilityButton or character is null");
             return;
         }
-        
+    
         bool interactable = false;
-        
+        string reason = "";
+
         if (_bCombatStarted && c && _currentTurnCharacter && _selectedCharacter != null)
         {
-            interactable = c == _currentTurnCharacter &&
-                           _selectedCharacter.Faction == Faction.Friendly &&
-                           !c.IsAbilityCooldownActive(abilityButton.Ability) &&
-                           c.CanUseAbility && c.Data.ActiveAbilities.Contains(abilityButton.Ability) && !c.IsStunned;
+            bool isTurnCharacter = c == _currentTurnCharacter;
+            bool isFriendly = _selectedCharacter.Faction == Faction.Friendly;
+            bool notOnCooldown = !c.IsAbilityCooldownActive(abilityButton.Ability);
+            bool canUseAbility = c.CanUseAbility;
+            bool isActiveAbility = c.Data.ActiveAbilities.Contains(abilityButton.Ability);
+            bool notStunned = !c.IsStunned;
+
+            interactable = isTurnCharacter && isFriendly && notOnCooldown && canUseAbility && isActiveAbility && notStunned;
+
+            // Build log string
+            reason = $"Ability: {abilityButton.Ability?.name ?? "null"} | " +
+                     $"TurnChar: {isTurnCharacter} | " +
+                     $"Friendly: {isFriendly} | " +
+                     $"Cooldown: {notOnCooldown} | " +
+                     $"CanUse: {canUseAbility} | " +
+                     $"Active: {isActiveAbility} | " +
+                     $"NotStunned: {notStunned} | " +
+                     $"Interactable: {interactable}";
+        }
+        else
+        {
+            reason = "Combat not started or character references null";
         }
 
         abilityButton.Button.interactable = interactable;
-        
+        DebugLog.JoppaLog(reason);
+
         StartCoroutine(SetCooldown(c, abilityButton));
     }
 
