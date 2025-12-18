@@ -98,7 +98,9 @@ public class Shop : MonoBehaviour
         foreach (Transform t in _purchasCharacterPos)
         {
             GameObject newCharacterObject = Instantiate(_purchaseCharacterPrefab, t);
-            newCharacterObject.GetComponent<BuyableCharacter>().SetCharacter(GetRandomCharacter());
+            CharacterData newCharacter = GetRandomCharacter();
+            newCharacter.CalculateDerivedStats(LevelManager.GetInstance().statIncrease);
+            newCharacterObject.GetComponent<BuyableCharacter>().SetCharacter(newCharacter);
             _buyableItemInScene.Add(newCharacterObject);
         }
     }
