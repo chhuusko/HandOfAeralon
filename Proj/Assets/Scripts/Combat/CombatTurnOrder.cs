@@ -93,10 +93,8 @@ public class CombatTurnOrder
         _charactersToDisplay.AddRange(_charactersInExecutedTurnOrder);
         _turnCountCurrent++;
 
-        if (_activeCharacter.GetFaction() == Faction.Friendly)
-            SetCurrentTurn(CombatTurn.PlayerTurn);
-        else
-            SetCurrentTurn(CombatTurn.EnemyTurn);
+        UpdateCurrentTurnType();
+        
 
         CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay);
     }
@@ -119,10 +117,7 @@ public class CombatTurnOrder
             _charactersInExecutedTurnOrder.Clear();
         }
 
-        if (_activeCharacter.GetFaction() == Faction.Friendly)
-            SetCurrentTurn(CombatTurn.PlayerTurn);
-        else
-            SetCurrentTurn(CombatTurn.EnemyTurn);
+        UpdateCurrentTurnType();
 
         CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay);
     }
@@ -279,5 +274,13 @@ public class CombatTurnOrder
     public List<Character> GetCharactersInTurnOrder()
     {
         return _charactersInTurnOrder;
+    }
+
+    public void UpdateCurrentTurnType()
+    {
+        if (_activeCharacter.GetFaction() == Faction.Friendly)
+            SetCurrentTurn(CombatTurn.PlayerTurn);
+        else
+            SetCurrentTurn(CombatTurn.EnemyTurn);
     }
 }
