@@ -51,15 +51,14 @@ public class Skullsplitter_Ability : SingleTargetAbility
         // 7. Enemy Buffs / Debuffs
 
         //1.
-        int baseDamage = Mathf.RoundToInt(castingCharacter.Data.DerivedDamage);
+        int baseDamage = castingCharacter.Data.DerivedDamage;
 
         //2.
-        int damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.Data.DerivedHealthPoints) ? Mathf.RoundToInt(baseDamage * _extraDamageMultiplier) : Mathf.RoundToInt(baseDamage * _damageMultiplier);
+        float damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.Data.DerivedHealthPoints) ? baseDamage * _extraDamageMultiplier : baseDamage * _damageMultiplier;
 
-        damage = Mathf.RoundToInt(castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this));
-        damage = Mathf.RoundToInt(affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this));
-
-        return damage;
+        damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
 
     }
 
@@ -70,15 +69,15 @@ public class Skullsplitter_Ability : SingleTargetAbility
 
     public override int GetDamage()
     {
-        int damage = Mathf.RoundToInt(GetCharacterCaster().Data.DerivedDamage * _damageMultiplier);
-        damage = Mathf.RoundToInt(GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this));
-        return damage;
+        float damage = GetCharacterCaster().Data.DerivedDamage * _damageMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 
     public override int GetSecondDamage()
     {
-        int damage = Mathf.RoundToInt(GetCharacterCaster().Data.DerivedDamage * _extraDamageMultiplier);
-        damage = Mathf.RoundToInt(GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this));
-        return damage;
+        float damage = GetCharacterCaster().Data.DerivedDamage * _extraDamageMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 }

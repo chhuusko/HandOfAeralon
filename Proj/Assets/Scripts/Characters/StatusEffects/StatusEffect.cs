@@ -38,13 +38,16 @@ public abstract class StatusEffect
         _name = Data.Name;
     }
 
-    public void Initialize(Character character, StatusEffectManager manager)
+    public void Setup(Character character, StatusEffectManager manager)
     {
         Character = character;
         Manager = manager;
-        
+    }
+
+    public void Initialize()
+    {
         // If the status effect is applied out of turn, it should not tick down at start of next turn.
-        _skipNextTick = character != CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
+        _skipNextTick = Character != CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
 
         CombatEventManager.OnTryAddStatusEffect += BeforeStatusEffectApplied;
         

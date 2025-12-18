@@ -62,7 +62,7 @@ public class StatusEffectManager : MonoBehaviour
         // Traits need to be initialized on combat start, once character has been created.
         foreach (var trait in _traitManager.GetAllTraits())
         {
-            trait.Initialize(_character, this);
+            trait.Initialize();
         }
     }
 
@@ -79,6 +79,8 @@ public class StatusEffectManager : MonoBehaviour
             return;
         }
         
+        statusEffect.Setup(_character, this);
+        
         // Check if other traits interact.
         BeforeStatusEffectApplied(caster, _character, statusEffect);
         
@@ -86,14 +88,15 @@ public class StatusEffectManager : MonoBehaviour
         bool canAdd = CombatEventManager.InvokeOnTryAddStatusEffect(caster, _character, statusEffect);
         if (!canAdd)
         {
+            statusEffect.Cleanup();
             // Blocked.
             return;
         }
         
         bool added = _traitManager.AddStatusEffect(statusEffect);
-        statusEffect.Initialize(_character, this);
         if (added)
         {
+            statusEffect.Initialize();
             CombatEventManager.InvokeOnStatusEffectAppliedToCharacter(caster, _character, statusEffect);
         }
     }
@@ -174,32 +177,6 @@ public class StatusEffectManager : MonoBehaviour
         foreach (var statusEffect in statusEffectsToRemove)
         {
             RemoveStatusEffect(statusEffect);
-        }
-    }
-
-    private void OnApply()
-    {
-        if (!_character)
-        {
-            return;
-        } 
-        
-        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
-        {
-            statusEffect.OnApply();
-        }
-    }
-
-    private void OnExpire()
-    {
-        if (!_character)
-        {
-            return;
-        } 
-        
-        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
-        {
-            statusEffect.OnExpire();
         }
     }
 
