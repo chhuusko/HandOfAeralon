@@ -37,9 +37,9 @@ public class AbilityVFXSequence : ScriptableObject
     {
         yield return new WaitForSeconds(data.CastingAnimationDuration);
 
+        PlayShake(_doCastCameraShake, _castShakeDuration, _castShakeMagnitude, _castShakeFrequency, _castShakeFade);
         if (_castFX != null)
         {
-            PlayShake(_doCastCameraShake, _castShakeDuration, _castShakeMagnitude, _castShakeFrequency, _castShakeFade);
             Vector3 offset = -data.Direction.normalized * _offsetDistance;
             offset.y = GetAirDistance();
 
@@ -57,9 +57,9 @@ public class AbilityVFXSequence : ScriptableObject
         yield return new WaitForSeconds(data.TravelFXDuration);
 
 
+        PlayShake(_doImpactCameraShake, _impactShakeDuration, _impactShakeMagnitude, _impactShakeFrequency, _impactShakeFade);
         if (_impactFX != null)
         {
-            PlayShake(_doImpactCameraShake, _impactShakeDuration, _impactShakeMagnitude, _impactShakeFrequency, _impactShakeFade);
             data.TargetPosition.y += GetImpactAirDistance();
             var impact = Instantiate(_impactFX);
             Vector3 baseScale = impact.transform.localScale;

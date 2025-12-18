@@ -19,13 +19,31 @@ MonoBehaviour:
   _offsetDistance: 0
   _airDistance: 0
   _rotationOffset: {x: 0, y: 0, z: 0}
-  _doCastCameraShake: 0
+  _doCastCameraShake: 1
   _castShakeDuration: 1.5
-  _castShakeMagnitude: 0.1
+  _castShakeMagnitude: 0.04
   _castShakeFrequency: 200
   _castShakeFade:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -34,8 +52,8 @@ MonoBehaviour:
   _impactAirDistance: 0.85
   _impactRotationOffset: {x: 0, y: 0, z: 0}
   _doImpactCameraShake: 1
-  _impactShakeDuration: 1
-  _impactShakeMagnitude: 0.1
+  _impactShakeDuration: 0.5
+  _impactShakeMagnitude: 0.08
   _impactShakeFrequency: 200
   _impactShakeFade:
     serializedVersion: 2

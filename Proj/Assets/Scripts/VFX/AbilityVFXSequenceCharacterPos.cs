@@ -9,16 +9,16 @@ public class AbilityVFXSequenceCharacterPos : AbilityVFXSequence
 
     public override IEnumerator RunSequence(VFXData data)
     {
-        if(_startFX != null)
+        if (_startFX != null)
         {
             Instantiate(_startFX).Play(data.OriginPosition, Vector3.zero, Vector3.zero);
         }
 
         yield return new WaitForSeconds(data.CastingAnimationDuration);
 
+        PlayShake(_doCastCameraShake, _castShakeDuration, _castShakeMagnitude, _castShakeFrequency, _castShakeFade);
         if (GetCastFX() != null)
         {
-            PlayShake(_doCastCameraShake, _castShakeDuration, _castShakeMagnitude, _castShakeFrequency, _castShakeFade);
             Vector3 offset = -data.Direction.normalized * GetOffsetDistance();
             offset.y = GetAirDistance();
 
@@ -35,9 +35,9 @@ public class AbilityVFXSequenceCharacterPos : AbilityVFXSequence
 
         yield return new WaitForSeconds(data.TravelFXDuration);
 
+        PlayShake(_doImpactCameraShake, _impactShakeDuration, _impactShakeMagnitude, _impactShakeFrequency, _impactShakeFade);
         if (GetImpactFX() != null)
         {
-            PlayShake(_doImpactCameraShake, _impactShakeDuration, _impactShakeMagnitude, _impactShakeFrequency, _impactShakeFade);
             data.TargetPosition.y += GetImpactAirDistance();
             var impact = Instantiate(GetImpactFX());
             Vector3 baseScale = impact.transform.localScale;
