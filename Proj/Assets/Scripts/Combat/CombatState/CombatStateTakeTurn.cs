@@ -31,6 +31,8 @@ public class CombatStateTakeTurn : CombatStateBase
         //combatTurnOrder.UpdateCharacterTurnOrderPreTurn();
         combatTurnOrder.UpdateCurrentTurnType();
         Character activeCharacter = combatTurnOrder.GetActiveCharacter();
+
+        activeCharacter.CanMove = true;
         
         //NOTE (Calle): Only make it possible to press "End Turn" button if its a hero
         if(activeCharacter.GetFaction() == Faction.Friendly)
