@@ -1,10 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using TMPro;
 using UnityEngine;
 
 public class CardPackViewUIShop : CardViewUI
 {
+    [SerializeField] private TextMeshProUGUI aboveText;
+
+    public void UpdateText()
+    {
+        aboveText.text = "Select (<color=Yellow>" + (CardPackCard.maxSelect-CardPackCard.GetSelectedCount()) + "</color>) Cards to Keep";
+    }
     public override void UpdateCards(List<Card> newCardList)
     {
         gameObject.SetActive(true);
@@ -26,4 +32,5 @@ public class CardPackViewUIShop : CardViewUI
         }
         
     }
+    
 }
