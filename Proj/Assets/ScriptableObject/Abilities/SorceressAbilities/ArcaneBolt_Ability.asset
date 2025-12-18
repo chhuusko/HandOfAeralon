@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _abilityName: Arcane Bolt
   _icon: {fileID: 21300000, guid: eb285121de8eefa418de80053b7eba77, type: 3}
-  _range: 6
+  _range: 5
   _cooldown: 1
   _description: Deals {damage} {elemental_damage}.
   _abilityTag: 6
@@ -28,6 +28,7 @@ MonoBehaviour:
   _castingAnimationTime: 0
   _castingFXTime: 0
   _fromCastToHitTime: 0
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
   <AudioEvent>k__BackingField:
     Guid:

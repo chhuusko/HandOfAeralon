@@ -15,7 +15,7 @@ MonoBehaviour:
   _abilityName: Dissonant Chord
   _icon: {fileID: 21300000, guid: abb24042aa496f44288a124f024798e4, type: 3}
   _range: 6
-  _cooldown: 4
+  _cooldown: 3
   _description: Emit a discordant note that dispels all buffs from enemies in the
     area. Draw 1 {card} if at least two buffs are dispelled from enemies.
   _abilityTag: 10
@@ -41,5 +41,5 @@ MonoBehaviour:
   _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
   _validTargets: 5
   _abilityAOEVFXSequence: {fileID: 0}
-  _radius: 2
+  _radius: 3
   _enemiesDebuffedTilBonus: 2
