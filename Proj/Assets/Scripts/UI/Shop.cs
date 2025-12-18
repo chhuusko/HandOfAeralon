@@ -100,6 +100,7 @@ public class Shop : MonoBehaviour
             GameObject newCharacterObject = Instantiate(_purchaseCharacterPrefab, t);
             CharacterData newCharacter = GetRandomCharacter();
             newCharacter.CalculateDerivedStats(LevelManager.GetInstance().statIncrease);
+            newCharacter.SetCurrentHealthPoints(newCharacter.DerivedHealthPoints);
             newCharacterObject.GetComponent<BuyableCharacter>().SetCharacter(newCharacter);
             _buyableItemInScene.Add(newCharacterObject);
         }

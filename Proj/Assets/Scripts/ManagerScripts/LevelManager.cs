@@ -103,7 +103,12 @@ public class LevelManager : ScriptableObject
             foreach (CharacterData character in GlobalGameManager.GetInstance().GetGameData().heroDataList)
             {
                 statIncrease = 1 + (statIncreaseFactor * (_level / statIncreaseInterval));
+
+                /// REMOVE THIS LATER
+                int lostHealth = character.DerivedHealthPoints - character.CurrentHealthPoints;
                 character.CalculateDerivedStats(statIncrease);
+                character.SetCurrentHealthPoints(character.DerivedHealthPoints-lostHealth);
+
                // Debug.Log("deriveddamage: " + character.DerivedDamage + " base damage: " + character.BaseDamage); 
             }
         } 
