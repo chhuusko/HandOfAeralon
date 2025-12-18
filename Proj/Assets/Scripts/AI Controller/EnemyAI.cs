@@ -258,6 +258,8 @@ public class EnemyAI : MonoBehaviour
                             case CharacterClass.Rogue:      moveScore -= 75f / myPERCENTHP; break;
                             case CharacterClass.Sorceress:  moveScore -= 50f / myPERCENTHP; break;
                         }
+
+                        if (myPERCENTHP < 0.2f) moveScore -= 100;
                     }
                 }
             }
