@@ -21,7 +21,7 @@ MonoBehaviour:
   _rotationOffset: {x: 0, y: 0, z: 0}
   _doCastCameraShake: 1
   _castShakeDuration: 3.4
-  _castShakeMagnitude: 0.12
+  _castShakeMagnitude: 0.07
   _castShakeFrequency: 200
   _castShakeFade:
     serializedVersion: 2
@@ -70,7 +70,7 @@ MonoBehaviour:
   _impactRotationOffset: {x: 0, y: 0, z: 0}
   _doImpactCameraShake: 0
   _impactShakeDuration: 3
-  _impactShakeMagnitude: 0.1
+  _impactShakeMagnitude: 0.06
   _impactShakeFrequency: 200
   _impactShakeFade:
     serializedVersion: 2
