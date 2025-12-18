@@ -9,15 +9,15 @@ public abstract class StatusEffect
     [SerializeField] private int _duration;
     public int Duration => _duration;
     
-    protected Character Character { get; private set; }
-    protected StatusEffectManager Manager { get; private set; }
-    
     [SerializeField] private StatusEffectData _data;
     public StatusEffectData Data => _data;
-    
-    public void SetDuration(int duration) => _duration = duration;
 
     public bool ShouldExpire;
+    
+    protected Character Character { get; private set; }
+    protected StatusEffectManager Manager { get; private set; }
+
+    private bool _skipNextTick;
     
     protected StatusEffect(int duration = 3)
     {
@@ -42,6 +42,9 @@ public abstract class StatusEffect
     {
         Character = character;
         Manager = manager;
+        
+        // If the status effect is applied out of turn, it should not tick down at start of next turn.
+        _skipNextTick = character != CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
 
         CombatEventManager.OnTryAddStatusEffect += BeforeStatusEffectApplied;
         
@@ -52,10 +55,12 @@ public abstract class StatusEffect
     {
         CombatEventManager.OnTryAddStatusEffect -= BeforeStatusEffectApplied;
     }
+    
+    public void SetDuration(int duration) => _duration = duration;
 
     public virtual void IncreaseDuration(int amount = 1)
     {
-        _duration = Mathf.Max(Duration, amount);
+        _duration += amount;
     }
 
     public void DecreaseDuration(int amount = 1)
@@ -77,6 +82,13 @@ public abstract class StatusEffect
         {
             return true;
         }
+
+        if (_skipNextTick)
+        {
+            _skipNextTick = false;
+            return true;
+        }
+        
         return --_duration > 0;
     }
     
