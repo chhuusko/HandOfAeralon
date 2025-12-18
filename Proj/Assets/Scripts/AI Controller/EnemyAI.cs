@@ -90,16 +90,12 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator AIBehaviour()
     {
-        StatusEffectManager statusEffectManager = null;
-        if (_character.TryGetComponent<StatusEffectManager>(out statusEffectManager))
+        if (_character.IsStunned)
         {
-            if (statusEffectManager.ContainsStatusEffect<Stunned>())
-            {
-                DebugLog.JLWLog($"{_character.name} was Stunned and will pass their turn!");
-                yield return new WaitForSeconds(TURN_END_WAIT_TIME);
-                EndTurn();
-                yield break;
-            }
+            DebugLog.JLWLog($"{_character.name} was Stunned and will pass their turn!");
+            yield return new WaitForSeconds(TURN_END_WAIT_TIME);
+            EndTurn();
+            yield break;
         }
 
         yield return new WaitForSeconds(TURN_START_WAIT_TIME);
@@ -185,6 +181,8 @@ public class EnemyAI : MonoBehaviour
             return new Dictionary<AIAction, float>();
         }
 
+        float myPERCENTHP = _character.GetMaxHealth() == 0 ? 1f : _character.GetCurrentHealth() / _character.GetMaxHealth();
+
         foreach (var tile in tiles) // Go through all possible movements and score them
         {
             AIAction move = new AIAction { movement = tile };
@@ -212,7 +210,7 @@ public class EnemyAI : MonoBehaviour
                     case CharacterClass.Sorceress:  moveScore += enemyDistance * 5; break;
                 }
 
-                if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian && _allies.Count > 1)
+                if (myPERCENTHP < 0.2f && _character.GetCharacterClass() != CharacterClass.Barbarian && _allies.Count > 1)
                 {
                     moveScore += enemyDistance * 20;
                 }
@@ -237,7 +235,7 @@ public class EnemyAI : MonoBehaviour
                     case CharacterClass.Sorceress:  moveScore -= allyDistance * 10; break;
                 }
 
-                if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian)
+                if (myPERCENTHP < 0.2f && _character.GetCharacterClass() != CharacterClass.Barbarian)
                 {
                     moveScore -= allyDistance * 20f;
                 }
@@ -255,11 +253,13 @@ public class EnemyAI : MonoBehaviour
                     {
                         switch (_character.GetCharacterClass())
                         {
-                            case CharacterClass.Barbarian:  moveScore -= 50f; break;
-                            case CharacterClass.Bard:       moveScore -= 50f; break;
-                            case CharacterClass.Rogue:      moveScore -= 75f; break;
-                            case CharacterClass.Sorceress:  moveScore -= 50f; break;
+                            case CharacterClass.Barbarian:  moveScore -= 50f / myPERCENTHP; break;
+                            case CharacterClass.Bard:       moveScore -= 50f / myPERCENTHP; break;
+                            case CharacterClass.Rogue:      moveScore -= 75f / myPERCENTHP; break;
+                            case CharacterClass.Sorceress:  moveScore -= 50f / myPERCENTHP; break;
                         }
+
+                        if (myPERCENTHP < 0.2f) moveScore -= 100;
                     }
                 }
             }
@@ -523,14 +523,39 @@ public class EnemyAI : MonoBehaviour
             case "SongOfRenewal_Ability":
                 {
                     int hitCount = 0;
-                    List<CombatGridTile> aoe = DiamondPattern(target, 3);
+                    bool isAlly = false;
+                    float occupantPERCENTHP = 1f;
+                    Character occupant = null;
+                    occupant = target.GetOccupantCharacter();
+                    if (occupant != null && occupant.GetCurrentHealth() > 0)
+                    {
+                        isAlly = occupant.GetFaction() == _controlledFaction;
+                        occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                        
+                        if (isAlly && occupantPERCENTHP < 1f)
+                        {
+                            hitCount++;
+                            result += 40;
+
+                            if (occupantPERCENTHP < 0.75f)
+                            {
+                                result += 10;
+
+                                if (occupantPERCENTHP < 0.5f)
+                                {
+                                    result += 10;
+                                }
+                            }
+                        }
+                    }
+                    List <CombatGridTile> aoe = DiamondPattern(target, 3);
                     foreach (var hit in aoe)
                     {
-                        Character occupant = hit.GetOccupantCharacter();
+                        occupant = hit.GetOccupantCharacter();
                         if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
-                            bool isAlly = occupant.GetFaction() == _controlledFaction;
-                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                            isAlly = occupant.GetFaction() == _controlledFaction;
+                            occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                             if (isAlly && occupantPERCENTHP < 1f)
                             {

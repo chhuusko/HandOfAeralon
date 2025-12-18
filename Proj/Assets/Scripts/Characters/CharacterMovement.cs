@@ -42,7 +42,7 @@ public class CharacterMovement : MonoBehaviour
         if (IsDead()) return;
 
         GameObject currentTile = _character.GetCurrentTileComponent().gameObject;
-        if (_character.GetMovementPoints() <= 0 || !_character.CanMove)
+        if (_character.GetMovementPoints() <= 0 || !_character.CanMove || _character.IsStunned)
         {
             //DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} can't move!");
             _tilesInRange = new();
@@ -68,7 +68,7 @@ public class CharacterMovement : MonoBehaviour
 
     public void PreviewPath(CombatGridTile tile)
     {
-        if (IsDead() || !_character.CanMove) return;
+        if (IsDead() || !_character.CanMove || _character.IsStunned) return;
 
         if (_bIsMoving || tile == _character.GetCurrentTileComponent() || tile == null || !_tilesInRange.Contains(tile) || CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() != Faction.Friendly)
         {
@@ -97,7 +97,7 @@ public class CharacterMovement : MonoBehaviour
 
     public bool ConfirmPath(CombatGridTile tile)
     {
-        if (IsDead() || !_character.CanMove) return false;
+        if (IsDead() || !_character.CanMove || _character.IsStunned) return false;
 
         if (_bIsMoving || tile == _character.GetCurrentTileComponent() || _pathPreview == null || _pathPreview.Count == 0)
         {
@@ -124,7 +124,7 @@ public class CharacterMovement : MonoBehaviour
 
     public void ForceCustomPath(List<CombatGridTile> path)
     {
-        if (IsDead() || !_character.CanMove) return;
+        if (IsDead() || !_character.CanMove || _character.IsStunned) return;
 
         if (path == null || path.Count == 0)
         {
@@ -137,7 +137,7 @@ public class CharacterMovement : MonoBehaviour
 
     private IEnumerator Move(List<CombatGridTile> path)
     {
-        if (IsDead() || !_character.CanMove) yield break;
+        if (IsDead() || !_character.CanMove || _character.IsStunned) yield break;
 
         _bIsMoving = true;
         Debug.LogWarning($"{_character.name} _isMoving = true");
@@ -184,7 +184,7 @@ public class CharacterMovement : MonoBehaviour
 
     private int CalculateMovementCost(List<CombatGridTile> path)
     {
-        if (IsDead() || !_character.CanMove) return 0;
+        if (IsDead() || !_character.CanMove || _character.IsStunned) return 0;
 
         int result = 0;
 
