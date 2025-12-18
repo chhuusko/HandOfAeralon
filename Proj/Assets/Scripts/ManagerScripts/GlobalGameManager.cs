@@ -17,6 +17,7 @@ public struct GameData
     // misc
     public int reapersLedgerKills;
     public int totalEnemiesKilled;
+    public int totalHeroesLost;
     public int totalBattlesWon;
 }
 
@@ -63,6 +64,8 @@ public class GlobalGameManager : ScriptableObject
     {
         if(obj.GetFaction() == Faction.Enemy)
             _currentGame.totalEnemiesKilled++;
+        else if (obj.GetFaction() == Faction.Friendly)
+            _currentGame.totalHeroesLost++;
 
         Dictionary<CharacterData, Character> dict = CombatManager._instance.GetCharacterDataDict();
         foreach (var pair in dict)
@@ -85,9 +88,11 @@ public class GlobalGameManager : ScriptableObject
     }
 
     public int GetTotalEnemiesKilled() { return _currentGame.totalEnemiesKilled; }
+    public int GetTotalHeroesLost() { return _currentGame.totalHeroesLost; }
     public int GetTotalBattlesWon() { return _currentGame.totalBattlesWon; }
     public void SetTotalBattlesWon(int battlesWon) { _currentGame.totalBattlesWon = battlesWon; }
     public void IncrementTotalBattlesWon() { _currentGame.totalBattlesWon++; }
+    
     public void LoadGame(int slot)
     {
         //TODO
