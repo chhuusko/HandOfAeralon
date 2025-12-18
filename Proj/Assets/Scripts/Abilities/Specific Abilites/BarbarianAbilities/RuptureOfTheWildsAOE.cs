@@ -68,10 +68,10 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
         // If character is slowed, deal more damage.
         bool targetIsSlowed = statusEffectsManager.GetStatusEffect<Slowed>() != null;
 
-        int damage = targetIsSlowed ? (int)(baseDamage * _slowedTargetDamageMultiplier) : (int)(baseDamage * _damageMultiplier);
+        int damage = targetIsSlowed ? Mathf.RoundToInt(baseDamage * _slowedTargetDamageMultiplier) : Mathf.RoundToInt(baseDamage * _damageMultiplier);
 
-        damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
-        damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
+        damage = Mathf.RoundToInt(castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this));
+        damage = Mathf.RoundToInt(affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this));
         return damage;
     }
 
@@ -82,15 +82,15 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
 
     public override int GetDamage()
     {
-        int damage = (int)(GetCharacterCaster().Data.DerivedDamage * _damageMultiplier);
-        damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        int damage = Mathf.RoundToInt(GetCharacterCaster().Data.DerivedDamage * _damageMultiplier);
+        damage = Mathf.RoundToInt(GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this));
         return damage;
     }
 
     public override int GetSecondDamage()
     {
-        int damage = (int)(GetCharacterCaster().Data.DerivedDamage * _slowedTargetDamageMultiplier);
-        damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        int damage = Mathf.RoundToInt(GetCharacterCaster().Data.DerivedDamage * _slowedTargetDamageMultiplier);
+        damage = Mathf.RoundToInt(GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this));
         return damage;
     }
 }
