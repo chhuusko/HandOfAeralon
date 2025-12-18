@@ -9,7 +9,9 @@ public class FrenzyInjection : Card
 
         if (character != null)
         {
-            character.TakeDamage(3);
+            int damage = 3;
+            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            character.TakeDamage(damage);
             character.GetStatusEffectManager().AddStatusEffect(new Enraged(2));
         }
     }

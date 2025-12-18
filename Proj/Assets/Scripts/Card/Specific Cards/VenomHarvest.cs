@@ -18,6 +18,7 @@ public class VenomHarvest : Card
                     totalDamage += i; 
                 }
             }
+            totalDamage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(totalDamage, null));
             character.TakeDamage(totalDamage);
             character.GetStatusEffectManager().RemoveStatusEffect(new Poison(1));
         }

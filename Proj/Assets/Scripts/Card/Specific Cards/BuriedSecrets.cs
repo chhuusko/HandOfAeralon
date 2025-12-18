@@ -9,7 +9,10 @@ public class BuriedSecrets : Card
     {
         if (character != null)
         {
-            character.TakeDamage((CardHandManager.GetInstance().GetDiscardPile().Count)*3);
+
+            int damage = (CardHandManager.GetInstance().GetDiscardPile().Count) * 3;
+            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            character.TakeDamage(damage);
         }
     }
 }

@@ -106,9 +106,9 @@ public class FlameSurge_Ability : DirectedAOEAbility
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
-        int damage = (int)(castingCharacter.Data.DerivedDamage * _damageMultiplier);
-        damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
-        damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
+        int damage = Mathf.RoundToInt(castingCharacter.Data.DerivedDamage * _damageMultiplier);
+        damage = Mathf.RoundToInt(castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this));
+        damage = Mathf.RoundToInt(affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this));
         return damage;
     }
 
@@ -119,8 +119,8 @@ public class FlameSurge_Ability : DirectedAOEAbility
 
     public override int GetDamage()
     {
-        int damage = (int)(GetCharacterCaster().Data.DerivedDamage * _damageMultiplier);
-        damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        int damage = Mathf.RoundToInt(GetCharacterCaster().Data.DerivedDamage * _damageMultiplier);
+        damage = Mathf.RoundToInt(GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this));
         return damage;
     }
 }

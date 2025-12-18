@@ -259,9 +259,10 @@ public class Character : MonoBehaviour
     private Dictionary<Ability, int> _currentCooldowns = new();
 
     [Header("State")] 
-    public bool CanMove { get; set; } = true;
-    public bool CanUseAbility { get; set; } = true;
-    public bool IsTargetable { get; set; } = true;
+    public bool CanMove = true;
+    public bool IsStunned;
+    public bool CanUseAbility = true;
+    public bool IsTargetable = true;
 
     [Header("Status effects")]
     private StatusEffectManager _statusEffectManager;

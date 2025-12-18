@@ -13,10 +13,14 @@ public class SunderingWave : Card
             Character character = enemy.GetComponent<Character>();
             if (character.GetStatusEffectManager().ContainsStatusEffect<Slowed>())
             {
-                character.TakeDamage(9);
+                int damage = 9;
+                damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+                character.TakeDamage(damage);
             } else 
             {
-                character.TakeDamage(6);
+                int damage = 6;
+                damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+                character.TakeDamage(damage);
             }
             
         }

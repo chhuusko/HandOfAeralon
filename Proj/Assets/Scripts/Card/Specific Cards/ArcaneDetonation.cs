@@ -8,9 +8,12 @@ public class ArcaneDetonation : Card
     public override void PlayCard()
     {
         List<Character> characters = CombatGrid._instance.GetAllCharacterScripts();
-        foreach(Character c in characters)
+        foreach(Character character in characters)
         {
-            c.TakeDamage(6);
+            int damage = 6;
+            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            character.TakeDamage(damage);
+            
         }
         CardHandManager.GetInstance().AddCardFromDeck();
     }

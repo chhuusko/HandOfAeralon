@@ -567,7 +567,7 @@ public class CombatUI : MonoBehaviour
             interactable = c == _currentTurnCharacter &&
                            _selectedCharacter.Faction == Faction.Friendly &&
                            !c.IsAbilityCooldownActive(abilityButton.Ability) &&
-                           c.CanUseAbility && c.Data.ActiveAbilities.Contains(abilityButton.Ability);
+                           c.CanUseAbility && c.Data.ActiveAbilities.Contains(abilityButton.Ability) && !c.IsStunned;
         }
 
         abilityButton.Button.interactable = interactable;

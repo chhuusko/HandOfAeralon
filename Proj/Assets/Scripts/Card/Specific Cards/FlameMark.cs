@@ -11,7 +11,9 @@ public class FlameMark : Card
             
             if (character.GetStatusEffectManager().ContainsStatusEffect<Burn>())
             {
-                character.TakeDamage(12);
+                int damage = 12;
+                damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+                character.TakeDamage(damage);
             }
             character.GetStatusEffectManager().AddStatusEffect(new Burn(null, 2));
         }

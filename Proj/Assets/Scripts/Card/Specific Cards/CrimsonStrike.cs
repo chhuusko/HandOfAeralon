@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [CreateAssetMenu(fileName = "Crimson Strike", menuName = "Item/Card Data/Crimson Strike", order = 1)]
 public class CrimsonStrike : Card
@@ -8,7 +9,10 @@ public class CrimsonStrike : Card
     {
         if (character != null)
         {
-            character.TakeDamage((int)(character.GetMaxHealth() * 0.25f));
+            int damage = (int)(character.GetMaxHealth() * 0.25f);
+            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            character.TakeDamage(damage);
+
             if (character.GetCurrentHealth() <= 0)
             {
                 CardHandManager.GetInstance().ChangeMana(2);
