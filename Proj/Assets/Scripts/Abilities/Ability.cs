@@ -112,7 +112,7 @@ public abstract class Ability : ScriptableObject
         if (caster == null) Debug.LogError("CasterTile has no character!");
 
         // Should not be able to move after performing ability.
-        ResetMovementPoints(caster);
+        caster.CanMove = false;
 
         // Rotate towards target if the target is not the caster's tile.
         if (casterTile != targetTile)

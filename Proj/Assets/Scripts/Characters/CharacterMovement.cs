@@ -68,7 +68,7 @@ public class CharacterMovement : MonoBehaviour
 
     public void PreviewPath(CombatGridTile tile)
     {
-        if (IsDead()) return;
+        if (IsDead() || !_character.CanMove) return;
 
         if (_bIsMoving || tile == _character.GetCurrentTileComponent() || tile == null || !_tilesInRange.Contains(tile) || CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() != Faction.Friendly)
         {
@@ -97,7 +97,7 @@ public class CharacterMovement : MonoBehaviour
 
     public bool ConfirmPath(CombatGridTile tile)
     {
-        if (IsDead()) return false;
+        if (IsDead() || !_character.CanMove) return false;
 
         if (_bIsMoving || tile == _character.GetCurrentTileComponent() || _pathPreview == null || _pathPreview.Count == 0)
         {
@@ -124,7 +124,7 @@ public class CharacterMovement : MonoBehaviour
 
     public void ForceCustomPath(List<CombatGridTile> path)
     {
-        if (IsDead()) return;
+        if (IsDead() || !_character.CanMove) return;
 
         if (path == null || path.Count == 0)
         {
@@ -137,7 +137,7 @@ public class CharacterMovement : MonoBehaviour
 
     private IEnumerator Move(List<CombatGridTile> path)
     {
-        if (IsDead()) yield break;
+        if (IsDead() || !_character.CanMove) yield break;
 
         _bIsMoving = true;
         Debug.LogWarning($"{_character.name} _isMoving = true");
@@ -184,7 +184,7 @@ public class CharacterMovement : MonoBehaviour
 
     private int CalculateMovementCost(List<CombatGridTile> path)
     {
-        if (IsDead()) return 0;
+        if (IsDead() || !_character.CanMove) return 0;
 
         int result = 0;
 

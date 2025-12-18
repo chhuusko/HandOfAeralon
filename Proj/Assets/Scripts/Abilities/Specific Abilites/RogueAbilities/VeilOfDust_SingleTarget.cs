@@ -57,6 +57,9 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
 
         RunAbility(casterTile, targetTile);
 
+        yield return new WaitForEndOfFrame();
+        Selector._instance.SelectCharacterFromUI(caster);
+
         Selector._instance.InvokeCharacterActionStopped();
     }
 

@@ -80,7 +80,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 36095
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _timelineDirector: {fileID: 1753662456628443831}
-  bIntroCinematicDone: 0
+  _bIntroCinematicDone: 0
   _cameraBounds:
     _southWest: {x: -3, y: 0, z: -8}
     _northWest: {x: -3, y: 0, z: 18}
