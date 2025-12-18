@@ -11,7 +11,7 @@ public class ArcaneDetonation : Card
         foreach(Character character in characters)
         {
             int damage = 6;
-            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
             character.TakeDamage(damage);
             
         }

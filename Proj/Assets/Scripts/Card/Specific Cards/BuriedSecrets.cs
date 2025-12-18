@@ -11,7 +11,7 @@ public class BuriedSecrets : Card
         {
 
             int damage = (CardHandManager.GetInstance().GetDiscardPile().Count) * 3;
-            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
             character.TakeDamage(damage);
         }
     }

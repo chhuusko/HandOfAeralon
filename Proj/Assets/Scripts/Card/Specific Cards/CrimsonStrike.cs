@@ -10,7 +10,7 @@ public class CrimsonStrike : Card
         if (character != null)
         {
             int damage = (int)(character.GetMaxHealth() * 0.25f);
-            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
             character.TakeDamage(damage);
 
             if (character.GetCurrentHealth() <= 0)

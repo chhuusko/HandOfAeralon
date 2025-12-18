@@ -18,7 +18,7 @@ public class ShardVolley : Card
             int damageInstance = Random.Range(1, damageTotal + 1);
 
             Character character = enemies[Random.Range(0, enemies.Count)];
-            int damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damageInstance, null));
+            int damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damageInstance, null));
 
             character.TakeDamage(damage);
 

@@ -10,7 +10,7 @@ public class SanguineOffering : Card
         if (character != null && character.GetFaction() == Faction.Friendly)
         {
             int damage = 10;
-            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
             character.TakeDamage(damage);
         }
         List<Character> friendlyList = CombatGrid._instance.GetCharacterScriptsByFaction(Faction.Friendly);

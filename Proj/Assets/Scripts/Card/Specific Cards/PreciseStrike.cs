@@ -9,7 +9,7 @@ public class PreciseStrike : Card
         if (character != null)
         {
             int damage = 10;
-            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
             character.TakeDamage(damage);
             if (character.GetCurrentHealth() <= 0)
             {

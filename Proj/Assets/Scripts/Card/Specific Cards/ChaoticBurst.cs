@@ -16,7 +16,7 @@ public class ChaoticBurst : Card
             int damage = damageInstance;
             Character characterTarget = characters[Random.Range(0, characters.Count)];
 
-            damage = Mathf.RoundToInt(characterTarget.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            damage = Mathf.RoundToInt(characterTarget.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
             characterTarget.TakeDamage(damage);
 
             totalDamage -= damageInstance;
