@@ -96,7 +96,7 @@ public class EnemyAI : MonoBehaviour
             if (statusEffectManager.ContainsStatusEffect<Stunned>())
             {
                 DebugLog.JLWLog($"{_character.name} was Stunned and will pass their turn!");
-                yield return new WaitForSeconds(TURN_START_WAIT_TIME + TURN_END_WAIT_TIME);
+                yield return new WaitForSeconds(TURN_END_WAIT_TIME);
                 EndTurn();
                 yield break;
             }
