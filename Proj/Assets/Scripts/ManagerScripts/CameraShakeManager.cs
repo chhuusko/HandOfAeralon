@@ -24,7 +24,7 @@ public class CameraShakeManager : MonoBehaviour
 
     private IEnumerator Shake(float duration, float magnitude, float frequency, AnimationCurve fadeCurve)
     {
-        if (!_cameraShakeEnabled || _cameraIsShaking) yield break;
+        if (!_cameraShakeEnabled) yield break;
 
         if (fadeCurve == null)
         {
@@ -37,7 +37,7 @@ public class CameraShakeManager : MonoBehaviour
         float timeSinceLastShake = 0f;
         float interval = 1f / frequency;
 
-        _cameraIsShaking = true;
+        //_cameraIsShaking = true;
 
         while (elapsed < duration)
         {
@@ -59,7 +59,7 @@ public class CameraShakeManager : MonoBehaviour
             yield return null;
         }
         transform.localPosition = originalPos;
-        _cameraIsShaking = false;
+        //_cameraIsShaking = false;
     }
     public void PlayShake(float duration, float magnitude, float frequency, AnimationCurve fade)
     {
