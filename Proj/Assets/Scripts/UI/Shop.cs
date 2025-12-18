@@ -184,9 +184,7 @@ public class Shop : MonoBehaviour
             List<CharacterData> heroList = GlobalGameManager.GetInstance().GetGameData().heroDataList;
             foreach(CharacterData character in heroList)
             {
-                Debug.Log((int)(character.BaseHealthPoints * 0.5f) + "healed.");
                 character.Heal( (int)(character.BaseHealthPoints*0.5f));
-                Debug.Log(character.BaseHealthPoints + "current.");
             }
             AudioManager.Instance.PlayOneShot(healSound, transform.position);
             Bought(_healPrice);
@@ -201,6 +199,7 @@ public class Shop : MonoBehaviour
     {
         GlobalGameManager.GetInstance().ChangeCoins(-cost);
         AudioManager.Instance.PlayOneShot(bougtSound, transform.position);
+        Debug.Log(GlobalGameManager.GetInstance().GetGameData().coins);
         UpdateMoneyUI();
     }
     public int GetRemoveCardPrice()

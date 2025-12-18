@@ -148,10 +148,8 @@ public class CardHandManager : MonoBehaviour
             }
             
         }
-        if (_cardsInDeck.Count == 0)
-        {
-            return null;
-        }
+
+        if (_cardsInDeck.Count == 0) return null;
         if (_maxHand <= _cardsInHand.Count) return null;
 
         CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();

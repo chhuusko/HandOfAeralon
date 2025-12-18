@@ -80,6 +80,8 @@ public class CombatTurnOrder
         CombatEventManager.OnCharacterInitiativeChanged += RebuildTurnOrder;
 
         _charactersInPendingTurnOrder = CombatGrid._instance.GetAllCharacterScripts();
+        _turnCountFullRound = _charactersInPendingTurnOrder.Count;
+        
 
         SortCharacterListByInitiative(_charactersInPendingTurnOrder);
 
@@ -91,10 +93,10 @@ public class CombatTurnOrder
 
         _charactersToDisplay.AddRange(_charactersInPendingTurnOrder);
         _charactersToDisplay.AddRange(_charactersInExecutedTurnOrder);
-        _turnCountCurrent++;
 
+        _turnCountCurrent = _charactersInExecutedTurnOrder.Count;
         UpdateCurrentTurnType();
-        
+        GetFullRoundMarkerPosition();
 
         CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay);
     }
@@ -104,10 +106,9 @@ public class CombatTurnOrder
         _activeCharacter = _charactersInPendingTurnOrder[0];
         
         _charactersInPendingTurnOrder.RemoveAt(0);
-
+        
         _charactersInExecutedTurnOrder.Add(_activeCharacter);
-        _turnCountCurrent++;
-
+        
         _charactersToDisplay.Remove(_activeCharacter);
         _charactersToDisplay.Add(_activeCharacter);
 
@@ -116,6 +117,9 @@ public class CombatTurnOrder
             _charactersInPendingTurnOrder.AddRange(_charactersInExecutedTurnOrder);
             _charactersInExecutedTurnOrder.Clear();
         }
+
+        _turnCountCurrent = _charactersInExecutedTurnOrder.Count;
+        GetFullRoundMarkerPosition();
 
         UpdateCurrentTurnType();
 
@@ -225,12 +229,14 @@ public class CombatTurnOrder
 
     public void UpdateCharacterTurnOrderPostTurn()
     {
+        /*
         // Add the popped character to the list
         if (_poppedCharacter != null)
             _charactersInTurnOrder.Add(_poppedCharacter);
 
 
         _turnCountCurrent++;
+        */
     }
 
     private void HandleCharacterDeath(Character character)
@@ -269,6 +275,10 @@ public class CombatTurnOrder
     public int GetTurnCountFullRound()
     {
         return _turnCountFullRound;
+    }
+    public int GetFullRoundMarkerPosition()
+    {
+        return _turnCountFullRound - _turnCountCurrent;
     }
 
     public List<Character> GetCharactersInTurnOrder()

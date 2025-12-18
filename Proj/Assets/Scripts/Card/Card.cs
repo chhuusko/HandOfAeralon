@@ -79,8 +79,13 @@ public class Card : ScriptableObject
     }
     public void TempModifyCost(int changeInCost)
     {
+        if (!isTempCost)
+        {
+            tempCost = cost;
+        }
         isTempCost = true;
         tempCost += changeInCost;
+        Debug.Log(tempCost + " tempcost " + changeInCost + " changeincost");
         if (tempCost < 0) { tempCost = 0; }
     }
     public Color GetRarityColor(int rarity)
