@@ -8,7 +8,9 @@ public class PreciseStrike : Card
     {
         if (character != null)
         {
-            character.TakeDamage(10);
+            int damage = 10;
+            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            character.TakeDamage(damage);
             if (character.GetCurrentHealth() <= 0)
             {
                 CardHandManager.GetInstance().ChangeMana(2);

@@ -11,7 +11,9 @@ public class ToxicInfusion : Card
             
             if (character.GetStatusEffectManager().ContainsStatusEffect<Poison>())
             {
-                character.TakeDamage(10);
+                int damage = 10;
+                damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+                character.TakeDamage(damage);
             }
             character.GetStatusEffectManager().AddStatusEffect(new Poison(3));
 

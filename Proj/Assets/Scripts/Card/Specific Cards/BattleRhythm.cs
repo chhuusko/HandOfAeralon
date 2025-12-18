@@ -11,7 +11,9 @@ public class BattleRhythm : Card
 
         if (character != null)
         {
-            character.TakeDamage(CardHandManager.GetInstance().GetCardsPlayedThisTurn() * 5);
+            int damage = CardHandManager.GetInstance().GetCardsPlayedThisTurn() * 5;
+            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            character.TakeDamage(damage);
         }
     }
 }

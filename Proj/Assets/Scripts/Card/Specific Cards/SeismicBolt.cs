@@ -6,11 +6,13 @@ public class SeismicBolt : Card
     public override void PlayCardOnTarget(Character character)
     {
 
-        if (character != null)
+        
 
-            if (character != null)
+        if (character != null)
         {
-            character.TakeDamage(5);
+            int damage = 5;
+            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            character.TakeDamage(damage);
             character.GetStatusEffectManager().AddStatusEffect(new Aftershock(2));
 
         }
