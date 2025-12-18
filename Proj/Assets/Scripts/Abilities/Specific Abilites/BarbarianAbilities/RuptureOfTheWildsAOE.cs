@@ -61,14 +61,14 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
         // Get base damage.
-        int baseDamage = (int) (castingCharacter.Data.DerivedDamage * _damageMultiplier);
+        int baseDamage = castingCharacter.Data.DerivedDamage;
         var statusEffectsManager = affectedCharacter.GetComponent<StatusEffectManager>();
         if (statusEffectsManager == null) return 0;
 
         // If character is slowed, deal more damage.
         bool targetIsSlowed = statusEffectsManager.GetStatusEffect<Slowed>() != null;
 
-        int damage = targetIsSlowed ? (int)(baseDamage * _damageMultiplier) : (int)(baseDamage * _slowedTargetDamageMultiplier);
+        int damage = targetIsSlowed ? (int)(baseDamage * _slowedTargetDamageMultiplier) : (int)(baseDamage * _damageMultiplier);
 
         damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
