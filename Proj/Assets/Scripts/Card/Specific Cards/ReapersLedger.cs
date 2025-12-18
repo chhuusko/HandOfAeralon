@@ -8,7 +8,7 @@ public class ReapersLedger : Card
         if (character != null)
         {
             int damage = 5 + (GlobalGameManager.GetInstance().GetGameData().reapersLedgerKills * 5);
-            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyOutgoingDamage(damage, null));
+            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
             character.TakeDamage(damage);
 
             if (character.GetCurrentHealth() <= 0)
