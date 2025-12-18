@@ -181,6 +181,8 @@ public class EnemyAI : MonoBehaviour
             return new Dictionary<AIAction, float>();
         }
 
+        float myPERCENTHP = _character.GetMaxHealth() == 0 ? 1f : _character.GetCurrentHealth() / _character.GetMaxHealth();
+
         foreach (var tile in tiles) // Go through all possible movements and score them
         {
             AIAction move = new AIAction { movement = tile };
@@ -208,7 +210,7 @@ public class EnemyAI : MonoBehaviour
                     case CharacterClass.Sorceress:  moveScore += enemyDistance * 5; break;
                 }
 
-                if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian && _allies.Count > 1)
+                if (myPERCENTHP < 0.2f && _character.GetCharacterClass() != CharacterClass.Barbarian && _allies.Count > 1)
                 {
                     moveScore += enemyDistance * 20;
                 }
@@ -233,7 +235,7 @@ public class EnemyAI : MonoBehaviour
                     case CharacterClass.Sorceress:  moveScore -= allyDistance * 10; break;
                 }
 
-                if (_character.GetCurrentHealth() < _character.GetMaxHealth() / 5 && _character.GetCharacterClass() != CharacterClass.Barbarian)
+                if (myPERCENTHP < 0.2f && _character.GetCharacterClass() != CharacterClass.Barbarian)
                 {
                     moveScore -= allyDistance * 20f;
                 }
@@ -251,10 +253,10 @@ public class EnemyAI : MonoBehaviour
                     {
                         switch (_character.GetCharacterClass())
                         {
-                            case CharacterClass.Barbarian:  moveScore -= 50f; break;
-                            case CharacterClass.Bard:       moveScore -= 50f; break;
-                            case CharacterClass.Rogue:      moveScore -= 75f; break;
-                            case CharacterClass.Sorceress:  moveScore -= 50f; break;
+                            case CharacterClass.Barbarian:  moveScore -= 50f / myPERCENTHP; break;
+                            case CharacterClass.Bard:       moveScore -= 50f / myPERCENTHP; break;
+                            case CharacterClass.Rogue:      moveScore -= 75f / myPERCENTHP; break;
+                            case CharacterClass.Sorceress:  moveScore -= 50f / myPERCENTHP; break;
                         }
                     }
                 }
