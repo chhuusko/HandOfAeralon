@@ -33,7 +33,7 @@ public class CombatVictoryScreenMenu : MonoBehaviour
         _title.text = "Battle Won!";
         string summaryInfo = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins() + "\n"
                              + "Total enemies killed: " + GlobalGameManager.GetInstance().GetTotalEnemiesKilled() + "\n"
-                             + "Total heroes killed: " + GlobalGameManager.GetInstance().GetTotalHeroesLost() + "\n"
+                             + "Total heroes lost: " + GlobalGameManager.GetInstance().GetTotalHeroesLost() + "\n"
                              + "Total battles won: " + GlobalGameManager.GetInstance().GetTotalBattlesWon();
         _info.text = summaryInfo;
         _mainMenuButtonText.text = "Quit Game";
@@ -46,7 +46,7 @@ public class CombatVictoryScreenMenu : MonoBehaviour
         _goToShopButton.SetActive(false);
         _title.text = "Battle Lost!";
         string summaryInfo = "Total enemies killed: " + GlobalGameManager.GetInstance().GetTotalEnemiesKilled() + "\n"
-                             + "Total heroes killed: " + GlobalGameManager.GetInstance().GetTotalHeroesLost() + "\n"
+                             + "Total heroes lost: " + GlobalGameManager.GetInstance().GetTotalHeroesLost() + "\n"
                              + "Total battles won: " + GlobalGameManager.GetInstance().GetTotalBattlesWon();
         _info.text = summaryInfo;
         _mainMenuButtonText.text = "Quit Game";
