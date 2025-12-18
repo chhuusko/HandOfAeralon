@@ -115,13 +115,12 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
         int baseDamage = castingCharacter.Data.DerivedDamage;
         int handSize = castingCharacter.GetFaction() == Faction.Friendly? CardHandManager.GetInstance().GetCardsInHand().Count: _enemyHandSize;
 
-        float fdamage = (_damageMultiplier + (_handSizeDamageMultiplier * handSize)) * baseDamage;
+        float damage = (_damageMultiplier + (_handSizeDamageMultiplier * handSize)) * baseDamage;
 
-        int damage = Mathf.RoundToInt(fdamage);
-        damage = Mathf.RoundToInt(castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this));
-        damage = Mathf.RoundToInt(affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this));
+        damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
 
-        return damage;
+        return Mathf.RoundToInt(damage);
     }
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
@@ -133,10 +132,10 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
         int baseDamage = GetCharacterCaster().Data.DerivedDamage;
         int handSize = GetCharacterCaster().GetFaction() == Faction.Friendly ? CardHandManager.GetInstance().GetCardsInHand().Count : _enemyHandSize;
 
-        float fdamage = (_damageMultiplier + (_handSizeDamageMultiplier * handSize)) * baseDamage;
+        float damage = (_damageMultiplier + (_handSizeDamageMultiplier * handSize)) * baseDamage;
 
-        int damage = Mathf.RoundToInt(fdamage);
-        damage = Mathf.RoundToInt(GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this));
-        return damage;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+
+        return Mathf.RoundToInt(damage);
     }
 }
