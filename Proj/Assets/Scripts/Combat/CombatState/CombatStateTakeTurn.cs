@@ -92,7 +92,6 @@ public class CombatStateTakeTurn : CombatStateBase
             Selector._instance.DeselectCharacter();
         }
             
-
         CombatManager._instance.GetEnemyAI().AIEndTurn.RemoveListener(EndTurn);
     }
 
