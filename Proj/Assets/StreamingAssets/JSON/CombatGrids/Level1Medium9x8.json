@@ -1311,38 +1311,6 @@
             "_position": {
                 "x": 17.0,
                 "y": 0.0,
-                "z": 11.0
-            },
-            "_size": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "_rotation": {
-                "x": 0.0,
-                "y": -0.7071068286895752,
-                "z": 0.0,
-                "w": 0.7071068286895752
-            },
-            "_baseHealthPoints": 32,
-            "_baseSpeed": 7,
-            "_baseDamage": 5,
-            "_baseMovementPoints": 4,
-            "_currentHealthPoints": 0,
-            "_currentSpeed": 7,
-            "_currentDamage": 5,
-            "_currentMovementPoints": 4,
-            "_currentTileIndex": {
-                "x": 8,
-                "y": 5
-            }
-        },
-        {
-            "_characterClass": 3,
-            "_faction": 1,
-            "_position": {
-                "x": 17.0,
-                "y": 0.0,
                 "z": 3.0
             },
             "_size": {
@@ -1431,6 +1399,38 @@
             "_currentTileIndex": {
                 "x": 7,
                 "y": 4
+            }
+        },
+        {
+            "_characterClass": 3,
+            "_faction": 1,
+            "_position": {
+                "x": 17.0,
+                "y": 0.0,
+                "z": 11.0
+            },
+            "_size": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "_rotation": {
+                "x": 0.0,
+                "y": -0.7071068286895752,
+                "z": 0.0,
+                "w": 0.7071068286895752
+            },
+            "_baseHealthPoints": 32,
+            "_baseSpeed": 7,
+            "_baseDamage": 5,
+            "_baseMovementPoints": 4,
+            "_currentHealthPoints": 0,
+            "_currentSpeed": 7,
+            "_currentDamage": 5,
+            "_currentMovementPoints": 4,
+            "_currentTileIndex": {
+                "x": 8,
+                "y": 5
             }
         }
     ]
