@@ -57,6 +57,11 @@ public class CharacterData
     {
         _classData = classData;
         _faction = faction;
+
+        if (_classData)
+        {
+            _characterClass = ClassData.characterClass;
+        }
         
         if (generateTraits)
         {
@@ -89,7 +94,6 @@ public class CharacterData
         _currentHealthPoints01 = 1f;
         _healthInitialized = true;
         
-        _characterClass = ClassData.characterClass;
         _abilities = ClassData.abilities;
         _activeAbilities = new List<Ability>(_abilities);
     }
