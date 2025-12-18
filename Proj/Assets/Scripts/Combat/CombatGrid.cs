@@ -417,58 +417,42 @@ public class CombatGrid : MonoBehaviour
 
     public GameObject AddCharacter(CombatGridCharacterData characterData)
     {
-        GameObject result = null;
+        Vector3 instancePos = characterData.GetCharacterPosition();
+        Quaternion rotation = characterData.GetRotation();
+        Vector2Int tileIndex = characterData.GetCurrentTileIndex();
+        Faction faction = characterData.GetFaction();
+        CharacterClass characterClass = characterData.GetCharacterClass();
 
-        Vector3        instancePos           = characterData.GetCharacterPosition();
-        Quaternion     rotation              = characterData.GetRotation();
-        Vector2Int     tileIndex             = characterData.GetCurrentTileIndex();
-        Faction        faction               = characterData.GetFaction();
-        CharacterClass characterClass        = characterData.GetCharacterClass();
-
-        int            currentHealtPoints    = characterData.GetHealthPoints();
-        int            currentSpeed          = characterData.GetInitiative();
-        int            currentDamage         = characterData.GetDamage();
-        int            currentMovementPoints = characterData.GetMovementPoints();
-
-        int            baseHealtPoints       = characterData.GetBaseHealthPoints();
-        int            baseSpeed             = characterData.GetBaseInitiative();
-        int            baseDamage            = characterData.GetBaseDamage();
-        int            baseMovementPoints    = characterData.GetBaseMovementPoints();
-
-
-        GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
+        // Instantiate prefab
+        GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterClass);
         GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, rotation);
         Character characterScript = characterObject.GetComponent<Character>();
-        
-        characterScript.Data.InitializeClassData();
-        
-        Debug.Log(baseHealtPoints);
 
+        // Initialize CharacterData directly from JSON
+        characterScript.Data.InitializeFromJSON(
+            faction,
+            characterData.GetBaseHealthPoints(),
+            characterData.GetBaseDamage(),
+            characterData.GetBaseInitiative(),
+            characterData.GetBaseMovementPoints(),
+            characterData.GetHealthPoints()
+        );
+
+        // Set class, faction, tile
         characterScript.SetCharacterClass(characterClass);
         characterScript.SetFaction(faction);
         characterScript.SetCurrentTileIndex(tileIndex);
-        characterScript.SetCurrentHealthPoints(currentHealtPoints);
-        characterScript.SetCurrentInitiative(currentSpeed);
-        characterScript.SetCurrentDamage(currentDamage);
-        characterScript.SetCurrentMovementPoints(currentMovementPoints);
-        characterScript.Data.SetBaseHealthPoints(baseHealtPoints);
-        characterScript.Data.InitializeCurrentHealthFromSave(characterData.GetHealthPoints());
-        characterScript.Data.SetDerivedHealthPoints(LevelManager.GetInstance().enemyStatIncrease, preserveLoadedCurrent: false);
-     
-        characterScript.SetBaseInitiative(baseSpeed);
-        characterScript.Data.SetBaseDamage(baseDamage);
-        characterScript.SetBaseMovementPoints(baseMovementPoints);
-  
-        characterScript.AddCharacterFrame();
-        
-        characterScript.Initialize(characterScript.Data);
-        characterScript.Data.GenerateTraits();
 
+        // Add UI/frames
+        characterScript.AddCharacterFrame();
+
+        // Optional: any additional Character setup
+        characterScript.Initialize(characterScript.Data);
+
+        // Add to grid
         _charactersGO.Add(characterObject);
-        
-        result = characterObject;
-        
-        return result;
+
+        return characterObject;
     }
 
     private void HandleCharacterDeath(Character character)
