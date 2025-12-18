@@ -90,16 +90,12 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator AIBehaviour()
     {
-        StatusEffectManager statusEffectManager = null;
-        if (_character.TryGetComponent<StatusEffectManager>(out statusEffectManager))
+        if (_character.IsStunned)
         {
-            if (statusEffectManager.ContainsStatusEffect<Stunned>())
-            {
-                DebugLog.JLWLog($"{_character.name} was Stunned and will pass their turn!");
-                yield return new WaitForSeconds(TURN_END_WAIT_TIME);
-                EndTurn();
-                yield break;
-            }
+            DebugLog.JLWLog($"{_character.name} was Stunned and will pass their turn!");
+            yield return new WaitForSeconds(TURN_END_WAIT_TIME);
+            EndTurn();
+            yield break;
         }
 
         yield return new WaitForSeconds(TURN_START_WAIT_TIME);
@@ -523,14 +519,39 @@ public class EnemyAI : MonoBehaviour
             case "SongOfRenewal_Ability":
                 {
                     int hitCount = 0;
-                    List<CombatGridTile> aoe = DiamondPattern(target, 3);
+                    bool isAlly = false;
+                    float occupantPERCENTHP = 1f;
+                    Character occupant = null;
+                    occupant = target.GetOccupantCharacter();
+                    if (occupant != null && occupant.GetCurrentHealth() > 0)
+                    {
+                        isAlly = occupant.GetFaction() == _controlledFaction;
+                        occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                        
+                        if (isAlly && occupantPERCENTHP < 1f)
+                        {
+                            hitCount++;
+                            result += 40;
+
+                            if (occupantPERCENTHP < 0.75f)
+                            {
+                                result += 10;
+
+                                if (occupantPERCENTHP < 0.5f)
+                                {
+                                    result += 10;
+                                }
+                            }
+                        }
+                    }
+                    List <CombatGridTile> aoe = DiamondPattern(target, 3);
                     foreach (var hit in aoe)
                     {
-                        Character occupant = hit.GetOccupantCharacter();
+                        occupant = hit.GetOccupantCharacter();
                         if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
-                            bool isAlly = occupant.GetFaction() == _controlledFaction;
-                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                            isAlly = occupant.GetFaction() == _controlledFaction;
+                            occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
                             if (isAlly && occupantPERCENTHP < 1f)
                             {
