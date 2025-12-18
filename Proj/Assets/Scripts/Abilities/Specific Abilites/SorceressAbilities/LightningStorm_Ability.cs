@@ -70,7 +70,6 @@ public class LightningStorm_Ability : RoundAOEAbility
         StatusEffect burn = statusEffectManager.TryApplyBurn(affectedCharacter, 0, _burnDuration);
 
         AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun, died);
-        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, burn, died);
     }
 
     protected override void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
