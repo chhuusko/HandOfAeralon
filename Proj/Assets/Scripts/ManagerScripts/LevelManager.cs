@@ -141,7 +141,8 @@ public class LevelManager : ScriptableObject
             {
                 Application.targetFrameRate = -1;
                 QualitySettings.vSyncCount = 1;
-                _difficulty = _level / mapScalingInterval;
+                _difficulty = (_level / mapScalingInterval)-1;
+                Debug.Log(_difficulty);
                 switch (_difficulty)
                 {
                     case 0:
@@ -150,8 +151,11 @@ public class LevelManager : ScriptableObject
                     case 1:
                         LoadScene(mediumList);
                         break;
-                    default:
+                    case 2:
                         LoadScene(hardList);
+                        break;
+                    default:
+                        RestartGame();
                         break;
                 }
                 _level++;
