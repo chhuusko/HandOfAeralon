@@ -35,6 +35,7 @@ public class CombatUI : MonoBehaviour
     [Header("Turn order")]
     [SerializeField] private GameObject _turnOrderPanel;
     [SerializeField] private ScrollRect _turnOrderScrollBar;
+    [SerializeField] private GameObject _roundMarkerPrefab;
     
     [Header("Combat Log")]
     [SerializeField] private CombatLog _combatLog;
@@ -344,19 +345,30 @@ public class CombatUI : MonoBehaviour
         return pb;
     }
     
-    private void UpdateTurnOrder(IReadOnlyList<Character> characters)
+    private void UpdateTurnOrder(IReadOnlyList<Character> characters, int currentRound)
     {
         // Clear previous portraits.
         for (int i = 0; i < _turnOrderPanel.transform.childCount; i++)
         {
             Destroy(_turnOrderPanel.transform.GetChild(i).gameObject);
         }
-        
+
+        int turnOrderIndex = 0;
+        CombatTurnOrder combatTurnOrder = CombatManager._instance.GetCombatTurnOrder();
         // Create portraits for current turn order.
         foreach (Character c in characters)
         {
+            if (turnOrderIndex++ == combatTurnOrder.GetFullRoundMarkerPosition())
+            {
+                GameObject roundMarkerObject = Instantiate(_roundMarkerPrefab, _turnOrderPanel.transform);
+                TurnOrderRoundMarker turnOrderRoundMarker = roundMarkerObject.GetComponent<TurnOrderRoundMarker>();
+                turnOrderRoundMarker.SetCurrentRound(currentRound);
+            }
+                
+
             PortraitButton pb = CreateCharacterPortrait(c, _turnOrderPanel.transform);
             _characterPortraits.TryAdd(pb.Character.Data, pb);
+
         }
         
         StartCoroutine(ScrollToBottom());

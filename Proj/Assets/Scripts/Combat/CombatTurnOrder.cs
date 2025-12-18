@@ -51,9 +51,11 @@ public class CombatTurnOrder
     [SerializeField] private List<Character> _charactersInExecutedTurnOrder;
     [SerializeField] private List<Character> _charactersToDisplay;
 
-    [SerializeField] private int _turnCountFullRound;
-    [SerializeField] private int _turnCountCurrent;
-    
+    private int _turnCountFullRound;
+    private int _turnCountCurrent;
+    private int _currentRound = 1;
+    private bool _updateRoundMarker;
+
     // NOTE (Calle): This is so that the character that is removed in InitializeTurnOrder()
     // can be added at the end of the turn later.
 
@@ -64,6 +66,7 @@ public class CombatTurnOrder
         _charactersInPendingTurnOrder  = new List<Character>();
         _charactersInExecutedTurnOrder = new List<Character>();
         _charactersToDisplay           = new List<Character>();
+        _currentRound = 1;
     }
 
     private void HandleEndCombat(bool playerWon)
@@ -81,8 +84,7 @@ public class CombatTurnOrder
 
         _charactersInPendingTurnOrder = CombatGrid._instance.GetAllCharacterScripts();
         _turnCountFullRound = _charactersInPendingTurnOrder.Count;
-        
-
+        _currentRound = 1;
         SortCharacterListByInitiative(_charactersInPendingTurnOrder);
 
         _activeCharacter = _charactersInPendingTurnOrder[0];
@@ -98,14 +100,21 @@ public class CombatTurnOrder
         UpdateCurrentTurnType();
         GetFullRoundMarkerPosition();
 
-        CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay);
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay, _currentRound);
     }
     
     public void UpdateTurnOrder()
     {
+        if (_updateRoundMarker)
+        {
+            _currentRound++;
+            _updateRoundMarker = false;
+        }
+            
 
         if (_charactersInPendingTurnOrder.Count <= 0)
         {
+            CombatEventManager.InvokeOnRoundFinished(_currentRound);
             _charactersInPendingTurnOrder.AddRange(_charactersInExecutedTurnOrder);
             _charactersInExecutedTurnOrder.Clear();
         }
@@ -127,11 +136,14 @@ public class CombatTurnOrder
 
 
         _turnCountCurrent = _charactersInExecutedTurnOrder.Count;
-        GetFullRoundMarkerPosition();
+    
 
         UpdateCurrentTurnType();
 
-        CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay);
+        if (_charactersInPendingTurnOrder.Count <= 0)
+            _updateRoundMarker = true;
+        
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay, _currentRound);
     }
 
     private void RebuildTurnOrder()
@@ -143,7 +155,7 @@ public class CombatTurnOrder
         _charactersToDisplay.AddRange(_charactersInPendingTurnOrder);
         _charactersToDisplay.AddRange(_charactersInExecutedTurnOrder);
 
-        CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay);
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay, _currentRound);
     }
 
     private void SortCharacterListByInitiative(List<Character> list)
@@ -202,7 +214,7 @@ public class CombatTurnOrder
             _charactersInTurnOrder.Add(_activeCharacter);
         }
 
-        CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder, _currentRound);
     }
 
     public void UpdateCharacterTurnOrderPreTurn()
@@ -258,7 +270,7 @@ public class CombatTurnOrder
         _charactersInTurnOrder.Remove(character);
         _turnCountFullRound--;
         //CombatEventManager.InvokeOnTurnOrderChanged(_charactersInTurnOrder);
-        CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay);
+        CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay, _currentRound);
     }
 
     public void SetCurrentTurn(CombatTurn nextTurn)
@@ -291,6 +303,7 @@ public class CombatTurnOrder
         return _turnCountFullRound - _turnCountCurrent;
     }
 
+    public int GetCurrentRound() { return _currentRound; }
     public List<Character> GetCharactersInTurnOrder()
     {
         return _charactersInTurnOrder;

@@ -33,6 +33,7 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerExitHandler
     {
         _rectTransform = GetComponent<RectTransform>();
         Hide();
+        _slider.value = _sliderSpeed;
     }
 
     // Update is called once per frame
@@ -183,12 +184,7 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerExitHandler
 
     public void SetHoverLockSpeed(float newSpeed) 
     { 
-        //NOTE (Calle): 0.1 is very fast so we should map the newSpeed to values between 0.0 and 0.1,
-        // 0.0 = the hover lock will never lock
-        // 0.1 = the hover lock will lock superquick
-
-        float mappedSpeed = 0.1f * newSpeed;
-        _sliderSpeed = mappedSpeed; 
+        SetMappedSliderSpeed(newSpeed);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -196,4 +192,13 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerExitHandler
         _bTooltipLocked = false;
         Hide();
     }
+
+    //NOTE (Calle): 0.1 is very fast so we should map the newSpeed to values between 0.0 and 0.1,
+    // 0.0 = the hover lock will never lock
+    // 0.1 = the hover lock will lock superquick
+    private void SetMappedSliderSpeed(float speed)
+    {
+        _sliderSpeed = 0.1f * speed;
+    }
+
 }

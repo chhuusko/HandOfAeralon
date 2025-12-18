@@ -1,10 +1,14 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class CombatOptionsMenu : MonoBehaviour
 {
     [SerializeField] private TMP_Text _settingHoverLockSpeed;
     [SerializeField] private TMP_Text _settingMasterVolume;
+    
+    [SerializeField] private Slider _settingHoverLockSpeedSlider;
+    [SerializeField] private CombatHoverTooltip _combatHoverTooltip;
 
     public void SetHoverLockSpeedText(float newLockSpeed) 
     { 

@@ -27,7 +27,9 @@ public static class CombatEventManager
 
     public static event Action<bool> OnIsHoveringUI;
 
-    public static event Action<IReadOnlyList<Character>> OnTurnOrderChanged;
+    public static event Action<IReadOnlyList<Character>, int> OnTurnOrderChanged;
+
+    public static event Action<int> OnRoundFinished;
 
     public static event Action<Character> OnCharacterDeath;
     public static event Action OnCharacterInitiativeChanged;
@@ -93,9 +95,11 @@ public static class CombatEventManager
     public static void InvokeOnCharacterInitiativeChanged()
        => OnCharacterInitiativeChanged?.Invoke();
     
-    public static void InvokeOnTurnOrderChanged(IReadOnlyList<Character> characterTurnOrder)
-        => OnTurnOrderChanged?.Invoke(characterTurnOrder);
+    public static void InvokeOnTurnOrderChanged(IReadOnlyList<Character> characterTurnOrder, int currentRound)
+        => OnTurnOrderChanged?.Invoke(characterTurnOrder, currentRound);
 
+    public static void InvokeOnRoundFinished(int currentRound)
+        => OnRoundFinished?.Invoke(currentRound);
     public static void InvokeOnAbilityDataCreated(AbilityExecutionData result)
        => OnAbilityDataCreated?.Invoke(result);
 

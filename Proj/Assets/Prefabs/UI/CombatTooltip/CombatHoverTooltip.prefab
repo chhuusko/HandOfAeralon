@@ -71,7 +71,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.71
+  m_FillAmount: 0.5
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -685,7 +685,7 @@ MonoBehaviour:
   _combatHUDOverlayCamera: {fileID: 0}
   _slider: {fileID: 3942459650698509616}
   _sliderInnerArea: {fileID: 8320378333627683324}
-  _sliderSpeed: 0.03
+  _sliderSpeed: 1
   _defaultColor: {r: 0.16981131, g: 0.16981131, b: 0.16981131, a: 1}
   _finishedColor: {r: 0.41998932, g: 0.6187129, b: 0.6226415, a: 1}
   _title: {fileID: 8128706942184581934}
@@ -882,7 +882,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.71
+  m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
