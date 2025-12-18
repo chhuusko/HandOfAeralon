@@ -90,7 +90,6 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator AIBehaviour()
     {
-        /*
         StatusEffectManager statusEffectManager = null;
         if (_character.TryGetComponent<StatusEffectManager>(out statusEffectManager))
         {
@@ -99,9 +98,9 @@ public class EnemyAI : MonoBehaviour
                 DebugLog.JLWLog($"{_character.name} was Stunned and will pass their turn!");
                 yield return new WaitForSeconds(TURN_START_WAIT_TIME + TURN_END_WAIT_TIME);
                 EndTurn();
+                yield break;
             }
         }
-        */
 
         yield return new WaitForSeconds(TURN_START_WAIT_TIME);
 
@@ -467,7 +466,7 @@ public class EnemyAI : MonoBehaviour
             case "RoarOfTheAncients_Ability":
                 {
                     int hitCount = 0;
-                    List<CombatGridTile> aoe = DiamondPattern(target, 2);
+                    List<CombatGridTile> aoe = DiamondPattern(target, 3);
                     foreach (var hit in aoe)
                     {
                         Character occupant = hit.GetOccupantCharacter();
@@ -889,7 +888,7 @@ public class EnemyAI : MonoBehaviour
             case "LightningStorm_Ability":
                 {
                     int hitCount = 0;
-                    List<CombatGridTile> aoe = DiamondPattern(target, 3);
+                    List<CombatGridTile> aoe = DiamondPattern(target, 2);
                     foreach (var hit in aoe)
                     {
                         Character occupant = hit.GetOccupantCharacter();
