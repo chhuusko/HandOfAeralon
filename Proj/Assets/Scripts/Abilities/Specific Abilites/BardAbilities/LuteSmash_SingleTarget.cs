@@ -78,8 +78,8 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
 
     public override int GetDamage()
     {
-        int damage = (int)(GetCharacterCaster().Data.DerivedDamage * _damageMultiplier);
-        damage = (int)GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        int damage = Mathf.RoundToInt(GetCharacterCaster().Data.DerivedDamage * _damageMultiplier);
+        damage = Mathf.RoundToInt(GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this));
         return damage;
     }
 }
