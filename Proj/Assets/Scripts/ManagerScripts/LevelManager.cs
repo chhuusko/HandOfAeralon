@@ -14,6 +14,7 @@ public class LevelManager : ScriptableObject
     [SerializeField] private List<string> mediumCombatList;
     [SerializeField] private List<string> hardCombatList;
 
+    [SerializeField] private int mapScalingInterval = 3;
     private static LevelManager _instance;
     private string[] _combatList;
     private string[] _generatedList;
@@ -135,7 +136,7 @@ public class LevelManager : ScriptableObject
             {
                 Application.targetFrameRate = -1;
                 QualitySettings.vSyncCount = 1;
-                _difficulty = _level / 5;
+                _difficulty = _level / mapScalingInterval;
                 switch (_difficulty)
                 {
                     case 0:
