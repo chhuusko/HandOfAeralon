@@ -8,11 +8,11 @@ public class Stunned : StatusEffect
 
     public override void OnApply()
     {
-        Character.IsStunned = false;
+        Character.IsStunned = true;
     }
 
     public override void OnExpire()
     {
-        Character.IsStunned = true;
+        Character.IsStunned = false;
     }
 }
