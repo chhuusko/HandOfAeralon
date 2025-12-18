@@ -484,6 +484,8 @@ public class Selector : MonoBehaviour
 
     private void HandleAbilityCast(CombatGridTile tile)
     {
+        if (!_selectedCharacter.CanUseAbility || _selectedCharacter.IsStunned) return;
+
         bool success = _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_selectedCharacter.GetAbilityHandler().GetPendingAbility(), tile);
 
         _selectedCharacter?.GetAbilityHandler()?.SetPendingAbility(null);
