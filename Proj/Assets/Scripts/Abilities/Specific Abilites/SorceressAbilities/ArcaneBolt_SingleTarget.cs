@@ -62,13 +62,13 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
         int mana = castingCharacter.GetFaction() == Faction.Friendly ? CardHandManager.GetInstance().GetMana() : CombatManager._instance.enemyMana;
 
         float totalMultiplier = _damageMultiplier + (_manaDamageMultiplier * mana);
-        int damage = Mathf.RoundToInt(baseDamage * totalMultiplier);
+        float damage = baseDamage * totalMultiplier;
 
 
-        damage = Mathf.RoundToInt(castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this));
-        damage = Mathf.RoundToInt(affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this));
+        damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
 
-        return damage;
+        return Mathf.RoundToInt(damage);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
@@ -82,8 +82,8 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
         int mana = CardHandManager.GetInstance().GetMana();
 
         float totalMultiplier = _damageMultiplier + (_manaDamageMultiplier * mana);
-        int damage = Mathf.RoundToInt(baseDamage * totalMultiplier);
-        damage = Mathf.RoundToInt(GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this));
-        return damage;
+        float damage = baseDamage * totalMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 }
