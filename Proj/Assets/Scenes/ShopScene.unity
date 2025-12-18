@@ -4661,6 +4661,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cardUI: {fileID: 2969407105491980244, guid: d5e6ec08a619d1943ac5712860266457, type: 3}
   _cardContent: {fileID: 2010235788}
+  aboveText: {fileID: 270522013}
 --- !u!114 &1211065232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8410,8 +8411,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 873734731}
   m_HandleRect: {fileID: 873734730}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.6510416
+  m_Value: 1.0000002
+  m_Size: 0.6510417
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
