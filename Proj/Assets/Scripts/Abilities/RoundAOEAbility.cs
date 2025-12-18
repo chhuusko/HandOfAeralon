@@ -7,6 +7,8 @@ public abstract class RoundAOEAbility : AOEAbility
     [Header("- Type Specific values - ")]
     [SerializeField] protected int _radius;
 
+    public int GetRadius() => _radius;
+
     public override IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         Character caster = casterTile.GetOccupantCharacter();

@@ -37,10 +37,12 @@ public class CharacterData
     public int DerivedDamage => _derivedDamage;
     
     [Header("Current stats")]
-    [SerializeField] private int _currentHealthPoints;
+    // Normalized health (0-1).
+    [SerializeField] private float _currentHealthPoints01;
     [SerializeField] private List<Ability> _abilities;
     [SerializeField] private List<Ability> _activeAbilities;
-    public int CurrentHealthPoints => _currentHealthPoints;
+    public float CurrentHealthPoints01 => _currentHealthPoints01;
+    public int CurrentHealthPoints => Mathf.RoundToInt(_derivedHealthPoints * _currentHealthPoints01);
     public IReadOnlyList<Ability> Abilities => _abilities;
     
     public List<Ability> ActiveAbilities => _activeAbilities;
@@ -56,12 +58,12 @@ public class CharacterData
         _classData = classData;
         _faction = faction;
         
-        InitializeClassData();
-        
         if (generateTraits)
         {
             GenerateTraits();
         }
+        
+        InitializeClassData();
     }
     
     /// <summary>
@@ -77,23 +79,48 @@ public class CharacterData
         if (_faction == Faction.Friendly)
         {
             // Set values from class data.
-            _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(ClassData.minHealthPoints, ClassData.maxHealthPoints + 1);
+            _baseHealthPoints = UnityEngine.Random.Range(ClassData.minHealthPoints, ClassData.maxHealthPoints + 1);
             _baseInitiative =  UnityEngine.Random.Range(ClassData.minInitiative, ClassData.maxInitiative + 1);
             _baseDamage = UnityEngine.Random.Range(ClassData.minDamage, ClassData.maxDamage + 1);
             _baseMovementPoints = UnityEngine.Random.Range(ClassData.minMovementPoints, ClassData.maxMovementPoints + 1);
         }
         
-        CalculateDerivedStats(1);
-
-        if (!_healthInitialized)
-        {
-            _currentHealthPoints = _derivedHealthPoints;
-            _healthInitialized = true;
-        }
+        CalculateDerivedStats(1, 1, false);
+        _currentHealthPoints01 = 1f;
+        _healthInitialized = true;
         
         _characterClass = ClassData.characterClass;
         _abilities = ClassData.abilities;
         _activeAbilities = new List<Ability>(_abilities);
+    }
+
+    public void InitializeFromJSON(Faction faction, int baseHP, int baseDamage, int baseInitiative,
+        int baseMovementPoints, int currentHP, List<Ability> abilities = null)
+    {
+        _faction = faction;
+
+        _baseHealthPoints = baseHP;
+        _baseDamage = baseDamage;
+        _baseInitiative = baseInitiative;
+        _baseMovementPoints = baseMovementPoints;
+
+        _abilities = _classData.abilities;
+        _activeAbilities = new List<Ability>(_abilities);
+
+        // 1) Set derived to base (no preservation) so _derivedHealthPoints = baseDerived.
+        SetDerivedHealthPoints(1f, false);
+        SetDerivedDamage(_baseDamage);
+
+        // 2) Compute saved fraction against base derived BEFORE any trait changes.
+        float savedPercent = (_derivedHealthPoints > 0) ? (float)currentHP / _derivedHealthPoints : 0f;
+        savedPercent = Mathf.Clamp01(savedPercent);
+
+        // 3) Generate traits (this will change _derivedHealthPoints).
+        GenerateTraits();
+
+        // 4) Apply saved fraction — this preserves the saved percentage regardless of how traits changed max HP.
+        _currentHealthPoints01 = savedPercent;
+        _healthInitialized = true; // mark initialized so later derived changes preserve absolute HP if you want
     }
 
     public void InitializeTraits()
@@ -118,23 +145,19 @@ public class CharacterData
         CalculateDerivedStats(factor, factor);
     }
 
-    public void CalculateDerivedStats(float hpFactor, float damageFactor)
+    public void CalculateDerivedStats(float hpFactor, float damageFactor, bool preserveCurrentHP = true)
     {
         _traitManager.ModifyDerivedStats(ref hpFactor, ref damageFactor);
         
-        int derivedHp = Mathf.RoundToInt(_baseHealthPoints * hpFactor);
-        int derivedDamage = Mathf.RoundToInt(_baseDamage * damageFactor);
-        
-        SetDerivedHealthPoints(hpFactor);
-        SetDerivedDamage(derivedDamage);
+        SetDerivedHealthPoints(hpFactor, preserveCurrentHP);
+        SetDerivedDamage(Mathf.RoundToInt(_baseDamage * damageFactor));
         
         OnDerivedStatsChanged?.Invoke();
     }
 
     public void InitializeCurrentHealthFromSave(int currentHealth)
     {
-        _currentHealthPoints = Mathf.Clamp(currentHealth, 0, _derivedHealthPoints);
-        _derivedHealthPoints = _baseHealthPoints;
+        _currentHealthPoints01 = Mathf.Clamp01((float)currentHealth / _derivedHealthPoints);
         _healthInitialized = true;
     }
     
@@ -146,50 +169,63 @@ public class CharacterData
     public void SetFaction(Faction faction) => _faction = faction;
     public void SetBaseInitiative(int initiative) => _baseInitiative = Mathf.Max(1, initiative);
     
-    public void SetDerivedHealthPoints(float hpFactor, bool preserveLoadedCurrent = false)
+    public void SetDerivedHealthPoints(float hpFactor, bool preserveCurrentHP = true)
     {
         int oldDerived = _derivedHealthPoints;
-        int oldCurrent = _currentHealthPoints;
         int newDerived = Mathf.Max(1, Mathf.RoundToInt(_baseHealthPoints * hpFactor));
-    
-        if (Faction == Faction.Enemy) 
-        { 
-            DebugLog.JoppaLog($"SetDerivedHealthPoints: oldDerived={oldDerived}, oldCurrent={oldCurrent}, newDerived={newDerived}, hpFactor={hpFactor}, baseHP={_baseHealthPoints}"); 
-        }
     
         // If derived health hasn't changed, don't recalculate current health
         if (newDerived == oldDerived && _healthInitialized)
         {
-            if (Faction == Faction.Enemy) { Debug.Log($"_currentHP={_currentHealthPoints} (unchanged)"); }
             return;
         }
-    
+        
+        int oldCurrentAbsolute = Mathf.RoundToInt(_currentHealthPoints01 * oldDerived);
+        
         _derivedHealthPoints = newDerived;
 
-        if (_healthInitialized && oldDerived > 0)
+        if (_healthInitialized)
         {
-            // Maintain percentage of current health
-            float healthPercent = (float)oldCurrent / oldDerived;
-            _currentHealthPoints = Mathf.RoundToInt(_derivedHealthPoints * healthPercent);
-        
-            if (Faction == Faction.Enemy) 
-            { 
-                DebugLog.JoppaLog($"Calculated: healthPercent={healthPercent}, new _currentHP={_currentHealthPoints}"); 
+            if (preserveCurrentHP && oldDerived > 0)
+            {
+                _currentHealthPoints01 = Mathf.Clamp01((float)oldCurrentAbsolute / newDerived);
+            }
+            else
+            {
+                _currentHealthPoints01 = 1f;
             }
         }
         else
         {
-            _currentHealthPoints = _derivedHealthPoints;
+            _currentHealthPoints01 = 1f;
             _healthInitialized = true;
         }
-    
-        if (Faction == Faction.Enemy) { Debug.Log($"Final _currentHP={_currentHealthPoints}"); }
     }
 
     public void SetDerivedDamage(int damage) => _derivedDamage = Mathf.Max(1, damage);
     public void SetBaseMovementPoints(int movementPoints) => _baseMovementPoints = Mathf.Max(movementPoints, 1);
-    public void SetCurrentHealthPoints(int health) => _currentHealthPoints = Mathf.Max(health, 0);
-    public void Heal(int amount) => SetCurrentHealthPoints(Mathf.Min(CurrentHealthPoints + amount, _derivedHealthPoints));
+    public void SetCurrentHealthPoints(int health)
+    {
+        if (_derivedHealthPoints <= 0)
+        {
+            return;
+        }
+        
+        _currentHealthPoints01 = Mathf.Clamp01((float)health / _derivedHealthPoints);
+    }
+
+    public void Heal(int amount)
+    {
+        float heal01 = (float)amount / _derivedHealthPoints;
+        _currentHealthPoints01 = Mathf.Clamp01(_currentHealthPoints01 + heal01);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        float dmg01 = (float)damage / _derivedHealthPoints;
+        _currentHealthPoints01 = Mathf.Max(0f, _currentHealthPoints01 - dmg01);
+    }
+
     public void SetAbilities(List<Ability> abilities) => _abilities = new List<Ability>(abilities);
     public void SetActiveAbilities(List<Ability> abilities)
     {
@@ -584,7 +620,7 @@ public class Character : MonoBehaviour
     {
         float oldHealth = GetCurrentHealth();
         
-        _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
+        _data.TakeDamage(damage);
         OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
         OnTakeDamage?.Invoke(damage, gameObject);
         
@@ -592,7 +628,7 @@ public class Character : MonoBehaviour
 
         Debug.Log($"{name} took {damage} damage! Remaining health: {GetCurrentHealth()}");
         
-        if (_data.CurrentHealthPoints <= 0)
+        if (_data.CurrentHealthPoints01 <= 0.001f)
         {
             PlayDamageSound(true, newHealth / oldHealth);
             StartCoroutine(RemoveCharacter());
