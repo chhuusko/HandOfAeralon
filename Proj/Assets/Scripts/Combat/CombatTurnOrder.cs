@@ -103,6 +103,19 @@ public class CombatTurnOrder
     
     public void UpdateTurnOrder()
     {
+
+        if (_charactersInPendingTurnOrder.Count <= 0)
+        {
+            _charactersInPendingTurnOrder.AddRange(_charactersInExecutedTurnOrder);
+            _charactersInExecutedTurnOrder.Clear();
+        }
+
+        if (_charactersInPendingTurnOrder.Count == 0)
+        {
+            Debug.LogError("No characters available for turn order!");
+            return;
+        }
+
         _activeCharacter = _charactersInPendingTurnOrder[0];
         
         _charactersInPendingTurnOrder.RemoveAt(0);
@@ -112,11 +125,6 @@ public class CombatTurnOrder
         _charactersToDisplay.Remove(_activeCharacter);
         _charactersToDisplay.Add(_activeCharacter);
 
-        if (_charactersInPendingTurnOrder.Count <= 0)
-        {
-            _charactersInPendingTurnOrder.AddRange(_charactersInExecutedTurnOrder);
-            _charactersInExecutedTurnOrder.Clear();
-        }
 
         _turnCountCurrent = _charactersInExecutedTurnOrder.Count;
         GetFullRoundMarkerPosition();
@@ -140,6 +148,8 @@ public class CombatTurnOrder
 
     private void SortCharacterListByInitiative(List<Character> list)
     {
+        if (list.Count == 0)
+            return;
         // Sort them byt initiative, highest first
         list.Sort((a, b) => b.GetBaseInitiative().CompareTo(a.GetBaseInitiative()));
     }

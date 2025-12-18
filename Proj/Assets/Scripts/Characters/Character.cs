@@ -263,6 +263,7 @@ public class Character : MonoBehaviour
     public bool IsStunned;
     public bool CanUseAbility = true;
     public bool IsTargetable = true;
+    private bool isDying;
 
     [Header("Status effects")]
     private StatusEffectManager _statusEffectManager;
@@ -633,8 +634,9 @@ public class Character : MonoBehaviour
 
         Debug.Log($"{name} took {damage} damage! Remaining health: {GetCurrentHealth()}");
         
-        if (_data.CurrentHealthPoints01 <= 0.001f)
+        if (_data.CurrentHealthPoints01 <= 0.001f && !isDying)
         {
+            isDying = true;
             PlayDamageSound(true, newHealth / oldHealth);
             StartCoroutine(RemoveCharacter());
             return true;
