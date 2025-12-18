@@ -62,6 +62,7 @@ public class StatusEffectManager : MonoBehaviour
         // Traits need to be initialized on combat start, once character has been created.
         foreach (var trait in _traitManager.GetAllTraits())
         {
+            trait.Setup(_character, this);
             trait.Initialize();
         }
     }

@@ -16,7 +16,7 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 0c3bb867d3de52f43ae0e7a74de316d0, type: 3}
   _range: 6
   _cooldown: 1
-  _description: "Restore 20% of a target ally\u2019s max {health}, and 10% to all
+  _description: "Restore 25% of a target ally\u2019s max {health}, and 10% to all
     allies in the area. Draw 1 {card} if the main target was below 50% {health}.  "
   _abilityTag: 10
   _type: 2
@@ -29,6 +29,7 @@ MonoBehaviour:
   _castingAnimationTime: 0
   _castingFXTime: 0
   _fromCastToHitTime: 1
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
   <AudioEvent>k__BackingField:
     Guid:
@@ -41,5 +42,5 @@ MonoBehaviour:
   _validTargets: 3
   _abilityAOEVFXSequence: {fileID: 0}
   _radius: 3
-  _maxHealthHealMain: 0.2
+  _maxHealthHealMain: 0.25
   _maxHealthHealArea: 0.1
