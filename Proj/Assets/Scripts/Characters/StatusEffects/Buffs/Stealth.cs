@@ -18,6 +18,7 @@ public class Stealth : StatusEffect
         Character.IsTargetable = false;
         Character.gameObject.GetComponent<Renderer>().material.SetFloat("_Camo", 1);
         Character.Data.SetBaseMovementPoints(Character.GetBaseMovementPoints() + data.MovementPointModifier);
+        Character.IncreaseCurrentMovementPoints();
     }
 
     public override void OnExpire()
@@ -32,6 +33,7 @@ public class Stealth : StatusEffect
         Character.IsTargetable = true;
         Character.gameObject.GetComponent<Renderer>().material.SetFloat("_Camo", 0);
         Character.Data.SetBaseMovementPoints(Character.GetBaseMovementPoints() - data.MovementPointModifier);
+        Character.DecreaseCurrentMovementPoints();
     }
 
     // Effect breaks on taking damage.
