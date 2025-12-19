@@ -38,8 +38,8 @@ public class CombatStateCharacterPlacement : CombatStateBase
 
             CombatGridTile unoccupiedDeployTile = _selector.GetUnoccupiedDeployTileClicked();
             Character selectedCharacter = _selector.GetSelectedCharacter();
-
-            if (selectedCharacter)
+            
+            if (selectedCharacter && selectedCharacter.GetFaction() == Faction.Friendly)
             {
                 if (unoccupiedDeployTile)
                 {
