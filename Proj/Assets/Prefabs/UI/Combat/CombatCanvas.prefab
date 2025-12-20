@@ -1702,6 +1702,7 @@ MonoBehaviour:
   - {fileID: 1865859873643117020}
   _turnOrderPanel: {fileID: 7483078133583643469}
   _turnOrderScrollBar: {fileID: 1479745401614222361}
+  _roundMarkerPrefab: {fileID: 0}
   _combatLog: {fileID: 5952408749085050435}
   _combatLogParent: {fileID: 8971003108845950401}
   _levelCounterPane: {fileID: 6949741852814719134}
@@ -2966,7 +2967,7 @@ MonoBehaviour:
     m_Right: 10
     m_Top: 10
     m_Bottom: 10
-  m_ChildAlignment: 3
+  m_ChildAlignment: 0
   m_Spacing: 20
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
