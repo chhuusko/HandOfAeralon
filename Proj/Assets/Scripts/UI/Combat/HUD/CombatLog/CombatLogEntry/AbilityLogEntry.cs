@@ -22,8 +22,20 @@ public class AbilityLogEntry : CombatLogEntry
 
         Color damageColor = ColorDatabase.Instance.GetDamageColor(d.Ability);
         
-        string casterName = GameTextFormatter.FactionColoredLabel(d.Caster);
-        string targetName = d.Caster == d.Target ? "itself" : GameTextFormatter.FactionColoredLabel(d.Target);
+        string casterName = d.Caster.GetFaction() == Faction.Friendly ?
+            GameTextFormatter.ClassColoredName(d.Caster) : GameTextFormatter.FactionColoredLabel(d.Caster);
+
+        string targetName;
+        if (d.Caster == d.Target)
+        {
+            targetName = "itself";
+        }
+        else
+        {
+            targetName = d.Target.GetFaction() == Faction.Friendly ?
+                GameTextFormatter.ClassColoredName(d.Target) : GameTextFormatter.FactionColoredLabel(d.Target);
+        }
+        
         string abilityName =
             TextMarkupExtensions.Colorize(d.Ability.GetAbilityName(), ColorDatabase.Instance.AbilityColor);
         string damage = TextMarkupExtensions.Colorize(d.Damage.ToString(), damageColor);

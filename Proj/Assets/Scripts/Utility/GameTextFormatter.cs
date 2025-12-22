@@ -2,6 +2,20 @@ using UnityEngine;
 
 public static class GameTextFormatter
 {
+    public static string ClassColoredName(Character character)
+    {
+        if (character == null)
+        {
+            Debug.LogWarning("Character is null");
+            return string.Empty;
+        }
+        
+        Color color = ColorDatabase.Instance.GetCharacterColor(character);
+        string name = character.Data.Name;
+        
+        return TextMarkupExtensions.Colorize(name, color);
+    }
+    
     public static string FactionColoredLabel(Character character)
     {
         if (character == null)
