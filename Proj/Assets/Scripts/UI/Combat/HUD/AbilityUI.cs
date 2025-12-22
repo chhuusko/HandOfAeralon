@@ -20,6 +20,18 @@ public class AbilityUI : MonoBehaviour
         CombatEventManager.OnCharacterMove += CharacterMoving;
         CombatEventManager.OnEnterCombatStatePlaceCharacter += LoadAbilities;
         CombatEventManager.OnAbilityCast += DeactivateBorder;
+
+        StartCoroutine(WaitForSelector());
+    }
+
+    private IEnumerator WaitForSelector()
+    {
+        while (!Selector._instance)
+        {
+            Debug.Log("Waiting for selector");
+            yield return null;
+        }
+        
         Selector._instance.OnCharacterDeselected += DeactivateBorder;
     }
 

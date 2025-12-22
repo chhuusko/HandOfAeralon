@@ -13,9 +13,11 @@ public class CharacterData
     public event Action OnDerivedStatsChanged;
     
     [Header("Data")]
+    [SerializeField] private string _name;
     [SerializeField] private ClassData _classData;
     [SerializeField] private CharacterClass _characterClass;
     [SerializeField] private Faction _faction;
+    public string Name => _name;
     public ClassData ClassData => _classData;
     public CharacterClass CharacterClass => _characterClass;
     public Faction Faction => _faction;
@@ -96,6 +98,8 @@ public class CharacterData
         
         _abilities = ClassData.abilities;
         _activeAbilities = new List<Ability>(_abilities);
+        
+        _name = _classData.availableNames[UnityEngine.Random.Range(0, _classData.availableNames.Length)];
     }
 
     public void InitializeFromJSON(Faction faction, int baseHP, int baseDamage, int baseInitiative,

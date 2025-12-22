@@ -20,6 +20,9 @@ public class ClassData : ScriptableObject
     
     [Header("Abilities")]
     public List<Ability> abilities;
+    
+    [Header("Name")]
+    public string[] availableNames;
 
     [Header("Misc")]
     public Sprite classImage;
