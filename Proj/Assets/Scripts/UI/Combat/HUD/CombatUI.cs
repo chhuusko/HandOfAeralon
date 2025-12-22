@@ -21,9 +21,9 @@ public class CombatUI : MonoBehaviour
 
     [Header("Characters")]
     [SerializeField] private GameObject _placeCharactersPanel;
-    [SerializeField] private Image _activeCharacterPortrait;
     [SerializeField] private GameObject _activeCharacterBorder;
     [SerializeField] private Button _characterPortraitButtonPrefab;
+    [SerializeField] private ActiveTurnCharacterButton _activeCharacterScript;
     public Character CurrentTurnCharacter { get; private set; }
     public CharacterData SelectedCharacter { get; private set; }
     
@@ -199,7 +199,8 @@ public class CombatUI : MonoBehaviour
         
         SetSelectedCharacter(c);
         CurrentTurnCharacter = c;
-        _activeCharacterPortrait.GetComponent<PortraitButton>().Character = c;
+        // _activeCharacterPortrait.GetComponent<PortraitButton>().Character = c;
+        _activeCharacterScript.SetActiveCharacter(c);
         
         _abilityScript.LoadAbilities(SelectedCharacter);
     }
@@ -286,7 +287,6 @@ public class CombatUI : MonoBehaviour
 
         pb.OnClickPortraitButton += SetSelectedCharacter;
         pb.OnClickPortraitButton += UpdatePortraitColors;
-        pb.OnClickPortraitButton += UpdateActivePortrait;
         pb.OnClickPortraitButton += _abilityScript.LoadAbilities;
         
         return pb;
@@ -340,37 +340,34 @@ public class CombatUI : MonoBehaviour
 
     private void ClearActivePortrait()
     {
-        _activeCharacterPortrait.sprite = null;
-        _activeCharacterPortrait.gameObject.SetActive(false);
+        // _activeCharacterPortrait.sprite = null;
+        // _activeCharacterPortrait.gameObject.SetActive(false);
+        _activeCharacterScript.SetActiveCharacter(null);
     }
-    
-    private void UpdateActivePortrait(PortraitButton pb)
-    {
-        // UpdateActivePortrait(pb.Character);
-    }
+
+    // private void UpdateActivePortrait(Character c)
+    // {
+    //     if (!c)
+    //     {
+    //         ClearActivePortrait();
+    //         DebugLog.JoppaLog("Null character");
+    //         return;
+    //     }
+    //     UpdateActivePortrait(c);
+    // }
 
     private void UpdateActivePortrait(Character c)
     {
-        if (!c)
-        {
-            ClearActivePortrait();
-            DebugLog.JoppaLog("Null character");
-            return;
-        }
-        UpdateActivePortrait(c.Data);
-    }
-
-    private void UpdateActivePortrait(CharacterData c)
-    {
-        if (c == null)
-        {
-            ClearActivePortrait();
-            return;
-        }
-        
-        _activeCharacterPortrait.gameObject.SetActive(true);
-        _activeCharacterPortrait.sprite = c.ClassData.classImage;
-        _activeCharacterPortrait.color = c.Faction == Faction.Friendly ? _activeColor : _enemyActiveColor;
+        // if (c == null)
+        // {
+        //     ClearActivePortrait();
+        //     return;
+        // }
+        //
+        // _activeCharacterPortrait.gameObject.SetActive(true);
+        // _activeCharacterPortrait.sprite = c.ClassData.classImage;
+        // _activeCharacterPortrait.color = c.Faction == Faction.Friendly ? _activeColor : _enemyActiveColor;
+        _activeCharacterScript.SetActiveCharacter(c);
     }
     
     private void OnDisable()
@@ -395,7 +392,6 @@ public class CombatUI : MonoBehaviour
         {
             pb.OnClickPortraitButton -= SetSelectedCharacter;
             pb.OnClickPortraitButton -= UpdatePortraitColors;
-            pb.OnClickPortraitButton -= UpdateActivePortrait;
             pb.OnClickPortraitButton -= _abilityScript.LoadAbilities;
         }
     }
