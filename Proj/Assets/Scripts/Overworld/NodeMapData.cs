@@ -1,6 +1,7 @@
-
 using System.Collections.Generic;
 using UnityEngine;
+
+[CreateAssetMenu(fileName = "NodeMapData", menuName = "Scriptable Objects/Overworld/NodeMapData")]
 
 public class NodeMapData : ScriptableObject
 {

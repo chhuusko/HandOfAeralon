@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class OverworldManager : MonoBehaviour
@@ -108,6 +109,13 @@ public class OverworldManager : MonoBehaviour
             {
                 _currentNodePath.Add(node);
             }
+        }
+
+        if (_data.GetNodePathIds().Count == 0)
+        {
+            var startNode = allNodes.FirstOrDefault(n => n.IsStartNode);
+
+            _currentNodePath.Add(startNode);
         }
     }
 
