@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.GraphicsBuffer;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -187,8 +188,9 @@ public class EnemyAI : MonoBehaviour
         {
             AIAction move = new AIAction { movement = tile };
             float moveScore = 0f;
-            int stepsUsed = GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), tile.GetTileIndex());
-            moveScore += Mathf.Min(stepsUsed, 3) * 5;
+
+            //int stepsUsed = GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), tile.GetTileIndex());
+            //moveScore += Mathf.Min(stepsUsed, 3) * 5;
 
             if (_enemies.Any()) // Evaluate distance to enemies
             {
@@ -202,12 +204,33 @@ public class EnemyAI : MonoBehaviour
                     enemyDistance = movedEnemyDistance - currentEnemyDistance;
                 }
 
+                float sorcModifier = 5f;
+                if (_character.GetCharacterClass() == CharacterClass.Sorceress)
+                {
+                    if (GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), closestEnemy.GetCurrentTileIndex()) > _character.GetMovementPoints() + 6)
+                    {
+                        sorcModifier = -20f;
+                    }
+
+                    /*
+                    int futureDist = GridExplorer._instance.ManhattanDistance(tile.GetTileIndex(), closestEnemy.GetCurrentTileIndex());
+
+                    int desiredMin = 5;
+                    int desiredMax = 7;
+
+                    if (futureDist >= desiredMin && futureDist <= desiredMax)
+                    {
+                        moveScore += 50f;
+                    }
+                    */
+                }
+
                 switch (_character.GetCharacterClass())
                 {
-                    case CharacterClass.Barbarian:  moveScore -= enemyDistance * 15; break;
-                    case CharacterClass.Bard:       moveScore += enemyDistance * 5; break;
-                    case CharacterClass.Rogue:      moveScore -= enemyDistance * 10; break;
-                    case CharacterClass.Sorceress:  moveScore += enemyDistance * 5; break;
+                    case CharacterClass.Barbarian:  moveScore -= enemyDistance * 20f; break;
+                    case CharacterClass.Bard:       moveScore += enemyDistance * 5f; break;
+                    case CharacterClass.Rogue:      moveScore -= enemyDistance * 20f; break;
+                    case CharacterClass.Sorceress:  moveScore += enemyDistance * sorcModifier; break;
                 }
 
                 if (myPERCENTHP < 0.2f && _character.GetCharacterClass() != CharacterClass.Barbarian && _allies.Count > 1)
@@ -230,9 +253,9 @@ public class EnemyAI : MonoBehaviour
                 switch (_character.GetCharacterClass())
                 {
                     case CharacterClass.Barbarian:  break;
-                    case CharacterClass.Bard:       moveScore -= allyDistance * 10; break;
+                    case CharacterClass.Bard:       moveScore -= allyDistance * 10f; break;
                     case CharacterClass.Rogue:      break;
-                    case CharacterClass.Sorceress:  moveScore -= allyDistance * 10; break;
+                    case CharacterClass.Sorceress:  moveScore -= allyDistance * 10f; break;
                 }
 
                 if (myPERCENTHP < 0.2f && _character.GetCharacterClass() != CharacterClass.Barbarian)
@@ -271,6 +294,15 @@ public class EnemyAI : MonoBehaviour
                 abilityHandler.SetPendingAbility(ability);
                 abilityHandler.CalculateAbilityRange(tile);
                 List<CombatGridTile> targets = abilityHandler.GetTilesInRange();
+
+                if (ability.name == "Emberwake_Ability" || ability.name == "VeilOfDust_Ability")
+                {
+                    AIAction act = new AIAction { movement = tile, ability = ability, target = tile };
+
+                    float actScore = moveScore + ScoreAbilityUsage(tile, ability, tile);
+                    result[act] = actScore;
+                    continue;
+                }
 
                 foreach (var target in targets) // Go through all possible ability casts and score them
                 {
@@ -423,7 +455,7 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    if (hitCount < 2) result -= 100;
+                    if (hitCount < 2) result -= 100f;
                     break;
                 }
             case "RuptureOfTheWilds_Ability":
@@ -460,7 +492,7 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    if (hitCount == 0) result -= 100;
+                    if (hitCount == 0) result -= 100f;
                     break;
                 }
             case "RoarOfTheAncients_Ability":
@@ -485,10 +517,10 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    if (hitCount > 1) result += 100;
-                    if (hitCount > 2) result += 100;
-                    if (hitCount > 3) result += 100;
-                    if (hitCount == 0) result -= 100;
+                    if (hitCount > 1) result += 100f;
+                    if (hitCount > 2) result += 100f;
+                    if (hitCount > 3) result += 100f;
+                    if (hitCount == 0) result -= 100f;
                     break;
                 }
 
@@ -516,8 +548,8 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    if (hitCount < 2) result -= 50;
-                    if (hitCount == 0) result -= 100;
+                    if (hitCount < 2) result -= 50f;
+                    if (hitCount == 0) result -= 100f;
                     break;
                 }
             case "SongOfRenewal_Ability":
@@ -535,21 +567,21 @@ public class EnemyAI : MonoBehaviour
                         if (isAlly && occupantPERCENTHP < 1f)
                         {
                             hitCount++;
-                            result += 40;
+                            result += 40f;
 
                             if (occupantPERCENTHP < 0.75f)
                             {
-                                result += 10;
+                                result += 10f;
 
                                 if (occupantPERCENTHP < 0.5f)
                                 {
-                                    result += 10;
+                                    result += 10f;
                                 }
                             }
 
                             if (occupant == _character)
                             {
-                                result = -9999;
+                                result = -9999f;
                             }
                         }
                     }
@@ -565,21 +597,21 @@ public class EnemyAI : MonoBehaviour
                             if (isAlly && occupantPERCENTHP < 1f)
                             {
                                 hitCount++;
-                                result += 40;
+                                result += 40f;
 
                                 if (occupantPERCENTHP < 0.75f)
                                 {
-                                    result += 10;
+                                    result += 10f;
 
                                     if (occupantPERCENTHP < 0.5f)
                                     {
-                                        result += 10;
+                                        result += 10f;
                                     }
                                 }
                             }
                         }
                     }
-                    if (hitCount == 0) result -= 100;
+                    if (hitCount == 0) result -= 100f;
                     break;
                 }
             case "DissonantChord_Ability":
@@ -608,7 +640,7 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    if (hitCount == 0) result -= 999;
+                    if (hitCount == 0) result -= 999f;
                     break;
                 }
             case "LuteSmash_Ability":
@@ -638,7 +670,7 @@ public class EnemyAI : MonoBehaviour
                             {
                                 if (trait is CrescendoSmash)
                                 {
-                                    result += 999;
+                                    result += 999f;
                                 }
                             }
 
@@ -682,7 +714,7 @@ public class EnemyAI : MonoBehaviour
 
                             if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
                             {
-                                result += 50;
+                                result += 50f;
                             }
 
                             if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
@@ -754,7 +786,7 @@ public class EnemyAI : MonoBehaviour
 
                                 if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
                                 {
-                                    result += 50;
+                                    result += 50f;
                                 }
                             }
                         }
@@ -768,7 +800,7 @@ public class EnemyAI : MonoBehaviour
                     {
                         result += 300f;
                     }
-                    if (hitCount < 2) result -= 200;
+                    if (hitCount < 2) result -= 200f;
                     break;
                 }
             case "ThrowingKnives_Ability":
@@ -810,12 +842,12 @@ public class EnemyAI : MonoBehaviour
 
                                 if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
                                 {
-                                    result += 50;
+                                    result += 50f;
                                 }
                             }
                         }
                     }
-                    if (hitCount == 0) result -= 100;
+                    if (hitCount == 0) result -= 100f;
                     break;
                 }
             case "VeilOfDust_Ability":
@@ -823,16 +855,22 @@ public class EnemyAI : MonoBehaviour
                     int hitCount = 0;
                     if (!mySEM.ContainsStatusEffect<Stealth>())
                     {
+                        if (Random.Range(0f, 1f) > 0.5f)
+                        {
+                            hitCount++;
+                            result += 30f;
+                        }
+
                         if (mySEM.ContainsStatusEffect<Poison>()) hitCount++;
                         if (mySEM.ContainsStatusEffect<Burn>()) hitCount++;
                         if (mySEM.ContainsStatusEffect<Aftershock>()) hitCount++;
                         if (mySEM.ContainsStatusEffect<Weakened>()) hitCount++;
                         if (mySEM.ContainsStatusEffect<Slowed>()) hitCount++;
                     }
-                    if (hitCount > 1) result += 150;
-                    if (hitCount > 2) result += 100;
-                    if (hitCount > 3) result += 999;
-                    if (hitCount == 0) result -= 100;
+                    if (hitCount > 1) result += 150f;
+                    if (hitCount > 2) result += 100f;
+                    if (hitCount > 3) result += 999f;
+                    if (hitCount == 0) result -= 100f;
                     break;
                 }
 
@@ -848,11 +886,11 @@ public class EnemyAI : MonoBehaviour
 
                         if (isEnemy)
                         {
-                            result += 40f;
+                            result += 50f;
 
                             if (occupantPERCENTHP < 0.2f)
                             {
-                                result += 100f;
+                                result += 999f;
                             }
 
                             if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
@@ -881,11 +919,6 @@ public class EnemyAI : MonoBehaviour
                             if (!isEnemy)
                             {
                                 result -= 75f;
-
-                                if (mySEM.ContainsStatusEffect<Emberwake>())
-                                {
-                                    result -= 10f;
-                                }
                             }
 
                             if (isEnemy)
@@ -893,14 +926,9 @@ public class EnemyAI : MonoBehaviour
                                 hitCount++;
                                 result += 30f;
 
-                                if (mySEM.ContainsStatusEffect<Emberwake>())
-                                {
-                                    result += 30f;
-                                }
-
                                 if (occupantPERCENTHP < 0.2f)
                                 {
-                                    result += 100f;
+                                    result += 999f;
                                 }
 
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
@@ -910,9 +938,9 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    if (hitCount > 1) result += 50;
-                    if (hitCount > 2) result += 50;
-                    if (hitCount == 0) result -= 100;
+                    if (hitCount > 1) result += 50f;
+                    if (hitCount > 2) result += 50f;
+                    if (hitCount == 0) result -= 100f;
                     break;
                 }
             case "LightningStorm_Ability":
@@ -931,11 +959,6 @@ public class EnemyAI : MonoBehaviour
                             if (!isEnemy)
                             {
                                 result -= 75f;
-
-                                if (mySEM.ContainsStatusEffect<Emberwake>())
-                                {
-                                    result -= 10f;
-                                }
                             }
 
                             if (isEnemy)
@@ -943,14 +966,9 @@ public class EnemyAI : MonoBehaviour
                                 hitCount++;
                                 result += 30f;
 
-                                if (mySEM.ContainsStatusEffect<Emberwake>())
-                                {
-                                    result += 30f;
-                                }
-
                                 if (occupantPERCENTHP < 0.2f)
                                 {
-                                    result += 100f;
+                                    result += 999f;
                                 }
 
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
@@ -960,9 +978,9 @@ public class EnemyAI : MonoBehaviour
                             }
                         }
                     }
-                    if (hitCount > 1) result += 50;
-                    if (hitCount > 2) result += 50;
-                    if (hitCount == 0) result -= 100;
+                    if (hitCount > 1) result += 50f;
+                    if (hitCount > 2) result += 50f;
+                    if (hitCount == 0) result -= 100f;
                     break;
                 }
             case "Emberwake_Ability":
@@ -986,7 +1004,7 @@ public class EnemyAI : MonoBehaviour
                     }
                     else
                     {
-                        result -= 999;
+                        result -= 999f;
                     }
                     break;
                 }
