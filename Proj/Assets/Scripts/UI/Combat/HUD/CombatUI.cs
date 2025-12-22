@@ -199,7 +199,6 @@ public class CombatUI : MonoBehaviour
         
         SetSelectedCharacter(c);
         CurrentTurnCharacter = c;
-        // _activeCharacterPortrait.GetComponent<PortraitButton>().Character = c;
         _activeCharacterScript.SetActiveCharacter(c);
         
         _abilityScript.LoadAbilities(SelectedCharacter);
@@ -259,7 +258,6 @@ public class CombatUI : MonoBehaviour
     {
         _portraitButtons.Clear();
         
-        // TODO: Clearing character portraits here will cause turn order to break most likely. Need to fix.
         _characterPortraits.Clear();
 
         for (int i = 0; i < _portraitSlots.Length; i++)
@@ -338,35 +336,8 @@ public class CombatUI : MonoBehaviour
         _manaFill.fillAmount = (float)mana / CardHandManager.GetInstance().GetMaxMana();
     }
 
-    private void ClearActivePortrait()
-    {
-        // _activeCharacterPortrait.sprite = null;
-        // _activeCharacterPortrait.gameObject.SetActive(false);
-        _activeCharacterScript.SetActiveCharacter(null);
-    }
-
-    // private void UpdateActivePortrait(Character c)
-    // {
-    //     if (!c)
-    //     {
-    //         ClearActivePortrait();
-    //         DebugLog.JoppaLog("Null character");
-    //         return;
-    //     }
-    //     UpdateActivePortrait(c);
-    // }
-
     private void UpdateActivePortrait(Character c)
     {
-        // if (c == null)
-        // {
-        //     ClearActivePortrait();
-        //     return;
-        // }
-        //
-        // _activeCharacterPortrait.gameObject.SetActive(true);
-        // _activeCharacterPortrait.sprite = c.ClassData.classImage;
-        // _activeCharacterPortrait.color = c.Faction == Faction.Friendly ? _activeColor : _enemyActiveColor;
         _activeCharacterScript.SetActiveCharacter(c);
     }
     
