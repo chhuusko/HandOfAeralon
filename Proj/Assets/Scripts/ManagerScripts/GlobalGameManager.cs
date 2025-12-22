@@ -55,8 +55,13 @@ public class GlobalGameManager : ScriptableObject
     }
     public int GetCombatCoins()
     {
-        int combatCoins = (baseCoinReward + (CoinRewardIncreasePerLevel * LevelManager.GetInstance().Getlevel()));
+        int level = LevelManager.GetInstance().Getlevel();
+
+        int increaseSteps = level / 3;
+
+        int combatCoins = baseCoinReward + (CoinRewardIncreasePerLevel * increaseSteps);
         _currentGame.coins += combatCoins;
+
         return combatCoins;
     }
 
