@@ -374,6 +374,7 @@ GameObject:
   - component: {fileID: 5263036356809927297}
   - component: {fileID: 8466798563718461685}
   - component: {fileID: 8059064154177590062}
+  - component: {fileID: 7883724420446966559}
   m_Layer: 5
   m_Name: CardPackCard
   m_TagString: Untagged
@@ -463,9 +464,7 @@ MonoBehaviour:
   _base: {fileID: 3514743431630479950}
   _frame: {fileID: 5263036356809927297}
   _image: {fileID: 4930338636939368564}
-  _infoPanels: []
-  _infoPanelsInScene: {fileID: 0}
-  _pivotPoint: {fileID: 5031557358602967002}
+  _glow: {fileID: 0}
 --- !u!114 &8059064154177590062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -479,6 +478,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _outLine: {fileID: 8808303805929597508}
+--- !u!114 &7883724420446966559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2969407105491980244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8a0fbdd6551144f9321d545b55f29c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pivotPoint: {fileID: 5031557358602967002}
 --- !u!1 &3055624895612862500
 GameObject:
   m_ObjectHideFlags: 0

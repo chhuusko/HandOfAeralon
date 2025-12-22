@@ -239,6 +239,7 @@ GameObject:
   - component: {fileID: 544685770696854145}
   - component: {fileID: 4673347237565533166}
   - component: {fileID: 9021327715737446378}
+  - component: {fileID: 8443873351274032943}
   m_Layer: 5
   m_Name: SellCard
   m_TagString: Untagged
@@ -258,7 +259,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 3897370637780339098}
   - {fileID: 3458387804721183220}
   - {fileID: 4045382224845121058}
   - {fileID: 773359472990549678}
@@ -267,6 +267,7 @@ RectTransform:
   - {fileID: 8258379289637383770}
   - {fileID: 2186714736399698652}
   - {fileID: 5980784573543712687}
+  - {fileID: 3897370637780339098}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -345,8 +346,19 @@ MonoBehaviour:
   _base: {fileID: 6325360769561720810}
   _frame: {fileID: 544685770696854145}
   _image: {fileID: 1184050068346105446}
-  _infoPanels: []
-  _infoPanelsInScene: {fileID: 0}
+  _glow: {fileID: 0}
+--- !u!114 &8443873351274032943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859725070732834603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8a0fbdd6551144f9321d545b55f29c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _pivotPoint: {fileID: 2462411902529625286}
 --- !u!1 &1885537355081852679
 GameObject:
