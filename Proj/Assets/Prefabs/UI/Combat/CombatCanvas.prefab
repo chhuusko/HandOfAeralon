@@ -661,7 +661,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -580, y: 80}
+  m_AnchoredPosition: {x: -530, y: 80}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1778901383662206880
@@ -2265,7 +2265,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Deck
+  m_text: Draw Pile
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d0c404f728a77b247bc581c379308fef, type: 2}
   m_sharedMaterial: {fileID: -156547908865965464, guid: d0c404f728a77b247bc581c379308fef,
@@ -3367,7 +3367,7 @@ GameObject:
   - component: {fileID: 1850541168197629458}
   - component: {fileID: 766074271560639469}
   m_Layer: 5
-  m_Name: DeckButton
+  m_Name: DrawPileButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3390,7 +3390,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 480, y: 80}
+  m_AnchoredPosition: {x: 530, y: 80}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4512356000976959138
