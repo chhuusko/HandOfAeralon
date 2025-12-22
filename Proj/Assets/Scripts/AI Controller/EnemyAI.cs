@@ -546,6 +546,11 @@ public class EnemyAI : MonoBehaviour
                                     result += 10;
                                 }
                             }
+
+                            if (occupant == _character)
+                            {
+                                result = -9999;
+                            }
                         }
                     }
                     List <CombatGridTile> aoe = DiamondPattern(target, 3);

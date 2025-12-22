@@ -53,7 +53,7 @@ public class CombatTurnOrder
 
     private int _turnCountFullRound;
     private int _turnCountCurrent;
-    private int _currentRound = 1;
+    private int _currentRound = 2;
     private bool _updateRoundMarker;
 
     // NOTE (Calle): This is so that the character that is removed in InitializeTurnOrder()
@@ -66,7 +66,7 @@ public class CombatTurnOrder
         _charactersInPendingTurnOrder  = new List<Character>();
         _charactersInExecutedTurnOrder = new List<Character>();
         _charactersToDisplay           = new List<Character>();
-        _currentRound = 1;
+        _currentRound = 2;
     }
 
     private void HandleEndCombat(bool playerWon)
@@ -84,7 +84,7 @@ public class CombatTurnOrder
 
         _charactersInPendingTurnOrder = CombatGrid._instance.GetAllCharacterScripts();
         _turnCountFullRound = _charactersInPendingTurnOrder.Count;
-        _currentRound = 1;
+        _currentRound = 2;
         SortCharacterListByInitiative(_charactersInPendingTurnOrder);
 
         _activeCharacter = _charactersInPendingTurnOrder[0];
