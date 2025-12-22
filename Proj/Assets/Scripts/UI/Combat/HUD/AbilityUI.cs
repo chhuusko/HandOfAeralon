@@ -11,15 +11,19 @@ public class AbilityUI : MonoBehaviour
     private List<AbilityButton> _abilityButtons = new();
     
     [SerializeField] private GameObject[] panels;
+    
+    private AbilityButton _selectedAbility;
 
     private void OnEnable()
     {
         CombatEventManager.OnAbilityCast += UpdateAbilityColors;
         CombatEventManager.OnCharacterMove += CharacterMoving;
         CombatEventManager.OnEnterCombatStatePlaceCharacter += LoadAbilities;
+        CombatEventManager.OnAbilityCast += DeactivateBorder;
+        Selector._instance.OnCharacterDeselected += DeactivateBorder;
     }
 
-    private void SetPanelsActive(bool active)
+    public void SetPanelsActive(bool active)
     {
         foreach (var panel in panels)
         {
@@ -29,6 +33,8 @@ public class AbilityUI : MonoBehaviour
 
     public void ClearAbilityButtons()
     {
+        _selectedAbility = null;
+        
         _abilityButtons.Clear();
         // Remove all current ability buttons.
         for (int i = 0; i < _abilityPanel.transform.childCount; i++)
@@ -60,6 +66,12 @@ public class AbilityUI : MonoBehaviour
     
     public void LoadAbilities(CharacterData character)
     {
+        if (!CombatUI.Instance.bCombatStarted)
+        {
+            DebugLog.JoppaLog("Combat not started");
+            return;
+        }
+        
         StartCoroutine(LoadAbilitiesNextFrame(character));
     }
 
@@ -100,6 +112,7 @@ public class AbilityUI : MonoBehaviour
             var ability = character.Abilities[i];
             button.image.sprite = ability.GetIcon();
             button.GetComponent<AbilityButton>().Ability = ability;
+            button.GetComponent<AbilityButton>().OnAbilityButtonClicked += SetBorder;
             
             var abilityButton = button.GetComponent<AbilityButton>();
             _abilityButtons.Add(abilityButton);
@@ -187,7 +200,7 @@ public class AbilityUI : MonoBehaviour
         }
     }
     
-    public void CharacterMoving(bool moving)
+    private void CharacterMoving(bool moving)
     {
         if (moving)
         {
@@ -202,10 +215,41 @@ public class AbilityUI : MonoBehaviour
         }
     }
 
+    private void DeactivateBorder()
+    {
+        foreach (var abilityButton in _abilityButtons)
+        {
+            abilityButton.SetBorder(false);
+        }
+    }
+
+    private void SetBorder(AbilityButton abilityButton)
+    {
+        if (abilityButton == _selectedAbility)
+        {
+            return;
+        }
+
+        if (_selectedAbility != null)
+        {
+            _selectedAbility.SetBorder(false);
+        }
+        
+        _selectedAbility = abilityButton;
+        _selectedAbility.SetBorder(true);
+    }
+
     private void OnDisable()
     {
         CombatEventManager.OnAbilityCast -= UpdateAbilityColors;
         CombatEventManager.OnCharacterMove -= CharacterMoving;
         CombatEventManager.OnEnterCombatStatePlaceCharacter -= LoadAbilities;
+        CombatEventManager.OnAbilityCast -= DeactivateBorder;
+        Selector._instance.OnCharacterDeselected -= DeactivateBorder;
+
+        foreach (var abilityButton in _abilityButtons)
+        {
+            abilityButton.GetComponent<AbilityButton>().OnAbilityButtonClicked -= SetBorder;
+        }
     }
 }

@@ -168,7 +168,9 @@ public class CombatUI : MonoBehaviour
         _combatLogParent.SetActive(true);
         _partyPanelText.SetActive(true);
         
+        // Enable the parent but set all child objects as hidden, so scripts can run, while not showing the element.
         _abilityPanelParent.SetActive(true);
+        _abilityScript.SetPanelsActive(false);
 
         _levelCounter.text = $"Level {GlobalGameManager.GetInstance().GetTotalBattlesWon() + 1}";
         _levelCounter.gameObject.SetActive(true);
