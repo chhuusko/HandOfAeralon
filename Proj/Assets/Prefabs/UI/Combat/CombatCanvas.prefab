@@ -2265,7 +2265,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Deck
+  m_text: Draw Pile
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d0c404f728a77b247bc581c379308fef, type: 2}
   m_sharedMaterial: {fileID: -156547908865965464, guid: d0c404f728a77b247bc581c379308fef,
@@ -3367,7 +3367,7 @@ GameObject:
   - component: {fileID: 1850541168197629458}
   - component: {fileID: 766074271560639469}
   m_Layer: 5
-  m_Name: DeckButton
+  m_Name: DrawPileButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
