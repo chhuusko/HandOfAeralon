@@ -206,7 +206,6 @@ public class AbilityHandler : MonoBehaviour
         foreach (CombatGridTile t in _tilesEffected)
         {
             t.SetTileColor(_tilesInRange.Contains(t) ? Color.green : Color.white);
-            //GetCharacterCaster().HidePreviewVFX();
         }
         _tilesEffected.Clear();
     }
@@ -218,8 +217,6 @@ public class AbilityHandler : MonoBehaviour
             if (t == null) continue;
 
             t.SetTileColor(Color.red);
-            //GetCharacterCaster().ShowPreviewVFX();
-
             _tilesEffected.Add(t);
         }
     }
