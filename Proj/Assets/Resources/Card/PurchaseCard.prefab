@@ -1626,6 +1626,7 @@ GameObject:
   - component: {fileID: 3977910276689206136}
   - component: {fileID: 2696763026664208417}
   - component: {fileID: 7303140950801313531}
+  - component: {fileID: 1464704519418560697}
   m_Layer: 5
   m_Name: PurchaseCard
   m_TagString: Untagged
@@ -1732,8 +1733,19 @@ MonoBehaviour:
   _base: {fileID: 6824698499927265734}
   _frame: {fileID: 1401348197012158603}
   _image: {fileID: 5917527627973859461}
-  _infoPanels: []
-  _infoPanelsInScene: {fileID: 0}
+  _glow: {fileID: 0}
+--- !u!114 &1464704519418560697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6038045627249362899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8a0fbdd6551144f9321d545b55f29c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _pivotPoint: {fileID: 2832978390796309582}
 --- !u!1 &8613388658439162297
 GameObject:

@@ -11,7 +11,7 @@ public class ManaConduction : Trait
 
     public override void OnCardPlayed(Card card)
     {
-        _manaUsed += card.Getcost();
+        _manaUsed += card.GetCost();
     }
 
     public override void ModifyOutgoingDamage(ref float damage, Ability ability)

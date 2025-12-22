@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 6785534863183984256}
   - component: {fileID: 544685770696854145}
   - component: {fileID: 2271389549126536748}
+  - component: {fileID: 2944992331469767615}
   m_Layer: 5
   m_Name: CardUI
   m_TagString: Untagged
@@ -250,8 +251,19 @@ MonoBehaviour:
   _base: {fileID: 2381408448504130791}
   _frame: {fileID: 544685770696854145}
   _image: {fileID: 1949511639912344604}
-  _infoPanels: []
-  _infoPanelsInScene: {fileID: 0}
+  _glow: {fileID: 0}
+--- !u!114 &2944992331469767615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859725070732834603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8a0fbdd6551144f9321d545b55f29c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _pivotPoint: {fileID: 8984036307313166073}
 --- !u!1 &1942522688768569386
 GameObject:

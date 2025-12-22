@@ -40,7 +40,7 @@ public class Card : ScriptableObject
 
     private int tempCost;
     private bool isTempCost;
-    public int Getcost()
+    public int GetCost()
     {
         if (isTempCost)
         {

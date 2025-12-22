@@ -302,7 +302,7 @@ public class CardHandManager : MonoBehaviour
     {
         if (_addedZoomedCard != null)
         {
-            _addedZoomedCard.GetComponent<CardUI>().SetShowInfoPanel(false);
+            _addedZoomedCard.GetComponent<InfoPanelHandler>().SetShowInfoPanel(false);
             Destroy(_addedZoomedCard);
         }
     }

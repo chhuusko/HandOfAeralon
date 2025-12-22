@@ -115,7 +115,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
                             Destroy(_spawnedParticle);
                             CardHandManager.GetInstance().CharacterTarget(grid.GetOccupantCharacter());
                             CardHandManager.GetInstance().CardTargetCharacter(_containedCard, grid.GetOccupantCharacter());
-                            CardHandManager.GetInstance().ChangeMana(-_containedCard.Getcost());
+                            CardHandManager.GetInstance().ChangeMana(-_containedCard.GetCost());
                             _containedCard.PlayCardOnTarget(grid.GetOccupantCharacter());
                         }
                         
@@ -129,7 +129,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             }
             else
             {
-                CardHandManager.GetInstance().ChangeMana(-_containedCard.Getcost());
+                CardHandManager.GetInstance().ChangeMana(-_containedCard.GetCost());
                 _containedCard.PlayCard();
                 
                 
@@ -158,7 +158,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     private bool CanAfford()
     {
-        return CardHandManager.GetInstance().GetMana() >= _containedCard.Getcost();
+        return CardHandManager.GetInstance().GetMana() >= _containedCard.GetCost();
     }
     private bool CanPlay()
     {
