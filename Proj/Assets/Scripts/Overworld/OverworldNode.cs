@@ -20,7 +20,7 @@ public class OverworldNode : MonoBehaviour
 
     public List<OverworldNode> GetNeighbors() => _neighbors;
     public bool IsSelectable => _isSelectable;
-    public bool IsStartNode => _isSelectable;
+    public bool IsStartNode => _isStartNode;
 
     public void SetSelectable(bool isSelectable)
     {

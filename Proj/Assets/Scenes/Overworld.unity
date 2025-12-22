@@ -383,6 +383,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data: {fileID: 11400000, guid: cdc3f118460bb554e83440e5c253034c, type: 2}
+  _allNodes:
+  - {fileID: 1464668230}
+  - {fileID: 362426273}
+  - {fileID: 1448110718}
 --- !u!1001 &1395261885
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -579,10 +583,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShopNode
       objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _nodeId
-      value: c5b7ca1b-715c-47c4-8b35-84f1c134996b
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -705,6 +705,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1463597137}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1464668230 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2300997743967264941, guid: fd18b3b25bc45eb4994a7ab57500e0dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 1463597137}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4761556304f7d7d4e845f74fc1abdb37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1481882008
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,7 +1138,7 @@ PrefabInstance:
     - target: {fileID: 1901499544258294601, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
-      value: 36095
+      value: 167167
       objectReference: {fileID: 0}
     - target: {fileID: 1942038114287213925, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
@@ -1426,6 +1438,16 @@ PrefabInstance:
     - target: {fileID: 4262114881146815808, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4262114881146815808, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: m_ShowToolkit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4262114881146815808, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: m_ShowCustomSorter
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4302494614805666633, guid: 2735cd7749f79404caa4e6ea6b692acd,

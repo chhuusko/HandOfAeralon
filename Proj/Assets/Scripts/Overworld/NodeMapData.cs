@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class NodeMapData : ScriptableObject
 {
-    private List<string> nodePathIds;
+    [SerializeField] private List<string> _nodePathIds = new();
 
-    public List<string> GetNodePathIds() => nodePathIds;
+    public List<string> GetNodePathIds() => _nodePathIds;
 
     public void SetNodePath(List<OverworldNode> nodes)
     {
-        nodePathIds.Clear();
+        _nodePathIds.Clear();
         foreach (var node in nodes)
         {
-            nodePathIds.Add(node.GetNodeId());
+            _nodePathIds.Add(node.GetNodeId());
         }
     }
 }
