@@ -749,6 +749,24 @@ public class Character : MonoBehaviour
         StartCoroutine(RotateCoroutine(targetRot, duration));
     }
 
+    public void ShowPreviewVFX()
+    {
+        var vfxPlayer = GetComponent<CharacterVFXPlayer>();
+        if (vfxPlayer != null)
+        {
+            vfxPlayer.ShowPreview();
+        }
+    }
+
+    public void HidePreviewVFX()
+    {
+        var vfxPlayer = GetComponent<CharacterVFXPlayer>();
+        if (vfxPlayer != null)
+        {
+            vfxPlayer.HidePreview();
+        }
+    }
+
     private IEnumerator RotateCoroutine(Quaternion targetRot, float duration)
     {
         Quaternion startRot = transform.rotation;

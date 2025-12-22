@@ -193,28 +193,33 @@ public class AbilityHandler : MonoBehaviour
     /// <param name="tile">The tile currently hovered by the player.</param>
     public void PreviewTargetTiles(CombatGridTile tile)
     {
+        ClearPreviousPreview();
 
         List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
+        if (newEffectedTiles == null) return;
 
-        // Reset all tiles
+        ApplyPreview(newEffectedTiles);
+    }
+
+    private void ClearPreviousPreview()
+    {
         foreach (CombatGridTile t in _tilesEffected)
         {
-            if (_tilesInRange.Contains(t))
-                t.SetTileColor(Color.green);
-            else
-                t.SetTileColor(Color.white);
+            t.SetTileColor(_tilesInRange.Contains(t) ? Color.green : Color.white);
+            //GetCharacterCaster().HidePreviewVFX();
         }
         _tilesEffected.Clear();
+    }
 
-        if (newEffectedTiles == null)
+    private void ApplyPreview(List<CombatGridTile> tiles)
+    {
+        foreach (var t in tiles)
         {
-            return;
-        }
-        // Paint new tiles red and add them to tilesEffected.
-        foreach (CombatGridTile t in newEffectedTiles)
-        {
-            if (t == null) return;
+            if (t == null) continue;
+
             t.SetTileColor(Color.red);
+            //GetCharacterCaster().ShowPreviewVFX();
+
             _tilesEffected.Add(t);
         }
     }

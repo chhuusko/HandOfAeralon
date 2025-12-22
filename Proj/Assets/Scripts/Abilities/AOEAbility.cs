@@ -47,6 +47,9 @@ public abstract class AOEAbility : Ability
                 if (!IsValidTargetForAbility(casterTile, tile)) continue;
 
                 PreviewEffectOnTile(casterTile, targetTile);
+                var character = targetTile.GetOccupantCharacter();
+                if (character == null) continue;
+                
             }
         }
     }
