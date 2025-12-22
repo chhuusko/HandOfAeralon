@@ -28,7 +28,8 @@ public class AbilityLogEntry : CombatLogEntry
         string targetName;
         if (d.Caster == d.Target)
         {
-            targetName = "itself";
+            targetName = d.Caster.GetCharacterClass() is CharacterClass.Barbarian or CharacterClass.Rogue ? "himself" :
+                "herself";
         }
         else
         {
