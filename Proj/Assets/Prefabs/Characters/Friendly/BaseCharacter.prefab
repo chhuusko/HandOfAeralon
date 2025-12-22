@@ -211,6 +211,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -938437373701701158}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 78cb7efc812f9b446bd019a8a1360add,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 503567361042124093}
   m_SourcePrefab: {fileID: 100100000, guid: 78cb7efc812f9b446bd019a8a1360add, type: 3}
 --- !u!4 &4999151439911242118 stripped
 Transform:
@@ -252,6 +256,10 @@ MonoBehaviour:
   _currentInitiative: 0
   _currentDamage: 0
   _currentMovementPoints: 0
+  CanMove: 1
+  IsStunned: 0
+  CanUseAbility: 1
+  IsTargetable: 1
   _bodyMesh: {fileID: 5632698098917217084}
   _weaponMesh: {fileID: 0}
   _data:
@@ -262,8 +270,11 @@ MonoBehaviour:
     _baseInitiative: 0
     _baseDamage: 0
     _baseMovementPoints: 0
-    _currentHealthPoints: 0
+    _derivedHealthPoints: 0
+    _derivedDamage: 0
+    _currentHealthPoints01: 0
     _abilities: []
+    _activeAbilities: []
   _currentTileIndex: {x: 0, y: 0}
 --- !u!54 &-5358155644811910876
 Rigidbody:
@@ -344,3 +355,17 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!114 &503567361042124093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5632698098917217084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4d154b9796ebfd45ac64a8bfddf4068, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterVFX: {fileID: -1878755158261626774, guid: f8bd8311e24b5b54c88915e248cef438,
+    type: 3}
