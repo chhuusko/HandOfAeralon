@@ -5,12 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class OverworldNode : MonoBehaviour
 {
-    [SerializeField] private string nodeId;
+    [SerializeField] private string _nodeId;
 
     [SerializeField] private string _sceneToLoad;
 
     [SerializeField] private List<OverworldNode> _neighbors;
-    public string GetNodeId() => nodeId;
+
+    [SerializeField] private bool _isStartNode;
+    public string GetNodeId() => _nodeId;
 
     private bool _isSelectable = false;
 
@@ -18,10 +20,17 @@ public class OverworldNode : MonoBehaviour
 
     public List<OverworldNode> GetNeighbors() => _neighbors;
     public bool IsSelectable => _isSelectable;
+    public bool IsStartNode => _isStartNode;
 
     public void SetSelectable(bool isSelectable)
     {
         _isSelectable = isSelectable;
+    }
+
+    [ContextMenu("Generate GUID")]
+    private void GenerateGuid()
+    {
+        _nodeId = System.Guid.NewGuid().ToString();
     }
 
     public IEnumerator StartLoadingNodeScene()

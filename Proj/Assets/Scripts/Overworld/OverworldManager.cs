@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class OverworldManager : MonoBehaviour
@@ -6,6 +7,8 @@ public class OverworldManager : MonoBehaviour
     public static OverworldManager _instance { get; private set; }
 
     [SerializeField] private NodeMapData _data;
+
+    [SerializeField] private List<OverworldNode> _allNodes;
 
     private List<OverworldNode> _currentNodePath = new();
 
@@ -32,13 +35,25 @@ public class OverworldManager : MonoBehaviour
     private void Start()
     {
         LoadPath();
-        SetLastNodeNeighborsSelectable(true);
+        if (_currentNodePath.Count > 0)
+        {
+            SetLastNodeNeighborsSelectable(true);
+        }
     }
 
     void Update()
     {
         HandleNodeClick();
         HandleNodeHover();
+        HandleTempKeyBindActions();
+    }
+
+private void HandleTempKeyBindActions()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            SavePath();
+        }
     }
 
     private void HandleNodeClick()
@@ -76,6 +91,7 @@ public class OverworldManager : MonoBehaviour
     private void SelectNode(OverworldNode node)
     {
         SetSelectedNode(node);
+        DebugLog.MGLog("Node: " + node.name + " selected.");
     }
 
     private void DeselectNode()
@@ -94,10 +110,8 @@ public class OverworldManager : MonoBehaviour
     {
         _currentNodePath.Clear();
 
-        var allNodes = FindObjectsByType<OverworldNode>(FindObjectsSortMode.None);
-
         var nodeLookup = new Dictionary<string, OverworldNode>();
-        foreach (var node in allNodes)
+        foreach (var node in _allNodes)
         {
             nodeLookup[node.GetNodeId()] = node;
         }
@@ -109,10 +123,31 @@ public class OverworldManager : MonoBehaviour
                 _currentNodePath.Add(node);
             }
         }
+
+        if (_data.GetNodePathIds().Count == 0)
+        {
+            OverworldNode startNode = null;
+            foreach(OverworldNode node in _allNodes)
+            {
+                if (node.IsStartNode)
+                {
+                    startNode = node;
+                }
+            }
+
+            if (startNode == null)
+            {
+                Debug.LogError("No StartNode found in scene!");
+                return;
+            }
+
+            _currentNodePath.Add(startNode);
+        }
     }
 
     public void SavePath()
     {
+        DebugLog.MGLog("Path saved");
         _data.SetNodePath(_currentNodePath);
     }
 
