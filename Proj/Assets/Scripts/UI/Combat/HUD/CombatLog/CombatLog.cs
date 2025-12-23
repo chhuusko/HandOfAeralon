@@ -66,7 +66,12 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private void AddCombatLogEntry(Character character, Card card)
     {
-        
+        // CardTargetedLogData cardTargetedLogData = new CardTargetedLogData()
+        // {
+        //     Card = card,
+        //     Target = character
+        // };
+        // AddCombatLogEntry(cardTargetedLogData);
     }
     
     private void AddCombatLogEntry(Character character)

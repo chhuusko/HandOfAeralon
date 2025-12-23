@@ -11,7 +11,8 @@ public class CharacterDeathLogEntry : CombatLogEntry
             return;
         }
         
-        string characterName = GameTextFormatter.FactionColoredLabel(d.Character);
+        string characterName = d.Character.GetFaction() == Faction.Friendly ?
+            GameTextFormatter.ClassColoredName(d.Character) : GameTextFormatter.FactionColoredLabel(d.Character);
         
         _text.text = $"{characterName} died";
     }
