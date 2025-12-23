@@ -80,13 +80,16 @@ public class CombatUI : MonoBehaviour
     {
         CardHandManager.onManaChange += UpdateManaText;
         
-        CombatEventManager.OnEnterCombatStatePlaceCharacter += PlaceCharacterStarted;
         CombatEventManager.OnEnterCombatStateLoadNextLevel += DisablePanels;
+        CombatEventManager.OnEnterCombatStatePlaceCharacter += PlaceCharacterStarted;
+        CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
         CombatEventManager.OnEnterCombatStateTakeTurn += StartTurn;
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateActivePortrait;
-        CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
+        CombatEventManager.OnEnterCombatStateTakeTurn += DisableEndTurnButtonBorder;
         CombatEventManager.OnCharacterDeath += UpdateCharacterPortraits;
         CombatEventManager.OnCharacterPlaced += SetStartCombatButton;
+        CombatEventManager.OnAbilityDataCreated += EnableEndTurnButtonBorder;
+        CombatEventManager.OnCharacterMove += EnableEndTurnButtonBorder;
 
         StartCoroutine(WaitForSelector());
     }
@@ -113,6 +116,7 @@ public class CombatUI : MonoBehaviour
             return;
         }
 
+     
         _startCombatButton.interactable = true;
         _startCombatButton.transform.Find("Border").gameObject.SetActive(true);
     }
@@ -142,6 +146,38 @@ public class CombatUI : MonoBehaviour
     private void SetSelectedCharacter(PortraitButton portraitButton)
     {
         SetSelectedCharacter(portraitButton.Character);
+    }
+
+    private void EnableEndTurnButtonBorder(Character character, bool isMoving)
+    {
+        // Check if character can still act.
+        if (character.GetMovementPoints() != 0 || character.CanUseAbility)
+        {
+            return;
+        }
+        
+        SetEndTurnButtonBorder(true);
+    }
+    
+    private void EnableEndTurnButtonBorder(AbilityExecutionData data)
+    {
+        // Check if character can still act.
+        if (data.Caster?.GetMovementPoints() != 0)
+        {
+            return;
+        }
+        
+        SetEndTurnButtonBorder(true);
+    }
+
+    private void DisableEndTurnButtonBorder(Character character)
+    {
+        SetEndTurnButtonBorder(false);
+    }
+
+    private void SetEndTurnButtonBorder(bool active)
+    {
+        _endTurnButton.transform.Find("Border").gameObject.SetActive(active);
     }
 
     public void EndTurn()
@@ -358,13 +394,16 @@ public class CombatUI : MonoBehaviour
     {
         CardHandManager.onManaChange -= UpdateManaText;
         
-        CombatEventManager.OnEnterCombatStatePlaceCharacter -= PlaceCharacterStarted;
         CombatEventManager.OnEnterCombatStateLoadNextLevel -= DisablePanels;
+        CombatEventManager.OnEnterCombatStatePlaceCharacter -= PlaceCharacterStarted;
+        CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
         CombatEventManager.OnEnterCombatStateTakeTurn -= StartTurn;
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateActivePortrait;
-        CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= DisableEndTurnButtonBorder;
         CombatEventManager.OnCharacterDeath -= UpdateCharacterPortraits;
         CombatEventManager.OnCharacterPlaced -= SetStartCombatButton;
+        CombatEventManager.OnAbilityDataCreated -= EnableEndTurnButtonBorder;
+        CombatEventManager.OnCharacterMove -= EnableEndTurnButtonBorder;
         
         Selector._instance.OnCharacterSelected -= SetSelectedCharacter;
         Selector._instance.OnCharacterSelected -= _abilityScript.LoadAbilities;

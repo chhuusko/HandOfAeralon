@@ -40,7 +40,7 @@ public static class CombatEventManager
 
     public static event Action OnAbilityCast;
     
-    public static event Action<bool> OnCharacterMove;
+    public static event Action<Character, bool> OnCharacterMove;
 
     public delegate bool TryAddStatusEffectHandler(Character caster, Character target, StatusEffect statusEffect);
     public static event TryAddStatusEffectHandler OnTryAddStatusEffect;
@@ -112,8 +112,8 @@ public static class CombatEventManager
     public static void InvokeOnAbilityCast()
        => OnAbilityCast?.Invoke();
     
-    public static void InvokeOnCharacterMove(bool isMoving)
-        => OnCharacterMove?.Invoke(isMoving);
+    public static void InvokeOnCharacterMove(Character character, bool isMoving)
+        => OnCharacterMove?.Invoke(character, isMoving);
 
     public static bool InvokeOnTryAddStatusEffect(Character caster, Character target, StatusEffect statusEffect)
     {
