@@ -81,20 +81,21 @@ public class CharacterEntry
 
         _character.GetComponent<Character>().SetCharacterClass(characterData.GetCharacterClass());
         _character.GetComponent<Character>().SetFaction(characterData.GetFaction());
+        
+        _character.GetComponent<Character>().Data.SetBaseHealthPoints(characterData.GetBaseHealthPoints());
+        _character.GetComponent<Character>().SetBaseInitiative(characterData.GetBaseSpeed());
+        _character.GetComponent<Character>().Data.SetBaseDamage(characterData.GetBaseDamage());
+        _character.GetComponent<Character>().SetBaseMovementPoints(characterData.GetBaseMovementPoints());
+        
+        _character.GetComponent<Character>().Data.CalculateDerivedStats(1f, 1f, false);
+        _character.GetComponent<Character>().Data.InitializeCurrentHealthFromSave(characterData.GetHealthPoints());
 
         _character.GetComponent<Character>().SetCurrentHealthPoints(characterData.GetHealthPoints());
         _character.GetComponent<Character>().SetCurrentInitiative(characterData.GetSpeed());
         _character.GetComponent<Character>().SetCurrentDamage(characterData.GetDamage());
         _character.GetComponent<Character>().SetCurrentMovementPoints(characterData.GetMovementPoints());
 
-        _character.GetComponent<Character>().Data.SetBaseHealthPoints(characterData.GetBaseHealthPoints());
-        _character.GetComponent<Character>().SetBaseInitiative(characterData.GetBaseSpeed());
-        _character.GetComponent<Character>().Data.SetBaseDamage(characterData.GetBaseDamage());
-        _character.GetComponent<Character>().SetBaseMovementPoints(characterData.GetBaseMovementPoints());
-
         _character.GetComponent<Character>().SetCurrentTileIndex(characterData.GetCurrentTileIndex());
-        
-        _character.GetComponent<Character>().Data.InitializeCurrentHealthFromSave(characterData.GetHealthPoints());
 
         // Save/Load Specific
         _characterClass        = characterData.GetCharacterClass();
