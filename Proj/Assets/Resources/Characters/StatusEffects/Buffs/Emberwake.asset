@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b991492d39e8d2446a0d7666f7170f5a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2736163cbb3d8b741ac24c1115f361f3, type: 3}
   m_Name: Emberwake
   m_EditorClassIdentifier: 
   Name: Emberwake
@@ -20,6 +20,8 @@ MonoBehaviour:
   Type: 0
   IsPermanent: 0
   IsDispellable: 1
-  _typeName: Emberwake, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  Class: 4
+  _typeName: 
+  Class: 0
   IsPositive: 0
+  Chance: 1.25
+  Modifier: 1
