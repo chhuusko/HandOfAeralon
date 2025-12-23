@@ -88,9 +88,14 @@ public class Card : ScriptableObject
         Debug.Log(tempCost + " tempcost " + changeInCost + " changeincost");
         if (tempCost < 0) { tempCost = 0; }
     }
+    public bool GetIsTemp() 
+    {
+        return isTempCost;
+    }
     public Color GetRarityColor(int rarity)
     {
         return rarityColors[rarity];
     }
+    
 }
 

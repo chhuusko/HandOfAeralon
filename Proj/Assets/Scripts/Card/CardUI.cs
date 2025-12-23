@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -63,6 +64,7 @@ public class CardUI : MonoBehaviour
         // for zoomedcard
         _infoHandler.SetShowInfoPanel(showInfoPanels);
         UpdateGlow();
+        CardManaChanged();
     }
     public void UpdateText()
     {
@@ -74,10 +76,12 @@ public class CardUI : MonoBehaviour
         {
             _glow.SetActive(CanAfford());
         }
+        CardManaChanged();
     }
     private void UpdateGlow(int i)
     {
         UpdateGlow();
+        CardManaChanged();
     }
     private bool CanAfford()
     {
@@ -87,6 +91,14 @@ public class CardUI : MonoBehaviour
         }
 
         return false;
+    }
+    private void CardManaChanged()
+    {
+        if (_card.GetIsTemp())
+        {
+            _mana.text = "<color=green>" + _card.GetCost() + "</color>";
+        }
+        
     }
 
 }
