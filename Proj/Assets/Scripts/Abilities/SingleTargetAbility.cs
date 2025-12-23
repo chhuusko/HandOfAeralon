@@ -10,23 +10,21 @@ public abstract class SingleTargetAbility : Ability
     public override void PreviewAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         PreviewEffectOnTile(casterTile, targetTile);
+        var character = targetTile.GetOccupantCharacter();
+        if (character == null) return;
+        character.ShowPreviewVFX();
     }
 
     public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
     {
-        if (targetTile == null)
+        if (targetTile == null) return null;
+
+        var handler = GetAbilityHandler();
+        if (handler == null) return null;
+
+        if (!handler.GetTilesInRange().Contains(targetTile))
             return null;
 
-        // Get caster
-        Character caster = GetAbilityHandler().GetCharacterCaster();
-        if (caster == null) return null;
-
-        // Check if target tile is in range.
-        bool inRange = caster.GetAbilityHandler().GetTilesInRange().Contains(targetTile);
-        if (!inRange) return null;
-
-        List<CombatGridTile> TilesToEffect = new();
-        TilesToEffect.Add(targetTile);
-        return TilesToEffect;
+        return new List<CombatGridTile> { targetTile };
     }
 }

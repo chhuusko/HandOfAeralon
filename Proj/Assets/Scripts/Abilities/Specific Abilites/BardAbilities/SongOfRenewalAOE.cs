@@ -54,12 +54,19 @@ public class SongOfRenewalAOE : RoundAOEAbility
 
             if (!IsValidTargetForAbility(casterTile, tile)) continue;
 
+            Character character;
             if (tile == targetTile)
             {
                 PreviewSongOfRenewalOnTile(casterTile, tile, true);
+                character = tile.GetOccupantCharacter();
+                if (character == null) continue;
+                character.ShowPreviewVFX();
                 continue;
             }
             PreviewSongOfRenewalOnTile(casterTile, tile, false);
+            character = tile.GetOccupantCharacter();
+            if (character == null) continue;
+            character.ShowPreviewVFX();
         }
     }
 

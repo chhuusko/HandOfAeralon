@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "VeilOfDust_Ability", menuName = "Scriptable Objects/Abilities/Rogue/Veil Of Dust")]
