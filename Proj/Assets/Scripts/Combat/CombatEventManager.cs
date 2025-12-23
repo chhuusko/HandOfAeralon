@@ -34,6 +34,8 @@ public static class CombatEventManager
     public static event Action<Character> OnCharacterDeath;
     public static event Action OnCharacterInitiativeChanged;
 
+    public static event Action OnCharacterPlaced;
+
     public static event Action<AbilityExecutionData> OnAbilityDataCreated;
 
     public static event Action OnAbilityCast;
@@ -100,6 +102,10 @@ public static class CombatEventManager
 
     public static void InvokeOnRoundFinished(int currentRound)
         => OnRoundFinished?.Invoke(currentRound);
+
+    public static void InvokeOnCharacterPlaced() 
+        => OnCharacterPlaced?.Invoke();
+    
     public static void InvokeOnAbilityDataCreated(AbilityExecutionData result)
        => OnAbilityDataCreated?.Invoke(result);
 

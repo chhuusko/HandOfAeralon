@@ -80,7 +80,6 @@ public class AbilityUI : MonoBehaviour
     {
         if (!CombatUI.Instance.bCombatStarted)
         {
-            DebugLog.JoppaLog("Combat not started");
             return;
         }
         
