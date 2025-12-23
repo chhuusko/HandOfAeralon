@@ -103,6 +103,7 @@ public abstract class DirectedAOEAbility : AOEAbility
                 var character = tile.GetOccupantCharacter();
                 if (character == null) continue;
                 character.ShowPreviewVFX();
+                GetAbilityHandler().AddPreviewedCharacter(character);
             }
         }
     }

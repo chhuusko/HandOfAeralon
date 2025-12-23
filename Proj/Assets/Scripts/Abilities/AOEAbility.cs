@@ -50,6 +50,7 @@ public abstract class AOEAbility : Ability
                 var character = tile.GetOccupantCharacter();
                 if (character == null) continue;
                 character.ShowPreviewVFX();
+                GetAbilityHandler().AddPreviewedCharacter(character);
             }
         }
     }

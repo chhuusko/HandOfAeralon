@@ -8,6 +8,8 @@ public class AbilityHandler : MonoBehaviour
 
     private List<CombatGridTile> _tilesInRange = new();
     private List<CombatGridTile> _tilesEffected = new();
+    private List<Character> _previewedCharacters = new();
+
     private Character _characterCaster;
     private CombatGridTile _casterTile;
     [SerializeField] private Ability _pendingAbility;
@@ -18,10 +20,11 @@ public class AbilityHandler : MonoBehaviour
     {
         if (!TryGetComponent(out _characterCaster))
         {
-            Debug.LogError("AbilityHandler is missing Character component!");
+            Debug.LogError("Object is missing Character component!");
             return;
         }
         _casterTile = _characterCaster.GetCurrentTileComponent();
+        Selector._instance.OnCharacterDeselected += HandleCharacterDeselected;
     }
     /// <summary>
     /// Attempts to cast the given ability on the selected target tile.
@@ -85,6 +88,9 @@ public class AbilityHandler : MonoBehaviour
     {
         return _pendingAbility;
     }
+
+    public List<Character> GetPreviewedCharacters() => _previewedCharacters;
+
 
     /// <summary>
     /// Calculates all tiles that the pending ability can target from the caster's position.
@@ -192,6 +198,18 @@ public class AbilityHandler : MonoBehaviour
     public void PreviewTargetTiles(CombatGridTile tile)
     {
         List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
+
+        if(newEffectedTiles != null)
+        {
+            bool shouldClearPreview = false;
+            foreach(CombatGridTile t in newEffectedTiles)
+            {
+                if (!_tilesEffected.Contains(t)) shouldClearPreview = true;
+            }
+
+            if(shouldClearPreview) ClearCharacterPreviews();
+        }
+
         // Reset all tiles
         foreach (CombatGridTile t in _tilesEffected)
         {
@@ -229,4 +247,23 @@ public class AbilityHandler : MonoBehaviour
 
         return !targetCharacter.IsTargetable;
     }
+
+    public void AddPreviewedCharacter(Character character)
+    {
+        _previewedCharacters.Add(character);
+    }
+
+    private void ClearCharacterPreviews()
+    {
+        foreach (var c in _previewedCharacters)
+            c.HidePreviewVFX();
+
+        _previewedCharacters.Clear();
+    }
+
+    private void HandleCharacterDeselected()
+    {
+        ClearCharacterPreviews();
+    }
+
 }

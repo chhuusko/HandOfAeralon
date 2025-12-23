@@ -13,6 +13,7 @@ public abstract class SingleTargetAbility : Ability
         var character = targetTile.GetOccupantCharacter();
         if (character == null) return;
         character.ShowPreviewVFX();
+        GetAbilityHandler().AddPreviewedCharacter(character);
     }
 
     public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
