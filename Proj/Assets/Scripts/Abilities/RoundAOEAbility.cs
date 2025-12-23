@@ -93,7 +93,12 @@ public abstract class RoundAOEAbility : AOEAbility
         {
             if (tile != null)
             {
+                if (!IsValidTargetForAbility(casterTile, tile)) continue;
+
                 PreviewEffectOnTile(casterTile, tile);
+                var character = tile.GetOccupantCharacter();
+                if (character == null) continue;
+                character.ShowPreviewVFX();
             }
         }
     }

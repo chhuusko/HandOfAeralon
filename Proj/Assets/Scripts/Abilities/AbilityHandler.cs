@@ -56,8 +56,6 @@ public class AbilityHandler : MonoBehaviour
         _tilesInRange = RemoveUntargetableTiles(GetAvailableTargets(_pendingAbility));
         if (!CanCastAbility(ability, targetTile))
         {
-            ClearAbilityTargetRange();
-            if (_bDebugAbilityHandler) DebugLog.MGLog("Preview ability, tried running but is run on illegal tile.");
             return;
         }
         ability.PreviewAbilityEffects(_casterTile, targetTile);
@@ -193,29 +191,26 @@ public class AbilityHandler : MonoBehaviour
     /// <param name="tile">The tile currently hovered by the player.</param>
     public void PreviewTargetTiles(CombatGridTile tile)
     {
-        ClearPreviousPreview();
-
         List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
-        if (newEffectedTiles == null) return;
-
-        ApplyPreview(newEffectedTiles);
-    }
-
-    private void ClearPreviousPreview()
-    {
+        // Reset all tiles
         foreach (CombatGridTile t in _tilesEffected)
         {
-            t.SetTileColor(_tilesInRange.Contains(t) ? Color.green : Color.white);
+            if (_tilesInRange.Contains(t))
+            {
+                t.SetTileColor(Color.green);
+            }
+            else
+            {
+                t.SetTileColor(Color.white);
+            }
         }
         _tilesEffected.Clear();
-    }
+        if (newEffectedTiles == null){ return; }
 
-    private void ApplyPreview(List<CombatGridTile> tiles)
-    {
-        foreach (var t in tiles)
+        // Paint new tiles red and add them to tilesEffected.
+        foreach (CombatGridTile t in newEffectedTiles)
         {
-            if (t == null) continue;
-
+            if (t == null) return;
             t.SetTileColor(Color.red);
             _tilesEffected.Add(t);
         }
