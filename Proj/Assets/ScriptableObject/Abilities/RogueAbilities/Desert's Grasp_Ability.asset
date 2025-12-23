@@ -30,6 +30,7 @@ MonoBehaviour:
   _castingAnimationTime: 0.71
   _castingFXTime: 0
   _fromCastToHitTime: 0.2
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
   <AudioEvent>k__BackingField:
     Guid:
@@ -43,7 +44,7 @@ MonoBehaviour:
   _abilityAOEVFXSequence: {fileID: 11400000, guid: 657e2ba37fe87414eb6902e15a0d5463,
     type: 2}
   _radius: 1
-  _damageMultiplier: 0.9
+  _damageMultiplier: 1
   _chanceToApplyPoison: 0.7
   _poisonStacks: 3
   _manaGain: 1
