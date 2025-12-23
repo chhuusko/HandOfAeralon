@@ -30,6 +30,7 @@ MonoBehaviour:
   _castingAnimationTime: 0.5
   _castingFXTime: 0
   _fromCastToHitTime: 0
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
   <AudioEvent>k__BackingField:
     Guid:
@@ -38,7 +39,7 @@ MonoBehaviour:
       Data3: -1661216124
       Data4: -1633610117
     Path: event:/Sound Design/Diegetic/Characters/Bard/abilities/lutesmash
-  _damageMultiplier: 1.7
+  _damageMultiplier: 2
   _applyStunChance: 0.35
   _stunDuration: 1
   _manaGain: 2
