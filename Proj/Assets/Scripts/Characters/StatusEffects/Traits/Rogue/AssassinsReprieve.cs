@@ -9,7 +9,7 @@ public class AssassinsReprieve : Trait
             return;
         }
 
-        var data = Data as FloatThresholdData;
+        var data = Data as FloatModifierData;
 
         if (!data)
         {
@@ -22,6 +22,6 @@ public class AssassinsReprieve : Trait
             Manager.RemoveStatusEffect(statusEffects[UnityEngine.Random.Range(0, statusEffects.Count)]);
         }
         
-        Character.IncreaseCurrentHealthPoints(Mathf.RoundToInt(Character.GetCurrentHealth() / data.Threshold));
+        Character.IncreaseCurrentHealthPoints(Mathf.RoundToInt(Character.GetCurrentHealth() / data.Modifier));
     }
 }
