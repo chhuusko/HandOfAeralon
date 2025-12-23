@@ -64,7 +64,6 @@ public class CardUI : MonoBehaviour
         // for zoomedcard
         _infoHandler.SetShowInfoPanel(showInfoPanels);
         UpdateGlow();
-        CardManaChanged();
     }
     public void UpdateText()
     {
@@ -76,28 +75,47 @@ public class CardUI : MonoBehaviour
         {
             _glow.SetActive(CanAfford());
         }
-        CardManaChanged();
+        SetCardManaText();
     }
     private void UpdateGlow(int i)
     {
         UpdateGlow();
-        CardManaChanged();
     }
     private bool CanAfford()
     {
-        if (CardHandManager.GetInstance().GetMana() >= _card.GetCost())
+        
+        if (CardHandManager.GetInstance())
         {
-            return true;
+            if (CardHandManager.GetInstance().GetMana() >= _card.GetCost())
+            {
+                return true;
+            } 
         }
-
         return false;
     }
-    private void CardManaChanged()
+    private void SetCardManaText()
     {
-        if (_card.GetIsTemp())
+        if (CardHandManager.GetInstance() == null)
         {
-            _mana.text = "<color=green>" + _card.GetCost() + "</color>";
+            _mana.text = "" + _card.GetCost();
+            return;
         }
+        if (CanAfford())
+        {
+            if (_card.GetIsTemp())
+            {
+                _mana.text = "<color=green>" + _card.GetCost() + "</color>";
+            }
+            else
+            {
+                _mana.text = "" + _card.GetCost();
+            }
+        }
+        else
+        {
+            _mana.text = "<color=red>" + _card.GetCost() + "</color>";
+        }
+        
         
     }
 
