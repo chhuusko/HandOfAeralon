@@ -142,7 +142,9 @@ public class Shop : MonoBehaviour
     
     public void OpenSellTab()
     {
-        _sellTab.GetComponent<CardViewUI>().UpdateCards(GlobalGameManager.GetInstance().GetGameData().cardList);
+        //Que
+        _sellTab.GetComponent<CardViewUIShop>().UpdateCards(GlobalGameManager.GetInstance().GetGameData().cardList);
+        _sellTab.GetComponent<CardViewUIShop>().UpdateCards(GlobalGameManager.GetInstance().GetGameData().cardList);
         _sellTab.SetActive(true);
     }
     public void OpenDeckTab()

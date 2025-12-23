@@ -61,7 +61,7 @@ public class SellableCardUI : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     public void SetCard(Card card)
     {
         _card = card;
-        GetComponent<CardUI>().SetUpUIElements(card);
+        GetComponent<CardUI>().SetUpUIElements(_card);
     }
     public void OnPointerDown(PointerEventData eventData)
     {

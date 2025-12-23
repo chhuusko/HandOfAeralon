@@ -25,7 +25,7 @@ public class CardViewUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public virtual void UpdateCards(List<Card> newCardList)
     {
         gameObject.SetActive(true);
-
+        ClearUI();
         if (_cardListUI.Count > 0 ) { ClearUI(); }
         if(newCardList ==  null ) { Debug.Log("Nothing");}
         _cardContent.transform.position = basePosition;

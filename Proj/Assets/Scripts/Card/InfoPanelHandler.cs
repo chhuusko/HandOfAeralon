@@ -18,7 +18,6 @@ public class InfoPanelHandler : MonoBehaviour, IPointerEnterHandler, IPointerExi
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log(_infoPanels.Count);
         isHover = true;
         _infoPanelsInScene = Instantiate(_pivotPoint, _pivotPoint.transform.position, Quaternion.identity, CanvasManager.Instance().CardInfoPanelCanvas.transform);
         if (_infoPanels.Count <= 0) return;
@@ -65,7 +64,7 @@ public class InfoPanelHandler : MonoBehaviour, IPointerEnterHandler, IPointerExi
     }
     public void SetInfoPanel(List<InfoPanel> newInfoPanels)
     {
-        Debug.Log(newInfoPanels.Count);
+        //Debug.Log(newInfoPanels.Count +  "newInfoPanels count");
         _infoPanels = newInfoPanels;
     }
 }
