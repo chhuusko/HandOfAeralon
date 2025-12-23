@@ -63,6 +63,8 @@ public class CombatStateCharacterPlacement : CombatStateBase
                                                                                             Quaternion.identity);
                         CombatGrid._instance.SpawnCharacter(characterData);
                     }
+                    
+                    CombatEventManager.InvokeOnCharacterPlaced();
                 }
                 else
                 {

@@ -86,6 +86,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateActivePortrait;
         CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
         CombatEventManager.OnCharacterDeath += UpdateCharacterPortraits;
+        CombatEventManager.OnCharacterPlaced += SetStartCombatButton;
 
         StartCoroutine(WaitForSelector());
     }
@@ -105,6 +106,17 @@ public class CombatUI : MonoBehaviour
         Selector._instance.OnCharacterActionStopped += SetEndTurnButtonInteractable;
     }
 
+    private void SetStartCombatButton()
+    {
+        if (!CombatGrid._instance.AllCharactersPlaced())
+        {
+            return;
+        }
+
+        _startCombatButton.interactable = true;
+        _startCombatButton.transform.Find("Border").gameObject.SetActive(true);
+    }
+
     public void StartCombat()
     {
         if (!CombatGrid._instance.AllCharactersPlaced())
@@ -112,6 +124,7 @@ public class CombatUI : MonoBehaviour
 
         OnStartCombatButtonPressed?.Invoke();
         
+        _startCombatButton.interactable = false;
         _startCombatButton.gameObject.SetActive(false);
         _endTurnButton.gameObject.SetActive(true);
         _hand.SetActive(true);
@@ -351,6 +364,7 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateActivePortrait;
         CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
         CombatEventManager.OnCharacterDeath -= UpdateCharacterPortraits;
+        CombatEventManager.OnCharacterPlaced -= SetStartCombatButton;
         
         Selector._instance.OnCharacterSelected -= SetSelectedCharacter;
         Selector._instance.OnCharacterSelected -= _abilityScript.LoadAbilities;
