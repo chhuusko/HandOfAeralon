@@ -22,6 +22,7 @@ public class LevelManager : ScriptableObject
     //private int _gameLevels = 10;
     private int _difficulty = 0;
 
+    private int statlevel;
     [SerializeField] private float statIncreaseFactor = 1.2f;
     [SerializeField] public int statIncreaseInterval = 3;
     public float statIncrease { get; private set; }
@@ -96,22 +97,26 @@ public class LevelManager : ScriptableObject
             QualitySettings.vSyncCount = 0;
         }
     }
-    private void IncreaseStat()
+    public bool IncreaseStat()
     {
         if (_level % statIncreaseInterval == 0)
         {
             foreach (CharacterData character in GlobalGameManager.GetInstance().GetGameData().heroDataList)
             {
-                statIncrease = 1 + (statIncreaseFactor * (_level / statIncreaseInterval));
+                statlevel = _level / statIncreaseInterval;
+                statIncrease = 1 + (statIncreaseFactor * (statlevel));
 
                 /// REMOVE THIS LATER
+                
                 int lostHealth = character.DerivedHealthPoints - character.CurrentHealthPoints;
                 character.CalculateDerivedStats(statIncrease);
                 character.SetCurrentHealthPoints(character.DerivedHealthPoints-lostHealth);
 
                // Debug.Log("deriveddamage: " + character.DerivedDamage + " base damage: " + character.BaseDamage); 
+               return true;
             }
-        } 
+        }
+        return false;
         /*
         if (_level % enemyStatIncreaseInterval == 0)
         {
@@ -175,6 +180,7 @@ public class LevelManager : ScriptableObject
             Application.targetFrameRate = menuFPSCap;
             QualitySettings.vSyncCount = 0;
             SceneManager.LoadScene("ShopScene");
+
         }
     }
     private void LoadScene(List<string> sceneList)
@@ -241,5 +247,9 @@ public class LevelManager : ScriptableObject
             _combatGrid.AddCharacter(combatGrid._characterData[i]);
         }
         return _combatGrid;
+    }
+    public int GetStatLevel()
+    {
+        return statlevel;
     }
 }
