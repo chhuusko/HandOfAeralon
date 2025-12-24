@@ -46,10 +46,11 @@ public abstract class AOEAbility : Ability
                 // Don't apply effect on tiles with invalid targets.
                 if (!IsValidTargetForAbility(casterTile, tile)) continue;
 
-                PreviewEffectOnTile(casterTile, targetTile);
-                var character = targetTile.GetOccupantCharacter();
+                PreviewEffectOnTile(casterTile, tile);
+                var character = tile.GetOccupantCharacter();
                 if (character == null) continue;
-                
+                character.ShowPreviewVFX();
+                GetAbilityHandler().AddPreviewedCharacter(character);
             }
         }
     }

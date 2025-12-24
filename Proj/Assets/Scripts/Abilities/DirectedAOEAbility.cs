@@ -100,6 +100,10 @@ public abstract class DirectedAOEAbility : AOEAbility
                 if (!IsValidTargetForAbility(casterTile, tile)) continue;
 
                 PreviewEffectOnTile(casterTile, tile);
+                var character = tile.GetOccupantCharacter();
+                if (character == null) continue;
+                character.ShowPreviewVFX();
+                GetAbilityHandler().AddPreviewedCharacter(character);
             }
         }
     }

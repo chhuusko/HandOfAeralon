@@ -141,7 +141,7 @@ public class CharacterMovement : MonoBehaviour
 
         _bIsMoving = true;
         Debug.LogWarning($"{_character.name} _isMoving = true");
-        CombatEventManager.InvokeOnCharacterMove(_bIsMoving);
+        CombatEventManager.InvokeOnCharacterMove(_character, _bIsMoving);
         Selector._instance.InvokeCharacterActionStarted();
         GridExplorer._instance.ClearPathDrawing();
         float moveSpeed = 4f; // M�ste matcha animationerna
@@ -176,7 +176,7 @@ public class CharacterMovement : MonoBehaviour
 
         _bIsMoving = false;
         Debug.LogWarning($"{_character.name} _isMoving = false");
-        CombatEventManager.InvokeOnCharacterMove(_bIsMoving);
+        CombatEventManager.InvokeOnCharacterMove(_character, _bIsMoving);
         Selector._instance.InvokeCharacterActionStopped();
 
         DrawMoveRange();

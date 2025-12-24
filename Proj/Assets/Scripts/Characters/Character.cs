@@ -155,7 +155,7 @@ public class CharacterData
 
     public void CalculateDerivedStats(float hpFactor, float damageFactor, bool preserveCurrentHP = true)
     {
-        _traitManager.ModifyDerivedStats(ref hpFactor, ref damageFactor);
+        _traitManager?.ModifyDerivedStats(ref hpFactor, ref damageFactor);
         
         SetDerivedHealthPoints(hpFactor, preserveCurrentHP);
         SetDerivedDamage(Mathf.RoundToInt(_baseDamage * damageFactor));

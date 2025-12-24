@@ -8,6 +8,8 @@ public class AbilityHandler : MonoBehaviour
 
     private List<CombatGridTile> _tilesInRange = new();
     private List<CombatGridTile> _tilesEffected = new();
+    private List<Character> _previewedCharacters = new();
+
     private Character _characterCaster;
     private CombatGridTile _casterTile;
     [SerializeField] private Ability _pendingAbility;
@@ -18,10 +20,11 @@ public class AbilityHandler : MonoBehaviour
     {
         if (!TryGetComponent(out _characterCaster))
         {
-            Debug.LogError("AbilityHandler is missing Character component!");
+            Debug.LogError("Object is missing Character component!");
             return;
         }
         _casterTile = _characterCaster.GetCurrentTileComponent();
+        Selector._instance.OnCharacterDeselected += HandleCharacterDeselected;
     }
     /// <summary>
     /// Attempts to cast the given ability on the selected target tile.
@@ -56,8 +59,6 @@ public class AbilityHandler : MonoBehaviour
         _tilesInRange = RemoveUntargetableTiles(GetAvailableTargets(_pendingAbility));
         if (!CanCastAbility(ability, targetTile))
         {
-            ClearAbilityTargetRange();
-            if (_bDebugAbilityHandler) DebugLog.MGLog("Preview ability, tried running but is run on illegal tile.");
             return;
         }
         ability.PreviewAbilityEffects(_casterTile, targetTile);
@@ -87,6 +88,9 @@ public class AbilityHandler : MonoBehaviour
     {
         return _pendingAbility;
     }
+
+    public List<Character> GetPreviewedCharacters() => _previewedCharacters;
+
 
     /// <summary>
     /// Calculates all tiles that the pending ability can target from the caster's position.
@@ -193,29 +197,38 @@ public class AbilityHandler : MonoBehaviour
     /// <param name="tile">The tile currently hovered by the player.</param>
     public void PreviewTargetTiles(CombatGridTile tile)
     {
-        ClearPreviousPreview();
-
         List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
-        if (newEffectedTiles == null) return;
 
-        ApplyPreview(newEffectedTiles);
-    }
+        if(newEffectedTiles != null)
+        {
+            bool shouldClearPreview = false;
+            foreach(CombatGridTile t in newEffectedTiles)
+            {
+                if (!_tilesEffected.Contains(t)) shouldClearPreview = true;
+            }
 
-    private void ClearPreviousPreview()
-    {
+            if(shouldClearPreview) ClearCharacterPreviews();
+        }
+
+        // Reset all tiles
         foreach (CombatGridTile t in _tilesEffected)
         {
-            t.SetTileColor(_tilesInRange.Contains(t) ? Color.green : Color.white);
+            if (_tilesInRange.Contains(t))
+            {
+                t.SetTileColor(Color.green);
+            }
+            else
+            {
+                t.SetTileColor(Color.white);
+            }
         }
         _tilesEffected.Clear();
-    }
+        if (newEffectedTiles == null){ return; }
 
-    private void ApplyPreview(List<CombatGridTile> tiles)
-    {
-        foreach (var t in tiles)
+        // Paint new tiles red and add them to tilesEffected.
+        foreach (CombatGridTile t in newEffectedTiles)
         {
-            if (t == null) continue;
-
+            if (t == null) return;
             t.SetTileColor(Color.red);
             _tilesEffected.Add(t);
         }
@@ -234,4 +247,23 @@ public class AbilityHandler : MonoBehaviour
 
         return !targetCharacter.IsTargetable;
     }
+
+    public void AddPreviewedCharacter(Character character)
+    {
+        _previewedCharacters.Add(character);
+    }
+
+    private void ClearCharacterPreviews()
+    {
+        foreach (var c in _previewedCharacters)
+            c.HidePreviewVFX();
+
+        _previewedCharacters.Clear();
+    }
+
+    private void HandleCharacterDeselected()
+    {
+        ClearCharacterPreviews();
+    }
+
 }

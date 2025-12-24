@@ -211,7 +211,7 @@ public class AbilityUI : MonoBehaviour
         }
     }
     
-    private void CharacterMoving(bool moving)
+    private void CharacterMoving(Character character, bool moving)
     {
         if (moving)
         {
