@@ -163,7 +163,6 @@ public class LevelManager : ScriptableObject
                         RestartGame();
                         break;
                 }
-                _level++;
             }
             else
             {
@@ -175,8 +174,8 @@ public class LevelManager : ScriptableObject
             if (_level != 0)
             {
                 IncreaseStat();
-                Debug.LogWarning("StatIncrease");
             }
+
             Application.targetFrameRate = menuFPSCap;
             QualitySettings.vSyncCount = 0;
             SceneManager.LoadScene("ShopScene");
@@ -188,7 +187,7 @@ public class LevelManager : ScriptableObject
         
         if (sceneList.Count == 0)
         {
-            RestartGame();
+            //RestartGame();
             return;
         }
         
@@ -196,6 +195,7 @@ public class LevelManager : ScriptableObject
         Debug.Log(sceneList.Count + "sceneCount" + sceneIndex + "Sceneindex");
         SceneManager.LoadScene(sceneList[sceneIndex]);
         sceneList.Remove(sceneList[sceneIndex]);
+        _level++;
     }
     private void TutorialLevel()
     {
