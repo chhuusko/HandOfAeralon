@@ -178,7 +178,15 @@ public class LevelManager : ScriptableObject
 
             Application.targetFrameRate = menuFPSCap;
             QualitySettings.vSyncCount = 0;
-            SceneManager.LoadScene("ShopScene");
+            if (_level+1 > 12)
+            {
+                RestartGame();
+            }
+            else
+            {
+                SceneManager.LoadScene("ShopScene");
+            }
+            
 
         }
     }
@@ -187,10 +195,9 @@ public class LevelManager : ScriptableObject
         
         if (sceneList.Count == 0)
         {
-            //RestartGame();
+            RestartGame();
             return;
         }
-        
         int sceneIndex = Random.Range(0, sceneList.Count);
         Debug.Log(sceneList.Count + "sceneCount" + sceneIndex + "Sceneindex");
         SceneManager.LoadScene(sceneList[sceneIndex]);
