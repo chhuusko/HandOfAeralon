@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [CreateAssetMenu(fileName = "SongOfRenewal_Ability", menuName = "Scriptable Objects/Abilities/Bard/SongOfRenewal")]
 public class SongOfRenewalAOE : RoundAOEAbility
@@ -7,6 +8,7 @@ public class SongOfRenewalAOE : RoundAOEAbility
     [Header("- Ability Specific values -")]
     [SerializeField] private float _maxHealthHealMain = 0.25f;
     [SerializeField] private float _maxHealthHealArea = 0.1f;
+    [SerializeField] private float _maxHealthSelfDamage = 0.1f;
 
     // Description
 
@@ -16,6 +18,8 @@ public class SongOfRenewalAOE : RoundAOEAbility
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
+        if(casterTile == null || targetTile == null) return;
+
         // Calculate all tiles around with in radius and apply effect to all of them.
         if (_pattern is RoundAOEPattern pattern)
         {
@@ -36,6 +40,19 @@ public class SongOfRenewalAOE : RoundAOEAbility
             }
             ApplyEffectOnTile(casterTile, tile);
         }
+
+        Character caster = casterTile.GetOccupantCharacter();
+        if (caster == null) return;
+        caster.ShowPreviewVFX();
+        GetAbilityHandler().AddPreviewedCharacter(caster);
+
+        float damageAmount = caster.Data.DerivedHealthPoints * _maxHealthSelfDamage;
+        damageAmount = caster.GetStatusEffectManager().ModifyOutgoingDamage(damageAmount, this);
+        damageAmount = caster.GetStatusEffectManager().ModifyIncomingDamage(damageAmount, this);
+        int damage = Mathf.RoundToInt(damageAmount);
+        bool died = caster.TakeDamage(Mathf.RoundToInt(damage));
+
+        AbilityExecutionData executionData = AbilityExecutionData.Create(this, caster, caster, casterTile, damage, 0, null, died);
     }
 
 

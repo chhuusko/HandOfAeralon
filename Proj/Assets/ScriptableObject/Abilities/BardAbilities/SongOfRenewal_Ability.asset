@@ -39,8 +39,9 @@ MonoBehaviour:
       Data4: 1315537343
     Path: event:/Sound Design/Diegetic/Characters/Bard/abilities/songofrenewal
   _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
-  _validTargets: 3
+  _validTargets: 4
   _abilityAOEVFXSequence: {fileID: 0}
   _radius: 3
   _maxHealthHealMain: 0.25
   _maxHealthHealArea: 0.15
+  _maxHealthSelfDamage: 0.1
