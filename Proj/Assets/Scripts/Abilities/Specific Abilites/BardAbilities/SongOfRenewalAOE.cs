@@ -150,21 +150,21 @@ public class SongOfRenewalAOE : RoundAOEAbility
         //1.
         //2.
         float healMultiplier = bIsMainTarget ? _maxHealthHealMain : _maxHealthHealArea;
-        int healAmount = (int) (affectedCharacter.Data.DerivedHealthPoints * healMultiplier);
+        float healAmount = (affectedCharacter.Data.DerivedHealthPoints * healMultiplier);
 
         if (bIsMainTarget)
         {
             // Draw an extra card from your deck if main target was below 50% health and casting Character is a not an enemy.
-            if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.Data.DerivedHealthPoints < (int) (affectedCharacter.Data.DerivedHealthPoints * 0.5f))
+            if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.Data.DerivedHealthPoints <  affectedCharacter.Data.DerivedHealthPoints * 0.5f)
             {
                 CardHandManager.GetInstance().AddCardFromDeck();
             }
         }
 
-        healAmount = (int) castingCharacter.GetStatusEffectManager().ModifyOutgoingHeal(healAmount, this);
-        healAmount = (int) affectedCharacter.GetStatusEffectManager().ModifyOutgoingHeal(healAmount, this);
+        healAmount =  castingCharacter.GetStatusEffectManager().ModifyOutgoingHeal(healAmount, this);
+        healAmount =  affectedCharacter.GetStatusEffectManager().ModifyIncomingHeal(healAmount, this);
         
-        return healAmount; 
+        return Mathf.RoundToInt(healAmount); 
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
