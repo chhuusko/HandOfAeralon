@@ -45,6 +45,8 @@ public class CombatStateCharacterPlacement : CombatStateBase
                 {
                     Vector2Int tileIndex = unoccupiedDeployTile.GetTileIndex();
                     Vector3 tilePosition = unoccupiedDeployTile.GetTilePosition();
+                    
+                    CombatGrid._instance.ClearOffGridOccupant(selectedCharacter.gameObject);
 
                     if (CombatGrid._instance.ContainsCharacter(selectedCharacter.gameObject))
                     {
@@ -63,6 +65,8 @@ public class CombatStateCharacterPlacement : CombatStateBase
                                                                                             Quaternion.identity);
                         CombatGrid._instance.SpawnCharacter(characterData);
                     }
+                    
+                    unoccupiedDeployTile.SetOccupant(selectedCharacter.gameObject);
                     
                     CombatEventManager.InvokeOnCharacterPlaced();
                 }

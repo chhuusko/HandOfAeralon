@@ -216,7 +216,7 @@ public class CombatGrid : MonoBehaviour
             if (tileScript.GetOccupant() != null)
                 return false;
         }
-
+        
         return true;
     }
 
@@ -394,6 +394,21 @@ public class CombatGrid : MonoBehaviour
             }
         }
         return friendlyCharacters;
+    }
+
+    public void ClearOffGridOccupant(GameObject character)
+    {
+        foreach (var offTileGO in _offgridSpawnTilesGO)
+        {
+            if (!offTileGO)
+                continue;
+            
+            var tile = offTileGO.GetComponent<CombatGridTile>();
+            if (tile && tile.GetOccupant() == character)
+            {
+                tile.SetOccupant(null);
+            }
+        }
     }
 
     public List<GameObject> GetAllEnemyCharacters()

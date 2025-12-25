@@ -115,7 +115,6 @@ public class CombatUI : MonoBehaviour
         {
             return;
         }
-
      
         _startCombatButton.interactable = true;
         _startCombatButton.transform.Find("Border").gameObject.SetActive(true);
