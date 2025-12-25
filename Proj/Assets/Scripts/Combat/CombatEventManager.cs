@@ -31,6 +31,7 @@ public static class CombatEventManager
 
     public static event Action<int> OnRoundFinished;
 
+    public static event Action<Character> OnCharacterSpawned;
     public static event Action<Character> OnCharacterDeath;
     public static event Action OnCharacterInitiativeChanged;
 
@@ -93,6 +94,9 @@ public static class CombatEventManager
 
     public static void InvokeOnCharacterDeath(Character character)
         => OnCharacterDeath?.Invoke(character);
+    
+    public static void InvokeOnCharacterSpawned(Character character) 
+        => OnCharacterSpawned?.Invoke(character);
 
     public static void InvokeOnCharacterInitiativeChanged()
        => OnCharacterInitiativeChanged?.Invoke();

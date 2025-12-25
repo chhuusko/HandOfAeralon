@@ -28,7 +28,6 @@ public class AbilityUI : MonoBehaviour
     {
         while (!Selector._instance)
         {
-            Debug.Log("Waiting for selector");
             yield return null;
         }
         
@@ -40,6 +39,11 @@ public class AbilityUI : MonoBehaviour
         foreach (var panel in panels)
         {
             panel.SetActive(active);
+        }
+
+        if (CombatUI.Instance != null)
+        {
+            CombatUI.Instance._movementPointsPanel.SetActive(active);
         }
     }
 
@@ -160,7 +164,6 @@ public class AbilityUI : MonoBehaviour
         }
     
         bool interactable = false;
-        string reason = "";
 
         if (CombatUI.Instance.bCombatStarted && c && CombatUI.Instance.CurrentTurnCharacter && CombatUI.Instance.SelectedCharacter != null)
         {
@@ -172,24 +175,9 @@ public class AbilityUI : MonoBehaviour
             bool notStunned = !c.IsStunned;
 
             interactable = isTurnCharacter && isFriendly && notOnCooldown && canUseAbility && isActiveAbility && notStunned;
-
-            // Build log string
-            reason = $"Ability: {abilityButton.Ability?.name ?? "null"} | " +
-                     $"TurnChar: {isTurnCharacter} | " +
-                     $"Friendly: {isFriendly} | " +
-                     $"Cooldown: {notOnCooldown} | " +
-                     $"CanUse: {canUseAbility} | " +
-                     $"Active: {isActiveAbility} | " +
-                     $"NotStunned: {notStunned} | " +
-                     $"Interactable: {interactable}";
-        }
-        else
-        {
-            reason = "Combat not started or character references null";
         }
 
         abilityButton.Button.interactable = interactable;
-        DebugLog.JoppaLog(reason);
 
         StartCoroutine(SetCooldown(c, abilityButton));
     }

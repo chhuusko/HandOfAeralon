@@ -15,6 +15,9 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _abilityPanelParent;
     [SerializeField] private AbilityUI _abilityScript;
     
+    [Header("Movement Points")]
+    public GameObject _movementPointsPanel;
+    
     [Header("Mana")]
     [SerializeField] private TextMeshProUGUI _mana;
     [SerializeField] private Image _manaFill;
