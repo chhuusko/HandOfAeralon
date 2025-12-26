@@ -18,6 +18,7 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateEndCombat += OnCombatEnded;
         CombatEventManager.OnStatusEffectAppliedToCharacter += OnStatusEffectApplied;
         CombatEventManager.OnStatusEffectExpiredOnCharacter += OnStatusEffectRemovedFromAny;
+        CombatEventManager.OnCharacterDeath += OnDeath;
         
         CardHandManager.onCardUse += OnCardPlayed;
         CardHandManager.onTargetCharacter += OnTargetCharacter;
@@ -529,6 +530,7 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
         CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
         CombatEventManager.OnStatusEffectExpiredOnCharacter -= OnStatusEffectRemovedFromAny;
+        CombatEventManager.OnCharacterDeath -= OnDeath;
         
         CardHandManager.onCardUse -= OnCardPlayed;
         CardHandManager.onTargetCharacter -= OnTargetCharacter;

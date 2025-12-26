@@ -3,46 +3,48 @@ using UnityEngine;
 
 public class BlightSpread : Trait
 {
-    private List<Character> _targets;
+    private Dictionary<Character, int> _poisonDurations = new();
     
     // Applies poison to a new enemy if an enemy poisoned by this character dies.
     public override void OnDeath(Character c)
     {
-        if (c.GetFaction() is not Faction.Enemy || !_targets.Contains(c) || 
-            !c.GetStatusEffectManager().ContainsStatusEffect<Poison>())
+        if (!_poisonDurations.TryGetValue(c, out int duration))
         {
+            Debug.Log("No duration exists!");
             return;
         }
 
         var data = Data as FloatModifierData;
-
         if (!data)
         {
+            Debug.Log("No data exists!");
             return;
         }
         
-        int duration = c.GetStatusEffectManager().GetStatusEffect<Poison>().Duration;
-        
-        _targets.Remove(c);
+        _poisonDurations.Remove(c);
         
         var enemies = CombatGrid._instance.GetAllEnemyCharacters();
-        enemies[UnityEngine.Random.Range(0, enemies.Count)]?.GetComponent<Character>()?.GetStatusEffectManager()?.
+        enemies.Remove(c.gameObject);
+
+        if (enemies.Count == 0)
+        {
+            Debug.Log("No enemies exist!");
+            return;
+        }
+        
+        var target = enemies[UnityEngine.Random.Range(0, enemies.Count)];
+        target.GetComponent<Character>().GetStatusEffectManager().
             AddStatusEffect(new Poison(Mathf.RoundToInt(duration / data.Modifier)));
     }
 
     public override void OnStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
     {
         // Only poisons applied by this character to enemies count.
-        if (target?.GetFaction() is not Faction.Enemy || caster != Character || statusEffect is not Poison)
+        if (target?.GetFaction() is not Faction.Enemy || caster != Character || statusEffect is not Poison poison)
         {
             return;
         }
         
-        _targets.Add(target);
-    }
-
-    public override void OnStatusEffectRemovedFromAny(Character character, StatusEffect statusEffect)
-    {
-        _targets.Remove(character);
+        _poisonDurations[target] = poison.Duration;
     }
 }
