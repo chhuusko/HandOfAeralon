@@ -9,7 +9,7 @@ public class ResonantRecovery : Trait
             return;
         }
         
-        var data = Data as DamageModifyingData;
+        var data = Data as ResonantRecoveryData;
 
         if (!data)
         {
