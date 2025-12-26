@@ -24,8 +24,6 @@ public class CoordinatedShift : Card
                     activeCharacter.gameObject.transform.position = tilePosition;
                     activeCharacter.SetCurrentTileIndex(tileIndex);
 
-                    
-
                 }
 
             }

@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -16,6 +18,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private GameObject _spawnedParticle;
     private RectTransform _rect;
     Vector3 _startPosition, _hoverEndPosition;
+    CombatGridTile gridTile;
     float _hoverDistance = 120f;
     private bool _isDragging;
 
@@ -94,29 +97,37 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             
             if (_containedCard.type == CardType.Target)
             {
-                CombatGridTile grid;
-                if (grid = Selector._instance.GetTileUnderMouse())
+                if (gridTile = Selector._instance.GetTileUnderMouse())
                 {
-                    if (!grid.GetOccupantCharacter())
+                    if (!gridTile.GetOccupantCharacter())
                     {
                         CancelUse();
                         return;
                     }
                     else
                     {
-                        if (grid.GetOccupantCharacter().GetFaction() == Faction.Enemy && grid.GetOccupantCharacter().GetStatusEffectManager().ContainsStatusEffect<Stealth>())
+                        if (isEnemyTargetStealth(gridTile.GetOccupantCharacter()))
                         {
                             CancelUse();
                             return;
                         }
                         else
                         {
-                            Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
-                            Destroy(_spawnedParticle);
-                            CardHandManager.GetInstance().CharacterTarget(grid.GetOccupantCharacter());
-                            CardHandManager.GetInstance().CardTargetCharacter(_containedCard, grid.GetOccupantCharacter());
-                            CardHandManager.GetInstance().ChangeMana(-_containedCard.GetCost());
-                            _containedCard.PlayCardOnTarget(grid.GetOccupantCharacter());
+                            if (HandleCardConditions(gridTile.GetOccupantCharacter()))
+                            {
+                                Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
+                                Destroy(_spawnedParticle);
+                                CardHandManager.GetInstance().CharacterTarget(gridTile.GetOccupantCharacter());
+                                CardHandManager.GetInstance().CardTargetCharacter(_containedCard, gridTile.GetOccupantCharacter());
+                                CardHandManager.GetInstance().ChangeMana(-_containedCard.GetCost());
+                                _containedCard.PlayCardOnTarget(gridTile.GetOccupantCharacter());
+                            }
+                            else
+                            {
+                                CancelUse();
+                                return;
+                            }
+                            
                         }
                         
                     }
@@ -211,5 +222,34 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             GetComponent<CanvasGroup>().alpha = 0;
         }
         
+    }
+    public bool HandleCardConditions(Character character)
+    {
+        List<TargetCondition> conditions = _containedCard.targetConditions;
+
+        if (conditions.Count == 0) return true;
+        
+        foreach(TargetCondition condition in conditions) {
+            switch (condition)
+            {
+                case TargetCondition.Ally:
+                    if (character.GetFaction() != Faction.Friendly) return false;
+                    break;
+                case TargetCondition.Enemy:
+                    if (character.GetFaction() != Faction.Enemy) return false;
+                    break;
+                case TargetCondition.NotActive:
+                    if (character == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter()) return false;
+                    break;
+
+            }
+        }
+
+        return true;
+        
+    }
+    private bool isEnemyTargetStealth(Character character)
+    {
+        return (character.GetFaction() == Faction.Enemy && character.GetStatusEffectManager().ContainsStatusEffect<Stealth>());
     }
 }
