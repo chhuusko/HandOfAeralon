@@ -17,8 +17,8 @@ MonoBehaviour:
   _range: 5
   _cooldown: 2
   _description: Call down a lightning storm that deals {damage} {elemental_damage}
-    to all characters in a large area. Every character hit has a 15% chance to gain
-    Stunned for 1 turn.
+    to all characters in a large area.\n\nEvery character hit has a 15% chance to
+    gain Stunned for 1 turn.
   _abilityTag: 10
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}

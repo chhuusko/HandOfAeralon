@@ -17,8 +17,8 @@ MonoBehaviour:
   _range: 1
   _cooldown: 2
   _description: Slam the ground, dealing {damage} {physical_damage} to all characters
-    in the area. Every character hit has a 60% chance to become Slowed for 2 turns.
-    Gain 1 {mana} if at least two enemies become Slowed.
+    in the area.\n\nEvery character hit has a 60% chance to become Slowed for 2 turns.\n\nGain
+    1 {mana} if at least two enemies become Slowed.
   _abilityTag: 9
   _type: 0
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
@@ -30,6 +30,7 @@ MonoBehaviour:
   _castingAnimationTime: 0.5
   _castingFXTime: 0
   _fromCastToHitTime: 0.3
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
   <AudioEvent>k__BackingField:
     Guid:

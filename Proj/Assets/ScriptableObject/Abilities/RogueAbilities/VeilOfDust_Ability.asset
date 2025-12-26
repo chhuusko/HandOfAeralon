@@ -16,8 +16,8 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 742585b77af2fe348968ebc1f20e7278, type: 3}
   _range: 0
   _cooldown: 4
-  _description: 'Cleanse all debuffs from self and gain Stealth for 3 turns. You
-    can move after using this ability. If a debuff is cleansed, gain 1 {mana}.  '
+  _description: Cleanse all debuffs from self and gain Stealth for 3 turns.\n\nYou
+    can move after using this ability.\n\nIf a debuff is cleansed, gain 1 {mana}.
   _abilityTag: 5
   _type: 3
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
@@ -29,6 +29,7 @@ MonoBehaviour:
   _castingAnimationTime: 0.4
   _castingFXTime: 0
   _fromCastToHitTime: 0
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
   <AudioEvent>k__BackingField:
     Guid:
