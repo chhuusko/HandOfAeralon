@@ -157,6 +157,11 @@ public class StatusEffectManager : MonoBehaviour
         return _traitManager.GetAllTraits();
     }
 
+    public IReadOnlyList<StatusEffect> GetAllOfType(StatusEffectType type)
+    {
+        return _traitManager.GetAllOfType(type);
+    }
+
     private void UpdateDuration(Character c)
     {
         if (!_character || c != _character)
