@@ -163,7 +163,6 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private bool CanPlay()
     {
         if (CombatManager._instance.GetCombatState() == CombatState.PlaceCharacters) return false;
-
         return (CombatManager._instance.GetCombatTurnOrder().GetCurrentTurn() == CombatTurn.PlayerTurn);
             
         

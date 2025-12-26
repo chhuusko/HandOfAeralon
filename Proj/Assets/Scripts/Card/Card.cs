@@ -6,6 +6,13 @@ public enum CardType
     Instant,
     Target,
 }
+public enum TargetCondition
+{
+    None,
+    Ally,
+    Enemy,
+    NotActive
+}
 public enum CardTag
 {
     Etherial,
@@ -22,7 +29,9 @@ public class Card : ScriptableObject
 
     [Header("Info")]
     public CardType type;
+    public Faction targetFaction;
     public CardRarity rarity;
+    
     public string title;
     public string description;
     [SerializeField] private int cost;
@@ -30,6 +39,7 @@ public class Card : ScriptableObject
     public Sprite CardTemplate;
     public List<InfoPanel> info;
     public List<CardTag> tags;
+    public List<TargetCondition> targetConditions;
 
     private List<Color> rarityColors = new List<Color>()
     {
