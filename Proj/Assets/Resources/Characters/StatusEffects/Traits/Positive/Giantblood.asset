@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Giantblood
   Icon: {fileID: 21300000, guid: 759d2db469762114a91216bb2268dffe, type: 3}
-  Description: Gain +20% Max Health
+  Description: Gain +15% Max Health
   Type: 3
   IsPermanent: 1
   IsDispellable: 0
   _typeName: Giantblood, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 1
-  DamageModifier: 1.2
+  DamageModifier: 1.15
