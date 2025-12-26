@@ -15,6 +15,9 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _abilityPanelParent;
     [SerializeField] private AbilityUI _abilityScript;
     
+    [Header("Movement Points")]
+    public GameObject _movementPointsPanel;
+    
     [Header("Mana")]
     [SerializeField] private TextMeshProUGUI _mana;
     [SerializeField] private Image _manaFill;
@@ -115,7 +118,6 @@ public class CombatUI : MonoBehaviour
         {
             return;
         }
-
      
         _startCombatButton.interactable = true;
         _startCombatButton.transform.Find("Border").gameObject.SetActive(true);
@@ -198,14 +200,14 @@ public class CombatUI : MonoBehaviour
     private void PlaceCharacterStarted()
     {
         Character c = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
-        UpdateCharacterPortraits();
+        // UpdateCharacterPortraits();
         UpdateActivePortrait(c);
         UpdatePortraitColors(c);
         
         SetSelectedCharacter(c);
         CurrentTurnCharacter = c;
         
-        _characterPortraitPanel.gameObject.SetActive(true);
+        // _characterPortraitPanel.gameObject.SetActive(true);
         _deckButton.gameObject.SetActive(true);
         _turnOrder.SetActive(true);
         _activeCharacterBorder.gameObject.SetActive(true);
@@ -215,7 +217,7 @@ public class CombatUI : MonoBehaviour
         _cardHandManager.SetActive(true);
         _placeCharactersPanel.SetActive(true);
         _combatLogParent.SetActive(true);
-        _partyPanelText.SetActive(true);
+        // _partyPanelText.SetActive(true);
         
         // Enable the parent but set all child objects as hidden, so scripts can run, while not showing the element.
         _abilityPanelParent.SetActive(true);
@@ -274,34 +276,34 @@ public class CombatUI : MonoBehaviour
 
     private void UpdateCharacterPortraits(Character character)
     {
-        UpdateCharacterPortraits();
+        // UpdateCharacterPortraits();
     }
     
     /// <summary>
     /// Sets all character portraits in combat UI to reflect current party.
     /// </summary>
-    private void UpdateCharacterPortraits()
-    {
-        GameData gameData = GlobalGameManager.GetInstance().GetGameData();
-        List<CharacterData> heroList = gameData.heroDataList;
-
-        if (heroList == null)
-        {
-            DebugLog.JoppaLog("No HeroList");
-            return;
-        }
-        
-        ClearCharacterPortraits();
-
-        for (int i = 0; i < heroList.Count; i++)
-        {
-            CharacterData c = heroList[i];
-            PortraitButton pb = CreateCharacterPortrait(CombatManager._instance.GetCharacterDataDict()[c], _portraitSlots[i]);
-            pb.Button.image.color = _inactiveColor;
-            _portraitButtons.Add(pb);
-            _characterPortraits.TryAdd(pb.Character.Data, pb);
-        }
-    }
+    // private void UpdateCharacterPortraits()
+    // {
+    //     GameData gameData = GlobalGameManager.GetInstance().GetGameData();
+    //     List<CharacterData> heroList = gameData.heroDataList;
+    //
+    //     if (heroList == null)
+    //     {
+    //         DebugLog.JoppaLog("No HeroList");
+    //         return;
+    //     }
+    //     
+    //     ClearCharacterPortraits();
+    //
+    //     for (int i = 0; i < heroList.Count; i++)
+    //     {
+    //         CharacterData c = heroList[i];
+    //         PortraitButton pb = CreateCharacterPortrait(CombatManager._instance.GetCharacterDataDict()[c], _portraitSlots[i]);
+    //         pb.Button.image.color = _inactiveColor;
+    //         _portraitButtons.Add(pb);
+    //         _characterPortraits.TryAdd(pb.Character.Data, pb);
+    //     }
+    // }
 
     private void ClearCharacterPortraits()
     {

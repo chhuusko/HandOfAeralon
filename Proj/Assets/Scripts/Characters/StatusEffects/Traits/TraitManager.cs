@@ -33,13 +33,15 @@ public class TraitManager
         return true;
     }
 
-    public void RemoveStatusEffect(StatusEffect statusEffect)
+    public bool RemoveStatusEffect(StatusEffect statusEffect)
     {
-        _statusEffects.Remove(statusEffect);
+        bool removed = _statusEffects.Remove(statusEffect);
         
         CharacterData.CalculateDerivedStats(CharacterData.Faction == Faction.Friendly
             ? LevelManager.GetInstance().statIncrease
             : LevelManager.GetInstance().enemyStatIncrease);
+        
+        return removed;
     }
 
     public int ClearStatusEffects(StatusEffectType type)
@@ -100,6 +102,11 @@ public class TraitManager
         }
 
         return all;
+    }
+
+    public IReadOnlyList<StatusEffect> GetAllOfType(StatusEffectType type)
+    {
+        return (IReadOnlyList<StatusEffect>)_statusEffects.Where(e => e.Data.Type == type);
     }
     
     /// <summary>

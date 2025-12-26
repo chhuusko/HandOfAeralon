@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using FMODUnity;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum Faction { Friendly, Enemy }
@@ -11,6 +12,7 @@ public enum Faction { Friendly, Enemy }
 public class CharacterData
 {
     public event Action OnDerivedStatsChanged;
+    public event Action<int> OnBaseMovementPointsChanged;
     
     [Header("Data")]
     [SerializeField] private string _name;
@@ -211,7 +213,13 @@ public class CharacterData
     }
 
     public void SetDerivedDamage(int damage) => _derivedDamage = Mathf.Max(1, damage);
-    public void SetBaseMovementPoints(int movementPoints) => _baseMovementPoints = Mathf.Max(movementPoints, 1);
+    
+    public void SetBaseMovementPoints(int movementPoints)
+    {
+        _baseMovementPoints = Mathf.Max(movementPoints, 1);
+        OnBaseMovementPointsChanged?.Invoke(_baseMovementPoints);
+    }
+
     public void SetCurrentHealthPoints(int health)
     {
         if (_derivedHealthPoints <= 0)
@@ -249,8 +257,8 @@ public class Character : MonoBehaviour
     public event Action<int, int> OnHealthChanged;
     public event Action<int, GameObject> OnTakeDamage;
     public event Action<int, GameObject> OnWasHealed;
+    public event Action<int, int> OnMovementPointsChanged;
 
-    public const int MOVEMENT_POINTS = 5;
     public const float DEATH_COOLDOWN = 2.5f;
     
     [Header("Current stats")]
@@ -305,7 +313,12 @@ public class Character : MonoBehaviour
         
         // Enemies aren't created via character data, so traits have to be created at start.
         _statusEffectManager.SetTraitManager(_data?.TraitManager);
-        _data?.InitializeTraits();
+
+        if (_data != null)
+        {
+            _data.InitializeTraits();
+            _data.OnBaseMovementPointsChanged += OnBaseMovementPointsChanged;
+        }
 
         if (!TryGetComponent(out _abilityHandler))
         {
@@ -327,32 +340,6 @@ public class Character : MonoBehaviour
 
         var mat = _factionIndicator.material;
         mat.SetColor("_Color", c);
-    }
-
-
-    private void OnDisable()
-    {
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= ResetCanAttack;
-        CombatEventManager.OnEnterCombatStateEndCombat -= ResetAbilities;
-
-        PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
-        if (damagePopupTextManager != null)
-        {
-            damagePopupTextManager.UnBindEventOnTakeDamage(this);
-            damagePopupTextManager.UnBindEventOnWasHealed(this);
-        }
-
-        CombatTooltipManager combatTooltipManager = CombatTooltipManager.GetInstance();
-        if (combatTooltipManager != null)
-        {
-            combatTooltipManager.GetCharacterLayout().UnBindEventEventOnTakeDamage(this);
-        }
-
-        if (_data != null)
-        {
-            _data.OnDerivedStatsChanged -= DerivedStatsChanged; 
-        }
     }
     
     /// <summary>
@@ -442,7 +429,18 @@ public class Character : MonoBehaviour
         _data.SetBaseInitiative(initiative);
         CombatEventManager.InvokeOnCharacterInitiativeChanged();
     }
-    public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
+    
+    public void SetBaseMovementPoints(int movementPoints)
+    {
+        _data.SetBaseMovementPoints(movementPoints);
+        OnMovementPointsChanged?.Invoke(_currentMovementPoints, _data.BaseMovementPoints);
+    }
+
+    private void OnBaseMovementPointsChanged(int newBase)
+    {
+        OnMovementPointsChanged?.Invoke(_currentMovementPoints, _data.BaseMovementPoints);
+    }
+
     public void SetDerivedHealthPoints(int newMax, float hpFactor)
     {
         _data.SetDerivedHealthPoints(hpFactor);
@@ -476,7 +474,6 @@ public class Character : MonoBehaviour
         _currentInitiative = Mathf.Max(initiative, 0);
         CombatEventManager.InvokeOnCharacterInitiativeChanged();
     }
-        
     
     public void IncreaseCurrentInitiative(int amount = 1) => 
         SetCurrentInitiative(_currentInitiative + amount);
@@ -495,12 +492,18 @@ public class Character : MonoBehaviour
         SetCurrentDamage(_currentDamage - amount);
     
     // Movement points.
-    public void SetCurrentMovementPoints(int movementPoints) =>
+    public void SetCurrentMovementPoints(int movementPoints)
+    {
         _currentMovementPoints = Mathf.Max(movementPoints, 0);
-    
-    public void ResetCurrentMovementPoints() =>
+        OnMovementPointsChanged?.Invoke(_currentMovementPoints, _data.BaseMovementPoints);
+    }
+
+    public void ResetCurrentMovementPoints()
+    {
         _currentMovementPoints = GetBaseMovementPoints();
-    
+        OnMovementPointsChanged?.Invoke(_currentMovementPoints, _data.BaseMovementPoints);
+    }
+
     public void IncreaseCurrentMovementPoints(int amount = 1) =>
         SetCurrentMovementPoints(_currentMovementPoints + amount);
     
@@ -783,12 +786,42 @@ public class Character : MonoBehaviour
             yield return null;
         }
     }
+    
+    private void OnDisable()
+    {
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= ResetCanAttack;
+        CombatEventManager.OnEnterCombatStateEndCombat -= ResetAbilities;
+
+        PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
+        if (damagePopupTextManager != null)
+        {
+            damagePopupTextManager.UnBindEventOnTakeDamage(this);
+            damagePopupTextManager.UnBindEventOnWasHealed(this);
+        }
+
+        CombatTooltipManager combatTooltipManager = CombatTooltipManager.GetInstance();
+        if (combatTooltipManager != null)
+        {
+            combatTooltipManager.GetCharacterLayout().UnBindEventEventOnTakeDamage(this);
+        }
+
+        if (_data != null)
+        {
+            _data.OnDerivedStatsChanged -= DerivedStatsChanged; 
+        }
+    }
 
     void OnDestroy()
     {
         if (CharacterFrameManager._instance != null)
         {
             CharacterFrameManager._instance.Unregister(this);
+        }
+        
+        if (_data != null)
+        {
+            _data.OnBaseMovementPointsChanged -= OnBaseMovementPointsChanged;
         }
     }
 }

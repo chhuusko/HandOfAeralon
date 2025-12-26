@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aea5427431fc81d4ba36f7f7ae4cafe5, type: 3}
+  m_Name: Rhythmic Fury_Deprecated
+  m_EditorClassIdentifier: 
+  Name: Rhythmic Fury
+  Icon: {fileID: 21300000, guid: 7e485958255f9c24e8664fd68e2649ff, type: 3}
+  Description: Every non-damaging ability increases the damage of your next Lute
+    Smash by +10% Damage. Resets on end of combat.
+  Type: 0
+  IsPermanent: 1
+  _typeName: RhythmicFury, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Class: 3
+  IsPositive: 1
+  DamageModifier: 0.1

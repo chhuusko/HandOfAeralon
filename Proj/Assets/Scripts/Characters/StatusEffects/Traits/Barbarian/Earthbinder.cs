@@ -9,7 +9,7 @@ public class Earthbinder : Trait
             return true;
         }
         
-        if (statusEffect is not Slowed)
+        if (statusEffect is not Slowed or Weakened)
         {
             return true;
         }

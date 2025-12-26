@@ -17,11 +17,11 @@ MonoBehaviour:
   _range: 0
   _cooldown: 4
   _description: The Sorceress ignites her inner flame for 3 turns, causing all her
-    abilities to gain a +50% chance to apply {burn} for two turns. During this effect,
-    every time she applies {burn}, reduce the {mana} cost of a random {card} in your
-    hand by 1 (once per turn).
+    abilities to gain a +50% chance to apply {burn} for two turns.\n\nDuring this
+    effect, every time she applies {burn}, reduce the {mana} cost of a random {card}
+    in your hand by 1 (once per turn).
   _abilityTag: 4
-  _type: 3
+  _type: 8
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
   _targetType: 2
   _abilityVFXSequence: {fileID: 11400000, guid: d3e22140e0ca4824c94046e107cfe20a,

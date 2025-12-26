@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Bloodrage Spark
   Icon: {fileID: 21300000, guid: 1cd2284b8e1ff3844a24d5ba73353993, type: 3}
-  Description: First time you take damage each combat, gain Empowered for 3 turns
+  Description: First time you take damage each combat, gain Empowered and Fortified
+    for 3 turns
   Type: 3
   IsPermanent: 1
+  IsDispellable: 0
   _typeName: BloodrageSpark, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 0
   IsPositive: 1

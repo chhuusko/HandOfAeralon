@@ -13,23 +13,36 @@ public class ShadowRush : Trait
         {
             return true;
         }
-        
-        AddHaste();
-        
+
+        //AddHaste();
+        AddBuffs();
+
         return true;
     }
 
-    public override void OnStatusEffectRemoved(StatusEffect statusEffect)
+    public override void OnStatusEffectRemovedFromThis(StatusEffect statusEffect)
     {
         if (statusEffect is not Stealth)
         {
             return;
         }
         
-        AddHaste();
+        //AddHaste();
+        AddBuffs();
     }
 
-    private void AddHaste()
+    //private void AddHaste()
+    //{
+    //    var data = Data as IntModifierData;
+
+    //    if (!data)
+    //    {
+    //        return;
+    //    }
+        
+    //    Manager.AddStatusEffect(new Haste(data.Modifier));
+    //}
+    private void AddBuffs()
     {
         var data = Data as IntModifierData;
 
@@ -37,7 +50,9 @@ public class ShadowRush : Trait
         {
             return;
         }
-        
+
         Manager.AddStatusEffect(new Haste(data.Modifier));
+        Manager.AddStatusEffect(new Empowered(data.Modifier));
+
     }
 }

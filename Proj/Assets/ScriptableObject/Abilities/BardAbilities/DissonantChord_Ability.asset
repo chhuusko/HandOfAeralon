@@ -17,9 +17,9 @@ MonoBehaviour:
   _range: 6
   _cooldown: 3
   _description: Emit a discordant note that dispels all buffs from enemies in the
-    area. Draw 1 {card} if at least two buffs are dispelled from enemies.
+    area.\n\nDraw 1 {card} if at least two buffs are dispelled from enemies.
   _abilityTag: 10
-  _type: 4
+  _type: 2
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
   _targetType: 0
   _abilityVFXSequence: {fileID: 11400000, guid: 27a676c7d5aa44e4096c820068d100ec,
@@ -43,3 +43,6 @@ MonoBehaviour:
   _abilityAOEVFXSequence: {fileID: 0}
   _radius: 3
   _enemiesDebuffedTilBonus: 2
+  _damageMultiplier: 0.9
+  _damagePerBuffMultiplier: 0.1
+  _maxDamageMultiplier: 1.4

@@ -16,12 +16,9 @@ public class AssassinsReprieve : Trait
             return;
         }
 
-        var statusEffects = Manager.GetAllStatusEffects();
-        if (statusEffects.Count > 0)
-        {
-            Manager.RemoveStatusEffect(statusEffects[UnityEngine.Random.Range(0, statusEffects.Count)]);
-        }
+        // Remove all debuffs on this character.
+        Manager.ClearStatusEffects(StatusEffectType.Debuff);
         
-        Character.IncreaseCurrentHealthPoints(Mathf.RoundToInt(Character.GetCurrentHealth() / data.Modifier));
+        Character.Heal(Mathf.RoundToInt(Character.GetBaseHealth() / data.Modifier));
     }
 }

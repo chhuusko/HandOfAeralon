@@ -17,10 +17,10 @@ MonoBehaviour:
   _range: 1
   _cooldown: 2
   _description: 'Unleash a burst of fire, dealing {damage} {elemental_damage} to
-    all characters in area. Every character hit has a 50% chance to gain {burn} for
-    2 turns. Gain 1 {mana} if at least two enemies become Burned. '
+    all characters in area.\n\nEvery character hit has a 50% chance to gain {burn}
+    for 2 turns.\n\nGain 1 {mana} if at least two enemies become Burned. '
   _abilityTag: 9
-  _type: 1
+  _type: 2
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
   _targetType: 0
   _abilityVFXSequence: {fileID: 11400000, guid: eb9d8798a82a49042a6d0b06ce91f98f,
@@ -30,6 +30,7 @@ MonoBehaviour:
   _castingAnimationTime: 0
   _castingFXTime: 0.5
   _fromCastToHitTime: 0
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
   <AudioEvent>k__BackingField:
     Guid:
