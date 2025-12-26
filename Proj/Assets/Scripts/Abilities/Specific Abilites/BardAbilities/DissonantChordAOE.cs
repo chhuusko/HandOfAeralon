@@ -113,4 +113,18 @@ public class DissonantChordAOE : RoundAOEAbility
     {
         // Not implemented.
     }
+
+    public override int GetDamage()
+    {
+        float damage = GetCharacterCaster().Data.DerivedDamage * _damageMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
+    }
+
+    public override int GetSecondDamage()
+    {
+        float damage = GetCharacterCaster().Data.DerivedDamage * _maxDamageMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
+    }
 }
