@@ -16,8 +16,10 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
         CombatEventManager.OnAbilityDataCreated += OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat += OnCombatEnded;
+        CombatEventManager.OnStatusEffectAppliedToCharacter += OnStatusEffectApplied;
+        CombatEventManager.OnStatusEffectExpiredOnCharacter += OnStatusEffectRemovedFromAny;
+        
         CardHandManager.onCardUse += OnCardPlayed;
-
         CardHandManager.onTargetCharacter += OnTargetCharacter;
     }
 
@@ -25,19 +27,6 @@ public class StatusEffectManager : MonoBehaviour
     {
         Initialize();
         OnStartCombat();
-    }
-
-    private void OnDisable()
-    {
-        CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
-        CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
-        CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
-        CardHandManager.onCardUse -= OnCardPlayed;
-
-        CardHandManager.onTargetCharacter -= OnTargetCharacter;
-
-        _character.OnTakeDamage -= OnTakeDamage;
     }
     
     private void Initialize()
@@ -109,11 +98,17 @@ public class StatusEffectManager : MonoBehaviour
             return;
         }
         
-        _traitManager.RemoveStatusEffect(statusEffect);
+        bool removed = _traitManager.RemoveStatusEffect(statusEffect);
+
+        if (!removed)
+        {
+            return;
+        }
+        
         statusEffect.Cleanup();
         statusEffect.OnExpire();
         CombatEventManager.InvokeOnStatusEffectExpiredOnCharacter(_character, statusEffect);
-        OnStatusEffectRemoved(statusEffect);
+        OnStatusEffectRemovedFromThis(statusEffect);
     }
 
     public int ClearStatusEffects(StatusEffectType type)
@@ -439,6 +434,14 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
+    private void OnDeath(Character c)
+    {
+        foreach (var trait in _traitManager.GetAllTraits().ToList())
+        {
+            trait.OnDeath(c);
+        }
+    }
+
     private void OnAbilityUsed(AbilityExecutionData abilityData)
     {
         if (!_character)
@@ -469,12 +472,28 @@ public class StatusEffectManager : MonoBehaviour
             trait.BeforeStatusEffectApplied(caster, target, statusEffect);
         }
     }
-
-    private void OnStatusEffectRemoved(StatusEffect statusEffect)
+    
+    private void OnStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
     {
         foreach (var trait in _traitManager.GetAllTraits().ToList())
         {
-            trait.OnStatusEffectRemoved(statusEffect);
+            trait.OnStatusEffectApplied(caster, target, statusEffect);
+        }
+    }
+
+    private void OnStatusEffectRemovedFromThis(StatusEffect statusEffect)
+    {
+        foreach (var trait in _traitManager.GetAllTraits().ToList())
+        {
+            trait.OnStatusEffectRemovedFromThis(statusEffect);
+        }
+    }
+    
+    private void OnStatusEffectRemovedFromAny(Character character, StatusEffect statusEffect)
+    {
+        foreach (var trait in _traitManager.GetAllTraits().ToList())
+        {
+            trait.OnStatusEffectRemovedFromAny(character, statusEffect);
         }
     }
 
@@ -500,5 +519,20 @@ public class StatusEffectManager : MonoBehaviour
         }
         
         return AoE;
+    }
+    
+    private void OnDisable()
+    {
+        CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
+        CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
+        CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
+        CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
+        CombatEventManager.OnStatusEffectExpiredOnCharacter -= OnStatusEffectRemovedFromAny;
+        
+        CardHandManager.onCardUse -= OnCardPlayed;
+        CardHandManager.onTargetCharacter -= OnTargetCharacter;
+
+        _character.OnTakeDamage -= OnTakeDamage;
     }
 }

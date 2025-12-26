@@ -20,7 +20,7 @@ public class ShadowRush : Trait
         return true;
     }
 
-    public override void OnStatusEffectRemoved(StatusEffect statusEffect)
+    public override void OnStatusEffectRemovedFromThis(StatusEffect statusEffect)
     {
         if (statusEffect is not Stealth)
         {
