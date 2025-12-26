@@ -58,14 +58,16 @@ public abstract class Ability : ScriptableObject
         SingleTarget = 1 << 2,
         AOE = 1 << 3
     }
+    [System.Flags]
     public enum Type
     {
-        Physical,
-        Elemental,
-        Heal,
-        Buff,
-        Debuff,
-        Movement
+        None = 0,
+        Physical = 1 << 0,
+        Elemental = 1 << 1,
+        Heal = 1 << 2,
+        Buff = 1 << 3,
+        Debuff = 1 << 4,
+        Movement = 1 << 5
     }
 
     public enum ValidTargetOccupant

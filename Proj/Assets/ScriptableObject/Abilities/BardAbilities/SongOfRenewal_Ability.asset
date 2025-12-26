@@ -19,7 +19,7 @@ MonoBehaviour:
   _description: "Restore 25% of a target ally\u2019s max {health}, and 10% to all
     allies in the area.\\n\\nDraw 1 {card} if the main target was below 50% {health}.  "
   _abilityTag: 10
-  _type: 2
+  _type: 4
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
   _targetType: 0
   _abilityVFXSequence: {fileID: 11400000, guid: 94c3c53ce92a8504cbfa2d5e9df9f706,

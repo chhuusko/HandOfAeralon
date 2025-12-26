@@ -19,7 +19,7 @@ MonoBehaviour:
   _description: Throw knives in a line, dealing {damage} {physical_damage}.\n\nEvery
     character hit has a 60% chance to gain 3 stacks of {poison}.
   _abilityTag: 10
-  _type: 0
+  _type: 1
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
   _targetType: 0
   _abilityVFXSequence: {fileID: 11400000, guid: a4329796338788b43aa982cf62e543bc,

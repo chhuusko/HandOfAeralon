@@ -19,7 +19,7 @@ MonoBehaviour:
   _description: All allies in the target area gain Haste for 2 turns.\n\nGain 1 {mana}
     if at least three allies gain Haste.
   _abilityTag: 10
-  _type: 3
+  _type: 8
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
   _targetType: 0
   _abilityVFXSequence: {fileID: 11400000, guid: b6f92b2c2143f784fb289e57ced8f8ff,
