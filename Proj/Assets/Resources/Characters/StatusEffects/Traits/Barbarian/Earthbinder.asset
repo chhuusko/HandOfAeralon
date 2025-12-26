@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Earthbinder
   Icon: {fileID: 21300000, guid: 2e676e595d6bdba4cb6df6ce73aa20cb, type: 3}
-  Description: Slowed you apply lasts +1 turn
+  Description: Slowed and Weakened you apply lasts +2 turns
   Type: 3
   IsPermanent: 1
+  IsDispellable: 0
   _typeName: Earthbinder, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 0
   IsPositive: 1
-  Modifier: 1
+  Modifier: 2
