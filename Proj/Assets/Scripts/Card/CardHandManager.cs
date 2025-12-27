@@ -23,7 +23,7 @@ public class CardHandManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI _deckText, _discardText;
 
-    [SerializeField] private DeckPreset _deckPreset; /// TEMP DECK
+    [SerializeField] private DeckPreset _deckPreset; 
 
     //sounds
     [SerializeField] private EventReference drawSound, hoverSound, playSound, deckShuffleSound, discardSound;
