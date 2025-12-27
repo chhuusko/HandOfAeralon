@@ -23,14 +23,10 @@ public class PopupText : MonoBehaviour
     }
 
     void Update()
-    {
-        Vector3 camPos = Camera.main.transform.position;
-        camPos.y = transform.position.y; // lock vertical tilt
+    { 
+        transform.rotation = Camera.main.transform.rotation;
 
-        transform.LookAt(camPos);
-        transform.Rotate(0, 180, 0);
-
-        if(_characterTarget != null)
+        if (_characterTarget != null)
         {
             Vector3 characterPos = _characterTarget.transform.position;
             characterPos.y = _fixedYPos;
