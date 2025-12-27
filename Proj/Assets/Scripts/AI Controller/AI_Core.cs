@@ -32,11 +32,6 @@ public class AI_Core : MonoBehaviour
 
     private Character _currentCharacter = null;
 
-    public Faction GetControlledFaction()
-    {
-        return _controlledFaction;
-    }
-
     private void OnEnable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
@@ -79,9 +74,10 @@ public class AI_Core : MonoBehaviour
         AI_Context context = new AI_Context(_currentCharacter);
         List<AI_Action> actions = AI_Searcher.GetInstance().GetPossibleActions(context);
         AI_Action best = AI_Evaluator.GetInstance().Evaluate(context, actions);
+        AI_Executor.GetInstance().PerformAction(context, best);
     }
 
-    private void EndTurn()
+    public void EndTurn()
     {
         //Debug.Log($"AI_Core.cs | {_currentCharacter.name}'s turn ended!");
         _currentCharacter = null;

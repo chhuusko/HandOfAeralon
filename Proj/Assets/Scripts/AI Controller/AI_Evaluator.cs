@@ -65,21 +65,20 @@ public class AI_Evaluator : MonoBehaviour
     {
         if (!actions.Any())
         {
-            //Debug.LogError($"AI_Evaluator.cs | NO ACTIONS FOUND for {context.Self.name}! Defaulting to standing still.");
+            Debug.LogError($"AI_Evaluator.cs | NO ACTIONS FOUND for {context.Self.name}! Defaulting to standing still.");
             return new AI_Action { Movement = context.Self.GetCurrentTileComponent() };
         }
-
-        AI_Action result = new();
 
         foreach (var action in actions)
         {
             float score = 0f;
             score += EvaluateMovement(context, action);
             score += EvaluateAbilityUsage(context, action);
+            PenalizeMovementOnlyActions(actions);
             action.Score = score;
         }
 
-        return result;
+        return SelectAction(context, actions);
     }
 
     private float EvaluateMovement(AI_Context context, AI_Action action)
@@ -144,7 +143,7 @@ public class AI_Evaluator : MonoBehaviour
 
         if (characters == null || !characters.Any())
         {
-            //Debug.LogError($"AI_Evaluator.cs | CAN'T CALCULATE closest character for {context.Self.name}!");
+            Debug.LogError($"AI_Evaluator.cs | CAN'T CALCULATE closest character for {context.Self.name}!");
             return null;
         }
 
@@ -172,6 +171,11 @@ public class AI_Evaluator : MonoBehaviour
     private float EvaluateAbilityUsage(AI_Context context, AI_Action action)
     {
         float result = 0f;
+
+        if (action.Ability == null)
+        {
+            return 0f;
+        }
 
         switch (action.Ability.name)
         {
@@ -928,5 +932,58 @@ public class AI_Evaluator : MonoBehaviour
         }
 
         return result;
+    }
+
+    private void PenalizeMovementOnlyActions(List<AI_Action> actions)
+    {
+        float required = 10f;
+        float penalty = 50f;
+
+        var actionsByTile = actions.GroupBy(a => a.Movement);
+
+        foreach (var group in actionsByTile)
+        {
+            var movementOnly = group
+                .Where(a => a.Ability == null && !float.IsNegativeInfinity(a.Score))
+                .ToList();
+
+            if (!movementOnly.Any())
+                continue;
+
+            float bestAbilityScore = group
+                .Where(a => a.Ability != null)
+                .Select(a => a.Score)
+                .DefaultIfEmpty(float.NegativeInfinity)
+                .Max();
+
+            foreach (var action in movementOnly)
+            {
+                if (bestAbilityScore > action.Score + required)
+                {
+                    action.Score -= penalty;
+                }
+            }
+        }
+    }
+
+    private AI_Action SelectAction(AI_Context context, List<AI_Action> actions)
+    {
+        var topActions = actions
+        .Where(a =>
+        !float.IsNegativeInfinity(a.Score) &&
+        !float.IsNaN(a.Score))
+        .OrderByDescending(a => a.Score)
+        .Take(_topN)
+        .ToList();
+
+        if (topActions.Count == 0)
+        {
+            Debug.LogError($"AI_Evaluator.cs | NO VALID ACTIONS FOUND for {context.Self.name}! Defaulting to standing still.");
+            return new AI_Action { Movement = context.Self.GetCurrentTileComponent() };
+        }
+        else
+        {
+            return topActions[Random.Range(0, topActions.Count)];
+        }
     }
 }
