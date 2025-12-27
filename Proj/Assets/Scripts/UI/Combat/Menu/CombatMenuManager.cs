@@ -58,6 +58,7 @@ public class CombatMenuManager : MonoBehaviour
             DebugLog.CJLogError("GlobalVolume has no Animator Comonent!");
 
         CombatEventManager.OnEnterCombatStateEndCombat += OpenVictoryMenuScreen;
+        CombatEventManager.OnEnterCombatStatePlaceCharacter += PostProcessingOFF;
 
     }
 
@@ -65,6 +66,7 @@ public class CombatMenuManager : MonoBehaviour
     private void OnDisable()
     {
         CombatEventManager.OnEnterCombatStateEndCombat -= OpenVictoryMenuScreen;
+        CombatEventManager.OnEnterCombatStatePlaceCharacter -= PostProcessingOFF;
     }
 
     private void Update()
@@ -212,10 +214,7 @@ public class CombatMenuManager : MonoBehaviour
 
     private void TurnOFFPostProcessingCombatCanvases()
     {
-        _uacCardHUDCameraData.renderPostProcessing     = true;
-        _uacCombatHUDCameraData.renderPostProcessing   = true;
-        _uacTooltipHUDCameraData.renderPostProcessing  = true;
-        _uacCutsceneHUDCameraData.renderPostProcessing = true;
+        PostProcessingON();
 
         _combatHUDCanvasGroup.interactable     = false;
         _combatTooltipCanvasGroup.interactable = false;
@@ -225,15 +224,28 @@ public class CombatMenuManager : MonoBehaviour
 
     private void TurnONPostProcessingCombatCanvases()
     {
-        _uacCardHUDCameraData.renderPostProcessing     = false;
-        _uacCombatHUDCameraData.renderPostProcessing   = false;
-        _uacTooltipHUDCameraData.renderPostProcessing  = false;
-        _uacCutsceneHUDCameraData.renderPostProcessing = false;
+        PostProcessingOFF();
 
         _combatHUDCanvasGroup.interactable     = true;
         _combatTooltipCanvasGroup.interactable = true;
         _combatCardCanvasGroup.interactable    = true;
         Time.timeScale = 1f;
+    }
+
+    private void PostProcessingON()
+    {
+        _uacCardHUDCameraData.renderPostProcessing     = true;
+        _uacCombatHUDCameraData.renderPostProcessing   = true;
+        _uacTooltipHUDCameraData.renderPostProcessing  = true;
+        _uacCutsceneHUDCameraData.renderPostProcessing = true;
+    }
+
+    private void PostProcessingOFF()
+    {
+        _uacCardHUDCameraData.renderPostProcessing     = false;
+        _uacCombatHUDCameraData.renderPostProcessing   = false;
+        _uacTooltipHUDCameraData.renderPostProcessing  = false;
+        _uacCutsceneHUDCameraData.renderPostProcessing = false;
     }
 
     private void ShowCanvases()
