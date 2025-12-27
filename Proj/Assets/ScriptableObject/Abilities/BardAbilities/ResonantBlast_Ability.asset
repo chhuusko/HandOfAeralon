@@ -24,13 +24,14 @@ MonoBehaviour:
   _type: 6
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
   _targetType: 0
-  _abilityVFXSequence: {fileID: 0}
+  _abilityVFXSequence: {fileID: 11400000, guid: bf1271d579334c84c82d3bbb7840b7b6,
+    type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
   _castingAnimationTime: 0
   _castingFXTime: 0
   _fromCastToHitTime: 0
-  _impactVFXTime: 0
+  _impactVFXTime: 2.2
   _castingRotationTime: 0.3
   <AudioEvent>k__BackingField:
     Guid:
