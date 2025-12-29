@@ -16,8 +16,9 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: e7d2c4ccaf4933b47b734c7e029b2498, type: 3}
   _range: 1
   _cooldown: 2
-  _description: Throw knives in a line, dealing {damage} {physical_damage}.\n\nEvery
-    character hit has a 60% chance to gain 3 stacks of {poison}.
+  _description: Jump and throw knives in a line, dealing {damage} {physical_damage},
+    scaling with amount of cards in hand.\n\nALL character's hit have a 60% chance
+    to gain 3 stacks of {poison}.
   _abilityTag: 10
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}

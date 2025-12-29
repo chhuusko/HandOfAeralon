@@ -16,8 +16,9 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: abb24042aa496f44288a124f024798e4, type: 3}
   _range: 6
   _cooldown: 3
-  _description: Emit a discordant note that dispels all buffs from enemies in the
-    area.\n\nDraw 1 {card} if at least two buffs are dispelled from enemies.
+  _description: 'Strike a harsh chord, removing all buffs from enemies in the area.\n\nDeal
+    {damage} {elemental_damage}, scaling with amount of buffs removed.\n\nDraw 1
+    {card} if at least two buffs are removed from enemies. '
   _abilityTag: 10
   _type: 2
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}

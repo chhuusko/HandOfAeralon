@@ -16,8 +16,9 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 0c3bb867d3de52f43ae0e7a74de316d0, type: 3}
   _range: 6
   _cooldown: 1
-  _description: "Restore 25% of a target ally\u2019s max {health}, and 10% to all
-    allies in the area.\\n\\nDraw 1 {card} if the main target was below 50% {health}.  "
+  _description: "Play a healing melody, restoring 25% of a target ally\u2019s max
+    {health}, and 10% of each other ally\u2019s max {health} in the area.\\n\\nDraw
+    1 {card} if the main target was below 50% {health}.  "
   _abilityTag: 10
   _type: 4
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
