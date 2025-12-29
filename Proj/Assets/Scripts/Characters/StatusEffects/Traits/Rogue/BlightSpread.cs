@@ -39,8 +39,8 @@ public class BlightSpread : Trait
 
     public override void OnStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
     {
-        // Only poisons applied by this character to enemies count.
-        if (target?.GetFaction() is not Faction.Enemy || caster != Character || statusEffect is not Poison poison)
+        // Only poisons applied by this character to opposing faction counts.
+        if (target?.GetFaction() == caster.GetFaction() || caster != Character || statusEffect is not Poison poison)
         {
             return;
         }

@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31348171085ebe6409a87141119abb83, type: 3}
+  m_Script: {fileID: 11500000, guid: b991492d39e8d2446a0d7666f7170f5a, type: 3}
   m_Name: Unyielding Tremor
   m_EditorClassIdentifier: 
   Name: Unyielding Tremor
-  Icon: {fileID: 21300000, guid: f3de371662c2f1646a610f480aa9c307, type: 3}
+  Icon: {fileID: 21300000, guid: 92408fd0d27db9c4aa413b1ce7994192, type: 3}
   Description: Each enemy Slowed or Stunned by the Barbarian grants 10% Damage Reduction
     for 1 turn (max 50%).
   Type: 3
@@ -23,5 +23,3 @@ MonoBehaviour:
     PublicKeyToken=null
   Class: 0
   IsPositive: 1
-  Cap: 0.5
-  Modifier: 0.1
