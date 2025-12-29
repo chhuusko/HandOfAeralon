@@ -12,8 +12,7 @@ public class ChainReaction : Trait
 
     public override void OnStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
     {
-        if (caster != Character || !target || target.GetFaction() == caster.GetFaction() 
-            || _appliedThisTurn.Contains(target) || statusEffect is not Burn)
+        if (caster != Character || !target || target.GetFaction() == caster.GetFaction() || statusEffect is not Burn)
         {
             return;
         }
@@ -26,7 +25,7 @@ public class ChainReaction : Trait
         
         var tilesInRange = GridExplorer._instance.GetTilesInRange(
             target.GetCurrentTileComponent().gameObject, data.Range, false);
-        List<Character> enemiesInRange = new();
+        List<Character> candidates = new();
 
         foreach (var tile in tilesInRange)
         {
@@ -36,25 +35,30 @@ public class ChainReaction : Trait
                 continue;
             }
 
-            var character = occupant.GetComponent<Character>();
-            if (character.GetFaction() != caster.GetFaction())
+            var candidate = occupant.GetComponent<Character>();
+            if (candidate.GetFaction() != caster.GetFaction() && !_appliedThisTurn.Contains(candidate) &&
+                candidate != target)
             {
-                enemiesInRange.Add(character);
+                candidates.Add(candidate);
             }
         }
 
-        if (enemiesInRange.Count == 0)
+        if (candidates.Count == 0)
         {
+            Debug.Log("No candidates in range.");
             return;
         }
         
         float applicationChance = data.ApplicationChancePercent / 100f;
-        if (UnityEngine.Random.value <= applicationChance)
+        if (UnityEngine.Random.value > applicationChance)
         {
-            var character = enemiesInRange[UnityEngine.Random.Range(0, enemiesInRange.Count)];
-            _appliedThisTurn.Add(character);
-            character.GetStatusEffectManager().
-                AddStatusEffect(new Burn(Character, data.Duration));
+            return;
         }
+        
+        var affected = candidates[UnityEngine.Random.Range(0, candidates.Count)];
+        _appliedThisTurn.Add(affected);
+        affected.GetStatusEffectManager().
+            AddStatusEffect(new Burn(Character, data.Duration));
+        Debug.Log($"Adding burn to {affected.GetFaction()} {affected.GetCharacterClass()}");
     }
 }

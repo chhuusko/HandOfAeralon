@@ -114,16 +114,10 @@ public class TraitManager
     /// </summary>
     public void GenerateTraits(CharacterData character)
     {
-        IReadOnlyList<StatusEffectData> positiveTraits;
-        
-        if (UnityEngine.Random.value >= GlobalGameManager.GetInstance().ClassTraitChance)
-        {
-            positiveTraits = StatusEffectDataRegistry.Instance.GetAllGlobalTraitsOfType(true);
-        }
-        else
-        {
-            positiveTraits = StatusEffectDataRegistry.Instance.GetAllClassTraits(character);
-        }
+        var positiveTraits = 
+            UnityEngine.Random.value <= GlobalGameManager.GetInstance().ClassTraitChancePercent / 100f ? 
+                StatusEffectDataRegistry.Instance.GetAllClassTraits(character) :
+                StatusEffectDataRegistry.Instance.GetAllGlobalTraitsOfType(true);
         
         IReadOnlyList<StatusEffectData> negativeTraits = StatusEffectDataRegistry.Instance.GetAllGlobalTraitsOfType(false);
 

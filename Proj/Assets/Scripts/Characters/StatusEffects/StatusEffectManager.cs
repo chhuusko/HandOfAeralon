@@ -352,7 +352,7 @@ public class StatusEffectManager : MonoBehaviour
         if (UnityEngine.Random.value < finalChance)
         {
             Burn burn = new Burn(_character, duration);
-            target.GetStatusEffectManager().AddStatusEffect(burn);
+            target.GetStatusEffectManager().AddStatusEffect(burn, _character);
             OnBurnApplied(_character);
             return burn;
         }

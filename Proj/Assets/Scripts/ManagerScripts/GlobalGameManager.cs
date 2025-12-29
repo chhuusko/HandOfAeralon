@@ -27,7 +27,7 @@ public class GlobalGameManager : ScriptableObject
     [SerializeField] private DeckPreset _deckPreset;
     [SerializeField] private CharacterPrefabLibrary _characterLibrary;
     [SerializeField] private ClassDatabase _classDatabase;
-    [SerializeField] private float _classTraitChance;
+    [SerializeField, Range(0, 100)] private float classTraitChancePercent;
     private static GlobalGameManager _instance;
     private GameData _currentGame;
     [SerializeField] private int startCoins = 100;
@@ -36,7 +36,7 @@ public class GlobalGameManager : ScriptableObject
 
 
     [SerializeField] private bool startWithFullParty;
-    public float ClassTraitChance => _classTraitChance;
+    public float ClassTraitChancePercent => classTraitChancePercent;
     public static GlobalGameManager GetInstance()
     {
         if (_instance == null)
