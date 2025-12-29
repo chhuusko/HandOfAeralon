@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Unity.Burst.Intrinsics;
 using UnityEngine;
-using static UnityEditor.Rendering.FilterWindow;
 
 [CreateAssetMenu(fileName = "DissonantChord_Ability", menuName = "Scriptable Objects/Abilities/Bard/Dissonant Chord")]
 
@@ -18,7 +16,7 @@ public class DissonantChordAOE : RoundAOEAbility
     // Description
 
     // Remove all buffs from enemies in the area.
-    // Deal((90% + (10% × amount of buffs removed) (up to 140%) × Damage) elemental damage.
+    // Deal((90% + (10% ï¿½ amount of buffs removed) (up to 140%) ï¿½ Damage) elemental damage.
     // Draw 1 card if at least two buffs are removed from enemies.
 
 
