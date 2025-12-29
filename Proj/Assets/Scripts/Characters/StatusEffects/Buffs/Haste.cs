@@ -15,7 +15,7 @@ public class Haste : StatusEffect
             return;
         }
         
-        Character.Data.SetBaseMovementPoints(Character.GetBaseMovementPoints() + data.MovementPoints);
+        Character.Data.IncreaseBaseMovementPoints(data.MovementPoints);
         Character.SetBaseInitiative(Character.GetBaseInitiative() + data.Initiative);
         Character.IncreaseCurrentMovementPoints(data.MovementPoints);
         Character.IncreaseCurrentInitiative(data.Initiative);
@@ -30,7 +30,7 @@ public class Haste : StatusEffect
             return;
         }
         
-        Character.Data.SetBaseMovementPoints(Character.GetBaseMovementPoints() - data.MovementPoints);
+        Character.Data.DecreaseBaseMovementPoints(data.MovementPoints);
         Character.SetBaseInitiative(Character.GetBaseInitiative() - data.Initiative);
         Character.DecreaseCurrentMovementPoints(data.MovementPoints);
         Character.DecreaseCurrentInitiative(data.Initiative);

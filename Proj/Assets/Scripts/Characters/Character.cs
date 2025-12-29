@@ -219,6 +219,18 @@ public class CharacterData
         _baseMovementPoints = Mathf.Max(movementPoints, 1);
         OnBaseMovementPointsChanged?.Invoke(_baseMovementPoints);
     }
+    
+    public void IncreaseBaseMovementPoints(int movementPoints = 1)
+    {
+        _baseMovementPoints = Math.Max(_baseMovementPoints + movementPoints, 1);
+        OnBaseMovementPointsChanged?.Invoke(_baseMovementPoints);
+    }
+    
+    public void DecreaseBaseMovementPoints(int movementPoints = 1)
+    {
+        _baseMovementPoints = Math.Max(_baseMovementPoints - movementPoints, 1);
+        OnBaseMovementPointsChanged?.Invoke(_baseMovementPoints);
+    }
 
     public void SetCurrentHealthPoints(int health)
     {

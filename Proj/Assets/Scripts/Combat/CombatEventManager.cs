@@ -14,7 +14,7 @@ public static class CombatEventManager
     public static event Action OnEnterCombatStateIntroCinematic;
     public static event Action OnEnterCombatStatePlaceCharacter;
     public static event Action<Character> OnEnterCombatStateTakeTurn;
-    public static event Action OnEnterCombatStateEndTurn;
+    public static event Action<Character> OnEnterCombatStateEndTurn;
     public static event Action<bool> OnEnterCombatStateEndCombat;
 
     // Exit Combat States
@@ -67,8 +67,8 @@ public static class CombatEventManager
     public static void InvokeEnterCombatStateTakeTurn(Character activeCharacter)
         => OnEnterCombatStateTakeTurn?.Invoke(activeCharacter);
 
-    public static void InvokeEnterCombatStateEndTurn()
-        => OnEnterCombatStateEndTurn?.Invoke();
+    public static void InvokeEnterCombatStateEndTurn(Character activeCharacter)
+        => OnEnterCombatStateEndTurn?.Invoke(activeCharacter);
     public static void InvokeEnterCombatStateEndCombat(bool playerWon)
         => OnEnterCombatStateEndCombat?.Invoke(playerWon);
 

@@ -14,6 +14,7 @@ public class StatusEffectManager : MonoBehaviour
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
+        CombatEventManager.OnEnterCombatStateEndTurn += OnTurnEnd;
         CombatEventManager.OnAbilityDataCreated += OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat += OnCombatEnded;
         CombatEventManager.OnStatusEffectAppliedToCharacter += OnStatusEffectApplied;
@@ -195,9 +196,9 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    private void OnTurnEnd()
+    private void OnTurnEnd(Character c)
     {
-        if (!_character)
+        if (!_character || c != _character)
         {
             return;
         } 
@@ -526,6 +527,7 @@ public class StatusEffectManager : MonoBehaviour
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
+        CombatEventManager.OnEnterCombatStateEndTurn -= OnTurnEnd;
         CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
         CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
