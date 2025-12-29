@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7ed90c5971ae2c4586c9763da266d68, type: 3}
+  m_Name: Chain Reaction
+  m_EditorClassIdentifier: 
+  Name: Chain Reaction
+  Icon: {fileID: 21300000, guid: 2c5399c548c1a014ba5d6c839b834db9, type: 3}
+  Description: When you apply Burn to an enemy, there is a 50% chance to apply Burn
+    for 1 turn to a random enemy within 2 tiles.
+  Type: 3
+  IsPermanent: 1
+  IsDispellable: 0
+  _typeName: Burn, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Class: 1
+  IsPositive: 1
+  applicationChancePercent: 50
+  range: 2
+  duration: 1
