@@ -4,7 +4,13 @@ public class EchoesOfRestoration : Trait
 {
     private float _healModifier = 1f;
     private bool _shouldReset;
-    
+
+    public override void ResetCombatState()
+    {
+        _healModifier = 1f;
+        _shouldReset = false;
+    }
+
     public override void OnAbilityUsed(AbilityExecutionData abilityData)
     {
         if (abilityData.Ability is not ResonantBlastAOE)

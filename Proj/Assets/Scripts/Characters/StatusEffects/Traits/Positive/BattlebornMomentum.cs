@@ -5,10 +5,10 @@ public class BattlebornMomentum : Trait
     private int _abilitiesUsed;
     private bool _effectApplied;
 
-    public override void OnCombatStarted()
+    public override void ResetCombatState()
     {
-        _effectApplied = false;
         _abilitiesUsed = 0;
+        _effectApplied = false;
     }
 
     public override void OnAbilityUsed(AbilityExecutionData abilityData)

@@ -4,6 +4,11 @@ public class ManaConduction : Trait
 {
     private int _manaUsed;
 
+    public override void ResetCombatState()
+    {
+        _manaUsed = 0;
+    }
+
     public override void OnTurnStart()
     {
         _manaUsed = 0;

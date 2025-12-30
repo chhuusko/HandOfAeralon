@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private GameObject _combatLogEntryPrefab;
     [SerializeField] private GameObject _combatLogPanel;
     [SerializeField] private GameObject _combatLogScrollbar;
     [SerializeField] private GameObject _combatLogButton;
@@ -17,6 +16,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private ScrollRect _combatLogScrollRect;
     
     [Header("Prefabs")]
+    [SerializeField] private GameObject _combatLogEntryPrefab;
     [SerializeField] private CombatLogEntry _abilityEntryPrefab;
     [SerializeField] private CombatLogEntry _characterDeathEntryPrefab;
     [SerializeField] private CombatLogEntry _cardUsedLogEntryPrefab;
@@ -33,6 +33,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         CombatEventManager.OnCharacterDeath += AddCombatLogEntry;
         CardHandManager.onCardUse += AddCombatLogEntry;
         CardHandManager.onCardTargetCharacter += AddCombatLogEntry;
+        LinkHandlerForTMPText.OnClickOnLink += SelectCharacter;
     }
 
     public void SetCombatLogActive()
@@ -141,6 +142,20 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         // Set scroll to bottom.
         _combatLogScrollRect.verticalNormalizedPosition = 0;
     }
+
+    private void SelectCharacter(string keyword)
+    {
+        int id = int.Parse(keyword);
+        Debug.Log($"Keyword: {keyword}, ID: {id}");
+        foreach (var character in CombatGrid._instance.GetAllCharacterScripts())
+        {
+            if (character.CharacterID == id)
+            {
+                Debug.Log("Selecting character");
+                Selector._instance.SelectCharacterFromUI(character);
+            }
+        }
+    }
     
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -159,5 +174,6 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         CombatEventManager.OnCharacterDeath -= AddCombatLogEntry;
         CardHandManager.onCardUse -= AddCombatLogEntry;
         CardHandManager.onCardTargetCharacter -= AddCombatLogEntry;
+        LinkHandlerForTMPText.OnClickOnLink -= SelectCharacter;
     }
 }

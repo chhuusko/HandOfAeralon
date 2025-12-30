@@ -4,7 +4,12 @@ using UnityEngine;
 public class BlightSpread : Trait
 {
     private Dictionary<Character, int> _poisonDurations = new();
-    
+
+    public override void ResetCombatState()
+    {
+        _poisonDurations.Clear();
+    }
+
     // Applies poison to a new enemy if an enemy poisoned by this character dies.
     public override void OnDeath(Character c)
     {

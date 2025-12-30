@@ -4,7 +4,7 @@ public class BloodrageSpark : Trait
 {
     private bool _effectApplied;
 
-    public override void OnCombatStarted()
+    public override void ResetCombatState()
     {
         _effectApplied = false;
     }
@@ -26,6 +26,5 @@ public class BloodrageSpark : Trait
         _effectApplied = true;
         Manager.AddStatusEffect(new Empowered(data.Modifier));
         Manager.AddStatusEffect(new Fortified(data.Modifier));
-
     }
 }

@@ -5,6 +5,12 @@ public class WarpathHustle : Trait
     private int _enemiesDamaged;
     private int _originalMovementPoints;
     private float _totalDamageModifier;
+    
+    public override void ResetCombatState()
+    {
+        // Reset for next combat.
+        _enemiesDamaged = 0;
+    }
 
     public override void OnTurnStart()
     {
@@ -47,11 +53,5 @@ public class WarpathHustle : Trait
     public override void ModifyOutgoingDamage(ref float damage, Ability ability)
     {
         damage *= _totalDamageModifier;
-    }
-
-    public override void OnCombatEnded()
-    {
-        // Reset for next combat.
-        _enemiesDamaged = 0;
     }
 }

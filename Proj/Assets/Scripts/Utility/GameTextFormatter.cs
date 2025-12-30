@@ -11,7 +11,7 @@ public static class GameTextFormatter
         }
         
         Color color = ColorDatabase.Instance.GetCharacterColor(character);
-        string name = character.Data.Name;
+        string name = $"<link=\"{character.CharacterID}\">{character.Data.Name}</link>";
         
         return TextMarkupExtensions.Colorize(name, color);
     }
@@ -25,8 +25,8 @@ public static class GameTextFormatter
         }
         
         Color color = ColorDatabase.Instance.GetCharacterColor(character);
-        string factionName = character.GetFaction().ToString();
-        string className = character.GetCharacterClass().ToString();
+        string factionName = $"<link=\"{character.CharacterID}\">{character.GetFaction().ToString()}</link>";
+        string className = $"<link=\"{character.CharacterID}\">{character.GetCharacterClass().ToString()}</link>";
         
         return TextMarkupExtensions.Colorize($"{factionName} {className}", color);
     }
