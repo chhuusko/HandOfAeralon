@@ -3,12 +3,11 @@ using UnityEngine;
 
 public class CharacterNameGenerator
 {
-    private static Dictionary<ClassData, List<string>> _availableNamesPerClass = new();
-    private static bool _isInitialized;
+    private static Dictionary<ClassData, List<string>> _allNamesPerClass = new();
 
     private static void Initialize()
     {
-        _availableNamesPerClass.Clear();
+        _allNamesPerClass.Clear();
         
         var classDatabase = Resources.Load<ClassDatabase>("Characters/ClassDatabase");
 
@@ -19,41 +18,67 @@ public class CharacterNameGenerator
         
         foreach (var classData in classDatabase.Classes)
         {
-            _availableNamesPerClass[classData] = new List<string>(classData.availableNames);
+            _allNamesPerClass[classData] = new List<string>(classData.availableNames);
         }
-
-        _isInitialized = true;
     }
     
-    public static string GenerateName(ClassData classData)
+    // public static string GenerateName(ClassData classData)
+    // {
+    //     if (!classData)
+    //     {
+    //         return null;
+    //     }
+    //
+    //     if (!_isInitialized)
+    //     {
+    //         Initialize();
+    //     }
+    //     
+    //     if (!_availableNamesPerClass.ContainsKey(classData) || _availableNamesPerClass[classData].Count == 0)
+    //     {
+    //         // Resets all names for this class if none are left.
+    //         _availableNamesPerClass[classData] = new List<string>(classData.availableNames);
+    //     }
+    //     
+    //     var names = _availableNamesPerClass[classData];
+    //     if (names.Count == 0)
+    //     {
+    //         Debug.LogError("No names available");
+    //         return "NoName";
+    //     }
+    //     
+    //     int index = UnityEngine.Random.Range(0, _availableNamesPerClass[classData].Count);
+    //     string name = names[index];
+    //     _availableNamesPerClass[classData].RemoveAt(index);
+    //     
+    //     return name;
+    // }
+
+    public static string GenerateName(ClassData classData, HashSet<string> reservedNames)
     {
         if (!classData)
         {
+            Debug.LogWarning("No class data found");
             return null;
         }
 
-        if (!_isInitialized)
+        if (!_allNamesPerClass.ContainsKey(classData))
         {
             Initialize();
         }
         
-        if (!_availableNamesPerClass.ContainsKey(classData) || _availableNamesPerClass[classData].Count == 0)
+        var allNames = _allNamesPerClass[classData];
+        
+        var availableNames = allNames.FindAll(
+            name => !reservedNames.Contains(name));
+
+        if (availableNames.Count == 0)
         {
-            // Resets all names for this class if none are left.
-            _availableNamesPerClass[classData] = new List<string>(classData.availableNames);
+            Debug.LogWarning("No available names found");
+            availableNames = new List<string>(allNames);
         }
         
-        var names = _availableNamesPerClass[classData];
-        if (names.Count == 0)
-        {
-            Debug.LogError("No names available");
-            return "NoName";
-        }
-        
-        int index = UnityEngine.Random.Range(0, _availableNamesPerClass[classData].Count);
-        string name = names[index];
-        _availableNamesPerClass[classData].RemoveAt(index);
-        
-        return name;
+        int index = UnityEngine.Random.Range(0, availableNames.Count);
+        return availableNames[index];
     }
 }

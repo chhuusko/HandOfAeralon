@@ -2,6 +2,7 @@ using FMODUnity;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -96,6 +97,10 @@ public class Shop : MonoBehaviour
 
     private void LoadBuyCharacter()
     {
+        // Get already used names.
+        HashSet<string> usedNames = new HashSet<string>(
+            GlobalGameManager.GetInstance().GetGameData().heroDataList.Select(h => h.Name));
+        
         foreach (Transform t in _purchasCharacterPos)
         {
             GameObject newCharacterObject = Instantiate(_purchaseCharacterPrefab, t);
@@ -104,6 +109,10 @@ public class Shop : MonoBehaviour
             newCharacter.SetCurrentHealthPoints(newCharacter.DerivedHealthPoints);
             newCharacterObject.GetComponent<BuyableCharacter>().SetCharacter(newCharacter);
             _buyableItemInScene.Add(newCharacterObject);
+            
+            string name = CharacterNameGenerator.GenerateName(newCharacter.ClassData, usedNames);
+            newCharacter.SetName(name);
+            usedNames.Add(name);
         }
     }
     public void LoadBuyCard()

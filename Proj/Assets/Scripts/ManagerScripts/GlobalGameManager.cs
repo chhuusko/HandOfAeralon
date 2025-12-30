@@ -144,9 +144,16 @@ public class GlobalGameManager : ScriptableObject
                 new CharacterData(_classDatabase.Classes[(int)CharacterClass.Barbarian], Faction.Friendly, true)
             };
         }
-
-
-            _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
+        
+        HashSet<string> usedNames = new HashSet<string>();
+        foreach (var character in _currentGame.heroDataList)
+        {
+            string name = CharacterNameGenerator.GenerateName(character.ClassData, usedNames);
+            usedNames.Add(name);
+            character.SetName(name);
+        }
+        
+        _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
         _currentGame.coins = startCoins;
         _currentGame.reapersLedgerKills = 0;
     }
