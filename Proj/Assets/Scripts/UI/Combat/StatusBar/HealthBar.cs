@@ -4,9 +4,10 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    [SerializeField] private Slider _slider;
-    [SerializeField] private Slider _easeSlider;
-    [SerializeField] private float _easeSpeed = 0.001f;
+    [SerializeField] private Slider _easeHealthSlider;
+    [SerializeField] private Slider _previewHealthSlider;
+    [SerializeField] private Slider _mainHealthslider;
+    [SerializeField] private float _easeSpeed = 1.5f;
 
 
     private Character _character;
@@ -20,11 +21,11 @@ public class HealthBar : MonoBehaviour
     public void Bind(Character c)
     {
         _character = c;
-        _slider.maxValue = c.GetMaxHealth();
-        _easeSlider.maxValue = c.GetMaxHealth();
+        _mainHealthslider.maxValue = c.GetMaxHealth();
+        _easeHealthSlider.maxValue = c.GetMaxHealth();
 
-        _slider.value = c.GetCurrentHealth();
-        _easeSlider.value = c.GetCurrentHealth();
+        _mainHealthslider.value = c.GetCurrentHealth();
+        _easeHealthSlider.value = c.GetCurrentHealth();
         c.OnHealthChanged += HandleHealthChanged;
     }
 
@@ -38,10 +39,10 @@ public class HealthBar : MonoBehaviour
 
     private void HandleHealthChanged(int currentHp, int maxHp)
     {
-        _slider.maxValue = maxHp;
-        _easeSlider.maxValue = maxHp;
+        _mainHealthslider.maxValue = maxHp;
+        _easeHealthSlider.maxValue = maxHp;
 
-        _slider.value = currentHp;
+        _mainHealthslider.value = currentHp;
 
         if (_easeRoutine != null)
             StopCoroutine(_easeRoutine);
@@ -51,16 +52,16 @@ public class HealthBar : MonoBehaviour
 
     private IEnumerator EaseHealth()
     {
-        while (!Mathf.Approximately(_easeSlider.value, _slider.value))
+        while (!Mathf.Approximately(_easeHealthSlider.value, _mainHealthslider.value))
         {
-            _easeSlider.value = Mathf.Lerp(
-                _easeSlider.value,
-                _slider.value,
+            _easeHealthSlider.value = Mathf.Lerp(
+                _easeHealthSlider.value,
+                _mainHealthslider.value,
                 Time.deltaTime * _easeSpeed
             );
             yield return null;
         }
 
-        _easeSlider.value = _slider.value;
+        _easeHealthSlider.value = _mainHealthslider.value;
     }
 }
