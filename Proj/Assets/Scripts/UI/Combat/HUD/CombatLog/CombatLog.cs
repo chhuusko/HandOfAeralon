@@ -146,12 +146,10 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private void SelectCharacter(string keyword)
     {
         int id = int.Parse(keyword);
-        Debug.Log($"Keyword: {keyword}, ID: {id}");
         foreach (var character in CombatGrid._instance.GetAllCharacterScripts())
         {
             if (character.CharacterID == id)
             {
-                Debug.Log("Selecting character");
                 Selector._instance.SelectCharacterFromUI(character);
             }
         }
