@@ -11,7 +11,7 @@ public static class GameTextFormatter
         }
         
         Color color = ColorDatabase.Instance.GetCharacterColor(character);
-        string name = $"<link=\"{character.CharacterID}\">{character.Data.Name}</link>";
+        string name = $"<link=\"{character.CharacterID}\"><u>{character.Data.Name}</link></u>";
         
         return TextMarkupExtensions.Colorize(name, color);
     }
@@ -25,10 +25,11 @@ public static class GameTextFormatter
         }
         
         Color color = ColorDatabase.Instance.GetCharacterColor(character);
-        string factionName = $"<link=\"{character.CharacterID}\">{character.GetFaction().ToString()}</link>";
-        string className = $"<link=\"{character.CharacterID}\">{character.GetCharacterClass().ToString()}</link>";
+        string factionName = $"{character.GetFaction().ToString()}";
+        string className = $"{character.GetCharacterClass().ToString()}";
         
-        return TextMarkupExtensions.Colorize($"{factionName} {className}", color);
+        return TextMarkupExtensions.Colorize(
+            $"<link=\"{character.CharacterID}\"><u>{factionName} {className}</link></u>", color);
     }
 
     public static string StatusEffectColoredLabel(StatusEffect statusEffect)
