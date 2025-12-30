@@ -152,24 +152,44 @@ public class CombatUI : MonoBehaviour
 
     private void EnableEndTurnButtonBorder(Character character, bool isMoving)
     {
-        // Check if character can still act.
-        if (character.GetMovementPoints() != 0 || character.CanUseAbility)
-        {
-            return;
-        }
-        
-        SetEndTurnButtonBorder(true);
+        EnableEndTurnButtonBorder(character);
     }
     
     private void EnableEndTurnButtonBorder(AbilityExecutionData data)
     {
-        // Check if character can still act.
-        if (data.Caster?.GetMovementPoints() != 0)
+        // // Check if character can still act.
+        // if (!data.Caster || data.Caster.GetFaction() == Faction.Enemy || data.Caster.CanMove || data.Caster.CanUseAbility)
+        // {
+        //     return;
+        // }
+        //
+        // SetEndTurnButtonBorder(true);
+
+        if (!data.Caster)
         {
             return;
         }
         
-        SetEndTurnButtonBorder(true);
+        EnableEndTurnButtonBorder(data.Caster);
+    }
+
+    private void EnableEndTurnButtonBorder(Character character)
+    {
+        // Check if character can still act.
+        if (character.GetFaction() == Faction.Enemy || character.CanUseAbility)
+        {
+            return;
+        }
+        
+        // Rogues need to expend all movement points.
+        if (character.GetCharacterClass() == CharacterClass.Rogue && character.GetMovementPoints() == 0)
+        {
+            SetEndTurnButtonBorder(true);
+        }
+        else if (!character.CanMove)
+        {
+            SetEndTurnButtonBorder(true);
+        }
     }
 
     private void DisableEndTurnButtonBorder(Character character)
