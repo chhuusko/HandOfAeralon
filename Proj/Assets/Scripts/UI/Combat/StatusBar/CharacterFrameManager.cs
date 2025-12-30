@@ -21,8 +21,23 @@ public class CharacterFrameManager : MonoBehaviour
             return;
         }
         _instance = this;
+
     }
 
+    public HealthBar GetHealthBarFrom(Character character)
+    {
+        CharacterFrame frame = _characterFrames[character];
+        if (frame == null)
+            return null;
+
+        HealthBar healthBar = frame.GetHealthBar();
+
+        if (healthBar == null)
+            return null;
+
+        return healthBar;
+    }
+        
     public void Register(Character character)
     {
         if(_characterFrames.ContainsKey(character)) return;
