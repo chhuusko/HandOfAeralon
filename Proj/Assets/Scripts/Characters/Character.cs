@@ -272,6 +272,11 @@ public class Character : MonoBehaviour
     public event Action<int, int> OnMovementPointsChanged;
 
     public const float DEATH_COOLDOWN = 2.5f;
+
+    [Header("ID")] 
+    public static int NextID = 1;
+    [SerializeField] private int _characterID;
+    public int CharacterID => _characterID;
     
     [Header("Current stats")]
     [SerializeField] private int _currentInitiative;
@@ -360,6 +365,7 @@ public class Character : MonoBehaviour
     /// <param name="data">The character data to generate from.</param>
     public void Initialize(CharacterData data)
     {
+        _characterID = NextID++;
         _data = data;
         _data.OnDerivedStatsChanged += DerivedStatsChanged; 
         
