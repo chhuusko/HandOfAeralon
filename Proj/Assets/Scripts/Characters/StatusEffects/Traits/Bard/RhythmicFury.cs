@@ -4,7 +4,7 @@ public class RhythmicFury : Trait
 {
     private float _totalDamageIncrease = 1;
 
-    public override void OnCombatStarted()
+    public override void ResetCombatState()
     {
         _totalDamageIncrease = 1;
     }

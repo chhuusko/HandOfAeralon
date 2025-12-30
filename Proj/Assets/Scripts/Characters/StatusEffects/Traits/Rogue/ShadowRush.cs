@@ -27,21 +27,9 @@ public class ShadowRush : Trait
             return;
         }
         
-        //AddHaste();
         AddBuffs();
     }
-
-    //private void AddHaste()
-    //{
-    //    var data = Data as IntModifierData;
-
-    //    if (!data)
-    //    {
-    //        return;
-    //    }
-        
-    //    Manager.AddStatusEffect(new Haste(data.Modifier));
-    //}
+    
     private void AddBuffs()
     {
         var data = Data as IntModifierData;

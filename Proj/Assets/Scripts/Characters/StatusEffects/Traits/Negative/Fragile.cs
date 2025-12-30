@@ -4,7 +4,7 @@ public class Fragile : Trait
 {
     private bool _effectApplied;
 
-    public override void OnCombatStarted()
+    public override void ResetCombatState()
     {
         _effectApplied = false;
     }

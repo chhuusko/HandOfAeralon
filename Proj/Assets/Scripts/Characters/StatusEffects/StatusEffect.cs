@@ -44,7 +44,7 @@ public abstract class StatusEffect
         Manager = manager;
     }
 
-    public void Initialize()
+    public virtual void Initialize()
     {
         // If the status effect is applied out of turn, it should not tick down at start of next turn.
         _skipNextTick = Character != CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();

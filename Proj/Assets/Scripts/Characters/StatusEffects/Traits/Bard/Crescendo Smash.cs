@@ -4,7 +4,7 @@ public class CrescendoSmash : Trait
 {
     private float _totalDamageModifier = 1;
 
-    public override void OnCombatStarted()
+    public override void ResetCombatState()
     {
         _totalDamageModifier = 1;
     }

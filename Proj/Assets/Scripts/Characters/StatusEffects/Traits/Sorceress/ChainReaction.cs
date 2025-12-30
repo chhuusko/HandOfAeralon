@@ -5,6 +5,11 @@ public class ChainReaction : Trait
 {
     private HashSet<Character> _appliedThisTurn = new();
 
+    public override void ResetCombatState()
+    {
+        _appliedThisTurn.Clear();
+    }
+
     public override void OnTurnStart()
     {
         _appliedThisTurn.Clear();
