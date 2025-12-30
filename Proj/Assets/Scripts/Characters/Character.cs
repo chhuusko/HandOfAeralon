@@ -92,6 +92,7 @@ public class CharacterData
             _baseInitiative =  UnityEngine.Random.Range(ClassData.minInitiative, ClassData.maxInitiative + 1);
             _baseDamage = UnityEngine.Random.Range(ClassData.minDamage, ClassData.maxDamage + 1);
             _baseMovementPoints = UnityEngine.Random.Range(ClassData.minMovementPoints, ClassData.maxMovementPoints + 1);
+            _name = CharacterNameGenerator.GenerateName(_classData);
         }
         
         CalculateDerivedStats(1, 1, false);
@@ -100,8 +101,6 @@ public class CharacterData
         
         _abilities = ClassData.abilities;
         _activeAbilities = new List<Ability>(_abilities);
-        
-        _name = _classData.availableNames[UnityEngine.Random.Range(0, _classData.availableNames.Length)];
     }
 
     public void InitializeFromJSON(Faction faction, int baseHP, int baseDamage, int baseInitiative,
