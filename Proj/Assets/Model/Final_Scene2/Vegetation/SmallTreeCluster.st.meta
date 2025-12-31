@@ -1,0 +1,94 @@
+fileFormatVersion: 2
+guid: 3e66fac57b99ebf44ada18c5e26ea3f5
+SpeedTreeImporter:
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BirchBark
+    second: {fileID: 2100000, guid: d8d975d27f64c5c408ab891e0279296a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BranchClusterAtlas
+    second: {fileID: 2100000, guid: b793db91833b2414b8157cc2cebf1a41, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Leaves_Atlas
+    second: {fileID: 2100000, guid: e439b9801793ec5498e5761ece71c136, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SmallTreeCluster_Billboard_LOD3
+    second: {fileID: 2100000, guid: b38cd8bcbfbe3744b8d9949573f91eb9, type: 2}
+  serializedVersion: 7
+  mainColor: {r: 1, g: 1, b: 1, a: 1}
+  hueVariation: {r: 1, g: 0.5, b: 0, a: 0.1}
+  alphaTestRef: 0.33
+  enableHueVariation: 0
+  enableBumpMapping: 1
+  enableSubsurfaceScattering: 1
+  bestWindQuality: 0
+  selectedWindQuality: 0
+  enableShadowCasting: 1
+  enableShadowReceiving: 1
+  enableLightProbes: 1
+  reflectionProbeEnumValue: 1
+  hasBillboard: 1
+  lODSettings:
+  - enableSettingOverride: 0
+    height: 0.5
+    castShadows: 1
+    receiveShadows: 1
+    useLightProbes: 1
+    reflectionProbeUsage: 1
+    enableBump: 1
+    enableHue: 0
+    enableSubsurface: 1
+    windQuality: 0
+  - enableSettingOverride: 0
+    height: 0.25
+    castShadows: 1
+    receiveShadows: 1
+    useLightProbes: 1
+    reflectionProbeUsage: 1
+    enableBump: 1
+    enableHue: 0
+    enableSubsurface: 1
+    windQuality: 0
+  - enableSettingOverride: 0
+    height: 0.125
+    castShadows: 1
+    receiveShadows: 1
+    useLightProbes: 1
+    reflectionProbeUsage: 1
+    enableBump: 1
+    enableHue: 0
+    enableSubsurface: 1
+    windQuality: 0
+  - enableSettingOverride: 1
+    height: 0.01
+    castShadows: 1
+    receiveShadows: 1
+    useLightProbes: 0
+    reflectionProbeUsage: 0
+    enableBump: 1
+    enableHue: 0
+    enableSubsurface: 1
+    windQuality: 0
+  enableSmoothLODTransition: 1
+  animateCrossFading: 1
+  billboardTransitionCrossFadeWidth: 0.25
+  fadeOutWidth: 0.25
+  scaleFactor: 0.3048
+  unitConversionEnumValue: 1
+  motionVectorModeEnumValue: 1
+  generateColliders: 1
+  generateRigidbody: 1
+  materialVersion: 3
+  materialLocation: 1
+  fileIDType: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
