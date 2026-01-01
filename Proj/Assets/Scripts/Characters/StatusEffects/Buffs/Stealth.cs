@@ -39,7 +39,6 @@ public class Stealth : StatusEffect
     // Effect breaks on taking damage.
     public override void ModifyIncomingDamage(ref float damage, Ability ability)
     {
-        Debug.Log("Taking damage");
         ShouldExpire = true;
     }
 
