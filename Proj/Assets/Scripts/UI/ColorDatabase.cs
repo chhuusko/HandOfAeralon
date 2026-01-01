@@ -72,13 +72,18 @@ public class ColorDatabase : ScriptableObject
             Debug.LogError($"{ability} is null");
             return Color.white;
         }
-        
-        return ability.GetAbilityType() switch
+        var type = ability.GetAbilityType();
+
+        if (type.HasFlag(Ability.Type.Elemental))
         {
-            Ability.Type.Elemental => ElementalDamageColor,
-            Ability.Type.Physical => PhysicalDamageColor,
-            Ability.Type.Heal => HealingColor,
-            _ => NonDamagingEffectColor
-        };
+            return ElementalDamageColor;
+        }
+
+        if (type.HasFlag(Ability.Type.Physical))
+        {
+            return PhysicalDamageColor;
+        }
+
+        return type.HasFlag(Ability.Type.Heal) ? HealingColor : NonDamagingEffectColor;
     }
 }

@@ -157,14 +157,6 @@ public class CombatUI : MonoBehaviour
     
     private void EnableEndTurnButtonBorder(AbilityExecutionData data)
     {
-        // // Check if character can still act.
-        // if (!data.Caster || data.Caster.GetFaction() == Faction.Enemy || data.Caster.CanMove || data.Caster.CanUseAbility)
-        // {
-        //     return;
-        // }
-        //
-        // SetEndTurnButtonBorder(true);
-
         if (!data.Caster)
         {
             return;

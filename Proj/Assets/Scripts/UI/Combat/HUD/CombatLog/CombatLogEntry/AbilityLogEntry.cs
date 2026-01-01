@@ -40,18 +40,42 @@ public class AbilityLogEntry : CombatLogEntry
         string abilityName =
             TextMarkupExtensions.Colorize(d.Ability.GetAbilityName(), ColorDatabase.Instance.AbilityColor);
         string damage = TextMarkupExtensions.Colorize(d.Damage.ToString(), damageColor);
+        string heal = TextMarkupExtensions.Colorize(d.Heal.ToString(), ColorDatabase.Instance.HealingColor);
 
         // Check for type of ability.
-        if (d.Ability.GetAbilityType() is Ability.Type.Elemental or Ability.Type.Physical)
+        if (d.Ability.GetAbilityType().HasFlag(Ability.Type.Heal) && (
+                d.Ability.GetAbilityType().HasFlag(Ability.Type.Physical) || 
+                d.Ability.GetAbilityType().HasFlag(Ability.Type.Elemental)))
+        {
+            if (d.Damage == 0)
+            {
+                _text.text = $"{casterName} healed for {heal}";
+            }
+            else
+            {
+                _text.text = $"{casterName} used {abilityName} and dealt " + 
+                             $"{damage} damage to {targetName}";
+            }
+        }
+        else if (d.Ability.GetAbilityType().HasFlag(Ability.Type.Elemental) ||
+                 d.Ability.GetAbilityType().HasFlag(Ability.Type.Physical))
         {
             _text.text = $"{casterName} used {abilityName} and dealt " + 
                          $"{damage} damage to {targetName}";
         }
-        else if (d.Ability.GetAbilityType() is Ability.Type.Heal)
+        else if (d.Ability.GetAbilityType().HasFlag(Ability.Type.Heal))
         {
-            string heal = TextMarkupExtensions.Colorize(d.Heal.ToString(), ColorDatabase.Instance.HealingColor);
-            _text.text = $"{casterName} used {abilityName} and restored " + 
-                         $"{heal} health to {targetName}";
+            if (d.Damage == 0)
+            {
+                _text.text = $"{casterName} used {abilityName} and restored " + 
+                             $"{heal} health to {targetName}";
+            }
+            else
+            {
+                damage = TextMarkupExtensions.Colorize(
+                    d.Damage.ToString(), ColorDatabase.Instance.ElementalDamageColor);
+                _text.text = $"{casterName} took {damage} damage";
+            }
         }
         else
         {
