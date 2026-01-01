@@ -4,10 +4,23 @@ using UnityEngine.UI;
 
 public class AbilityLogEntry : CombatLogEntry
 {
+    private static string GetTargetName(AbilityLogData d)
+    {
+        if (d.Caster == d.Target)
+        {
+            return d.Caster.GetCharacterClass() is CharacterClass.Barbarian or CharacterClass.Rogue ? "himself" :
+                "herself";
+        }
+        else
+        {
+            return d.Target.GetFaction() == Faction.Friendly ?
+                GameTextFormatter.ClassColoredName(d.Target) : GameTextFormatter.FactionColoredLabel(d.Target);
+        }
+    }
+    
     public override void Initialize(CombatLogData data)
     {
         var d = (AbilityLogData)data;
-
         if (d == null)
         {
             return;
@@ -19,33 +32,25 @@ public class AbilityLogEntry : CombatLogEntry
         }
         
         _image.sprite = d.Ability.GetIcon();
-
-        Color damageColor = ColorDatabase.Instance.GetDamageColor(d.Ability);
         
         string casterName = d.Caster.GetFaction() == Faction.Friendly ?
             GameTextFormatter.ClassColoredName(d.Caster) : GameTextFormatter.FactionColoredLabel(d.Caster);
 
-        string targetName;
-        if (d.Caster == d.Target)
-        {
-            targetName = d.Caster.GetCharacterClass() is CharacterClass.Barbarian or CharacterClass.Rogue ? "himself" :
-                "herself";
-        }
-        else
-        {
-            targetName = d.Target.GetFaction() == Faction.Friendly ?
-                GameTextFormatter.ClassColoredName(d.Target) : GameTextFormatter.FactionColoredLabel(d.Target);
-        }
+        string targetName = GetTargetName(d);
         
         string abilityName =
             TextMarkupExtensions.Colorize(d.Ability.GetAbilityName(), ColorDatabase.Instance.AbilityColor);
+        Color damageColor = ColorDatabase.Instance.GetDamageColor(d.Ability);
         string damage = TextMarkupExtensions.Colorize(d.Damage.ToString(), damageColor);
         string heal = TextMarkupExtensions.Colorize(d.Heal.ToString(), ColorDatabase.Instance.HealingColor);
+        
+        var abilityType = d.Ability.GetAbilityType();
+        bool isElemental = abilityType.HasFlag(Ability.Type.Elemental);
+        bool isPhysical = abilityType.HasFlag(Ability.Type.Physical);
+        bool isHeal = abilityType.HasFlag(Ability.Type.Heal);
 
         // Check for type of ability.
-        if (d.Ability.GetAbilityType().HasFlag(Ability.Type.Heal) && (
-                d.Ability.GetAbilityType().HasFlag(Ability.Type.Physical) || 
-                d.Ability.GetAbilityType().HasFlag(Ability.Type.Elemental)))
+        if (isHeal && (isPhysical || isElemental))
         {
             if (d.Damage == 0)
             {
@@ -57,13 +62,12 @@ public class AbilityLogEntry : CombatLogEntry
                              $"{damage} damage to {targetName}";
             }
         }
-        else if (d.Ability.GetAbilityType().HasFlag(Ability.Type.Elemental) ||
-                 d.Ability.GetAbilityType().HasFlag(Ability.Type.Physical))
+        else if (isElemental || isPhysical)
         {
             _text.text = $"{casterName} used {abilityName} and dealt " + 
                          $"{damage} damage to {targetName}";
         }
-        else if (d.Ability.GetAbilityType().HasFlag(Ability.Type.Heal))
+        else if (isHeal)
         {
             if (d.Damage == 0)
             {
