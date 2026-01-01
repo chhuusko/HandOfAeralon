@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class StatusEffectLogEntry : CombatLogEntry
+public class StatusEffectAddedLogEntry : CombatLogEntry
 {
     public override void Initialize(CombatLogData data)
     {
-        var d = (StatusEffectLogData)data;
+        var d = (StatusEffectAddedLogData)data;
 
         if (d?.StatusEffect == null || !d.Target)
         {

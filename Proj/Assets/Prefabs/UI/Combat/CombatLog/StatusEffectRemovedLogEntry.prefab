@@ -87,9 +87,9 @@ GameObject:
   - component: {fileID: 5942684069223303462}
   - component: {fileID: 3690827802514738725}
   - component: {fileID: 869761179923741678}
-  - component: {fileID: -1787938578285379161}
+  - component: {fileID: 3104200863191119633}
   m_Layer: 5
-  m_Name: StatusEffectLogEntry
+  m_Name: StatusEffectRemovedLogEntry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,7 +174,7 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &-1787938578285379161
+--- !u!114 &3104200863191119633
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 515051203510682649}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd30c6c703ab69443be47865bba2d648, type: 3}
+  m_Script: {fileID: 11500000, guid: d8feae4f8f5c2d54cad1505f6f7bc111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _image: {fileID: 3983451707349768076}
@@ -254,7 +254,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Friendly Barbarian gained poison
+  m_text: Friendly Barbarian lost poison
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d0c404f728a77b247bc581c379308fef, type: 2}
   m_sharedMaterial: {fileID: -156547908865965464, guid: d0c404f728a77b247bc581c379308fef,

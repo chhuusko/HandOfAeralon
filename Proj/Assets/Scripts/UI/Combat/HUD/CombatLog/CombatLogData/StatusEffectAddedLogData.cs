@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class StatusEffectLogData : CombatLogData
+public class StatusEffectAddedLogData : CombatLogData
 {
     public StatusEffect StatusEffect;
     public Character Caster;
