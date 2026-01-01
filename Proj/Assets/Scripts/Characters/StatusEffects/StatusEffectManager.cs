@@ -13,7 +13,7 @@ public class StatusEffectManager : MonoBehaviour
     private void OnEnable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
-        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
+        CombatEventManager.OnEnterCombatStateEndTurn += UpdateDuration;
         CombatEventManager.OnEnterCombatStateEndTurn += OnTurnEnd;
         CombatEventManager.OnAbilityDataCreated += OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat += OnCombatEnded;
@@ -193,6 +193,15 @@ public class StatusEffectManager : MonoBehaviour
         foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
         {
             statusEffect.OnTurnStart();
+        }
+        
+        // Removes burns and poisons that have ticked down to 0.
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            if (statusEffect.ShouldExpire)
+            {
+                RemoveStatusEffect(statusEffect, true);
+            }
         }
     }
 
@@ -526,7 +535,7 @@ public class StatusEffectManager : MonoBehaviour
     private void OnDisable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
+        CombatEventManager.OnEnterCombatStateEndTurn -= UpdateDuration;
         CombatEventManager.OnEnterCombatStateEndTurn -= OnTurnEnd;
         CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
