@@ -34,17 +34,5 @@ public class Burn : StatusEffect
             : baseDamage;
 
         Character.TakeDamage(finalDamage);
-        
-        // Ticks at start of turn instead of end.
-        if (!base.TickDuration())
-        {
-            ShouldExpire = true;
-        }
-    }
-    
-    public override bool TickDuration()
-    {
-        // Does nothing.
-        return true;
     }
 }

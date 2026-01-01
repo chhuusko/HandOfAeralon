@@ -13,7 +13,7 @@ public class StatusEffectManager : MonoBehaviour
     private void OnEnable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
-        CombatEventManager.OnEnterCombatStateEndTurn += UpdateDuration;
+        CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
         CombatEventManager.OnEnterCombatStateEndTurn += OnTurnEnd;
         CombatEventManager.OnAbilityDataCreated += OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat += OnCombatEnded;
@@ -535,7 +535,7 @@ public class StatusEffectManager : MonoBehaviour
     private void OnDisable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
-        CombatEventManager.OnEnterCombatStateEndTurn -= UpdateDuration;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
         CombatEventManager.OnEnterCombatStateEndTurn -= OnTurnEnd;
         CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
         CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;

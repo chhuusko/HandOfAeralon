@@ -47,7 +47,7 @@ public abstract class StatusEffect
     public virtual void Initialize()
     {
         // If the status effect is applied out of turn, it should not tick down at start of next turn.
-        // _skipNextTick = Character != CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
+        _skipNextTick = Character != CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
 
         CombatEventManager.OnTryAddStatusEffect += BeforeStatusEffectApplied;
         
@@ -79,7 +79,7 @@ public abstract class StatusEffect
     /// Decrements duration and returns whether status effect is still active.
     /// </summary>
     /// <returns>Whether the status effect is still active.</returns>
-    public virtual bool TickDuration()
+    public bool TickDuration()
     {
         if (Data.IsPermanent)
         {

@@ -22,17 +22,5 @@ public class Poison : StatusEffect
     public override void OnTurnStart()
     {
         Character.TakeDamage(Duration);
-
-        // Ticks at start of turn instead of end.
-        if (!base.TickDuration())
-        {
-            ShouldExpire = true;
-        }
-    }
-
-    public override bool TickDuration()
-    {
-        // Does nothing.
-        return true;
     }
 }

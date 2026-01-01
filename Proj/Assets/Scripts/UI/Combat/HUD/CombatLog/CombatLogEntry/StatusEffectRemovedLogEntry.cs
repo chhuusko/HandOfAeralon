@@ -11,8 +11,6 @@ public class StatusEffectRemovedLogEntry : CombatLogEntry
             return;
         }
         
-        Debug.Log("Initializing");
-
         _image.sprite = d.StatusEffect.Data.Icon;
 
         string statusEffectName = GameTextFormatter.StatusEffectColoredLabel(d.StatusEffect);
