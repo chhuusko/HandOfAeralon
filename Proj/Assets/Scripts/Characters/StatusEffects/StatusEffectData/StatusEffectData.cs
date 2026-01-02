@@ -13,6 +13,7 @@ public class StatusEffectData : ScriptableObject
     public StatusEffectType Type;
     public bool IsPermanent;
     public bool IsDispellable;
+    public bool SkipFirstTick;
 
     [SerializeField, HideInInspector] protected string _typeName;
     
