@@ -22,7 +22,7 @@ public class AI_Executor : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public UnityEvent AIEndTurn { get; private set; } = new();
+    public UnityEvent NewAIEndTurn { get; private set; } = new();
 
     private const float TURN_START_WAIT_TIME = 1f;
     private const float TURN_END_WAIT_TIME = 2.5f;
@@ -36,7 +36,7 @@ public class AI_Executor : MonoBehaviour
     public void EndTurn()
     {
         Debug.Log($"AI_Executor.cs | AI's turn ended!");
-        AIEndTurn.Invoke();
+        NewAIEndTurn.Invoke();
     }
 
     private IEnumerator Run(AI_Context context, AI_Action action)

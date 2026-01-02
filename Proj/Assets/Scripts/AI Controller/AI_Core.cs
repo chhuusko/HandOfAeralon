@@ -59,7 +59,7 @@ public class AI_Core
 
     public UnityEngine.Events.UnityEvent GetAIEndTurnEvent()
     {
-        return _executor.AIEndTurn;
+        return _executor.NewAIEndTurn;
     }
 
     public void OnTurnStart(Character character)
