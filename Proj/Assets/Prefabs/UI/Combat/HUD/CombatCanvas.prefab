@@ -3854,8 +3854,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _portrait: {fileID: 5436997534344647171}
+  _portraitButton: {fileID: 4347582611147732135}
   _friendlyColor: {r: 1, g: 1, b: 1, a: 1}
   _enemyColor: {r: 1, g: 0.43921572, b: 0.43921572, a: 1}
+--- !u!114 &4347582611147732135 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7741533659791628048, guid: e0604acf35576954bb8b49405d849ce8,
+    type: 3}
+  m_PrefabInstance: {fileID: 6285552289650058167}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169187262370474008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff767adec34acc04992cb7ff715404dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5436997534344647171 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2039810613839245748, guid: e0604acf35576954bb8b49405d849ce8,
