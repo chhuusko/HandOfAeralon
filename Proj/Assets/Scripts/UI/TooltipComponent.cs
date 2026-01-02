@@ -1,3 +1,5 @@
+// Joel Larsson Wendt | jola6902
+
 using UnityEngine;
 
 public class TooltipComponent : MonoBehaviour

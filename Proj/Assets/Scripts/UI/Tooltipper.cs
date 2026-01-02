@@ -1,3 +1,5 @@
+// Joel Larsson Wendt | jola6902
+
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

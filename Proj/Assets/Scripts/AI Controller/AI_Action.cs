@@ -1,3 +1,5 @@
+// Joel Larsson Wendt | jola6902
+
 public class AI_Action
 {
     public CombatGridTile Movement;

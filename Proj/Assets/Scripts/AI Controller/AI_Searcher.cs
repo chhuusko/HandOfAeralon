@@ -1,29 +1,9 @@
+// Joel Larsson Wendt | jola6902
+
 using System.Collections.Generic;
-using UnityEngine;
 
-public class AI_Searcher : MonoBehaviour
+public class AI_Searcher
 {
-    // Singleton pattern
-    private static AI_Searcher Instance;
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
-
-    public static AI_Searcher GetInstance()
-    {
-        return Instance;
-    }
-    // End of singleton pattern
-
     private static readonly HashSet<string> _selfCastSet = new()
     {
         "RoarOfTheAncients_Ability",

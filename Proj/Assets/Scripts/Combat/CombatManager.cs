@@ -86,7 +86,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private CombatTurnOrder _combatTurnOrder;
 
     [Header("Combat Turn Order")]
-    [SerializeField] private EnemyAI _enemyAI;
+    private AI_Core _aiCore;
 
     [Header("Abilities")]
     [SerializeField] private List<ClassAbilities> _classAbilities;
@@ -132,6 +132,8 @@ public class CombatManager : MonoBehaviour
 
     void Start()
     {
+        _aiCore = AI_Core.BuildAICore(Faction.Enemy);
+
         _selector = GetComponent<Selector>();
         _selectorOverHead = Instantiate(_selectorOverHeadPrefab, Vector3.zero, Quaternion.identity);
         _selectorOverHead.SetActive(false);
@@ -219,7 +221,7 @@ public class CombatManager : MonoBehaviour
     public GameObject GetSelectorOverHead() { return _selectorOverHead; }
     
     public Selector GetCombatSelector() { return _selector; }
-    public EnemyAI GetEnemyAI() { return _enemyAI; }
+    public AI_Core GetEnemyAI() { return _aiCore; }
     public CombatTurnOrder GetCombatTurnOrder() { return _combatTurnOrder; }
     public Dictionary<CharacterData, Character> GetCharacterDataDict()
     {

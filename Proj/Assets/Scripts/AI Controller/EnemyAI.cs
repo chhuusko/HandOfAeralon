@@ -1,10 +1,15 @@
+// Joel Larsson Wendt | jola6902
+
+using UnityEngine;
+using UnityEngine.Events;
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : MonoBehaviour // ### OLD VERSION (SEE: AI_CORE INSTEAD) ###
 {
     private const int TOP_N_ACTIONS = 3;
     private const float TURN_START_WAIT_TIME = 1f;
@@ -17,7 +22,7 @@ public class EnemyAI : MonoBehaviour
         public CombatGridTile target;
     }
 
-    public UnityEvent AIEndTurn;
+    //public UnityEvent AIEndTurn;
 
     [SerializeField] private Faction _controlledFaction = Faction.Enemy;
     [SerializeField] private DirectedAOEPattern _linePattern, _flamePattern, _housePattern, _trisquarePattern;
@@ -25,6 +30,7 @@ public class EnemyAI : MonoBehaviour
     private List<Character> _allies = new();
     private List<Character> _enemies = new();
 
+    /*
     private void OnEnable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
@@ -34,6 +40,7 @@ public class EnemyAI : MonoBehaviour
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
     }
+    */
 
     private void OnTurnStart(Character character)
     {
@@ -112,12 +119,12 @@ public class EnemyAI : MonoBehaviour
             yield break;
         }
         AIAction chosenAction = SelectAction(scoredActions);
-        /*
-        Debug.LogWarning($"EnemyAI.cs | Move {_character.name} to {chosenAction.movement.GetTileIndex()}," +
-            $" use ability: {(chosenAction.ability != null ? chosenAction.ability.name : "NONE")}," +
-            $" at position: {(chosenAction.target != null ? chosenAction.target.GetTileIndex() : "NONE")}," +
-            $" score: {scoredActions[chosenAction]}!");
-        */
+        
+        //Debug.LogWarning($"EnemyAI.cs | Move {_character.name} to {chosenAction.movement.GetTileIndex()}," +
+        //    $" use ability: {(chosenAction.ability != null ? chosenAction.ability.name : "NONE")}," +
+        //    $" at position: {(chosenAction.target != null ? chosenAction.target.GetTileIndex() : "NONE")}," +
+        //    $" score: {scoredActions[chosenAction]}!");
+        
 
         CharacterMovement movementComponent = null;
         if (!IsDead() && chosenAction.movement != _character.GetCurrentTileComponent() && _character.CanMove &&
@@ -211,17 +218,16 @@ public class EnemyAI : MonoBehaviour
                         sorcModifier = -20f;
                     }
 
-                    /*
-                    int futureDist = GridExplorer._instance.ManhattanDistance(tile.GetTileIndex(), closestEnemy.GetCurrentTileIndex());
+                    
+                    //int futureDist = GridExplorer._instance.ManhattanDistance(tile.GetTileIndex(), closestEnemy.GetCurrentTileIndex());
 
-                    int desiredMin = 5;
-                    int desiredMax = 7;
+                    //int desiredMin = 5;
+                    //int desiredMax = 7;
 
-                    if (futureDist >= desiredMin && futureDist <= desiredMax)
-                    {
-                        moveScore += 50f;
-                    }
-                    */
+                    //if (futureDist >= desiredMin && futureDist <= desiredMax)
+                    //{
+                    //    moveScore += 50f;
+                    //}
                 }
 
                 switch (_character.GetCharacterClass())
@@ -1088,7 +1094,7 @@ public class EnemyAI : MonoBehaviour
         _character = null;
         _allies = new();
         _enemies = new();
-        AIEndTurn.Invoke();
+        //AIEndTurn.Invoke();
     }
 
     private bool IsDead()
