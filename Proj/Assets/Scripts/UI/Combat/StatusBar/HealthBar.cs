@@ -23,9 +23,11 @@ public class HealthBar : MonoBehaviour
         _character = c;
         _mainHealthslider.maxValue = c.GetMaxHealth();
         _easeHealthSlider.maxValue = c.GetMaxHealth();
+        _previewHealthSlider.maxValue = c.GetMaxHealth();
 
         _mainHealthslider.value = c.GetCurrentHealth();
         _easeHealthSlider.value = c.GetCurrentHealth();
+        _previewHealthSlider.value = c.GetCurrentHealth();
         c.OnHealthChanged += HandleHealthChanged;
     }
 
@@ -65,20 +67,32 @@ public class HealthBar : MonoBehaviour
         _easeHealthSlider.value = _mainHealthslider.value;
     }
 
-    public void ShowPreviewDamage(int previewDamage)
+    public void ShowPreviewDamage(int previewHealthDifference)
     {
         if (_character == null) return;
 
-        int currentHp = _character.GetCurrentHealth();
-        int previewHp = Mathf.Max(0, currentHp - previewDamage);
+        int current = _character.GetCurrentHealth();
+        int previewHP = Mathf.Max(0, current + previewHealthDifference);
 
         _previewHealthSlider.gameObject.SetActive(true);
-        _previewHealthSlider.maxValue = _mainHealthslider.maxValue;
-        _previewHealthSlider.value = previewHp;
+        _easeHealthSlider.gameObject.SetActive(false);
+
+        if (previewHealthDifference < 0)
+        {
+            _previewHealthSlider.value = current;   
+            _mainHealthslider.value = previewHP;
+        }
+        else
+        {
+            _previewHealthSlider.value = previewHP;
+        }
     }
 
     public void HidePreview()
     {
         _previewHealthSlider.gameObject.SetActive(false);
+        _easeHealthSlider.gameObject.SetActive(true);
+        _mainHealthslider.value = _character.GetCurrentHealth();
+        _previewHealthSlider.value = _character.GetCurrentHealth();
     }
 }

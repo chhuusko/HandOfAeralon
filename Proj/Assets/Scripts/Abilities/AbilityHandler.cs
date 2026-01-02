@@ -33,6 +33,8 @@ public class AbilityHandler : MonoBehaviour
     /// </summary>
     public bool UseAbility(Ability ability, CombatGridTile targetTile)
     {
+        ClearCharacterPreviews();
+
         // Set caster to get information that might alter ability, like extra AOE range.
         _pendingAbility.SetCharacterCaster(_characterCaster);
 
@@ -199,16 +201,16 @@ public class AbilityHandler : MonoBehaviour
     {
         List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
 
+        bool shouldClearPreview = true;
         if(newEffectedTiles != null)
         {
-            bool shouldClearPreview = false;
+            shouldClearPreview = false;
             foreach(CombatGridTile t in newEffectedTiles)
             {
                 if (!_tilesEffected.Contains(t)) shouldClearPreview = true;
             }
-
-            if(shouldClearPreview) ClearCharacterPreviews();
         }
+        if(shouldClearPreview) ClearCharacterPreviews();
 
         // Reset all tiles
         foreach (CombatGridTile t in _tilesEffected)
@@ -256,7 +258,10 @@ public class AbilityHandler : MonoBehaviour
     private void ClearCharacterPreviews()
     {
         foreach (var c in _previewedCharacters)
+        {
             c.HidePreviewVFX();
+            c.StopPreviewingHealthChange();
+        }
 
         _previewedCharacters.Clear();
     }
