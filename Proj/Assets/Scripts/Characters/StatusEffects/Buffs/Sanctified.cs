@@ -10,6 +10,10 @@ public class Sanctified : StatusEffect
     public override void ModifyIncomingDamage(ref float damage, Ability ability)
     {
         damage = 0f;
+    }
+
+    public override void OnTakeDamage()
+    {
         ShouldExpire = true;
     }
 }
