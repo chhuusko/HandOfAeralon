@@ -22,7 +22,7 @@ public class EnemyAI : MonoBehaviour // ### OLD VERSION (SEE: AI_CORE INSTEAD) #
         public CombatGridTile target;
     }
 
-    //public UnityEvent AIEndTurn;
+    public UnityEvent AIEndTurn;
 
     [SerializeField] private Faction _controlledFaction = Faction.Enemy;
     [SerializeField] private DirectedAOEPattern _linePattern, _flamePattern, _housePattern, _trisquarePattern;
@@ -30,7 +30,6 @@ public class EnemyAI : MonoBehaviour // ### OLD VERSION (SEE: AI_CORE INSTEAD) #
     private List<Character> _allies = new();
     private List<Character> _enemies = new();
 
-    /*
     private void OnEnable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
@@ -40,7 +39,6 @@ public class EnemyAI : MonoBehaviour // ### OLD VERSION (SEE: AI_CORE INSTEAD) #
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
     }
-    */
 
     private void OnTurnStart(Character character)
     {

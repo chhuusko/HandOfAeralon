@@ -244,6 +244,7 @@ public class AI_Evaluator
         int hitCount = 0;
         DirectedAOEPattern.Direction direction = GetDirection(action.Movement, action.Target);
         _housePattern.SetDirection(direction);
+        _housePattern.SetCasterTile(action.Movement);
         List<CombatGridTile> areaOfEffect = _housePattern.CalculateTilesToEffect(action.Target);
 
         foreach (var tile in areaOfEffect)
@@ -284,7 +285,6 @@ public class AI_Evaluator
 
         if (hitCount == 0)
         {
-            Debug.LogError("HIT COUNT == 0 FOR AOE SKILL");
             result = float.NegativeInfinity;
         }
 
@@ -298,6 +298,7 @@ public class AI_Evaluator
         int hitCount = 0;
         DirectedAOEPattern.Direction direction = GetDirection(action.Movement, action.Target);
         _trisquarePattern.SetDirection(direction);
+        _trisquarePattern.SetCasterTile(action.Movement);
         List<CombatGridTile> areaOfEffect = _trisquarePattern.CalculateTilesToEffect(action.Target);
 
         foreach (var tile in areaOfEffect)
@@ -333,7 +334,6 @@ public class AI_Evaluator
 
         if (hitCount == 0)
         {
-            Debug.LogError("HIT COUNT == 0 FOR AOE SKILL");
             result = float.NegativeInfinity;
         }
 
@@ -660,6 +660,7 @@ public class AI_Evaluator
         int hitCount = 0;
         DirectedAOEPattern.Direction direction = GetDirection(action.Movement, action.Target);
         _linePattern.SetDirection(direction);
+        _linePattern.SetCasterTile(action.Movement);
         List<CombatGridTile> areaOfEffect = _linePattern.CalculateTilesToEffect(action.Target);
 
         foreach (var tile in areaOfEffect)
@@ -805,6 +806,7 @@ public class AI_Evaluator
         int hitCount = 0;
         DirectedAOEPattern.Direction direction = GetDirection(action.Movement, action.Target);
         _flamePattern.SetDirection(direction);
+        _flamePattern.SetCasterTile(action.Movement);
         List<CombatGridTile> areaOfEffect = _flamePattern.CalculateTilesToEffect(action.Target);
 
         foreach (var tile in areaOfEffect)
