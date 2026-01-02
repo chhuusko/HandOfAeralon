@@ -22,13 +22,7 @@ public class CombatStateTakeTurn : CombatStateBase
         EnemyAI enemyAI = CombatManager._instance.GetEnemyAI();
         if(enemyAI != null)
         {
-            UnityEvent aiEndTurn = CombatManager._instance.GetEnemyAI().AIEndTurn;
-            if (aiEndTurn == null)
-            {
-                Debug.LogError("AIEndTurnEvent is null!");
-            }
-
-            aiEndTurn.AddListener(EndTurn);
+            enemyAI.AIEndTurn.AddListener(EndTurn);
         }
         
         
@@ -100,13 +94,11 @@ public class CombatStateTakeTurn : CombatStateBase
             Selector._instance.DeselectCharacter();
         }
 
-        UnityEvent aiEndTurn = CombatManager._instance.GetEnemyAI().AIEndTurn;
-        if (aiEndTurn == null)
+        EnemyAI enemyAI = CombatManager._instance.GetEnemyAI();
+        if (enemyAI != null)
         {
-            Debug.LogError("AIEndTurnEvent is null!");
+            enemyAI.AIEndTurn.RemoveListener(EndTurn);
         }
-
-        aiEndTurn.RemoveListener(EndTurn);
     }
 
     public override void Update()
