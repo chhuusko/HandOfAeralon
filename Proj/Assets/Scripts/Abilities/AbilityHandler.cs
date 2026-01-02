@@ -201,16 +201,16 @@ public class AbilityHandler : MonoBehaviour
     {
         List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
 
+        bool shouldClearPreview = true;
         if(newEffectedTiles != null)
         {
-            bool shouldClearPreview = false;
+            shouldClearPreview = false;
             foreach(CombatGridTile t in newEffectedTiles)
             {
                 if (!_tilesEffected.Contains(t)) shouldClearPreview = true;
             }
-
-            if(shouldClearPreview) ClearCharacterPreviews();
         }
+        if(shouldClearPreview) ClearCharacterPreviews();
 
         // Reset all tiles
         foreach (CombatGridTile t in _tilesEffected)
