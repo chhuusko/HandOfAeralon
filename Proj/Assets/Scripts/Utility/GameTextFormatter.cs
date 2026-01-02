@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public static class GameTextFormatter
@@ -56,6 +57,47 @@ public static class GameTextFormatter
         }
         
         return TextMarkupExtensions.Colorize(name, color);
+    }
+
+    public static string ColorizeStatusEffectTooltip(StatusEffect statusEffect)
+    {
+        // var colorDB = ColorDatabase.Instance;
+        // Color abilityColor         = colorDB.AbilityColor;
+        // Color elementalDamageColor = colorDB.ElementalDamageColor;
+        // Color physicalDamageColor  = colorDB.PhysicalDamageColor;
+        // Color nonDamageEffectColor = colorDB.NonDamagingEffectColor;
+        // Color burnColor            = colorDB.BurnColor;
+        // Color poisonColor          = colorDB.PoisonColor;
+        // Color cardColor            = colorDB.CardColor;
+        // Color manaColor            = colorDB.ManaColor;
+        // Color healColor            = colorDB.HealingColor;
+        //
+        // string desc                 = statusEffect.Data.Description;
+        // string damageToken          = "{damage}";
+        // string elementalDamageToken = "{elemental_damage}";
+        // string physicalDamageToken  = "{physical_damage}";
+        // string burnToken            = "{burn}";
+        // string poisonToken          = "{poison}";
+        // string nonDamagingEffectToken =  "{non_damaging}";
+        // string healthToken          = "{health}";
+        // string healToken            = "{heal}";
+        // string manaToken            = "{mana}";
+        // string cardToken            = "{card}";
+        //
+        // ReplaceAll(ref desc, ability);
+        // ReplaceAll(ref desc, elementalDamageToken, TextMarkupExtensions.Colorize("Elemental Damage", elementalDamageColor));
+        // ReplaceAll(ref desc, physicalDamageToken, TextMarkupExtensions.Colorize("Physical Damage", physicalDamageColor));
+        // ReplaceAll(ref desc, burnToken, TextMarkupExtensions.Colorize("Burn", burnColor));
+        // ReplaceAll(ref desc, poisonToken, TextMarkupExtensions.Colorize("Poison", poisonColor));
+        // ReplaceAll(ref desc, healthToken, TextMarkupExtensions.Colorize("Health", healColor));
+        // ReplaceAll(ref desc, manaToken, TextMarkupExtensions.Colorize("Mana", manaColor));
+        // ReplaceAll(ref desc, cardToken, TextMarkupExtensions.Colorize("Card", cardColor));
+        //
+        // return desc;
+        
+        var description = statusEffect.Data.Description;
+        
+        return description;
     }
 
     public static string AbilityColoredLabel(Ability ability)
