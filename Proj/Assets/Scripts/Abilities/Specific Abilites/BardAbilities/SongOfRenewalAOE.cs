@@ -43,14 +43,9 @@ public class SongOfRenewalAOE : RoundAOEAbility
 
         Character caster = casterTile.GetOccupantCharacter();
         if (caster == null) return;
-        caster.ShowPreviewVFX();
-        GetAbilityHandler().AddPreviewedCharacter(caster);
 
-        float damageAmount = caster.Data.DerivedHealthPoints * _maxHealthSelfDamage;
-        damageAmount = caster.GetStatusEffectManager().ModifyOutgoingDamage(damageAmount, this);
-        damageAmount = caster.GetStatusEffectManager().ModifyIncomingDamage(damageAmount, this);
-        int damage = Mathf.RoundToInt(damageAmount);
-        bool died = caster.TakeDamage(Mathf.RoundToInt(damage));
+        int damage = CalculateDamage(caster);
+        bool died = caster.TakeDamage(damage);
 
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, caster, caster, casterTile, damage, 0, null, died);
     }
@@ -87,6 +82,12 @@ public class SongOfRenewalAOE : RoundAOEAbility
             character.ShowPreviewVFX();
             GetAbilityHandler().AddPreviewedCharacter(character);
         }
+
+        Character caster = casterTile.GetOccupantCharacter();
+        if (caster == null) return;
+        caster.ShowPreviewVFX();
+        caster.PreviewHealthChange(-CalculateDamage(caster));
+        GetAbilityHandler().AddPreviewedCharacter(caster);
     }
 
     protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
@@ -182,6 +183,19 @@ public class SongOfRenewalAOE : RoundAOEAbility
         healAmount =  affectedCharacter.GetStatusEffectManager().ModifyIncomingHeal(healAmount, this);
         
         return Mathf.RoundToInt(healAmount); 
+    }
+
+    private int CalculateDamage(Character castingCharacter)
+    {
+        float damageAmount = castingCharacter.Data.DerivedHealthPoints * _maxHealthSelfDamage;
+        damageAmount = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damageAmount, this);
+        damageAmount = castingCharacter.GetStatusEffectManager().ModifyIncomingDamage(damageAmount, this);
+        return Mathf.RoundToInt(damageAmount);
+    }
+
+    public override int GetDamage()
+    {
+        return CalculateDamage(GetCharacterCaster());
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
