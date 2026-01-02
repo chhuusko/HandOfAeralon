@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aea5427431fc81d4ba36f7f7ae4cafe5, type: 3}
-  m_Name: Dulled Steel
+  m_Name: Muted Arcana
   m_EditorClassIdentifier: 
-  Name: Dulled Steel
+  Name: Muted Arcana
   Icon: {fileID: 0}
-  Description: Deal 20% less Physical damage
+  Description: Deal 20% less Elemental damage
   Type: 3
   IsPermanent: 1
   IsDispellable: 0
   SkipFirstTick: 0
-  _typeName: DulledSteel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  _typeName: MutedArcana, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
   DamageModifier: 20
