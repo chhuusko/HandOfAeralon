@@ -86,7 +86,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private CombatTurnOrder _combatTurnOrder;
 
     [Header("Combat Turn Order")]
-    private EnemyAI _enemyAI;
+    [SerializeField] private EnemyAI _enemyAI;
 
     [Header("Abilities")]
     [SerializeField] private List<ClassAbilities> _classAbilities;
