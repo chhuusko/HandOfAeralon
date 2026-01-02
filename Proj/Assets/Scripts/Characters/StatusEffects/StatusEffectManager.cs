@@ -336,9 +336,9 @@ public class StatusEffectManager : MonoBehaviour
         return heal;
     }
     
-    public int ApplyBurnDamageModifiers(int baseDamage)
+    public float ApplyBurnDamageModifiers(float baseDamage)
     {
-        int damage = baseDamage;
+        float damage = baseDamage;
 
         foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
         {

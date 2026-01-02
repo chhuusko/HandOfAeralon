@@ -1,16 +1,16 @@
 using UnityEngine;
 
-public class Everflame : Trait
+public class FlameForgedSoul : Trait
 {
     public override void ModifyBurnDamage(ref float damage)
     {
         var data = Data as DamageModifyingData;
-
         if (!data)
         {
             return;
         }
-
-        damage += data.DamageModifier;
+        
+        var modifier = 1f + data.DamageModifier / 100f;
+        damage *= modifier;
     }
 }

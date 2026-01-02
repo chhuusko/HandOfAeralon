@@ -33,6 +33,6 @@ public class Burn : StatusEffect
         var finalDamage = (_source != null) ? _source.GetStatusEffectManager().ApplyBurnDamageModifiers(baseDamage)
             : baseDamage;
 
-        Character.TakeDamage(finalDamage);
+        Character.TakeDamage(Mathf.RoundToInt(finalDamage));
     }
 }
