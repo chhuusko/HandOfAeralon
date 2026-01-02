@@ -78,6 +78,5 @@ public class AI_Core
         List<AI_Action> actions = _searcher.GetPossibleActions(context);
         AI_Action best = _evaluator.Evaluate(context, actions);
         _executor.PerformAction(context, best);
-        DebugLog.JLWLog("AI runtime completed.");
     }
 }

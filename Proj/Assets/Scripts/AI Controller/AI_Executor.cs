@@ -16,7 +16,7 @@ public class AI_Executor : MonoBehaviour
 
     public void PerformAction(AI_Context context, AI_Action action)
     {
-        Debug.Log($"AI_Executor.cs | Move to: {action.Movement.GetTileIndex()}, cast: {action.Ability.name}, at: {action.Target.GetTileIndex()}");
+        //Debug.Log($"AI_Executor.cs | Move to: {action.Movement.GetTileIndex()}, cast: {action.Ability.name}, at: {action.Target.GetTileIndex()}");
         StartCoroutine(Run(context, action));
     }
 

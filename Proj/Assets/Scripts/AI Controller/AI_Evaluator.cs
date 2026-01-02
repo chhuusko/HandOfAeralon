@@ -933,22 +933,23 @@ public class AI_Evaluator
 
     private AI_Action SelectAction(AI_Context context, List<AI_Action> actions)
     {
-        var topActions = actions
-        .Where(a =>
-        !float.IsNegativeInfinity(a.Score) &&
-        !float.IsNaN(a.Score))
-        .OrderByDescending(a => a.Score)
-        .Take(TOP_N_ACTIONS)
-        .ToList();
+        var validActions = actions
+            .Where(a => !float.IsNegativeInfinity(a.Score) && !float.IsNaN(a.Score))
+            .ToList();
+
+        Debug.Log($"AI_Evaluator.cs | Found {validActions.Count} worthwhile actions out of {actions.Count} total for {context.Self.name}.");
+
+        var topActions = validActions
+            .OrderByDescending(a => a.Score)
+            .Take(TOP_N_ACTIONS)
+            .ToList();
 
         if (topActions.Count == 0)
         {
             Debug.LogError($"AI_Evaluator.cs | NO VALID ACTIONS FOUND for {context.Self.name}! Defaulting to standing still.");
             return new AI_Action { Movement = context.Self.GetCurrentTileComponent() };
         }
-        else
-        {
-            return topActions[Random.Range(0, topActions.Count)];
-        }
+
+        return topActions[Random.Range(0, topActions.Count)];
     }
 }
