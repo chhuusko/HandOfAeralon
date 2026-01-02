@@ -40,7 +40,7 @@ public class CombatTooltipManager : MonoBehaviour
         AbilityButton.OnMouseHoverExit               += HideHoverTooltip;
         AbilityButton.OnMouseHoverExit               += AbilityCloseRequest;
         StatusEffectBarElement.OnMouseHoverEnter     += ShowHoverTooltip;
-        StatusEffectBarElement.OnMouseHoverExit      += HideHoverTooltip;
+        StatusEffectBarElement.OnMouseHoverExit      += HideStatusBarElementTooltip;
 
     }
 
@@ -53,7 +53,8 @@ public class CombatTooltipManager : MonoBehaviour
         AbilityButton.OnMouseHoverExit               -= HideHoverTooltip;
         AbilityButton.OnMouseHoverExit               -= AbilityCloseRequest;
         StatusEffectBarElement.OnMouseHoverEnter     -= ShowHoverTooltip;
-        StatusEffectBarElement.OnMouseHoverExit      -= HideHoverTooltip;
+        StatusEffectBarElement.OnMouseHoverExit      -= HideStatusBarElementTooltip;
+        
 
     }
 
@@ -119,6 +120,11 @@ public class CombatTooltipManager : MonoBehaviour
         }
     }
 
+    public void HideStatusBarElementTooltip()
+    {
+        _combatHoverTooltip.Hide();
+    }
+
     public void HideTooltipCanvas()
     {
         if(_characterLayout != null)
@@ -145,8 +151,6 @@ public class CombatTooltipManager : MonoBehaviour
     {
         _lastAbilityButton = button;
         _lastAbility = ability;
-
-   
         _bAbilityRequestingClose = false;
 
     }
