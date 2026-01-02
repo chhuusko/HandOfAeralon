@@ -49,7 +49,7 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
         }
 
         if(IsLocked() && 
-           (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)))
+           (Input.GetMouseButtonDown(1)))
         {
             Hide();
             _bTooltipLocked = false;
@@ -123,8 +123,11 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
             out Vector2 localPoint);
 
         
-        localPoint.x += _rectTransform.rect.width / 2f + 10f;
-        localPoint.y += _rectTransform.rect.height / 2f - 10f;
+        localPoint.x += _rectTransform.rect.width / 2f - 10f;
+
+        // NOTE (Calle): This is a fkn MAGIC value that seemed to work for not making the hovertooltip flicker when mouse was hovering over
+        // both the abilitybutton and the tooltip.
+        localPoint.y += _rectTransform.rect.height / 2f + 5f;
 
 
         localPoint = ClampToScreenBounds(localPoint, canvasRect.rect.size);
@@ -211,7 +214,7 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
     {
         //_bTooltipLocked = false;
         SetIsHovering(false);
-        SetIsRequsetingClose(true);
-        Hide();
+      //  SetIsRequsetingClose(true);
+      //  Hide();
     }
 }
