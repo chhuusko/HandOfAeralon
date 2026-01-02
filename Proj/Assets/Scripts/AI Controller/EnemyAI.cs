@@ -642,43 +642,46 @@ public class EnemyAI : MonoBehaviour
                     if (hitCount == 0) result -= 999f;
                     break;
                 }
-            case "LuteSmash_Ability":
+            case "ResonantBlast_Ability":
                 {
-                    Character occupant = target.GetOccupantCharacter();
-                    if (occupant != null && occupant.GetCurrentHealth() > 0)
+                    int hitCount = 0;
+                    List<CombatGridTile> aoe = DiamondPattern(target, 2);
+                    foreach (var hit in aoe)
                     {
-                        StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
-                        bool isEnemy = occupant.GetFaction() != _controlledFaction;
-                        float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
-
-                        if (isEnemy)
+                        Character occupant = hit.GetOccupantCharacter();
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
-                            result += 10f;
+                            StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                            bool isEnemy = occupant.GetFaction() != _controlledFaction;
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
 
-                            if (occupantPERCENTHP < 0.2f)
+                            if (!isEnemy)
                             {
-                                result += 20f;
+                                result -= 75f;
                             }
 
-                            if (_allies.Count == 1)
+                            if (isEnemy)
                             {
-                                result += 999f;
-                            }
+                                hitCount++;
+                                result += 30f;
 
-                            foreach (var trait in myTM.GetAllTraits())
-                            {
-                                if (trait is CrescendoSmash)
+                                if (occupantPERCENTHP < 0.2f)
                                 {
                                     result += 999f;
                                 }
-                            }
 
-                            if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
-                            {
-                                result = -9999f;
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
+                                {
+                                    result += Random.Range(0f, 20f);
+                                }
                             }
                         }
                     }
+                    if (hitCount > 1) result += 50f;
+                    if (hitCount > 2) result += 50f;
+                    if (hitCount == 0) result -= 100f;
+                    float myPERCENTHP = _character.GetMaxHealth() == 0 ? 1f : _character.GetCurrentHealth() / _character.GetMaxHealth();
+                    if (myPERCENTHP > 0.9f) result -= 100f;
                     break;
                 }
 
