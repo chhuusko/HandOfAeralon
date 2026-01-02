@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aea5427431fc81d4ba36f7f7ae4cafe5, type: 3}
+  m_Name: Cinder-scarred Flesh
+  m_EditorClassIdentifier: 
+  Name: Cinder-scarred Flesh
+  Icon: {fileID: 0}
+  Description: Take 35% more Burn damage
+  Type: 3
+  IsPermanent: 1
+  IsDispellable: 0
+  SkipFirstTick: 0
+  _typeName: CinderScarredFlesh, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
+  Class: 4
+  IsPositive: 0
+  DamageModifier: 35
