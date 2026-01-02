@@ -15,17 +15,17 @@ public static class TextMarkupExtensions
     {
         if (style.HasFlag(TextStyle.Colored))
         {
-            Colorize(text, color);
+            text = Colorize(text, color);
         }
 
         if (style.HasFlag(TextStyle.Bold))
         {
-            Bold(text);
+            text = Bold(text);
         }
 
         if (style.HasFlag(TextStyle.Italic))
         {
-            Italic(text);
+            text = Italic(text);
         }
         
         return text;
