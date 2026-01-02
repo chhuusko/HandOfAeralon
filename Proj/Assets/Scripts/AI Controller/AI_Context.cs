@@ -72,7 +72,7 @@ public class AI_Context
 
         foreach (var ability in character.GetAvailableAbilities())
         {
-            if (!character.IsAbilityCooldownActive(ability) || character.GetCurrentCooldown(ability) <= 1)
+            if (!character.IsAbilityCooldownActive(ability))
             {
                 result.Add(ability);
             }
