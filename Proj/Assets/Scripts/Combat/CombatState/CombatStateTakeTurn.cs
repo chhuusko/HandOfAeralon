@@ -20,12 +20,12 @@ public class CombatStateTakeTurn : CombatStateBase
 
         // TODO (Calle): Should AIEndTurn be in CombatEventManager, and/or should it be a event Action instead of UnityEvent?
         EnemyAI enemyAI = CombatManager._instance.GetEnemyAI();
-        if(enemyAI != null)
+        if (enemyAI)
         {
             enemyAI.AIEndTurn.AddListener(EndTurn);
         }
-        
-        
+
+
         CombatTurnOrder combatTurnOrder = CombatManager._instance.GetCombatTurnOrder();
         
         //combatTurnOrder.UpdateCharacterTurnOrderPreTurn();
