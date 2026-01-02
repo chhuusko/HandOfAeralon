@@ -415,6 +415,52 @@ public class StatusEffectManager : MonoBehaviour
         return chance;
     }
     
+    private void OnAbilityUsed(AbilityExecutionData abilityData)
+    {
+        if (!_character)
+        {
+            return;
+        }
+        
+        if (abilityData.Caster != _character)
+        {
+            return;
+        }
+        
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            statusEffect.OnAbilityUsed(abilityData);
+        }
+        
+        RemoveExpiredStatusEffects();
+    }
+    
+    private void OnTakeDamage(int damage, GameObject c)
+    {
+        if (!_character)
+        {
+            return;
+        }
+        
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            statusEffect.OnTakeDamage();
+        }
+        
+        RemoveExpiredStatusEffects();
+    }
+
+    private void RemoveExpiredStatusEffects()
+    {
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            if (statusEffect.ShouldExpire)
+            {
+                RemoveStatusEffect(statusEffect, true);
+            }
+        }
+    }
+    
     // Traits.
     private void OnStartCombat()
     {
@@ -431,43 +477,12 @@ public class StatusEffectManager : MonoBehaviour
             }
         } 
     }
-    
-    private void OnTakeDamage(int damage, GameObject c)
-    {
-        if (!_character)
-        {
-            return;
-        }
-        
-        foreach (var trait in _traitManager.GetAllTraits().ToList())
-        {
-            trait.OnTakeDamage();
-        }
-    }
 
     private void OnDeath(Character c)
     {
         foreach (var trait in _traitManager.GetAllTraits().ToList())
         {
             trait.OnDeath(c);
-        }
-    }
-
-    private void OnAbilityUsed(AbilityExecutionData abilityData)
-    {
-        if (!_character)
-        {
-            return;
-        }
-        
-        if (abilityData.Caster != _character)
-        {
-            return;
-        }
-        
-        foreach (var trait in _traitManager.GetAllTraits().ToList())
-        {
-            trait.OnAbilityUsed(abilityData);
         }
     }
 
