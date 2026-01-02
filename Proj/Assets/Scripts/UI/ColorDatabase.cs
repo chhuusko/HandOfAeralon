@@ -41,6 +41,7 @@ public class ColorDatabase : ScriptableObject
     
     [Header("Misc")]
     public Color HealingColor;
+    public Color TooltipTextColor;
     
     public Color GetCharacterColor(Character c)
     {

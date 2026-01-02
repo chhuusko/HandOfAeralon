@@ -11,7 +11,7 @@ public abstract class StatusEffect
     
     [SerializeField] private StatusEffectData _data;
     public StatusEffectData Data => _data;
-
+    
     public bool ShouldExpire;
     
     protected Character Character { get; private set; }
@@ -48,6 +48,10 @@ public abstract class StatusEffect
     {
         // If the status effect is applied out of turn, it should not tick down at start of next turn.
         _skipNextTick = Character != CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
+        if (_data && !_data.SkipFirstTick)
+        {
+            _skipNextTick = false;
+        }
 
         CombatEventManager.OnTryAddStatusEffect += BeforeStatusEffectApplied;
         
@@ -108,6 +112,8 @@ public abstract class StatusEffect
     public virtual void OnTargetedByCard() {}
     public virtual void OnBurnApplied() {}
     public virtual void OnCombatEnded() {}
+    public virtual void OnTakeDamage() {}
+    public virtual void OnAbilityUsed(AbilityExecutionData abilityData) {}
     public virtual void ModifyIncomingDamage(ref float damage, Ability ability) {}
     public virtual void ModifyOutgoingDamage(ref float damage, Ability ability) {}
     public virtual void ModifyIncomingHeal(ref float heal, Ability ability) {}
