@@ -94,11 +94,7 @@ public class CombatStateTakeTurn : CombatStateBase
             Selector._instance.DeselectCharacter();
         }
 
-        EnemyAI enemyAI = CombatManager._instance.GetEnemyAI();
-        if (enemyAI != null)
-        {
-            enemyAI.AIEndTurn.RemoveListener(EndTurn);
-        }
+        CombatManager._instance.GetEnemyAI().AIEndTurn.RemoveListener(EndTurn);
     }
 
     public override void Update()
