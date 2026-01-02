@@ -682,8 +682,21 @@ public class Character : MonoBehaviour
 
     public void PreviewHealthChange(int health)
     {
-        // TODO: Call an event that updates healthbar temporarily without updating current HP.
+        HealthBar healthbar = CharacterFrameManager._instance.GetHealthBarFrom(this);
+
+        if (healthbar == null) return;
+
+        healthbar.ShowPreviewDamage(health);
         DebugLog.MGLog("Health differens that healthbar should preview is: " + health);
+    }
+
+    public void StopPreviewingHealthChange()
+    {
+        HealthBar healthbar = CharacterFrameManager._instance.GetHealthBarFrom(this);
+
+        if (healthbar == null) return;
+
+        healthbar.HidePreview();
     }
 
     public bool TakeDamage(int damage, Character source)

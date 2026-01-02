@@ -64,4 +64,21 @@ public class HealthBar : MonoBehaviour
 
         _easeHealthSlider.value = _mainHealthslider.value;
     }
+
+    public void ShowPreviewDamage(int previewDamage)
+    {
+        if (_character == null) return;
+
+        int currentHp = _character.GetCurrentHealth();
+        int previewHp = Mathf.Max(0, currentHp - previewDamage);
+
+        _previewHealthSlider.gameObject.SetActive(true);
+        _previewHealthSlider.maxValue = _mainHealthslider.maxValue;
+        _previewHealthSlider.value = previewHp;
+    }
+
+    public void HidePreview()
+    {
+        _previewHealthSlider.gameObject.SetActive(false);
+    }
 }
