@@ -41,7 +41,7 @@ public class AI_Searcher
             }
         }
 
-        UnityEngine.Debug.Log($"AI_Searcher.cs | Found {result.Count} possible actions for {context.Self.name}!");
+        //UnityEngine.Debug.Log($"AI_Searcher.cs | Found {result.Count} possible actions for {context.Self.name}!");
         return result;
     }
 

@@ -13,8 +13,9 @@ public class AI_Evaluator
     };
 
     private const int TOP_N_ACTIONS = 3;
-    private const float HAZARD_AVOIDANCE = 50f;
+    private const float HAZARD_AVOIDANCE = 25f;
     private const int RANGED_CHARACTER_PREFERRED_RANGE = 6;
+    private const float USE_ABILITY_BONUS = 30f;
     private const float DISPEL_BUFFS_INCLINATION = 50f;
     private const float PREFER_POISONED_TARGETS = 30f;
     private const float PREFER_UNARMORED_TARGETS = 30f;
@@ -39,9 +40,10 @@ public class AI_Evaluator
             float score = 0f;
             score += EvaluateMovement(context, action);
             score += EvaluateAbilityUsage(context, action);
-            PenalizeMovementOnlyActions(actions);
             action.Score = score;
         }
+
+        PenalizeMovementOnlyActions(actions);
 
         return SelectAction(context, actions);
     }
@@ -74,7 +76,7 @@ public class AI_Evaluator
             if (closestAlly != null)
             {
                 deltaDistance = GetDeltaDistance(context.Self, closestAlly, action.Movement);
-                result -= deltaDistance * 10f / context.PercentHP;
+                result -= deltaDistance * 5f / context.PercentHP;
             }
         }
 
@@ -85,13 +87,13 @@ public class AI_Evaluator
             if (closestEnemy != null)
             {
                 deltaDistance = GetDeltaDistance(context.Self, closestEnemy, action.Movement);
-                float modifier = 20f;
+                float modifier = 5f;
 
                 if (!_meleeClassSet.Contains(context.Self.GetCharacterClass()))
                 {
                     if (GridExplorer._instance.ManhattanDistance(context.Self.GetCurrentTileIndex(), closestEnemy.GetCurrentTileIndex()) > context.Self.GetMovementPoints() + RANGED_CHARACTER_PREFERRED_RANGE)
                     {
-                        modifier = -20f;
+                        modifier = -5f;
                     }
                 }
 
@@ -218,6 +220,7 @@ public class AI_Evaluator
         OccupantData occupant = AnalyzeOccupant(context, action.Target);
         if (occupant.Exists && occupant.IsEnemy)
         {
+            result += USE_ABILITY_BONUS;
             result += 30f;
 
             if (occupant.PercentHP < 0.5f)
@@ -274,8 +277,14 @@ public class AI_Evaluator
             result -= 30f;
         }
 
+        if (hitCount > 0)
+        {
+            result += USE_ABILITY_BONUS;
+        }
+
         if (hitCount == 0)
         {
+            Debug.LogError("HIT COUNT == 0 FOR AOE SKILL");
             result = float.NegativeInfinity;
         }
 
@@ -317,8 +326,14 @@ public class AI_Evaluator
             }
         }
 
+        if (hitCount > 0)
+        {
+            result += USE_ABILITY_BONUS;
+        }
+
         if (hitCount == 0)
         {
+            Debug.LogError("HIT COUNT == 0 FOR AOE SKILL");
             result = float.NegativeInfinity;
         }
 
@@ -348,6 +363,11 @@ public class AI_Evaluator
         if (hitCount < 2)
         {
             result -= 50f;
+        }
+
+        if (hitCount > 0)
+        {
+            result += USE_ABILITY_BONUS;
         }
 
         if (hitCount == 0)
@@ -382,6 +402,11 @@ public class AI_Evaluator
         if (hitCount < 2)
         {
             result -= 50f;
+        }
+
+        if (hitCount > 0)
+        {
+            result += USE_ABILITY_BONUS;
         }
 
         if (hitCount == 0)
@@ -421,6 +446,11 @@ public class AI_Evaluator
         if (hitCount < 2)
         {
             result -= 50f;
+        }
+
+        if (hitCount > 0)
+        {
+            result += USE_ABILITY_BONUS;
         }
 
         if (hitCount == 0)
@@ -498,6 +528,11 @@ public class AI_Evaluator
             result -= DISPEL_BUFFS_INCLINATION;
         }
 
+        if (hitCount > 0)
+        {
+            result += USE_ABILITY_BONUS;
+        }
+
         if (hitCount == 0)
         {
             result = float.NegativeInfinity;
@@ -520,6 +555,7 @@ public class AI_Evaluator
         OccupantData occupant = AnalyzeOccupant(context, action.Target);
         if (occupant.Exists && occupant.IsEnemy)
         {
+            result += USE_ABILITY_BONUS;
             result += 30f;
 
             if (occupant.PercentHP < 0.2f)
@@ -604,6 +640,11 @@ public class AI_Evaluator
             result -= 30f;
         }
 
+        if (hitCount > 0)
+        {
+            result += USE_ABILITY_BONUS;
+        }
+
         if (hitCount == 0)
         {
             result = float.NegativeInfinity;
@@ -655,6 +696,11 @@ public class AI_Evaluator
         if (hitCount < 2)
         {
             result -= 30f;
+        }
+
+        if (hitCount > 0)
+        {
+            result += USE_ABILITY_BONUS;
         }
 
         if (hitCount == 0)
@@ -714,6 +760,11 @@ public class AI_Evaluator
             result -= 30f;
         }
 
+        if (hitCount > 0)
+        {
+            result += USE_ABILITY_BONUS;
+        }
+
         if (hitCount == 0)
         {
             result = float.NegativeInfinity;
@@ -730,6 +781,7 @@ public class AI_Evaluator
         OccupantData occupant = AnalyzeOccupant(context, action.Target);
         if (occupant.Exists && occupant.IsEnemy)
         {
+            result += USE_ABILITY_BONUS;
             result += 30f;
 
             if (occupant.PercentHP < 0.2f)
@@ -781,6 +833,11 @@ public class AI_Evaluator
             result -= 30f;
         }
 
+        if (hitCount > 0)
+        {
+            result += USE_ABILITY_BONUS;
+        }
+
         if (hitCount == 0)
         {
             result = float.NegativeInfinity;
@@ -822,6 +879,11 @@ public class AI_Evaluator
             result -= 30f;
         }
 
+        if (hitCount > 0)
+        {
+            result += USE_ABILITY_BONUS;
+        }
+
         if (hitCount == 0)
         {
             result = float.NegativeInfinity;
@@ -836,6 +898,8 @@ public class AI_Evaluator
 
         if (!context.StatusEffectManager.ContainsStatusEffect<Emberwake>())
         {
+            result += USE_ABILITY_BONUS;
+
             foreach (var cooldownCheck in context.Self.GetAvailableAbilities())
             {
                 if (cooldownCheck is LightningStorm_Ability && !context.Self.IsAbilityCooldownActive(cooldownCheck))
@@ -938,6 +1002,11 @@ public class AI_Evaluator
             .ToList();
 
         Debug.Log($"AI_Evaluator.cs | Found {validActions.Count} worthwhile actions out of {actions.Count} total for {context.Self.name}.");
+        
+        foreach (var action in validActions)
+        {
+            AI_Core.PrintAction(action);
+        }
 
         var topActions = validActions
             .OrderByDescending(a => a.Score)

@@ -16,8 +16,12 @@ public class AI_Core
     {
         DebugLog.JLWLog("AI_Core built.");
 
-        GameObject monobehaviour = new GameObject("AI_Executor");
-        AI_Executor executor = monobehaviour.AddComponent<AI_Executor>();
+        AI_Executor executor = AI_Executor.Instance;
+        if (executor == null)
+        {
+            GameObject go = new GameObject("AI_Executor");
+            executor = go.AddComponent<AI_Executor>();
+        }
 
         AI_Core result = new AI_Core(
             new AI_Searcher(),
@@ -29,6 +33,14 @@ public class AI_Core
         return result;
     }
 
+    public static void PrintAction(AI_Action action)
+    {
+        string movement = action.Movement != null ? action.Movement.GetTileIndex().ToString() : "N/A";
+        string ability = action.Ability != null ? action.Ability.name : "N/A";
+        string target = action.Target != null ? action.Target.GetTileIndex().ToString() : "N/A";
+        Debug.Log($"AI_Core.cs | Move to: {movement}, cast: {ability}, at: {target}, score: {action.Score}");
+    }
+
     public AI_Core(AI_Searcher searcher, AI_Evaluator evaluator, AI_Executor executor, Faction faction)
     {
         _searcher = searcher;
@@ -36,7 +48,13 @@ public class AI_Core
         _executor = executor;
         _faction = faction;
 
+        CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
+    }
+
+    ~AI_Core()
+    {
+        CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
     }
 
     public UnityEngine.Events.UnityEvent GetAIEndTurnEvent()

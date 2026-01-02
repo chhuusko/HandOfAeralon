@@ -8,6 +8,20 @@ using UnityEngine.Events;
 
 public class AI_Executor : MonoBehaviour
 {
+    public static AI_Executor Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
     public UnityEvent AIEndTurn { get; private set; } = new();
 
     private const float TURN_START_WAIT_TIME = 1f;
@@ -16,7 +30,6 @@ public class AI_Executor : MonoBehaviour
 
     public void PerformAction(AI_Context context, AI_Action action)
     {
-        //Debug.Log($"AI_Executor.cs | Move to: {action.Movement.GetTileIndex()}, cast: {action.Ability.name}, at: {action.Target.GetTileIndex()}");
         StartCoroutine(Run(context, action));
     }
 

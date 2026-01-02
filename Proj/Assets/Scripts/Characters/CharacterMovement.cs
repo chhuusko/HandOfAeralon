@@ -142,7 +142,7 @@ public class CharacterMovement : MonoBehaviour
         if (IsDead() || !_character.CanMove || _character.IsStunned) yield break;
 
         _bIsMoving = true;
-        Debug.LogWarning($"{_character.name} _isMoving = true");
+        //Debug.LogWarning($"{_character.name} _isMoving = true");
         CombatEventManager.InvokeOnCharacterMove(_character, _bIsMoving);
         Selector._instance.InvokeCharacterActionStarted();
         GridExplorer._instance.ClearPathDrawing();
@@ -177,7 +177,7 @@ public class CharacterMovement : MonoBehaviour
         }
 
         _bIsMoving = false;
-        Debug.LogWarning($"{_character.name} _isMoving = false");
+        //Debug.LogWarning($"{_character.name} _isMoving = false");
         CombatEventManager.InvokeOnCharacterMove(_character, _bIsMoving);
         Selector._instance.InvokeCharacterActionStopped();
 

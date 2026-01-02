@@ -72,13 +72,13 @@ public class AI_Context
 
         foreach (var ability in character.GetAvailableAbilities())
         {
-            if (!character.IsAbilityCooldownActive(ability))
+            if (!character.IsAbilityCooldownActive(ability) || character.GetCurrentCooldown(ability) <= 1)
             {
                 result.Add(ability);
             }
         }
 
-        //Debug.Log($"AI_Context.cs | Found {result.Count} abilities ready to use!");
+        Debug.Log($"AI_Context.cs | Found {result.Count} abilities ready to use!");
 
         return result;
     }
