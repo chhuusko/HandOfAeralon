@@ -51,6 +51,7 @@ public class GridExplorer : MonoBehaviour
 
     [SerializeField] private LineRenderer _lineRendererPrefab;
     private LineRenderer _activeLineRenderer;
+    private bool _bHidePathDrawing = false;
 
     /*
     [SerializeField] private bool _bPaintTiles = false;
@@ -577,6 +578,8 @@ public class GridExplorer : MonoBehaviour
             Destroy(_activeLineRenderer.gameObject);
         }
 
+        if (_bHidePathDrawing) return;
+
         if (path == null || path.Count == 0)
         {
             return;
@@ -596,6 +599,16 @@ public class GridExplorer : MonoBehaviour
         if (_activeLineRenderer != null)
         {
             Destroy(_activeLineRenderer.gameObject);
+        }
+    }
+
+    public void HidePathDrawing(bool hide)
+    {
+        _bHidePathDrawing = hide;
+
+        if (hide == true)
+        {
+            ClearPathDrawing();
         }
     }
 
