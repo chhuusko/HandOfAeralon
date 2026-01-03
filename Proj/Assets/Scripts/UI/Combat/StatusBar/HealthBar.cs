@@ -31,11 +31,29 @@ public class HealthBar : MonoBehaviour
         c.OnHealthChanged += HandleHealthChanged;
     }
 
+    private void OnDisable()
+    {
+        if (_character != null)
+            _character.OnHealthChanged -= HandleHealthChanged;
+
+        if (_easeRoutine != null)
+        {
+            StopCoroutine(_easeRoutine);
+            _easeRoutine = null;
+        }
+    }
+
     void OnDestroy()
     {
         if (_character != null)
         {
             _character.OnHealthChanged -= HandleHealthChanged;
+        }
+
+        if (_easeRoutine != null)
+        {
+            StopCoroutine(_easeRoutine);
+            _easeRoutine = null;
         }
     }
 
@@ -47,7 +65,10 @@ public class HealthBar : MonoBehaviour
         _mainHealthslider.value = currentHp;
 
         if (_easeRoutine != null)
+        {
             StopCoroutine(_easeRoutine);
+            _easeRoutine = null;
+        }
 
         _easeRoutine = StartCoroutine(EaseHealth());
     }
