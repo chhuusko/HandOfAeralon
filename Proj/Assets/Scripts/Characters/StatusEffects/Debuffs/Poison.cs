@@ -4,7 +4,7 @@ public class Poison : StatusEffect
 {
     private Character _source;
     
-    public Poison(Character source, int duration = 3) : base(duration)
+    public Poison(int duration = 3, Character source = null) : base(duration)
     {
         _source = source;
     }
