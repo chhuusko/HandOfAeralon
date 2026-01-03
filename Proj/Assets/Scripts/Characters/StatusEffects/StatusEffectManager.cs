@@ -336,13 +336,49 @@ public class StatusEffectManager : MonoBehaviour
         return heal;
     }
     
-    public float ApplyBurnDamageModifiers(float baseDamage)
+    public float ModifyOutgoingPoisonDamage(float baseDamage)
     {
         float damage = baseDamage;
 
         foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
         {
-            statusEffect.ModifyBurnDamage(ref damage);
+            statusEffect.ModifyOutgoingPoisonDamage(ref damage);
+        }
+        
+        return damage;
+    }
+    
+    public float ModifyIncomingPoisonDamage(float baseDamage)
+    {
+        float damage = baseDamage;
+
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            statusEffect.ModifyIncomingPoisonDamage(ref damage);
+        }
+        
+        return damage;
+    }
+    
+    public float ModifyOutgoingBurnDamage(float baseDamage)
+    {
+        float damage = baseDamage;
+
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            statusEffect.ModifyOutgoingBurnDamage(ref damage);
+        }
+        
+        return damage;
+    }
+    
+    public float ModifyIncomingBurnDamage(float baseDamage)
+    {
+        float damage = baseDamage;
+
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            statusEffect.ModifyIncomingBurnDamage(ref damage);
         }
         
         return damage;

@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class CinderScarredFlesh : Trait
+public class VenomSoakedVeins : Trait
 {
-    public override void ModifyIncomingBurnDamage(ref float damage)
+    public override void ModifyIncomingPoisonDamage(ref float damage)
     {
         var data = Data as DamageModifyingData;
         if (!data)

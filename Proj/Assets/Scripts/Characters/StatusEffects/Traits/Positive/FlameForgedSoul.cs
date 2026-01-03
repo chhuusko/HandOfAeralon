@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FlameForgedSoul : Trait
 {
-    public override void ModifyBurnDamage(ref float damage)
+    public override void ModifyIncomingBurnDamage(ref float damage)
     {
         var data = Data as DamageModifyingData;
         if (!data)
@@ -10,7 +10,7 @@ public class FlameForgedSoul : Trait
             return;
         }
         
-        var modifier = 1f + data.DamageModifier / 100f;
+        var modifier = 1f - data.DamageModifier / 100f;
         damage *= modifier;
     }
 }

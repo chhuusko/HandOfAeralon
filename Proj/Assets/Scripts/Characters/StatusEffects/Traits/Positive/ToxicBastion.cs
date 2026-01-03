@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class CinderScarredFlesh : Trait
+public class ToxicBastion : Trait
 {
-    public override void ModifyIncomingBurnDamage(ref float damage)
+    public override void ModifyIncomingPoisonDamage(ref float damage)
     {
         var data = Data as DamageModifyingData;
         if (!data)
@@ -10,7 +10,7 @@ public class CinderScarredFlesh : Trait
             return;
         }
         
-        var modifier = 1f + data.DamageModifier / 100f;
+        var modifier = 1f - data.DamageModifier / 100f;
         damage *= modifier;
     }
 }

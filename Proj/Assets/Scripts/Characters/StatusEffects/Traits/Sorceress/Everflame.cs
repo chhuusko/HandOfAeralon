@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Everflame : Trait
 {
-    public override void ModifyBurnDamage(ref float damage)
+    public override void ModifyOutgoingBurnDamage(ref float damage)
     {
         var data = Data as DamageModifyingData;
 

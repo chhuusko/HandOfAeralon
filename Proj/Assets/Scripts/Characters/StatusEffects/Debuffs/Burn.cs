@@ -23,16 +23,18 @@ public class Burn : StatusEffect
     public override void OnTurnStart()
     {
         var data = Data as DamageData;
-
         if (!data)
         {
             return;
         }
         
-        var baseDamage = data.Damage;
-        var finalDamage = (_source != null) ? _source.GetStatusEffectManager().ApplyBurnDamageModifiers(baseDamage)
-            : baseDamage;
+        float damage = data.Damage;
+        if (_source != null)
+        {
+            damage = _source.GetStatusEffectManager().ModifyOutgoingBurnDamage(damage);
+        }
+        damage = Character.GetStatusEffectManager().ModifyIncomingBurnDamage(damage);
 
-        Character.TakeDamage(Mathf.RoundToInt(finalDamage));
+        Character.TakeDamage(Mathf.RoundToInt(damage));
     }
 }
