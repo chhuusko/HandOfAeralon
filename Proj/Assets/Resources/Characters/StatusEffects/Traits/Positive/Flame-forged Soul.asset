@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aea5427431fc81d4ba36f7f7ae4cafe5, type: 3}
-  m_Name: Dulled Steel
+  m_Name: Flame-forged Soul
   m_EditorClassIdentifier: 
-  Name: Dulled Steel
-  Icon: {fileID: 21300000, guid: 6b4ada4496e10fb4588d69a5d2da79cc, type: 3}
-  Description: Deal 20% less Physical damage
+  Name: Flame-forged Soul
+  Icon: {fileID: 21300000, guid: c24f79c5d6d91f043819caf4ebff1035, type: 3}
+  Description: Take 50% less Burn damage
   Type: 3
   IsPermanent: 1
   IsDispellable: 0
   SkipFirstTick: 0
-  _typeName: DulledSteel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  _typeName: FlameForgedSoul, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
   Class: 4
-  IsPositive: 0
-  DamageModifier: 20
+  IsPositive: 1
+  DamageModifier: 50

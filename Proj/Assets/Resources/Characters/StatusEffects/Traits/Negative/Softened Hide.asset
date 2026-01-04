@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aea5427431fc81d4ba36f7f7ae4cafe5, type: 3}
-  m_Name: Dulled Steel
+  m_Name: Softened Hide
   m_EditorClassIdentifier: 
-  Name: Dulled Steel
-  Icon: {fileID: 21300000, guid: 6b4ada4496e10fb4588d69a5d2da79cc, type: 3}
-  Description: Deal 20% less Physical damage
+  Name: Softened Hide
+  Icon: {fileID: 21300000, guid: 51863ced3c1836c4bb744c3191ed041a, type: 3}
+  Description: Take 20% more Physical damage
   Type: 3
   IsPermanent: 1
   IsDispellable: 0
   SkipFirstTick: 0
-  _typeName: DulledSteel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  _typeName: SoftenedHide, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
   DamageModifier: 20
