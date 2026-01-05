@@ -176,14 +176,7 @@ public class AbilityHandler : MonoBehaviour
     /// </summary>
     private List<CombatGridTile> RemoveUntargetableTiles(List<CombatGridTile> tiles)
     {
-        List<CombatGridTile> filteredList = new();
-        foreach (CombatGridTile tile in tiles)
-        {
-            if (tile.IsWalkable())
-            {
-                filteredList.Add(tile);
-            }
-        }
+        List<CombatGridTile> filteredList = tiles;
 
         if ((_pendingAbility.GetAbilityTargetType() != Ability.ValidTargetOccupant.Any) && (_pendingAbility.GetAbilityTargetType() != Ability.ValidTargetOccupant.Friendly))
         {
