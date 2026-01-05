@@ -19,22 +19,20 @@ public class ResonantRecovery : Trait
         damage *= data.DamageModifier;
     }
 
-    public override void ModifyIncomingHeal(ref float heal, Ability ability)
+    public override void OnAbilityUsed(AbilityExecutionData abilityData)
     {
-        if (ability is not ResonantBlastAOE)
+        if (abilityData.Ability is not ResonantBlastAOE)
         {
             return;
         }
         
         var data = Data as ResonantRecoveryData;
-
         if (!data)
         {
             return;
         }
         
         int healAmount = Mathf.RoundToInt(data.HealModifier * Character.GetMaxHealth());
-
         Character.Heal(healAmount);
     }
 }
