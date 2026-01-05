@@ -38,13 +38,16 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         LinkHandlerForTMPText.OnClickOnLink += SelectCharacter;
     }
 
+    /// <summary>
+    /// Cycles the combat log being active/inactive.
+    /// </summary>
     public void SetCombatLogActive()
     {
         _bCombatLogEnabled = !_bCombatLogEnabled;
         _combatLogPanel.SetActive(_bCombatLogEnabled);
         _combatLogScrollbar.SetActive(_bCombatLogEnabled);
     }
-
+    
     private void AddCombatLogEntry(AbilityExecutionData data)
     {
         AbilityLogData abilityLogData = new AbilityLogData
@@ -131,6 +134,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private void AddCombatLogEntry(CombatLogData data)
     {
+        // Get the prefab to instantiate.
         CombatLogEntry prefab = data switch
         {
             AbilityLogData => _abilityEntryPrefab,
@@ -149,9 +153,11 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             return;
         }
         
+        // Create the combat log entry.
         var entry = Instantiate(prefab, _combatLogContent);
         entry.Initialize(data);
         
+        // Reset scroll.
         StartCoroutine(ScrollToBottom());
     }
     
@@ -163,9 +169,13 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         _combatLogScrollRect.verticalNormalizedPosition = 0;
     }
 
-    private void SelectCharacter(string keyword)
+    /// <summary>
+    /// Selects the corresponding character based on its ID.
+    /// </summary>
+    /// <param name="linkID">The ID of the character to select.</param>
+    private void SelectCharacter(string linkID)
     {
-        int id = int.Parse(keyword);
+        int id = int.Parse(linkID);
         foreach (var character in CombatGrid._instance.GetAllCharacterScripts())
         {
             if (character.CharacterID == id)

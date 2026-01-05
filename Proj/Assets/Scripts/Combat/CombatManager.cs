@@ -78,7 +78,7 @@ public class CombatManager : MonoBehaviour
     [Header("Combat State")]
     [SerializeField] private CombatState _debugCurrentState;
     [SerializeReference] private CombatStateBase _currentCombatState;
-   
+
 
     private Dictionary<CharacterData, Character> _dataToCharacterDict;
 
@@ -92,7 +92,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private List<ClassAbilities> _classAbilities;
     private Dictionary<CharacterClass, List<Ability>> _classAbilitiesDictionary;
 
-    [Header("Enemy base stats")] 
+    [Header("Enemy base stats")]
     public int enemyMana = 6;
     public int enemyManaSpent = 2;
 
@@ -110,7 +110,7 @@ public class CombatManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
         _classAbilitiesDictionary = new Dictionary<CharacterClass, List<Ability>>();
         foreach (var pair in _classAbilities)
         {
@@ -142,14 +142,14 @@ public class CombatManager : MonoBehaviour
         _selectorCube.transform.position = pos;
         _selectorCube.SetActive(false);
 
-        ChangeCombatState(new CombatStateLoadLevel());        
+        ChangeCombatState(new CombatStateLoadLevel());
     }
 
     void Update()
     {
         if (Time.timeScale <= 0.0f)
             return;
-        if(_currentCombatState != null)
+        if (_currentCombatState != null)
         {
             _currentCombatState?.Update();
             Character activeCharacter = _combatTurnOrder.GetActiveCharacter();
@@ -217,7 +217,7 @@ public class CombatManager : MonoBehaviour
 
     public CombatCamera GetCombatCamera() { return _combatCamera; }
     public GameObject GetSelectorOverHead() { return _selectorOverHead; }
-    
+
     public Selector GetCombatSelector() { return _selector; }
     public EnemyAI GetEnemyAI() { return _enemyAI; }
     public CombatTurnOrder GetCombatTurnOrder() { return _combatTurnOrder; }
@@ -238,9 +238,9 @@ public class CombatManager : MonoBehaviour
 
         // NOTE (Calle): only placing heroes on the first deploytiles in the list.
         int deployTileIndex = 0;
-        foreach(CharacterData data in characterDataList)
+        foreach (CharacterData data in characterDataList)
         {
-            Character playerHero = CombatGrid._instance.SpawnCharacter(data, 
+            Character playerHero = CombatGrid._instance.SpawnCharacter(data,
                                                                        deployTiles[deployTileIndex].GetTilePosition(),
                                                                        Quaternion.Euler(0.0f, 90.0f, 0.0f));
             playerHero.Initialize(data);

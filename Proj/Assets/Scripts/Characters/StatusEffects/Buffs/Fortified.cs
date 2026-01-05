@@ -16,6 +16,7 @@ public class Fortified : StatusEffect
             return;
         }
         
-        damage /= data.DamageModifier;
+        var modifier = 1f - data.DamageModifierPercent / 100f;
+        damage *= modifier;
     }
 }

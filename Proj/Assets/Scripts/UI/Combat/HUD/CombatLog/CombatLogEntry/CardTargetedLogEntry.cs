@@ -17,7 +17,7 @@ public class CardTargetedLogEntry : CombatLogEntry
 
         string cardName = TextMarkupExtensions.Colorize(d.Card.title, ColorDatabase.Instance.CardColor);
         string targetName = d.Target.GetFaction() == Faction.Friendly ?
-            GameTextFormatter.ClassColoredName(d.Target) : GameTextFormatter.FactionColoredLabel(d.Target);
+            GameTextFormatter.CreateCharacterNameLink(d.Target) : GameTextFormatter.FactionColoredLabel(d.Target);
         
         _text.text = $"Used {cardName} on {targetName}";
     }

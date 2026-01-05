@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ConduitOfPower : StatusEffect
 {
-    private float _combinedDamageModifier = 1;
+    private float _combinedDamageModifier;
 
     public override void OnTargetedByCard()
     {
@@ -13,13 +13,13 @@ public class ConduitOfPower : StatusEffect
             return;
         }
         
-        _combinedDamageModifier += data.DamageModifier;
-        
+        _combinedDamageModifier += data.DamageModifierPercent;
     }
 
     public override void ModifyOutgoingDamage(ref float damage, Ability ability)
     {
-        damage *= _combinedDamageModifier;
+        var modifier = 1f + _combinedDamageModifier / 100f;
+        damage *= modifier;
     }
 
     public override void OnCombatEnded()

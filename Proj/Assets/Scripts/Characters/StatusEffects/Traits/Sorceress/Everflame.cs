@@ -11,6 +11,6 @@ public class Everflame : Trait
             return;
         }
 
-        damage += data.DamageModifier;
+        damage += data.DamageModifierPercent / 100f;
     }
 }

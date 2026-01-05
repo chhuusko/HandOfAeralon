@@ -16,7 +16,7 @@ public class AbilityUI : MonoBehaviour
 
     private void OnEnable()
     {
-        CombatEventManager.OnAbilityCast += UpdateAbilityColors;
+        CombatEventManager.OnAbilityCast += UpdateAbilityButton;
         CombatEventManager.OnCharacterMove += CharacterMoving;
         CombatEventManager.OnEnterCombatStatePlaceCharacter += LoadAbilities;
         CombatEventManager.OnAbilityCast += DeactivateBorder;
@@ -50,8 +50,8 @@ public class AbilityUI : MonoBehaviour
     public void ClearAbilityButtons()
     {
         _selectedAbility = null;
-        
         _abilityButtons.Clear();
+        
         // Remove all current ability buttons.
         for (int i = 0; i < _abilityPanel.transform.childCount; i++)
         {
@@ -90,6 +90,11 @@ public class AbilityUI : MonoBehaviour
         StartCoroutine(LoadAbilitiesNextFrame(character));
     }
 
+    /// <summary>
+    /// Loads all the given characters abilities and adds them to the UI.
+    /// </summary>
+    /// <param name="character">The character of which's abilities to load.</param>
+    /// <returns></returns>
     private IEnumerator LoadAbilitiesNextFrame(CharacterData character)
     {
         yield return null;
@@ -113,7 +118,6 @@ public class AbilityUI : MonoBehaviour
         }
 
         ClearAbilityButtons();
-        
         SetPanelsActive(true);
 
         for (int i = 0; i < character.Abilities.Count; i++)
@@ -132,13 +136,14 @@ public class AbilityUI : MonoBehaviour
             var abilityButton = button.GetComponent<AbilityButton>();
             _abilityButtons.Add(abilityButton);
             
-            UpdateAbilityColors(CombatManager._instance.GetCharacterDataDict()[character], abilityButton);
+            UpdateAbilityButton(CombatManager._instance.GetCharacterDataDict()[character], abilityButton);
             
+            // Only set the button as active after fully creating it.
             buttonGO.SetActive(true);
         }
     }
 
-    public void UpdateAbilityColors()
+    public void UpdateAbilityButton()
     {
         if (CombatUI.Instance.SelectedCharacter == null)
         {
@@ -150,16 +155,21 @@ public class AbilityUI : MonoBehaviour
         {
             foreach (var abilityButton in _abilityButtons)
             {
-                UpdateAbilityColors(character, abilityButton);
+                UpdateAbilityButton(character, abilityButton);
             }
         }
     }
 
-    public void UpdateAbilityColors(Character c, AbilityButton abilityButton)
+    /// <summary>
+    /// Sets the button as interactable depending on game state.
+    /// </summary>
+    /// <param name="c">The current character.</param>
+    /// <param name="abilityButton">The ability button to set.</param>
+    private void UpdateAbilityButton(Character c, AbilityButton abilityButton)
     {
         if (abilityButton == null || c == null)
         {
-            Debug.LogWarning("UpdateAbilityColors: abilityButton or character is null");
+            Debug.LogWarning("abilityButton or character is null");
             return;
         }
     
@@ -182,7 +192,13 @@ public class AbilityUI : MonoBehaviour
         StartCoroutine(SetCooldown(c, abilityButton));
     }
 
-    public IEnumerator SetCooldown(Character c, AbilityButton abilityButton)
+    /// <summary>
+    /// Sets the buttons cooldown text.
+    /// </summary>
+    /// <param name="c">The current character.</param>
+    /// <param name="abilityButton">The button to update.</param>
+    /// <returns></returns>
+    private IEnumerator SetCooldown(Character c, AbilityButton abilityButton)
     {
         yield return null;
 
@@ -190,19 +206,25 @@ public class AbilityUI : MonoBehaviour
         {
             yield break;
         }
-        
-        if (c && 
-            c.IsAbilityCooldownActive(abilityButton.Ability))
+
+        if (!c || !c.IsAbilityCooldownActive(abilityButton.Ability))
         {
-            abilityButton.SetCooldownTextActive(true);
-            abilityButton.SetCooldownText(c.GetCurrentCooldown(abilityButton.Ability));
+            yield break;
         }
+        abilityButton.SetCooldownTextActive(true);
+        abilityButton.SetCooldownText(c.GetCurrentCooldown(abilityButton.Ability));
     }
     
+    /// <summary>
+    /// Sets all buttons as active or inactive, depending on if the character is moving currently.
+    /// </summary>
+    /// <param name="character">The character.</param>
+    /// <param name="moving">Whether the character is moving.</param>
     private void CharacterMoving(Character character, bool moving)
     {
         if (moving)
         {
+            // Deactivate all buttons.
             foreach (var abilityButton in _abilityButtons)
             {
                 abilityButton.Button.interactable = false;
@@ -210,7 +232,8 @@ public class AbilityUI : MonoBehaviour
         }
         else
         {
-            UpdateAbilityColors();
+            // Check state.
+            UpdateAbilityButton();
         }
     }
 
@@ -240,7 +263,7 @@ public class AbilityUI : MonoBehaviour
 
     private void OnDisable()
     {
-        CombatEventManager.OnAbilityCast -= UpdateAbilityColors;
+        CombatEventManager.OnAbilityCast -= UpdateAbilityButton;
         CombatEventManager.OnCharacterMove -= CharacterMoving;
         CombatEventManager.OnEnterCombatStatePlaceCharacter -= LoadAbilities;
         CombatEventManager.OnAbilityCast -= DeactivateBorder;

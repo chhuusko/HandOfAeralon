@@ -4,9 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CharacterMovement : MonoBehaviour
 {
+    public UnityEvent<int> MovementCostPreview;
+    public UnityEvent OnMovementPreviewStopped;
+
     private Character _character;
     private List<CombatGridTile> _tilesInRange = new();
     private List<CombatGridTile> _pathPreview = new();
@@ -76,6 +80,7 @@ public class CharacterMovement : MonoBehaviour
         {
             _lastPreviewPathTile = null;
             GridExplorer._instance.ClearPathDrawing();
+            OnMovementPreviewStopped.Invoke();
             return;
         }
 
@@ -95,6 +100,9 @@ public class CharacterMovement : MonoBehaviour
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
         .ToList();
+
+        int cost = CalculateMovementCost(_pathPreview);
+        MovementCostPreview.Invoke(cost);
     }
 
     public bool ConfirmPath(CombatGridTile tile)

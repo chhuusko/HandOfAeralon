@@ -65,7 +65,7 @@ public abstract class StatusEffect
     
     public string GetColorCodedDescription()
     {
-        return GameTextFormatter.LabeledStatusEffectTooltip(this);
+        return GameTextFormatter.LabeledStatusEffectDescription(this);
     }
     
     public void SetDuration(int duration) => _duration = duration;

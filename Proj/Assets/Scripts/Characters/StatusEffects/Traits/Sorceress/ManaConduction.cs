@@ -27,7 +27,6 @@ public class ManaConduction : Trait
         }
         
         var data = Data as DamageModifyingData;
-
         if (!data)
         {
             return;
@@ -37,6 +36,7 @@ public class ManaConduction : Trait
         {
             _manaUsed = CombatManager._instance.enemyMana;
         }
-        damage += (_manaUsed * data.DamageModifier);
+        var modifier = data.DamageModifierPercent / 100f;
+        damage += (_manaUsed * modifier);
     }
 }

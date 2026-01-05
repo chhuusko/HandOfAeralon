@@ -2,13 +2,11 @@ using UnityEngine;
 
 public class EchoesOfRestoration : Trait
 {
-    private float _healModifier = 1f;
-    private bool _shouldReset;
+    private float _healModifier;
 
     public override void ResetCombatState()
     {
-        _healModifier = 1f;
-        _shouldReset = false;
+        _healModifier = 0f;
     }
 
     public override void OnAbilityUsed(AbilityExecutionData abilityData)
@@ -19,13 +17,13 @@ public class EchoesOfRestoration : Trait
         }
             
         var data = Data as FloatModifierData;
-
         if (!data)
         {
             return;
         }
         
-        _healModifier += data.Modifier;
+        var modifier = data.ModifierPercent / 100f;
+        _healModifier += modifier;
     }
     
     public override void ModifyOutgoingHeal(ref float heal, Ability ability)
@@ -35,20 +33,12 @@ public class EchoesOfRestoration : Trait
             return;
         }
         
-        if (_healModifier <= 1f)
+        if (_healModifier <= 0f)
         {
             return;
         }
         
-        heal *= _healModifier;
-        _shouldReset = true;
-    }
-
-    public override void OnTurnEnd()
-    {
-        if (_shouldReset)
-        {
-            _healModifier = 1f;
-        }
+        heal *= 1f + _healModifier;
+        _healModifier = 0f;
     }
 }

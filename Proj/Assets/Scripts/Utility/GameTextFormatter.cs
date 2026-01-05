@@ -17,7 +17,12 @@ public static class GameTextFormatter
         Card,
     }
     
-    public static string ClassColoredName(Character character)
+    /// <summary>
+    /// Creates a named, colored link for the character's name.
+    /// </summary>
+    /// <param name="character">The character to create a label for.</param>
+    /// <returns>The characters name in color representing its class.</returns>
+    public static string CreateCharacterNameLink(Character character)
     {
         if (character == null)
         {
@@ -31,6 +36,11 @@ public static class GameTextFormatter
         return TextMarkupExtensions.Colorize(name, color);
     }
     
+    /// <summary>
+    /// Creates a faction and class name for the character, colored according to its class.
+    /// </summary>
+    /// <param name="character">The character to create the label for.</param>
+    /// <returns>A colored label indicating faction and character class.</returns>
     public static string FactionColoredLabel(Character character)
     {
         if (character == null)
@@ -47,6 +57,11 @@ public static class GameTextFormatter
             $"<link=\"{character.CharacterID}\"><u>{factionName} {className}</link></u>", color);
     }
 
+    /// <summary>
+    /// Creates a colored label for the given status effect.
+    /// </summary>
+    /// <param name="statusEffect">The status effect to create the label for.</param>
+    /// <returns>A label for the status effect, including name and color representing its type.</returns>
     public static string StatusEffectColoredLabel(StatusEffect statusEffect)
     {
         if (statusEffect == null)
@@ -56,25 +71,19 @@ public static class GameTextFormatter
         }
         
         string name = statusEffect.Name;
-        Color color;
-        if (statusEffect is Burn)
+        Color color = statusEffect switch
         {
-            color = ColorDatabase.Instance.BurnColor;
-        }
-        else if (statusEffect is Poison)
-        {
-            color = ColorDatabase.Instance.PoisonColor;
-        }
-        else
-        {
-            color = ColorDatabase.Instance.NonDamagingEffectColor;
-        }
-        
+            Burn => ColorDatabase.Instance.BurnColor,
+            Poison => ColorDatabase.Instance.PoisonColor,
+            _ => ColorDatabase.Instance.NonDamagingEffectColor
+        };
+
         return TextMarkupExtensions.Colorize(name, color);
     }
 
-    private static string GetPattern(TagType tagType)
+    private static string GetTagPattern(TagType tagType)
     {
+        // Find the regex pattern for the tag.
         switch (tagType)
         {
             case TagType.Ability:
@@ -100,8 +109,9 @@ public static class GameTextFormatter
         }
     }
 
-    private static string CreateLabel(string text, TagType tagType)
+    private static string CreateTag(string text, TagType tagType)
     {
+        // Colorize the tag depending on which type of tag it is.
         switch (tagType)
         {
             case TagType.Ability:
@@ -127,18 +137,28 @@ public static class GameTextFormatter
         }
     }
 
+    /// <summary>
+    /// Replaces the text in the given string with a colored tag.
+    /// </summary>
+    /// <param name="text">Reference to the text to replace.</param>
+    /// <param name="tagType">The tags to replace.</param>
     private static void ReplaceText(ref string text, TagType tagType)
     {
-        var pattern = GetPattern(tagType);
+        var pattern = GetTagPattern(tagType);
         text = Regex.Replace(text, pattern, match =>
         {
             var value = match.Groups[1].Value;
-            value = CreateLabel(value, tagType);
+            value = CreateTag(value, tagType);
             return value;
         });
     }
     
-    public static string LabeledStatusEffectTooltip(StatusEffect statusEffect)
+    /// <summary>
+    /// Replaces all tags in the status effects description with colored labels, keeping any text between the tags the same.
+    /// </summary>
+    /// <param name="statusEffect">The status effect description to search.</param>
+    /// <returns>The status effect description, with colored labels for any keyword.</returns>
+    public static string LabeledStatusEffectDescription(StatusEffect statusEffect)
     {
         var description = statusEffect.Data.Description;
 

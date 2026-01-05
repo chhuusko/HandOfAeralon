@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Tremor
   Icon: {fileID: 21300000, guid: 92408fd0d27db9c4aa413b1ce7994192, type: 3}
-  Description: Grants 10% damage reduction per stack
+  Description: Grants 10% damage reduction per stack (max 50%)
   Type: 0
   IsPermanent: 0
   IsDispellable: 1
@@ -22,5 +22,5 @@ MonoBehaviour:
   _typeName: Tremor, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
-  Cap: 0.5
-  Modifier: 0.1
+  CapPercent: 50
+  ModifierPercent: 10
