@@ -9,6 +9,7 @@ using UnityEngine.Events;
 public class CharacterMovement : MonoBehaviour
 {
     public UnityEvent<int> MovementCostPreview;
+    public UnityEvent OnMovementPreviewStopped;
 
     private Character _character;
     private List<CombatGridTile> _tilesInRange = new();
@@ -79,6 +80,7 @@ public class CharacterMovement : MonoBehaviour
         {
             _lastPreviewPathTile = null;
             GridExplorer._instance.ClearPathDrawing();
+            OnMovementPreviewStopped.Invoke();
             return;
         }
 
