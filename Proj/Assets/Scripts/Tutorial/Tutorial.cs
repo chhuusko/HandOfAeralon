@@ -18,8 +18,7 @@ public class Tutorial : MonoBehaviour
         }
     }
 
-    [SerializeField] private RectTransform _panel;
-    [SerializeField] private TMP_Text _tmpText;
+    [SerializeField] private RectTransform _turnOrder;
 
     private Canvas _canvas;
 
