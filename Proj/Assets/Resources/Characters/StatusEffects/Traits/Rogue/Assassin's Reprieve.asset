@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Assassin's Reprieve
   Icon: {fileID: 21300000, guid: 989215966b662754c8e0e70e2ded1c26, type: 3}
-  Description: Killing blow heals 100% of Max Health and removes all debuffs from
-    self
+  Description: '{ability}Killing blow{/ability} {heal}heals{/heal} 100% of {heal}Max
+    Health{/heal} and removes all {non_damaging}debuffs{/non_damaging} from self'
   Type: 3
   IsPermanent: 1
   IsDispellable: 0
+  SkipFirstTick: 0
   _typeName: AssassinsReprieve, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   Class: 2

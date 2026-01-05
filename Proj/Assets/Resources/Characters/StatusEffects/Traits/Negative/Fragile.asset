@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Fragile
   Icon: {fileID: 21300000, guid: 99a6de8053902374c8cf27d3493d321b, type: 3}
-  Description: First time you fall below 50% HP each combat, become Vulnerable for
-    2 turns
+  Description: First time you fall below 50% HP each combat, become {non_damaging}Vulnerable{/non_damaging}
+    for 2 turns
   Type: 3
   IsPermanent: 1
+  IsDispellable: 0
+  SkipFirstTick: 0
   _typeName: Fragile, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0

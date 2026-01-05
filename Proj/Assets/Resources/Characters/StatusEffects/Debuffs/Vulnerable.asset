@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Vulnerable
   Icon: {fileID: 21300000, guid: 8c796b88996acf74ab07a4d14a42adc5, type: 3}
-  Description: Character takes 50% more Damage (does not affect Burn or Poison)
+  Description: Character takes 50% more Damage (does not affect {burn}Burn{/burn}
+    or {poison}Poison{/poison})
   Type: 1
   IsPermanent: 0
   IsDispellable: 1

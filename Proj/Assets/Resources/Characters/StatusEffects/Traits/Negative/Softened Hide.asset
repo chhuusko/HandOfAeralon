@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Softened Hide
   Icon: {fileID: 21300000, guid: 51863ced3c1836c4bb744c3191ed041a, type: 3}
-  Description: Take 20% more Physical damage
+  Description: Take 20% more {physical_damage}Physical damage{/physical_damage}
   Type: 3
   IsPermanent: 1
   IsDispellable: 0
