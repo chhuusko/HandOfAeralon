@@ -59,6 +59,12 @@ public class HealthBar : MonoBehaviour
 
     private void HandleHealthChanged(int currentHp, int maxHp)
     {
+        if (this == null || !isActiveAndEnabled)
+            return;
+
+        if (_mainHealthslider == null || _easeHealthSlider == null)
+            return;
+
         _mainHealthslider.maxValue = maxHp;
         _easeHealthSlider.maxValue = maxHp;
 
