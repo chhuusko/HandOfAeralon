@@ -15,7 +15,7 @@ public class Stormwrath : Trait
             return;
         }
 
-        var multiplier = 1f + data.DamageModifier / 100f;
+        var multiplier = 1f + data.DamageModifierPercent / 100f;
         damage *= multiplier;
     }
 }

@@ -10,7 +10,7 @@ public class CinderScarredFlesh : Trait
             return;
         }
         
-        var modifier = 1f + data.DamageModifier / 100f;
+        var modifier = 1f + data.DamageModifierPercent / 100f;
         damage *= modifier;
     }
 }

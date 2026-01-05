@@ -16,7 +16,8 @@ public class ResonantRecovery : Trait
             return;
         }
         
-        damage *= data.DamageModifier;
+        var modifier = 1f + data.DamageModifierPercent / 100f;
+        damage *= modifier;
     }
 
     public override void OnAbilityUsed(AbilityExecutionData abilityData)
