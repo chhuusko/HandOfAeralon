@@ -40,7 +40,7 @@ public class AbilityLogEntry : CombatLogEntry
         
         string abilityName =
             TextMarkupExtensions.Colorize(d.Ability.GetAbilityName(), ColorDatabase.Instance.AbilityColor);
-        Color damageColor = ColorDatabase.Instance.GetDamageColor(d.Ability);
+        Color damageColor = ColorDatabase.Instance.GetAbilityColor(d.Ability);
         string damage = TextMarkupExtensions.Colorize(d.Damage.ToString(), damageColor);
         string heal = TextMarkupExtensions.Colorize(d.Heal.ToString(), ColorDatabase.Instance.HealingColor);
         
