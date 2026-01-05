@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9716981, g: 0.958983, b: 0.59126914, a: 1}
+  m_Color: {r: 0.9716981, g: 0.958983, b: 0.72156864, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -616,6 +616,11 @@ MonoBehaviour:
   _mainHealthslider: {fileID: 2182154836996242702}
   _easeDuration: 0.5
   _waitEaseDuration: 0.5
+  _previewHealthFill: {fileID: 2500175486471050557}
+  _startColor: {r: 0.990566, g: 0.9680067, b: 0.5093005, a: 1}
+  _endColor: {r: 1, g: 0.6236605, b: 0, a: 1}
+  _fadeDuration: 0.5
+  _waitPreviewFadeDuration: 0.25
 --- !u!1 &8075635495839296639
 GameObject:
   m_ObjectHideFlags: 0
