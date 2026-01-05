@@ -11,6 +11,7 @@ public class Mightforged : Trait
             return;
         }
 
-        damage *= data.DamageModifier;
+        var modifier = 1f + data.DamageModifierPercent / 100f;
+        damage *= modifier;
     }
 }

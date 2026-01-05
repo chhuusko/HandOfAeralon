@@ -38,8 +38,9 @@ public class BlightSpread : Trait
         }
         
         var target = enemies[UnityEngine.Random.Range(0, enemies.Count)];
-        target.GetComponent<Character>().GetStatusEffectManager().
-            AddStatusEffect(new Poison(Mathf.RoundToInt(duration / data.Modifier), Character));
+        var modifier = data.ModifierPercent / 100f;
+        target.GetComponent<Character>()?.GetStatusEffectManager()?.
+            AddStatusEffect(new Poison(Mathf.RoundToInt(duration * modifier), Character));
     }
 
     public override void OnStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)

@@ -112,6 +112,9 @@ public class CombatUI : MonoBehaviour
         Selector._instance.OnCharacterActionStopped += SetEndTurnButtonInteractable;
     }
 
+    /// <summary>
+    /// Enables the start combat button border once all characters have been placed.
+    /// </summary>
     private void SetStartCombatButton()
     {
         if (!CombatGrid._instance.AllCharactersPlaced())
@@ -209,6 +212,9 @@ public class CombatUI : MonoBehaviour
         CardHandManager.GetInstance().OpenDiscardPile();
     }
 
+    /// <summary>
+    /// Sets combat specific UI objects as active and calls methods to update them.
+    /// </summary>
     private void PlaceCharacterStarted()
     {
         Character c = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
@@ -255,6 +261,10 @@ public class CombatUI : MonoBehaviour
         bCombatStarted = true;
     }
 
+    /// <summary>
+    /// Calls corresponding methods to update UI elements at the start of turn.
+    /// </summary>
+    /// <param name="c">The character which's turn has started.</param>
     private void StartTurn(Character c)
     {
         UpdateActivePortrait(c);
@@ -263,6 +273,7 @@ public class CombatUI : MonoBehaviour
         SetSelectedCharacter(c);
         CurrentTurnCharacter = c;
 
+        // Player can only end turn for friendly characters.
         if (c && c.GetFaction() == Faction.Enemy)
         {
             SetEndTurnButtonUninteractable();
@@ -272,7 +283,7 @@ public class CombatUI : MonoBehaviour
             SetEndTurnButtonInteractable();
         }
         
-        _activeCharacterScript.SetActiveCharacter(c);
+        _activeCharacterScript.SetCharacter(c);
         
         _abilityScript.LoadAbilities(SelectedCharacter);
     }
@@ -280,9 +291,7 @@ public class CombatUI : MonoBehaviour
     private void DeselectCharacter()
     {
         SelectedCharacter = null;
-        
         _abilityScript.ClearAbilityButtons();
-
         ClearPortraitColors();
     }
 
@@ -345,6 +354,12 @@ public class CombatUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Creates a character portrait button.
+    /// </summary>
+    /// <param name="c">The character to create the portrait for.</param>
+    /// <param name="parent">The parent transform the portrait is created under</param>
+    /// <returns></returns>
     public PortraitButton CreateCharacterPortrait(Character c, Transform parent)
     {
         Button button = Instantiate(_characterPortraitButtonPrefab, parent);
@@ -389,6 +404,10 @@ public class CombatUI : MonoBehaviour
         UpdatePortraitColors(pb);
     }
 
+    /// <summary>
+    /// Updates colors for all current portraits to show faction and if the character is selected.
+    /// </summary>
+    /// <param name="selectedPortrait">The currently selected portrait.</param>
     private void UpdatePortraitColors(PortraitButton selectedPortrait)
     {
         bool friendly; 
@@ -399,11 +418,12 @@ public class CombatUI : MonoBehaviour
             pb.GetComponent<Image>().color = friendly ? _inactiveColor : _enemyInactiveColor;
         }
 
-        if (selectedPortrait)
+        if (!selectedPortrait)
         {
-            friendly = selectedPortrait.Character.GetFaction() == Faction.Friendly;
-            selectedPortrait.GetComponent<Image>().color = friendly ? _activeColor : _enemyActiveColor;
+            return;
         }
+        friendly = selectedPortrait.Character.GetFaction() == Faction.Friendly;
+        selectedPortrait.GetComponent<Image>().color = friendly ? _activeColor : _enemyActiveColor;
     }
 
     private void UpdateManaText(int mana)
@@ -414,7 +434,7 @@ public class CombatUI : MonoBehaviour
 
     private void UpdateActivePortrait(Character c)
     {
-        _activeCharacterScript.SetActiveCharacter(c);
+        _activeCharacterScript.SetCharacter(c);
     }
     
     private void OnDisable()

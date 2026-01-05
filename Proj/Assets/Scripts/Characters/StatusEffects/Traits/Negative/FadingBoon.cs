@@ -30,7 +30,7 @@ public class FadingBoon : Trait
         }
         
         _effectApplied = true;
-        statusEffect.SetDuration(Mathf.FloorToInt(statusEffect.Duration / data.DamageModifier));
+        statusEffect.SetDuration(Mathf.FloorToInt(statusEffect.Duration / data.DamageModifierPercent));
         return statusEffect.Duration > 0;
     }
 }

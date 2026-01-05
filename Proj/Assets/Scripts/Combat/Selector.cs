@@ -29,7 +29,6 @@ public class Selector : MonoBehaviour
     public event Action OnCharacterActionStopped;
 
 
-
     public enum CharacterActionType
     {
         Null,

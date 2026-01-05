@@ -23,7 +23,8 @@ public class Fragile : Trait
             return;
         }
 
-        if (Character.GetCurrentHealth() >= data.Threshold)
+        float healthPercent = (float)Character.GetCurrentHealth() / Character.GetMaxHealth();
+        if (healthPercent >= data.ThresholdPercent / 100f)
         {
             return;
         }

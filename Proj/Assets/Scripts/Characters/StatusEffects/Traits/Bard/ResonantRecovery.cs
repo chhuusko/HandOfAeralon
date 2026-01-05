@@ -16,7 +16,8 @@ public class ResonantRecovery : Trait
             return;
         }
         
-        damage *= data.DamageModifier;
+        var modifier = 1f + data.DamageModifierPercent / 100f;
+        damage *= modifier;
     }
 
     public override void OnAbilityUsed(AbilityExecutionData abilityData)
@@ -32,7 +33,7 @@ public class ResonantRecovery : Trait
             return;
         }
         
-        int healAmount = Mathf.RoundToInt(data.HealModifier * Character.GetMaxHealth());
+        int healAmount = Mathf.RoundToInt(data.HealModifierPercent * Character.GetMaxHealth() / 100f);
         Character.Heal(healAmount);
     }
 }

@@ -11,8 +11,16 @@ public static class TextMarkupExtensions
         Italic = 1 << 2,
     }
 
+    /// <summary>
+    /// Applies all styles specified to the given text and returns it.
+    /// </summary>
+    /// <param name="text">The text to modify.</param>
+    /// <param name="style">Flags for one or multiple styles to apply.</param>
+    /// <param name="color">The color to apply, if any.</param>
+    /// <returns>The text with style applied.</returns>
     public static string ApplyStyle(string text, TextStyle style, Color color = default)
     {
+        // Go through each flag and apply the corresponding style if needed.
         if (style.HasFlag(TextStyle.Colored))
         {
             text = Colorize(text, color);
