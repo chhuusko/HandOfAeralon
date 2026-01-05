@@ -51,6 +51,10 @@ public class CardHandManager : MonoBehaviour
     //  bool
     bool isCombat;
 
+    // view
+    [SerializeField] CardViewUI cardView;
+    [SerializeField] CardSelectViewUI cardSelect;
+
     // event
     public static Action<Card> onCardUse;
     public static Action<int> onManaChange;
@@ -95,7 +99,9 @@ public class CardHandManager : MonoBehaviour
     private void OnEnable()
     {
         CombatEventManager.OnCombatTurnChange += TurnChanged;
+
         onCardTargetCharacter += TurnEffects;
+
         _controller.Enable();
         _controller.Developer.SkipLevel.performed += SkipLevel;
     }
@@ -105,7 +111,9 @@ public class CardHandManager : MonoBehaviour
     private void OnDisable()
     {
         CombatEventManager.OnCombatTurnChange -= TurnChanged;
+
         onCardTargetCharacter -= TurnEffects;
+
         _controller.Disable();
         _controller.Developer.SkipLevel.performed -= SkipLevel;
     }
@@ -186,11 +194,17 @@ public class CardHandManager : MonoBehaviour
     }
     public void OpenDeck()
     {
-        CardViewUI.GetInstance().UpdateCards(_cardsInDeck);
+        cardView.UpdateCards(_cardsInDeck);
+        cardView.gameObject.SetActive(true);
     }
     public void OpenDiscardPile()
     {
-        CardViewUI.GetInstance().UpdateCards(_cardsInDiscardPile);
+        cardView.UpdateCards(_cardsInDiscardPile);
+        cardView.gameObject.SetActive(true);
+    }
+    public void OpenCardSelect()
+    {
+
     }
     public void RemoveCardFromHand(CardContainer cardContainer)
     {
