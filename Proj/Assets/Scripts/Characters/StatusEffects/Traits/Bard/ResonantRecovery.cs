@@ -33,7 +33,7 @@ public class ResonantRecovery : Trait
             return;
         }
         
-        int healAmount = Mathf.RoundToInt(data.HealModifier * Character.GetMaxHealth());
+        int healAmount = Mathf.RoundToInt(data.HealModifierPercent * Character.GetMaxHealth() / 100f);
         Character.Heal(healAmount);
     }
 }

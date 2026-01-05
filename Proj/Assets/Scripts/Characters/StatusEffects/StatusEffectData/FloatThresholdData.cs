@@ -4,6 +4,6 @@ using UnityEngine;
 public class FloatThresholdData : StatusEffectData
 {
     [Header("Effect-Specific Data")]
-    public float Threshold;
+    [Range(0, 100)]public float ThresholdPercent;
     public int TurnAmount;
 }
