@@ -216,7 +216,7 @@ public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler,
             TooltipTraitElement traitElementScript = _traitElements[i].GetComponent<TooltipTraitElement>();
             traitElementScript.SetTraitIcon(trait.Data.Icon);
             traitElementScript.SetTraitTitle(trait.Data.name);
-            traitElementScript.SetTraitDescription(trait.Data.Description);
+            traitElementScript.SetTraitDescription(trait.GetColorCodedDescription());
         }
     }
 
@@ -292,7 +292,7 @@ public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler,
             
             elementScript.SetIcon(statusEffect.Data.Icon);
             elementScript.SetTitle(statusEffect.Data.name);
-            elementScript.SetDescription(statusEffect.Data.Description);
+            elementScript.SetDescription(statusEffect.GetColorCodedDescription());
             elementScript.SetTurns(statusEffect.Duration);
         }
 

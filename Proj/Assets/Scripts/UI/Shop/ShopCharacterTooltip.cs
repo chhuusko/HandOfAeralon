@@ -127,7 +127,7 @@ public class ShopCharacterTooltip : MonoBehaviour
             TooltipTraitElement traitElementScript = _traitElements[i].GetComponent<TooltipTraitElement>();
             traitElementScript.SetTraitIcon(trait.Data.Icon);
             traitElementScript.SetTraitTitle(trait.Data.name);
-            traitElementScript.SetTraitDescription(trait.Data.Description);
+            traitElementScript.SetTraitDescription(trait.GetColorCodedDescription());
         }
     }
 

@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Blight Spread
   Icon: {fileID: 21300000, guid: 3063c204252d275499f8c060b7f6b3e0, type: 3}
-  Description: When an enemy with Poison applied by the Rogue is defeated, transfer
-    half of its remaining Poison stacks (rounded up) to a random enemy.
+  Description: When an enemy with {poison}Poison{/poison} applied by the Rogue is
+    defeated, transfer half of its remaining {poison}Poison{/poison} stacks (rounded
+    up) to a random enemy.
   Type: 3
   IsPermanent: 1
   IsDispellable: 0
+  SkipFirstTick: 0
   _typeName: BlightSpread, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 2
   IsPositive: 1

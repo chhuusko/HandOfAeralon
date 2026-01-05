@@ -152,12 +152,14 @@ public class AbilityHandler : MonoBehaviour
         var occupant = tile.GetOccupant();
         Character character = occupant ? occupant.GetComponent<Character>() : null;
 
-        if (CharacterNotTargetable(character)) return false;
+        var abilityType = ability.GetAbilityTargetType();
 
-        switch (ability.GetAbilityTargetType())
+        if (abilityType != Ability.ValidTargetOccupant.Any && CharacterNotTargetable(character)) return false;
+
+        switch (abilityType)
         {
             case Ability.ValidTargetOccupant.Any:
-                return tile.IsWalkable();
+                return true;
             case Ability.ValidTargetOccupant.CharacterOccupiedTile:
                 return occupant != null;
             case Ability.ValidTargetOccupant.Enemy:
@@ -174,14 +176,7 @@ public class AbilityHandler : MonoBehaviour
     /// </summary>
     private List<CombatGridTile> RemoveUntargetableTiles(List<CombatGridTile> tiles)
     {
-        List<CombatGridTile> filteredList = new();
-        foreach (CombatGridTile tile in tiles)
-        {
-            if (tile.IsWalkable())
-            {
-                filteredList.Add(tile);
-            }
-        }
+        List<CombatGridTile> filteredList = tiles;
 
         if ((_pendingAbility.GetAbilityTargetType() != Ability.ValidTargetOccupant.Any) && (_pendingAbility.GetAbilityTargetType() != Ability.ValidTargetOccupant.Friendly))
         {
@@ -217,7 +212,7 @@ public class AbilityHandler : MonoBehaviour
         {
             if (_tilesInRange.Contains(t))
             {
-                t.SetTileColor(Color.green);
+                t.SetTileColor(Color.cyan);
             }
             else
             {
