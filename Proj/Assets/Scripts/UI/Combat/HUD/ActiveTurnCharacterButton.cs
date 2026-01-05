@@ -12,7 +12,11 @@ public class ActiveTurnCharacterButton : MonoBehaviour
     [SerializeField] private Color _friendlyColor;
     [SerializeField] private Color _enemyColor;
 
-    public void SetActiveCharacter(Character character)
+    /// <summary>
+    /// Updates button to reflect the currently active character in turn order.
+    /// </summary>
+    /// <param name="character">The character which turn it is.</param>
+    public void SetCharacter(Character character)
     {
         if (character == null)
         {
