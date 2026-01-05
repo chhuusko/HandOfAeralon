@@ -416,7 +416,7 @@ public class Selector : MonoBehaviour
             _currentState = SelectorState.ActionTypeSelected;
             abilityHandler.SetPendingAbility(ability);
             abilityHandler.CalculateAbilityRange();
-            SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.green);
+            SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.cyan);
         }
     }
 
