@@ -1,7 +1,4 @@
-// Joel Larsson Wendt | jola6902
-
-using UnityEngine;
-using UnityEngine.Events;
+// Joel Larsson Wendt || jola6902
 
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemyAI : MonoBehaviour // ### OLD VERSION (SEE: AI_CORE INSTEAD) ###
+public class EnemyAI : MonoBehaviour
 {
     private const int TOP_N_ACTIONS = 3;
     private const float TURN_START_WAIT_TIME = 1f;
@@ -117,12 +114,12 @@ public class EnemyAI : MonoBehaviour // ### OLD VERSION (SEE: AI_CORE INSTEAD) #
             yield break;
         }
         AIAction chosenAction = SelectAction(scoredActions);
-        
-        //Debug.LogWarning($"EnemyAI.cs | Move {_character.name} to {chosenAction.movement.GetTileIndex()}," +
-        //    $" use ability: {(chosenAction.ability != null ? chosenAction.ability.name : "NONE")}," +
-        //    $" at position: {(chosenAction.target != null ? chosenAction.target.GetTileIndex() : "NONE")}," +
-        //    $" score: {scoredActions[chosenAction]}!");
-        
+        /*
+        Debug.LogWarning($"EnemyAI.cs | Move {_character.name} to {chosenAction.movement.GetTileIndex()}," +
+            $" use ability: {(chosenAction.ability != null ? chosenAction.ability.name : "NONE")}," +
+            $" at position: {(chosenAction.target != null ? chosenAction.target.GetTileIndex() : "NONE")}," +
+            $" score: {scoredActions[chosenAction]}!");
+        */
 
         CharacterMovement movementComponent = null;
         if (!IsDead() && chosenAction.movement != _character.GetCurrentTileComponent() && _character.CanMove &&
@@ -216,16 +213,17 @@ public class EnemyAI : MonoBehaviour // ### OLD VERSION (SEE: AI_CORE INSTEAD) #
                         sorcModifier = -20f;
                     }
 
-                    
-                    //int futureDist = GridExplorer._instance.ManhattanDistance(tile.GetTileIndex(), closestEnemy.GetCurrentTileIndex());
+                    /*
+                    int futureDist = GridExplorer._instance.ManhattanDistance(tile.GetTileIndex(), closestEnemy.GetCurrentTileIndex());
 
-                    //int desiredMin = 5;
-                    //int desiredMax = 7;
+                    int desiredMin = 5;
+                    int desiredMax = 7;
 
-                    //if (futureDist >= desiredMin && futureDist <= desiredMax)
-                    //{
-                    //    moveScore += 50f;
-                    //}
+                    if (futureDist >= desiredMin && futureDist <= desiredMax)
+                    {
+                        moveScore += 50f;
+                    }
+                    */
                 }
 
                 switch (_character.GetCharacterClass())
@@ -614,8 +612,6 @@ public class EnemyAI : MonoBehaviour // ### OLD VERSION (SEE: AI_CORE INSTEAD) #
                             }
                         }
                     }
-                    float myPERCENTHP = _character.GetMaxHealth() == 0 ? 1f : _character.GetCurrentHealth() / _character.GetMaxHealth();
-                    if (myPERCENTHP < 0.2f) result -= 9999;
                     if (hitCount == 0) result -= 100f;
                     break;
                 }

@@ -1,4 +1,4 @@
-// Joel Larsson Wendt | jola6902
+// Joel Larsson Wendt || jola6902
 
 using System.Collections.Generic;
 using System.Linq;
@@ -78,7 +78,7 @@ public class AI_Context
             }
         }
 
-        Debug.Log($"AI_Context.cs | Found {result.Count} abilities ready to use!");
+        //Debug.Log($"AI_Context.cs | Found {result.Count} abilities ready to use!");
 
         return result;
     }

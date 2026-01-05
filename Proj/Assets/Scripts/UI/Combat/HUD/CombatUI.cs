@@ -262,6 +262,16 @@ public class CombatUI : MonoBehaviour
         
         SetSelectedCharacter(c);
         CurrentTurnCharacter = c;
+
+        if (c && c.GetFaction() == Faction.Enemy)
+        {
+            SetEndTurnButtonUninteractable();
+        }
+        else if (c && c.GetFaction() == Faction.Friendly)
+        {
+            SetEndTurnButtonInteractable();
+        }
+        
         _activeCharacterScript.SetActiveCharacter(c);
         
         _abilityScript.LoadAbilities(SelectedCharacter);
@@ -278,7 +288,10 @@ public class CombatUI : MonoBehaviour
 
     private void SetEndTurnButtonInteractable()
     {
-        _endTurnButton.interactable = true;
+        if (CurrentTurnCharacter && CurrentTurnCharacter.GetFaction() == Faction.Friendly)
+        {
+            _endTurnButton.interactable = true;
+        }
     }
 
     private void SetEndTurnButtonUninteractable()

@@ -1,31 +1,65 @@
-// Joel Larsson Wendt | jola6902
+// Joel Larsson Wendt || jola6902
 
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class AI_Evaluator
+public class AI_Evaluator : MonoBehaviour
 {
+    // Singleton pattern
+    private static AI_Evaluator Instance;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
+    public static AI_Evaluator GetInstance()
+    {
+        return Instance;
+    }
+    // End of singleton pattern
+
     private static readonly HashSet<CharacterClass> _meleeClassSet = new()
     {
         CharacterClass.Barbarian,
         CharacterClass.Rogue
     };
 
-    private const int TOP_N_ACTIONS = 3;
-    private const float HAZARD_AVOIDANCE = 25f;
-    private const int RANGED_CHARACTER_PREFERRED_RANGE = 6;
-    private const float USE_ABILITY_BONUS = 30f;
-    private const float DISPEL_BUFFS_INCLINATION = 50f;
-    private const float PREFER_POISONED_TARGETS = 30f;
-    private const float PREFER_UNARMORED_TARGETS = 30f;
-    private const float PROACTIVE_STEALTH_CHANCE = 0.5f;
-    private const float FRIENDLY_FIRE_AVOIDANCE = 60f;
+    [Header("Settings")]
+    [Tooltip("How many number of top rated actions shall be considered for being randomly selected as the best one.")]
+    [SerializeField] private int _topN = 3;
+    [Tooltip("Controls the AI's willingness to avoid hazard tiles.")]
+    [SerializeField] private float _hazardAvoidance = 50f;
+    [Tooltip("The preferred range for ranged characters to stay away from the closest enemy (in number of tiles).")]
+    [SerializeField] private int _sorcBardPrefRange = 6;
+    [Tooltip("How much Bards prefer to dispel enemy Buffs.")]
+    [SerializeField] private float _dispelGreed = 50f;
+    [Tooltip("The level of greediness Rogues have for attacking Poisoned enemies.")]
+    [SerializeField] private float _poisonGreed = 30f;
+    [Tooltip("The level of greediness Rogues have for attacking Ranged enemies.")]
+    [SerializeField] private float _unarmoredGreed = 30f;
+    [Tooltip("The chance a Rogue has to favor preemptively using Stealth without having Debuffs (0-1).")]
+    [SerializeField] private float _premeditationChance = 0.5f;
+    [Tooltip("Controls the AI's willingness to avoid friendly fire with AoE abilities.")]
+    [SerializeField] private float _avoidFriendlyFire = 60f;
 
-    private LinePattern _linePattern = ScriptableObject.Instantiate(Resources.Load<LinePattern>("AI/LinePattern"));
-    private FlamePattern _flamePattern = ScriptableObject.Instantiate(Resources.Load<FlamePattern>("AI/FlamePattern"));
-    private HousePattern _housePattern = ScriptableObject.Instantiate(Resources.Load<HousePattern>("AI/HousePattern"));
-    private TriSquarePattern _trisquarePattern = ScriptableObject.Instantiate(Resources.Load<TriSquarePattern>("AI/TriSquarePattern"));
+    [Header("AoE Patterns")]
+    [Tooltip("Used in ability score calculations.")]
+    [SerializeField] private DirectedAOEPattern _linePattern;
+    [Tooltip("Used in ability score calculations.")]
+    [SerializeField] private DirectedAOEPattern _flamePattern;
+    [Tooltip("Used in ability score calculations.")]
+    [SerializeField] private DirectedAOEPattern _housePattern;
+    [Tooltip("Used in ability score calculations.")]
+    [SerializeField] private DirectedAOEPattern _trisquarePattern;
 
     public AI_Action Evaluate(AI_Context context, List<AI_Action> actions)
     {
@@ -40,10 +74,9 @@ public class AI_Evaluator
             float score = 0f;
             score += EvaluateMovement(context, action);
             score += EvaluateAbilityUsage(context, action);
+            PenalizeMovementOnlyActions(actions);
             action.Score = score;
         }
-
-        PenalizeMovementOnlyActions(actions);
 
         return SelectAction(context, actions);
     }
@@ -52,7 +85,7 @@ public class AI_Evaluator
     {
         float result = 0f;
 
-        if (HAZARD_AVOIDANCE > 0f && context.Self.GetCurrentTileComponent() != action.Movement) // Check for hazards
+        if (_hazardAvoidance > 0f && context.Self.GetCurrentTileComponent() != action.Movement) // Check for hazards
         {
             List<CombatGridTile> path =
             GridExplorer._instance.FindPathAStar(context.Self.GetCurrentTileComponent().gameObject, action.Movement.gameObject, false, context.ReachableTiles)
@@ -64,7 +97,7 @@ public class AI_Evaluator
             {
                 if (step.GetTileType() == TileType.Lava || step.GetTileType() == TileType.Poison)
                 {
-                    result -= HAZARD_AVOIDANCE / context.PercentHP;
+                    result -= _hazardAvoidance / context.PercentHP;
                 }
             }
         }
@@ -76,7 +109,7 @@ public class AI_Evaluator
             if (closestAlly != null)
             {
                 deltaDistance = GetDeltaDistance(context.Self, closestAlly, action.Movement);
-                result -= deltaDistance * 5f / context.PercentHP;
+                result -= deltaDistance * 10f / context.PercentHP;
             }
         }
 
@@ -87,13 +120,13 @@ public class AI_Evaluator
             if (closestEnemy != null)
             {
                 deltaDistance = GetDeltaDistance(context.Self, closestEnemy, action.Movement);
-                float modifier = 5f;
+                float modifier = 20f;
 
                 if (!_meleeClassSet.Contains(context.Self.GetCharacterClass()))
                 {
-                    if (GridExplorer._instance.ManhattanDistance(context.Self.GetCurrentTileIndex(), closestEnemy.GetCurrentTileIndex()) > context.Self.GetMovementPoints() + RANGED_CHARACTER_PREFERRED_RANGE)
+                    if (GridExplorer._instance.ManhattanDistance(context.Self.GetCurrentTileIndex(), closestEnemy.GetCurrentTileIndex()) > context.Self.GetMovementPoints() + _sorcBardPrefRange)
                     {
-                        modifier = -5f;
+                        modifier = -20f;
                     }
                 }
 
@@ -220,7 +253,6 @@ public class AI_Evaluator
         OccupantData occupant = AnalyzeOccupant(context, action.Target);
         if (occupant.Exists && occupant.IsEnemy)
         {
-            result += USE_ABILITY_BONUS;
             result += 30f;
 
             if (occupant.PercentHP < 0.5f)
@@ -244,7 +276,6 @@ public class AI_Evaluator
         int hitCount = 0;
         DirectedAOEPattern.Direction direction = GetDirection(action.Movement, action.Target);
         _housePattern.SetDirection(direction);
-        _housePattern.SetCasterTile(action.Movement);
         List<CombatGridTile> areaOfEffect = _housePattern.CalculateTilesToEffect(action.Target);
 
         foreach (var tile in areaOfEffect)
@@ -269,18 +300,13 @@ public class AI_Evaluator
             if (occupant.Exists && !occupant.IsEnemy)
             {
                 hitCount--;
-                result -= FRIENDLY_FIRE_AVOIDANCE;
+                result -= _avoidFriendlyFire;
             }
         }
 
         if (hitCount < 2)
         {
             result -= 30f;
-        }
-
-        if (hitCount > 0)
-        {
-            result += USE_ABILITY_BONUS;
         }
 
         if (hitCount == 0)
@@ -298,7 +324,6 @@ public class AI_Evaluator
         int hitCount = 0;
         DirectedAOEPattern.Direction direction = GetDirection(action.Movement, action.Target);
         _trisquarePattern.SetDirection(direction);
-        _trisquarePattern.SetCasterTile(action.Movement);
         List<CombatGridTile> areaOfEffect = _trisquarePattern.CalculateTilesToEffect(action.Target);
 
         foreach (var tile in areaOfEffect)
@@ -323,13 +348,8 @@ public class AI_Evaluator
             if (occupant.Exists && !occupant.IsEnemy)
             {
                 hitCount--;
-                result -= FRIENDLY_FIRE_AVOIDANCE;
+                result -= _avoidFriendlyFire;
             }
-        }
-
-        if (hitCount > 0)
-        {
-            result += USE_ABILITY_BONUS;
         }
 
         if (hitCount == 0)
@@ -365,11 +385,6 @@ public class AI_Evaluator
             result -= 50f;
         }
 
-        if (hitCount > 0)
-        {
-            result += USE_ABILITY_BONUS;
-        }
-
         if (hitCount == 0)
         {
             result = float.NegativeInfinity;
@@ -402,11 +417,6 @@ public class AI_Evaluator
         if (hitCount < 2)
         {
             result -= 50f;
-        }
-
-        if (hitCount > 0)
-        {
-            result += USE_ABILITY_BONUS;
         }
 
         if (hitCount == 0)
@@ -448,11 +458,6 @@ public class AI_Evaluator
             result -= 50f;
         }
 
-        if (hitCount > 0)
-        {
-            result += USE_ABILITY_BONUS;
-        }
-
         if (hitCount == 0)
         {
             result = float.NegativeInfinity;
@@ -475,49 +480,49 @@ public class AI_Evaluator
             {
                 if (occupant.HasStatusEffect<Haste>())
                 {
-                    result += DISPEL_BUFFS_INCLINATION;
+                    result += _dispelGreed;
                     hitCount++;
                 }
 
                 if (occupant.HasStatusEffect<Empowered>())
                 {
-                    result += DISPEL_BUFFS_INCLINATION;
+                    result += _dispelGreed;
                     hitCount++;
                 }
 
                 if (occupant.HasStatusEffect<Emberwake>())
                 {
-                    result += DISPEL_BUFFS_INCLINATION;
+                    result += _dispelGreed;
                     hitCount++;
                 }
 
                 if (occupant.HasStatusEffect<Enraged>())
                 {
-                    result += DISPEL_BUFFS_INCLINATION;
+                    result += _dispelGreed;
                     hitCount++;
                 }
 
                 if (occupant.HasStatusEffect<ConduitOfPower>())
                 {
-                    result += DISPEL_BUFFS_INCLINATION;
+                    result += _dispelGreed;
                     hitCount++;
                 }
 
                 if (occupant.HasStatusEffect<Fortified>())
                 {
-                    result += DISPEL_BUFFS_INCLINATION;
+                    result += _dispelGreed;
                     hitCount++;
                 }
 
                 if (occupant.HasStatusEffect<Sanctified>())
                 {
-                    result += DISPEL_BUFFS_INCLINATION;
+                    result += _dispelGreed;
                     hitCount++;
                 }
 
                 if (occupant.HasStatusEffect<Stealth>())
                 {
-                    result += DISPEL_BUFFS_INCLINATION;
+                    result += _dispelGreed;
                     hitCount++;
                 }
             }
@@ -525,12 +530,7 @@ public class AI_Evaluator
 
         if (hitCount < 2)
         {
-            result -= DISPEL_BUFFS_INCLINATION;
-        }
-
-        if (hitCount > 0)
-        {
-            result += USE_ABILITY_BONUS;
+            result -= _dispelGreed;
         }
 
         if (hitCount == 0)
@@ -555,7 +555,6 @@ public class AI_Evaluator
         OccupantData occupant = AnalyzeOccupant(context, action.Target);
         if (occupant.Exists && occupant.IsEnemy)
         {
-            result += USE_ABILITY_BONUS;
             result += 30f;
 
             if (occupant.PercentHP < 0.2f)
@@ -565,12 +564,12 @@ public class AI_Evaluator
 
             if (occupant.HasStatusEffect<Poison>())
             {
-                result += PREFER_POISONED_TARGETS;
+                result += _poisonGreed;
             }
 
             if (!_meleeClassSet.Contains(occupant.Character.GetCharacterClass()))
             {
-                result += PREFER_UNARMORED_TARGETS;
+                result += _unarmoredGreed;
             }
 
             if (occupant.HasStatusEffect<Stealth>())
@@ -618,19 +617,19 @@ public class AI_Evaluator
 
                     if (occupant.HasStatusEffect<Poison>())
                     {
-                        result += PREFER_POISONED_TARGETS;
+                        result += _poisonGreed;
                     }
 
                     if (!_meleeClassSet.Contains(occupant.Character.GetCharacterClass()))
                     {
-                        result += PREFER_UNARMORED_TARGETS;
+                        result += _unarmoredGreed;
                     }
                 }
 
                 if (occupant.Exists && !occupant.IsEnemy)
                 {
                     hitCount--;
-                    result -= FRIENDLY_FIRE_AVOIDANCE;
+                    result -= _avoidFriendlyFire;
                 }
             }
         }
@@ -638,11 +637,6 @@ public class AI_Evaluator
         if (hitCount < 2)
         {
             result -= 30f;
-        }
-
-        if (hitCount > 0)
-        {
-            result += USE_ABILITY_BONUS;
         }
 
         if (hitCount == 0)
@@ -660,7 +654,6 @@ public class AI_Evaluator
         int hitCount = 0;
         DirectedAOEPattern.Direction direction = GetDirection(action.Movement, action.Target);
         _linePattern.SetDirection(direction);
-        _linePattern.SetCasterTile(action.Movement);
         List<CombatGridTile> areaOfEffect = _linePattern.CalculateTilesToEffect(action.Target);
 
         foreach (var tile in areaOfEffect)
@@ -678,30 +671,25 @@ public class AI_Evaluator
 
                 if (occupant.HasStatusEffect<Poison>())
                 {
-                    result += PREFER_POISONED_TARGETS;
+                    result += _poisonGreed;
                 }
 
                 if (!_meleeClassSet.Contains(occupant.Character.GetCharacterClass()))
                 {
-                    result += PREFER_UNARMORED_TARGETS;
+                    result += _unarmoredGreed;
                 }
             }
 
             if (occupant.Exists && !occupant.IsEnemy)
             {
                 hitCount--;
-                result -= FRIENDLY_FIRE_AVOIDANCE;
+                result -= _avoidFriendlyFire;
             }
         }
 
         if (hitCount < 2)
         {
             result -= 30f;
-        }
-
-        if (hitCount > 0)
-        {
-            result += USE_ABILITY_BONUS;
         }
 
         if (hitCount == 0)
@@ -719,7 +707,7 @@ public class AI_Evaluator
         int hitCount = 0;
         if (!context.StatusEffectManager.ContainsStatusEffect<Stealth>())
         {
-            if (Random.Range(0f, 1f) > PROACTIVE_STEALTH_CHANCE)
+            if (Random.Range(0f, 1f) > _premeditationChance)
             {
                 hitCount++;
                 result += 30f;
@@ -761,11 +749,6 @@ public class AI_Evaluator
             result -= 30f;
         }
 
-        if (hitCount > 0)
-        {
-            result += USE_ABILITY_BONUS;
-        }
-
         if (hitCount == 0)
         {
             result = float.NegativeInfinity;
@@ -782,7 +765,6 @@ public class AI_Evaluator
         OccupantData occupant = AnalyzeOccupant(context, action.Target);
         if (occupant.Exists && occupant.IsEnemy)
         {
-            result += USE_ABILITY_BONUS;
             result += 30f;
 
             if (occupant.PercentHP < 0.2f)
@@ -806,7 +788,6 @@ public class AI_Evaluator
         int hitCount = 0;
         DirectedAOEPattern.Direction direction = GetDirection(action.Movement, action.Target);
         _flamePattern.SetDirection(direction);
-        _flamePattern.SetCasterTile(action.Movement);
         List<CombatGridTile> areaOfEffect = _flamePattern.CalculateTilesToEffect(action.Target);
 
         foreach (var tile in areaOfEffect)
@@ -826,18 +807,13 @@ public class AI_Evaluator
             if (occupant.Exists && !occupant.IsEnemy)
             {
                 hitCount--;
-                result -= FRIENDLY_FIRE_AVOIDANCE;
+                result -= _avoidFriendlyFire;
             }
         }
 
         if (hitCount < 2)
         {
             result -= 30f;
-        }
-
-        if (hitCount > 0)
-        {
-            result += USE_ABILITY_BONUS;
         }
 
         if (hitCount == 0)
@@ -872,18 +848,13 @@ public class AI_Evaluator
             if (occupant.Exists && !occupant.IsEnemy)
             {
                 hitCount--;
-                result -= FRIENDLY_FIRE_AVOIDANCE;
+                result -= _avoidFriendlyFire;
             }
         }
 
         if (hitCount < 2)
         {
             result -= 30f;
-        }
-
-        if (hitCount > 0)
-        {
-            result += USE_ABILITY_BONUS;
         }
 
         if (hitCount == 0)
@@ -900,8 +871,6 @@ public class AI_Evaluator
 
         if (!context.StatusEffectManager.ContainsStatusEffect<Emberwake>())
         {
-            result += USE_ABILITY_BONUS;
-
             foreach (var cooldownCheck in context.Self.GetAvailableAbilities())
             {
                 if (cooldownCheck is LightningStorm_Ability && !context.Self.IsAbilityCooldownActive(cooldownCheck))
@@ -999,28 +968,22 @@ public class AI_Evaluator
 
     private AI_Action SelectAction(AI_Context context, List<AI_Action> actions)
     {
-        var validActions = actions
-            .Where(a => !float.IsNegativeInfinity(a.Score) && !float.IsNaN(a.Score))
-            .ToList();
-
-        Debug.Log($"AI_Evaluator.cs | Found {validActions.Count} worthwhile actions out of {actions.Count} total for {context.Self.name}.");
-        
-        foreach (var action in validActions)
-        {
-            AI_Core.PrintAction(action);
-        }
-
-        var topActions = validActions
-            .OrderByDescending(a => a.Score)
-            .Take(TOP_N_ACTIONS)
-            .ToList();
+        var topActions = actions
+        .Where(a =>
+        !float.IsNegativeInfinity(a.Score) &&
+        !float.IsNaN(a.Score))
+        .OrderByDescending(a => a.Score)
+        .Take(_topN)
+        .ToList();
 
         if (topActions.Count == 0)
         {
             Debug.LogError($"AI_Evaluator.cs | NO VALID ACTIONS FOUND for {context.Self.name}! Defaulting to standing still.");
             return new AI_Action { Movement = context.Self.GetCurrentTileComponent() };
         }
-
-        return topActions[Random.Range(0, topActions.Count)];
+        else
+        {
+            return topActions[Random.Range(0, topActions.Count)];
+        }
     }
 }

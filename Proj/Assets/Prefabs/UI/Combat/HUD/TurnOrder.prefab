@@ -198,9 +198,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _turnOrderPanel: {fileID: 1155740122543395430}
+  _panelViewPort: {fileID: 2928068767618680575}
   _turnOrderScrollRect: {fileID: 7159075191125529906}
   _roundMarkerPrefab: {fileID: 3558424651576000756, guid: e8a034716e871b248a2636b648a2b59d,
     type: 3}
+  _turnOrderRoundMarker: {fileID: 0}
 --- !u!1 &2928068767618680575
 GameObject:
   m_ObjectHideFlags: 0

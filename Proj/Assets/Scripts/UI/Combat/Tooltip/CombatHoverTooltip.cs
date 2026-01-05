@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -33,9 +34,21 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
 
     void Start()
     {
+        Selector._instance.OnCharacterDeselected += Hide;
         _rectTransform = GetComponent<RectTransform>();
         Hide();
-        _slider.value = _sliderSpeed;
+        SetSliderValue(_sliderSpeed);
+
+        if (_sliderSpeed <= 0f)
+            _slider.gameObject.SetActive(false);
+        else
+            _slider.gameObject.SetActive(true);
+
+    }
+
+    void OnDisable()
+    {
+        Selector._instance.OnCharacterDeselected -= Hide;
     }
 
     // Update is called once per frame
@@ -95,7 +108,6 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
 
         _buttonPosition = RectTransformUtility.WorldToScreenPoint(camera, topCenter);
 
-
         RectTransform canvasRect = _tooltipCanvas.transform as RectTransform;
 
         // Convert the BUTTON screen position to canvas local position
@@ -105,13 +117,11 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
             _tooltipOverlayCamera,         
             out Vector2 localPoint);
 
-        
         localPoint.x += _rectTransform.rect.width / 2f - 10f;
 
         // NOTE (Calle): This is a fkn MAGIC value that seemed to work for not making the hovertooltip flicker when mouse was hovering over
         // both the abilitybutton and the tooltip.
         localPoint.y += _rectTransform.rect.height / 2f + 5f;
-
 
         localPoint = ClampToScreenBounds(localPoint, canvasRect.rect.size);
 
@@ -156,10 +166,10 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
     private void StopSlider() { _bSliderFinished = true; }
     private void UpdateSlider()
     {
-        _slider.value += _sliderSpeed;
+        SetSliderValue(_slider.value + _sliderSpeed);
         if(_slider.value >= 1f)
         {
-            _slider.value = 0f;
+            SetSliderValue(0f);
             _sliderInnerArea.color = _finishedColor;
             _bTooltipLocked = true;
             StopSlider();
@@ -180,9 +190,15 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
     {
         _sliderSpeed = 0.1f * speed;
         if (_sliderSpeed <= 0.0f)
+        {
             SetHoverLock(false);
+            _slider.gameObject.SetActive(false);
+        }
         else
+        {
             SetHoverLock(true);
+            _slider.gameObject.SetActive(true);
+        }
     }
 
     public bool GetIsHovering() { return _bIsHovering; }
@@ -195,12 +211,14 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
     bool IsRequestingClose() { return _bCloseRequest; }
     public void OnPointerExit(PointerEventData eventData)
     {
-        //_bTooltipLocked = false;
         SetIsHovering(false);
-      //  SetIsRequsetingClose(true);
         Hide();
     }
 
+    public void SetSliderValue(float value)
+    {
+        _slider.value = value;
+    }
 
 
     private void DEBUGLogRayCastHits()
@@ -219,4 +237,6 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
             }
         }
     }
+
+    
 }

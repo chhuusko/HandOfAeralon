@@ -1,4 +1,4 @@
-// Joel Larsson Wendt | jola6902
+// Joel Larsson Wendt || jola6902
 
 using System.Collections;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ public class EnemyAIOld : MonoBehaviour
         public CombatGridTile target;
     }
 
-    //public UnityEvent AIEndTurn;
+    public UnityEvent AIEndTurn;
 
     [SerializeField] private ClassData _barbData, _rogueData, _sorcData, _bardData;
     [SerializeField] private Faction _controlledFaction = Faction.Enemy;
@@ -34,7 +34,6 @@ public class EnemyAIOld : MonoBehaviour
     private Dictionary<AIAction, int> _scoredActions = new();
     private AIAction _chosenAction = new();
 
-    /*
     private void OnEnable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
@@ -44,7 +43,6 @@ public class EnemyAIOld : MonoBehaviour
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
     }
-    */
 
     private void OnTurnStart(Character character)
     {
@@ -337,7 +335,7 @@ public class EnemyAIOld : MonoBehaviour
         _scoredActions = new();
         _chosenAction = new();
 
-        //AIEndTurn.Invoke();
+        AIEndTurn.Invoke();
     }
 
     private void PrintAIAction(AIAction action) // Action must be scored first

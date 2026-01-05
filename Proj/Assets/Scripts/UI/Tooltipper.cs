@@ -1,4 +1,4 @@
-// Joel Larsson Wendt | jola6902
+// Joel Larsson Wendt || jola6902
 
 using TMPro;
 using UnityEngine;
