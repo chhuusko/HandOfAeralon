@@ -7,7 +7,9 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Slider _easeHealthSlider;
     [SerializeField] private Slider _previewHealthSlider;
     [SerializeField] private Slider _mainHealthslider;
-    [SerializeField] private float _easeSpeed = 1.5f;
+    [SerializeField] private float _easeDuration = 0.5f;
+    [SerializeField] private float _waitEaseDuration = 0.5f;
+
 
 
     private Character _character;
@@ -81,17 +83,31 @@ public class HealthBar : MonoBehaviour
 
     private IEnumerator EaseHealth()
     {
-        while (!Mathf.Approximately(_easeHealthSlider.value, _mainHealthslider.value))
+        float start = _easeHealthSlider.value;
+        float target = _mainHealthslider.value;
+
+        float elapsed = 0f;
+
+        while(elapsed < _waitEaseDuration)
         {
-            _easeHealthSlider.value = Mathf.Lerp(
-                _easeHealthSlider.value,
-                _mainHealthslider.value,
-                Time.deltaTime * _easeSpeed
-            );
+            elapsed += Time.deltaTime;
+            float t = elapsed / _easeDuration;
+
             yield return null;
         }
 
-        _easeHealthSlider.value = _mainHealthslider.value;
+        elapsed = 0;
+
+        while (elapsed < _easeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / _easeDuration;
+
+            _easeHealthSlider.value = Mathf.Lerp(start, target, t);
+            yield return null;
+        }
+
+        _easeHealthSlider.value = target;
     }
 
     public void ShowPreviewDamage(int previewHealthDifference)

@@ -614,7 +614,8 @@ MonoBehaviour:
   _easeHealthSlider: {fileID: 438993216210149134}
   _previewHealthSlider: {fileID: 2250031975041279369}
   _mainHealthslider: {fileID: 2182154836996242702}
-  _easeSpeed: 1.5
+  _easeDuration: 0.5
+  _waitEaseDuration: 0.5
 --- !u!1 &8075635495839296639
 GameObject:
   m_ObjectHideFlags: 0
