@@ -80,7 +80,11 @@ public class TurnOrder : MonoBehaviour
                         getCardMarkerDisplayed = true;
                     }
                 }
-                else if(combatTurnOrder.IsGetCardRound() && !getCardMarkerDisplayed && combatTurnOrder.IsFriendlyInPendingOrder())
+                else if(combatTurnOrder.IsGetCardRound()             && 
+                        !getCardMarkerDisplayed                      && 
+                        combatTurnOrder.IsFriendlyInPendingOrder()   && 
+                        !combatTurnOrder.IsFriendlyInExecutedOrder() &&
+                        combatTurnOrder.GetActiveCharacter().GetFaction() != Faction.Friendly)
                 {
                     GameObject getCardMarkerObject = Instantiate(_getCardMarkerPrefab, _turnOrderPanel.transform);
                     _getCardMarker = getCardMarkerObject.GetComponent<GetCardMarker>();

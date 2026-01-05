@@ -253,6 +253,16 @@ public class CombatTurnOrder
         }
         return false;
     }
+
+    public bool IsFriendlyInExecutedOrder()
+    {
+        foreach (Character c in _charactersInExecutedTurnOrder)
+        {
+            if (c.GetFaction() == Faction.Friendly)
+                return true;
+        }
+        return false;
+    }
     public bool IsNextRoundGetCard()
     {
         bool result = ((_currentRound + 1) % 4) == 0;
