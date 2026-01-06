@@ -680,6 +680,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7345e2afde5b0b74a90032a4366d2325, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hoverTooltipPrefab: {fileID: 7072464142353777644}
+  _subHoverTooltipObject: {fileID: 0}
   _tooltipCanvas: {fileID: 0}
   _tooltipOverlayCamera: {fileID: 0}
   _combatHUDOverlayCamera: {fileID: 0}

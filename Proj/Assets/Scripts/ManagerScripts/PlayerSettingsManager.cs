@@ -22,6 +22,7 @@ public class PlayerSettingsManager : MonoBehaviour
         _instance = this;
 
         DontDestroyOnLoad(gameObject);
+        
     }
 
 
@@ -29,10 +30,22 @@ public class PlayerSettingsManager : MonoBehaviour
 
 
     //UI
-    public float GetHoverLockSpeed() { return _hoverLockSpeed; }
-    public void SetHoverLockSpeed(float hoverLockSpeed) { _hoverLockSpeed = hoverLockSpeed; }
+    public float GetHoverLockSpeed() 
+    { 
+        return _hoverLockSpeed; 
+    }
+    public void SetHoverLockSpeed(float hoverLockSpeed) 
+    { 
+        _hoverLockSpeed = hoverLockSpeed; 
+    }
 
     // AUDIO
-    public float GetMasterVolume() { return _masterVolume; }
-    public void SetMasterVolume(float masterVolume) { _masterVolume = masterVolume; }
+    public float GetMasterVolume() 
+    { 
+        return _masterVolume; 
+    }
+    public void SetMasterVolume(float masterVolume) 
+    { 
+        _masterVolume = masterVolume; 
+    }
 }

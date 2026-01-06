@@ -3,10 +3,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
 
 public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+
+
+    [SerializeField] private GameObject _hoverTooltipPrefab;
+    [SerializeField] private GameObject _subHoverTooltipObject;
+    
     [SerializeField] private Canvas _tooltipCanvas;
     [SerializeField] private Camera _tooltipOverlayCamera;
     [SerializeField] private Camera _combatHUDOverlayCamera;
@@ -32,14 +36,16 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
     private RectTransform _targetRectTransform;
     private Vector2 _buttonPosition;
 
+    public bool _hideOnStart = true;
 
     // LinkInfo
-    private int _currentLinkIndex = -1;
+    private int _lastLinkIndex = -1;
     void Start()
     {
         Selector._instance.OnCharacterDeselected += Hide;
         _rectTransform = GetComponent<RectTransform>();
-        Hide();
+        if(_hideOnStart)
+            Hide(); 
         _sliderSpeed = PlayerSettingsManager.GetInstance().GetHoverLockSpeed();
         SetSliderValue(_sliderSpeed);
         SetHoverLockSpeed(_sliderSpeed);
@@ -49,6 +55,11 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
         else
             _slider.gameObject.SetActive(true);
 
+    }
+
+    void Awake()
+    {
+        _rectTransform = GetComponent<RectTransform>();
     }
 
     void OnDisable()
@@ -73,19 +84,47 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
             _bTooltipLocked = false;
         }
 
-        int linkIndex = TMP_TextUtilities.FindIntersectingLink(_description, Input.mousePosition, _tooltipOverlayCamera);
-        if(linkIndex != -1 && linkIndex != _currentLinkIndex)
+        int currentLinkIndex = TMP_TextUtilities.FindIntersectingLink(_description, Input.mousePosition, _tooltipOverlayCamera );
+
+        // Hover enter
+        if (currentLinkIndex != -1 && currentLinkIndex != _lastLinkIndex)
         {
-            _currentLinkIndex = linkIndex;
-            TMP_LinkInfo linkInfo = _description.textInfo.linkInfo[linkIndex];
+            _lastLinkIndex = currentLinkIndex;
+            TMP_LinkInfo linkInfo = _description.textInfo.linkInfo[currentLinkIndex];
             Debug.Log("Hover over link: " + linkInfo.GetLinkID());
             Burn burn = new Burn();
             StatusEffectData data = StatusEffectDataRegistry.GetDataForType(burn.GetType());
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                                                                    _tooltipCanvas.transform as RectTransform,
+                                                                    Input.mousePosition,
+                                                                    _tooltipOverlayCamera,
+                                                                    out Vector2 localPoint);
+
+
+            // TODO (Calle): The sub tooltip gets hidden directly and that's why its position is way off...
+            // right now just setting a bool if it should hide on start
+
+            // Also the tooltip will disappear directly as the text link is not hovered once the subtooltip spawns because it blocks it
+            // and hence, gets destroyed.
+            _subHoverTooltipObject = Instantiate(_hoverTooltipPrefab, localPoint, Quaternion.identity, _tooltipCanvas.transform);
+
+            _subHoverTooltipObject.GetComponent<CombatHoverTooltip>().Show(data.Name, data.Description, localPoint);
+            _subHoverTooltipObject.GetComponent<CombatHoverTooltip>()._hideOnStart = false;
+            RectTransform tooltipRect = _subHoverTooltipObject.GetComponent<RectTransform>();
+            
+            tooltipRect.anchoredPosition = localPoint; // local X/Y
+            tooltipRect.localPosition = new Vector3(tooltipRect.localPosition.x + 60f, tooltipRect.localPosition.y, 0f); // force Z = 0
         }
-        else
+
+        // Hover exit
+        if (_lastLinkIndex != -1 && currentLinkIndex == -1)
         {
-            _currentLinkIndex = linkIndex;
+            if (_subHoverTooltipObject != null)
+                Destroy(_subHoverTooltipObject);
         }
+
+        _lastLinkIndex = currentLinkIndex;
     }
 
     private Vector2 ClampToScreenBounds(Vector2 localPoint, Vector2 canvasSize)
@@ -121,15 +160,14 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
         Vector3 topCenter = (corners[1] + corners[2]) * 0.5f;
 
         // NOTE (Calle): So you have to pass the camera that the UI-element is rendered in. AbilityButton is rendered
-        // on CombatHUDOverlayCamera for example.
-
+        // on CombatHUDOverlayCamera for example. And the hover tooltip is rendered on TooltipOverlayCamera.
         Camera camera = targetRect.GetComponentInParent<Canvas>().worldCamera;
 
         _buttonPosition = RectTransformUtility.WorldToScreenPoint(camera, topCenter);
 
         RectTransform canvasRect = _tooltipCanvas.transform as RectTransform;
 
-        // Convert the BUTTON screen position to canvas local position
+        // Convert the ability BUTTON screen position to canvas local position
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect,
             _buttonPosition,               
@@ -162,8 +200,15 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
         _bTooltipLocked = false;
         StopSlider();
         Vector3 pos = transform.position;
-        pos.x = -9999;
+        pos.x = -2000;
         transform.position = pos;
+    }
+
+    public void Show(string title, string description, Vector2 position)
+    {
+        SetTitle(title);
+        SetDescription(description);
+        _rectTransform.anchoredPosition = position;
     }
     public void Show(string title, string description, RectTransform rectTransform)
     {
