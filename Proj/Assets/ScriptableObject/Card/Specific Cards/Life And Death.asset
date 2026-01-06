@@ -16,7 +16,7 @@ MonoBehaviour:
   targetFaction: 1
   rarity: 2
   title: Life & Death
-  description: Deal {card_damage}damage{/card_damage} to target enemy equal to {card_damage}25%{/card_damage}
+  description: Deal {card_damage}damage{/card_damage} to target enemy equal to 25%
     of their Max Health and {heal}heal{/heal} the ally with the highest % missing
     Health for the same amount.
   cost: 3

@@ -16,7 +16,7 @@ MonoBehaviour:
   targetFaction: 0
   rarity: 1
   title: Frenzy Injection
-  description: Deal {card_damage}5 damage{/card_damage} to target and grant them
+  description: Deal 5 {card_damage}damage{/card_damage} to target and grant them
     {non_damaging}Enraged{/non_damaging} for two turns.
   cost: 3
   icon: {fileID: 21300000, guid: f643b89998871334ab52055c975826d1, type: 3}

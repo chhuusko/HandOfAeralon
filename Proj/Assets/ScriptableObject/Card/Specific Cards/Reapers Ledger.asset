@@ -16,9 +16,9 @@ MonoBehaviour:
   targetFaction: 0
   rarity: 2
   title: "Reaper\u2019s Ledger"
-  description: '{card_keyword}Exhaust{/card_keyword}. Deal {card_damage}5 damage{/card_damage}
-    plus {card_damage}5{/card_damage} to target for each enemy killed by any copy
-    of this {card}card{/card} during the current run. '
+  description: '{card_keyword}Exhaust{/card_keyword}. Deal 5 {card_damage}damage{/card_damage}
+    plus 5 to target for each enemy killed by any copy of this {card}card{/card}
+    during the current run. '
   cost: 4
   icon: {fileID: 21300000, guid: d0866846edb1b274da6afaaea9a82573, type: 3}
   CardTemplate: {fileID: 0}

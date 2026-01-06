@@ -16,8 +16,8 @@ MonoBehaviour:
   targetFaction: 0
   rarity: 1
   title: Crimson Strike
-  description: "Deal {card_damage}25%{/card_damage} of target\u2019s Max Health as
-    {card_damage}damage{/card_damage}. If this kills target, gain {mana}2 Mana{/mana}."
+  description: "Deal 25% of target\u2019s Max Health as {card_damage}damage{/card_damage}.
+    If this kills target, gain 2 Mana."
   cost: 2
   icon: {fileID: 21300000, guid: 55abb6ba45b77544ea5d1ba2ba662166, type: 3}
   CardTemplate: {fileID: 0}
