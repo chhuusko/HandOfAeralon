@@ -63,7 +63,7 @@ public class ChainReaction : Trait
         var affected = candidates[UnityEngine.Random.Range(0, candidates.Count)];
         _appliedThisTurn.Add(affected);
         affected.GetStatusEffectManager().
-            AddStatusEffect(new Burn(Character, data.Duration));
+            AddStatusEffect(new Burn(data.Duration, Character));
         Debug.Log($"Adding burn to {affected.GetFaction()} {affected.GetCharacterClass()}");
     }
 }

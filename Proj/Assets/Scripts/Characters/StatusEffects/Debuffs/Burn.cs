@@ -5,7 +5,7 @@ public class Burn : StatusEffect
 {
     private Character _source;
     
-    public Burn(Character source = null, int duration = 3) : base(duration)
+    public Burn(int duration = 3, Character source = null) : base(duration)
     {
         _source = source;
     }
