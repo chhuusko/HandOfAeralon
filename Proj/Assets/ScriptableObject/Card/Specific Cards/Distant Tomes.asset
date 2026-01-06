@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: Distant Tomes
   m_EditorClassIdentifier: 
   type: 1
+  targetFaction: 0
   rarity: 1
   title: Distant Tomes
-  description: Deal damage to target equal to half the number of cards remaining
-    in your draw pile.
+  description: Deal {card_damage}damage{/card_damage} to target equal to half the
+    number of {card}cards{/card} remaining in your draw pile
   cost: 2
   icon: {fileID: 21300000, guid: 39962f603ad787b4cb52569386cd4872, type: 3}
   CardTemplate: {fileID: 0}
   info: []
   tags: 
+  targetConditions: 

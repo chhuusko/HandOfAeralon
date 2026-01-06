@@ -9,7 +9,7 @@ public class StatusEffectData : ScriptableObject
     [Header("General Info")]
     public string Name;
     public Sprite Icon;
-    public string Description;
+    [TextArea(5, 10)] public string Description;
     public StatusEffectType Type;
     public bool IsPermanent;
     public bool IsDispellable;

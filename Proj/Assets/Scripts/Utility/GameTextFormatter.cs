@@ -9,12 +9,14 @@ public static class GameTextFormatter
         Ability,
         ElementalDamage,
         PhysicalDamage,
+        CardDamage,
         Burn,
         Poison,
         NonDamagingEffect,
         Heal,
         Mana,
         Card,
+        CardKeyword
     }
     
     /// <summary>
@@ -92,6 +94,8 @@ public static class GameTextFormatter
                 return @"{elemental_damage}(.*?){/elemental_damage}";
             case TagType.PhysicalDamage:
                 return @"{physical_damage}(.*?){/physical_damage}";
+            case TagType.CardDamage:
+                return @"{card_damage}(.*?){/card_damage}";
             case TagType.Burn:
                 return @"{burn}(.*?){/burn}";
             case TagType.Poison:
@@ -104,6 +108,8 @@ public static class GameTextFormatter
                 return @"{mana}(.*?){/mana}";
             case TagType.Card:
                 return @"{card}(.*?){/card}";
+            case TagType.CardKeyword:
+                return @"{card_keyword}(.*?){/card_keyword}";
             default:
                 return string.Empty;
         }
@@ -120,6 +126,8 @@ public static class GameTextFormatter
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.ElementalDamageColor);
             case TagType.PhysicalDamage:
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.PhysicalDamageColor);
+            case TagType.CardDamage:
+                return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.CardDamageColor);
             case TagType.Burn:
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.BurnColor);
             case TagType.Poison:
@@ -132,6 +140,8 @@ public static class GameTextFormatter
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.ManaColor);
             case TagType.Card:
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.CardColor);
+            case TagType.CardKeyword:
+                return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.CardKeywordColor);
             default:
                 return string.Empty;
         }
@@ -162,6 +172,21 @@ public static class GameTextFormatter
     {
         var description = statusEffect.Data.Description;
 
+        foreach (var value in Enum.GetValues(typeof(TagType)))
+        {
+            ReplaceText(ref description, (TagType)value);
+        }
+        
+        return description;
+    }
+
+    /// <summary>
+    /// Replaces all tags in the description with colored labels, keeping any text between the tags the same.
+    /// </summary>
+    /// <param name="description">The description to check.</param>
+    /// <returns>The description, with colored labels for any keyword found.</returns>
+    public static string LabeledDescription(string description)
+    {
         foreach (var value in Enum.GetValues(typeof(TagType)))
         {
             ReplaceText(ref description, (TagType)value);

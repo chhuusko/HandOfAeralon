@@ -29,6 +29,7 @@ public class ColorDatabase : ScriptableObject
     public Color AbilityColor;
     public Color ElementalDamageColor;
     public Color PhysicalDamageColor;
+    public Color CardDamageColor;
     
     [Header("Status Effects")]
     public Color NonDamagingEffectColor;
@@ -38,6 +39,7 @@ public class ColorDatabase : ScriptableObject
     [Header("Cards")] 
     public Color CardColor;
     public Color ManaColor;
+    public Color CardKeywordColor;
     
     [Header("Misc")]
     public Color HealingColor;
