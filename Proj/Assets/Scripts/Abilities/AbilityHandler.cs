@@ -212,7 +212,7 @@ public class AbilityHandler : MonoBehaviour
         {
             if (_tilesInRange.Contains(t))
             {
-                t.SetTileColor(Color.cyan);
+                t.SetTileColor(Color.magenta);
             }
             else
             {
