@@ -186,7 +186,7 @@ public class Tooltipper : MonoBehaviour
         _panel.gameObject.SetActive(true);
     }
 
-    private void HideTooltip()
+    public void HideTooltip()
     {
         _currentObject = null;
         _tmpText.text = "";

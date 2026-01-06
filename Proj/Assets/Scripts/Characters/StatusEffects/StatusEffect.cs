@@ -13,6 +13,7 @@ public abstract class StatusEffect
     public StatusEffectData Data => _data;
     
     public bool ShouldExpire;
+    public bool IsReflected;
     
     protected Character Character { get; private set; }
     protected StatusEffectManager Manager { get; private set; }
@@ -52,15 +53,13 @@ public abstract class StatusEffect
         {
             _skipNextTick = false;
         }
-
-        CombatEventManager.OnTryAddStatusEffect += BeforeStatusEffectApplied;
         
         OnApply();
     }
 
     public void Cleanup()
     {
-        CombatEventManager.OnTryAddStatusEffect -= BeforeStatusEffectApplied;
+        
     }
     
     public string GetColorCodedDescription()

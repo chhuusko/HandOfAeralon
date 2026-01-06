@@ -10,8 +10,9 @@ public class CardViewUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     protected static CardViewUI _instance;
 
     [SerializeField] protected GameObject _cardUI;
-    protected List<GameObject> _cardListUI;
     [SerializeField] protected Transform _cardContent;
+
+    protected List<GameObject> _cardListUI;
 
     protected Vector3 basePosition;
     public static CardViewUI GetInstance() { return _instance; }
@@ -19,6 +20,7 @@ public class CardViewUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         _cardListUI = new List<GameObject>();
         _instance = this;
+
         gameObject.SetActive(false);
         basePosition = _cardContent.position;
     }
