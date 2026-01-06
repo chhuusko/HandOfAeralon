@@ -33,7 +33,7 @@ public class Card : ScriptableObject
     public CardRarity rarity;
     
     public string title;
-    public string description;
+    [TextArea(5, 10)] public string description;
     [SerializeField] private int cost;
     public Sprite icon;
     public Sprite CardTemplate;
@@ -65,11 +65,11 @@ public class Card : ScriptableObject
     }
     public virtual void PlayCard()
     {
-        //när den spelas
+        //nï¿½r den spelas
     }
     public virtual void PlayCardOnTarget(Character character)
     {
-        //när den spelas på en target
+        //nï¿½r den spelas pï¿½ en target
         PlayCard();
     }
     public virtual void CardSelect(Card selectedCard)

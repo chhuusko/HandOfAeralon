@@ -16,7 +16,8 @@ MonoBehaviour:
   targetFaction: 0
   rarity: 1
   title: Recall Memory
-  description: Choose a card from your discard pile and add it to your hand
+  description: Choose a {card}card{/card} from your discard pile and add it to your
+    hand
   cost: 3
   icon: {fileID: 21300000, guid: 5af20a879b07cc74c92c85cd7b76e953, type: 3}
   CardTemplate: {fileID: 0}
