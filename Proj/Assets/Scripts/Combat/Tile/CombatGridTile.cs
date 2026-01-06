@@ -88,7 +88,7 @@ public class CombatGridTile : MonoBehaviour
                     {
                         character.TakeDamage(4);
                         StatusEffectManager statusEffectManager = character.GetComponent<StatusEffectManager>();
-                        statusEffectManager.AddStatusEffect(new Burn(1, character));
+                        statusEffectManager.AddStatusEffect(new Burn(character, 1));
                         
                         Vector3 positionToSpawnAt = other.gameObject.transform.position;
                         positionToSpawnAt.y += 2f;
