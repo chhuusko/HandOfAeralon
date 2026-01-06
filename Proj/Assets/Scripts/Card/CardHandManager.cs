@@ -35,7 +35,7 @@ public class CardHandManager : MonoBehaviour
     private int _maxMana = 10;
     private int _mana = 5;
     private int _cardsPlayedThisTurn = 0;
-    private static int _maxHand = 7;
+    private static int _maxHand = 10;
     private static int beginningDraw = 5;
 
     // Onhover

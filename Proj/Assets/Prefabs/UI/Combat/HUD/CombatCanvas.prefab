@@ -2014,8 +2014,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 6.5}
-  m_SizeDelta: {x: -94, y: -15}
+  m_AnchoredPosition: {x: 0, y: 8.5}
+  m_SizeDelta: {x: -130, y: -17}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &697170551177152969
 CanvasRenderer:
@@ -2073,7 +2073,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28.4
+  m_fontSize: 39.15
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2089,7 +2089,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -2726,8 +2726,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -200}
-  m_SizeDelta: {x: 290, y: 70}
+  m_AnchoredPosition: {x: 0, y: -215}
+  m_SizeDelta: {x: 400, y: 105}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5267642165116478331
 CanvasRenderer:
@@ -3678,23 +3678,39 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 1554641163184395948, guid: fe889341b342836419584d2ddf0bdfcd,
         type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -156547908865965464, guid: d0c404f728a77b247bc581c379308fef,
+        type: 2}
+    - target: {fileID: 1554641163184395948, guid: fe889341b342836419584d2ddf0bdfcd,
+        type: 3}
       propertyPath: m_hasFontAssetChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1837848315005881099, guid: fe889341b342836419584d2ddf0bdfcd,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 300
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1837848315005881099, guid: fe889341b342836419584d2ddf0bdfcd,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 75
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3759284144579262207, guid: fe889341b342836419584d2ddf0bdfcd,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -762.5483
       objectReference: {fileID: 0}
     - target: {fileID: 8067438011519287914, guid: fe889341b342836419584d2ddf0bdfcd,
         type: 3}
       propertyPath: m_Name
       value: CardHandManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8067438011519287914, guid: fe889341b342836419584d2ddf0bdfcd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
