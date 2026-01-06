@@ -323,7 +323,7 @@ MonoBehaviour:
   _settingHoverLockSpeed: {fileID: 7053702331800514296}
   _settingMasterVolume: {fileID: 3197050657534478448}
   _settingHoverLockSpeedSlider: {fileID: 4884666320817872941}
-  _combatHoverTooltip: {fileID: 0}
+  _masterVolumeSlider: {fileID: 2122676296466894814}
 --- !u!1 &1713411306232276281
 GameObject:
   m_ObjectHideFlags: 0
@@ -2717,7 +2717,7 @@ PrefabInstance:
     - target: {fileID: 1683462869204547389, guid: fee5ed8236219cb4e9995b8b0e4ed118,
         type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetMasterVolume
+      value: SetMasterVolumeSliderValue
       objectReference: {fileID: 0}
     - target: {fileID: 1683462869204547389, guid: fee5ed8236219cb4e9995b8b0e4ed118,
         type: 3}
@@ -2842,7 +2842,7 @@ PrefabInstance:
     - target: {fileID: 7726301798744093977, guid: fee5ed8236219cb4e9995b8b0e4ed118,
         type: 3}
       propertyPath: m_Name
-      value: Slider
+      value: Slider_MasterVolume
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2857,6 +2857,18 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7686099843980426097}
   m_SourcePrefab: {fileID: 100100000, guid: fee5ed8236219cb4e9995b8b0e4ed118, type: 3}
+--- !u!114 &2122676296466894814 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1683462869204547389, guid: fee5ed8236219cb4e9995b8b0e4ed118,
+    type: 3}
+  m_PrefabInstance: {fileID: 732290511048685795}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6994311067902430714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &3927112462869349900 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4347796275973095151, guid: fee5ed8236219cb4e9995b8b0e4ed118,
@@ -2943,7 +2955,7 @@ PrefabInstance:
     - target: {fileID: 1683462869204547389, guid: fee5ed8236219cb4e9995b8b0e4ed118,
         type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetHoverLockSpeedText
+      value: SetHoverLockSliderValue
       objectReference: {fileID: 0}
     - target: {fileID: 1683462869204547389, guid: fee5ed8236219cb4e9995b8b0e4ed118,
         type: 3}

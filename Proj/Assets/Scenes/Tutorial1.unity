@@ -3086,7 +3086,7 @@ MonoBehaviour:
     time</color></font-weight> required to lock a tooltip can be adjusted in the
     <font-weight=800><color=#FFFFFF>Settings Menu</color></font-weight>.
 
-    
+
 
     <font-weight=800><color=#FFFFFF>Highlighted
     keywords</color></font-weight> inside tooltips can be hovered over to reveal
@@ -3095,12 +3095,11 @@ MonoBehaviour:
     <font-weight=800><color=#FFFFFF>Debuffs</color></font-weight>, or <font-weight=800><color=#FFFFFF>special
     rules</color></font-weight>.
 
-    
 
-    <font-weight=800><color=#FFFFFF>Damage
-    values</color></font-weight> shown in abilities can also be hovered over to see
-    the <font-weight=800><color=#FFFFFF>full damage calculation</color></font-weight>,
-    including modifiers from <font-weight=800><color=#FFFFFF>stats</color></font-weight>,
+
+    <font-weight=800><color=#FFFFFF>Damage values</color></font-weight>
+    shown in abilities can also be hovered over to see the <font-weight=800><color=#FFFFFF>full
+    damage calculation</color></font-weight>, including modifiers from <font-weight=800><color=#FFFFFF>stats</color></font-weight>,
     <font-weight=800><color=#FFFFFF>traits</color></font-weight>, and <font-weight=800><color=#FFFFFF>active
     effects</color></font-weight>. <font-weight=800><color=#FFFFFF>Mastering keywords</color></font-weight>
     is essential for understanding <font-weight=800><color=#FFFFFF>more complex interactions</color></font-weight>.
@@ -6608,13 +6607,13 @@ MonoBehaviour:
     by a <font-weight=800><color=#FFFFFF>coin flip</color></font-weight> at the start
     of the round.
 
-    
 
-    The <font-weight=800><color=#FFFFFF>currently active
-    character</color></font-weight> is displayed in a <font-weight=800><color=#FFFFFF>separate
-    box to the left</color></font-weight> of the Turn Order Panel, making it clear
-    whose turn it is at all times. You can click any unit in the turn order to select
-    that character. Initiative and other stats will soon be explained in more detail.
+
+    The <font-weight=800><color=#FFFFFF>currently active character</color></font-weight>
+    is displayed in a <font-weight=800><color=#FFFFFF>separate box to the left</color></font-weight>
+    of the Turn Order Panel, making it clear whose turn it is at all times. You can
+    click any unit in the turn order to select that character. Initiative and other
+    stats will soon be explained in more detail.
 
 '
   m_isRightToLeft: 0
@@ -7023,6 +7022,84 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &4737705563236457745
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 27915457598560445, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -51.039604
+      objectReference: {fileID: 0}
+    - target: {fileID: 27915457598560445, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.5601048
+      objectReference: {fileID: 0}
+    - target: {fileID: 27915457598560445, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.3424315
+      objectReference: {fileID: 0}
+    - target: {fileID: 27915457598560445, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 27915457598560445, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 27915457598560445, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 27915457598560445, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 27915457598560445, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 27915457598560445, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 27915457598560445, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6123813652874307725, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: _masterVolume
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6123813652874307725, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: _hoverLockSpeed
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8131860488906627594, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: m_Name
+      value: PlayerSettings
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 883f3c1d0e569204baa02e6740cf7b9f, type: 3}
 --- !u!1 &5285476249066578450
 GameObject:
   m_ObjectHideFlags: 0
@@ -7294,3 +7371,4 @@ SceneRoots:
   - {fileID: 1087526430}
   - {fileID: 1436559623}
   - {fileID: 5856722859225056941}
+  - {fileID: 4737705563236457745}

@@ -40,7 +40,9 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
         Selector._instance.OnCharacterDeselected += Hide;
         _rectTransform = GetComponent<RectTransform>();
         Hide();
+        _sliderSpeed = PlayerSettingsManager.GetInstance().GetHoverLockSpeed();
         SetSliderValue(_sliderSpeed);
+        SetHoverLockSpeed(_sliderSpeed);
 
         if (_sliderSpeed <= 0f)
             _slider.gameObject.SetActive(false);
@@ -206,6 +208,10 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
     private void SetMappedSliderSpeed(float speed)
     {
         _sliderSpeed = 0.1f * speed;
+
+        // NOTE (Calle): The save setting value should not be mapped, 1 is 1 in saved settings
+        PlayerSettingsManager.GetInstance().SetHoverLockSpeed(speed); 
+
         if (_sliderSpeed <= 0.0f)
         {
             SetHoverLock(false);
