@@ -15,10 +15,10 @@ public class CardSelect : MonoBehaviour, IPointerClickHandler
     {
         _outLine.SetActive(_isSelected);
         _maxSelect = CardSelectHandler._instance._amount;
+        _card = gameObject.GetComponent<CardUI>().GetCard();
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("card " + _card.title);
         if (!_isSelected)
         {
             if (selectedCount < _maxSelect)
@@ -26,6 +26,7 @@ public class CardSelect : MonoBehaviour, IPointerClickHandler
                 _isSelected = true;
                 selectedCount++;
                 CardSelectHandler._instance.SetSelectCard(_card);
+                Debug.Log("isSet");
             }
         }
         else
@@ -33,6 +34,7 @@ public class CardSelect : MonoBehaviour, IPointerClickHandler
             _isSelected = false;
             selectedCount--;
             CardSelectHandler._instance.SetSelectCard(null);
+            Debug.Log("isNull");
         }
         _outLine.SetActive(_isSelected);
     }

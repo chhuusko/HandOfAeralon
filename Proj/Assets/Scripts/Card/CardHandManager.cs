@@ -171,6 +171,7 @@ public class CardHandManager : MonoBehaviour
 
     public void AddSpaceing()
     {
+        _cardsInHand.RemoveAll(o => o == null);
         for (int i = 0; i < _cardsInHand.Count; i++)
         {
             Vector3 position = _Hand.position + new Vector3(-(150f * (_cardsInHand.Count - 1)) / 2f, 0, 0) + new Vector3(i * 150f, 0, 0);

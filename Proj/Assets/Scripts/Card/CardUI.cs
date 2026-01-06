@@ -118,5 +118,9 @@ public class CardUI : MonoBehaviour
         
         
     }
+    public Card GetCard()
+    {
+        return _card;
+    }
 
 }

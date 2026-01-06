@@ -22,13 +22,18 @@ public class SelectivePurge : Card
     }
     public override void CardSelect(Card selectedCard)
     {
-        //CardHandManager cardHandManager = CardHandManager.GetInstance();
-        //List<CardContainer> cards = cardHandManager.GetCardsInHand();
+        CardHandManager cardHandManager = CardHandManager.GetInstance();
+        List<CardContainer> cards = cardHandManager.GetCardsInHand();
 
-        
-        
-        //CardHandManager.GetInstance().GetDiscardPile().Add(selectedCard);
-        //Destroy(card.gameObject);
-        
+        cardHandManager.AddCardFromDeck(2);
+
+        foreach (CardContainer card in cards)
+        {
+            if (card.GetCard() == selectedCard)
+            {
+                CardHandManager.GetInstance().RemoveCardFromHand(card);
+                return;
+            }
+        }
     }
 }
