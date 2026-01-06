@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -61,22 +62,20 @@ public class Selector : MonoBehaviour
         CombatEventManager.OnExitCombatStateTakeTurn += HandleCombatStateTakeTurn;
         CombatEventManager.OnEnterCombatStateTakeTurn += HandleEnterCombatStateTakeTurn;
 
-        DelayedStart();
+        StartCoroutine(DelayedStart());
     }
 
 
     void Update()
     {
-        SetStandrardColors();
         HandleTileClick();
         HandleTileHover(); 
     }
 
     private IEnumerator DelayedStart()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitUntil(() => CombatGrid._instance.IsCombatGridLoaded());
         SetStandrardColors();
-
     }
 
     private void HandleEnterCombatStateTakeTurn(Character character)

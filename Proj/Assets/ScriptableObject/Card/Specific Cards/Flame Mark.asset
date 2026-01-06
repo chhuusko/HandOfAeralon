@@ -17,7 +17,7 @@ MonoBehaviour:
   rarity: 0
   title: Flame Mark
   description: Apply {burn}Burn{/burn} to target for 2 turns. If the target already
-    has {burn}Burn{/burn}, also deal {card_damage}15 damage{/card_damage}.
+    has {burn}Burn{/burn}, also deal 15 {card_damage}damage{/card_damage}
   cost: 2
   icon: {fileID: 21300000, guid: 2c5399c548c1a014ba5d6c839b834db9, type: 3}
   CardTemplate: {fileID: 0}
