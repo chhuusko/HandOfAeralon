@@ -113,6 +113,9 @@ MonoBehaviour:
   _pendingCharacterActionType: 0
   _selectedCharacter: {fileID: 0}
   _bDebugSelector: 0
+  _abilityRangeColor: {r: 1, g: 0.6184036, b: 0.3066038, a: 1}
+  _movementRangeColor: {r: 0, g: 1, b: 0.011662006, a: 1}
+  _hitTilesRangeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &8445614807586532933
 GameObject:
   m_ObjectHideFlags: 0

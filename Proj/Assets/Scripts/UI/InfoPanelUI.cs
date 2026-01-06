@@ -8,7 +8,17 @@ public class InfoPanelUI : MonoBehaviour
     public void SetUpUIElements(InfoPanel infoPanel)
     {
         transform.SetAsLastSibling();
-        title.text = infoPanel.title;
-        description.text = infoPanel.description;
+        if (infoPanel.status == null)
+        {
+            
+            title.text = GameTextFormatter.LabeledDescription(infoPanel.title);
+            description.text = GameTextFormatter.LabeledDescription(infoPanel.description);
+        }
+        else
+        {
+            
+            title.text = GameTextFormatter.LabeledDescription(infoPanel.status.Name);
+            description.text = GameTextFormatter.LabeledDescription(infoPanel.status.Description);
+        }
     }
 }

@@ -41,7 +41,8 @@ MonoBehaviour:
     Path: event:/Sound Design/Diegetic/Characters/Barbarian/abilities/earthquake
   _pattern: {fileID: 11400000, guid: 129687a3acdf70e4cba2536129786496, type: 2}
   _validTargets: 0
-  _abilityAOEVFXSequence: {fileID: 0}
+  _abilityAOEVFXSequence: {fileID: 11400000, guid: cb02ca87659aade4abcc987073de4f8c,
+    type: 2}
   _damageMultiplier: 0.9
   _slowCharacterHitChance: 0.6
   _slowDuration: 2

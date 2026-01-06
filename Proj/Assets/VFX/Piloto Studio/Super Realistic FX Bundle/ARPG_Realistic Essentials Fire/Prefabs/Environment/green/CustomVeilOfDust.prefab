@@ -19798,7 +19798,7 @@ PrefabInstance:
     - target: {fileID: 7267510285996851040, guid: 870e7f7755cff1a428d92c386d3fb37e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 7267510285996851040, guid: 870e7f7755cff1a428d92c386d3fb37e,
         type: 3}
@@ -20006,6 +20006,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PoisonExplosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219061986264912498, guid: 2f0d63e09ff31af40b6f56a5b5764c8b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

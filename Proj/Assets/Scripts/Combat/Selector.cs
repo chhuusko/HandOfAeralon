@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -21,6 +23,11 @@ public class Selector : MonoBehaviour
     [SerializeField] private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
     [SerializeField] private Character _selectedCharacter;
     [SerializeField] private bool _bDebugSelector = true;
+
+    [SerializeField] private Color _abilityRangeColor;
+    [SerializeField] private Color _movementRangeColor;
+    [SerializeField] private Color _hitTilesRangeColor;
+
     private CharacterMovement _characterMovement;
 
     public event Action<Character> OnCharacterSelected;
@@ -54,12 +61,21 @@ public class Selector : MonoBehaviour
         CombatEventManager.OnCombatTurnChange += HandleCombatTurnChanged;
         CombatEventManager.OnExitCombatStateTakeTurn += HandleCombatStateTakeTurn;
         CombatEventManager.OnEnterCombatStateTakeTurn += HandleEnterCombatStateTakeTurn;
+
+        StartCoroutine(DelayedStart());
     }
+
 
     void Update()
     {
         HandleTileClick();
-        HandleTileHover();
+        HandleTileHover(); 
+    }
+
+    private IEnumerator DelayedStart()
+    {
+        yield return new WaitUntil(() => CombatGrid._instance.IsCombatGridLoaded());
+        SetStandrardColors();
     }
 
     private void HandleEnterCombatStateTakeTurn(Character character)
@@ -415,7 +431,7 @@ public class Selector : MonoBehaviour
             _currentState = SelectorState.ActionTypeSelected;
             abilityHandler.SetPendingAbility(ability);
             abilityHandler.CalculateAbilityRange();
-            SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.cyan);
+            SetColorOfTiles(abilityHandler.GetTilesInRange(), _abilityRangeColor);
         }
     }
 
@@ -525,6 +541,28 @@ public class Selector : MonoBehaviour
             }
         }
         SetColorOfTiles(tiles, Color.white);
+    }
+
+    private void SetStandrardColors()
+    {
+        var listOfAllCharacters = CombatGrid._instance.GetAllCharacters();
+
+        foreach(var c in listOfAllCharacters)
+        {
+            AbilityHandler ab = c.GetComponent<AbilityHandler>();
+            CharacterMovement cm = c.GetComponent<CharacterMovement>();
+
+            if(ab != null)
+            {
+                ab.SetAbilityRangeColor(_abilityRangeColor);
+                ab.SetHitTilesRangeColor(_hitTilesRangeColor);
+            }
+
+            if(cm != null)
+            {
+                cm.SetMovementRangeColor(_movementRangeColor);
+            }
+        }
     }
     private void DebugPossibleStartErrors()
     {

@@ -5,5 +5,5 @@ using UnityEngine;
 public class InfoPanel : ScriptableObject
 {
     [SerializeField] public string title, description;
-
+    [SerializeField] public StatusEffectData status;
 }

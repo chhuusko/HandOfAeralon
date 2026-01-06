@@ -16,10 +16,10 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: a7eb268ed3a39ab499ec34ceec713f50, type: 3}
   _range: 6
   _cooldown: 1
-  _description: 'Play a resonating sound wave, dealing {damage} {elemental_damage}
-    damage to all enemies in the area.\n\nEnemies with a Debuff take {damage} damage
-    instead.\n\nIf at least one enemy is hit, heal the Bard for 10% of their maximum
-    Health, plus 2.5% for each additional enemy hit (up to 20%). '
+  _description: 'Deal {damage} {elemental_damage} damage to all enemies in the area.\n\nEnemies
+    with a Debuff take {damage} damage instead.\n\nIf at least one enemy is hit,
+    heal the Bard for 10% of their maximum Health, plus 2.5% for each additional
+    enemy hit (up to 20%). '
   _abilityTag: 10
   _type: 6
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
