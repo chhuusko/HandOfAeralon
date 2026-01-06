@@ -16,7 +16,7 @@ MonoBehaviour:
   targetFaction: 0
   rarity: 1
   title: Distant Tomes
-  description: Deal {card_damage}damage{card_damage} to target equal to half the
+  description: Deal {card_damage}damage{/card_damage} to target equal to half the
     number of {card}cards{/card} remaining in your draw pile.
   cost: 2
   icon: {fileID: 21300000, guid: 39962f603ad787b4cb52569386cd4872, type: 3}

@@ -16,7 +16,7 @@ MonoBehaviour:
   targetFaction: 0
   rarity: 2
   title: Arcane Windfall
-  description: Add 3 random {card}Uncommon cards{card} to your hand. They cost {mana}0
+  description: Add 3 random {card}Uncommon cards{/card} to your hand. They cost {mana}0
     Mana{/mana} this turn and are {card_keyword}Ephemeral{/card_keyword}.
   cost: 5
   icon: {fileID: 21300000, guid: 52c0e73fc2619ae46bf13efad5f1e69f, type: 3}
