@@ -32,6 +32,9 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
     private RectTransform _targetRectTransform;
     private Vector2 _buttonPosition;
 
+
+    // LinkInfo
+    private int _currentLinkIndex = -1;
     void Start()
     {
         Selector._instance.OnCharacterDeselected += Hide;
@@ -66,6 +69,20 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
         {
             Hide();
             _bTooltipLocked = false;
+        }
+
+        int linkIndex = TMP_TextUtilities.FindIntersectingLink(_description, Input.mousePosition, _tooltipOverlayCamera);
+        if(linkIndex != -1 && linkIndex != _currentLinkIndex)
+        {
+            _currentLinkIndex = linkIndex;
+            TMP_LinkInfo linkInfo = _description.textInfo.linkInfo[linkIndex];
+            Debug.Log("Hover over link: " + linkInfo.GetLinkID());
+            Burn burn = new Burn();
+            StatusEffectData data = StatusEffectDataRegistry.GetDataForType(burn.GetType());
+        }
+        else
+        {
+            _currentLinkIndex = linkIndex;
         }
     }
 
