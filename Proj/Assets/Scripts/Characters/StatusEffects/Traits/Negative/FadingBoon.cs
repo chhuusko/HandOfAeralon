@@ -23,7 +23,6 @@ public class FadingBoon : Trait
         }
 
         var data = Data as DamageModifyingData;
-
         if (!data)
         {
             return true;

@@ -74,14 +74,12 @@ public class StatusEffectManager : MonoBehaviour
         statusEffect.Setup(_character, this);
         
         // Check if other traits interact.
-        BeforeStatusEffectApplied(caster, _character, statusEffect);
+        bool canAdd = BeforeStatusEffectApplied(caster, _character, statusEffect);
         
         // Try adding it.
-        bool canAdd = CombatEventManager.InvokeOnTryAddStatusEffect(caster, _character, statusEffect);
         if (!canAdd)
         {
             statusEffect.Cleanup();
-            // Blocked.
             return;
         }
         
@@ -522,17 +520,17 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    private void BeforeStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
+    private bool BeforeStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
     {
-        if (target != _character)
-        {
-            return;
-        }
-        
         foreach (var trait in _traitManager.GetAllTraits().ToList())
         {
-            trait.BeforeStatusEffectApplied(caster, target, statusEffect);
+            if (!trait.BeforeStatusEffectApplied(caster, target, statusEffect))
+            {
+                return false;
+            }
         }
+
+        return true;
     }
     
     private void OnStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
