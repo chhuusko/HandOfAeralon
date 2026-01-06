@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Empowering Anthem
   Icon: {fileID: 21300000, guid: 48ec4c9d68cc64a4ebad679a5496fc72, type: 3}
-  Description: Inspiring Anthem now also applies Empowered to all affected allies
-    for 1 turn.
+  Description: '{ability}Inspiring Anthem{/ability} now also applies {non_damaging}Empowered{/non_damaging}
+    to all affected allies for 1 turn.'
   Type: 3
   IsPermanent: 1
   IsDispellable: 0
+  SkipFirstTick: 0
   _typeName: EmpoweringAnthem, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   Class: 3

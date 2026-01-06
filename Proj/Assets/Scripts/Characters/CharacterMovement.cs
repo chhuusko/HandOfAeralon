@@ -1,16 +1,24 @@
+// Joel Larsson Wendt || jola6902
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CharacterMovement : MonoBehaviour
 {
+    public UnityEvent<int> MovementCostPreview;
+    public UnityEvent OnMovementPreviewStopped;
+
     private Character _character;
     private List<CombatGridTile> _tilesInRange = new();
     private List<CombatGridTile> _pathPreview = new();
     private bool _bIsMoving = false;
     private CombatGridTile _lastPreviewPathTile = null;
     private Animator _animator;
+
+    private Color _movementRangeColor = Color.green;
 
     void Start()
     {
@@ -57,7 +65,7 @@ public class CharacterMovement : MonoBehaviour
         
         if (_character.GetFaction() == Faction.Friendly)
         {
-            Selector._instance.SetColorOfTiles(_tilesInRange, Color.green);
+            Selector._instance.SetColorOfTiles(_tilesInRange, _movementRangeColor);
         }
     }
 
@@ -74,6 +82,7 @@ public class CharacterMovement : MonoBehaviour
         {
             _lastPreviewPathTile = null;
             GridExplorer._instance.ClearPathDrawing();
+            OnMovementPreviewStopped.Invoke();
             return;
         }
 
@@ -93,6 +102,9 @@ public class CharacterMovement : MonoBehaviour
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
         .ToList();
+
+        int cost = CalculateMovementCost(_pathPreview);
+        MovementCostPreview.Invoke(cost);
     }
 
     public bool ConfirmPath(CombatGridTile tile)
@@ -215,4 +227,10 @@ public class CharacterMovement : MonoBehaviour
 
         return bIsDead;
     }
+
+    public void SetMovementRangeColor(Color color)
+    {
+        _movementRangeColor = color;
+    }
+
 }

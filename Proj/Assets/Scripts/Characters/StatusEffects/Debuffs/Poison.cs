@@ -2,8 +2,16 @@ using UnityEngine;
 
 public class Poison : StatusEffect
 {
-    public Poison(int duration) : base(duration)
+    private Character _source;
+
+    public Poison(int duration = 3) : base(duration)
     {
+        
+    }
+    
+    public Poison(Character source, int duration = 3) : base(duration)
+    {
+        _source = source;
     }
 
     public override void IncreaseDuration(int amount = 1)
@@ -21,6 +29,13 @@ public class Poison : StatusEffect
 
     public override void OnTurnStart()
     {
-        Character.TakeDamage(Duration);
+        float damage = Duration;
+        if (_source != null)
+        {
+            damage = _source.GetStatusEffectManager().ModifyOutgoingPoisonDamage(damage);
+        }
+        damage = Character.GetStatusEffectManager().ModifyIncomingPoisonDamage(damage);
+
+        Character.TakeDamage(Mathf.RoundToInt(damage));
     }
 }

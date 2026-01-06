@@ -14,13 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Echoes of Restoration
   Icon: {fileID: 21300000, guid: 0992c6fd549a2054bac4bcc746680291, type: 3}
-  Description: "Each enemy hit by Resonant Blast increases the healing of your next
-    use of Song of Renewal by +5% of the Bard\u2019s maximum Health."
+  Description: Each enemy hit by {ability}Resonant Blast{/ability} increases the
+    {heal}healing{/heal} of your next use of {ability}Song of Renewal{/ability} by
+    +25%.
   Type: 3
   IsPermanent: 1
   IsDispellable: 0
+  SkipFirstTick: 0
   _typeName: EchoesOfRestoration, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   Class: 3
   IsPositive: 1
-  Modifier: 0.25
+  ModifierPercent: 25

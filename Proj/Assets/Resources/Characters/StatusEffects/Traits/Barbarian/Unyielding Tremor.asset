@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Unyielding Tremor
   Icon: {fileID: 21300000, guid: 92408fd0d27db9c4aa413b1ce7994192, type: 3}
-  Description: Each enemy Slowed or Stunned by the Barbarian grants 10% Damage Reduction
-    for 1 turn (max 50%).
+  Description: Each enemy {non_damaging}Slowed{/non_damaging} or {non_damaging}Stunned{/non_damaging}
+    by the Barbarian grants 10% Damage Reduction for 1 turn (max 50%). (does not
+    affect {burn}Burn{/burn} or {poison}Poison{/poison}).
   Type: 3
   IsPermanent: 1
   IsDispellable: 0
+  SkipFirstTick: 0
   _typeName: UnyieldingTremor, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   Class: 0

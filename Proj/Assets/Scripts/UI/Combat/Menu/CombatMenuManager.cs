@@ -16,6 +16,7 @@ public class CombatMenuManager : MonoBehaviour
     [SerializeField] private GameObject _inGameLayout;
     [SerializeField] private GameObject _optionsLayout;
     [SerializeField] private GameObject _victoryScreenLayout;
+    [SerializeField] private GameObject _quitGameLayout;
 
 
     // (Calle): Cameras to turn on/off Postprocessing for when menu opens
@@ -99,6 +100,16 @@ public class CombatMenuManager : MonoBehaviour
         Debug.Log("GO TO SHOP");
         CloseVictoryMenuScreen();
         OnGoToShopButtonPressed?.Invoke();
+    }
+
+    public void RequestQuitGame()
+    {
+        _quitGameLayout.SetActive(true);
+    }
+
+    public void CloseQuitGameConfirmationLayout()
+    {
+        _quitGameLayout.SetActive(false);
     }
 
     public void QuitGame()

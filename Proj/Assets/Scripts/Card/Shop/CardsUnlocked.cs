@@ -12,7 +12,7 @@ public class CardsUnlocked : ScriptableObject
     [Header("Info")]
     [SerializeField] private CardList allCards;
     [SerializeField] private CardList defaultUnlocked;
-    [SerializeField] private CardsUnlockedStatus[] cardsUnlocked;
+    private CardsUnlockedStatus[] cardsUnlocked;
 
     [System.Serializable]
     public struct CardsUnlockedStatus

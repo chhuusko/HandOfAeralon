@@ -808,13 +808,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 545573cb926bbbb4d862f30b9e9fa3cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _combatLogEntryPrefab: {fileID: 515051203510682649, guid: d029746f98115104494a220ba07147d2,
-    type: 3}
   _combatLogPanel: {fileID: 4526150849383664231}
   _combatLogScrollbar: {fileID: 2312095411896026509}
   _combatLogButton: {fileID: 6749988161067624331}
   _combatLogContent: {fileID: 4499401449079612489}
   _combatLogScrollRect: {fileID: 3085368872588384015}
+  _combatLogEntryPrefab: {fileID: 515051203510682649, guid: d029746f98115104494a220ba07147d2,
+    type: 3}
   _abilityEntryPrefab: {fileID: -1773185080026993426, guid: d029746f98115104494a220ba07147d2,
     type: 3}
   _characterDeathEntryPrefab: {fileID: 4343468963409620165, guid: 177bbedc6776bcd4d8d840b61252aa34,
@@ -824,7 +824,9 @@ MonoBehaviour:
   _cardTargetedLogEntryPrefab: {fileID: -8805841298396950255, guid: da9ea02317be8b34c9b97d0d0363c763,
     type: 3}
   _combatBountyEntryPrefab: {fileID: 0}
-  _statusEffectEntryPrefab: {fileID: -1787938578285379161, guid: ce8e43e20c9004b45a2252d039fa2a43,
+  _statusEffectAddedEntryPrefab: {fileID: -1787938578285379161, guid: ce8e43e20c9004b45a2252d039fa2a43,
+    type: 3}
+  _statusEffectRemovedEntryPrefab: {fileID: 3104200863191119633, guid: c60e0a2c141e25a4a8759c1488a7d123,
     type: 3}
 --- !u!1 &8191509190501037255
 GameObject:

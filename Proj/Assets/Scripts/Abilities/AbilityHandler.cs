@@ -16,6 +16,10 @@ public class AbilityHandler : MonoBehaviour
 
     bool _bDebugAbilityHandler = false;
 
+    private Color _abilityRangeColor = Color.cyan;
+    private Color _hitTilesRangeColor = Color.red;
+
+
     private void Start()
     {
         if (!TryGetComponent(out _characterCaster))
@@ -33,6 +37,8 @@ public class AbilityHandler : MonoBehaviour
     /// </summary>
     public bool UseAbility(Ability ability, CombatGridTile targetTile)
     {
+        ClearCharacterPreviews();
+
         // Set caster to get information that might alter ability, like extra AOE range.
         _pendingAbility.SetCharacterCaster(_characterCaster);
 
@@ -150,12 +156,14 @@ public class AbilityHandler : MonoBehaviour
         var occupant = tile.GetOccupant();
         Character character = occupant ? occupant.GetComponent<Character>() : null;
 
-        if (CharacterNotTargetable(character)) return false;
+        var abilityType = ability.GetAbilityTargetType();
 
-        switch (ability.GetAbilityTargetType())
+        if (abilityType != Ability.ValidTargetOccupant.Any && CharacterNotTargetable(character)) return false;
+
+        switch (abilityType)
         {
             case Ability.ValidTargetOccupant.Any:
-                return tile.IsWalkable();
+                return true;
             case Ability.ValidTargetOccupant.CharacterOccupiedTile:
                 return occupant != null;
             case Ability.ValidTargetOccupant.Enemy:
@@ -172,14 +180,7 @@ public class AbilityHandler : MonoBehaviour
     /// </summary>
     private List<CombatGridTile> RemoveUntargetableTiles(List<CombatGridTile> tiles)
     {
-        List<CombatGridTile> filteredList = new();
-        foreach (CombatGridTile tile in tiles)
-        {
-            if (tile.IsWalkable())
-            {
-                filteredList.Add(tile);
-            }
-        }
+        List<CombatGridTile> filteredList = tiles;
 
         if ((_pendingAbility.GetAbilityTargetType() != Ability.ValidTargetOccupant.Any) && (_pendingAbility.GetAbilityTargetType() != Ability.ValidTargetOccupant.Friendly))
         {
@@ -199,23 +200,23 @@ public class AbilityHandler : MonoBehaviour
     {
         List<CombatGridTile> newEffectedTiles = _pendingAbility.GetTilesToEffect(tile);
 
+        bool shouldClearPreview = true;
         if(newEffectedTiles != null)
         {
-            bool shouldClearPreview = false;
+            shouldClearPreview = false;
             foreach(CombatGridTile t in newEffectedTiles)
             {
                 if (!_tilesEffected.Contains(t)) shouldClearPreview = true;
             }
-
-            if(shouldClearPreview) ClearCharacterPreviews();
         }
+        if(shouldClearPreview) ClearCharacterPreviews();
 
         // Reset all tiles
         foreach (CombatGridTile t in _tilesEffected)
         {
             if (_tilesInRange.Contains(t))
             {
-                t.SetTileColor(Color.green);
+                t.SetTileColor(_abilityRangeColor);
             }
             else
             {
@@ -229,7 +230,7 @@ public class AbilityHandler : MonoBehaviour
         foreach (CombatGridTile t in newEffectedTiles)
         {
             if (t == null) return;
-            t.SetTileColor(Color.red);
+            t.SetTileColor(_hitTilesRangeColor);
             _tilesEffected.Add(t);
         }
     }
@@ -256,7 +257,10 @@ public class AbilityHandler : MonoBehaviour
     private void ClearCharacterPreviews()
     {
         foreach (var c in _previewedCharacters)
+        {
             c.HidePreviewVFX();
+            c.StopPreviewingHealthChange();
+        }
 
         _previewedCharacters.Clear();
     }
@@ -264,6 +268,16 @@ public class AbilityHandler : MonoBehaviour
     private void HandleCharacterDeselected()
     {
         ClearCharacterPreviews();
+    }
+
+    public void SetAbilityRangeColor(Color color)
+    {
+        _abilityRangeColor = color;
+    }
+
+    public void SetHitTilesRangeColor(Color color)
+    {
+        _hitTilesRangeColor = color;
     }
 
 }

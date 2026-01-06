@@ -12,7 +12,7 @@ public class CharacterDeathLogEntry : CombatLogEntry
         }
         
         string characterName = d.Character.GetFaction() == Faction.Friendly ?
-            GameTextFormatter.ClassColoredName(d.Character) : GameTextFormatter.FactionColoredLabel(d.Character);
+            GameTextFormatter.CreateCharacterNameLink(d.Character) : GameTextFormatter.FactionColoredLabel(d.Character);
         
         _text.text = $"{characterName} died";
     }

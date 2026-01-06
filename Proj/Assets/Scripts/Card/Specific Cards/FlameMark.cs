@@ -15,7 +15,7 @@ public class FlameMark : Card
                 damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
                 character.TakeDamage(damage);
             }
-            character.GetStatusEffectManager().AddStatusEffect(new Burn(null, 2));
+            character.GetStatusEffectManager().AddStatusEffect(new Burn(2));
         }
     }
 }

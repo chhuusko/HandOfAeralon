@@ -11,6 +11,7 @@ public class Giantblood : Trait
             return;
         }
         
-        hpFactor *= data.DamageModifier;
+        var modifier = 1f + data.DamageModifierPercent / 100f;
+        hpFactor *= modifier;
     }
 }

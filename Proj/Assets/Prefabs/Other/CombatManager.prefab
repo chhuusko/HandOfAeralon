@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1066770049747366293}
-  - {fileID: 4814447980440405769}
+  - {fileID: 8820004339867049900}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &616073620153778492
@@ -63,9 +63,10 @@ MonoBehaviour:
     _currentTurn: 0
     _activeCharacter: {fileID: 0}
     _charactersInTurnOrder: []
-    _turnCountFullRound: 1
-    _turnCountCurrent: 1
-  _enemyAI: {fileID: 21440665389889202}
+    _charactersInPendingTurnOrder: []
+    _charactersInExecutedTurnOrder: []
+    _charactersToDisplay: []
+  _enemyAI: {fileID: 4105741287026421271}
   _classAbilities: []
   enemyMana: 6
   enemyManaSpent: 2
@@ -112,6 +113,9 @@ MonoBehaviour:
   _pendingCharacterActionType: 0
   _selectedCharacter: {fileID: 0}
   _bDebugSelector: 0
+  _abilityRangeColor: {r: 1, g: 0.6184036, b: 0.3066038, a: 1}
+  _movementRangeColor: {r: 0, g: 1, b: 0.011662006, a: 1}
+  _hitTilesRangeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &8445614807586532933
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,7 +176,7 @@ MonoBehaviour:
   inCombatTileMaterialPoison: {fileID: 2100000, guid: c8a49a2d6caa30248afd75a7a877279d,
     type: 2}
   _fileToLoadDEBUG: 
---- !u!1001 &8360854918918250801
+--- !u!1001 &5526216467615431060
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -240,11 +244,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b50cf4c38c2c0f24ab87673e0ef21cb3, type: 3}
---- !u!114 &21440665389889202 stripped
+--- !u!114 &4105741287026421271 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8379955821282121603, guid: b50cf4c38c2c0f24ab87673e0ef21cb3,
     type: 3}
-  m_PrefabInstance: {fileID: 8360854918918250801}
+  m_PrefabInstance: {fileID: 5526216467615431060}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -252,9 +256,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 454555ab5cf54d048bbd04741d20bcde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &4814447980440405769 stripped
+--- !u!4 &8820004339867049900 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3951877536032253496, guid: b50cf4c38c2c0f24ab87673e0ef21cb3,
     type: 3}
-  m_PrefabInstance: {fileID: 8360854918918250801}
+  m_PrefabInstance: {fileID: 5526216467615431060}
   m_PrefabAsset: {fileID: 0}

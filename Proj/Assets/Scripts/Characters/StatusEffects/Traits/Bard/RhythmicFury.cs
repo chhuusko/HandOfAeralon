@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class RhythmicFury : Trait
 {
-    private float _totalDamageIncrease = 1;
+    private float _totalDamageIncrease;
 
     public override void ResetCombatState()
     {
-        _totalDamageIncrease = 1;
+        _totalDamageIncrease = 0f;
     }
 
     public override void OnAbilityUsed(AbilityExecutionData abilityData)
@@ -18,13 +18,12 @@ public class RhythmicFury : Trait
         }
         
         var data = Data as DamageModifyingData;
-
         if (!data)
         {
             return;
         }
 
-        _totalDamageIncrease += data.DamageModifier;
+        _totalDamageIncrease += data.DamageModifierPercent;
     }
     
     public override void ModifyOutgoingDamage(ref float damage, Ability ability)
@@ -34,6 +33,7 @@ public class RhythmicFury : Trait
             return;
         }
         
-        damage *= _totalDamageIncrease;
+        var modifier = 1f + _totalDamageIncrease / 100f;
+        damage *= modifier;
     }
 }

@@ -14,10 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Crescendo Smash
   Icon: {fileID: 21300000, guid: 88290965ea3c9994f98bc6a1604073f3, type: 3}
-  Description: Lute Smash deals +20% damage for each use this combat
+  Description: '{ability}Lute Smash{/ability} deals +20% damage for each use this
+    combat'
   Type: 3
   IsPermanent: 1
+  IsDispellable: 0
+  SkipFirstTick: 0
   _typeName: CrescendoSmash, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 3
   IsPositive: 1
-  DamageModifier: 0.2
+  DamageModifierPercent: 20

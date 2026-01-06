@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Healing Fatigue
   Icon: {fileID: 21300000, guid: 71e9e99a5716268449af9f6841e07da8, type: 3}
-  Description: Character receives 50% less healing from all sources
+  Description: Character receives 50% less {heal}healing{/heal} from all sources
   Type: 1
   IsPermanent: 0
   IsDispellable: 1
+  SkipFirstTick: 1
   _typeName: HealingFatigue, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
-  DamageModifier: 1.5
+  DamageModifierPercent: 50

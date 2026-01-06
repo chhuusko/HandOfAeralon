@@ -74,14 +74,12 @@ public class StatusEffectManager : MonoBehaviour
         statusEffect.Setup(_character, this);
         
         // Check if other traits interact.
-        BeforeStatusEffectApplied(caster, _character, statusEffect);
+        bool canAdd = BeforeStatusEffectApplied(caster, _character, statusEffect);
         
         // Try adding it.
-        bool canAdd = CombatEventManager.InvokeOnTryAddStatusEffect(caster, _character, statusEffect);
         if (!canAdd)
         {
             statusEffect.Cleanup();
-            // Blocked.
             return;
         }
         
@@ -193,6 +191,15 @@ public class StatusEffectManager : MonoBehaviour
         foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
         {
             statusEffect.OnTurnStart();
+        }
+        
+        // Removes burns and poisons that have ticked down to 0.
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            if (statusEffect.ShouldExpire)
+            {
+                RemoveStatusEffect(statusEffect, true);
+            }
         }
     }
 
@@ -327,13 +334,49 @@ public class StatusEffectManager : MonoBehaviour
         return heal;
     }
     
-    public int ApplyBurnDamageModifiers(int baseDamage)
+    public float ModifyOutgoingPoisonDamage(float baseDamage)
     {
-        int damage = baseDamage;
+        float damage = baseDamage;
 
         foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
         {
-            statusEffect.ModifyBurnDamage(ref damage);
+            statusEffect.ModifyOutgoingPoisonDamage(ref damage);
+        }
+        
+        return damage;
+    }
+    
+    public float ModifyIncomingPoisonDamage(float baseDamage)
+    {
+        float damage = baseDamage;
+
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            statusEffect.ModifyIncomingPoisonDamage(ref damage);
+        }
+        
+        return damage;
+    }
+    
+    public float ModifyOutgoingBurnDamage(float baseDamage)
+    {
+        float damage = baseDamage;
+
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            statusEffect.ModifyOutgoingBurnDamage(ref damage);
+        }
+        
+        return damage;
+    }
+    
+    public float ModifyIncomingBurnDamage(float baseDamage)
+    {
+        float damage = baseDamage;
+
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            statusEffect.ModifyIncomingBurnDamage(ref damage);
         }
         
         return damage;
@@ -406,6 +449,52 @@ public class StatusEffectManager : MonoBehaviour
         return chance;
     }
     
+    private void OnAbilityUsed(AbilityExecutionData abilityData)
+    {
+        if (!_character)
+        {
+            return;
+        }
+        
+        if (abilityData.Caster != _character)
+        {
+            return;
+        }
+        
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            statusEffect.OnAbilityUsed(abilityData);
+        }
+        
+        RemoveExpiredStatusEffects();
+    }
+    
+    private void OnTakeDamage(int damage, GameObject c)
+    {
+        if (!_character)
+        {
+            return;
+        }
+        
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            statusEffect.OnTakeDamage();
+        }
+        
+        RemoveExpiredStatusEffects();
+    }
+
+    private void RemoveExpiredStatusEffects()
+    {
+        foreach (var statusEffect in _traitManager.GetAllEffects().ToList())
+        {
+            if (statusEffect.ShouldExpire)
+            {
+                RemoveStatusEffect(statusEffect, true);
+            }
+        }
+    }
+    
     // Traits.
     private void OnStartCombat()
     {
@@ -422,19 +511,6 @@ public class StatusEffectManager : MonoBehaviour
             }
         } 
     }
-    
-    private void OnTakeDamage(int damage, GameObject c)
-    {
-        if (!_character)
-        {
-            return;
-        }
-        
-        foreach (var trait in _traitManager.GetAllTraits().ToList())
-        {
-            trait.OnTakeDamage();
-        }
-    }
 
     private void OnDeath(Character c)
     {
@@ -444,35 +520,17 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    private void OnAbilityUsed(AbilityExecutionData abilityData)
+    private bool BeforeStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
     {
-        if (!_character)
-        {
-            return;
-        }
-        
-        if (abilityData.Caster != _character)
-        {
-            return;
-        }
-        
         foreach (var trait in _traitManager.GetAllTraits().ToList())
         {
-            trait.OnAbilityUsed(abilityData);
+            if (!trait.BeforeStatusEffectApplied(caster, target, statusEffect))
+            {
+                return false;
+            }
         }
-    }
 
-    private void BeforeStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
-    {
-        if (target != _character)
-        {
-            return;
-        }
-        
-        foreach (var trait in _traitManager.GetAllTraits().ToList())
-        {
-            trait.BeforeStatusEffectApplied(caster, target, statusEffect);
-        }
+        return true;
     }
     
     private void OnStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)

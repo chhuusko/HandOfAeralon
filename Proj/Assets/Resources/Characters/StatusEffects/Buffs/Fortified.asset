@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Fortified
   Icon: {fileID: 21300000, guid: 864f59deccd57bb4097337c45f5edf95, type: 3}
-  Description: Character takes 50% less Damage
+  Description: Character takes 50% less Damage (does not affect {burn}Burn{/burn}
+    or {poison}Poison{/poison})
   Type: 0
   IsPermanent: 0
   IsDispellable: 1
+  SkipFirstTick: 1
   _typeName: Fortified, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
-  DamageModifier: 1.5
+  DamageModifierPercent: 50

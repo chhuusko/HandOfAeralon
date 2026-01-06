@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Reflected Affliction
   Icon: {fileID: 21300000, guid: 10ca0546d233b9c4cae8ffe7a214acdc, type: 3}
-  Description: Reflect any debuff onto inflictor once per combat
+  Description: Reflect any {non_damaging}debuff{/non_damaging} onto inflictor once
+    per combat
   Type: 3
   IsPermanent: 1
+  IsDispellable: 0
+  SkipFirstTick: 0
   _typeName: ReflectedAffliction, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   Class: 4

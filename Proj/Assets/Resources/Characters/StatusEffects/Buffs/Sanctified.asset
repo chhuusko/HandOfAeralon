@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Sanctified
   Icon: {fileID: 21300000, guid: 0a0859a18d5c9c74abfaa208425e51c5, type: 3}
-  Description: Character is immune to Damage and negative effects until the next
-    time they would take damage
+  Description: Character is immune to Damage and {non_damaging}negative effects{/non_damaging}
+    until the next time they would take damage
   Type: 0
   IsPermanent: 0
   IsDispellable: 0
+  SkipFirstTick: 1
   _typeName: Sanctified, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0

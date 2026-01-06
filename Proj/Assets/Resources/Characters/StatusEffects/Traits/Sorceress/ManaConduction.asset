@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Mana Conduction
   Icon: {fileID: 21300000, guid: 0ef48632241e0d9429a376ea8482b01c, type: 3}
-  Description: Arcane Bolt gains +25% damage per mana spent this turn
+  Description: '{ability}Arcane Bolt{/ability} gains +25% damage per {mana}mana{/mana}
+    spent this turn'
   Type: 3
   IsPermanent: 1
   IsDispellable: 0
+  SkipFirstTick: 0
   _typeName: ManaConduction, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 1
   IsPositive: 1
-  DamageModifier: 1.25
+  DamageModifierPercent: 25

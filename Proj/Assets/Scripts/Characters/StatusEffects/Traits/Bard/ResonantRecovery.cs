@@ -16,25 +16,24 @@ public class ResonantRecovery : Trait
             return;
         }
         
-        damage *= data.DamageModifier;
+        var modifier = 1f + data.DamageModifierPercent / 100f;
+        damage *= modifier;
     }
 
-    public override void ModifyIncomingHeal(ref float heal, Ability ability)
+    public override void OnAbilityUsed(AbilityExecutionData abilityData)
     {
-        if (ability is not ResonantBlastAOE)
+        if (abilityData.Ability is not ResonantBlastAOE)
         {
             return;
         }
         
         var data = Data as ResonantRecoveryData;
-
         if (!data)
         {
             return;
         }
         
-        int healAmount = Mathf.RoundToInt(data.HealModifier * Character.GetMaxHealth());
-
+        int healAmount = Mathf.RoundToInt(data.HealModifierPercent * Character.GetMaxHealth() / 100f);
         Character.Heal(healAmount);
     }
 }

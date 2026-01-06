@@ -22,7 +22,8 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private CombatLogEntry _cardUsedLogEntryPrefab;
     [SerializeField] private CombatLogEntry _cardTargetedLogEntryPrefab;
     [SerializeField] private CombatLogEntry _combatBountyEntryPrefab;
-    [SerializeField] private CombatLogEntry _statusEffectEntryPrefab;
+    [SerializeField] private CombatLogEntry _statusEffectAddedEntryPrefab;
+    [SerializeField] private CombatLogEntry _statusEffectRemovedEntryPrefab;
     
     private bool _bCombatLogEnabled = true;
     
@@ -30,19 +31,23 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
         CombatEventManager.OnStatusEffectAppliedToCharacter += AddCombatLogEntry;
+        CombatEventManager.OnStatusEffectExpiredOnCharacter += AddCombatLogEntry;
         CombatEventManager.OnCharacterDeath += AddCombatLogEntry;
         CardHandManager.onCardUse += AddCombatLogEntry;
         CardHandManager.onCardTargetCharacter += AddCombatLogEntry;
         LinkHandlerForTMPText.OnClickOnLink += SelectCharacter;
     }
 
+    /// <summary>
+    /// Cycles the combat log being active/inactive.
+    /// </summary>
     public void SetCombatLogActive()
     {
         _bCombatLogEnabled = !_bCombatLogEnabled;
         _combatLogPanel.SetActive(_bCombatLogEnabled);
         _combatLogScrollbar.SetActive(_bCombatLogEnabled);
     }
-
+    
     private void AddCombatLogEntry(AbilityExecutionData data)
     {
         AbilityLogData abilityLogData = new AbilityLogData
@@ -95,23 +100,41 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         StartCoroutine(AddStatusEffectNextFrame(caster, target, effect));
     }
-
+    
     private IEnumerator AddStatusEffectNextFrame(Character caster, Character target, StatusEffect effect)
     {
         // Wait one frame. Guarantees ability log is added before status effects.
         yield return null;
         
-        StatusEffectLogData statusEffectLogData = new StatusEffectLogData()
+        StatusEffectAddedLogData statusEffectAddedLogData = new StatusEffectAddedLogData()
         {
             StatusEffect = effect,
             Caster = caster,
             Target = target,
         };
-        AddCombatLogEntry(statusEffectLogData);
+        AddCombatLogEntry(statusEffectAddedLogData);
+    }
+
+    private void AddCombatLogEntry(Character character, StatusEffect effect)
+    {
+        StartCoroutine(RemoveStatusEffectNextFrame(character, effect));
+    }
+
+    private IEnumerator RemoveStatusEffectNextFrame(Character character, StatusEffect effect)
+    {
+        yield return null;
+        
+        StatusEffectRemovedLogData statusEffectRemovedLogData = new StatusEffectRemovedLogData()
+        {
+            StatusEffect = effect,
+            Character = character,
+        };
+        AddCombatLogEntry(statusEffectRemovedLogData);
     }
 
     private void AddCombatLogEntry(CombatLogData data)
     {
+        // Get the prefab to instantiate.
         CombatLogEntry prefab = data switch
         {
             AbilityLogData => _abilityEntryPrefab,
@@ -119,7 +142,8 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             CardUsedLogData => _cardUsedLogEntryPrefab,
             CardTargetedLogData => _cardTargetedLogEntryPrefab,
             CombatBountyLogData => _combatBountyEntryPrefab,
-            StatusEffectLogData => _statusEffectEntryPrefab,
+            StatusEffectAddedLogData => _statusEffectAddedEntryPrefab,
+            StatusEffectRemovedLogData => _statusEffectRemovedEntryPrefab,
             _ => null
         };
 
@@ -129,9 +153,11 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             return;
         }
         
+        // Create the combat log entry.
         var entry = Instantiate(prefab, _combatLogContent);
         entry.Initialize(data);
         
+        // Reset scroll.
         StartCoroutine(ScrollToBottom());
     }
     
@@ -143,9 +169,13 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         _combatLogScrollRect.verticalNormalizedPosition = 0;
     }
 
-    private void SelectCharacter(string keyword)
+    /// <summary>
+    /// Selects the corresponding character based on its ID.
+    /// </summary>
+    /// <param name="linkID">The ID of the character to select.</param>
+    private void SelectCharacter(string linkID)
     {
-        int id = int.Parse(keyword);
+        int id = int.Parse(linkID);
         foreach (var character in CombatGrid._instance.GetAllCharacterScripts())
         {
             if (character.CharacterID == id)
@@ -169,6 +199,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         CombatEventManager.OnAbilityDataCreated -= AddCombatLogEntry;
         CombatEventManager.OnStatusEffectAppliedToCharacter -= AddCombatLogEntry;
+        CombatEventManager.OnStatusEffectExpiredOnCharacter -= AddCombatLogEntry;
         CombatEventManager.OnCharacterDeath -= AddCombatLogEntry;
         CardHandManager.onCardUse -= AddCombatLogEntry;
         CardHandManager.onCardTargetCharacter -= AddCombatLogEntry;

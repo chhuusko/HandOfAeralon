@@ -11,6 +11,12 @@ public class CombatTooltipManager : MonoBehaviour
     [SerializeField] private CombatTooltipCharacterLayout _characterLayout;
     [SerializeField] private CombatHoverTooltip _combatHoverTooltip;
 
+    private bool _bAbilityRequestingClose = false;
+    private bool _bCloseTooltipDuringOverlap = false;
+    AbilityButton _lastAbilityButton;
+    Ability _lastAbility;
+
+
     private void Awake()
     {
         if(_instance != null && _instance != this)
@@ -30,9 +36,11 @@ public class CombatTooltipManager : MonoBehaviour
         TooltipStatusEffectElement.OnMouseHoverEnter += ShowHoverTooltip;
         TooltipStatusEffectElement.OnMouseHoverExit  += HideHoverTooltip;
         AbilityButton.OnMouseHoverEnter              += ShowHoverTooltipAbility;
+        AbilityButton.OnMouseHoverEnter              += AbilityOpenRequest;
         AbilityButton.OnMouseHoverExit               += HideHoverTooltip;
+        AbilityButton.OnMouseHoverExit               += AbilityCloseRequest;
         StatusEffectBarElement.OnMouseHoverEnter     += ShowHoverTooltip;
-        StatusEffectBarElement.OnMouseHoverExit      += HideHoverTooltip;
+        StatusEffectBarElement.OnMouseHoverExit      += HideStatusBarElementTooltip;
 
     }
 
@@ -41,9 +49,12 @@ public class CombatTooltipManager : MonoBehaviour
         TooltipStatusEffectElement.OnMouseHoverEnter -= ShowHoverTooltip;
         TooltipStatusEffectElement.OnMouseHoverExit  -= HideHoverTooltip;
         AbilityButton.OnMouseHoverEnter              -= ShowHoverTooltipAbility;
+        AbilityButton.OnMouseHoverEnter              -= AbilityOpenRequest;
         AbilityButton.OnMouseHoverExit               -= HideHoverTooltip;
+        AbilityButton.OnMouseHoverExit               -= AbilityCloseRequest;
         StatusEffectBarElement.OnMouseHoverEnter     -= ShowHoverTooltip;
-        StatusEffectBarElement.OnMouseHoverExit      -= HideHoverTooltip;
+        StatusEffectBarElement.OnMouseHoverExit      -= HideStatusBarElementTooltip;
+        
 
     }
 
@@ -62,6 +73,24 @@ public class CombatTooltipManager : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        if(_bAbilityRequestingClose)
+        {
+            if (!_combatHoverTooltip.GetIsHovering() || !_combatHoverTooltip.IsLocked())
+            {
+                if(!_bCloseTooltipDuringOverlap)
+                {
+                    _combatHoverTooltip.Hide();
+                    _bAbilityRequestingClose = false;
+                    _bCloseTooltipDuringOverlap = true;
+                }
+                
+            }
+                
+        }
+    }
+
     public static CombatTooltipManager GetInstance() { return _instance; }
 
     public CombatTooltipCharacterLayout GetCharacterLayout() { return _characterLayout; }
@@ -69,12 +98,12 @@ public class CombatTooltipManager : MonoBehaviour
 
     public void ShowHoverTooltipAbility(AbilityButton button, Ability ability)
     {
+
         string description = ability.GetDescription();
         description += "\n\nCooldown: " + ability.GetCooldown() + " turns.";
 
         string advancedDescription = GameTextFormatter.AbilityColoredLabel(ability);
 
-        //_combatHoverTooltip.Show(ability.GetAbilityName(), description, button.GetComponent<RectTransform>());
         _combatHoverTooltip.Show(ability.GetAbilityName(), advancedDescription, button.GetComponent<RectTransform>());
     }
 
@@ -82,12 +111,20 @@ public class CombatTooltipManager : MonoBehaviour
     {
         _combatHoverTooltip.Show(title, description, rectTransform);
     }
+
     public void HideHoverTooltip()
     {
-        if(!_combatHoverTooltip.IsLocked())
-            _combatHoverTooltip.Hide();
-
+        if(!_combatHoverTooltip.IsLocked() || !_combatHoverTooltip.GetIsHovering())
+        {
+            // _combatHoverTooltip.Hide();
+        }
     }
+
+    public void HideStatusBarElementTooltip()
+    {
+        _combatHoverTooltip.Hide();
+    }
+
     public void HideTooltipCanvas()
     {
         if(_characterLayout != null)
@@ -102,5 +139,19 @@ public class CombatTooltipManager : MonoBehaviour
         {
             _characterLayout.ShowCanvas();
         }
+    }
+
+    public void AbilityCloseRequest()
+    {
+        _bAbilityRequestingClose = true;
+        _bCloseTooltipDuringOverlap = false;
+    }
+
+    public void AbilityOpenRequest(AbilityButton button, Ability ability)
+    {
+        _lastAbilityButton = button;
+        _lastAbility = ability;
+        _bAbilityRequestingClose = false;
+
     }
 }

@@ -35,7 +35,7 @@ public class CardHandManager : MonoBehaviour
     private int _maxMana = 10;
     private int _mana = 5;
     private int _cardsPlayedThisTurn = 0;
-    private static int _maxHand = 7;
+    private static int _maxHand = 10;
     private static int beginningDraw = 5;
 
     // Onhover
@@ -50,6 +50,10 @@ public class CardHandManager : MonoBehaviour
 
     //  bool
     bool isCombat;
+
+    // view
+    [SerializeField] CardViewUI cardView;
+    [SerializeField] CardSelectViewUI cardSelect;
 
     // event
     public static Action<Card> onCardUse;
@@ -95,7 +99,9 @@ public class CardHandManager : MonoBehaviour
     private void OnEnable()
     {
         CombatEventManager.OnCombatTurnChange += TurnChanged;
+
         onCardTargetCharacter += TurnEffects;
+
         _controller.Enable();
         _controller.Developer.SkipLevel.performed += SkipLevel;
     }
@@ -105,7 +111,9 @@ public class CardHandManager : MonoBehaviour
     private void OnDisable()
     {
         CombatEventManager.OnCombatTurnChange -= TurnChanged;
+
         onCardTargetCharacter -= TurnEffects;
+
         _controller.Disable();
         _controller.Developer.SkipLevel.performed -= SkipLevel;
     }
@@ -163,6 +171,7 @@ public class CardHandManager : MonoBehaviour
 
     public void AddSpaceing()
     {
+        _cardsInHand.RemoveAll(o => o == null);
         for (int i = 0; i < _cardsInHand.Count; i++)
         {
             Vector3 position = _Hand.position + new Vector3(-(150f * (_cardsInHand.Count - 1)) / 2f, 0, 0) + new Vector3(i * 150f, 0, 0);
@@ -186,11 +195,17 @@ public class CardHandManager : MonoBehaviour
     }
     public void OpenDeck()
     {
-        CardViewUI.GetInstance().UpdateCards(_cardsInDeck);
+        cardView.UpdateCards(_cardsInDeck);
+        cardView.gameObject.SetActive(true);
     }
     public void OpenDiscardPile()
     {
-        CardViewUI.GetInstance().UpdateCards(_cardsInDiscardPile);
+        cardView.UpdateCards(_cardsInDiscardPile);
+        cardView.gameObject.SetActive(true);
+    }
+    public void OpenCardSelect()
+    {
+
     }
     public void RemoveCardFromHand(CardContainer cardContainer)
     {
@@ -329,5 +344,15 @@ public class CardHandManager : MonoBehaviour
         _deckText.text = "Draw Pile (" + _cardsInDeck.Count + ")";
         _discardText.text = "Discard (" + _cardsInDiscardPile.Count + ")";
     }
-
+    public void AddCardFromDiscard(Card card)
+    {
+        RemoveFromDiscard(card);
+        AddCardToHand(card);
+    }
+    private void RemoveFromDiscard(Card card)
+    {
+        _cardsInDiscardPile.Remove(card);
+        _cardsInDiscardPile.RemoveAll(o => o == null);
+        UpdatePileTexts();
+    }
 }

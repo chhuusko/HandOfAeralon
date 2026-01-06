@@ -11,8 +11,9 @@ public abstract class StatusEffect
     
     [SerializeField] private StatusEffectData _data;
     public StatusEffectData Data => _data;
-
+    
     public bool ShouldExpire;
+    public bool IsReflected;
     
     protected Character Character { get; private set; }
     protected StatusEffectManager Manager { get; private set; }
@@ -48,15 +49,22 @@ public abstract class StatusEffect
     {
         // If the status effect is applied out of turn, it should not tick down at start of next turn.
         _skipNextTick = Character != CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
-
-        CombatEventManager.OnTryAddStatusEffect += BeforeStatusEffectApplied;
+        if (_data && !_data.SkipFirstTick)
+        {
+            _skipNextTick = false;
+        }
         
         OnApply();
     }
 
     public void Cleanup()
     {
-        CombatEventManager.OnTryAddStatusEffect -= BeforeStatusEffectApplied;
+        
+    }
+    
+    public string GetColorCodedDescription()
+    {
+        return GameTextFormatter.LabeledStatusEffectDescription(this);
     }
     
     public void SetDuration(int duration) => _duration = duration;
@@ -108,11 +116,16 @@ public abstract class StatusEffect
     public virtual void OnTargetedByCard() {}
     public virtual void OnBurnApplied() {}
     public virtual void OnCombatEnded() {}
+    public virtual void OnTakeDamage() {}
+    public virtual void OnAbilityUsed(AbilityExecutionData abilityData) {}
     public virtual void ModifyIncomingDamage(ref float damage, Ability ability) {}
     public virtual void ModifyOutgoingDamage(ref float damage, Ability ability) {}
     public virtual void ModifyIncomingHeal(ref float heal, Ability ability) {}
     public virtual void ModifyOutgoingHeal(ref float heal, Ability ability) {}
-    public virtual void ModifyBurnDamage(ref int damage) {}
+    public virtual void ModifyOutgoingBurnDamage(ref float damage) {}
+    public virtual void ModifyIncomingBurnDamage(ref float damage) {}
+    public virtual void ModifyOutgoingPoisonDamage(ref float damage) {}
+    public virtual void ModifyIncomingPoisonDamage(ref float damage) {}
     public virtual void ModifyBurnApplicationChance(ref float chance) {}
     public virtual void ModifyStunApplicationChance(ref float chance) {}
 }

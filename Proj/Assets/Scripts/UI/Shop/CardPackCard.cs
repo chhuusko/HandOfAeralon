@@ -5,6 +5,7 @@ public class CardPackCard : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private GameObject _outLine;
     [SerializeField] public static readonly int maxSelect = 2;
+
     private static int selectedCount = 0;
     private bool _isSelected;
     private Card _card;

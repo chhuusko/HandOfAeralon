@@ -9,9 +9,7 @@ public class Trait : StatusEffect
     }
     public virtual void ResetCombatState() {}
     public virtual void OnCombatStarted() {}
-    public virtual void OnTakeDamage() {}
     public virtual void OnDeath(Character c) {}
-    public virtual void OnAbilityUsed(AbilityExecutionData abilityData) {}
     public virtual void OnStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect) {}
     public virtual void OnStatusEffectRemovedFromThis(StatusEffect statusEffect) {}
     public virtual void OnStatusEffectRemovedFromAny(Character character, StatusEffect statusEffect) {}

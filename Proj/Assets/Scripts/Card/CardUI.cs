@@ -36,7 +36,7 @@ public class CardUI : MonoBehaviour
     {
         _card = card;
         _title.text = card.title;
-        _description.text = card.description;
+        _description.text = GameTextFormatter.LabeledDescription(card.description);
         _mana.text = "" + card.GetCost();
         _image.sprite = card.icon;
         _frame.color = card.GetRarityColor((int)card.rarity);
@@ -52,7 +52,7 @@ public class CardUI : MonoBehaviour
     {
         _card = card;
         _title.text = card.title;
-        _description.text = card.description;
+        _description.text = GameTextFormatter.LabeledDescription(card.description);
         _mana.text = "" + card.GetCost();
         _image.sprite = card.icon;
         _frame.color = card.GetRarityColor((int)card.rarity);
@@ -117,6 +117,10 @@ public class CardUI : MonoBehaviour
         }
         
         
+    }
+    public Card GetCard()
+    {
+        return _card;
     }
 
 }

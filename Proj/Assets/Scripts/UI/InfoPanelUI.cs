@@ -9,6 +9,6 @@ public class InfoPanelUI : MonoBehaviour
     {
         transform.SetAsLastSibling();
         title.text = infoPanel.title;
-        description.text = infoPanel.description;
+        description.text = GameTextFormatter.LabeledDescription(infoPanel.description);
     }
 }

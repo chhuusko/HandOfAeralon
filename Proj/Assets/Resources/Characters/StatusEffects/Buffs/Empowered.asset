@@ -18,7 +18,8 @@ MonoBehaviour:
   Type: 0
   IsPermanent: 0
   IsDispellable: 1
+  SkipFirstTick: 1
   _typeName: Empowered, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
-  DamageModifier: 1.5
+  DamageModifierPercent: 50

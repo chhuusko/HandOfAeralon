@@ -36,16 +36,8 @@ public class Stealth : StatusEffect
         Character.DecreaseCurrentMovementPoints();
     }
 
-    // Effect breaks on taking damage.
-    public override void ModifyIncomingDamage(ref float damage, Ability ability)
-    {
-        ShouldExpire = true;
-    }
-
     public override void ModifyOutgoingDamage(ref float damage, Ability ability)
     {
-        ShouldExpire = true;
-        
         var data = Data as StealthData;
 
         if (!data)
@@ -53,6 +45,21 @@ public class Stealth : StatusEffect
             return;
         }
 
-        damage *= data.DamageModifier;
+        var modifier = 1f + data.DamageModifierPercent / 100f;
+        damage *= modifier;
+    }
+
+    public override void OnAbilityUsed(AbilityExecutionData abilityData)
+    {
+        if (abilityData.Damage > 0)
+        {
+            ShouldExpire = true;
+        }
+    }
+    
+    // Effect breaks on taking damage.
+    public override void OnTakeDamage()
+    {
+        ShouldExpire = true;
     }
 }
