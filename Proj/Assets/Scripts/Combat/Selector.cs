@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -74,7 +75,7 @@ public class Selector : MonoBehaviour
 
     private IEnumerator DelayedStart()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitUntil(() => CombatGrid._instance.IsCombatGridLoaded());
         SetStandrardColors();
 
     }
