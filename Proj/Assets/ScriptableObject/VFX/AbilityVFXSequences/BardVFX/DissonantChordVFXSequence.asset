@@ -18,13 +18,67 @@ MonoBehaviour:
   _offsetDistance: 0
   _airDistance: 0.1
   _rotationOffset: {x: 0, y: 0, z: 0}
-  _doCastCameraShake: 0
+  _doCastCameraShake: 1
   _castShakeDuration: 1.5
   _castShakeMagnitude: 0.1
   _castShakeFrequency: 200
   _castShakeFade:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.019772545
+      value: 0.004634857
+      inSlope: -0.005764894
+      outSlope: -0.005764894
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6552224
+      value: 0.0009715557
+      inSlope: 0.0008991388
+      outSlope: 0.0008991388
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.6656811
+      value: 0.091967344
+      inSlope: 0.792371
+      outSlope: 0.792371
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6934159
+      value: 0.29749316
+      inSlope: -0
+      outSlope: -0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.5468787
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.70281684
+      value: 0.992858
+      inSlope: 0.0000051350085
+      outSlope: 0.0000051350085
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.99157715
+      value: 0.50265884
+      inSlope: -1.6975988
+      outSlope: -1.6975988
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -32,9 +86,9 @@ MonoBehaviour:
     type: 3}
   _impactAirDistance: 0.1
   _impactRotationOffset: {x: 0, y: 0, z: 0}
-  _doImpactCameraShake: 1
-  _impactShakeDuration: 1
-  _impactShakeMagnitude: 0.1
+  _doImpactCameraShake: 0
+  _impactShakeDuration: 0
+  _impactShakeMagnitude: 0.5
   _impactShakeFrequency: 200
   _impactShakeFade:
     serializedVersion: 2
