@@ -19,7 +19,7 @@ public class CardSelectHandler : MonoBehaviour
     {
         _cardUsed = card;
         _amount = amount;
-        _view.UpdateCards(cardList, amount, "text");
+        _view.UpdateCards(cardList, amount);
         _view.gameObject.SetActive(true);
         _button.interactable = false;
         Debug.Log("updatesView");
@@ -28,6 +28,7 @@ public class CardSelectHandler : MonoBehaviour
     public void SetSelectCard(Card selectedCard)
     {
         _selectedCard = selectedCard;
+        _view.UpdateText();
         if (_selectedCard != null)
         {
             _button.interactable = true;

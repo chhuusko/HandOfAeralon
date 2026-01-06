@@ -7,20 +7,22 @@ public class CardSelectViewUI : CardViewUI
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] private TextMeshProUGUI aboveText;
-    private int amount;
-    public void UpdateText(string text)
+    private int _amount;
+    public void UpdateText()
     {
-        aboveText.text = "Select (<color=Yellow>" + (amount - CardSelect.GetSelectedCount()) + "</color>) Cards";
+        aboveText.text = "Select (<color=Yellow>" + (_amount - CardSelect.GetSelectedCount()) + "</color>) Cards";
     }
-    public void UpdateCards(List<Card> newCardList, int amount, string text)
+    public void UpdateCards(List<Card> newCardList, int amount)
     {
         gameObject.SetActive(true);
 
         if (_cardListUI.Count > 0) { ClearUI(); }
         if (newCardList == null) { Debug.Log("Nothing"); }
-        UpdateText(text);
+        _amount = amount;
+        UpdateText();
         _cardContent.transform.position = basePosition;
         gameObject.SetActive(true);
+        
 
         for (int i = 0; i < newCardList.Count; i++)
         {
