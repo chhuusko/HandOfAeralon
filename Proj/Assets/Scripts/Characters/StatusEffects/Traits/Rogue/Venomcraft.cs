@@ -15,14 +15,12 @@ public class Venomcraft : Trait
         }
 
         var data = Data as IntModifierData;
-
         if (data == null)
         {
             return true;
         }
 
         statusEffect.IncreaseDuration(data.Modifier);
-        
         return true;
     }
 }

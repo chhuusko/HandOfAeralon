@@ -72,6 +72,10 @@ public class Card : ScriptableObject
         //när den spelas på en target
         PlayCard();
     }
+    public virtual void CardSelect(Card selectedCard)
+    {
+
+    }
     public virtual void AfterCardPlay()
     {
         tempCost = cost;

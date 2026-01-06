@@ -14,9 +14,7 @@ public class ShadowRush : Trait
             return true;
         }
 
-        //AddHaste();
         AddBuffs();
-
         return true;
     }
 
@@ -33,7 +31,6 @@ public class ShadowRush : Trait
     private void AddBuffs()
     {
         var data = Data as IntModifierData;
-
         if (!data)
         {
             return;
@@ -41,6 +38,5 @@ public class ShadowRush : Trait
 
         Manager.AddStatusEffect(new Haste(data.Modifier));
         Manager.AddStatusEffect(new Empowered(data.Modifier));
-
     }
 }
