@@ -26,7 +26,7 @@ public class StatusEffectData : ScriptableObject
     /// Used when we don't know beforehand which status effect to create.
     /// </summary>
     /// <param name="duration">The amount of turns the status effect lasts.</param>
-    /// <returns></returns>
+    /// <returns>The created status effect.</returns>
     public StatusEffect CreateInstance(int duration)
     {
         var type = GetEffectType();
