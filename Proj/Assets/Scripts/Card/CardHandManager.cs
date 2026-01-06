@@ -344,5 +344,15 @@ public class CardHandManager : MonoBehaviour
         _deckText.text = "Draw Pile (" + _cardsInDeck.Count + ")";
         _discardText.text = "Discard (" + _cardsInDiscardPile.Count + ")";
     }
-
+    public void AddCardFromDiscard(Card card)
+    {
+        RemoveFromDiscard(card);
+        AddCardToHand(card);
+    }
+    private void RemoveFromDiscard(Card card)
+    {
+        _cardsInDiscardPile.Remove(card);
+        _cardsInDiscardPile.RemoveAll(o => o == null);
+        UpdatePileTexts();
+    }
 }
