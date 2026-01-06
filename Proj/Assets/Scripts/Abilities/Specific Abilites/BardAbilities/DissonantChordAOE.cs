@@ -106,6 +106,56 @@ public class DissonantChordAOE : RoundAOEAbility
         return Mathf.RoundToInt(damage);
     }
 
+   
+
+    public override void PreviewAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        if (_pattern is RoundAOEPattern pattern)
+        {
+            SetAbilityRadius(_radius, ref pattern);
+        }
+
+        // Calculate all tiles around with in radius and apply effect to all of them.
+        List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
+
+        enemiesDebuffed = 0;
+
+        foreach (CombatGridTile tile in tilesToEffect)
+        {
+            if (tile == null) continue;
+            if (!IsValidTargetForAbility(casterTile, tile)) continue;
+
+            RemoveBuffFromEnemy(casterTile, tile);
+        }
+
+        foreach (CombatGridTile tile in tilesToEffect)
+        {
+            if (tile != null)
+            {
+                // Don't apply effect on tiles with invalid targets.
+                if (!IsValidTargetForAbility(casterTile, tile)) continue;
+
+                PreviewEffectOnTile(casterTile, tile);
+                var character = tile.GetOccupantCharacter();
+                if (character == null) continue;
+                character.ShowPreviewVFX();
+                GetAbilityHandler().AddPreviewedCharacter(character);
+            }
+        }
+    }
+
+    protected override void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        if (targetTile == null) return;
+
+        Character affectedCharacter = targetTile.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        affectedCharacter.PreviewHealthChange(-damage);
+    }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {

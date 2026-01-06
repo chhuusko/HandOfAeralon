@@ -62,13 +62,12 @@ public class Selector : MonoBehaviour
         CombatEventManager.OnExitCombatStateTakeTurn += HandleCombatStateTakeTurn;
         CombatEventManager.OnEnterCombatStateTakeTurn += HandleEnterCombatStateTakeTurn;
 
-        DelayedStart();
+        StartCoroutine(DelayedStart());
     }
 
 
     void Update()
     {
-        SetStandrardColors();
         HandleTileClick();
         HandleTileHover(); 
     }
@@ -77,7 +76,6 @@ public class Selector : MonoBehaviour
     {
         yield return new WaitUntil(() => CombatGrid._instance.IsCombatGridLoaded());
         SetStandrardColors();
-
     }
 
     private void HandleEnterCombatStateTakeTurn(Character character)
