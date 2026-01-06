@@ -18,7 +18,7 @@ MonoBehaviour:
   title: Life & Death
   description: Deal {card_damage}damage{/card_damage} to target enemy equal to 25%
     of their Max Health and {heal}heal{/heal} the ally with the highest % missing
-    Health for the same amount.
+    Health for the same amount
   cost: 3
   icon: {fileID: 21300000, guid: 14773e8d51115364dbf0088d062028bb, type: 3}
   CardTemplate: {fileID: 0}
