@@ -16,6 +16,7 @@ public class StormlitEmberwake : Trait
             return;
         }
 
-        chance *= data.DamageModifier;
+        var modifier = 1f + data.DamageModifierPercent / 100f;
+        chance *= modifier;
     }
 }

@@ -4,7 +4,7 @@ public class AssassinsReprieve : Trait
 {
     public override void OnAbilityUsed(AbilityExecutionData abilityData)
     {
-        if (!abilityData.CharacterDied)
+        if (!abilityData.CharacterDied || abilityData.Caster != Character)
         {
             return;
         }
@@ -18,7 +18,8 @@ public class AssassinsReprieve : Trait
 
         // Remove all debuffs on this character.
         Manager.ClearStatusEffects(StatusEffectType.Debuff);
-        
-        Character.Heal(Mathf.RoundToInt(Character.GetBaseHealth() / data.Modifier));
+
+        var modifier = data.ModifierPercent / 100f;
+        Character.Heal(Mathf.RoundToInt(Character.GetBaseHealth() * modifier));
     }
 }

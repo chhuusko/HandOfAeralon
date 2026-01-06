@@ -10,7 +10,6 @@ public class CombatStateEndTurn : CombatStateBase
         CombatEventManager.InvokeEnterCombatStateEndTurn(CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter());
 
         CombatTurnOrder combatTurnOrder = CombatManager._instance.GetCombatTurnOrder();
-        combatTurnOrder.UpdateCharacterTurnOrderPostTurn();
         combatTurnOrder.UpdateTurnOrder();
         int i = 0;
     }

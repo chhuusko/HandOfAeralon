@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Ironhide
   Icon: {fileID: 21300000, guid: ed6294c29c265d04ba846bce6d45c228, type: 3}
-  Description: Take 25% less Physical damage
+  Description: Take 25% less {physical_damage}Physical damage{/physical_damage}
   Type: 3
   IsPermanent: 1
   IsDispellable: 0
@@ -22,4 +22,4 @@ MonoBehaviour:
   _typeName: Ironhide, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 1
-  DamageModifier: 25
+  DamageModifierPercent: 25

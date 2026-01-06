@@ -27,12 +27,12 @@ public class LinkHandlerForTMPText : MonoBehaviour, IPointerClickHandler
         Vector3 mousePos = new Vector3(eventData.position.x, eventData.position.y, 0);
         
         var linkTaggedText = TMP_TextUtilities.FindIntersectingLink(_text, mousePos, _camera);
-
         if (linkTaggedText == -1)
         {
             return;
         }
         
+        // Get and invoke ID.
         TMP_LinkInfo linkInfo = _text.textInfo.linkInfo[linkTaggedText];
         OnClickOnLink?.Invoke(linkInfo.GetLinkID());
     }

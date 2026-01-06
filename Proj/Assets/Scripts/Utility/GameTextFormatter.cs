@@ -1,9 +1,28 @@
+using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
 public static class GameTextFormatter
 {
-    public static string ClassColoredName(Character character)
+    private enum TagType
+    {
+        Ability,
+        ElementalDamage,
+        PhysicalDamage,
+        Burn,
+        Poison,
+        NonDamagingEffect,
+        Heal,
+        Mana,
+        Card,
+    }
+    
+    /// <summary>
+    /// Creates a named, colored link for the character's name.
+    /// </summary>
+    /// <param name="character">The character to create a label for.</param>
+    /// <returns>The characters name in color representing its class.</returns>
+    public static string CreateCharacterNameLink(Character character)
     {
         if (character == null)
         {
@@ -17,6 +36,11 @@ public static class GameTextFormatter
         return TextMarkupExtensions.Colorize(name, color);
     }
     
+    /// <summary>
+    /// Creates a faction and class name for the character, colored according to its class.
+    /// </summary>
+    /// <param name="character">The character to create the label for.</param>
+    /// <returns>A colored label indicating faction and character class.</returns>
     public static string FactionColoredLabel(Character character)
     {
         if (character == null)
@@ -33,6 +57,11 @@ public static class GameTextFormatter
             $"<link=\"{character.CharacterID}\"><u>{factionName} {className}</link></u>", color);
     }
 
+    /// <summary>
+    /// Creates a colored label for the given status effect.
+    /// </summary>
+    /// <param name="statusEffect">The status effect to create the label for.</param>
+    /// <returns>A label for the status effect, including name and color representing its type.</returns>
     public static string StatusEffectColoredLabel(StatusEffect statusEffect)
     {
         if (statusEffect == null)
@@ -42,60 +71,101 @@ public static class GameTextFormatter
         }
         
         string name = statusEffect.Name;
-        Color color;
-        if (statusEffect is Burn)
+        Color color = statusEffect switch
         {
-            color = ColorDatabase.Instance.BurnColor;
-        }
-        else if (statusEffect is Poison)
-        {
-            color = ColorDatabase.Instance.PoisonColor;
-        }
-        else
-        {
-            color = ColorDatabase.Instance.NonDamagingEffectColor;
-        }
-        
+            Burn => ColorDatabase.Instance.BurnColor,
+            Poison => ColorDatabase.Instance.PoisonColor,
+            _ => ColorDatabase.Instance.NonDamagingEffectColor
+        };
+
         return TextMarkupExtensions.Colorize(name, color);
     }
 
-    public static string ColorizeStatusEffectTooltip(StatusEffect statusEffect)
+    private static string GetTagPattern(TagType tagType)
     {
-        // var colorDB = ColorDatabase.Instance;
-        // Color abilityColor         = colorDB.AbilityColor;
-        // Color elementalDamageColor = colorDB.ElementalDamageColor;
-        // Color physicalDamageColor  = colorDB.PhysicalDamageColor;
-        // Color nonDamageEffectColor = colorDB.NonDamagingEffectColor;
-        // Color burnColor            = colorDB.BurnColor;
-        // Color poisonColor          = colorDB.PoisonColor;
-        // Color cardColor            = colorDB.CardColor;
-        // Color manaColor            = colorDB.ManaColor;
-        // Color healColor            = colorDB.HealingColor;
-        //
-        // string desc                 = statusEffect.Data.Description;
-        // string damageToken          = "{damage}";
-        // string elementalDamageToken = "{elemental_damage}";
-        // string physicalDamageToken  = "{physical_damage}";
-        // string burnToken            = "{burn}";
-        // string poisonToken          = "{poison}";
-        // string nonDamagingEffectToken =  "{non_damaging}";
-        // string healthToken          = "{health}";
-        // string healToken            = "{heal}";
-        // string manaToken            = "{mana}";
-        // string cardToken            = "{card}";
-        //
-        // ReplaceAll(ref desc, ability);
-        // ReplaceAll(ref desc, elementalDamageToken, TextMarkupExtensions.Colorize("Elemental Damage", elementalDamageColor));
-        // ReplaceAll(ref desc, physicalDamageToken, TextMarkupExtensions.Colorize("Physical Damage", physicalDamageColor));
-        // ReplaceAll(ref desc, burnToken, TextMarkupExtensions.Colorize("Burn", burnColor));
-        // ReplaceAll(ref desc, poisonToken, TextMarkupExtensions.Colorize("Poison", poisonColor));
-        // ReplaceAll(ref desc, healthToken, TextMarkupExtensions.Colorize("Health", healColor));
-        // ReplaceAll(ref desc, manaToken, TextMarkupExtensions.Colorize("Mana", manaColor));
-        // ReplaceAll(ref desc, cardToken, TextMarkupExtensions.Colorize("Card", cardColor));
-        //
-        // return desc;
-        
+        // Find the regex pattern for the tag.
+        switch (tagType)
+        {
+            case TagType.Ability:
+                return @"{ability}(.*?){/ability}";
+            case TagType.ElementalDamage:
+                return @"{elemental_damage}(.*?){/elemental_damage}";
+            case TagType.PhysicalDamage:
+                return @"{physical_damage}(.*?){/physical_damage}";
+            case TagType.Burn:
+                return @"{burn}(.*?){/burn}";
+            case TagType.Poison:
+                return @"{poison}(.*?){/poison}";
+            case TagType.NonDamagingEffect:
+                return @"{non_damaging}(.*?){/non_damaging}";
+            case TagType.Heal:
+                return @"{heal}(.*?){/heal}";
+            case TagType.Mana:
+                return @"{mana}(.*?){/mana}";
+            case TagType.Card:
+                return @"{card}(.*?){/card}";
+            default:
+                return string.Empty;
+        }
+    }
+
+    private static string CreateTag(string text, TagType tagType)
+    {
+        // Colorize the tag depending on which type of tag it is.
+        switch (tagType)
+        {
+            case TagType.Ability:
+                return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.AbilityColor);
+            case TagType.ElementalDamage:
+                return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.ElementalDamageColor);
+            case TagType.PhysicalDamage:
+                return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.PhysicalDamageColor);
+            case TagType.Burn:
+                return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.BurnColor);
+            case TagType.Poison:
+                return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.PoisonColor);
+            case TagType.NonDamagingEffect:
+                return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.NonDamagingEffectColor);
+            case TagType.Heal:
+                return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.HealingColor);
+            case TagType.Mana:
+                return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.ManaColor);
+            case TagType.Card:
+                return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.CardColor);
+            default:
+                return string.Empty;
+        }
+    }
+
+    /// <summary>
+    /// Replaces the text in the given string with a colored tag.
+    /// </summary>
+    /// <param name="text">Reference to the text to replace.</param>
+    /// <param name="tagType">The tags to replace.</param>
+    private static void ReplaceText(ref string text, TagType tagType)
+    {
+        var pattern = GetTagPattern(tagType);
+        text = Regex.Replace(text, pattern, match =>
+        {
+            var value = match.Groups[1].Value;
+            value = CreateTag(value, tagType);
+            return value;
+        });
+    }
+    
+    /// <summary>
+    /// Replaces all tags in the status effects description with colored labels, keeping any text between the tags the same.
+    /// </summary>
+    /// <param name="statusEffect">The status effect description to search.</param>
+    /// <returns>The status effect description, with colored labels for any keyword.</returns>
+    public static string LabeledStatusEffectDescription(StatusEffect statusEffect)
+    {
         var description = statusEffect.Data.Description;
+
+        foreach (var value in Enum.GetValues(typeof(TagType)))
+        {
+            ReplaceText(ref description, (TagType)value);
+        }
         
         return description;
     }

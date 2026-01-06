@@ -88,7 +88,7 @@ public class ThrowingKnives_AOE : DirectedAOEAbility
         {
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
             {
-                statusEffectManager.AddStatusEffect(poison = new Poison(_poisonStacks, castingCharacter), castingCharacter);
+                statusEffectManager.AddStatusEffect(poison = new Poison(castingCharacter, _poisonStacks), castingCharacter);
 
             }
         }

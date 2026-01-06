@@ -14,7 +14,7 @@ public class AbilityLogEntry : CombatLogEntry
         else
         {
             return d.Target.GetFaction() == Faction.Friendly ?
-                GameTextFormatter.ClassColoredName(d.Target) : GameTextFormatter.FactionColoredLabel(d.Target);
+                GameTextFormatter.CreateCharacterNameLink(d.Target) : GameTextFormatter.FactionColoredLabel(d.Target);
         }
     }
     
@@ -34,13 +34,13 @@ public class AbilityLogEntry : CombatLogEntry
         _image.sprite = d.Ability.GetIcon();
         
         string casterName = d.Caster.GetFaction() == Faction.Friendly ?
-            GameTextFormatter.ClassColoredName(d.Caster) : GameTextFormatter.FactionColoredLabel(d.Caster);
+            GameTextFormatter.CreateCharacterNameLink(d.Caster) : GameTextFormatter.FactionColoredLabel(d.Caster);
 
         string targetName = GetTargetName(d);
         
         string abilityName =
             TextMarkupExtensions.Colorize(d.Ability.GetAbilityName(), ColorDatabase.Instance.AbilityColor);
-        Color damageColor = ColorDatabase.Instance.GetDamageColor(d.Ability);
+        Color damageColor = ColorDatabase.Instance.GetAbilityColor(d.Ability);
         string damage = TextMarkupExtensions.Colorize(d.Damage.ToString(), damageColor);
         string heal = TextMarkupExtensions.Colorize(d.Heal.ToString(), ColorDatabase.Instance.HealingColor);
         

@@ -11,6 +11,7 @@ public class WitheringRecovery : Trait
             return;
         }
 
-        heal /= data.DamageModifier;
+        var modifier = 1f - data.DamageModifierPercent / 100f;
+        heal *= modifier;
     }
 }

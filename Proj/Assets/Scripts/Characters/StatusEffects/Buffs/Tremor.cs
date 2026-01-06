@@ -18,11 +18,12 @@ public class Tremor : StatusEffect
         }
         
         // Stacks can never be more than the cap.
-        _totalDamageReduction = Mathf.Min(_totalDamageReduction + data.Modifier, data.Cap);
+        _totalDamageReduction = Mathf.Min(_totalDamageReduction + data.ModifierPercent, data.CapPercent);
     }
 
     public override void ModifyIncomingDamage(ref float damage, Ability ability)
     {
-        damage *= 1f - _totalDamageReduction;
+        var modifier = 1f - _totalDamageReduction / 100f;
+        damage *= modifier;
     }
 }

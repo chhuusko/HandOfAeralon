@@ -63,6 +63,11 @@ public abstract class StatusEffect
         CombatEventManager.OnTryAddStatusEffect -= BeforeStatusEffectApplied;
     }
     
+    public string GetColorCodedDescription()
+    {
+        return GameTextFormatter.LabeledStatusEffectDescription(this);
+    }
+    
     public void SetDuration(int duration) => _duration = duration;
 
     public virtual void IncreaseDuration(int amount = 1)

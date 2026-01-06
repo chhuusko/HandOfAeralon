@@ -15,7 +15,7 @@ public class StatusEffectAddedLogEntry : CombatLogEntry
 
         string statusEffectName = GameTextFormatter.StatusEffectColoredLabel(d.StatusEffect);
         string targetName = d.Target.GetFaction() == Faction.Friendly ?
-            GameTextFormatter.ClassColoredName(d.Target) : GameTextFormatter.FactionColoredLabel(d.Target);
+            GameTextFormatter.CreateCharacterNameLink(d.Target) : GameTextFormatter.FactionColoredLabel(d.Target);
         
         _text.text = $"{targetName} gained {statusEffectName}";
     }

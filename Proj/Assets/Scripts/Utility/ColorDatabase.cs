@@ -43,6 +43,11 @@ public class ColorDatabase : ScriptableObject
     public Color HealingColor;
     public Color TooltipTextColor;
     
+    /// <summary>
+    /// Gets the UI color representing a character.
+    /// </summary>
+    /// <param name="c">The character to get a color for.</param>
+    /// <returns>The characters corresponding color.</returns>
     public Color GetCharacterColor(Character c)
     {
         if (c == null)
@@ -66,7 +71,12 @@ public class ColorDatabase : ScriptableObject
         };
     }
 
-    public Color GetDamageColor(Ability ability)
+    /// <summary>
+    /// Returns a color for the given ability type.
+    /// </summary>
+    /// <param name="ability"></param>
+    /// <returns>The color representing the given ability.</returns>
+    public Color GetAbilityColor(Ability ability)
     {
         if (ability == null)
         {
@@ -75,16 +85,18 @@ public class ColorDatabase : ScriptableObject
         }
         var type = ability.GetAbilityType();
 
+        /*
+         * Check ability flags and return the color. Goes in order, so if an ability has multiple types, it will 
+         * always return the first type found.
+         */
         if (type.HasFlag(Ability.Type.Elemental))
         {
             return ElementalDamageColor;
         }
-
         if (type.HasFlag(Ability.Type.Physical))
         {
             return PhysicalDamageColor;
         }
-
         return type.HasFlag(Ability.Type.Heal) ? HealingColor : NonDamagingEffectColor;
     }
 }

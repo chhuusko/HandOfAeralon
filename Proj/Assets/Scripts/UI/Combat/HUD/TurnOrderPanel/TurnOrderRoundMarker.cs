@@ -8,24 +8,6 @@ public class TurnOrderRoundMarker : MonoBehaviour
     [SerializeField] private TMP_Text _title;
     [SerializeField] private TMP_Text _currentRound;
 
-    private bool _isMasked = false;
-    private void Update()
-    {
-        //if(Input.GetMouseButtonDown(0))
-        //{
-        //    if(_isMasked)
-        //    {
-        //        _isMasked = false;
-        //        SetMaskable(_isMasked);
-        //        
-        //    }
-        //    else
-        //    {
-        //        _isMasked = true;
-        //        SetMaskable(_isMasked);
-        //    }
-        //}
-    }
     private void Start()
     {
         CombatEventManager.OnRoundFinished += SetCurrentRound;
@@ -63,7 +45,8 @@ public class TurnOrderRoundMarker : MonoBehaviour
     public float GetRightSidePosition()
     {
         Vector3[] corners = new Vector3[4];
-        _currentRound.GetComponent<RectTransform>().GetWorldCorners(corners);
+        
+        GetComponent<RectTransform>().GetWorldCorners(corners);
 
         return corners[2].x;
     }

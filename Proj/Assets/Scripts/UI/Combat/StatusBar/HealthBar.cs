@@ -7,16 +7,21 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Slider _easeHealthSlider;
     [SerializeField] private Slider _previewHealthSlider;
     [SerializeField] private Slider _mainHealthslider;
-    [SerializeField] private float _easeSpeed = 1.5f;
+
+    [SerializeField] private float _easeDuration = 0.5f;
+    [SerializeField] private float _waitEaseDuration = 0.5f;
+
+    [SerializeField] private Image _previewHealthFill;
+    [SerializeField] private Color _startColor, _endColor;
+    [SerializeField] private float _fadeDuration, _waitPreviewFadeDuration;
+
+
 
 
     private Character _character;
     private Coroutine _easeRoutine;
+    private Coroutine _previewColorRoutine;
 
-    private void Update()
-    {
-        
-    }
 
     public void Bind(Character c)
     {
@@ -81,22 +86,39 @@ public class HealthBar : MonoBehaviour
 
     private IEnumerator EaseHealth()
     {
-        while (!Mathf.Approximately(_easeHealthSlider.value, _mainHealthslider.value))
+        float start = _easeHealthSlider.value;
+        float target = _mainHealthslider.value;
+
+        float elapsed = 0f;
+
+        while(elapsed < _waitEaseDuration)
         {
-            _easeHealthSlider.value = Mathf.Lerp(
-                _easeHealthSlider.value,
-                _mainHealthslider.value,
-                Time.deltaTime * _easeSpeed
-            );
+            elapsed += Time.deltaTime;
+            float t = elapsed / _easeDuration;
+
             yield return null;
         }
 
-        _easeHealthSlider.value = _mainHealthslider.value;
+        elapsed = 0;
+
+        while (elapsed < _easeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / _easeDuration;
+
+            _easeHealthSlider.value = Mathf.Lerp(start, target, t);
+            yield return null;
+        }
+
+        _easeHealthSlider.value = target;
     }
 
     public void ShowPreviewDamage(int previewHealthDifference)
     {
         if (_character == null) return;
+
+        if (_previewColorRoutine != null) return;
+        _previewColorRoutine = StartCoroutine(PreviewColorPulse());
 
         int current = _character.GetCurrentHealth();
         int previewHP = Mathf.Max(0, current + previewHealthDifference);
@@ -117,9 +139,46 @@ public class HealthBar : MonoBehaviour
 
     public void HidePreview()
     {
+        if (_previewColorRoutine != null)
+        {
+            StopCoroutine(_previewColorRoutine);
+            _previewColorRoutine = null;
+        }
+
+        _previewHealthFill.color = _startColor;
+
         _previewHealthSlider.gameObject.SetActive(false);
         _easeHealthSlider.gameObject.SetActive(true);
         _mainHealthslider.value = _character.GetCurrentHealth();
         _previewHealthSlider.value = _character.GetCurrentHealth();
+    }
+
+    private IEnumerator PreviewColorPulse()
+    {
+        while (true)
+        {
+            // Fade in
+            yield return FadeColor(_startColor, _endColor, _fadeDuration);
+
+            // Pause
+            yield return new WaitForSeconds(_waitPreviewFadeDuration);
+
+            // Fade out
+            yield return FadeColor(_endColor, _startColor, _fadeDuration);
+
+            // Pause
+            yield return new WaitForSeconds(_waitPreviewFadeDuration);
+        }
+    }
+
+    private IEnumerator FadeColor(Color from, Color to, float duration)
+    {
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime / duration;
+            _previewHealthFill.color = Color.Lerp(from, to, t);
+            yield return null;
+        }
     }
 }

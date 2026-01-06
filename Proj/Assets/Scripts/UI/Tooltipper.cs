@@ -186,7 +186,7 @@ public class Tooltipper : MonoBehaviour
         _panel.gameObject.SetActive(true);
     }
 
-    private void HideTooltip()
+    public void HideTooltip()
     {
         _currentObject = null;
         _tmpText.text = "";
@@ -199,6 +199,11 @@ public class Tooltipper : MonoBehaviour
 
         if (_currentObject.TryGetComponent<Character>(out Character c))
         {
+            if (c.GetFaction() == Faction.Friendly)
+            {
+                result += $"Name: {c.Data.Name}\n";
+            }
+
             result += $"Faction: {c.GetFaction()}"
                     + $"\nClass: {c.GetCharacterClass()}" 
                     + $"\nHP: {c.GetCurrentHealth()}/{c.GetMaxHealth()}" 

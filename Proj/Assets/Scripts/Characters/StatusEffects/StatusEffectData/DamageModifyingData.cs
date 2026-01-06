@@ -4,5 +4,5 @@ using UnityEngine;
 public class DamageModifyingData : StatusEffectData
 {
     [Header("Effect-Specific Data")]
-    public float DamageModifier;
+    [Range(0, 100)]public float DamageModifierPercent;
 }
