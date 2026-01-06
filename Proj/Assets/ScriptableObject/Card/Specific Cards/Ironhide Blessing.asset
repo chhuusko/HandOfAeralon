@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: Ironhide Blessing
   m_EditorClassIdentifier: 
   type: 1
+  targetFaction: 0
   rarity: 0
   title: Ironhide Blessing
-  description: Grant target Fortified for 2 turns.
+  description: Grant target {non_damaging}Fortified{/non_damaging} for 2 turns.
   cost: 1
   icon: {fileID: 21300000, guid: d54bb1a26d6cdd846a51deeadb876bb6, type: 3}
   CardTemplate: {fileID: 0}
   info:
   - {fileID: 11400000, guid: 70be95a3da6448a46aaf1fb2c67d178f, type: 2}
   tags: 
+  targetConditions: 

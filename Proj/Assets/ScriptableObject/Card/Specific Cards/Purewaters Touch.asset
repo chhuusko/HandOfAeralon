@@ -16,8 +16,9 @@ MonoBehaviour:
   targetFaction: 0
   rarity: 1
   title: Purewater's Touch
-  description: Remove a random debuff from target ally and heal them for 15 Health.
-    If a debuff was removed, gain 2 Mana.
+  description: Remove a random {non_damaging}debuff{/non_damaging} from target ally
+    and {heal}heal{/heal} them for {heal}15{/heal} Health. If a {non_damaging}debuff{/non_damaging}
+    was removed, gain {mana}2 Mana{/mana}.
   cost: 4
   icon: {fileID: 21300000, guid: 7e485958255f9c24e8664fd68e2649ff, type: 3}
   CardTemplate: {fileID: 0}

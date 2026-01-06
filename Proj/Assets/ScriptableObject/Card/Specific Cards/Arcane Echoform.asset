@@ -9,17 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 996a399276bbc8c47b54ecbe8de3d422, type: 3}
-  m_Name: Distant Tomes
+  m_Script: {fileID: 11500000, guid: 394a4f1a0b0513840a37db9e783a94e0, type: 3}
+  m_Name: Arcane Echoform
   m_EditorClassIdentifier: 
-  type: 1
+  type: 0
   targetFaction: 0
-  rarity: 1
-  title: Distant Tomes
-  description: Deal {card_damage}damage{card_damage} to target equal to half the
-    number of {card}cards{/card} remaining in your draw pile.
-  cost: 2
-  icon: {fileID: 21300000, guid: 39962f603ad787b4cb52569386cd4872, type: 3}
+  rarity: 0
+  title: Arcane Echoform
+  description: Add a duplicate of target card to your hand. The duplicate has Exhaus
+  cost: 4
+  icon: {fileID: 21300000, guid: d3d6ea874aec514438e5404d9dd44001, type: 3}
   CardTemplate: {fileID: 0}
   info: []
   tags: 
