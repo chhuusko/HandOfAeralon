@@ -270,7 +270,7 @@ public class Character : MonoBehaviour
     public event Action<int, GameObject> OnWasHealed;
     public event Action<int, int> OnMovementPointsChanged;
 
-    public const float DEATH_COOLDOWN = 2.5f;
+    public const float DEATH_COOLDOWN = 3f;
 
     [Header("ID")] 
     public static int NextID = 1;
@@ -745,8 +745,8 @@ public class Character : MonoBehaviour
         if (TryGetComponent<Animator>(out animator))
         {
             animator.SetTrigger("Death");
-            AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            deathCooldown = animatorStateInfo.length;
+            // AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            // deathCooldown = animatorStateInfo.length;
         }
 
         yield return new WaitForSeconds(deathCooldown);
