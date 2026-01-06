@@ -18,6 +18,8 @@ public class CharacterMovement : MonoBehaviour
     private CombatGridTile _lastPreviewPathTile = null;
     private Animator _animator;
 
+    private Color _movementRangeColor = Color.green;
+
     void Start()
     {
         _character = GetComponent<Character>();
@@ -63,7 +65,7 @@ public class CharacterMovement : MonoBehaviour
         
         if (_character.GetFaction() == Faction.Friendly)
         {
-            Selector._instance.SetColorOfTiles(_tilesInRange, Color.green);
+            Selector._instance.SetColorOfTiles(_tilesInRange, _movementRangeColor);
         }
     }
 
@@ -225,4 +227,10 @@ public class CharacterMovement : MonoBehaviour
 
         return bIsDead;
     }
+
+    public void SetMovementRangeColor(Color color)
+    {
+        _movementRangeColor = color;
+    }
+
 }

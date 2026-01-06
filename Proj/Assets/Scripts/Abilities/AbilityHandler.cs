@@ -16,6 +16,10 @@ public class AbilityHandler : MonoBehaviour
 
     bool _bDebugAbilityHandler = false;
 
+    private Color _abilityRangeColor = Color.cyan;
+    private Color _hitTilesRangeColor = Color.red;
+
+
     private void Start()
     {
         if (!TryGetComponent(out _characterCaster))
@@ -212,7 +216,7 @@ public class AbilityHandler : MonoBehaviour
         {
             if (_tilesInRange.Contains(t))
             {
-                t.SetTileColor(Color.magenta);
+                t.SetTileColor(_abilityRangeColor);
             }
             else
             {
@@ -226,7 +230,7 @@ public class AbilityHandler : MonoBehaviour
         foreach (CombatGridTile t in newEffectedTiles)
         {
             if (t == null) return;
-            t.SetTileColor(Color.red);
+            t.SetTileColor(_hitTilesRangeColor);
             _tilesEffected.Add(t);
         }
     }
@@ -264,6 +268,16 @@ public class AbilityHandler : MonoBehaviour
     private void HandleCharacterDeselected()
     {
         ClearCharacterPreviews();
+    }
+
+    public void SetAbilityRangeColor(Color color)
+    {
+        _abilityRangeColor = color;
+    }
+
+    public void SetHitTilesRangeColor(Color color)
+    {
+        _hitTilesRangeColor = color;
     }
 
 }
