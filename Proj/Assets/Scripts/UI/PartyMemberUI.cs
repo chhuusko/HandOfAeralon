@@ -29,12 +29,16 @@ public class PartyMemberUI : MonoBehaviour, IPointerClickHandler
     public void SellCharacter()
     {
         Debug.Log("SellCharacter");
-        if (GlobalGameManager.GetInstance().GetGameData().heroDataList.Count > 1)
-        {
-            Shop.GetInstance().Bought(-_sellPrice);
-            GlobalGameManager.GetInstance().GetGameData().heroDataList.Remove(_characterData);
 
-            Shop.GetInstance().LoadParty();
-        }
+        if (!CanSell()) return;
+
+        Shop.GetInstance().Bought(-_sellPrice);
+        GlobalGameManager.GetInstance().GetGameData().heroDataList.Remove(_characterData);
+        Shop.GetInstance().LoadParty();
+        
+    }
+    public bool CanSell()
+    {
+        return (GlobalGameManager.GetInstance().GetGameData().heroDataList.Count > 1);
     }
 }

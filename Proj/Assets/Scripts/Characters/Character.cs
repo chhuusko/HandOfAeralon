@@ -115,20 +115,16 @@ public class CharacterData
         _abilities = _classData.abilities;
         _activeAbilities = new List<Ability>(_abilities);
 
-        // 1) Set derived to base (no preservation) so _derivedHealthPoints = baseDerived.
         SetDerivedHealthPoints(1f, false);
         SetDerivedDamage(_baseDamage);
 
-        // 2) Compute saved fraction against base derived BEFORE any trait changes.
         float savedPercent = (_derivedHealthPoints > 0) ? (float)currentHP / _derivedHealthPoints : 0f;
         savedPercent = Mathf.Clamp01(savedPercent);
-
-        // 3) Generate traits (this will change _derivedHealthPoints).
+        
         GenerateTraits();
 
-        // 4) Apply saved fraction — this preserves the saved percentage regardless of how traits changed max HP.
         _currentHealthPoints01 = savedPercent;
-        _healthInitialized = true; // mark initialized so later derived changes preserve absolute HP if you want
+        _healthInitialized = true;
     }
 
     public void InitializeTraits()
