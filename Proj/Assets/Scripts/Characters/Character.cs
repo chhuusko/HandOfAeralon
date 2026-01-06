@@ -270,7 +270,7 @@ public class Character : MonoBehaviour
     public event Action<int, GameObject> OnWasHealed;
     public event Action<int, int> OnMovementPointsChanged;
 
-    public const float DEATH_COOLDOWN = 3f;
+    public const float DEATH_COOLDOWN = 4.5f;
 
     [Header("ID")] 
     public static int NextID = 1;
