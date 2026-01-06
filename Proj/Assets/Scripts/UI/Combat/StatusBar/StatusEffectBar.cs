@@ -41,7 +41,7 @@ public class StatusEffectBar : MonoBehaviour
         
         statusEffectBarElement.SetSprite(statusEffect.Data.Icon);
         statusEffectBarElement.SetTitle(statusEffect.Data.name);
-        statusEffectBarElement.SetDescription(statusEffect.Data.Description);
+        statusEffectBarElement.SetDescription(GameTextFormatter.LabeledDescription(statusEffect.Data.Description));
         _statusEffectBarElements.Add(statusEffectBarElement);
      
      

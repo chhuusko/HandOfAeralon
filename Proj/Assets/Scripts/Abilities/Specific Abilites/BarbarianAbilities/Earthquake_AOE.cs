@@ -1,4 +1,6 @@
+using Newtonsoft.Json.Bson;
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
@@ -23,6 +25,52 @@ public class Earthquake_AOE : DirectedAOEAbility
 
 
     private int slowedEnemyCounter;
+
+
+    public override IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        Character caster = casterTile.GetOccupantCharacter();
+        if (caster == null) Debug.LogError("CasterTile has no character!");
+
+        // Should not be able to move after performing ability.
+        caster.CanMove = false;
+
+        // Rotate towards target if the target is not the caster's tile.
+        if (casterTile != targetTile)
+        {
+            caster.RotateTowards(targetTile.transform, GetCastingRotationTime());
+        }
+
+        if (caster.TryGetComponent<Animator>(out var animator))
+        {
+            animator.SetTrigger(GetAbilityName());
+        }
+
+        AudioManager.Instance.PlayOneShot(AudioEvent, caster.transform.position);
+
+        PlayCustomEarthquakeVFX(casterTile, targetTile);
+
+        if (GetAbilityVFXSequence() != null)
+        {
+            VFXData data = new VFXData
+            {
+                Caster = caster,
+                OriginPosition = casterTile.transform.position,
+                TargetTile = targetTile,
+                TargetPosition = targetTile.transform.position,
+                Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
+                CastingAnimationDuration = GetCastingAnimationTime(),
+                CastingFXDuration = GetCastingTime(),
+                TravelFXDuration = GetFromCastToHitTime(),
+                ImpactFXDuration = GetImpactTime()
+            };
+            yield return caster.StartCoroutine(GetAbilityVFXSequence().RunSequence(data)
+            );
+        }
+
+        RunAbility(casterTile, targetTile);
+        Selector._instance.InvokeCharacterActionStopped();
+    }
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
@@ -75,6 +123,7 @@ public class Earthquake_AOE : DirectedAOEAbility
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         bool died = affectedCharacter.TakeDamage(damage);
 
+
         StatusEffect slow = null;
 
         if (Random.value < _slowCharacterHitChance)
@@ -110,6 +159,35 @@ public class Earthquake_AOE : DirectedAOEAbility
 
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         affectedCharacter.PreviewHealthChange(-damage);
+    }
+
+    private void PlayCustomEarthquakeVFX(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        var directedAOEPattern = _pattern as DirectedAOEPattern;
+
+        directedAOEPattern.SetDirection(CalculateDirection(casterTile, targetTile));
+        directedAOEPattern.SetCasterTile(casterTile);
+
+        List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
+        foreach (CombatGridTile tile in tilesToEffect)
+        {
+            if (tile != null)
+            {
+                if (_abilityAOEVFXSequence != null)
+                {
+                    VFXData data = new VFXData
+                    {
+                        Caster = GetCharacterCaster(),
+                        OriginPosition = casterTile.transform.position,
+                        TargetTile = tile,
+                        TargetPosition = tile.transform.position,
+                        Direction = (tile.transform.position - casterTile.transform.position).normalized,
+                    };
+                    data.Caster.StartCoroutine(_abilityAOEVFXSequence.RunSequence(data)
+                    );
+                }
+            }
+        }
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
