@@ -268,23 +268,6 @@ public class CombatManager : MonoBehaviour
         return _classAbilitiesDictionary.TryGetValue(characterClass, out var abilities) ? abilities : new List<Ability>();
     }
 
-    //public GameObject GetNextTurnCharacter()
-    //{
-    //    int highestInitiative = Int32.MinValue;
-    //    GameObject nextCharacter = null;
-    //    foreach (var g in CombatGrid._instance.GetAllCharacters())
-    //    {
-    //        int initiative = g.GetComponent<Character>().GetInitiative();
-    //        if (initiative > highestInitiative)
-    //        {
-    //            highestInitiative = initiative;
-    //            nextCharacter = g;
-    //        }
-    //    }
-    //
-    //    return nextCharacter;
-    //}
-
     public CombatGridTile GetTileComponent(int x, int y)
     {
         GameObject tileObject = CombatGrid._instance.GetTileAtCoord(x, y);
