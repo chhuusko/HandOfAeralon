@@ -13,19 +13,22 @@ public class ReflectedAffliction : Trait
 
     public override bool BeforeStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
     {
-        if (target != Character)
+        if (statusEffect.IsReflected)
         {
             return true;
         }
         
-        if (_effectApplied || !caster || statusEffect.Data.Type is not StatusEffectType.Debuff)
+        if (target != Character || statusEffect.Data.Type is not StatusEffectType.Debuff || !caster ||
+            caster.GetFaction() == Character.GetFaction() || _effectApplied)
         {
             return true;
         }
         
         _effectApplied = true;
         
+        // Reflect back to caster.
         var reflected = statusEffect.Data.CreateInstance(statusEffect.Duration);
+        reflected.IsReflected = true;
         caster.GetStatusEffectManager().AddStatusEffect(reflected, Character);
 
         // Block adding the effect.
