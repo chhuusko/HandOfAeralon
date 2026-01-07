@@ -16,9 +16,10 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: abb24042aa496f44288a124f024798e4, type: 3}
   _range: 6
   _cooldown: 3
-  _description: 'Strike a harsh chord, removing all buffs from enemies in the area.\n\nDeal
-    {damage} {elemental_damage}, scaling with amount of buffs removed.\n\nDraw 1
-    {card} if at least two buffs are removed from enemies. '
+  _description: "Strike a harsh chord, removing all buffs from enemies in the area.\\n\\nDeal
+    {damage} ((90% + (10% \xD7 amount of buffs removed) (up to 140%) \xD7 Damage)
+    {elemental_damage}, scaling with amount of buffs removed.\\n\\nDraw 1 {card}
+    if at least two buffs are removed from enemies. "
   _abilityTag: 10
   _type: 2
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
@@ -28,9 +29,9 @@ MonoBehaviour:
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
   _castingAnimationTime: 0
-  _castingFXTime: 0.1
+  _castingFXTime: 0.2
   _fromCastToHitTime: 0
-  _impactVFXTime: 1.5
+  _impactVFXTime: 0.8
   _castingRotationTime: 0.3
   <AudioEvent>k__BackingField:
     Guid:
@@ -42,7 +43,7 @@ MonoBehaviour:
   _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
   _validTargets: 5
   _abilityAOEVFXSequence: {fileID: 0}
-  _radius: 3
+  _radius: 2
   _enemiesDebuffedTilBonus: 2
   _damageMultiplier: 0.9
   _damagePerBuffMultiplier: 0.1

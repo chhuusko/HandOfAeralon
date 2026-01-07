@@ -16,9 +16,9 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 130df84cf9f38a04797a3b5afc6b0683, type: 3}
   _range: 1
   _cooldown: 2
-  _description: Slam the ground, dealing {damage} {physical_damage} to ALL characters
-    in the area.\n\nEvery character hit has a 60% chance to become Slowed for 2 turns.\n\nGain
-    1 {mana} if at least two enemies become Slowed.
+  _description: "Slam the ground, dealing {damage} (90% \xD7 Damage) {physical_damage}
+    to ALL characters in the area.\\n\\nEvery character hit has a 60% chance to become
+    Slowed for 2 turns.\\n\\nGain 1 {mana} if at least two enemies become Slowed."
   _abilityTag: 9
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
@@ -41,7 +41,8 @@ MonoBehaviour:
     Path: event:/Sound Design/Diegetic/Characters/Barbarian/abilities/earthquake
   _pattern: {fileID: 11400000, guid: 129687a3acdf70e4cba2536129786496, type: 2}
   _validTargets: 0
-  _abilityAOEVFXSequence: {fileID: 0}
+  _abilityAOEVFXSequence: {fileID: 11400000, guid: cb02ca87659aade4abcc987073de4f8c,
+    type: 2}
   _damageMultiplier: 0.9
   _slowCharacterHitChance: 0.6
   _slowDuration: 2

@@ -10,7 +10,7 @@ public class ArcaneDetonation : Card
         List<Character> characters = CombatGrid._instance.GetAllCharacterScripts();
         foreach(Character character in characters)
         {
-            int damage = 6;
+            int damage = 30;
             damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
             character.TakeDamage(damage);
             

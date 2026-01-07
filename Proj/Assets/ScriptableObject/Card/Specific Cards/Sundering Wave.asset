@@ -16,8 +16,8 @@ MonoBehaviour:
   targetFaction: 0
   rarity: 1
   title: Sundering Wave
-  description: Deal {card_damage}8 damage{/card_damage} to all enemies. {non_damaging}Slowed{/non_damaging}
-    enemies take {card_damage}12 damage{/card_damage} instead.
+  description: Deal <b>40</b> {card_damage}damage{/card_damage} to all enemies. {non_damaging}Slowed{/non_damaging}
+    enemies take <b>60</b> {card_damage}damage{/card_damage} instead
   cost: 3
   icon: {fileID: 21300000, guid: 42b72f28e8f50fd46a702ab58297aefe, type: 3}
   CardTemplate: {fileID: 0}

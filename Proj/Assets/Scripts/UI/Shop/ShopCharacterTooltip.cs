@@ -22,6 +22,7 @@ public class ShopCharacterTooltip : MonoBehaviour
     [SerializeField] private GameObject _layout;
     [SerializeField] private Image _characterIcon;
     [SerializeField] private TMP_Text _characterClassName;
+    [SerializeField] private TMP_Text _characterName;
     private bool _bIsHidden = true;
 
     // Stats Tooltip
@@ -102,6 +103,7 @@ public class ShopCharacterTooltip : MonoBehaviour
         Sprite sprite = classData.classImage;
         _characterIcon.sprite = sprite;
         _characterClassName.text = classData.name;
+        _characterName.text = character.Name;
     }
 
     private void UpdateCharacterTraits(CharacterData character)

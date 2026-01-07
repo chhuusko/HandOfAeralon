@@ -12,4 +12,15 @@ public abstract class CombatLogEntry : MonoBehaviour
     [SerializeField] protected TMP_Text _text;
     
     public abstract void Initialize(CombatLogData data);
+
+    protected string GetCharacterIdentifier(Character character)
+    {
+        if (!character)
+        {
+            return string.Empty;
+        }
+        
+        return character.GetFaction() == Faction.Friendly ?
+            GameTextFormatter.CreateCharacterNameLink(character) : GameTextFormatter.FactionColoredLabel(character);
+    }
 }

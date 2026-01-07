@@ -4,18 +4,15 @@ using UnityEngine.UI;
 
 public class AbilityLogEntry : CombatLogEntry
 {
-    private static string GetTargetName(AbilityLogData d)
+    private string GetTargetName(AbilityLogData d)
     {
         if (d.Caster == d.Target)
         {
             return d.Caster.GetCharacterClass() is CharacterClass.Barbarian or CharacterClass.Rogue ? "himself" :
                 "herself";
         }
-        else
-        {
-            return d.Target.GetFaction() == Faction.Friendly ?
-                GameTextFormatter.CreateCharacterNameLink(d.Target) : GameTextFormatter.FactionColoredLabel(d.Target);
-        }
+
+        return GetCharacterIdentifier(d.Target);
     }
     
     public override void Initialize(CombatLogData data)
@@ -33,8 +30,7 @@ public class AbilityLogEntry : CombatLogEntry
         
         _image.sprite = d.Ability.GetIcon();
         
-        string casterName = d.Caster.GetFaction() == Faction.Friendly ?
-            GameTextFormatter.CreateCharacterNameLink(d.Caster) : GameTextFormatter.FactionColoredLabel(d.Caster);
+        string casterName = GetCharacterIdentifier(d.Caster);
 
         string targetName = GetTargetName(d);
         

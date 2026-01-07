@@ -10,10 +10,10 @@ public class LibraryCrash : Card
         
         if (character != null)
         {
-            int damage = 10;
+            int damage = 50;
             if (CardHandManager.GetInstance().GetDeck().Count < CardHandManager.GetInstance().GetDiscardPile().Count)
             {
-                damage = 25;
+                damage = 125;
             }
             
             damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));

@@ -9,7 +9,7 @@ public class StatusEffectData : ScriptableObject
     [Header("General Info")]
     public string Name;
     public Sprite Icon;
-    public string Description;
+    [TextArea(5, 10)] public string Description;
     public StatusEffectType Type;
     public bool IsPermanent;
     public bool IsDispellable;
@@ -26,7 +26,7 @@ public class StatusEffectData : ScriptableObject
     /// Used when we don't know beforehand which status effect to create.
     /// </summary>
     /// <param name="duration">The amount of turns the status effect lasts.</param>
-    /// <returns></returns>
+    /// <returns>The created status effect.</returns>
     public StatusEffect CreateInstance(int duration)
     {
         var type = GetEffectType();

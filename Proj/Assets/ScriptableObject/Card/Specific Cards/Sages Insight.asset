@@ -16,7 +16,7 @@ MonoBehaviour:
   targetFaction: 0
   rarity: 1
   title: Sage's Insight
-  description: Draw {card}2 cards{/card}, they cost {mana}1{/mana} less {mana}Mana{/mana}.
+  description: Draw <b>2</b> {card}cards{/card}, they cost <b>1</b> less {mana}Mana{/mana}
   cost: 3
   icon: {fileID: 21300000, guid: 716253453d14f694f9ffce37d6bf3546, type: 3}
   CardTemplate: {fileID: 0}

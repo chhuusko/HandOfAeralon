@@ -109,8 +109,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -6, y: -4.5}
-  m_SizeDelta: {x: -32, y: -25}
+  m_AnchoredPosition: {x: -6, y: -6.5}
+  m_SizeDelta: {x: -32, y: -21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8353167242582314454
 MonoBehaviour:
@@ -288,8 +288,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 10.5, y: 76}
-  m_SizeDelta: {x: 400, y: 230}
+  m_AnchoredPosition: {x: 10.5, y: 78}
+  m_SizeDelta: {x: 400, y: 240}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6090565712602333969
 CanvasRenderer:
@@ -571,7 +571,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.92156863, g: 0.92156863, b: 0.92156863, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -733,7 +733,7 @@ MonoBehaviour:
     m_Left: 8
     m_Right: 10
     m_Top: 22
-    m_Bottom: 0
+    m_Bottom: 10
   m_ChildAlignment: 0
   m_Spacing: 4
   m_ChildForceExpandWidth: 1
@@ -827,6 +827,8 @@ MonoBehaviour:
   _statusEffectAddedEntryPrefab: {fileID: -1787938578285379161, guid: ce8e43e20c9004b45a2252d039fa2a43,
     type: 3}
   _statusEffectRemovedEntryPrefab: {fileID: 3104200863191119633, guid: c60e0a2c141e25a4a8759c1488a7d123,
+    type: 3}
+  _statusEffectDamageEntryPrefab: {fileID: -3454922198741527296, guid: 7802b4d9c6e91f147892548a81f11253,
     type: 3}
 --- !u!1 &8191509190501037255
 GameObject:

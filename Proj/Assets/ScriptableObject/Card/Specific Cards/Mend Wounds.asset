@@ -16,8 +16,8 @@ MonoBehaviour:
   targetFaction: 0
   rarity: 0
   title: Mend Wounds
-  description: '{heal}Heal{/heal} target for {heal}10{/heal} Health. If the target
-    was below 50% Health, gain {mana}1 Mana{/mana}.'
+  description: '{heal}Heal{/heal} target for <b>50</b> health. If the target was
+    below <b>50</b>% {health}health{/health}, gain <b>1</b> {mana}Mana{/mana}'
   cost: 2
   icon: {fileID: 21300000, guid: a7524b8d958c435418668b1dda24d09a, type: 3}
   CardTemplate: {fileID: 0}

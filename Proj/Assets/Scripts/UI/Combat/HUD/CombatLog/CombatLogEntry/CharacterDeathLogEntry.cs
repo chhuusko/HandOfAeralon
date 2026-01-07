@@ -10,10 +10,8 @@ public class CharacterDeathLogEntry : CombatLogEntry
         {
             return;
         }
-        
-        string characterName = d.Character.GetFaction() == Faction.Friendly ?
-            GameTextFormatter.CreateCharacterNameLink(d.Character) : GameTextFormatter.FactionColoredLabel(d.Character);
-        
+
+        string characterName = GetCharacterIdentifier(d.Character);
         _text.text = $"{characterName} died";
     }
 }
