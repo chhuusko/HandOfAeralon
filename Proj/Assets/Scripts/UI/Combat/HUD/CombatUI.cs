@@ -194,7 +194,7 @@ public class CombatUI : MonoBehaviour
 
     private void SetEndTurnButtonBorder(bool active)
     {
-        _endTurnButton.transform.Find("Border").gameObject.SetActive(active);
+        _endTurnButton.transform.Find("Focus").gameObject.SetActive(active);
     }
 
     public void EndTurn()
