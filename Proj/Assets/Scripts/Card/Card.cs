@@ -112,6 +112,19 @@ public class Card : ScriptableObject
     {
         return rarityColors[rarity];
     }
-    
+    public virtual int GetDamage(Character character)
+    {
+        damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
+        return damage;
+    }
+    public virtual void ShowDamagePreview(Character character)
+    {
+        if (character == null) return;
+        character.PreviewHealthChange(GetDamage(character));
+    }
+    public virtual void ShowDamagePreview()
+    {
+
+    }
 }
 

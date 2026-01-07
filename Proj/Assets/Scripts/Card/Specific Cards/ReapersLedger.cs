@@ -7,14 +7,18 @@ public class ReapersLedger : Card
     {
         if (character != null)
         {
-            int damage = 5 + (GlobalGameManager.GetInstance().GetGameData().reapersLedgerKills * 5);
-            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
-            character.TakeDamage(damage);
-
+            
+            character.TakeDamage(GetDamage(character));
             if (character.GetCurrentHealth() <= 0)
             {
                 GlobalGameManager.GetInstance().ReapersLedgerKillChange(1);
             }
         }
+    }
+    public override int GetDamage(Character character)
+    {
+        damage = 25 + (GlobalGameManager.GetInstance().GetGameData().reapersLedgerKills * 25);
+        return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
+
     }
 }

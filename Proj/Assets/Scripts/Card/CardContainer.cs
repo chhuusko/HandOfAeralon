@@ -75,8 +75,21 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
             if (Physics.Raycast(ray, out hit))
             {
-                _spawnedParticle.transform.position = hit.point;
                 
+                _spawnedParticle.transform.position = hit.point;
+                StopAllHealthPreview();
+                if (_containedCard.type == CardType.Target)
+                {
+                    Character target = GetValidTarget();
+                    if (target != null)
+                    {
+                        _containedCard.ShowDamagePreview(target);
+                    }
+                }
+                else
+                {
+                    _containedCard.ShowDamagePreview();
+                }
             }
         }
     }
@@ -148,6 +161,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
             _containedCard.AfterCardPlay();
+            StopAllHealthPreview();
             CardHandManager.GetInstance().RemoveCardFromHand(this);   
         }
     }
@@ -161,7 +175,6 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        //StartCoroutine(OnHover(true));
         CardHandManager.GetInstance().ShowHighlightedCard(this, transform.position);
         CardHandManager.GetInstance().Hovered(true);
         setVisible(false);
@@ -251,5 +264,38 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private bool isEnemyTargetStealth(Character character)
     {
         return (character.GetFaction() == Faction.Enemy && character.GetStatusEffectManager().ContainsStatusEffect<Stealth>());
+    }
+    private Character GetValidTarget()
+    {
+        if (gridTile = Selector._instance.GetTileUnderMouse())
+        {
+            if (!gridTile.GetOccupantCharacter())
+            {
+                return null;
+            }
+            else
+            {
+                if (isEnemyTargetStealth(gridTile.GetOccupantCharacter()))
+                {
+                    return null;
+                }
+                else
+                {
+                    if (HandleCardConditions(gridTile.GetOccupantCharacter()))
+                    {
+                        return gridTile.GetOccupantCharacter();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    private void StopAllHealthPreview()
+    {
+        List<Character>characters = CombatGrid._instance.GetAllCharacterScripts();
+        foreach (Character character in characters)
+        {
+            character.StopPreviewingHealthChange();
+        }
     }
 }
