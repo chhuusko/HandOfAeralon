@@ -108,6 +108,11 @@ public class TraitManager
     {
         return (IReadOnlyList<StatusEffect>)_statusEffects.Where(e => e.Data.Type == type);
     }
+
+    public int GetAmountOfType(StatusEffectType type)
+    {
+        return _statusEffects.Count(e => e.Data.Type == type);
+    }
     
     /// <summary>
     /// Adds one positive and one negative trait for the character.
