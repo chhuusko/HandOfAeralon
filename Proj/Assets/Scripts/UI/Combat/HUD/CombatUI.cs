@@ -123,7 +123,7 @@ public class CombatUI : MonoBehaviour
         }
      
         _startCombatButton.interactable = true;
-        _startCombatButton.transform.Find("Border").gameObject.SetActive(true);
+        _startCombatButton.transform.Find("Focus").gameObject.SetActive(true);
     }
 
     public void StartCombat()
