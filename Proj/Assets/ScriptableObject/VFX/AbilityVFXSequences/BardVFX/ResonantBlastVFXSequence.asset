@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _castFX: {fileID: 3274100198787280846, guid: c0731cf889bd021458e8de9c47becada, type: 3}
   _travelFX: {fileID: 0}
-  _biggerImpactScale: 1
+  _biggerImpactScale: 1.1
   _offsetDistance: 0
   _airDistance: 0.03
   _rotationOffset: {x: 0, y: 0, z: 0}
   _doCastCameraShake: 1
-  _castShakeDuration: 4.4
+  _castShakeDuration: 4
   _castShakeMagnitude: 0.04
   _castShakeFrequency: 200
   _castShakeFade:
@@ -28,15 +28,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0.005908966
       value: 0.00030517578
-      inSlope: 1.8432549
-      outSlope: 1.8432549
+      inSlope: 0.013348171
+      outSlope: 0.013348171
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.114305235
-      value: 0.20010713
+      time: 0.37196514
+      value: 0.005191356
       inSlope: 0.00066798046
       outSlope: 0.00066798046
       tangentMode: 0
@@ -44,8 +44,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 1
     - serializedVersion: 3
-      time: 0.4394731
-      value: 0.2020821
+      time: 0.3862962
+      value: 0.19970173
       inSlope: 0.006885158
       outSlope: 0.006885158
       tangentMode: 0
@@ -53,8 +53,8 @@ MonoBehaviour:
       inWeight: 1
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.44126892
-      value: 0.8564975
+      time: 0.4249115
+      value: 0.85175204
       inSlope: 0.4042847
       outSlope: 0.4042847
       tangentMode: 0
@@ -62,8 +62,8 @@ MonoBehaviour:
       inWeight: 1
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.5024773
-      value: 0.9960661
+      time: 0.45338976
+      value: 0.998435
       inSlope: 0.008492087
       outSlope: 0.008492087
       tangentMode: 0
@@ -71,19 +71,28 @@ MonoBehaviour:
       inWeight: 0.4563058
       outWeight: 1
     - serializedVersion: 3
-      time: 0.8663294
-      value: 0.9945961
-      inSlope: -0.13350336
-      outSlope: -0.13350336
+      time: 0.8049874
+      value: 0.99696946
+      inSlope: 0.000078344485
+      outSlope: 0.000078344485
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.95194846
+    - serializedVersion: 3
+      time: 0.92424816
+      value: 0.118928656
+      inSlope: -1.8447306
+      outSlope: -1.8447306
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 1
     - serializedVersion: 3
-      time: 0.9874878
-      value: 0.008182526
-      inSlope: -8.14152
-      outSlope: -8.14152
+      time: 0.9956665
+      value: 0.0034217834
+      inSlope: -1.6173278
+      outSlope: -1.6173278
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334

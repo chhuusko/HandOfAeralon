@@ -17,8 +17,8 @@ MonoBehaviour:
   _range: 0
   _cooldown: 4
   _description: Shroud yourself in dust, removing all debuffs from self & gaining
-    Stealth for 3 turns.\n\nYou can move after using this ability.\n\nIf a debuff
-    is cleansed, gain 1 {mana}.
+    Stealth and Haste for 3 turns.\n\nYou can move after using this ability.\n\nIf
+    a debuff is cleansed, gain 1 {mana}.
   _abilityTag: 5
   _type: 8
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}

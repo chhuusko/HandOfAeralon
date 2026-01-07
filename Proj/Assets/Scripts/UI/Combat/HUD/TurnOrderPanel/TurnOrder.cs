@@ -20,7 +20,6 @@ public class TurnOrder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         CombatEventManager.OnTurnOrderChanged += UpdateTurnOrder;
     }
 
-
     private void Update()
     {
         Vector3[] viewPortCorners = new Vector3[4];
@@ -47,6 +46,7 @@ public class TurnOrder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
         }
     }
+    
     private void UpdateTurnOrder(IReadOnlyList<Character> characters, int currentRound)
     {
         // Clear previous portraits.
@@ -94,7 +94,7 @@ public class TurnOrder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             }
 
             PortraitButton pb = CombatUI.Instance.CreateCharacterPortrait(c, _turnOrderPanel.transform);
-            CombatUI.Instance._characterPortraits.TryAdd(pb.Character.Data, pb);
+            CombatUI.Instance._characterPortraits.TryAdd(pb.Character, pb);
         }
         
         StartCoroutine(ResetTurnOrder());
