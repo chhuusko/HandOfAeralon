@@ -14,6 +14,7 @@ public static class GameTextFormatter
         Poison,
         NonDamagingEffect,
         Heal,
+        Health,
         Mana,
         Card,
         CardKeyword
@@ -104,6 +105,8 @@ public static class GameTextFormatter
                 return @"{non_damaging}(.*?){/non_damaging}";
             case TagType.Heal:
                 return @"{heal}(.*?){/heal}";
+            case TagType.Health:
+                return @"{health}(.*?){/health}";
             case TagType.Mana:
                 return @"{mana}(.*?){/mana}";
             case TagType.Card:
@@ -136,6 +139,8 @@ public static class GameTextFormatter
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.NonDamagingEffectColor);
             case TagType.Heal:
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.HealingColor);
+            case TagType.Health:
+                return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.HealthColor);
             case TagType.Mana:
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.ManaColor);
             case TagType.Card:
