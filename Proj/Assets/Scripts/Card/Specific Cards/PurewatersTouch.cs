@@ -25,7 +25,7 @@ public class PurewatersTouch : Card
                 character.GetStatusEffectManager().RemoveStatusEffect(debuffs[Random.Range(0, debuffs.Count)]);
                 CardHandManager.GetInstance().ChangeMana(2);
             }
-            character.Heal(15);
+            character.Heal(70);
         }
     }
 }
