@@ -37,5 +37,6 @@ public class Poison : StatusEffect
         damage = Character.GetStatusEffectManager().ModifyIncomingPoisonDamage(damage);
 
         Character.TakeDamage(Mathf.RoundToInt(damage));
+        CombatEventManager.InvokeOnStatusEffectDamageDealt(Character, this, Mathf.RoundToInt(damage));
     }
 }
