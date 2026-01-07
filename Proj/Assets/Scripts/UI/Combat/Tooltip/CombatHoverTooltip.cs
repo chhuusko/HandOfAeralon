@@ -114,7 +114,7 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
             RectTransform tooltipRect = _subHoverTooltipObject.GetComponent<RectTransform>();
             
             tooltipRect.anchoredPosition = localPoint; // local X/Y
-            tooltipRect.localPosition = new Vector3(tooltipRect.localPosition.x + 60f, tooltipRect.localPosition.y, 0f); // force Z = 0
+            tooltipRect.localPosition = new Vector3(tooltipRect.localPosition.x + 600f, tooltipRect.localPosition.y, 0f); // force Z = 0
         }
 
         // Hover exit
