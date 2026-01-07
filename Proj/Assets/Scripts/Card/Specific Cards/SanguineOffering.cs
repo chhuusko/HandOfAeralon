@@ -9,7 +9,7 @@ public class SanguineOffering : Card
         
         if (character != null && character.GetFaction() == Faction.Friendly)
         {
-            int damage = 10;
+            int damage = 50;
             damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
             character.TakeDamage(damage);
         }
@@ -18,7 +18,7 @@ public class SanguineOffering : Card
         {
             if (friendly.GetFaction() == Faction.Friendly && friendly != character)
             {
-                friendly.Heal(10);
+                friendly.Heal(50);
             }
         }
     }

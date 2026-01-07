@@ -10,7 +10,7 @@ public class SeismicBolt : Card
 
         if (character != null)
         {
-            int damage = 5;
+            int damage = 25;
             damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
             character.TakeDamage(damage);
             character.GetStatusEffectManager().AddStatusEffect(new Aftershock(2));

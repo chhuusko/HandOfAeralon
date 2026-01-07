@@ -20,7 +20,7 @@ public class NullifyingBlast : Card
                 }
             }
 
-            int damage = debuffs.Count * 4;
+            int damage = debuffs.Count * 20;
             damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
             character.TakeDamage(damage);
 
