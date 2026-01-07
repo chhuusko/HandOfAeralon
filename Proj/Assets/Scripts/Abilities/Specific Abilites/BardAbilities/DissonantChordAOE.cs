@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [CreateAssetMenu(fileName = "DissonantChord_Ability", menuName = "Scriptable Objects/Abilities/Bard/Dissonant Chord")]
 
@@ -92,6 +93,27 @@ public class DissonantChordAOE : RoundAOEAbility
             }
         }
     }
+
+    private void CheckBuffs(CombatGridTile casterTile, CombatGridTile tileToEffect)
+    {
+        if (tileToEffect == null) return;
+
+        Character affectedCharacter = tileToEffect.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
+        {
+            int buffsCleared = statusEffectManager.GetAmountOfType(StatusEffectType.Buff);
+
+            if (castingCharacter.GetFaction() != affectedCharacter.GetFaction())
+            {
+                enemiesDebuffed += buffsCleared;
+            }
+        }
+    }
+
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
         // Get base damage.
@@ -125,7 +147,7 @@ public class DissonantChordAOE : RoundAOEAbility
             if (tile == null) continue;
             if (!IsValidTargetForAbility(casterTile, tile)) continue;
 
-            RemoveBuffFromEnemy(casterTile, tile);
+            CheckBuffs(casterTile, tile);
         }
 
         foreach (CombatGridTile tile in tilesToEffect)
