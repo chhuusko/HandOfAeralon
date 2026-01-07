@@ -105,9 +105,7 @@ public class DissonantChordAOE : RoundAOEAbility
 
         if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
         {
-            var allBuffs = statusEffectManager.GetAllOfType(StatusEffectType.Buff);
-
-            int buffsCleared = allBuffs.Count();
+            int buffsCleared = statusEffectManager.GetAmountOfType(StatusEffectType.Buff);
 
             if (castingCharacter.GetFaction() != affectedCharacter.GetFaction())
             {
