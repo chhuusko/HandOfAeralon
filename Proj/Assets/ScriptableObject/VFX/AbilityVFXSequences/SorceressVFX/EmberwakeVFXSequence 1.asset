@@ -22,7 +22,7 @@ MonoBehaviour:
   _doCastCameraShake: 1
   _castShakeDuration: 1.5
   _castShakeMagnitude: 0.04
-  _castShakeFrequency: 200
+  _castShakeFrequency: 100
   _castShakeFade:
     serializedVersion: 2
     m_Curve:
@@ -52,9 +52,9 @@ MonoBehaviour:
   _impactAirDistance: 0.85
   _impactRotationOffset: {x: 0, y: 0, z: 0}
   _doImpactCameraShake: 1
-  _impactShakeDuration: 0.5
+  _impactShakeDuration: 0.3
   _impactShakeMagnitude: 0.08
-  _impactShakeFrequency: 200
+  _impactShakeFrequency: 150
   _impactShakeFade:
     serializedVersion: 2
     m_Curve:
