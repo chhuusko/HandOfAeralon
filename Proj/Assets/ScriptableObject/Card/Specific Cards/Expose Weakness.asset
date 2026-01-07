@@ -16,7 +16,8 @@ MonoBehaviour:
   targetFaction: 0
   rarity: 0
   title: Expose Weakness
-  description: Grant target {non_damaging}Vulnerable{/non_damaging} for 2 turns
+  description: Grant target {non_damaging}Vulnerable{/non_damaging} for <b>2</b>
+    turns
   cost: 2
   icon: {fileID: 21300000, guid: 303c513a36c00074caf55bfd1b094fcf, type: 3}
   CardTemplate: {fileID: 0}

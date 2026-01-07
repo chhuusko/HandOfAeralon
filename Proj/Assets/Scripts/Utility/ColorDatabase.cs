@@ -43,6 +43,7 @@ public class ColorDatabase : ScriptableObject
     
     [Header("Misc")]
     public Color HealingColor;
+    public Color HealthColor;
     public Color TooltipTextColor;
     
     /// <summary>
