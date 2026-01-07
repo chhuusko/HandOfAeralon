@@ -4,21 +4,13 @@ using UnityEngine;
 
 public static class GameTextFormatter
 {
-    private enum TagType
-    {
-        Ability,
-        ElementalDamage,
-        PhysicalDamage,
-        CardDamage,
-        Burn,
-        Poison,
-        NonDamagingEffect,
-        Heal,
-        Health,
-        Mana,
-        Card,
-        CardKeyword
-    }
+    /*
+     * The regex pattern here says:
+     * 1) Match any word character repeated.
+     * 2) Any character except newline matched as few times as possible.
+     * 3) Same as the first group but with a slash added.
+     */
+    private static Regex _pattern = new Regex(@"\{(\w+)\}(.*?)\{/\1\}");
     
     /// <summary>
     /// Creates a named, colored link for the character's name.
@@ -84,105 +76,38 @@ public static class GameTextFormatter
         return TextMarkupExtensions.Colorize(name, color);
     }
 
-    private static string GetTagPattern(TagType tagType)
-    {
-        // Find the regex pattern for the tag.
-        switch (tagType)
-        {
-            case TagType.Ability:
-                return @"{ability}(.*?){/ability}";
-            case TagType.ElementalDamage:
-                return @"{elemental_damage}(.*?){/elemental_damage}";
-            case TagType.PhysicalDamage:
-                return @"{physical_damage}(.*?){/physical_damage}";
-            case TagType.CardDamage:
-                return @"{card_damage}(.*?){/card_damage}";
-            case TagType.Burn:
-                return @"{burn}(.*?){/burn}";
-            case TagType.Poison:
-                return @"{poison}(.*?){/poison}";
-            case TagType.NonDamagingEffect:
-                return @"{non_damaging}(.*?){/non_damaging}";
-            case TagType.Heal:
-                return @"{heal}(.*?){/heal}";
-            case TagType.Health:
-                return @"{health}(.*?){/health}";
-            case TagType.Mana:
-                return @"{mana}(.*?){/mana}";
-            case TagType.Card:
-                return @"{card}(.*?){/card}";
-            case TagType.CardKeyword:
-                return @"{card_keyword}(.*?){/card_keyword}";
-            default:
-                return string.Empty;
-        }
-    }
-
-    private static string CreateTag(string text, TagType tagType)
+    private static string CreateTag(string text, string tag)
     {
         // Colorize the tag depending on which type of tag it is.
-        switch (tagType)
+        switch (tag)
         {
-            case TagType.Ability:
+            case "ability":
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.AbilityColor);
-            case TagType.ElementalDamage:
+            case "elemental_damage":
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.ElementalDamageColor);
-            case TagType.PhysicalDamage:
+            case "physical_damage":
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.PhysicalDamageColor);
-            case TagType.CardDamage:
+            case "card_damage":
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.CardDamageColor);
-            case TagType.Burn:
+            case "burn":
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.BurnColor);
-            case TagType.Poison:
+            case "poison":
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.PoisonColor);
-            case TagType.NonDamagingEffect:
+            case "non_damaging":
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.NonDamagingEffectColor);
-            case TagType.Heal:
+            case "heal":
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.HealingColor);
-            case TagType.Health:
+            case "health":
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.HealthColor);
-            case TagType.Mana:
+            case "mana":
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.ManaColor);
-            case TagType.Card:
+            case "card":
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.CardColor);
-            case TagType.CardKeyword:
+            case "card_keyword":
                 return TextMarkupExtensions.Colorize(text, ColorDatabase.Instance.CardKeywordColor);
             default:
-                return string.Empty;
+                return text;
         }
-    }
-
-    /// <summary>
-    /// Replaces the text in the given string with a colored tag.
-    /// </summary>
-    /// <param name="text">Reference to the text to replace.</param>
-    /// <param name="tagType">The tags to replace.</param>
-    private static void ReplaceText(ref string text, TagType tagType)
-    {
-        var pattern = GetTagPattern(tagType);
-        text = Regex.Replace(text, pattern, match =>
-        {
-            var value = match.Groups[1].Value;
-            value = CreateTag(value, tagType);
-            return value;
-        });
-    }
-    
-    /// <summary>
-    /// Replaces all tags in the status effects description with colored labels, keeping any text between the tags the same.
-    /// </summary>
-    /// <param name="statusEffect">The status effect description to search.</param>
-    /// <returns>The status effect description, with colored labels for any keyword.</returns>
-    public static string LabeledStatusEffectDescription(StatusEffect statusEffect)
-    {
-        var description = statusEffect.Data.Description;
-
-        foreach (var value in Enum.GetValues(typeof(TagType)))
-        {
-            ReplaceText(ref description, (TagType)value);
-        }
-        
-        return description;
     }
 
     /// <summary>
@@ -192,10 +117,13 @@ public static class GameTextFormatter
     /// <returns>The description, with colored labels for any keyword found.</returns>
     public static string LabeledDescription(string description)
     {
-        foreach (var value in Enum.GetValues(typeof(TagType)))
+        description = Regex.Replace(description, _pattern.ToString(), match =>
         {
-            ReplaceText(ref description, (TagType)value);
-        }
+            var tagName = match.Groups[1].Value;
+            var value = match.Groups[2].Value;
+            value = CreateTag(value, tagName);
+            return value;
+        });
         
         return description;
     }
