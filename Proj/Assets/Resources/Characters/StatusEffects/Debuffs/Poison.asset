@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Poison
   Icon: {fileID: 21300000, guid: 98fe3a05b77511b44bc323c28c299bed, type: 3}
-  Description: Character takes damage equal to 5 times the number of {poison}Poison{/poison}
+  Description: Character takes damage equal to <b>5</b> times the number of {poison}Poison{/poison}
     stacks on character at the start of their turn, then one stack of {poison}Poison{/poison}
     expires
   Type: 1
@@ -25,3 +25,4 @@ MonoBehaviour:
   Class: 4
   IsPositive: 0
   Cap: 9
+  Damage: 5

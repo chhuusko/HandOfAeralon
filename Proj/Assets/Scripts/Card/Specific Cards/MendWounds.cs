@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [CreateAssetMenu(fileName = "Mend Wounds", menuName = "Item/Card Data/Mend Wounds", order = 1)]
 public class MendWounds : Card
@@ -11,7 +12,11 @@ public class MendWounds : Card
             {
                 CardHandManager.GetInstance().ChangeMana(1);
             }
-            character.Heal(10);
+            character.Heal(50);
         }
+    }
+    public override void ShowDamagePreview(Character character)
+    {
+        character.PreviewHealthChange(50);
     }
 }

@@ -7,7 +7,18 @@ public class SoulExchange : Card
     public override void PlayCardOnTarget(Character character)
     {
         Character activeCharacter = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
-        character.TakeDamage(999);
-        activeCharacter.TakeDamage(999);
+        character.TakeDamage(GetDamage(character));
+        activeCharacter.TakeDamage(GetDamage(activeCharacter));
+    }
+    public override int GetDamage(Character character)
+    {
+        int damage = 9999;
+        return damage;
+    }
+    public override void ShowDamagePreview(Character character)
+    {
+        Character activeCharacter = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
+        activeCharacter.PreviewHealthChange(-GetDamage(activeCharacter));
+        character.PreviewHealthChange(-GetDamage(character));
     }
 }

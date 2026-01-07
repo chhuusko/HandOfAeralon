@@ -15,4 +15,8 @@ public class VitalSurge : Card
             character.Heal((int)(character.GetMaxHealth() * 0.25f));
         }
     }
+    public override void ShowDamagePreview(Character character)
+    {
+        character.PreviewHealthChange((int)(character.GetMaxHealth() * 0.25f));
+    }
 }

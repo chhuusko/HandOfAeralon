@@ -48,8 +48,6 @@ public class Card : ScriptableObject
         new Color(1.00f, 0.66f, 0.14f)
     };
 
-    protected int damage;
-
     private int tempCost;
     private bool isTempCost;
     public int GetCost()
@@ -112,6 +110,18 @@ public class Card : ScriptableObject
     {
         return rarityColors[rarity];
     }
-    
+    public virtual int GetDamage(Character character)
+    {
+        return 0;
+    }
+    public virtual void ShowDamagePreview(Character character)
+    {
+        if (character == null) return;
+        character.PreviewHealthChange(-GetDamage(character));
+    }
+    public virtual void ShowDamagePreview()
+    {
+
+    }
 }
 

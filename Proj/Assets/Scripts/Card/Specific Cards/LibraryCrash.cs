@@ -10,16 +10,18 @@ public class LibraryCrash : Card
         
         if (character != null)
         {
-            int damage = 50;
-            if (CardHandManager.GetInstance().GetDeck().Count < CardHandManager.GetInstance().GetDiscardPile().Count)
-            {
-                damage = 125;
-            }
-            
-            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
-            character.TakeDamage(damage);
-            
+            character.TakeDamage(GetDamage(character));
             
         }
+    }
+    public override int GetDamage(Character character)
+    {
+        int damage = 50;
+        if (CardHandManager.GetInstance().GetDeck().Count < CardHandManager.GetInstance().GetDiscardPile().Count)
+        {
+            damage = 125;
+        }
+        return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
+        
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class PortraitButton : MonoBehaviour
 {
-    public event Action<PortraitButton> OnClickPortraitButton;
+    public event Action<Character> OnClickPortraitButton;
 
     public Character Character { get; set; }
     
@@ -13,7 +13,7 @@ public class PortraitButton : MonoBehaviour
 
     public void OnClick()
     {
-        OnClickPortraitButton?.Invoke(this);
+        OnClickPortraitButton?.Invoke(Character);
         Selector._instance.SelectCharacterFromUI(Character);
     }
 }
