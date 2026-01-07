@@ -35,7 +35,7 @@ public class SunderingWave : Card
             {
                 int damage = 60;
                 damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
-                character.TakeDamage(-damage);
+                character.PreviewHealthChange(-damage);
             }
             else
             {
