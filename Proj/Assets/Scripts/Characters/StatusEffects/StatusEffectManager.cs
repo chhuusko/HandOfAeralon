@@ -157,6 +157,11 @@ public class StatusEffectManager : MonoBehaviour
         return _traitManager.GetAllOfType(type);
     }
 
+    public int GetAmountOfType(StatusEffectType type)
+    {
+        return _traitManager.GetAmountOfType(type);
+    }
+
     private void UpdateDuration(Character c)
     {
         if (!_character || c != _character)
