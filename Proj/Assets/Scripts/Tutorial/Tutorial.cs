@@ -22,12 +22,13 @@ public class Tutorial : MonoBehaviour
         }
     }
 
+    public static bool SkipTutorial = false;
+
     [SerializeField] private TutorialPopup[] _popups;
     [SerializeField] private Image _blocker;
 
     private Canvas _canvas;
     private int _currentPopup = 0;
-    private bool _bShowPopupsEnabled = true;
 
     void Start()
     {
@@ -51,7 +52,7 @@ public class Tutorial : MonoBehaviour
 
     public void ShowPopup(int popup)
     {
-        if (!_bShowPopupsEnabled) return;
+        if (SkipTutorial) return;
 
         if (popup >= 0 && popup < _popups.Length)
         {
