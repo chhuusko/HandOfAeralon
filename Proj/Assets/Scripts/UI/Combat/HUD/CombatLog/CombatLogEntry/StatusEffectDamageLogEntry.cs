@@ -17,8 +17,8 @@ public class StatusEffectDamageLogEntry : CombatLogEntry
         _image.sprite = d.StatusEffect.Data.Icon;
 
         string statusEffectName = GameTextFormatter.StatusEffectColoredLabel(d.StatusEffect);
-        string characterName = d.Character.GetFaction() == Faction.Friendly ?
-            GameTextFormatter.CreateCharacterNameLink(d.Character) : GameTextFormatter.FactionColoredLabel(d.Character);
+        string characterName = GetCharacterIdentifier(d.Character);
+        
         Color damageColor = ColorDatabase.Instance.GetStatusEffectColor(d.StatusEffect);
         string damage = TextMarkupExtensions.Colorize(d.Damage.ToString(), damageColor);
         

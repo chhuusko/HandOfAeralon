@@ -30,13 +30,13 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     
     private void OnEnable()
     {
-        CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
-        CombatEventManager.OnStatusEffectAppliedToCharacter += AddCombatLogEntry;
-        CombatEventManager.OnStatusEffectExpiredOnCharacter += AddCombatLogEntry;
-        CombatEventManager.OnStatusEffectDamageDealt += AddCombatLogEntry;
-        CombatEventManager.OnCharacterDeath += AddCombatLogEntry;
-        CardHandManager.onCardUse += AddCombatLogEntry;
-        CardHandManager.onCardTargetCharacter += AddCombatLogEntry;
+        CombatEventManager.OnAbilityDataCreated += AddAbilityEntry;
+        CombatEventManager.OnStatusEffectAppliedToCharacter += AddStatusEffectAppliedEntry;
+        CombatEventManager.OnStatusEffectExpiredOnCharacter += AddStatusEffectRemovedEntry;
+        CombatEventManager.OnStatusEffectDamageDealt += AddStatusEffectDamageEntry;
+        CombatEventManager.OnCharacterDeath += AddCharacterDeathEntry;
+        CardHandManager.onCardUse += AddCardUsedEntry;
+        CardHandManager.onCardTargetCharacter += AddCardTargetedEntry;
         LinkHandlerForTMPText.OnClickOnLink += SelectCharacter;
     }
 
@@ -50,7 +50,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         _combatLogScrollbar.SetActive(_bCombatLogEnabled);
     }
     
-    private void AddCombatLogEntry(AbilityExecutionData data)
+    private void AddAbilityEntry(AbilityExecutionData data)
     {
         AbilityLogData abilityLogData = new AbilityLogData
         {
@@ -63,7 +63,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         AddCombatLogEntry(abilityLogData);
     }
 
-    private void AddCombatLogEntry(Card card)
+    private void AddCardUsedEntry(Card card)
     {
         CardUsedLogData cardUsedLogData = new CardUsedLogData()
         {
@@ -72,7 +72,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         AddCombatLogEntry(cardUsedLogData);
     }
 
-    private void AddCombatLogEntry(Character character, Card card)
+    private void AddCardTargetedEntry(Character character, Card card)
     {
         // CardTargetedLogData cardTargetedLogData = new CardTargetedLogData()
         // {
@@ -82,7 +82,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         // AddCombatLogEntry(cardTargetedLogData);
     }
     
-    private void AddCombatLogEntry(Character character)
+    private void AddCharacterDeathEntry(Character character)
     {
         StartCoroutine(AddCharacterDeathNextFrame(character));
     }
@@ -98,7 +98,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         AddCombatLogEntry(characterDeathLogData);
     }
     
-    private void AddCombatLogEntry(Character caster, Character target, StatusEffect effect)
+    private void AddStatusEffectAppliedEntry(Character caster, Character target, StatusEffect effect)
     {
         StartCoroutine(AddStatusEffectNextFrame(caster, target, effect));
     }
@@ -117,7 +117,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         AddCombatLogEntry(statusEffectAddedLogData);
     }
 
-    private void AddCombatLogEntry(Character character, StatusEffect effect)
+    private void AddStatusEffectRemovedEntry(Character character, StatusEffect effect)
     {
         StartCoroutine(RemoveStatusEffectNextFrame(character, effect));
     }
@@ -134,7 +134,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         AddCombatLogEntry(statusEffectRemovedLogData);
     }
 
-    private void AddCombatLogEntry(Character character, StatusEffect effect, int damage)
+    private void AddStatusEffectDamageEntry(Character character, StatusEffect effect, int damage)
     {
         StatusEffectDamageLogData statusEffectDamageLogData = new StatusEffectDamageLogData()
         {
@@ -211,13 +211,13 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     
     private void OnDisable()
     {
-        CombatEventManager.OnAbilityDataCreated -= AddCombatLogEntry;
-        CombatEventManager.OnStatusEffectAppliedToCharacter -= AddCombatLogEntry;
-        CombatEventManager.OnStatusEffectExpiredOnCharacter -= AddCombatLogEntry;
-        CombatEventManager.OnStatusEffectDamageDealt -= AddCombatLogEntry;
-        CombatEventManager.OnCharacterDeath -= AddCombatLogEntry;
-        CardHandManager.onCardUse -= AddCombatLogEntry;
-        CardHandManager.onCardTargetCharacter -= AddCombatLogEntry;
+        CombatEventManager.OnAbilityDataCreated -= AddAbilityEntry;
+        CombatEventManager.OnStatusEffectAppliedToCharacter -= AddStatusEffectAppliedEntry;
+        CombatEventManager.OnStatusEffectExpiredOnCharacter -= AddStatusEffectRemovedEntry;
+        CombatEventManager.OnStatusEffectDamageDealt -= AddStatusEffectDamageEntry;
+        CombatEventManager.OnCharacterDeath -= AddCharacterDeathEntry;
+        CardHandManager.onCardUse -= AddCardUsedEntry;
+        CardHandManager.onCardTargetCharacter -= AddCardTargetedEntry;
         LinkHandlerForTMPText.OnClickOnLink -= SelectCharacter;
     }
 }
