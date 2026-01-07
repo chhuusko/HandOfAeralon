@@ -1,5 +1,6 @@
 // Joel Larsson Wendt || jola6902
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ public class CharacterMovement : MonoBehaviour
 {
     public UnityEvent<int> MovementCostPreview;
     public UnityEvent OnMovementPreviewStopped;
+    public event Action OnCharacterStoppedMoving;
 
     private Character _character;
     private List<CombatGridTile> _tilesInRange = new();
@@ -188,6 +190,7 @@ public class CharacterMovement : MonoBehaviour
 
         _bIsMoving = false;
         Debug.LogWarning($"{_character.name} _isMoving = false");
+        OnCharacterStoppedMoving?.Invoke();
         CombatEventManager.InvokeOnCharacterMove(_character, _bIsMoving);
         Selector._instance.InvokeCharacterActionStopped();
 

@@ -1,4 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +27,7 @@ public class Tutorial : MonoBehaviour
 
     private Canvas _canvas;
     private int _currentPopup = 0;
+    private bool _bShowPopupsEnabled = true;
 
     void Start()
     {
@@ -33,6 +37,9 @@ public class Tutorial : MonoBehaviour
         {
             Debug.LogError("Tutorial.cs | Canvas not found!");
         }
+
+        CombatUI.Instance.OnStartCombatButtonPressed += ShowMovementPointsPopup;
+        CombatMenuManager.GetInstance().OnGoToShopButtonPressed += ShowShopPopup;
 
         HidePopups();
         
@@ -44,6 +51,8 @@ public class Tutorial : MonoBehaviour
 
     public void ShowPopup(int popup)
     {
+        if (!_bShowPopupsEnabled) return;
+
         if (popup >= 0 && popup < _popups.Length)
         {
             for (int i = 0; i < _popups.Length; i++)
@@ -92,9 +101,31 @@ public class Tutorial : MonoBehaviour
         HidePopups();
     }
 
+    public void PopupFinished(TutorialPopup popup)
+    {
+        HidePopups();
+
+        if (_popups.Contains(popup))
+        {
+            int index = _popups.AsReadOnlyList().IndexOf(popup);
+
+            switch(index)
+            {
+                case 0: NextPopup(); break; // Turn Order
+                case 1: break; // Deploy Your Party
+                case 2: break; // Movement Points
+                case 3: break; // Abilities ...
+                case 4: NextPopup(); break; // Combat Log
+                case 5: NextPopup(); break; // Mana, Cards & Deck
+                case 6: break; // Traits & Status
+                case 7: break; // The Shop ...
+            }
+        }
+    }
+
     private IEnumerator FirstPopup()
     {
-        float maxTime = 8f; // Lika lång tid som intro-cinematic tar
+        float maxTime = 8.5f; // Lika lång tid som intro-cinematic tar
         float startTime = Time.time;
 
         while (Time.time - startTime < maxTime)
@@ -105,7 +136,50 @@ public class Tutorial : MonoBehaviour
             yield return null;
         }
 
+        CombatLog combatLog = FindFirstObjectByType<CombatLog>();
+        if (combatLog != null)
+        {
+            combatLog.OnCombatLogUpdate += ShowCombatLogPopup;
+        }
+
         ShowPopup(0);
     }
 
+    private void ShowMovementPointsPopup()
+    {
+        List<GameObject> characters = CombatGrid._instance.GetAllFriendlyCharacters();
+        characters[0].GetComponent<CharacterMovement>().OnCharacterStoppedMoving += ShowAbilitiesPopup;
+
+        CombatUI.Instance.OnStartCombatButtonPressed -= ShowMovementPointsPopup;
+        _currentPopup = 2;
+        ShowPopup(_currentPopup);
+    }
+
+    private void ShowAbilitiesPopup()
+    {
+        List<GameObject> characters = CombatGrid._instance.GetAllFriendlyCharacters();
+        characters[0].GetComponent<CharacterMovement>().OnCharacterStoppedMoving -= ShowAbilitiesPopup;
+
+        _currentPopup = 3;
+        ShowPopup(_currentPopup);
+    }
+
+    private void ShowCombatLogPopup()
+    {
+        CombatLog combatLog = FindFirstObjectByType<CombatLog>();
+        if (combatLog != null)
+        {
+            combatLog.OnCombatLogUpdate -= ShowCombatLogPopup;
+        }
+
+        _currentPopup = 4;
+        ShowPopup(_currentPopup);
+    }
+
+    private void ShowShopPopup()
+    {
+        CombatMenuManager.GetInstance().OnGoToShopButtonPressed -= ShowShopPopup;
+        _currentPopup = 7;
+        ShowPopup(_currentPopup);
+    }
 }
