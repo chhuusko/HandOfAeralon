@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    public event Action OnCombatLogUpdate;
+
     [SerializeField] private GameObject _combatLogPanel;
     [SerializeField] private GameObject _combatLogScrollbar;
     [SerializeField] private GameObject _combatLogButton;
@@ -170,7 +173,9 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         // Create the combat log entry.
         var entry = Instantiate(prefab, _combatLogContent);
         entry.Initialize(data);
-        
+
+        OnCombatLogUpdate?.Invoke();
+
         // Reset scroll.
         StartCoroutine(ScrollToBottom());
     }
