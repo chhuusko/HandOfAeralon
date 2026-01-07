@@ -10,71 +10,7 @@ public static class GameTextFormatter
      * 2) Any character except newline matched as few times as possible.
      * 3) Same as the first group but with a slash added.
      */
-    private static Regex _pattern = new Regex(@"\{(\w+)\}(.*?)\{/\1\}");
-    
-    /// <summary>
-    /// Creates a named, colored link for the character's name.
-    /// </summary>
-    /// <param name="character">The character to create a label for.</param>
-    /// <returns>The characters name in color representing its class.</returns>
-    public static string CreateCharacterNameLink(Character character)
-    {
-        if (character == null)
-        {
-            Debug.LogWarning("Character is null");
-            return string.Empty;
-        }
-        
-        Color color = ColorDatabase.Instance.GetCharacterColor(character);
-        string name = $"<link=\"{character.CharacterID}\"><u>{character.Data.Name}</link></u>";
-        
-        return TextMarkupExtensions.Colorize(name, color);
-    }
-    
-    /// <summary>
-    /// Creates a faction and class name for the character, colored according to its class.
-    /// </summary>
-    /// <param name="character">The character to create the label for.</param>
-    /// <returns>A colored label indicating faction and character class.</returns>
-    public static string FactionColoredLabel(Character character)
-    {
-        if (character == null)
-        {
-            Debug.LogWarning("Character is null");
-            return string.Empty;
-        }
-        
-        Color color = ColorDatabase.Instance.GetCharacterColor(character);
-        string factionName = $"{character.GetFaction().ToString()}";
-        string className = $"{character.GetCharacterClass().ToString()}";
-        
-        return TextMarkupExtensions.Colorize(
-            $"<link=\"{character.CharacterID}\"><u>{factionName} {className}</link></u>", color);
-    }
-
-    /// <summary>
-    /// Creates a colored label for the given status effect.
-    /// </summary>
-    /// <param name="statusEffect">The status effect to create the label for.</param>
-    /// <returns>A label for the status effect, including name and color representing its type.</returns>
-    public static string StatusEffectColoredLabel(StatusEffect statusEffect)
-    {
-        if (statusEffect == null)
-        {
-            Debug.LogWarning("StatusEffect is null");
-            return string.Empty;
-        }
-        
-        string name = statusEffect.Name;
-        Color color = statusEffect switch
-        {
-            Burn => ColorDatabase.Instance.BurnColor,
-            Poison => ColorDatabase.Instance.PoisonColor,
-            _ => ColorDatabase.Instance.NonDamagingEffectColor
-        };
-
-        return TextMarkupExtensions.Colorize(name, color);
-    }
+    private static Regex _pattern = new(@"\{(\w+)\}(.*?)\{/\1\}");
 
     private static string CreateTag(string text, string tag)
     {
@@ -202,5 +138,69 @@ public static class GameTextFormatter
         {
             text = ReplaceAt(text, index, token.Length, replacement);
         }
+    }
+    
+    /// <summary>
+    /// Creates a named, colored link for the character's name.
+    /// </summary>
+    /// <param name="character">The character to create a label for.</param>
+    /// <returns>The characters name in color representing its class.</returns>
+    public static string CreateCharacterNameLink(Character character)
+    {
+        if (character == null)
+        {
+            Debug.LogWarning("Character is null");
+            return string.Empty;
+        }
+        
+        Color color = ColorDatabase.Instance.GetCharacterColor(character);
+        string name = $"<link=\"{character.CharacterID}\"><u>{character.Data.Name}</link></u>";
+        
+        return TextMarkupExtensions.Colorize(name, color);
+    }
+    
+    /// <summary>
+    /// Creates a faction and class name for the character, colored according to its class.
+    /// </summary>
+    /// <param name="character">The character to create the label for.</param>
+    /// <returns>A colored label indicating faction and character class.</returns>
+    public static string FactionColoredLabel(Character character)
+    {
+        if (character == null)
+        {
+            Debug.LogWarning("Character is null");
+            return string.Empty;
+        }
+        
+        Color color = ColorDatabase.Instance.GetCharacterColor(character);
+        string factionName = $"{character.GetFaction().ToString()}";
+        string className = $"{character.GetCharacterClass().ToString()}";
+        
+        return TextMarkupExtensions.Colorize(
+            $"<link=\"{character.CharacterID}\"><u>{factionName} {className}</link></u>", color);
+    }
+
+    /// <summary>
+    /// Creates a colored label for the given status effect.
+    /// </summary>
+    /// <param name="statusEffect">The status effect to create the label for.</param>
+    /// <returns>A label for the status effect, including name and color representing its type.</returns>
+    public static string StatusEffectColoredLabel(StatusEffect statusEffect)
+    {
+        if (statusEffect == null)
+        {
+            Debug.LogWarning("StatusEffect is null");
+            return string.Empty;
+        }
+        
+        string name = statusEffect.Name;
+        Color color = statusEffect switch
+        {
+            Burn => ColorDatabase.Instance.BurnColor,
+            Poison => ColorDatabase.Instance.PoisonColor,
+            _ => ColorDatabase.Instance.NonDamagingEffectColor
+        };
+
+        return TextMarkupExtensions.Colorize(name, color);
     }
 }
