@@ -43,10 +43,11 @@ public static class CombatEventManager
     
     public static event Action<Character, bool> OnCharacterMove;
 
-    public delegate bool TryAddStatusEffectHandler(Character caster, Character target, StatusEffect statusEffect);
+    // Status effects.
     public static event Action<Character, Character, StatusEffect> OnStatusEffectAppliedToCharacter;
     public static event Action<Character, StatusEffect> OnStatusEffectExpiredOnCharacter;
     public static event Action<Character, StatusEffect> OnStatusEffectDurationChanged;
+    public static event Action<Character, StatusEffect, int> OnStatusEffectDamageDealt;
 
     public static void InvokeCombatStateChanged(CombatState newState)
         => OnCombatStateChange?.Invoke(newState);
@@ -127,4 +128,6 @@ public static class CombatEventManager
     public static void InvokeOnStatusEffectDurationChanged(Character character, StatusEffect statusEffect)
     => OnStatusEffectDurationChanged?.Invoke(character, statusEffect);
 
+    public static void InvokeOnStatusEffectDamageDealt(Character character, StatusEffect statusEffect, int damage) 
+    => OnStatusEffectDamageDealt?.Invoke(character, statusEffect, damage);
 }

@@ -6,7 +6,7 @@ public class ShardVolley : Card
 {
     public override void PlayCard()
     {
-        int damageTotal = 15 + (CardHandManager.GetInstance().GetCardsPlayedThisTurn()*2);
+        int damageTotal = 70 + (CardHandManager.GetInstance().GetCardsPlayedThisTurn()*10);
 
         
         

@@ -58736,6 +58736,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ad9744d453b4eb4b936cce880fd1cc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particleHandler: {fileID: 0}
+  fallbackLifetime: 5
 --- !u!1 &7356675355019688893
 GameObject:
   m_ObjectHideFlags: 0

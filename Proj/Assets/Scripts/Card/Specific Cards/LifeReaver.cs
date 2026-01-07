@@ -8,7 +8,7 @@ public class LifeReaver : Card
     {
         if (character != null && character.GetFaction() == Faction.Enemy)
         {
-            int damage = 10;
+            int damage = 50;
             damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
             character.TakeDamage(damage);
         }
@@ -22,7 +22,7 @@ public class LifeReaver : Card
                 lowestHP = friendly;
             }
         }
-        lowestHP.Heal(10);
+        lowestHP.Heal(50);
         CardHandManager.GetInstance().AddCardFromDeck();
     }
 }

@@ -123,7 +123,7 @@ public class CombatUI : MonoBehaviour
         }
      
         _startCombatButton.interactable = true;
-        _startCombatButton.transform.Find("Border").gameObject.SetActive(true);
+        _startCombatButton.transform.Find("Focus").gameObject.SetActive(true);
     }
 
     public void StartCombat()
@@ -194,7 +194,7 @@ public class CombatUI : MonoBehaviour
 
     private void SetEndTurnButtonBorder(bool active)
     {
-        _endTurnButton.transform.Find("Border").gameObject.SetActive(active);
+        _endTurnButton.transform.Find("Focus").gameObject.SetActive(active);
     }
 
     public void EndTurn()

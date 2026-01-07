@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TurnOrder : MonoBehaviour
+public class TurnOrder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private GameObject _turnOrderPanel;
     [SerializeField] private GameObject _panelViewPort;
@@ -105,6 +106,16 @@ public class TurnOrder : MonoBehaviour
         
         // Set scroll to bottom.
         _turnOrderScrollRect.verticalNormalizedPosition = 0;
+    }
+    
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        CombatEventManager.InvokeOnIsHoveringUI(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        CombatEventManager.InvokeOnIsHoveringUI(false);
     }
 
     private void OnDisable()
