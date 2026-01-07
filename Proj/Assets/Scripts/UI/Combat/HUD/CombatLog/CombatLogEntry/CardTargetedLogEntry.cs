@@ -13,12 +13,8 @@ public class CardTargetedLogEntry : CombatLogEntry
         
         _image.sprite = d.Card.icon;
         
-        Color targetColor = ColorDatabase.Instance.GetCharacterColor(d.Target);
-
         string cardName = TextMarkupExtensions.Colorize(d.Card.title, ColorDatabase.Instance.CardColor);
-        string targetName = d.Target.GetFaction() == Faction.Friendly ?
-            GameTextFormatter.CreateCharacterNameLink(d.Target) : GameTextFormatter.FactionColoredLabel(d.Target);
-        
+        string targetName = GetCharacterIdentifier(d.Target);
         _text.text = $"Used {cardName} on {targetName}";
     }
 }

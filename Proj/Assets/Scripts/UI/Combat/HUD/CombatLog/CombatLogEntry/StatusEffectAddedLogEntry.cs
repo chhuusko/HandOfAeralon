@@ -14,9 +14,7 @@ public class StatusEffectAddedLogEntry : CombatLogEntry
         _image.sprite = d.StatusEffect.Data.Icon;
 
         string statusEffectName = GameTextFormatter.StatusEffectColoredLabel(d.StatusEffect);
-        string targetName = d.Target.GetFaction() == Faction.Friendly ?
-            GameTextFormatter.CreateCharacterNameLink(d.Target) : GameTextFormatter.FactionColoredLabel(d.Target);
-        
+        string targetName = GetCharacterIdentifier(d.Target);
         _text.text = $"{targetName} gained {statusEffectName}";
     }
 }

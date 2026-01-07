@@ -12,9 +12,7 @@ public class CardUsedLogEntry : CombatLogEntry
         }
         
         _image.sprite = d.Card.icon;
-
         string cardName = TextMarkupExtensions.Colorize(d.Card.title, ColorDatabase.Instance.CardColor);
-        
         _text.text = $"Used {cardName}";
     }
 }
