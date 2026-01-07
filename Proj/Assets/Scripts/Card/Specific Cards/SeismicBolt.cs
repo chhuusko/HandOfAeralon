@@ -5,16 +5,15 @@ public class SeismicBolt : Card
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void PlayCardOnTarget(Character character)
     {
-
-        
-
         if (character != null)
         {
-            int damage = 25;
-            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
-            character.TakeDamage(damage);
+            character.TakeDamage(GetDamage(character));
             character.GetStatusEffectManager().AddStatusEffect(new Aftershock(2));
-
         }
+    }
+    public override int GetDamage(Character character)
+    {
+        int damage = 25;
+        return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
     }
 }

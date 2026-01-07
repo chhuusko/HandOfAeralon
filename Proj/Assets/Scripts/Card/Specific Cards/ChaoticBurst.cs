@@ -5,10 +5,10 @@ using UnityEngine.TextCore.Text;
 [CreateAssetMenu(fileName = "Chaotic Burst", menuName = "Item/Card Data/Chaotic Burst", order = 1)]
 public class ChaoticBurst : Card
 {
+    [SerializeField] private int totalDamage = 75;
     public override void PlayCard()
     {
 
-        int totalDamage = 15;
         List<Character> characters = CombatGrid._instance.GetAllCharacterScripts();
         while (totalDamage > 0) 
         {

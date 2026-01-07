@@ -259,8 +259,10 @@ public class CardHandManager : MonoBehaviour
     }
     private void TurnChanged(CombatTurn t)
     {
+
         if(t == CombatTurn.PlayerTurn)
         {
+            Debug.Log("PlayerTurn");
             _cardsPlayedThisTurn = 0;
 
             tempTurnsTillCard--;
@@ -270,9 +272,13 @@ public class CardHandManager : MonoBehaviour
                 AddCardFromDeck();
             }
         }
+        else
+        {
+            Debug.Log("EnemyTurn");
+        }
 
-        //handle etherial cards
-        List<CardContainer> removeList = new List<CardContainer>();
+            //handle etherial cards
+            List<CardContainer> removeList = new List<CardContainer>();
         for (int i = 0; i < _cardsInHand.Count; i++)
         {
             if (_cardsInHand[i].GetCard().tags.Contains(CardTag.Etherial))

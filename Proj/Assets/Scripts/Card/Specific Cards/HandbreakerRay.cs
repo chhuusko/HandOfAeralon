@@ -8,9 +8,12 @@ public class HandbreakerRay : Card
     {
         if (character != null)
         {
-            int damage = (Mathf.Max(0, CardHandManager.GetInstance().GetCardsInHand().Count - 1) * 20);
-            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
-            character.TakeDamage(damage);
+            character.TakeDamage(GetDamage(character));
         }
+    }
+    public override int GetDamage(Character character)
+    {
+        int damage = (Mathf.Max(0, CardHandManager.GetInstance().GetCardsInHand().Count - 1) * 20);
+        return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
     }
 }

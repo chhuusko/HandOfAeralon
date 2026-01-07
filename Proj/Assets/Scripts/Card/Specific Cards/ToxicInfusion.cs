@@ -11,12 +11,24 @@ public class ToxicInfusion : Card
             
             if (character.GetStatusEffectManager().ContainsStatusEffect<Poison>())
             {
-                int damage = 70;
-                damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
-                character.TakeDamage(damage);
+                character.TakeDamage(GetDamage(character));
             }
             character.GetStatusEffectManager().AddStatusEffect(new Poison(3));
 
+        }
+    }
+    public override int GetDamage(Character character)
+    {
+        int damage = 70;
+        return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
+    }
+    public override void ShowDamagePreview(Character character)
+    {
+        if (character == null) return;
+
+        if (character.GetStatusEffectManager().ContainsStatusEffect<Poison>())
+        {
+            character.PreviewHealthChange(-GetDamage(character));
         }
     }
 }

@@ -8,20 +8,24 @@ public class VenomHarvest : Card
 
         if (character != null)
         {
-            int totalDamage = 0;
-            if (character.GetStatusEffectManager().ContainsStatusEffect<Poison>())
-            {
-                StatusEffect poison = character.GetStatusEffectManager().GetStatusEffect<Poison>();
-                
-                for (int i = poison.Duration; i > 0; i--)
-                {
-                    totalDamage += i; 
-                }
-            }
-            totalDamage = Mathf.RoundToInt(2 * character.GetStatusEffectManager().ModifyIncomingDamage(totalDamage, null));
-            character.TakeDamage(totalDamage);
+            character.TakeDamage(GetDamage(character));
             character.GetStatusEffectManager().RemoveStatusEffect(new Poison(1));
         }
         
+    }
+    public override int GetDamage(Character character)
+    {
+        int totalDamage = 0;
+        if (character.GetStatusEffectManager().ContainsStatusEffect<Poison>())
+        {
+            StatusEffect poison = character.GetStatusEffectManager().GetStatusEffect<Poison>();
+
+            for (int i = poison.Duration; i > 0; i--)
+            {
+                totalDamage += i;
+            }
+        }
+        return Mathf.RoundToInt(2 * character.GetStatusEffectManager().ModifyIncomingDamage(totalDamage, null));
+
     }
 }
