@@ -82,7 +82,7 @@ public class ColorDatabase : ScriptableObject
     {
         if (ability == null)
         {
-            Debug.LogError($"{ability} is null");
+            Debug.LogWarning($"{ability} is null");
             return Color.white;
         }
         var type = ability.GetAbilityType();
@@ -100,5 +100,21 @@ public class ColorDatabase : ScriptableObject
             return PhysicalDamageColor;
         }
         return type.HasFlag(Ability.Type.Heal) ? HealingColor : NonDamagingEffectColor;
+    }
+
+    public Color GetStatusEffectColor(StatusEffect statusEffect)
+    {
+        if (statusEffect == null)
+        {
+            Debug.LogWarning($"Status effect is null");
+            return Color.white;
+        }
+
+        return statusEffect switch
+        {
+            Burn => BurnColor,
+            Poison => PoisonColor,
+            _ => NonDamagingEffectColor
+        };
     }
 }

@@ -24,6 +24,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private CombatLogEntry _combatBountyEntryPrefab;
     [SerializeField] private CombatLogEntry _statusEffectAddedEntryPrefab;
     [SerializeField] private CombatLogEntry _statusEffectRemovedEntryPrefab;
+    [SerializeField] private CombatLogEntry _statusEffectDamageEntryPrefab;
     
     private bool _bCombatLogEnabled = true;
     
@@ -32,6 +33,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         CombatEventManager.OnAbilityDataCreated += AddCombatLogEntry;
         CombatEventManager.OnStatusEffectAppliedToCharacter += AddCombatLogEntry;
         CombatEventManager.OnStatusEffectExpiredOnCharacter += AddCombatLogEntry;
+        CombatEventManager.OnStatusEffectDamageDealt += AddCombatLogEntry;
         CombatEventManager.OnCharacterDeath += AddCombatLogEntry;
         CardHandManager.onCardUse += AddCombatLogEntry;
         CardHandManager.onCardTargetCharacter += AddCombatLogEntry;
@@ -132,6 +134,17 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         AddCombatLogEntry(statusEffectRemovedLogData);
     }
 
+    private void AddCombatLogEntry(Character character, StatusEffect effect, int damage)
+    {
+        StatusEffectDamageLogData statusEffectDamageLogData = new StatusEffectDamageLogData()
+        {
+            Character = character,
+            StatusEffect = effect,
+            Damage = damage
+        };
+        AddCombatLogEntry(statusEffectDamageLogData);
+    }
+
     private void AddCombatLogEntry(CombatLogData data)
     {
         // Get the prefab to instantiate.
@@ -144,6 +157,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             CombatBountyLogData => _combatBountyEntryPrefab,
             StatusEffectAddedLogData => _statusEffectAddedEntryPrefab,
             StatusEffectRemovedLogData => _statusEffectRemovedEntryPrefab,
+            StatusEffectDamageLogData => _statusEffectDamageEntryPrefab,
             _ => null
         };
 
@@ -200,6 +214,7 @@ public class CombatLog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         CombatEventManager.OnAbilityDataCreated -= AddCombatLogEntry;
         CombatEventManager.OnStatusEffectAppliedToCharacter -= AddCombatLogEntry;
         CombatEventManager.OnStatusEffectExpiredOnCharacter -= AddCombatLogEntry;
+        CombatEventManager.OnStatusEffectDamageDealt -= AddCombatLogEntry;
         CombatEventManager.OnCharacterDeath -= AddCombatLogEntry;
         CardHandManager.onCardUse -= AddCombatLogEntry;
         CardHandManager.onCardTargetCharacter -= AddCombatLogEntry;
