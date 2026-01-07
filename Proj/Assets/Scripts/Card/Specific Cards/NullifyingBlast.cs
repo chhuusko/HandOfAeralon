@@ -9,6 +9,9 @@ public class NullifyingBlast : Card
     {
         if (character != null)
         {
+            
+            character.TakeDamage(GetDamage(character));
+
             List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffects());
             List<StatusEffect> debuffs = new List<StatusEffect>();
             foreach (StatusEffect status in statuses)
@@ -16,18 +19,28 @@ public class NullifyingBlast : Card
                 if (status.Data.Type == StatusEffectType.Debuff)
                 {
                     debuffs.Add(status);
-                    
+
                 }
             }
-
-            int damage = debuffs.Count * 4;
-            damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
-            character.TakeDamage(damage);
-
             foreach (StatusEffect status in debuffs)
             {
                 character.GetStatusEffectManager().RemoveStatusEffect(status);
             }
         }
+    }
+    public override int GetDamage(Character character)
+    {
+        List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffects());
+        List<StatusEffect> debuffs = new List<StatusEffect>();
+        foreach (StatusEffect status in statuses)
+        {
+            if (status.Data.Type == StatusEffectType.Debuff)
+            {
+                debuffs.Add(status);
+
+            }
+        }
+        int damage = debuffs.Count * 20;
+        return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
     }
 }

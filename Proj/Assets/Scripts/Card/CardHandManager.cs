@@ -6,6 +6,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class CardHandManager : MonoBehaviour
 {
@@ -38,6 +39,9 @@ public class CardHandManager : MonoBehaviour
     private static int _maxHand = 10;
     private static int beginningDraw = 5;
 
+    // visual
+    [SerializeField] private int scalingMargin = 7;
+
     // Onhover
     GameObject _addedZoomedCard;
     CardContainer _activeContainer;
@@ -50,6 +54,9 @@ public class CardHandManager : MonoBehaviour
 
     //  bool
     bool isCombat;
+
+    //
+    HorizontalLayoutGroup _horizontalLayoutGroup;
 
     // view
     [SerializeField] CardViewUI cardView;
@@ -77,6 +84,7 @@ public class CardHandManager : MonoBehaviour
     }
     private void Awake()
     {
+        _horizontalLayoutGroup = _Hand.gameObject.GetComponent<HorizontalLayoutGroup>();
         _controller = new InputController();
         _instance = this;
         if (GlobalGameManager.GetInstance() != null)
@@ -172,12 +180,7 @@ public class CardHandManager : MonoBehaviour
     public void AddSpaceing()
     {
         _cardsInHand.RemoveAll(o => o == null);
-        for (int i = 0; i < _cardsInHand.Count; i++)
-        {
-            Vector3 position = _Hand.position + new Vector3(-(150f * (_cardsInHand.Count - 1)) / 2f, 0, 0) + new Vector3(i * 150f, 0, 0);
-            _cardsInHand[i].transform.position = position;
-            _cardsInHand[i].SetPos(position);
-        }
+        _horizontalLayoutGroup.spacing = (_cardsInHand.Count*(-scalingMargin));
     }
 
     public void Mulligan()
@@ -256,8 +259,10 @@ public class CardHandManager : MonoBehaviour
     }
     private void TurnChanged(CombatTurn t)
     {
+
         if(t == CombatTurn.PlayerTurn)
         {
+            Debug.Log("PlayerTurn");
             _cardsPlayedThisTurn = 0;
 
             tempTurnsTillCard--;
@@ -267,9 +272,13 @@ public class CardHandManager : MonoBehaviour
                 AddCardFromDeck();
             }
         }
+        else
+        {
+            Debug.Log("EnemyTurn");
+        }
 
-        //handle etherial cards
-        List<CardContainer> removeList = new List<CardContainer>();
+            //handle etherial cards
+            List<CardContainer> removeList = new List<CardContainer>();
         for (int i = 0; i < _cardsInHand.Count; i++)
         {
             if (_cardsInHand[i].GetCard().tags.Contains(CardTag.Etherial))

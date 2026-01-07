@@ -14,9 +14,7 @@ public class StatusEffectRemovedLogEntry : CombatLogEntry
         _image.sprite = d.StatusEffect.Data.Icon;
 
         string statusEffectName = GameTextFormatter.StatusEffectColoredLabel(d.StatusEffect);
-        string name = d.Character.GetFaction() == Faction.Friendly ?
-            GameTextFormatter.CreateCharacterNameLink(d.Character) : GameTextFormatter.FactionColoredLabel(d.Character);
-        
-        _text.text = $"{name} lost {statusEffectName}";
+        string characterName = GetCharacterIdentifier(d.Character);
+        _text.text = $"{characterName} lost {statusEffectName}";
     }
 }

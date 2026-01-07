@@ -41,5 +41,6 @@ public class Burn : StatusEffect
         damage = Character.GetStatusEffectManager().ModifyIncomingBurnDamage(damage);
 
         Character.TakeDamage(Mathf.RoundToInt(damage));
+        CombatEventManager.InvokeOnStatusEffectDamageDealt(Character, this, Mathf.RoundToInt(damage));
     }
 }

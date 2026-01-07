@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Burn
   Icon: {fileID: 21300000, guid: c371571ecc5da0d4ab0011dcf584e2b0, type: 3}
-  Description: Character takes 4 damage at the start of their turn
+  Description: Character takes <b>20</b> damage at the start of their turn
   Type: 1
   IsPermanent: 0
   IsDispellable: 1
+  SkipFirstTick: 0
   _typeName: Burn, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
-  Damage: 4
+  Damage: 20

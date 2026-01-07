@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Warpath Hustle
   Icon: {fileID: 21300000, guid: 739de71e7a5ff7c46a1c357ae9ff945e, type: 3}
-  Description: Damaging an enemy grants +1 Movement Point and +10% Damage next turn
-    (max +3 and 30%)
+  Description: Damaging an enemy grants <b>+1</b> Movement Point and <b>+10%</b>
+    damage next turn (max <b>+3</b> and <b>30%</b>)
   Type: 3
   IsPermanent: 1
   IsDispellable: 0
+  SkipFirstTick: 0
   _typeName: WarpathHustle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 0
   IsPositive: 1

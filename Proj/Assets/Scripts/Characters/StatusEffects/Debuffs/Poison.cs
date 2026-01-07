@@ -17,7 +17,6 @@ public class Poison : StatusEffect
     public override void IncreaseDuration(int amount = 1)
     {
         var data = Data as IntCapData;
-
         if (!data)
         {
             return;
@@ -29,7 +28,13 @@ public class Poison : StatusEffect
 
     public override void OnTurnStart()
     {
-        float damage = Duration;
+        var data = Data as IntCapData;
+        if (!data)
+        {
+            return;
+        }
+        
+        float damage = Duration * data.Damage;
         if (_source != null)
         {
             damage = _source.GetStatusEffectManager().ModifyOutgoingPoisonDamage(damage);
@@ -37,5 +42,6 @@ public class Poison : StatusEffect
         damage = Character.GetStatusEffectManager().ModifyIncomingPoisonDamage(damage);
 
         Character.TakeDamage(Mathf.RoundToInt(damage));
+        CombatEventManager.InvokeOnStatusEffectDamageDealt(Character, this, Mathf.RoundToInt(damage));
     }
 }

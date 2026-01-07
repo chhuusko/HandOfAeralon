@@ -16,8 +16,9 @@ MonoBehaviour:
   targetFaction: 0
   rarity: 0
   title: Life Reaver
-  description: Deal 10 {card_damage}damage{/card_damage} to target enemy and {heal}heal{/heal}
-    the ally with the highest amount of missing Health by 10
+  description: Deal <b>50</b> {card_damage}damage{/card_damage} to target enemy and
+    {heal}heal{/heal} the ally with the highest amount of missing {health}health{/health}
+    by <b>50</b>
   cost: 4
   icon: {fileID: 21300000, guid: 869a29bf499259b4a8bfb85ee98b9c99, type: 3}
   CardTemplate: {fileID: 0}

@@ -65,22 +65,8 @@ public class AbilityUI : MonoBehaviour
     {
         LoadAbilities(CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter());
     }
-    
-    /// <summary>
-    /// Displays each available ability for the selected character.
-    /// </summary>
-    /// <param name="portraitButton">The character of which's abilities to display.</param>
-    public void LoadAbilities(PortraitButton portraitButton)
-    {
-        LoadAbilities(portraitButton.Character);
-    }
 
-    public void LoadAbilities(Character c)
-    {
-        LoadAbilities(c.Data);
-    }
-    
-    public void LoadAbilities(CharacterData character)
+    public void LoadAbilities(Character character)
     {
         if (!CombatUI.Instance.bCombatStarted)
         {
@@ -95,7 +81,7 @@ public class AbilityUI : MonoBehaviour
     /// </summary>
     /// <param name="character">The character of which's abilities to load.</param>
     /// <returns></returns>
-    private IEnumerator LoadAbilitiesNextFrame(CharacterData character)
+    private IEnumerator LoadAbilitiesNextFrame(Character character)
     {
         yield return null;
         
@@ -106,7 +92,7 @@ public class AbilityUI : MonoBehaviour
         }
 
         // Don't show abilities for enemies.
-        if (character.Faction == Faction.Enemy)
+        if (character.GetFaction() == Faction.Enemy)
         {
             yield break;
         }
@@ -120,7 +106,7 @@ public class AbilityUI : MonoBehaviour
         ClearAbilityButtons();
         SetPanelsActive(true);
 
-        for (int i = 0; i < character.Abilities.Count; i++)
+        for (int i = 0; i < character.Data.Abilities.Count; i++)
         {
             var buttonGO = Instantiate(_abilityButtonPrefab.gameObject);
             buttonGO.SetActive(false);
@@ -128,7 +114,7 @@ public class AbilityUI : MonoBehaviour
             
             var button = buttonGO.GetComponent<Button>();
             
-            var ability = character.Abilities[i];
+            var ability = character.Data.Abilities[i];
             button.image.sprite = ability.GetIcon();
             button.GetComponent<AbilityButton>().Ability = ability;
             button.GetComponent<AbilityButton>().OnAbilityButtonClicked += SetBorder;
@@ -136,27 +122,23 @@ public class AbilityUI : MonoBehaviour
             var abilityButton = button.GetComponent<AbilityButton>();
             _abilityButtons.Add(abilityButton);
             
-            UpdateAbilityButton(CombatManager._instance.GetCharacterDataDict()[character], abilityButton);
+            UpdateAbilityButton(character, abilityButton);
             
             // Only set the button as active after fully creating it.
             buttonGO.SetActive(true);
         }
     }
 
-    public void UpdateAbilityButton()
+    private void UpdateAbilityButton()
     {
         if (CombatUI.Instance.SelectedCharacter == null)
         {
             return;
         }
         
-        var dict = CombatManager._instance.GetCharacterDataDict();
-        if (dict.TryGetValue(CombatUI.Instance.SelectedCharacter, out var character))
+        foreach (var abilityButton in _abilityButtons)
         {
-            foreach (var abilityButton in _abilityButtons)
-            {
-                UpdateAbilityButton(character, abilityButton);
-            }
+            UpdateAbilityButton(CombatUI.Instance.SelectedCharacter, abilityButton);
         }
     }
 
@@ -178,7 +160,7 @@ public class AbilityUI : MonoBehaviour
         if (CombatUI.Instance.bCombatStarted && c && CombatUI.Instance.CurrentTurnCharacter && CombatUI.Instance.SelectedCharacter != null)
         {
             bool isTurnCharacter = c == CombatUI.Instance.CurrentTurnCharacter;
-            bool isFriendly = CombatUI.Instance.SelectedCharacter.Faction == Faction.Friendly;
+            bool isFriendly = CombatUI.Instance.SelectedCharacter.GetFaction() == Faction.Friendly;
             bool notOnCooldown = !c.IsAbilityCooldownActive(abilityButton.Ability);
             bool canUseAbility = c.CanUseAbility;
             bool isActiveAbility = c.Data.ActiveAbilities.Contains(abilityButton.Ability);

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Resonant Recovery
   Icon: {fileID: 21300000, guid: cc2088b195c74e040bc9beb3d5e5ac4e, type: 3}
-  Description: "{ability}Resonant Blast{/ability} now deals +20% increased damage.
-    Additionally, its {heal}healing{/heal} effect gains +15% of the Bard\u2019s maximum
-    Health. "
+  Description: '{ability}Resonant Blast{/ability} now deals <b>+20%</b> increased
+    damage. Additionally, its {heal}healing{/heal} effect gains <b>+15%</b> of your
+    maximum {health}Health{/health}'
   Type: 3
   IsPermanent: 1
   IsDispellable: 0

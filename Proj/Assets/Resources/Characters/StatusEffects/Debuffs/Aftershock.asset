@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Aftershock
   Icon: {fileID: 21300000, guid: b294c2a924ded964e86abe6213a7d930, type: 3}
-  Description: Character takes 5 damage whenever a {card}card{/card} is played
+  Description: Character takes <b>25</b> damage whenever a {card}card{/card} is played
   Type: 1
   IsPermanent: 0
   IsDispellable: 1
@@ -22,4 +22,4 @@ MonoBehaviour:
   _typeName: Aftershock, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
-  Damage: 5
+  Damage: 25

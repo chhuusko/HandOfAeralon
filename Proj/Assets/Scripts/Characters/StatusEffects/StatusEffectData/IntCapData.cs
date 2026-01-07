@@ -5,4 +5,5 @@ public class IntCapData : StatusEffectData
 {
     [Header("Effect-Specific Data")]
     public int Cap;
+    public int Damage;
 }

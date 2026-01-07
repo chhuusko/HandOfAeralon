@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Bard
   m_EditorClassIdentifier: 
   characterClass: 3
-  minHealthPoints: 24
-  maxHealthPoints: 26
-  minDamage: 5
-  maxDamage: 6
+  minHealthPoints: 120
+  maxHealthPoints: 130
+  minDamage: 20
+  maxDamage: 25
   minInitiative: 7
   maxInitiative: 8
   minMovementPoints: 4
@@ -47,4 +47,4 @@ MonoBehaviour:
   - Nimue
   - Ysolde
   - Bellayne
-  classImage: {fileID: 21300000, guid: f10146a9848305f4aa24e41d01b25893, type: 3}
+  classImage: {fileID: 21300000, guid: ac7854c08bf71c240860245a7cc52c5a, type: 3}
