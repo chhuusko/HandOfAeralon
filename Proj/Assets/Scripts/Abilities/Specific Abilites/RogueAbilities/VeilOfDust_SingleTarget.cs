@@ -7,6 +7,7 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
     [Header("- Ability Specific values -")]
     [SerializeField] private int _buffsRemovedTilBonus = 1;
     [SerializeField] private int _stealthDuration = 3;
+    [SerializeField] private int _hasteDuration = 3;
     [SerializeField] private int _manaGain = 1;
 
     // Description
@@ -78,6 +79,8 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
 
         StatusEffect stealth;
         statusEffectManager.AddStatusEffect(stealth = new Stealth(_stealthDuration));
+
+        statusEffectManager.AddStatusEffect(new Haste(_hasteDuration));
 
         if (effectsRemoved >= _buffsRemovedTilBonus && castingCharacter.GetFaction() == Faction.Friendly)
         {
