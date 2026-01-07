@@ -13,7 +13,7 @@ public class FlareCollapse : Card
                 StatusEffect burn = character.GetStatusEffectManager().GetStatusEffect<Burn>();
                 var data = burn.Data as DamageData;
 
-                int damage = (3 * burn.Duration * data.Damage);
+                int damage = (10 * burn.Duration * data.Damage);
                 damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
                 character.TakeDamage(damage);
 
