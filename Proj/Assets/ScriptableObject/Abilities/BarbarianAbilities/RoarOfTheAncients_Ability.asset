@@ -17,8 +17,8 @@ MonoBehaviour:
   _range: 0
   _cooldown: 3
   _description: 'Unleash a primal roar, enemies in area have a 100% chance to become
-    Slowed and 50% chance to become Weakened for two turns. \n\nGain 2 {mana} if
-    at least two enemies become Weakened. '
+    Slowed and 75% chance to become Weakened for 3 turns. \n\nGain 2 {mana} if at
+    least two enemies become Weakened. '
   _abilityTag: 9
   _type: 16
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
@@ -43,8 +43,8 @@ MonoBehaviour:
   _validTargets: 5
   _abilityAOEVFXSequence: {fileID: 0}
   _radius: 3
-  _chanceToApplyWeakened: 0.5
-  _slowDuration: 2
-  _weakenedDuration: 2
+  _chanceToApplyWeakened: 0.75
+  _slowDuration: 3
+  _weakenedDuration: 3
   _manaGain: 2
   _enemiesWeakenedTilBonus: 2
