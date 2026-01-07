@@ -10,7 +10,7 @@ public static class GameTextFormatter
      * 2) Any character except newline matched as few times as possible.
      * 3) Same as the first group but with a slash added.
      */
-    private static Regex pattern = new Regex(@"\{(\w+)\}(.*?)\{/\1\}");
+    private static Regex _pattern = new Regex(@"\{(\w+)\}(.*?)\{/\1\}");
     
     /// <summary>
     /// Creates a named, colored link for the character's name.
@@ -117,7 +117,7 @@ public static class GameTextFormatter
     /// <returns>The description, with colored labels for any keyword found.</returns>
     public static string LabeledDescription(string description)
     {
-        description = Regex.Replace(description, pattern.ToString(), match =>
+        description = Regex.Replace(description, _pattern.ToString(), match =>
         {
             var tagName = match.Groups[1].Value;
             var value = match.Groups[2].Value;
