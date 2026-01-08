@@ -50,8 +50,8 @@ public class WarpathHustle : Trait
         _enemiesDamaged++;
     }
 
-    public override void ModifyOutgoingDamage(ref float damage, Ability ability)
+    public override void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
-        damage *= _totalDamageModifier;
+        combinedModifier += _totalDamageModifier;
     }
 }

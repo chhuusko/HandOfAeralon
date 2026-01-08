@@ -9,7 +9,7 @@ public class CrescendoSmash : Trait
         _totalDamageModifier = 0f;
     }
 
-    public override void ModifyOutgoingDamage(ref float damage, Ability ability)
+    public override void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
         if (ability is not LuteSmash_SingleTarget)
         {
@@ -22,8 +22,8 @@ public class CrescendoSmash : Trait
             return;
         }
         
-        var modifier = 1f + _totalDamageModifier / 100f;
-        damage *= modifier;
+        var modifier = _totalDamageModifier / 100f;
+        combinedModifier += modifier;
     }
 
     public override void OnAbilityUsed(AbilityExecutionData abilityData)

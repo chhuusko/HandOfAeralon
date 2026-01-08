@@ -26,14 +26,14 @@ public class RhythmicFury : Trait
         _totalDamageIncrease += data.DamageModifierPercent;
     }
     
-    public override void ModifyOutgoingDamage(ref float damage, Ability ability)
+    public override void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
         if (ability is not LuteSmash_SingleTarget)
         {
             return;
         }
         
-        var modifier = 1f + _totalDamageIncrease / 100f;
-        damage *= modifier;
+        var modifier = _totalDamageIncrease / 100f;
+        combinedModifier += modifier;
     }
 }

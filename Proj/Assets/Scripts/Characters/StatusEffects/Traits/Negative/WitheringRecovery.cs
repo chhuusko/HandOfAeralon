@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class WitheringRecovery : Trait
 {
-    public override void ModifyIncomingHeal(ref float heal, Ability ability)
+    public override void ModifyIncomingHeal(ref float heal, ref float combinedModifier, Ability ability)
     {
         var data = Data as DamageModifyingData;
 
@@ -11,7 +11,7 @@ public class WitheringRecovery : Trait
             return;
         }
 
-        var modifier = 1f - data.DamageModifierPercent / 100f;
-        heal *= modifier;
+        var modifier = data.DamageModifierPercent / 100f;
+        combinedModifier -= modifier;
     }
 }
