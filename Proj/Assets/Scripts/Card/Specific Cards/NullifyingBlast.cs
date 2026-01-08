@@ -12,7 +12,7 @@ public class NullifyingBlast : Card
             
             character.TakeDamage(GetDamage(character));
 
-            List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffects());
+            List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffectsSnapshot());
             List<StatusEffect> debuffs = new List<StatusEffect>();
             foreach (StatusEffect status in statuses)
             {
@@ -30,7 +30,7 @@ public class NullifyingBlast : Card
     }
     public override int GetDamage(Character character)
     {
-        List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffects());
+        List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffectsSnapshot());
         List<StatusEffect> debuffs = new List<StatusEffect>();
         foreach (StatusEffect status in statuses)
         {
