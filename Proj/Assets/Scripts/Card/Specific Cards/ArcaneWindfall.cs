@@ -5,7 +5,7 @@ using UnityEngine;
 public class ArcaneWindfall : Card
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public override void PlayCard()
+    public override void AfterCardPlay()
     {
         for (int i = 0; i < 3; i++)
         {
