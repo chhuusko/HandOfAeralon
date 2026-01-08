@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 public class EnemyAI : MonoBehaviour
 {
-    private const int TOP_N_ACTIONS = 3;
+    private const int TOP_N_ACTIONS = 2;
     private const float TURN_START_WAIT_TIME = 1f;
     private const float TURN_END_WAIT_TIME = 2.5f;
 
@@ -210,7 +210,7 @@ public class EnemyAI : MonoBehaviour
                 {
                     if (GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), closestEnemy.GetCurrentTileIndex()) > _character.GetMovementPoints() + 6)
                     {
-                        sorcModifier = -20f;
+                        sorcModifier = -60f;
                     }
 
                     /*
@@ -229,7 +229,7 @@ public class EnemyAI : MonoBehaviour
                 switch (_character.GetCharacterClass())
                 {
                     case CharacterClass.Barbarian:  moveScore -= enemyDistance * 20f; break;
-                    case CharacterClass.Bard:       moveScore += enemyDistance * 5f; break;
+                    case CharacterClass.Bard:       moveScore += enemyDistance * sorcModifier; break;
                     case CharacterClass.Rogue:      moveScore -= enemyDistance * 20f; break;
                     case CharacterClass.Sorceress:  moveScore += enemyDistance * sorcModifier; break;
                 }
@@ -278,9 +278,9 @@ public class EnemyAI : MonoBehaviour
                         switch (_character.GetCharacterClass())
                         {
                             case CharacterClass.Barbarian:  moveScore -= 50f / myPERCENTHP; break;
-                            case CharacterClass.Bard:       moveScore -= 50f / myPERCENTHP; break;
-                            case CharacterClass.Rogue:      moveScore -= 75f / myPERCENTHP; break;
-                            case CharacterClass.Sorceress:  moveScore -= 50f / myPERCENTHP; break;
+                            case CharacterClass.Bard:       moveScore -= 100f / myPERCENTHP; break;
+                            case CharacterClass.Rogue:      moveScore -= 100f / myPERCENTHP; break;
+                            case CharacterClass.Sorceress:  moveScore -= 100f / myPERCENTHP; break;
                         }
 
                         if (myPERCENTHP < 0.2f) moveScore -= 100;
