@@ -9,7 +9,13 @@ public class TraitManager
     [NonSerialized] public CharacterData CharacterData;
     
     [SerializeReference] private List<StatusEffect> _statusEffects = new();
+    public IReadOnlyList<StatusEffect> StatusEffects => _statusEffects;
     
+    /// <summary>
+    /// Adds a status effect to the character, or increases duration if already existing.
+    /// </summary>
+    /// <param name="statusEffect">The status effect to add.</param>
+    /// <returns>Whether the status effect has been added.</returns>
     public bool AddStatusEffect(StatusEffect statusEffect)
     {
         StatusEffect existing = _statusEffects
@@ -33,8 +39,18 @@ public class TraitManager
         return true;
     }
 
+    /// <summary>
+    /// Removes the given status effect from the character.
+    /// </summary>
+    /// <param name="statusEffect">The status effect to remove.</param>
+    /// <returns>Whether the status effect has been removed.</returns>
     public bool RemoveStatusEffect(StatusEffect statusEffect)
     {
+        if (statusEffect is Trait)
+        {
+            return false;
+        }
+        
         bool removed = _statusEffects.Remove(statusEffect);
         
         CharacterData.CalculateDerivedStats(CharacterData.Faction == Faction.Friendly
@@ -44,6 +60,11 @@ public class TraitManager
         return removed;
     }
 
+    /// <summary>
+    /// Removes all status effects of the given type.
+    /// </summary>
+    /// <param name="type">The type of status effect to remove.</param>
+    /// <returns>The amount of status effects removed.</returns>
     public int ClearStatusEffects(StatusEffectType type)
     {
         int amount = 0;
@@ -70,26 +91,10 @@ public class TraitManager
         return amount;
     }
 
-    public bool ContainsStatusEffect<T>() where T : StatusEffect
-    {
-        return _statusEffects.Exists(e => e is T);
-    }
-
-    public StatusEffect GetStatusEffect<T>() where T : StatusEffect
-    {
-        return _statusEffects.Find(e => e.GetType() == typeof(T));
-    }
-
-    public IReadOnlyList<StatusEffect> GetAllEffects()
-    {
-        return _statusEffects;
-    }
-
-    public IReadOnlyList<StatusEffect> GetAllStatusEffects()
-    {
-        return _statusEffects.Where(e => e is not Trait).ToList();
-    }
-
+    /// <summary>
+    /// Finds all traits the character currently has.
+    /// </summary>
+    /// <returns>A list of all traits on the character.</returns>
     public IReadOnlyList<Trait> GetAllTraits()
     {
         List<Trait> all = new();
@@ -104,14 +109,14 @@ public class TraitManager
         return all;
     }
 
+    /// <summary>
+    /// Finds all status effects of the given type that the character currently has.
+    /// </summary>
+    /// <param name="type">The type of status effect to get.</param>
+    /// <returns>All status effects of the given type.</returns>
     public IReadOnlyList<StatusEffect> GetAllOfType(StatusEffectType type)
     {
         return (IReadOnlyList<StatusEffect>)_statusEffects.Where(e => e.Data.Type == type);
-    }
-
-    public int GetAmountOfType(StatusEffectType type)
-    {
-        return _statusEffects.Count(e => e.Data.Type == type);
     }
     
     /// <summary>
@@ -137,6 +142,11 @@ public class TraitManager
         }
     }
 
+    /// <summary>
+    /// Applies hp and damage scaling on the character for each trait it has.
+    /// </summary>
+    /// <param name="hpFactor">The HP scaling factor to modify.</param>
+    /// <param name="damageFactor">The damage scaling factor to modify.</param>
     public void ModifyDerivedStats(ref float hpFactor, ref float damageFactor)
     {
         foreach (var trait in GetAllTraits())

@@ -240,6 +240,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31cf0bca4fd08f540894e7041e5bdee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MovementCostPreview:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMovementPreviewStopped:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5375635547301200709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,6 +259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _factionIndicator: {fileID: 1707646618432603668}
+  _characterID: 0
   _currentInitiative: 0
   _currentDamage: 0
   _currentMovementPoints: 0
@@ -263,6 +270,7 @@ MonoBehaviour:
   _bodyMesh: {fileID: 5632698098917217084}
   _weaponMesh: {fileID: 0}
   _data:
+    _name: 
     _classData: {fileID: 11400000, guid: 379db16b03291a04c8f6aa4262adf05f, type: 2}
     _characterClass: 0
     _faction: 0
@@ -276,6 +284,7 @@ MonoBehaviour:
     _abilities: []
     _activeAbilities: []
   _currentTileIndex: {x: 0, y: 0}
+  _animator: {fileID: 0}
 --- !u!54 &-5358155644811910876
 Rigidbody:
   m_ObjectHideFlags: 0

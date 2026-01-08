@@ -222,7 +222,7 @@ public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler,
 
     private void UpdateCharacterStatusEffects(Character character)  
     {
-        IReadOnlyList<StatusEffect> statusEffects = character.GetStatusEffectManager().GetAllStatusEffects();
+        IReadOnlyList<StatusEffect> statusEffects = character.GetStatusEffectManager().GetAllStatusEffectsSnapshot();
 
         // NOTE (Calle): If a character has no statuseffects, destroy and remove all effects and clear the 
         // list.

@@ -10,7 +10,7 @@ public class PurewatersTouch : Card
         //TODO Needs to know what effect is debuff. needs a list of effekts
         if (character != null && character.GetFaction() == Faction.Friendly)
         {
-            List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffects());
+            List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffectsSnapshot());
             List<StatusEffect> debuffs = new List<StatusEffect>();
 
             foreach (StatusEffect status in statuses)

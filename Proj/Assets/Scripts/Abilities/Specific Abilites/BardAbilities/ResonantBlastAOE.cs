@@ -17,7 +17,7 @@ public class ResonantBlastAOE : RoundAOEAbility
 
     // Description
 
-    // Deal(70% × Damage) Elemental damage to all enemies in the area.Enemies with a Debuff take (100% × Damage) instead.
+    // Deal(70% ï¿½ Damage) Elemental damage to all enemies in the area.Enemies with a Debuff take (100% ï¿½ Damage) instead.
     // If at least one enemy is hit, heal the Bard for 10% of their maximum Health, plus 2.5% for each additional enemy hit(up to 20%).
 
 
@@ -135,7 +135,7 @@ public class ResonantBlastAOE : RoundAOEAbility
 
         StatusEffectManager statusEffectManager = affectedCharacter.GetComponent<StatusEffectManager>();
         if (statusEffectManager == null) return 0;
-        var effects = statusEffectManager.GetAllStatusEffects();
+        var effects = statusEffectManager.GetAllStatusEffectsSnapshot();
         foreach (var effect in effects)
         {
             if (effect.Data.Type == StatusEffectType.Debuff)

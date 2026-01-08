@@ -9,7 +9,7 @@ public class SacredShielding : Card
 
         if (character != null)
         {
-            List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffects());
+            List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffectsSnapshot());
             foreach (StatusEffect status in statuses)
             {
                 if (status.Data.Type == StatusEffectType.Debuff)
