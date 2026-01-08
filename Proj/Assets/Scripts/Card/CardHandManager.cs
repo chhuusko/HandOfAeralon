@@ -33,8 +33,8 @@ public class CardHandManager : MonoBehaviour
     // presets
     [SerializeField] private int turnsTillCard = 4;
     [SerializeField] private int _maxMana = 10;
-    [SerializeField] private static int _maxHand = 10;
-    [SerializeField] private static int beginningDraw = 5;
+    [SerializeField] private int _maxHand = 10;
+    [SerializeField] private int beginningDraw = 5;
 
     // counters
     private int _mana = 5;
@@ -116,9 +116,6 @@ public class CardHandManager : MonoBehaviour
         _controller.Enable();
         _controller.Developer.SkipLevel.performed += SkipLevel;
     }
-
-    
-
     private void OnDisable()
     {
         CombatEventManager.OnCombatTurnChange -= TurnChanged;
@@ -137,7 +134,6 @@ public class CardHandManager : MonoBehaviour
         _cardsInHand.RemoveAll(o => o == null);
         while (beginningDraw > _cardsInHand.Count && _cardsInDeck.Count != 0)
         {
-            
             if(_cardsInDeck.Count == 0)
             {
                 _cardsInDeck = _cardsInDiscardPile;
@@ -217,12 +213,14 @@ public class CardHandManager : MonoBehaviour
     {
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
+
         if (!cardContainer.GetCard().tags.Contains(CardTag.Etherial))
         {
             _cardsInDiscardPile.Add(cardContainer.GetCard());
         }
-        AddSpaceing();
+
         _cardsPlayedThisTurn++;
+        AddSpaceing();
         UpdatePileTexts();
         AudioManager.Instance.PlayOneShot(discardSound, transform.position);
     }
@@ -337,9 +335,11 @@ public class CardHandManager : MonoBehaviour
     }
     public void AddCardToHand(Card newCard)
     {
+        if (_maxHand <= _cardsInHand.Count) return;
         CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
         _cardsInHand.Add(newCardContainer);
         newCardContainer.AddCard(newCard);
+        AddSpaceing();
     }
     private void TurnEffects(Character character, Card card)
     {
@@ -355,6 +355,7 @@ public class CardHandManager : MonoBehaviour
     }
     public void AddCardFromDiscard(Card card)
     {
+        if (_maxHand <= _cardsInHand.Count) return;
         RemoveFromDiscard(card);
         AddCardToHand(card);
     }
