@@ -19,7 +19,7 @@ public class ManaConduction : Trait
         _manaUsed += card.GetCost();
     }
 
-    public override void ModifyOutgoingDamage(ref float damage, Ability ability)
+    public override void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
         if (ability is not ArcaneBolt_SingleTarget)
         {
@@ -37,6 +37,6 @@ public class ManaConduction : Trait
             _manaUsed = CombatManager._instance.enemyMana;
         }
         var modifier = data.DamageModifierPercent / 100f;
-        damage += (_manaUsed * modifier);
+        combinedModifier += (_manaUsed * modifier);
     }
 }

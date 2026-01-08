@@ -283,13 +283,18 @@ public class StatusEffectManager : MonoBehaviour
         if (!_character)
         {
             return damage;
-        } 
-        
-        foreach (var statusEffect in GetAllEffectsSnapshot())
-        {
-            statusEffect.ModifyIncomingDamage(ref damage, ability);
         }
 
+        // Starts at 1, no change in damage.
+        var modifier = 1f;
+        foreach (var statusEffect in GetAllEffectsSnapshot())
+        {
+            statusEffect.ModifyIncomingDamage(ref modifier, ref damage, ability);
+        }
+        
+        // Calculate final damage with combined multipler.
+        damage *= Mathf.Max(modifier, 0f);
+        
         HandleExpiration();
         
         return damage;
@@ -300,12 +305,14 @@ public class StatusEffectManager : MonoBehaviour
         if (!_character)
         {
             return damage;
-        } 
-        
+        }
+
+        var modifier = 1f;
         foreach (var statusEffect in GetAllEffectsSnapshot())
         {
-            statusEffect.ModifyOutgoingDamage(ref damage, ability);
+            statusEffect.ModifyOutgoingDamage(ref damage, ref modifier, ability);
         }
+        damage *= Mathf.Max(modifier, 0f);
         
         HandleExpiration();
         
@@ -319,10 +326,13 @@ public class StatusEffectManager : MonoBehaviour
             return heal;
         } 
         
+        var modifier = 1f;
         foreach (var statusEffect in GetAllEffectsSnapshot())
         {
-            statusEffect.ModifyIncomingHeal(ref heal, ability);
+            statusEffect.ModifyIncomingHeal(ref heal, ref modifier, ability);
         }
+        heal *= Mathf.Max(modifier, 0f);
+        
         return heal;
     }
     
@@ -331,12 +341,14 @@ public class StatusEffectManager : MonoBehaviour
         if (!_character)
         {
             return heal;
-        } 
-        
+        }
+
+        var modifier = 1f;
         foreach (var statusEffect in GetAllEffectsSnapshot())
         {
-            statusEffect.ModifyOutgoingHeal(ref heal, ability);
+            statusEffect.ModifyOutgoingHeal(ref heal, ref modifier, ability);
         }
+        heal *= Mathf.Max(modifier, 0f);
 
         return heal;
     }

@@ -7,7 +7,7 @@ public class Vulnerable : StatusEffect
     {
     }
 
-    public override void ModifyIncomingDamage(ref float damage, Ability ability)
+    public override void ModifyIncomingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
         var data = Data as DamageModifyingData;
 
@@ -16,7 +16,7 @@ public class Vulnerable : StatusEffect
             return;
         }
         
-        var modifier = 1f + data.DamageModifierPercent / 100f;
-        damage *= modifier;
+        var modifier = data.DamageModifierPercent / 100f;
+        combinedModifier += modifier;
     }
 }

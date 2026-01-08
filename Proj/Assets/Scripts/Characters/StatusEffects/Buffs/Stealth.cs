@@ -36,7 +36,7 @@ public class Stealth : StatusEffect
         Character.DecreaseCurrentMovementPoints();
     }
 
-    public override void ModifyOutgoingDamage(ref float damage, Ability ability)
+    public override void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
         var data = Data as StealthData;
 
@@ -45,8 +45,8 @@ public class Stealth : StatusEffect
             return;
         }
 
-        var modifier = 1f + data.DamageModifierPercent / 100f;
-        damage *= modifier;
+        var modifier = data.DamageModifierPercent / 100f;
+        combinedModifier += modifier;
     }
 
     public override void OnAbilityUsed(AbilityExecutionData abilityData)
