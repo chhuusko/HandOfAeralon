@@ -40,10 +40,7 @@ public class StatusEffectManager : MonoBehaviour
             _character.OnTakeDamage += OnTakeDamage;
         }
 
-        if (_traitManager == null)
-        {
-            _traitManager = _character.GetTraitManager();
-        }
+        _traitManager ??= _character.GetTraitManager();
 
         if (_traitManager == null || !_character)
         {
@@ -63,14 +60,13 @@ public class StatusEffectManager : MonoBehaviour
         _traitManager = traitManager;
     }
 
+    /// <summary>
+    /// Adds a status effect to the character.
+    /// </summary>
+    /// <param name="statusEffect">The status effect to add.</param>
+    /// <param name="caster">The character source of the status effect.</param>
     public void AddStatusEffect(StatusEffect statusEffect, Character caster = null)
     {
-        // Sanctified disallows receiving debuffs.
-        if (ContainsStatusEffect<Sanctified>() && statusEffect.Data.Type is StatusEffectType.Debuff)
-        {
-            return;
-        }
-        
         statusEffect.Setup(_character, this);
         
         // Check if other traits interact.
@@ -91,6 +87,11 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Removes the given status effect from the character.
+    /// </summary>
+    /// <param name="statusEffect">The status effect to remove.</param>
+    /// <param name="forceRemoval">Forcibly removes the status effect, ignoring other interactions.</param>
     public void RemoveStatusEffect(StatusEffect statusEffect, bool forceRemoval = false)
     {
         if (!forceRemoval && !statusEffect.Data.IsDispellable)
@@ -99,7 +100,6 @@ public class StatusEffectManager : MonoBehaviour
         }
         
         bool removed = _traitManager.RemoveStatusEffect(statusEffect);
-
         if (!removed)
         {
             return;
@@ -110,33 +110,58 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.InvokeOnStatusEffectExpiredOnCharacter(_character, statusEffect);
         OnStatusEffectRemovedFromThis(statusEffect);
     }
-
+    
+    /// <summary>
+    /// Removes all status effects of the given type.
+    /// </summary>
+    /// <param name="type">The type of </param>
+    /// <returns>The amount of status effects removed.</returns>
     public int ClearStatusEffects(StatusEffectType type)
     {
-        int removed = 0;
+        int amount = 0;
+        List<StatusEffect> statusEffectsToRemove = new();
 
-        foreach (var effect in GetAllEffectsSnapshot())
+        foreach (var statusEffect in _traitManager.StatusEffects)
         {
-            if (effect.Data.Type == type && effect.Data.IsDispellable)
+            if (statusEffect.Data.Type == type && statusEffect.Data.IsDispellable)
             {
-                RemoveStatusEffect(effect);
-                removed++;
+                statusEffectsToRemove.Add(statusEffect);
+                amount++;
             }
         }
+
+        foreach (var statusEffect in statusEffectsToRemove)
+        {
+            RemoveStatusEffect(statusEffect);
+        }
         
-        return removed;
+        return amount;
     }
 
+    /// <summary>
+    /// Checks if the player has an instance of the status effect.
+    /// </summary>
+    /// <typeparam name="T">The type of status effect to look for.</typeparam>
+    /// <returns>Whether the player has the status effect.</returns>
     public bool ContainsStatusEffect<T>() where T : StatusEffect
     {
         return _traitManager.StatusEffects.Any(e => e is T);
     }
 
+    /// <summary>
+    /// Returns the instance of status effect on the character.
+    /// </summary>
+    /// <typeparam name="T">The type of status effect to look for.</typeparam>
+    /// <returns>The instance of the given status effect type.</returns>
     public StatusEffect GetStatusEffect<T>() where T : StatusEffect
     {
         return _traitManager.StatusEffects.FirstOrDefault(e => e.GetType() == typeof(T));
     }
 
+    /// <summary>
+    /// Finds all status effects the character has as they are at that moment in time.
+    /// </summary>
+    /// <returns>A snapshot of current status effects.</returns>
     public IReadOnlyList<StatusEffect> GetAllEffectsSnapshot()
     {
         return _traitManager.StatusEffects.ToList();
@@ -146,12 +171,16 @@ public class StatusEffectManager : MonoBehaviour
     {
         return _traitManager.StatusEffects.Where(e => e is not Trait).ToList();
     }
-
+    
     public int GetAmountOfType(StatusEffectType type)
     {
         return _traitManager.StatusEffects.Count(e => e.Data.Type == type);
     }
 
+    /// <summary>
+    /// Updates duration for each status effect affecting the character.
+    /// </summary>
+    /// <param name="c">The character to update duration for.</param>
     private void UpdateDuration(Character c)
     {
         if (!_character || c != _character)
