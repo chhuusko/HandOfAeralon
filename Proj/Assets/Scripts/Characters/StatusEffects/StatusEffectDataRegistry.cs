@@ -7,6 +7,7 @@ using UnityEngine;
 public class StatusEffectDataRegistry : ScriptableObject
 {
     private static StatusEffectDataRegistry _instance;
+    
     public static StatusEffectDataRegistry Instance
     {
         get
@@ -23,8 +24,10 @@ public class StatusEffectDataRegistry : ScriptableObject
     
     [SerializeField] private StatusEffectData[] _entries;
     private static Dictionary<Type, StatusEffectData> _lookup;
+    private static Dictionary<string, StatusEffectData> _dataPerName = new();
+    public static Dictionary<string, StatusEffectData> DataPerName => _dataPerName;
 
-    public void Initialize()
+    private void Initialize()
     {
         _lookup = new Dictionary<Type, StatusEffectData>();
         foreach (var entry in _entries)
@@ -39,6 +42,7 @@ public class StatusEffectDataRegistry : ScriptableObject
             if (type != null)
             {
                 _lookup[type] = entry;
+                _dataPerName.TryAdd(type.Name, entry);
             }
             else
             {

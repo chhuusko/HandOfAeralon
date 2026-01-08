@@ -7,10 +7,6 @@ public class ShardVolley : Card
     public override void PlayCard()
     {
         int damageTotal = 70 + (CardHandManager.GetInstance().GetCardsPlayedThisTurn()*10);
-
-        
-        
-
         List<Character> enemies = CombatGrid._instance.GetCharacterScriptsByFaction(Faction.Enemy);
         
         while (damageTotal > 0)

@@ -17,7 +17,7 @@ public class StatIncreasePanel : MonoBehaviour
         panel.SetActive(b);
         int formatedstat = Mathf.RoundToInt((LevelManager.GetInstance().statIncrease - 1f) * 100f);
         levelText.text = "" + LevelManager.GetInstance().GetStatLevel();
-        statText.text = "health +" + formatedstat + "%" + "\ndamage +" + formatedstat + "%";
+        statText.text = "Health +" + formatedstat + "%" + "\nDamage +" + formatedstat + "%";
     }
 
 }
