@@ -5,23 +5,30 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CardPackUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class CardPackUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private float _sellTime = 1f;
     private float _timeHeld = 0;
     [SerializeField] Image _fillImage;
+    [SerializeField] private Image _image;
     [SerializeField] GameObject _aboveText;
     [SerializeField] TextMeshProUGUI _priceText;
     [SerializeField] int CardAmount;
     [SerializeField] private int _cost = 50;
     List<Card> cardInPack = new List<Card>();
     private bool _isHeldDown;
+    
+    [Header("Sprites")]
+    [SerializeField] private Sprite _defaultSprite;
+    [SerializeField] private Sprite _hoverSprite;
+    [SerializeField] private Sprite _clickSprite;
 
     private void Awake()
     {
         RandomizeCards();
         _fillImage.fillAmount = 0;
         _priceText.text = $"<color=yellow>{_cost}</color><voffset=12><space=15><sprite index=0>";
+        _image.sprite = _defaultSprite;
     }
     private void Update()
     {
@@ -52,13 +59,26 @@ public class CardPackUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (Shop.CanAfford(_cost))
         {
             _isHeldDown = true;
+            _image.sprite = _clickSprite;
         }
-        
     }
     public void OnPointerUp(PointerEventData eventData)
     {
         _isHeldDown = false;
         _fillImage.fillAmount = 0;
         _timeHeld = 0;
+        _image.sprite = _hoverSprite;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log("OnPointerEnter");
+        _image.sprite = _hoverSprite;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Debug.Log("OnPointerExit");
+        _image.sprite = _defaultSprite;
     }
 }
