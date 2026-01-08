@@ -9,6 +9,7 @@ public class TraitManager
     [NonSerialized] public CharacterData CharacterData;
     
     [SerializeReference] private List<StatusEffect> _statusEffects = new();
+    public IReadOnlyList<StatusEffect> StatusEffects => _statusEffects;
     
     public bool AddStatusEffect(StatusEffect statusEffect)
     {
@@ -70,26 +71,6 @@ public class TraitManager
         return amount;
     }
 
-    public bool ContainsStatusEffect<T>() where T : StatusEffect
-    {
-        return _statusEffects.Exists(e => e is T);
-    }
-
-    public StatusEffect GetStatusEffect<T>() where T : StatusEffect
-    {
-        return _statusEffects.Find(e => e.GetType() == typeof(T));
-    }
-
-    public IReadOnlyList<StatusEffect> GetAllEffects()
-    {
-        return _statusEffects;
-    }
-
-    public IReadOnlyList<StatusEffect> GetAllStatusEffects()
-    {
-        return _statusEffects.Where(e => e is not Trait).ToList();
-    }
-
     public IReadOnlyList<Trait> GetAllTraits()
     {
         List<Trait> all = new();
@@ -107,11 +88,6 @@ public class TraitManager
     public IReadOnlyList<StatusEffect> GetAllOfType(StatusEffectType type)
     {
         return (IReadOnlyList<StatusEffect>)_statusEffects.Where(e => e.Data.Type == type);
-    }
-
-    public int GetAmountOfType(StatusEffectType type)
-    {
-        return _statusEffects.Count(e => e.Data.Type == type);
     }
     
     /// <summary>
