@@ -153,8 +153,9 @@ public abstract class Ability : ScriptableObject
         RunAbility(casterTile, targetTile);
 
         Selector._instance.InvokeCharacterActionStopped();
-        caster.Animator.SetBool("AbilityOngoing", false);
 
+        yield return new WaitForSeconds(3);
+        caster.Animator.SetBool("AbilityOngoing", false);
     }
     protected void ResetMovementPoints(Character character)
     {
