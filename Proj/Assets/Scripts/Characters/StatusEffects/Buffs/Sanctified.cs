@@ -18,7 +18,7 @@ public class Sanctified : StatusEffect
         return statusEffect.Data.Type is not StatusEffectType.Debuff;
     }
 
-    public override void ModifyIncomingDamage(ref float damage, Ability ability)
+    public override void ModifyIncomingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
         damage = 0f;
     }

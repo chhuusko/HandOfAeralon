@@ -6,7 +6,7 @@ public class Enraged : StatusEffect
     {
     }
     
-    public override void ModifyOutgoingDamage(ref float damage, Ability ability)
+    public override void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
         var data = Data as DamageModifyingData;
 
@@ -15,7 +15,7 @@ public class Enraged : StatusEffect
             return;
         }
 
-        var modifier = 1f + data.DamageModifierPercent / 100f;
-        damage *= modifier;
+        var modifier = data.DamageModifierPercent / 100f;
+        combinedModifier += modifier;
     }
 }
