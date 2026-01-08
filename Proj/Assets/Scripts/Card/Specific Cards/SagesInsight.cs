@@ -3,8 +3,9 @@ using UnityEngine;
 public class SagesInsight : Card
 {
     private CardContainer newCard;
-    public override void PlayCard()
+    public override void AfterCardPlay()
     {
+        base.AfterCardPlay();
         for (int i = 0; i < 2; i++)
         {
             if (newCard = CardHandManager.GetInstance().AddCardFromDeck())
@@ -17,7 +18,7 @@ public class SagesInsight : Card
                 }
             }
             newCard = null;
-            
+
         }
     }
 }

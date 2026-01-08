@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Fleeting Insight", menuName = "Item/Card Data/Fleeting Insight", order = 1)]
 public class FleetingInsight : Card
 {
-    public override void PlayCard()
+    public override void AfterCardPlay()
     {
         for (int i = 0; i < 3; i++)
         {
@@ -14,7 +14,6 @@ public class FleetingInsight : Card
                 clone.TempSetCost(0);
                 clone.tags.Add(CardTag.Etherial);
                 CardHandManager.GetInstance().AddCardToHand(clone);
-                Debug.Log(clone);
             }
         }
     }

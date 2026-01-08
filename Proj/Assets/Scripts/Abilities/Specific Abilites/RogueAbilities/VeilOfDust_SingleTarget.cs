@@ -63,6 +63,7 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
         Selector._instance.SelectCharacterFromUI(caster);
 
         Selector._instance.InvokeCharacterActionStopped();
+        yield return new WaitForSeconds(3);
         caster.Animator.SetBool("AbilityOngoing", false);
     }
 

@@ -160,9 +160,10 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             }
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
-            _containedCard.AfterCardPlay();
+            
             StopAllHealthPreview();
-            CardHandManager.GetInstance().RemoveCardFromHand(this);   
+            CardHandManager.GetInstance().RemoveCardFromHand(this);
+            _containedCard.AfterCardPlay();
         }
     }
 
