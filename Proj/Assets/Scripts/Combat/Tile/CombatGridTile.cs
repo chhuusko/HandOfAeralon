@@ -86,7 +86,7 @@ public class CombatGridTile : MonoBehaviour
 
                 case TileType.Lava:
                     {
-                        character.TakeDamage(4);
+                        character.TakeDamage(20);
                         StatusEffectManager statusEffectManager = character.GetComponent<StatusEffectManager>();
                         statusEffectManager.AddStatusEffect(new Burn(character, 1));
                         
