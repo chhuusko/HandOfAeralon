@@ -17,6 +17,7 @@ public class CardPackUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     [SerializeField] private int _cost = 50;
     List<Card> cardInPack = new List<Card>();
     private bool _isHeldDown;
+    private bool _isHovering;
     
     [Header("Sprites")]
     [SerializeField] private Sprite _defaultSprite;
@@ -67,18 +68,19 @@ public class CardPackUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         _isHeldDown = false;
         _fillImage.fillAmount = 0;
         _timeHeld = 0;
-        _image.sprite = _hoverSprite;
+
+        _image.sprite = _isHovering ? _hoverSprite : _defaultSprite;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("OnPointerEnter");
+        _isHovering = true;
         _image.sprite = _hoverSprite;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("OnPointerExit");
-        _image.sprite = _defaultSprite;
+        _isHovering = false;
+        _image.sprite = _isHeldDown ? _clickSprite : _defaultSprite;
     }
 }
