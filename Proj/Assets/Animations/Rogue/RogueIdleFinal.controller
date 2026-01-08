@@ -86,6 +86,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: AbilityOngoing
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsMoving
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -398631604781947750}
   m_Solo: 0
