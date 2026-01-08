@@ -30,7 +30,7 @@ public class LifeAndDeath : Card
     {
         List<Character> allies = CombatGrid._instance.GetCharacterScriptsByFaction(Faction.Friendly);
         int heal = Mathf.Min(character.GetCurrentHealth(), GetDamage(character));
-        character.PreviewHealthChange(GetDamage(character));
+        character.PreviewHealthChange(-GetDamage(character));
         Character lowestHp = allies[0];
 
         foreach (Character ally in allies)

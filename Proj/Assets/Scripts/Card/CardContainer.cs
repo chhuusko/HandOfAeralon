@@ -106,6 +106,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         if (_isDragging)
         {
             _isDragging = false;
+            StopAllHealthPreview();
             CardHandManager.GetInstance().Dragged(false);
             
             if (_containedCard.type == CardType.Target)
@@ -160,8 +161,8 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             }
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
+             
             
-            StopAllHealthPreview();
             CardHandManager.GetInstance().RemoveCardFromHand(this);
             _containedCard.AfterCardPlay();
         }
