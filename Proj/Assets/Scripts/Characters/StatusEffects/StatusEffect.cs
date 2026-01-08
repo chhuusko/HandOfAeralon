@@ -118,10 +118,10 @@ public abstract class StatusEffect
     public virtual void OnCombatEnded() {}
     public virtual void OnTakeDamage() {}
     public virtual void OnAbilityUsed(AbilityExecutionData abilityData) {}
-    public virtual void ModifyIncomingDamage(ref float damage, Ability ability) {}
-    public virtual void ModifyOutgoingDamage(ref float damage, Ability ability) {}
-    public virtual void ModifyIncomingHeal(ref float heal, Ability ability) {}
-    public virtual void ModifyOutgoingHeal(ref float heal, Ability ability) {}
+    public virtual void ModifyIncomingDamage(ref float damage, ref float combinedModifier, Ability ability) {}
+    public virtual void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability) {}
+    public virtual void ModifyIncomingHeal(ref float heal, ref float combinedModifier, Ability ability) {}
+    public virtual void ModifyOutgoingHeal(ref float heal, ref float combinedModifier, Ability ability) {}
     public virtual void ModifyOutgoingBurnDamage(ref float damage) {}
     public virtual void ModifyIncomingBurnDamage(ref float damage) {}
     public virtual void ModifyOutgoingPoisonDamage(ref float damage) {}

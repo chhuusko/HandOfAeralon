@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HealingFatigue : StatusEffect
 {
-    public override void ModifyIncomingHeal(ref float heal, Ability ability)
+    public override void ModifyIncomingHeal(ref float heal, ref float combinedModifier, Ability ability)
     {
         // Only affects SoR.
         if (ability is not SongOfRenewalAOE)
@@ -11,13 +11,12 @@ public class HealingFatigue : StatusEffect
         }
         
         var data = Data as DamageModifyingData;
-
         if (!data)
         {
             return;
         }
 
-        var modifier = 1f - data.DamageModifierPercent / 100f;
-        heal *= modifier;
+        var modifier = data.DamageModifierPercent / 100f;
+        combinedModifier -= modifier;
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DulledSteel : Trait
 {
-    public override void ModifyOutgoingDamage(ref float damage, Ability ability)
+    public override void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
         if (!ability || !ability.GetAbilityType().HasFlag(Ability.Type.Physical))
         {
@@ -15,7 +15,7 @@ public class DulledSteel : Trait
             return;
         }
 
-        var multiplier = 1f - data.DamageModifierPercent / 100f;
-        damage *= multiplier;
+        var multiplier = data.DamageModifierPercent / 100f;
+        combinedModifier -= multiplier;
     }
 }

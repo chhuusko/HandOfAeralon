@@ -21,9 +21,9 @@ public class Tremor : StatusEffect
         _totalDamageReduction = Mathf.Min(_totalDamageReduction + data.ModifierPercent, data.CapPercent);
     }
 
-    public override void ModifyIncomingDamage(ref float damage, Ability ability)
+    public override void ModifyIncomingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
-        var modifier = 1f - _totalDamageReduction / 100f;
-        damage *= modifier;
+        var modifier = _totalDamageReduction / 100f;
+        combinedModifier -= modifier;
     }
 }
