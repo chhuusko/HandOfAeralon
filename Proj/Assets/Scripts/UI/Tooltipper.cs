@@ -190,7 +190,7 @@ public class Tooltipper : MonoBehaviour
     {
         _currentObject = null;
         _tmpText.text = "";
-        _panel.gameObject.SetActive(false);
+        if (_panel != null) _panel.gameObject.SetActive(false);
     }
 
     private string GenerateTooltip()

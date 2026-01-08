@@ -25,7 +25,7 @@ public class SkipTutorial : MonoBehaviour
     {
         Tutorial.SkipTutorial = isOn;
 
-        if (isOn) Tutorial.Instance.HidePopups();
+        //if (isOn) Tutorial.Instance.HidePopups();
 
         foreach (var t in allToggles)
         {
