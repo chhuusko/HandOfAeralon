@@ -8,7 +8,7 @@ public class MentalPurge : Card
     {
         CardHandManager cardHandManager = CardHandManager.GetInstance();
         List<CardContainer> cards = cardHandManager.GetCardsInHand();
-        int count = cards.Count;
+        int count = cards.Count-1;
 
         if (count > 1)
         {
