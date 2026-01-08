@@ -205,6 +205,9 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Removes all status effects that should expire.
+    /// </summary>
     private void HandleExpiration()
     {
         foreach (var statusEffect in GetAllEffectsSnapshot())
@@ -260,19 +263,6 @@ public class StatusEffectManager : MonoBehaviour
         foreach (var statusEffect in GetAllEffectsSnapshot())
         {
             statusEffect.OnTargetedByCard();
-        }
-    }
-
-    public void OnBurnApplied(Character c)
-    {
-        if (c != _character)
-        {
-            return;
-        }
-
-        foreach (var statusEffect in GetAllEffectsSnapshot())
-        {
-            statusEffect.OnBurnApplied();
         }
     }
 
@@ -399,7 +389,19 @@ public class StatusEffectManager : MonoBehaviour
         return damage;
     }
     
-    // Status effects.
+    public void OnBurnApplied(Character c)
+    {
+        if (c != _character)
+        {
+            return;
+        }
+
+        foreach (var statusEffect in GetAllEffectsSnapshot())
+        {
+            statusEffect.OnBurnApplied();
+        }
+    }
+    
     /// <summary>
     /// Tries applying the burn to the target, with chance influenced by all this character's modifiers.
     /// </summary>
@@ -442,7 +444,7 @@ public class StatusEffectManager : MonoBehaviour
         return null;
     }
     
-    private float ApplyBurnApplicationChanceModifiers(ref float baseChance)
+    private void ApplyBurnApplicationChanceModifiers(ref float baseChance)
     {
         float chance = baseChance;
 
@@ -450,11 +452,9 @@ public class StatusEffectManager : MonoBehaviour
         {
             statusEffect.ModifyBurnApplicationChance(ref chance);
         }
-        
-        return chance;
     }
 
-    private float ApplyStunApplicationChanceModifiers(ref float baseChance)
+    private void ApplyStunApplicationChanceModifiers(ref float baseChance)
     {
         float chance = baseChance;
 
@@ -462,8 +462,6 @@ public class StatusEffectManager : MonoBehaviour
         {
             statusEffect.ModifyStunApplicationChance(ref chance);
         }
-
-        return chance;
     }
     
     private void OnAbilityUsed(AbilityExecutionData abilityData)
