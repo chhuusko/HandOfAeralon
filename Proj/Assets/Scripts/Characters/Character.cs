@@ -47,8 +47,9 @@ public class CharacterData
     [SerializeField] private List<Ability> _activeAbilities;
     public float CurrentHealthPoints01 => _currentHealthPoints01;
     public int CurrentHealthPoints => Mathf.RoundToInt(_derivedHealthPoints * _currentHealthPoints01);
-    public IReadOnlyList<Ability> Abilities => _abilities;
     
+    [Header("Abilities")]
+    public IReadOnlyList<Ability> Abilities => _abilities;
     public List<Ability> ActiveAbilities => _activeAbilities;
     
     [Header("Status Effects")]
@@ -301,6 +302,8 @@ public class Character : MonoBehaviour
     [SerializeField] private GameObject _weaponMesh;
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
+    [SerializeField] private Animator _animator;
+    public Animator Animator => _animator;
     public CharacterData Data => _data;
 
     private void OnEnable()
@@ -665,11 +668,10 @@ public class Character : MonoBehaviour
             StartCoroutine(RemoveCharacter());
             return true;
         }
-        
-        Animator animator = null;
-        if (TryGetComponent<Animator>(out animator))
+
+        if (_animator != null)
         {
-            animator.SetTrigger("TakeDamage");
+            _animator.SetTrigger("TakeDamage");
         }
 
         PlayDamageSound(false, newHealth / oldHealth);
@@ -741,12 +743,9 @@ public class Character : MonoBehaviour
 
         float deathCooldown = DEATH_COOLDOWN;
         
-        Animator animator = null;
-        if (TryGetComponent<Animator>(out animator))
+        if (_animator != null)
         {
-            animator.SetTrigger("Death");
-            // AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            // deathCooldown = animatorStateInfo.length;
+            _animator.SetTrigger("Death");
         }
 
         yield return new WaitForSeconds(deathCooldown);
