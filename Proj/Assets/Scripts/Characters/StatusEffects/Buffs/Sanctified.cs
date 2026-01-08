@@ -9,6 +9,11 @@ public class Sanctified : StatusEffect
 
     public override bool BeforeStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
     {
+        if (statusEffect == null || statusEffect.Data == null)
+        {
+            return true;
+        }
+        
         // Sanctified disallows receiving debuffs.
         return statusEffect.Data.Type is not StatusEffectType.Debuff;
     }
