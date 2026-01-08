@@ -32,12 +32,14 @@ public class CardHandManager : MonoBehaviour
 
     // presets
     [SerializeField] private int turnsTillCard = 4;
-    private int tempTurnsTillCard;
-    private int _maxMana = 10;
+    [SerializeField] private int _maxMana = 10;
+    [SerializeField] private static int _maxHand = 10;
+    [SerializeField] private static int beginningDraw = 5;
+
+    // counters
     private int _mana = 5;
     private int _cardsPlayedThisTurn = 0;
-    private static int _maxHand = 10;
-    private static int beginningDraw = 5;
+    private int tempTurnsTillCard = 4;
 
     // visual
     [SerializeField] private int scalingMargin = 7;
@@ -84,6 +86,7 @@ public class CardHandManager : MonoBehaviour
     }
     private void Awake()
     {
+        turnsTillCard = tempTurnsTillCard;
         _horizontalLayoutGroup = _Hand.gameObject.GetComponent<HorizontalLayoutGroup>();
         _controller = new InputController();
         _instance = this;
@@ -277,8 +280,13 @@ public class CardHandManager : MonoBehaviour
             Debug.Log("EnemyTurn");
         }
 
-            //handle etherial cards
-            List<CardContainer> removeList = new List<CardContainer>();
+        RemoveEphemeral();  
+        UpdatePileTexts();
+        turnEffects.Clear();
+    }
+    private void RemoveEphemeral()
+    {
+        List<CardContainer> removeList = new List<CardContainer>();
         for (int i = 0; i < _cardsInHand.Count; i++)
         {
             if (_cardsInHand[i].GetCard().tags.Contains(CardTag.Etherial))
@@ -286,13 +294,10 @@ public class CardHandManager : MonoBehaviour
                 removeList.Add(_cardsInHand[i]);
             }
         }
-
         foreach (CardContainer card in removeList)
         {
             RemoveCardFromHand(card);
         }
-        UpdatePileTexts();
-        turnEffects.Clear();
     }
     public int GetCardsPlayedThisTurn()
     {
@@ -335,7 +340,6 @@ public class CardHandManager : MonoBehaviour
         CardContainer newCardContainer = Instantiate(_CardContainer, _Hand).GetComponent<CardContainer>();
         _cardsInHand.Add(newCardContainer);
         newCardContainer.AddCard(newCard);
-
     }
     private void TurnEffects(Character character, Card card)
     {
@@ -343,10 +347,6 @@ public class CardHandManager : MonoBehaviour
         {
             effect.Effect(character, card);
         }
-    }
-    public void OverrideManager()
-    {
-
     }
     public void UpdatePileTexts()
     {
