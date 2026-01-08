@@ -281,12 +281,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
+  m_fontSize: 18
   m_fontSizeBase: 22
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 16
+  m_fontSizeMax: 18
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
@@ -680,6 +680,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7345e2afde5b0b74a90032a4366d2325, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hoverTooltipPrefab: {fileID: 7072464142353777644}
+  _subHoverTooltipObject: {fileID: 0}
   _tooltipCanvas: {fileID: 0}
   _tooltipOverlayCamera: {fileID: 0}
   _combatHUDOverlayCamera: {fileID: 0}
@@ -691,6 +693,7 @@ MonoBehaviour:
   _title: {fileID: 8128706942184581934}
   _description: {fileID: 2455607605031226785}
   _offsetY: 0
+  _hideOnStart: 1
 --- !u!1 &7141433214762382363
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -45,6 +45,7 @@ public class CombatTurnOrder
 {
     [SerializeField] private CombatTurn _currentTurn;
     [SerializeField] private Character _activeCharacter;
+    [SerializeField] private Character _prevActiveCharacter;
 
     [SerializeField] private List<Character> _charactersInTurnOrder;
     [SerializeField] private List<Character> _charactersInPendingTurnOrder;
@@ -60,6 +61,7 @@ public class CombatTurnOrder
     private int _playerTurnCount;
     private int _playerTurnCountToGetCard;
 
+    private bool _combatStarted;
 
     // NOTE (Calle): This is so that the character that is removed in InitializeTurnOrder()
     // can be added at the end of the turn later.
@@ -94,9 +96,10 @@ public class CombatTurnOrder
         _charactersInPendingTurnOrder = CombatGrid._instance.GetAllCharacterScripts();
         _turnCountFullRound = _charactersInPendingTurnOrder.Count;
         _nextRound = 2;
+        _combatStarted = false;
         SortCharacterListByInitiative(_charactersInPendingTurnOrder);
 
-        _activeCharacter = _charactersInPendingTurnOrder[0];
+        SetActiveCharacter(_charactersInPendingTurnOrder[0]);
         
         _charactersInPendingTurnOrder.RemoveAt(0);
 
@@ -135,8 +138,8 @@ public class CombatTurnOrder
             return;
         }
 
-        _activeCharacter = _charactersInPendingTurnOrder[0];
-        
+        SetActiveCharacter(_charactersInPendingTurnOrder[0]);
+
         _charactersInPendingTurnOrder.RemoveAt(0);
         
         _charactersInExecutedTurnOrder.Add(_activeCharacter);
@@ -168,12 +171,41 @@ public class CombatTurnOrder
         CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay, _nextRound);
     }
 
+    private static bool FriendlyWinsTie()
+    {
+        // 75% chance friendly wins
+        return Random.value < 0.75f;
+    }
+
     private void SortCharacterListByInitiative(List<Character> list)
     {
         if (list.Count == 0)
             return;
         // Sort them byt initiative, highest first
-        list.Sort((a, b) => b.GetBaseInitiative().CompareTo(a.GetBaseInitiative()));
+//        list.Sort((a, b) => b.GetBaseInitiative().CompareTo(a.GetBaseInitiative()));
+
+        list.Sort((a, b) =>
+        {
+            int initiativeCompare = b.GetBaseInitiative()
+                                     .CompareTo(a.GetBaseInitiative());
+
+            // Normal initiative ordering
+            if (initiativeCompare != 0)
+                return initiativeCompare;
+
+            // Equal initiative - apply 75/25 bias
+            bool aFriendly = a.GetFaction() == Faction.Friendly;
+            bool bFriendly = b.GetFaction() == Faction.Friendly;
+
+            // Same faction - keep stable order
+            if (aFriendly == bFriendly)
+                return 0;
+
+            // One friendly, one enemy - biased roll
+            bool friendlyFirst = FriendlyWinsTie();
+
+            return (aFriendly == friendlyFirst) ? -1 : 1;
+        });
     }
    
     // NOTE (Calle): This should sort the pending characters
@@ -210,6 +242,12 @@ public class CombatTurnOrder
 
     public void SetCurrentTurn(CombatTurn nextTurn)
     {
+        if(_prevActiveCharacter != null)
+        {
+            if (_prevActiveCharacter.GetFaction() == _activeCharacter.GetFaction())
+                return;
+        }
+
         _currentTurn = nextTurn;
         CombatEventManager.InvokeCombatTurnChanged(_currentTurn);
     }
@@ -288,4 +326,23 @@ public class CombatTurnOrder
         else
             SetCurrentTurn(CombatTurn.EnemyTurn);
     }
+
+    private void SetActiveCharacter(Character newActiveCharacter)
+    {
+        _prevActiveCharacter = _activeCharacter;
+        _activeCharacter = newActiveCharacter;
+    }
+
+    public bool IsFirstRound()
+    {
+        if(_combatStarted)
+        {
+            return false;
+        }
+
+        _combatStarted = true;
+
+        return true;
+    }
+
 }

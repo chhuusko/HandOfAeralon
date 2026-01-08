@@ -54,7 +54,6 @@ public class CombatTooltipManager : MonoBehaviour
         AbilityButton.OnMouseHoverExit               -= AbilityCloseRequest;
         StatusEffectBarElement.OnMouseHoverEnter     -= ShowHoverTooltip;
         StatusEffectBarElement.OnMouseHoverExit      -= HideStatusBarElementTooltip;
-        
 
     }
 
@@ -103,6 +102,13 @@ public class CombatTooltipManager : MonoBehaviour
         description += "\n\nCooldown: " + ability.GetCooldown() + " turns.";
 
         string advancedDescription = GameTextFormatter.AbilityColoredLabel(ability);
+
+        int cooldown = ability.GetCooldown();
+        
+        if (cooldown > 1)
+            advancedDescription += "\n\nCooldown: " + cooldown + " turns.";
+        else
+            advancedDescription += "\n\nCooldown: " + cooldown + " turn.";
 
         _combatHoverTooltip.Show(ability.GetAbilityName(), advancedDescription, button.GetComponent<RectTransform>());
     }
