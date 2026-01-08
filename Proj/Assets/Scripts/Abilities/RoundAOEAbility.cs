@@ -14,6 +14,8 @@ public abstract class RoundAOEAbility : AOEAbility
         Character caster = casterTile.GetOccupantCharacter();
         if (caster == null) Debug.LogError("CasterTile has no character!");
 
+        caster.Animator.SetBool("AbilityOngoing", true);
+
         // Should not be able to move after performing ability.
         caster.CanMove = false;
 
@@ -60,6 +62,7 @@ public abstract class RoundAOEAbility : AOEAbility
 
         RunAbility(casterTile, targetTile);
         Selector._instance.InvokeCharacterActionStopped();
+        caster.Animator.SetBool("AbilityOngoing", false);
     }
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)

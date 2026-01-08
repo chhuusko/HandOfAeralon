@@ -23,6 +23,8 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
         Character caster = casterTile.GetOccupantCharacter();
         if (caster == null) Debug.LogError("CasterTile has no character!");
 
+        caster.Animator.SetBool("AbilityOngoing", true);
+
         // Rotate towards target if the target is not the caster's tile.
         if (casterTile != targetTile)
         {
@@ -61,6 +63,7 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
         Selector._instance.SelectCharacterFromUI(caster);
 
         Selector._instance.InvokeCharacterActionStopped();
+        caster.Animator.SetBool("AbilityOngoing", false);
     }
 
     protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)

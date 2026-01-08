@@ -1,6 +1,7 @@
 using FMODUnity;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class Ability : ScriptableObject
@@ -110,8 +111,11 @@ public abstract class Ability : ScriptableObject
 
     public virtual IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
     {
+
         Character caster = casterTile.GetOccupantCharacter();
         if (caster == null) Debug.LogError("CasterTile has no character!");
+
+        caster.Animator.SetBool("AbilityOngoing", true);
 
         // Should not be able to move after performing ability.
         caster.CanMove = false;
@@ -149,6 +153,8 @@ public abstract class Ability : ScriptableObject
         RunAbility(casterTile, targetTile);
 
         Selector._instance.InvokeCharacterActionStopped();
+        caster.Animator.SetBool("AbilityOngoing", false);
+
     }
     protected void ResetMovementPoints(Character character)
     {
