@@ -203,9 +203,11 @@ public class Shop : MonoBehaviour
                 character.Heal( (int)(character.BaseHealthPoints*0.5f));
             }
             AudioManager.Instance.PlayOneShot(healSound, transform.position);
+           
+            
+            Bought(_healPrice);
             _healPrice += _addedHealPrice;
             _healText.text = "Heal Party (50%)\r\n<color=Yellow>" + _healPrice + "</color><voffset=15><space=20><sprite name=\"UI_icon_59\">";
-            Bought(_healPrice);
         }
         LoadParty();
     }
