@@ -50,6 +50,12 @@ public class Tutorial : MonoBehaviour
         }
     }
 
+    public IEnumerator ShowPopupDelayed(int popup)
+    {
+        yield return new WaitForSeconds(1f);
+        ShowPopup(popup);
+    }
+
     public void ShowPopup(int popup)
     {
         if (SkipTutorial) return;
@@ -90,6 +96,12 @@ public class Tutorial : MonoBehaviour
         ShowPopup(_currentPopup);
     }
 
+    public void NextPopupDelayed()
+    {
+        _currentPopup++;
+        StartCoroutine(ShowPopupDelayed(_currentPopup));
+    }
+
     public void PreviousPopup()
     {
         _currentPopup--;
@@ -112,12 +124,12 @@ public class Tutorial : MonoBehaviour
 
             switch(index)
             {
-                case 0: NextPopup(); break; // Turn Order
+                case 0: NextPopupDelayed(); break; // Turn Order
                 case 1: break; // Deploy Your Party
                 case 2: break; // Movement Points
                 case 3: break; // Abilities ...
-                case 4: NextPopup(); break; // Combat Log
-                case 5: NextPopup(); break; // Mana, Cards & Deck
+                case 4: NextPopupDelayed(); break; // Combat Log
+                case 5: NextPopupDelayed(); break; // Mana, Cards & Deck
                 case 6: break; // Traits & Status
                 case 7: break; // The Shop ...
             }
@@ -143,7 +155,7 @@ public class Tutorial : MonoBehaviour
             combatLog.OnCombatLogUpdate += ShowCombatLogPopup;
         }
 
-        ShowPopup(0);
+        StartCoroutine(ShowPopupDelayed(0));
     }
 
     private void ShowMovementPointsPopup()
@@ -153,7 +165,7 @@ public class Tutorial : MonoBehaviour
 
         CombatUI.Instance.OnStartCombatButtonPressed -= ShowMovementPointsPopup;
         _currentPopup = 2;
-        ShowPopup(_currentPopup);
+        StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 
     private void ShowAbilitiesPopup()
@@ -162,7 +174,7 @@ public class Tutorial : MonoBehaviour
         characters[0].GetComponent<CharacterMovement>().OnCharacterStoppedMoving -= ShowAbilitiesPopup;
 
         _currentPopup = 3;
-        ShowPopup(_currentPopup);
+        StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 
     private void ShowCombatLogPopup()
@@ -174,13 +186,13 @@ public class Tutorial : MonoBehaviour
         }
 
         _currentPopup = 4;
-        ShowPopup(_currentPopup);
+        StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 
     private void ShowShopPopup()
     {
         CombatMenuManager.GetInstance().OnGoToShopButtonPressed -= ShowShopPopup;
         _currentPopup = 7;
-        ShowPopup(_currentPopup);
+        StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 }
