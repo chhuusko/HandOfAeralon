@@ -186,6 +186,7 @@ public class Shop : MonoBehaviour
     public void UpdateMoneyUI()
     {
         _balanceText.text =  GlobalGameManager.GetInstance().GetGameData().coins + "<voffset=25> <space=3> <sprite name=\"UI_icon_59\">";
+        _removeCardText.text = "Balance <color=yellow>" + GlobalGameManager.GetInstance().GetGameData().coins + "</color><voffset=20><space=40><sprite name=\"UI_icon_59\">";
     }
 
     public void ChangeCoins(int change)
