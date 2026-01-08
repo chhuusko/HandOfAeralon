@@ -44,10 +44,18 @@ public class CombatGridTile : MonoBehaviour
     public void SetTileColor(Color color)
     {
         MeshRenderer meshRend = GetComponent<MeshRenderer>();
-        if(meshRend != null)
+        if (meshRend == null) return;
+
+        var mats = meshRend.materials;
+        for (int i = 0; i < mats.Length; i++)
         {
-            meshRend.material.SetColor("_TileColor", color);
+            if (mats[i].HasProperty("_TileColor"))
+            {
+                mats[i].SetColor("_TileColor", color);
+            }
         }
+
+        meshRend.materials = mats;
     }
 
     public Character GetOccupantCharacter()
