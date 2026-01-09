@@ -113,14 +113,16 @@ public static class GameTextFormatter
             );
         }
 
+        desc = LabeledDescription(desc);
+
         // NOTE (Calle): These just sets the color of each token in the tooltip, for now.
-        ReplaceAll(ref desc, elementalDamageToken, TextMarkupExtensions.Colorize("Elemental Damage", elementalDamageColor));
-        ReplaceAll(ref desc, physicalDamageToken, TextMarkupExtensions.Colorize("Physical Damage", physicalDamageColor));
-        ReplaceAll(ref desc, burnToken, TextMarkupExtensions.Colorize("Burn", burnColor));
-        ReplaceAll(ref desc, poisonToken, TextMarkupExtensions.Colorize("Poison", posionColor));
-        ReplaceAll(ref desc, healthToken, TextMarkupExtensions.Colorize("Health", healColor));
-        ReplaceAll(ref desc, manaToken, TextMarkupExtensions.Colorize("Mana", manaColor));
-        ReplaceAll(ref desc, cardToken, TextMarkupExtensions.Colorize("Card", cardColor));
+        //ReplaceAll(ref desc, elementalDamageToken, TextMarkupExtensions.Colorize("Elemental Damage", elementalDamageColor));
+        //ReplaceAll(ref desc, physicalDamageToken, TextMarkupExtensions.Colorize("Physical Damage", physicalDamageColor));
+        //ReplaceAll(ref desc, burnToken, TextMarkupExtensions.Colorize("Burn", burnColor));
+        //ReplaceAll(ref desc, poisonToken, TextMarkupExtensions.Colorize("Poison", posionColor));
+        //ReplaceAll(ref desc, healthToken, TextMarkupExtensions.Colorize("Health", healColor));
+        //ReplaceAll(ref desc, manaToken, TextMarkupExtensions.Colorize("Mana", manaColor));
+        //ReplaceAll(ref desc, cardToken, TextMarkupExtensions.Colorize("Card", cardColor));
 
         return desc;
     }
