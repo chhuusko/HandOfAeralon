@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -80}
+  m_AnchoredPosition: {x: 0, y: -72}
   m_SizeDelta: {x: 150, y: 82.508}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &700205199160509891
@@ -250,8 +250,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 300}
+  m_AnchoredPosition: {x: 0, y: 10}
+  m_SizeDelta: {x: 225, y: 340}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5124532466352039416
 CanvasRenderer:
@@ -281,9 +281,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 73eb5c495a614624794810fbb3b84f21, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 199e743a7f840f94a93162018581525a, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -304,10 +304,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fillImage: {fileID: 4386289255600201418}
+  _image: {fileID: 3748387826287029103}
   _aboveText: {fileID: 2063955244635378961}
   _priceText: {fileID: 6839094527117306507}
   CardAmount: 5
   _cost: 100
+  _defaultSprite: {fileID: 21300000, guid: 199e743a7f840f94a93162018581525a, type: 3}
+  _hoverSprite: {fileID: 21300000, guid: 064fc86635b480748a78d840be994c1c, type: 3}
+  _clickSprite: {fileID: 21300000, guid: 979dfd8ea8c34714c917038777f67885, type: 3}
 --- !u!1 &5299762863564351697
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,7 +483,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 300}
+  m_SizeDelta: {x: 225, y: 320}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5540486150599708908
 CanvasRenderer:
