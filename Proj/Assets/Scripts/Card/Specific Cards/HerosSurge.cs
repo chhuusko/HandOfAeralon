@@ -11,6 +11,7 @@ public class HerosSurge : Card
         {
             character.GetStatusEffectManager().AddStatusEffect(new Haste(2));
             character.GetStatusEffectManager().AddStatusEffect(new Empowered(2));
+            character.gameObject.GetComponent<CharacterMovement>().DrawMoveRange();
         }
     }
 }

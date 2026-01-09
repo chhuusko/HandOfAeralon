@@ -17,7 +17,8 @@ MonoBehaviour:
   _range: 6
   _cooldown: 1
   _description: "Play a healing melody, restoring 25% of a target ally\u2019s max
-    {health}, and 10% of each other ally\u2019s max {health} in the area.\\n\\nDraw
+    {health}, and 10% of each other ally\u2019s max {health} in the area.\\n\\nYou
+    do not heal yourself and instead take damage equal to 10% of your maximum health.\\n\\nDraw
     1 {card} if the main target was below 50% {health}.  "
   _abilityTag: 10
   _type: 4
