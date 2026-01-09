@@ -50,4 +50,11 @@ public class TurnOrderRoundMarker : MonoBehaviour
 
         return corners[2].x;
     }
+
+    public float GetLeftSidePosition()
+    {
+        Vector3[] corners = new Vector3[4];
+        GetComponent<RectTransform>().GetWorldCorners(corners);
+        return corners[0].x;
+    }
 }

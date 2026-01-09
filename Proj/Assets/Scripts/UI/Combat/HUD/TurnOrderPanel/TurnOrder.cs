@@ -25,21 +25,27 @@ public class TurnOrder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         Vector3[] viewPortCorners = new Vector3[4];
         _panelViewPort.GetComponent<RectTransform>().GetWorldCorners(viewPortCorners);
         float panelRightSidePos = viewPortCorners[3].x;
+        float panelLeftSidePos = viewPortCorners[0].x;
 
         if (_turnOrderRoundMarker)
         {
             float roundMarkerRightSiderPos = _turnOrderRoundMarker.GetRightSidePosition();
-            if (roundMarkerRightSiderPos > panelRightSidePos)
+            float roundMarkerLeftSiderPos = _turnOrderRoundMarker.GetLeftSidePosition();
+            
+            if (roundMarkerRightSiderPos > panelRightSidePos ||
+                roundMarkerLeftSiderPos < panelLeftSidePos)
                 _turnOrderRoundMarker.SetMaskable(true);
             else
                 _turnOrderRoundMarker.SetMaskable(false);
-
         }
 
         if (_getCardMarker)
         {
             float getCardMarkerRightSiderPos = _getCardMarker.GetRightSidePosition();
-            if (getCardMarkerRightSiderPos > panelRightSidePos)
+            float getCardMarkerLeftSiderPos = _getCardMarker.GetLeftSidePosition();
+            
+            if (getCardMarkerRightSiderPos > panelRightSidePos ||
+                getCardMarkerLeftSiderPos < panelLeftSidePos)
                 _getCardMarker.SetMaskable(true);
             else
                 _getCardMarker.SetMaskable(false);
