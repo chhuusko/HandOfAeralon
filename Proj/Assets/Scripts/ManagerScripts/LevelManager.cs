@@ -4,39 +4,65 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.TextCore.Text;
 [CreateAssetMenu(fileName = "LevelManager", menuName = "Manager/LevelManager")]
 public class LevelManager : ScriptableObject
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-
+    [SerializeField] private List<string> tutorialCombatList;
     [SerializeField] private List<string> easyCombatList;
     [SerializeField] private List<string> mediumCombatList;
     [SerializeField] private List<string> hardCombatList;
 
+    [SerializeField] private int mapScalingInterval = 3;
     private static LevelManager _instance;
     private string[] _combatList;
     private string[] _generatedList;
     private int _level = 0;
-    private int _gameLevels = 10;
+    //private int _gameLevels = 10;
     private int _difficulty = 0;
 
-    [SerializeField] private float statIncrease = 1.2f;
-    [SerializeField] private int turnsTillStatIncrease = 2;
+    private int statlevel;
+    [SerializeField] private float statIncreaseFactor = 1.2f;
+    [SerializeField] public int statIncreaseInterval = 3;
+    public float statIncrease { get; private set; }
 
+    [SerializeField] private float enemyStatIncreaseFactor = 1.2f;
+    [SerializeField] public int enemyStatIncreaseInterval = 1;
+    public float enemyStatIncrease { get; private set; }
+
+    private int menuFPSCap = 60;
     private CombatGrid _combatGrid;
+    private bool _isTutorialCompleted;
+
+    List<string> easyList, mediumList, hardList;
+
     public static LevelManager GetInstance()
     {
         if (_instance == null)
         {
             _instance = Resources.Load<LevelManager>("LevelManager");
+            _instance._level = 0;
+            _instance._isTutorialCompleted = false;
+            _instance.Initialize();
         }
         return _instance;
     }
+    public void Initialize()
+    {
+        _instance._level = 0;
+        _instance._isTutorialCompleted = false;
+        _instance.statIncrease = 1;
+        _instance.enemyStatIncrease = 1;
+
+        // tempfix for non-repeat levels
+        easyList = new List<string>(easyCombatList);
+        mediumList = new List<string>(mediumCombatList);
+        hardList = new List<string>(hardCombatList);
+    }
     private void Awake()
     {
-        //_instance = this;
-        //_combatList = Directory.GetFiles("Assets/JSON BattleGrids").Where(f => !f.EndsWith(".meta")).ToArray(); 
-        //_generatedList = new string[10];
+        
     }
     public void GenerateMap(int seed)
     {
@@ -49,27 +75,143 @@ public class LevelManager : ScriptableObject
     }
     public void StartNextLevel() 
     {
+        TieredRandomLevel();
+    }
+    private void StaticLevel()
+    {
+        
+        Debug.Log(_level + " level");
         if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
         {
-            _difficulty = _level/5;
-            switch (_difficulty)
-            {
-                case 0:
-                    SceneManager.LoadScene(easyCombatList[Random.Range(0, easyCombatList.Count)]);
-                    break;
-                case 1:
-                    SceneManager.LoadScene(easyCombatList[Random.Range(0, mediumCombatList.Count)]);
-                    break;
-                default:
-                    SceneManager.LoadScene(easyCombatList[Random.Range(0, hardCombatList.Count)]);
-                    break;
-            }
+            if (_level >= easyCombatList.Count) _level = 0;
+            SceneManager.LoadScene(easyCombatList[_level]);
             _level++;
 
+            Application.targetFrameRate = -1;
+            QualitySettings.vSyncCount = 1;
         }
         else
         {
             SceneManager.LoadScene("ShopScene");
+            Application.targetFrameRate = menuFPSCap;
+            QualitySettings.vSyncCount = 0;
+        }
+    }
+    public bool IncreaseStat()
+    {
+        if (_level % statIncreaseInterval == 0)
+        {
+            foreach (CharacterData character in GlobalGameManager.GetInstance().GetGameData().heroDataList)
+            {
+                statlevel = _level / statIncreaseInterval;
+                statIncrease = 1 + (statIncreaseFactor * (statlevel));
+
+                /// REMOVE THIS LATER
+                
+                int lostHealth = character.DerivedHealthPoints - character.CurrentHealthPoints;
+                character.CalculateDerivedStats(statIncrease);
+                character.SetCurrentHealthPoints(character.DerivedHealthPoints-lostHealth);
+
+               // Debug.Log("deriveddamage: " + character.DerivedDamage + " base damage: " + character.BaseDamage); 
+               return true;
+            }
+        }
+        return false;
+        /*
+        if (_level % enemyStatIncreaseInterval == 0)
+        {
+            foreach (Character character in CombatGrid._instance.GetCharacterScriptsByFaction(Faction.Enemy))
+            {
+                character.Data.CalculateDerivedStats((statIncrease * (_level / statIncreaseInterval)));
+                // Debug.Log("deriveddamage: " + character.DerivedDamage + " base damage: " + character.BaseDamage); 
+            }
+        }
+        */
+       
+    }
+    public void RestartGame()
+    {
+        SceneManager.LoadScene("MainMenu");
+        Initialize();
+    }
+    private void TieredRandomLevel()
+    {
+        Debug.Log("current level " +  _level);
+        if (SceneManager.GetActiveScene().name == "ShopScene" || SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            
+            
+            //loadCombat
+            if (_isTutorialCompleted)
+            {
+                Application.targetFrameRate = -1;
+                QualitySettings.vSyncCount = 1;
+                _difficulty = (_level / mapScalingInterval)-1;
+                Debug.Log(_difficulty);
+                switch (_difficulty)
+                {
+                    case 0:
+                        LoadScene(easyList);
+                        break;
+                    case 1:
+                        LoadScene(mediumList);
+                        break;
+                    case 2:
+                        LoadScene(hardList);
+                        break;
+                    default:
+                        RestartGame();
+                        break;
+                }
+            }
+            else
+            {
+                TutorialLevel();
+            }
+        }
+        else
+        {
+            if (_level != 0)
+            {
+                IncreaseStat();
+            }
+
+            Application.targetFrameRate = menuFPSCap;
+            QualitySettings.vSyncCount = 0;
+            if (_level+1 > 12)
+            {
+                RestartGame();
+            }
+            else
+            {
+                SceneManager.LoadScene("ShopScene");
+            }
+            
+
+        }
+    }
+    private void LoadScene(List<string> sceneList)
+    {
+        
+        if (sceneList.Count == 0)
+        {
+            RestartGame();
+            return;
+        }
+        int sceneIndex = Random.Range(0, sceneList.Count);
+        Debug.Log(sceneList.Count + "sceneCount" + sceneIndex + "Sceneindex");
+        SceneManager.LoadScene(sceneList[sceneIndex]);
+        sceneList.Remove(sceneList[sceneIndex]);
+        _level++;
+    }
+    private void TutorialLevel()
+    {
+        SceneManager.LoadScene(tutorialCombatList[_level]);
+        
+        _level++;
+        if (_level == tutorialCombatList.Count)
+        {
+            _isTutorialCompleted = true;
         }
     }
     public int Getlevel()
@@ -112,5 +254,9 @@ public class LevelManager : ScriptableObject
             _combatGrid.AddCharacter(combatGrid._characterData[i]);
         }
         return _combatGrid;
+    }
+    public int GetStatLevel()
+    {
+        return statlevel;
     }
 }

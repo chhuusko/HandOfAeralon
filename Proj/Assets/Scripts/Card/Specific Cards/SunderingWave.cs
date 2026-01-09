@@ -13,12 +13,37 @@ public class SunderingWave : Card
             Character character = enemy.GetComponent<Character>();
             if (character.GetStatusEffectManager().ContainsStatusEffect<Slowed>())
             {
-                character.TakeDamage(9);
+                int damage = 60;
+                damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
+                character.TakeDamage(damage);
             } else 
             {
-                character.TakeDamage(6);
+                int damage = 40;
+                damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
+                character.TakeDamage(damage);
             }
             
+        }
+    }
+    public override void ShowDamagePreview()
+    {
+        List<GameObject> enemies = CombatGrid._instance.GetAllEnemyCharacters();
+        foreach (GameObject enemy in enemies)
+        {
+            Character character = enemy.GetComponent<Character>();
+            if (character.GetStatusEffectManager().ContainsStatusEffect<Slowed>())
+            {
+                int damage = 60;
+                damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
+                character.PreviewHealthChange(-damage);
+            }
+            else
+            {
+                int damage = 40;
+                damage = Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
+                character.PreviewHealthChange(-damage);
+            }
+
         }
     }
 }

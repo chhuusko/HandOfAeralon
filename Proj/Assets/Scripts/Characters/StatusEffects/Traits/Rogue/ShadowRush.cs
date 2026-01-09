@@ -2,35 +2,41 @@ using UnityEngine;
 
 public class ShadowRush : Trait
 {
-    public override void OnStatusEffectApplied(Character caster, StatusEffect statusEffect)
+    public override bool BeforeStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
+    {
+        if (target != Character)
+        {
+            return true;
+        }
+        
+        if (statusEffect is not Stealth)
+        {
+            return true;
+        }
+
+        AddBuffs();
+        return true;
+    }
+
+    public override void OnStatusEffectRemovedFromThis(StatusEffect statusEffect)
     {
         if (statusEffect is not Stealth)
         {
             return;
         }
         
-        AddHaste();
+        AddBuffs();
     }
-
-    public override void OnStatusEffectRemoved(StatusEffect statusEffect)
-    {
-        if (statusEffect is not Stealth)
-        {
-            return;
-        }
-        
-        AddHaste();
-    }
-
-    private void AddHaste()
+    
+    private void AddBuffs()
     {
         var data = Data as IntModifierData;
-
         if (!data)
         {
             return;
         }
-        
+
         Manager.AddStatusEffect(new Haste(data.Modifier));
+        Manager.AddStatusEffect(new Empowered(data.Modifier));
     }
 }

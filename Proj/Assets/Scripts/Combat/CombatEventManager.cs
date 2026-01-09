@@ -14,7 +14,7 @@ public static class CombatEventManager
     public static event Action OnEnterCombatStateIntroCinematic;
     public static event Action OnEnterCombatStatePlaceCharacter;
     public static event Action<Character> OnEnterCombatStateTakeTurn;
-    public static event Action OnEnterCombatStateEndTurn;
+    public static event Action<Character> OnEnterCombatStateEndTurn;
     public static event Action<bool> OnEnterCombatStateEndCombat;
 
     // Exit Combat States
@@ -25,19 +25,29 @@ public static class CombatEventManager
     public static event Action OnExitCombatStateEndTurn;
     public static event Action<bool> OnExitCombatStateEndCombat;
 
-    public static event Action<IReadOnlyList<Character>> OnTurnOrderChanged;
+    public static event Action<bool> OnIsHoveringUI;
 
+    public static event Action<IReadOnlyList<Character>, int> OnTurnOrderChanged;
+
+    public static event Action<int> OnRoundFinished;
+
+    public static event Action<Character> OnCharacterSpawned;
     public static event Action<Character> OnCharacterDeath;
+    public static event Action OnCharacterInitiativeChanged;
+
+    public static event Action OnCharacterPlaced;
 
     public static event Action<AbilityExecutionData> OnAbilityDataCreated;
 
     public static event Action OnAbilityCast;
     
-    public static event Action<bool> OnCharacterMove;
+    public static event Action<Character, bool> OnCharacterMove;
 
+    // Status effects.
     public static event Action<Character, Character, StatusEffect> OnStatusEffectAppliedToCharacter;
     public static event Action<Character, StatusEffect> OnStatusEffectExpiredOnCharacter;
     public static event Action<Character, StatusEffect> OnStatusEffectDurationChanged;
+    public static event Action<Character, StatusEffect, int> OnStatusEffectDamageDealt;
 
     public static void InvokeCombatStateChanged(CombatState newState)
         => OnCombatStateChange?.Invoke(newState);
@@ -57,8 +67,8 @@ public static class CombatEventManager
     public static void InvokeEnterCombatStateTakeTurn(Character activeCharacter)
         => OnEnterCombatStateTakeTurn?.Invoke(activeCharacter);
 
-    public static void InvokeEnterCombatStateEndTurn()
-        => OnEnterCombatStateEndTurn?.Invoke();
+    public static void InvokeEnterCombatStateEndTurn(Character activeCharacter)
+        => OnEnterCombatStateEndTurn?.Invoke(activeCharacter);
     public static void InvokeEnterCombatStateEndCombat(bool playerWon)
         => OnEnterCombatStateEndCombat?.Invoke(playerWon);
 
@@ -79,20 +89,35 @@ public static class CombatEventManager
     public static void InvokeExitCombatStateEndCombat(bool playerWon)
         => OnExitCombatStateEndCombat?.Invoke(playerWon);
 
+    public static void InvokeOnIsHoveringUI(bool mouseIsHoveringUI)
+        => OnIsHoveringUI?.Invoke(mouseIsHoveringUI);
+
     public static void InvokeOnCharacterDeath(Character character)
         => OnCharacterDeath?.Invoke(character);
+    
+    public static void InvokeOnCharacterSpawned(Character character) 
+        => OnCharacterSpawned?.Invoke(character);
 
-    public static void InvokeOnTurnOrderChanged(IReadOnlyList<Character> characterTurnOrder)
-        => OnTurnOrderChanged?.Invoke(characterTurnOrder);
+    public static void InvokeOnCharacterInitiativeChanged()
+       => OnCharacterInitiativeChanged?.Invoke();
+    
+    public static void InvokeOnTurnOrderChanged(IReadOnlyList<Character> characterTurnOrder, int currentRound)
+        => OnTurnOrderChanged?.Invoke(characterTurnOrder, currentRound);
 
+    public static void InvokeOnRoundFinished(int currentRound)
+        => OnRoundFinished?.Invoke(currentRound);
+
+    public static void InvokeOnCharacterPlaced() 
+        => OnCharacterPlaced?.Invoke();
+    
     public static void InvokeOnAbilityDataCreated(AbilityExecutionData result)
        => OnAbilityDataCreated?.Invoke(result);
 
     public static void InvokeOnAbilityCast()
        => OnAbilityCast?.Invoke();
     
-    public static void InvokeOnCharacterMove(bool isMoving)
-        => OnCharacterMove?.Invoke(isMoving);
+    public static void InvokeOnCharacterMove(Character character, bool isMoving)
+        => OnCharacterMove?.Invoke(character, isMoving);
 
     public static void InvokeOnStatusEffectAppliedToCharacter(Character caster, Character target, StatusEffect statusEffect)
         => OnStatusEffectAppliedToCharacter?.Invoke(caster, target, statusEffect);
@@ -103,4 +128,6 @@ public static class CombatEventManager
     public static void InvokeOnStatusEffectDurationChanged(Character character, StatusEffect statusEffect)
     => OnStatusEffectDurationChanged?.Invoke(character, statusEffect);
 
+    public static void InvokeOnStatusEffectDamageDealt(Character character, StatusEffect statusEffect, int damage) 
+    => OnStatusEffectDamageDealt?.Invoke(character, statusEffect, damage);
 }

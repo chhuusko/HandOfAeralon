@@ -16,25 +16,37 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 2daeff1426025cf4eb6d075fb79f5fbd, type: 3}
   _range: 0
   _cooldown: 2
-  _description: "Slash around you, dealing (90% \xD7 Damage) Physical damage to adjacent
-    characters. Every character hit has a 70% chance to gain 3 stacks of Poison.
-    Gain 1 Mana if at least two enemies become Poisoned."
+  _description: "Spin and slash with your blades, dealing {damage} (<b>90%</b> \xD7
+    Damage) {physical_damage}Physical damage{/physical_damage} to ALL adjacent characters.\\n\\nEvery
+    character hit has a <b>70%</b> chance to gain <b>3</b> stacks of <link=\"Poison\">{poison}<u>Poison</u>{/poison}</link>.\\n\\nGain
+    <b>1</b> {mana}Mana{/mana} if at least two enemies become <link=\"Poison\">{poison}<u>Poisoned</u>{/poison}</link>."
   _abilityTag: 9
-  _type: 0
+  _type: 1
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
   _targetType: 2
-  _castingEffect: {fileID: 0}
-  _hitEffect: {fileID: 0}
+  _abilityVFXSequence: {fileID: 11400000, guid: a8929ade6f85404408a6f34642becaf8,
+    type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0.5
-  _fromCastToHitTime: 0
+  _castingAnimationTime: 0.71
+  _castingFXTime: 0
+  _fromCastToHitTime: 0.2
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
-  _pattern: {fileID: 11400000, guid: d5355e064e976a940a41fc2ec9e2eef7, type: 2}
+  <AudioEvent>k__BackingField:
+    Guid:
+      Data1: 1457391258
+      Data2: 1107950545
+      Data3: -730765923
+      Data4: -1565707224
+    Path: event:/Sound Design/Diegetic/Characters/Rouge/abilities/desertsgrasp
+  _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
   _validTargets: 2
-  _radius: 1
-  _damageMultiplier: 0.9
+  _abilityAOEVFXSequence: {fileID: 11400000, guid: 657e2ba37fe87414eb6902e15a0d5463,
+    type: 2}
+  _radius: 2
+  _damageMultiplier: 1
   _chanceToApplyPoison: 0.7
   _poisonStacks: 3
   _manaGain: 1
-  _enemiesPoisonedTilBonus: 3
+  _enemiesPoisonedTilBonus: 2

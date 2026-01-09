@@ -8,6 +8,11 @@ public class CombatStateEndCombat : CombatStateBase
     public CombatStateEndCombat(bool playerWon)
     {
         _playerWon = playerWon;
+
+        if (_playerWon)
+        {
+            GlobalGameManager.GetInstance().IncrementTotalBattlesWon();
+        }
     }
 
     public override void Enter()
@@ -15,6 +20,7 @@ public class CombatStateEndCombat : CombatStateBase
         base.Enter();
         CombatEventManager.InvokeEnterCombatStateEndCombat(_playerWon);
         CombatMenuManager.GetInstance().OnGoToShopButtonPressed += OnGoToShop;
+        CombatMenuManager.GetInstance().OnGoToMainMenuPressed   += OnGoToMainMenu;
     }
 
     public override void Exit()
@@ -31,5 +37,10 @@ public class CombatStateEndCombat : CombatStateBase
     private void OnGoToShop()
     {
         CombatEventManager.InvokeExitCombatStateEndCombat(_playerWon);
+    }
+
+    private void OnGoToMainMenu()
+    {
+        CombatEventManager.InvokeExitCombatStateEndCombat(false);
     }
 }

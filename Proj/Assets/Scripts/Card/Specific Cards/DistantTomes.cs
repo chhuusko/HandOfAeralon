@@ -8,7 +8,12 @@ public class DistantTomes : Card
     {
         if (character != null)
         {
-            character.TakeDamage(CardHandManager.GetInstance().GetDeck().Count);
+            character.TakeDamage(GetDamage(character));
         }
+    }
+    public override int GetDamage(Character character)
+    {
+        int damage = CardHandManager.GetInstance().GetDeck().Count* 3;
+        return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
     }
 }

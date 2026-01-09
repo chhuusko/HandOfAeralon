@@ -4,7 +4,7 @@ public class SlowedCasting : Trait
 {
     private bool _effectApplied;
 
-    public override void OnCombatStarted()
+    public override void ResetCombatState()
     {
         _effectApplied = false;
     }
@@ -25,6 +25,10 @@ public class SlowedCasting : Trait
         
         _effectApplied = true;
         var ability = abilityData.Ability;
-        ability.SetCooldown(ability.GetCooldown() + data.Modifier);
+        
+        if (Character.IsAbilityCooldownActive(ability))
+        {
+            Character.ChangeCooldown(ability, data.Modifier);
+        }
     }
 }

@@ -13,17 +13,78 @@ MonoBehaviour:
   m_Name: Bard
   m_EditorClassIdentifier: 
   characterClass: 3
-  minHealthPoints: 24
-  maxHealthPoints: 26
-  minDamage: 4
-  maxDamage: 5
+  minHealthPoints: 120
+  maxHealthPoints: 130
+  minDamage: 20
+  maxDamage: 25
   minInitiative: 7
   maxInitiative: 8
   minMovementPoints: 4
   maxMovementPoints: 4
   abilities:
-  - {fileID: 11400000, guid: d31f33e9fc2a8934592f3023863b20a2, type: 2}
   - {fileID: 11400000, guid: ae3a3b1c967a3fe49bb022202ac983e2, type: 2}
+  - {fileID: 11400000, guid: b09713f488ff7b44299df5cd25f98284, type: 2}
+  - {fileID: 11400000, guid: d31f33e9fc2a8934592f3023863b20a2, type: 2}
   - {fileID: 11400000, guid: d505afd4bcc9dbc449682fb6e3045943, type: 2}
-  - {fileID: 11400000, guid: e6e7bcaf45743c64fa0f379c5a0bca21, type: 2}
-  classImage: {fileID: 21300000, guid: f10146a9848305f4aa24e41d01b25893, type: 3}
+  availableNames:
+  - Elowen
+  - Lyra
+  - Sera
+  - Mirelle
+  - Caelis
+  - Nyssa
+  - Aveline
+  - Iria
+  - Thalia
+  - Vesryn
+  - Luneth
+  - Maribel
+  - Erisyne
+  - Kailen
+  - Sorelle
+  - Feyra
+  - Aria
+  - Nimue
+  - Ysolde
+  - Bellayne
+  - Elira
+  - Vaelis
+  - Corinne
+  - Liorael
+  - Selwyn
+  - Amaryth
+  - Isolde
+  - Rennaya
+  - Faelan
+  - Mireth
+  - Alouen
+  - Caelwyn
+  - Thiriel
+  - Ondine
+  - Roselyn
+  - Evelisse
+  - Naerith
+  - Bellis
+  - Yvaine
+  - Solenne
+  - Ariellea
+  - Lyrienne
+  - Calestine
+  - Seraphae
+  - Eloria
+  - Maerine
+  - Taviela
+  - Isariel
+  - Vaeloria
+  - Oribelle
+  - Fenellae
+  - Raveline
+  - Celissae
+  - Harmonia
+  - Althaea
+  - Mirayel
+  - Sylenia
+  - Elarielle
+  - Sonette
+  - Lunaria
+  classImage: {fileID: 21300000, guid: ac7854c08bf71c240860245a7cc52c5a, type: 3}

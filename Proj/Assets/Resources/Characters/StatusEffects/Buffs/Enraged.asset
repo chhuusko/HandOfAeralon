@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Enraged
   Icon: {fileID: 21300000, guid: d56f6d3f1cf06d446b6462d01314ff2c, type: 3}
-  Description: Character deals 100% more damage
+  Description: Character deals <b>75%</b> more damage
   Type: 0
   IsPermanent: 0
-  Script: {fileID: 11500000, guid: 1c36362087c7e82449623b8bd30011d7, type: 3}
+  IsDispellable: 1
+  SkipFirstTick: 1
+  _typeName: Enraged, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
-  DamageModifier: 2
+  DamageModifierPercent: 75

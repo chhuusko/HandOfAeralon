@@ -6,6 +6,8 @@ public abstract class AOEAbility : Ability
     [Header("- Type Specific values - ")]
     [SerializeField] protected AOEPattern _pattern;
     [SerializeField] protected ValidTargets _validTargets;
+    [SerializeField] protected AbilityVFXSequence _abilityAOEVFXSequence;
+
     public enum ValidTargets
     {
         Any,
@@ -31,9 +33,42 @@ public abstract class AOEAbility : Ability
             }
         }
     }
-    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile tile)
+
+    public override void PreviewAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
     {
-        return _pattern.CalculateTilesToEffect(tile);
+        // Calculate all tiles around with in radius and apply effect to all of them.
+        List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
+
+        foreach (CombatGridTile tile in tilesToEffect)
+        {
+            if (tile != null)
+            {
+                // Don't apply effect on tiles with invalid targets.
+                if (!IsValidTargetForAbility(casterTile, tile)) continue;
+
+                PreviewEffectOnTile(casterTile, tile);
+                var character = tile.GetOccupantCharacter();
+                if (character == null) continue;
+                character.ShowPreviewVFX();
+                GetAbilityHandler().AddPreviewedCharacter(character);
+            }
+        }
+    }
+
+    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
+    {
+        if (targetTile == null)
+            return null;
+
+        // Get caster
+        Character caster = GetAbilityHandler().GetCharacterCaster();
+        if (caster == null) return null;
+
+        // Check if target tile is in range.
+        bool inRange = caster.GetAbilityHandler().GetTilesInRange().Contains(targetTile);
+        if (!inRange) return null;
+
+        return _pattern.CalculateTilesToEffect(targetTile);
     }
 
     /// <summary>

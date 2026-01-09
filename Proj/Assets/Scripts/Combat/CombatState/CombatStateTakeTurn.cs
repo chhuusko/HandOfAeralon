@@ -18,30 +18,36 @@ public class CombatStateTakeTurn : CombatStateBase
     {
         base.Enter();
 
-        // TODO (Calle): Should AIEndTurn be in CombatEventManager, and/or should it be a event Action instead of UnityEvent?
         EnemyAI enemyAI = CombatManager._instance.GetEnemyAI();
-        if(enemyAI)
+        if (enemyAI)
         {
             enemyAI.AIEndTurn.AddListener(EndTurn);
         }
-        
-        
-        CombatTurnOrder combatTurnOrder = CombatManager._instance.GetCombatTurnOrder();
 
-        combatTurnOrder.UpdateCharacterTurnOrder();
+
+        CombatTurnOrder combatTurnOrder = CombatManager._instance.GetCombatTurnOrder();
+        
+        //NOTE (Calle): We only update and brodcast turntype event changed first turn, since it's update in EndTurn state afterwards.
+        if(combatTurnOrder.IsFirstRound())
+            combatTurnOrder.UpdateCurrentTurnType();
+
         Character activeCharacter = combatTurnOrder.GetActiveCharacter();
+
+        activeCharacter.CanMove = true;
         
         //NOTE (Calle): Only make it possible to press "End Turn" button if its a hero
         if(activeCharacter.GetFaction() == Faction.Friendly)
+        {
             CombatUI.Instance.OnEndTurnButtonPressed += EndTurn;
+            CombatEventManager.OnCharacterDeath += EndTurnOnActiveCharacterDeath;
+        }
 
+        
         switch (activeCharacter.GetFaction())
         {
             case Faction.Friendly:
-                {
+                { 
                     CardHandManager.GetInstance().ChangeMana(1);
-                    
-                    
                     CombatManager._instance.SetSelectorOverHeadColor(Color.green);
                 }
                 break;
@@ -52,6 +58,7 @@ public class CombatStateTakeTurn : CombatStateBase
                 break;
         }
 
+        //NOTE (Calle): If character is standing still on a debuff-tile, apply corresponding status effect.
         switch (activeCharacter.GetCurrentTileComponent().GetTileType())
         {
             case TileType.Poison:
@@ -83,29 +90,30 @@ public class CombatStateTakeTurn : CombatStateBase
         CombatEventManager.InvokeExitCombatStateTakeTurn();
 
         if (CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() == Faction.Friendly)
+        {
             CombatUI.Instance.OnEndTurnButtonPressed -= EndTurn;
+            CombatEventManager.OnCharacterDeath -= EndTurnOnActiveCharacterDeath;
+            Selector._instance.DeselectCharacter();
+        }
 
         CombatManager._instance.GetEnemyAI().AIEndTurn.RemoveListener(EndTurn);
     }
 
     public override void Update()
     {
-        switch (CombatManager._instance.GetCombatTurnOrder().GetCurrentTurn())
-        {
-            case CombatTurn.PlayerTurn:
-                HandlePlayerTurn();
-                break;
-            case CombatTurn.EnemyTurn:
-                HandleEnemyTurn();
-                break;
-        }
-
         HandleWinCondition();
     }
 
     private void EndTurn()
     {
+        //Debug.LogError("SOMEONE ENDED A TURN!");
         CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
+    }
+
+    private void EndTurnOnActiveCharacterDeath(Character deadCharacter)
+    {
+        if(deadCharacter == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter())
+            CombatManager._instance.ChangeCombatState(new CombatStateEndTurn());
     }
 
     private void HandleWinCondition()
@@ -122,35 +130,4 @@ public class CombatStateTakeTurn : CombatStateBase
         }
     }
 
-    private void HandlePlayerTurn()
-    {
-        // TODO (Calle): 
-        //  Vid starten av varje hero karakt�rs turn sker dessa saker: 
-        //  - Spelarens mana �kar med 1 -> I CardHandManager()
-        //  - Hero karakt�rens ability cooldowns minskar med 1 -> WIP (MG/JOPPA)
-        //  - Spelarens "cooldown" / timer f�r att dra ett till kort minskar med 1 -> WIP 
-
-        // TODO: Call selector with character.
-
-        //TurnStart.Invoke(); // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandleEnemyTurn() för att AI ska kunna spela båda factions.
-        switch (_currentPlayerTurnMode)
-        {
-            case PlayerTurnMode.CharacterMode:
-                break;
-            case PlayerTurnMode.CardMode:
-                break;
-        }
-    }
-
-    bool enemyDoingStuff = false;
-    private void HandleEnemyTurn()
-    {
-        if (!enemyDoingStuff)
-        {
-            enemyDoingStuff = true;
-             // Säger till AI att en ny tur börjat, Eventet broadcastas både här och i HandlePlayerTurn() för att AI ska kunna spela båda factions.
-            //_activeCharacter = null;
-            //UpdateCombatState(CombatState.EndTurn);
-        }
-    }
 }

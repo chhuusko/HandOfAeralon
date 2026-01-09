@@ -16,23 +16,27 @@ public struct GameData
 
     // misc
     public int reapersLedgerKills;
-
-
+    public int totalEnemiesKilled;
+    public int totalHeroesLost;
+    public int totalBattlesWon;
 }
+
 [CreateAssetMenu(fileName = "GlobalGameManager", menuName = "Manager/GlobalGameManager")]
 public class GlobalGameManager : ScriptableObject
 {
     [SerializeField] private DeckPreset _deckPreset;
     [SerializeField] private CharacterPrefabLibrary _characterLibrary;
     [SerializeField] private ClassDatabase _classDatabase;
-    [SerializeField] private float _classTraitChance;
+    [SerializeField, Range(0, 100)] private float classTraitChancePercent;
     private static GlobalGameManager _instance;
     private GameData _currentGame;
-
+    [SerializeField] private int startCoins = 100;
     [SerializeField] private int baseCoinReward = 200;
     [SerializeField] private int CoinRewardIncreasePerLevel = 50;
 
-    public float ClassTraitChance => _classTraitChance;
+
+    [SerializeField] private bool startWithFullParty;
+    public float ClassTraitChancePercent => classTraitChancePercent;
     public static GlobalGameManager GetInstance()
     {
         if (_instance == null)
@@ -44,20 +48,30 @@ public class GlobalGameManager : ScriptableObject
     private void OnEnable()
     {
         CombatEventManager.OnCharacterDeath += RemoveCharacter;
-        CombatEventManager.OnExitCombatStateEndCombat += GetCombatCoins;
     }
     private void OnDisable()
     {
         CombatEventManager.OnCharacterDeath -= RemoveCharacter;
-        CombatEventManager.OnExitCombatStateEndCombat -= GetCombatCoins;
     }
-    private void GetCombatCoins(bool playerWon)
+    public int GetCombatCoins()
     {
-        _currentGame.coins += (baseCoinReward+(CoinRewardIncreasePerLevel*LevelManager.GetInstance().Getlevel()));
+        int level = LevelManager.GetInstance().Getlevel();
+
+        int increaseSteps = level / 3;
+
+        int combatCoins = baseCoinReward + (CoinRewardIncreasePerLevel * increaseSteps);
+        _currentGame.coins += combatCoins;
+
+        return combatCoins;
     }
 
     private void RemoveCharacter(Character obj)
     {
+        if(obj.GetFaction() == Faction.Enemy)
+            _currentGame.totalEnemiesKilled++;
+        else if (obj.GetFaction() == Faction.Friendly)
+            _currentGame.totalHeroesLost++;
+
         Dictionary<CharacterData, Character> dict = CombatManager._instance.GetCharacterDataDict();
         foreach (var pair in dict)
         {
@@ -77,6 +91,13 @@ public class GlobalGameManager : ScriptableObject
         }
         return _currentGame;
     }
+
+    public int GetTotalEnemiesKilled() { return _currentGame.totalEnemiesKilled; }
+    public int GetTotalHeroesLost() { return _currentGame.totalHeroesLost; }
+    public int GetTotalBattlesWon() { return _currentGame.totalBattlesWon; }
+    public void SetTotalBattlesWon(int battlesWon) { _currentGame.totalBattlesWon = battlesWon; }
+    public void IncrementTotalBattlesWon() { _currentGame.totalBattlesWon++; }
+    
     public void LoadGame(int slot)
     {
         //TODO
@@ -93,7 +114,7 @@ public class GlobalGameManager : ScriptableObject
     public void StartNewGame(int slot)
     {
         GetTemp();
-        SceneManager.LoadScene("Graveyard12x10_Easy"); //TODO
+        LevelManager.GetInstance().StartNextLevel();
     }
     public void JSONWrite()
     {
@@ -108,24 +129,32 @@ public class GlobalGameManager : ScriptableObject
         _currentGame.saveSlot = 1;
         _currentGame.seed = 67;
         LevelManager.GetInstance().GenerateMap(_currentGame.seed);
-        
-        _currentGame.heroList = new List<Character>
+        if (startWithFullParty)
         {
-            _characterLibrary.GetPrefab(CharacterClass.Barbarian).GetComponent<Character>(),
-            _characterLibrary.GetPrefab(CharacterClass.Sorceress).GetComponent<Character>(),
-            _characterLibrary.GetPrefab(CharacterClass.Rogue).GetComponent<Character>(),
-            _characterLibrary.GetPrefab(CharacterClass.Bard).GetComponent<Character>()
-        };
-        _currentGame.heroDataList = new List<CharacterData>(){
-            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Barbarian], Faction.Friendly, true),
-            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Rogue], Faction.Friendly, true),
-            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Bard], Faction.Friendly, true),
-            new CharacterData(_classDatabase.Classes[(int)CharacterClass.Sorceress], Faction.Friendly, true)
-        };
-
+            _currentGame.heroDataList = new List<CharacterData>(){
+                new CharacterData(_classDatabase.Classes[(int)CharacterClass.Barbarian], Faction.Friendly, true),
+                new CharacterData(_classDatabase.Classes[(int)CharacterClass.Rogue], Faction.Friendly, true),
+                new CharacterData(_classDatabase.Classes[(int)CharacterClass.Bard], Faction.Friendly, true),
+                new CharacterData(_classDatabase.Classes[(int)CharacterClass.Sorceress], Faction.Friendly, true)
+            };
+        }
+        else 
+        {
+            _currentGame.heroDataList = new List<CharacterData>(){
+                new CharacterData(_classDatabase.Classes[(int)CharacterClass.Barbarian], Faction.Friendly, true)
+            };
+        }
+        
+        HashSet<string> usedNames = new HashSet<string>();
+        foreach (var character in _currentGame.heroDataList)
+        {
+            string name = CharacterNameGenerator.GenerateName(character.ClassData, usedNames);
+            usedNames.Add(name);
+            character.SetName(name);
+        }
+        
         _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
-        DebugLog.AlexLog($"_currentGame.cardList.Count");
-        _currentGame.coins = 100;
+        _currentGame.coins = startCoins;
         _currentGame.reapersLedgerKills = 0;
     }
     public void SaveCards(List<Card> cards)

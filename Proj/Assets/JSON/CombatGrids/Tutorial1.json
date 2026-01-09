@@ -26,7 +26,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 2,
             "_tileIndex": {
                 "x": 1,
                 "y": 0
@@ -41,10 +41,10 @@
                 "y": 0.009999999776482582,
                 "z": 2.0
             },
-            "_bWalkable": true
+            "_bWalkable": false
         },
         {
-            "_tileType": 2,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 2,
                 "y": 0
@@ -59,7 +59,7 @@
                 "y": 0.009999999776482582,
                 "z": 2.0
             },
-            "_bWalkable": false
+            "_bWalkable": true
         },
         {
             "_tileType": 1,
@@ -224,7 +224,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 2,
             "_tileIndex": {
                 "x": 2,
                 "y": 2
@@ -239,10 +239,10 @@
                 "y": 0.009999999776482582,
                 "z": 2.0
             },
-            "_bWalkable": true
+            "_bWalkable": false
         },
         {
-            "_tileType": 2,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 3,
                 "y": 2
@@ -257,7 +257,7 @@
                 "y": 0.009999999776482582,
                 "z": 2.0
             },
-            "_bWalkable": false
+            "_bWalkable": true
         },
         {
             "_tileType": 1,
@@ -373,7 +373,7 @@
             "_characterClass": 0,
             "_faction": 1,
             "_position": {
-                "x": 9.0,
+                "x": 7.0,
                 "y": 0.0,
                 "z": 3.0
             },
@@ -388,16 +388,16 @@
                 "z": 0.0,
                 "w": 0.7071068286895752
             },
-            "_baseHealthPoints": 36,
-            "_baseSpeed": 5,
-            "_baseDamage": 7,
+            "_baseHealthPoints": 180,
+            "_baseSpeed": 4,
+            "_baseDamage": 40,
             "_baseMovementPoints": 4,
-            "_currentHealthPoints": 36,
-            "_currentSpeed": 5,
+            "_currentHealthPoints": 80,
+            "_currentSpeed": 4,
             "_currentDamage": 7,
             "_currentMovementPoints": 4,
             "_currentTileIndex": {
-                "x": 4,
+                "x": 3,
                 "y": 1
             }
         }

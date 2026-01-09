@@ -1,16 +1,18 @@
+// Joel Larsson Wendt || jola6902
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SocialPlatforms.Impl;
-using static UnityEditor.PlayerSettings;
 
 public class EnemyAI : MonoBehaviour
 {
-    public const int TOP_N_ACTIONS = 3;
+    private const int TOP_N_ACTIONS = 2;
+    private const float TURN_START_WAIT_TIME = 1f;
+    private const float TURN_END_WAIT_TIME = 2.5f;
 
-    private struct AIAction
+    private class AIAction
     {
         public CombatGridTile movement;
         public Ability ability;
@@ -19,21 +21,11 @@ public class EnemyAI : MonoBehaviour
 
     public UnityEvent AIEndTurn;
 
-    [SerializeField] private ClassData _barbData, _rogueData, _sorcData, _bardData;
     [SerializeField] private Faction _controlledFaction = Faction.Enemy;
-
-    private Character _currentCharacter = null;
-    private GameObject _currentTile = null;
-
-    private CharacterClass _currentClass = CharacterClass.None;
-    private AbilityHandler _currentAbilityHandler = null;
-    private List<Ability> _currentAbilities = new();
-
-    private int _currentMoveRange = 0;
-    private List<CombatGridTile> _movePath = new();
-
-    private Dictionary<AIAction, int> _scoredActions = new();
-    private AIAction _chosenAction = new();
+    [SerializeField] private DirectedAOEPattern _linePattern, _flamePattern, _housePattern, _trisquarePattern;
+    private Character _character = null;
+    private List<Character> _allies = new();
+    private List<Character> _enemies = new();
 
     private void OnEnable()
     {
@@ -53,186 +45,23 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private bool TurnStartedProperly() // Caching and null checks
+    private bool TurnStartedProperly()
     {
-        _currentCharacter = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
-        if (_currentCharacter == null || _currentCharacter.GetFaction() != _controlledFaction)
+        _character = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
+        if (_character == null || _character.GetFaction() != _controlledFaction)
         {
             return false;
         }
-
-        _currentTile = _currentCharacter.GetCurrentTileComponent().gameObject;
-        if (_currentTile == null)
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | _currentTile NOT FOUND!");
-            return false;
-        }
-
-        _currentClass = _currentCharacter.GetCharacterClass();
-        if (_currentClass == CharacterClass.None)
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | _currentClass NOT FOUND!");
-            return false;
-        }
-
-        _currentAbilityHandler = _currentCharacter.GetAbilityHandler();
-        if (_currentAbilityHandler == null)
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | _currentAbilityHandler NOT FOUND!");
-            return false;
-        }
-
-        switch (_currentClass)
-        {
-            case CharacterClass.Barbarian: _currentAbilities = _barbData.abilities; break;
-            case CharacterClass.Bard: _currentAbilities = _bardData.abilities; break;
-            case CharacterClass.Rogue: _currentAbilities = _rogueData.abilities; break;
-            case CharacterClass.Sorceress: _currentAbilities = _sorcData.abilities; break;
-        }
-        if (_currentAbilities == null || !_currentAbilities.Any())
-        {
-            DebugLog.JLWLog($"EnemyAI.cs | _currentAbilities NOT FOUND!");
-            return false;
-        }
-
-        _currentMoveRange = _currentCharacter.GetMovementPoints();
-
-        return true;
-    }
-
-    private void Run()
-    {
-        List<CombatGridTile> moveRange = new();
-        List<CombatGridTile> canReach = new();
-        if (_currentCharacter.CanMove && _currentMoveRange > 0)
-        {
-            moveRange = GridExplorer._instance.GetTilesInRange(_currentTile, _currentMoveRange, true)
-                .Select(obj => obj.GetComponent<CombatGridTile>())
-                .Where(ch => ch != null)
-                .ToList();
-        }
-        else
-        {
-            moveRange.Add(_currentTile.GetComponent<CombatGridTile>());
-        }
-
-        foreach (var tile in moveRange)
-        {
-            List<GameObject> pathSample = GridExplorer._instance.FindPathAStar(_currentTile.gameObject, tile.gameObject, false);
-
-            if (pathSample != null && pathSample.Count > 0)
-            {
-                canReach.Add(tile);
-            }
-        }
-
-        foreach (var pos in canReach)
-        {
-            AIAction move = new AIAction { movement = pos };
-            int score = 0;
-
-            Character closestOpponent = FindClosestOpponent(_currentCharacter);
-            int distance = GridExplorer._instance.ManhattanDistance(pos.GetTileIndex(), closestOpponent.GetCurrentTileIndex());
-            switch (_currentClass)
-            {
-                case CharacterClass.Barbarian: score -= distance; break;
-                case CharacterClass.Bard: score += distance; break;
-                case CharacterClass.Rogue: score -= distance; break;
-                case CharacterClass.Sorceress: score += distance; break;
-            }
-
-            _scoredActions[move] = score;
-
-            if (_currentAbilities == null || !_currentAbilities.Any())
-            {
-                Debug.LogError($"{_currentCharacter.name} has no abilities!");
-                continue;
-            }
-
-            foreach (var ability in _currentAbilities)
-            {
-                if (ability == null) continue;
-
-                _currentAbilityHandler.SetPendingAbility(ability);
-                _currentAbilityHandler.CalculateAbilityRange(pos);
-                List<CombatGridTile> abilityRange = _currentAbilityHandler.GetTilesInRange();
-
-                foreach (var tile in abilityRange)
-                {
-                    AIAction action = new AIAction { movement = pos, ability = ability, target = tile };
-                    int newScore = score;
-
-                    Character occupant = tile.GetOccupantCharacter();
-
-                    if (occupant != null && occupant.GetFaction() != _controlledFaction)
-                    {
-                        newScore += 10;
-                        _scoredActions[action] = newScore;
-                    }
-
-                    if (occupant != null && _currentCharacter.GetCharacterClass() == CharacterClass.Bard && occupant.GetFaction() == _controlledFaction && occupant != _currentCharacter)
-                    {
-                        newScore += 10;
-
-                        if (ability.name == "SongOfRenewal_Ability")
-                        {
-                            if (occupant.GetCurrentHealth() != occupant.GetMaxHealth())
-                            {
-                                newScore += 999;
-                            } 
-                            else
-                            {
-                                newScore -= 10;
-                            }
-                            
-                        }
-
-                        _scoredActions[action] = newScore;
-                    }
-
-                    // Get ability area of effect
-                    // Check if any damage or healing is done and add score
-                }
-            }
-        }
-
-        /*
-        foreach (var entry in _scoredActions)
-        {
-            PrintAIAction(entry.Key);
-        }
-        */
-
-        var topActions = _scoredActions
-            .OrderByDescending(x => x.Value)
-            .Take(TOP_N_ACTIONS)
-            .ToList();
-
-        _chosenAction = topActions[Random.Range(0, topActions.Count)].Key;
-
-        PrintAIAction(_chosenAction);
-
-        if (_currentCharacter.CanMove)
-        {
-            _movePath = GridExplorer._instance.FindPathAStar(_currentTile, _chosenAction.movement.gameObject, false)
-                .Select(obj => obj.GetComponent<CombatGridTile>())
-                .Where(ch => ch != null)
-                .ToList();
-
-            _currentCharacter.GetComponent<CharacterMovement>().ForceCustomPath(_movePath);
-        }
-
-        StartCoroutine(WaitForMovement());
-    }
-
-    private Character FindClosestOpponent(Character currentCharacter)
-    {
-        Character result = null;
-        List<Character> opponentCharacters = new();
 
         if (_controlledFaction == Faction.Enemy)
         {
-            opponentCharacters = CombatGrid
+            _allies = CombatGrid
+                ._instance.GetAllEnemyCharacters()
+                .Select(obj => obj.GetComponent<Character>())
+                .Where(ch => ch != null)
+                .ToList();
+
+            _enemies = CombatGrid
                 ._instance.GetAllFriendlyCharacters()
                 .Select(obj => obj.GetComponent<Character>())
                 .Where(ch => ch != null)
@@ -240,78 +69,1020 @@ public class EnemyAI : MonoBehaviour
         }
         else if (_controlledFaction == Faction.Friendly)
         {
-            opponentCharacters = CombatGrid
+            _allies = CombatGrid
+                ._instance.GetAllFriendlyCharacters()
+                .Select(obj => obj.GetComponent<Character>())
+                .Where(ch => ch != null)
+                .ToList();
+
+            _enemies = CombatGrid
                 ._instance.GetAllEnemyCharacters()
                 .Select(obj => obj.GetComponent<Character>())
                 .Where(ch => ch != null)
                 .ToList();
         }
 
-        float min = float.MaxValue;
-        foreach (var opponentCharacter in opponentCharacters)
+        return true;
+    } // Caching and null checks
+
+    private void Run()
+    {
+        StartCoroutine(AIBehaviour());
+    }
+
+    private IEnumerator AIBehaviour()
+    {
+        if (_character.IsStunned)
         {
-            float distance = Vector3.Distance(currentCharacter.transform.position, opponentCharacter.transform.position);
-            if (distance < min)
+            DebugLog.JLWLog($"{_character.name} was Stunned and will pass their turn!");
+            yield return new WaitForSeconds(TURN_END_WAIT_TIME);
+            EndTurn();
+            yield break;
+        }
+
+        yield return new WaitForSeconds(TURN_START_WAIT_TIME);
+
+        List<CombatGridTile> moveRange = FindMoveRange();
+        //Debug.LogError($"EnemyAI.cs | moveRange: {moveRange.Count}");
+        Dictionary<AIAction, float> scoredActions = EvaluatePossibleActions(moveRange);
+        //Debug.LogWarning($"EnemyAI.cs | {_character.name} evaluated {scoredActions.Count} actions.");
+        if (scoredActions == null || !scoredActions.Any())
+        {
+            Debug.LogError($"EnemyAI.cs | AIBehaviour INTERRUPTED!");
+            yield return new WaitForSeconds(TURN_END_WAIT_TIME);
+            EndTurn();
+            yield break;
+        }
+        AIAction chosenAction = SelectAction(scoredActions);
+        /*
+        Debug.LogWarning($"EnemyAI.cs | Move {_character.name} to {chosenAction.movement.GetTileIndex()}," +
+            $" use ability: {(chosenAction.ability != null ? chosenAction.ability.name : "NONE")}," +
+            $" at position: {(chosenAction.target != null ? chosenAction.target.GetTileIndex() : "NONE")}," +
+            $" score: {scoredActions[chosenAction]}!");
+        */
+
+        CharacterMovement movementComponent = null;
+        if (!IsDead() && chosenAction.movement != _character.GetCurrentTileComponent() && _character.CanMove &&
+            _character.GetMovementPoints() > 0 && _character.TryGetComponent<CharacterMovement>(out movementComponent))
+        {
+            List<CombatGridTile> movePath =
+                GridExplorer._instance.FindPathAStar(_character.GetCurrentTileComponent().gameObject, chosenAction.movement.gameObject, false, moveRange)
+                .Select(obj => obj.GetComponent<CombatGridTile>()).Where(cgt => cgt != null).ToList();
+
+            movementComponent.ForceCustomPath(movePath);
+            float timeout = 0f;
+
+            yield return new WaitWhile(() =>
+            {
+                timeout += Time.deltaTime;
+                if (timeout >= 10f) Debug.LogError($"{_character.name}'s movement timed out!");
+                return movementComponent.IsMoving() && timeout < 10f;
+            });
+
+        }
+
+        if (!IsDead() && _character.CanUseAbility && chosenAction.ability != null && chosenAction.target != null)
+        {
+            //Debug.LogError($"EnemyAI.cs | {_character.name} tries to cast {chosenAction.ability.name}!");
+            PerformAbilityCast(chosenAction);
+        }
+
+        yield return new WaitForSeconds(TURN_END_WAIT_TIME);
+        EndTurn();
+    }
+
+    private List<CombatGridTile> FindMoveRange()
+    {
+        List<CombatGridTile> result =
+            GridExplorer._instance.GetReachableTilesWithMovement(_character.GetCurrentTileComponent().gameObject, _character.GetMovementPoints())
+            .Select(obj => obj.GetComponent<CombatGridTile>()).Where(cgt => cgt != null).ToList();
+
+        result.Add(_character.GetCurrentTileComponent());
+
+        return result;
+    }
+
+    private Dictionary<AIAction, float> EvaluatePossibleActions(List<CombatGridTile> tiles)
+    {
+        Dictionary<AIAction, float> result = new();
+
+        List<Ability> abilities = GetAbilities();
+        for (int i = 0; i < abilities.Count; i++)
+        {
+            if (_character.IsAbilityCooldownActive(abilities[i]))
+            {
+                abilities.RemoveAt(i);
+            }
+        }
+        //Debug.LogError($"EnemyAI.cs | Found {abilities.Count} abilities ready to use!");
+
+        AbilityHandler abilityHandler = _character.GetAbilityHandler();
+        if (abilityHandler == null)
+        {
+            Debug.LogError($"EnemyAI.cs | AbilityHandler NOT FOUND!");
+            return new Dictionary<AIAction, float>();
+        }
+
+        float myPERCENTHP = _character.GetMaxHealth() == 0 ? 1f : _character.GetCurrentHealth() / _character.GetMaxHealth();
+
+        foreach (var tile in tiles) // Go through all possible movements and score them
+        {
+            AIAction move = new AIAction { movement = tile };
+            float moveScore = 0f;
+
+            //int stepsUsed = GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), tile.GetTileIndex());
+            //moveScore += Mathf.Min(stepsUsed, 3) * 5;
+
+            if (_enemies.Any()) // Evaluate distance to enemies
+            {
+                Character closestEnemy = FindClosestCharacter(_enemies);
+                int enemyDistance = 0;
+                int movedEnemyDistance = 0;
+                if (closestEnemy != null)
+                {
+                    int currentEnemyDistance = GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), closestEnemy.GetCurrentTileIndex());
+                    movedEnemyDistance = GridExplorer._instance.ManhattanDistance(tile.GetTileIndex(), closestEnemy.GetCurrentTileIndex());
+                    enemyDistance = movedEnemyDistance - currentEnemyDistance;
+                }
+
+                float sorcModifier = 5f;
+                if (_character.GetCharacterClass() == CharacterClass.Sorceress || _character.GetCharacterClass() == CharacterClass.Bard)
+                {
+                    if (GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), closestEnemy.GetCurrentTileIndex()) > _character.GetMovementPoints() + 6)
+                    {
+                        sorcModifier = -60f;
+                    }
+
+                    /*
+                    int futureDist = GridExplorer._instance.ManhattanDistance(tile.GetTileIndex(), closestEnemy.GetCurrentTileIndex());
+
+                    int desiredMin = 5;
+                    int desiredMax = 7;
+
+                    if (futureDist >= desiredMin && futureDist <= desiredMax)
+                    {
+                        moveScore += 50f;
+                    }
+                    */
+                }
+
+                switch (_character.GetCharacterClass())
+                {
+                    case CharacterClass.Barbarian:  moveScore -= enemyDistance * 20f; break;
+                    case CharacterClass.Bard:       moveScore += enemyDistance * sorcModifier; break;
+                    case CharacterClass.Rogue:      moveScore -= enemyDistance * 20f; break;
+                    case CharacterClass.Sorceress:  moveScore += enemyDistance * sorcModifier; break;
+                }
+
+                if (myPERCENTHP < 0.2f && _character.GetCharacterClass() != CharacterClass.Barbarian && _allies.Count > 1)
+                {
+                    moveScore += enemyDistance * 20;
+                }
+            }
+
+            if (_allies.Count > 1) // Evaluate distance to allies
+            {
+                Character closestAlly = FindClosestCharacter(_allies);
+                int allyDistance = 0;
+                if (closestAlly != null)
+                {
+                    int currentAllyDistance = GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), closestAlly.GetCurrentTileIndex());
+                    int movedAllyDistance = GridExplorer._instance.ManhattanDistance(tile.GetTileIndex(), closestAlly.GetCurrentTileIndex());
+                    allyDistance = movedAllyDistance - currentAllyDistance;
+                }
+
+                switch (_character.GetCharacterClass())
+                {
+                    case CharacterClass.Barbarian:  break;
+                    case CharacterClass.Bard:       moveScore -= allyDistance * 10f; break;
+                    case CharacterClass.Rogue:      break;
+                    case CharacterClass.Sorceress:  moveScore -= allyDistance * 10f; break;
+                }
+
+                if (myPERCENTHP < 0.2f && _character.GetCharacterClass() != CharacterClass.Barbarian)
+                {
+                    moveScore -= allyDistance * 20f;
+                }
+            }
+
+            if (tile != _character.GetCurrentTileComponent()) // Check for hazards
+            {
+                List<CombatGridTile> path =
+                    GridExplorer._instance.FindPathAStar(_character.GetCurrentTileComponent().gameObject, tile.gameObject, false, tiles)
+                    .Select(obj => obj.GetComponent<CombatGridTile>()).Where(ch => ch != null).ToList();
+
+                foreach (var step in path)
+                {
+                    if (step.GetTileType() == TileType.Lava || step.GetTileType() == TileType.Poison)
+                    {
+                        switch (_character.GetCharacterClass())
+                        {
+                            case CharacterClass.Barbarian:  moveScore -= 50f / myPERCENTHP; break;
+                            case CharacterClass.Bard:       moveScore -= 100f / myPERCENTHP; break;
+                            case CharacterClass.Rogue:      moveScore -= 100f / myPERCENTHP; break;
+                            case CharacterClass.Sorceress:  moveScore -= 100f / myPERCENTHP; break;
+                        }
+
+                        if (myPERCENTHP < 0.2f) moveScore -= 100;
+                    }
+                }
+            }
+
+            result[move] = moveScore; // Save movement as it's own possible action, before checking abilities
+
+            foreach (var ability in abilities)
+            {
+                abilityHandler.SetPendingAbility(ability);
+                abilityHandler.CalculateAbilityRange(tile);
+                List<CombatGridTile> targets = abilityHandler.GetTilesInRange();
+
+                if (ability.name == "Emberwake_Ability" || ability.name == "VeilOfDust_Ability")
+                {
+                    AIAction act = new AIAction { movement = tile, ability = ability, target = tile };
+
+                    float actScore = moveScore + ScoreAbilityUsage(tile, ability, tile);
+                    result[act] = actScore;
+                    continue;
+                }
+
+                foreach (var target in targets) // Go through all possible ability casts and score them
+                {
+                    if (!abilityHandler.IsValidTargetTileForAbility(ability, target)) continue;
+                    AIAction act = new AIAction { movement = tile, ability = ability, target = target };
+                    float actScore = moveScore;
+                    actScore += ScoreAbilityUsage(tile, ability, target);
+                    result[act] = actScore;
+                }
+            }
+
+            bool canHitInstead = result.Any(kvp =>
+                kvp.Key.movement == tile &&
+                kvp.Key.ability != null &&
+                kvp.Value > moveScore + 10f);
+
+            if (canHitInstead)
+            {
+                result[move] -= 50f;
+            }
+
+            if (!result.Any())
+            {
+                result[new AIAction
+                {
+                    movement = _character.GetCurrentTileComponent(),
+                    ability = null,
+                    target = null
+                }] = -1f;
+            }
+
+        }
+
+        return result;
+    }
+
+    private List<Ability> GetAbilities()
+    {
+        List<Ability> result = new();
+
+        foreach (var ability in _character.GetAvailableAbilities())
+        {
+            result.Add(ability);
+        }
+
+        return result;
+    }
+
+    private Character FindClosestCharacter(List<Character> characters)
+    {
+        Character result = null;
+
+        if (characters == null || !characters.Any())
+        {
+            return null;
+        }
+
+        float min = float.MaxValue;
+        foreach (var character in characters)
+        {
+            float distance = Vector3.Distance(_character.transform.position, character.transform.position);
+            if (distance < min && character != _character)
             {
                 min = distance;
-                result = opponentCharacter;
+                result = character;
             }
         }
 
         return result;
     }
 
-    private IEnumerator WaitForMovement()
+    private float ScoreAbilityUsage(CombatGridTile tile, Ability ability, CombatGridTile target)
     {
-        CharacterMovement movementComponent = null;
-        if (_currentCharacter.TryGetComponent<CharacterMovement>(out movementComponent))
+        float result = 0f;
+
+        StatusEffectManager mySEM = _character.GetStatusEffectManager();
+        if (mySEM == null)
         {
-            yield return new WaitWhile(() => movementComponent.IsMoving());
-            UseAbility(_chosenAction.ability, _chosenAction.target);
+            Debug.LogError($"EnemyAI.cs | {_character.name} StatusEffectManager NOT FOUND!");
+            return result;
         }
-        
-        EndTurn();
+
+        TraitManager myTM = _character.GetTraitManager();
+        if (myTM == null)
+        {
+            Debug.LogError($"EnemyAI.cs | {_character.name} TraitManager NOT FOUND!");
+            return result;
+        }
+
+        switch (ability.name)
+        {
+            // Barbarian
+            case "Skullsplitter_Ability":
+                {
+                    Character occupant = target.GetOccupantCharacter();
+                    if (occupant != null && occupant.GetCurrentHealth() > 0)
+                    {
+                        StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                        bool isEnemy = occupant.GetFaction() != _controlledFaction;
+                        float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+
+                        if (isEnemy)
+                        {
+                            result += 30f;
+
+                            if (occupantPERCENTHP < 0.5f)
+                            {
+                                result += 100f;
+                            }
+
+                            if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
+                            {
+                                result = -9999f;
+                            }
+                        }
+                    }
+                    break;
+                }
+            case "Earthquake_Ability":
+                {
+                    int hitCount = 0;
+                    DirectedAOEPattern.Direction direction = GetDirection(tile, target);
+                    _housePattern.SetDirection(direction);
+                    List<CombatGridTile> aoe = _housePattern.CalculateTilesToEffect(target);
+                    foreach (var hit in aoe)
+                    {
+                        Character occupant = hit.GetOccupantCharacter();
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
+                        {
+                            StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                            bool isEnemy = occupant.GetFaction() != _controlledFaction;
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+
+                            if (!isEnemy) result -= 75f;
+
+                            if (isEnemy)
+                            {
+                                hitCount++;
+                                result += 30f;
+
+                                if (occupantSEM != null && !occupantSEM.ContainsStatusEffect<Slowed>())
+                                {
+                                    result += 10f;
+                                }
+
+                                if (occupantPERCENTHP < 0.2f)
+                                {
+                                    result += 100f;
+                                }
+                            }
+                        }
+                    }
+                    if (hitCount < 2) result -= 100f;
+                    break;
+                }
+            case "RuptureOfTheWilds_Ability":
+                {
+                    int hitCount = 0;
+                    DirectedAOEPattern.Direction direction = GetDirection(tile, target);
+                    _trisquarePattern.SetDirection(direction);
+                    List<CombatGridTile> aoe = _trisquarePattern.CalculateTilesToEffect(target);
+                    foreach (var hit in aoe)
+                    {
+                        Character occupant = hit.GetOccupantCharacter();
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
+                        {
+                            StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                            bool isEnemy = occupant.GetFaction() != _controlledFaction;
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+
+                            if (!isEnemy) result -= 75f;
+
+                            if (isEnemy)
+                            {
+                                hitCount++;
+                                result += 30f;
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Slowed>())
+                                {
+                                    result += 50f;
+                                }
+
+                                if (occupantPERCENTHP < 0.2f)
+                                {
+                                    result += 100f;
+                                }
+                            }
+                        }
+                    }
+                    if (hitCount == 0) result -= 100f;
+                    break;
+                }
+            case "RoarOfTheAncients_Ability":
+                {
+                    int hitCount = 0;
+                    List<CombatGridTile> aoe = DiamondPattern(target, 3);
+                    foreach (var hit in aoe)
+                    {
+                        Character occupant = hit.GetOccupantCharacter();
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
+                        {
+                            StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                            bool isEnemy = occupant.GetFaction() != _controlledFaction;
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+
+                            if (isEnemy)
+                            {
+                                if (occupantSEM != null && !occupantSEM.ContainsStatusEffect<Slowed>())
+                                {
+                                    hitCount++;
+                                }
+                            }
+                        }
+                    }
+                    if (hitCount > 1) result += 100f;
+                    if (hitCount > 2) result += 100f;
+                    if (hitCount > 3) result += 100f;
+                    if (hitCount == 0) result -= 100f;
+                    break;
+                }
+
+            // Bard
+            case "InspiringAnthem_Ability":
+                {
+                    int hitCount = 0;
+                    List<CombatGridTile> aoe = DiamondPattern(target, 2);
+                    foreach (var hit in aoe)
+                    {
+                        Character occupant = hit.GetOccupantCharacter();
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
+                        {
+                            StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                            bool isAlly = occupant.GetFaction() == _controlledFaction;
+
+                            if (isAlly)
+                            {
+                                hitCount++;
+
+                                if (occupantSEM != null && !occupantSEM.ContainsStatusEffect<Haste>())
+                                {
+                                    result += 50f;
+                                }
+                            }
+                        }
+                    }
+                    if (hitCount < 2) result -= 50f;
+                    if (hitCount == 0) result -= 100f;
+                    break;
+                }
+            case "SongOfRenewal_Ability":
+                {
+                    int hitCount = 0;
+                    bool isAlly = false;
+                    float occupantPERCENTHP = 1f;
+                    Character occupant = null;
+                    occupant = target.GetOccupantCharacter();
+                    if (occupant != null && occupant.GetCurrentHealth() > 0)
+                    {
+                        isAlly = occupant.GetFaction() == _controlledFaction;
+                        occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+                        
+                        if (isAlly && occupantPERCENTHP < 1f)
+                        {
+                            hitCount++;
+                            result += 40f;
+
+                            if (occupantPERCENTHP < 0.75f)
+                            {
+                                result += 10f;
+
+                                if (occupantPERCENTHP < 0.5f)
+                                {
+                                    result += 10f;
+                                }
+                            }
+
+                            if (occupant == _character)
+                            {
+                                result = -9999f;
+                            }
+                        }
+                    }
+                    List <CombatGridTile> aoe = DiamondPattern(target, 3);
+                    foreach (var hit in aoe)
+                    {
+                        occupant = hit.GetOccupantCharacter();
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
+                        {
+                            isAlly = occupant.GetFaction() == _controlledFaction;
+                            occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+
+                            if (isAlly && occupantPERCENTHP < 1f)
+                            {
+                                hitCount++;
+                                result += 40f;
+
+                                if (occupantPERCENTHP < 0.75f)
+                                {
+                                    result += 15f;
+
+                                    if (occupantPERCENTHP < 0.5f)
+                                    {
+                                        result += 20f;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (hitCount == 0) result -= 100f;
+                    float myPERCENTHP = _character.GetMaxHealth() == 0 ? 1f : _character.GetCurrentHealth() / _character.GetMaxHealth();
+                    if (myPERCENTHP < 0.33f) result -= 300;
+                    break;
+                }
+            case "DissonantChord_Ability":
+                {
+                    int hitCount = 0;
+                    List<CombatGridTile> aoe = DiamondPattern(target, 2);
+                    foreach (var hit in aoe)
+                    {
+                        Character occupant = hit.GetOccupantCharacter();
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
+                        {
+                            StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                            bool isEnemy = occupant.GetFaction() != _controlledFaction;
+
+                            if (isEnemy)
+                            {
+                                hitCount++;
+                                if (occupantSEM.ContainsStatusEffect<Haste>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<Empowered>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<Emberwake>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<Enraged>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<ConduitOfPower>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<Fortified>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<Sanctified>()) result += 50f;
+                                if (occupantSEM.ContainsStatusEffect<Stealth>()) result += 50f;
+                            }
+                        }
+                    }
+                    if (hitCount == 0) result -= 999f;
+                    break;
+                }
+            case "ResonantBlast_Ability":
+                {
+                    int hitCount = 0;
+                    List<CombatGridTile> aoe = DiamondPattern(target, 2);
+                    foreach (var hit in aoe)
+                    {
+                        Character occupant = hit.GetOccupantCharacter();
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
+                        {
+                            StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                            bool isEnemy = occupant.GetFaction() != _controlledFaction;
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+
+                            if (!isEnemy)
+                            {
+                                result -= 75f;
+                            }
+
+                            if (isEnemy)
+                            {
+                                hitCount++;
+                                result += 30f;
+
+                                if (occupantPERCENTHP < 0.2f)
+                                {
+                                    result += 999f;
+                                }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
+                                {
+                                    result += Random.Range(0f, 20f);
+                                }
+                            }
+                        }
+                    }
+                    if (hitCount > 1) result += 50f;
+                    if (hitCount > 2) result += 50f;
+                    if (hitCount == 0) result -= 100f;
+                    float myPERCENTHP = _character.GetMaxHealth() == 0 ? 1f : _character.GetCurrentHealth() / _character.GetMaxHealth();
+                    if (myPERCENTHP > 0.9f) result -= 100f;
+                    break;
+                }
+
+            // Rogue
+            case "SandfangStrike_Ability":
+                {
+                    Character occupant = target.GetOccupantCharacter();
+                    if (occupant != null && occupant.GetCurrentHealth() > 0)
+                    {
+                        StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                        bool isEnemy = occupant.GetFaction() != _controlledFaction;
+                        float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+
+                        if (isEnemy)
+                        {
+                            result += 40f;
+
+                            if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Poison>())
+                            {
+                                result += 10f;
+                            }
+
+                            if (occupantPERCENTHP < 0.5f)
+                            {
+                                result += 10f;
+
+                                if (occupantPERCENTHP < 0.2f)
+                                {
+                                    result += 100f;
+                                }
+                            }
+
+                            if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
+                            {
+                                result += 50f;
+                            }
+
+                            if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
+                            {
+                                result = -9999f;
+                            }
+                        }
+                    }
+                    break;
+                }
+            case "Desert's Grasp_Ability":
+                {
+                    result += 50f;
+                    int hitCount = 0;
+
+                    List<CombatGridTile> aoe = DiamondPattern(target, 2);
+                    foreach (var hit in aoe)
+                    {
+                        Character occupant = hit.GetOccupantCharacter();
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
+                        {
+                            StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                            bool isEnemy = occupant.GetFaction() != _controlledFaction;
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+
+                            if (!isEnemy) result -= 75f;
+
+                            if (isEnemy)
+                            {
+                                hitCount++;
+                                result += 30f;
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Poison>())
+                                {
+                                    result += 10f;
+                                }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
+                                {
+                                    result += 20f;
+                                }
+
+                                if (occupantPERCENTHP < 0.5f)
+                                {
+                                    result += 10f;
+
+                                    if (occupantPERCENTHP < 0.2f)
+                                    {
+                                        result += 100f;
+                                    }
+                                }
+
+                                if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
+                                {
+                                    result += 50f;
+                                }
+                            }
+                        }
+                    }
+                    if (hitCount >= 2)
+                    {
+                        result += 125f;
+                    }
+
+                    if (hitCount >= 3)
+                    {
+                        result += 300f;
+                    }
+                    if (hitCount < 2) result -= 200f;
+                    break;
+                }
+            case "ThrowingKnives_Ability":
+                {
+                    int hitCount = 0;
+                    DirectedAOEPattern.Direction direction = GetDirection(tile, target);
+                    _linePattern.SetDirection(direction);
+                    List<CombatGridTile> aoe = _linePattern.CalculateTilesToEffect(target);
+                    foreach (var hit in aoe)
+                    {
+                        Character occupant = hit.GetOccupantCharacter();
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
+                        {
+                            StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                            bool isEnemy = occupant.GetFaction() != _controlledFaction;
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+
+                            if (!isEnemy) result -= 100f;
+
+                            if (isEnemy)
+                            {
+                                hitCount++;
+                                result += 30f;
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Poison>())
+                                {
+                                    result += 10f;
+                                }
+
+                                if (occupantPERCENTHP < 0.5f)
+                                {
+                                    result += 10f;
+
+                                    if (occupantPERCENTHP < 0.2f)
+                                    {
+                                        result += 100f;
+                                    }
+                                }
+
+                                if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
+                                {
+                                    result += 50f;
+                                }
+                            }
+                        }
+                    }
+                    if (hitCount == 0) result -= 100f;
+                    break;
+                }
+            case "VeilOfDust_Ability":
+                {
+                    int hitCount = 0;
+                    if (!mySEM.ContainsStatusEffect<Stealth>())
+                    {
+                        if (Random.Range(0f, 1f) > 0.5f)
+                        {
+                            hitCount++;
+                            result += 30f;
+                        }
+
+                        if (mySEM.ContainsStatusEffect<Poison>()) hitCount++;
+                        if (mySEM.ContainsStatusEffect<Burn>()) hitCount++;
+                        if (mySEM.ContainsStatusEffect<Aftershock>()) hitCount++;
+                        if (mySEM.ContainsStatusEffect<Weakened>()) hitCount++;
+                        if (mySEM.ContainsStatusEffect<Slowed>()) hitCount++;
+                    }
+                    if (hitCount > 1) result += 150f;
+                    if (hitCount > 2) result += 100f;
+                    if (hitCount > 3) result += 999f;
+                    if (hitCount == 0) result -= 100f;
+                    break;
+                }
+
+            // Sorceress
+            case "ArcaneBolt_Ability":
+                {
+                    Character occupant = target.GetOccupantCharacter();
+                    if (occupant != null && occupant.GetCurrentHealth() > 0)
+                    {
+                        StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                        bool isEnemy = occupant.GetFaction() != _controlledFaction;
+                        float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+
+                        if (isEnemy)
+                        {
+                            result += 50f;
+
+                            if (occupantPERCENTHP < 0.2f)
+                            {
+                                result += 999f;
+                            }
+
+                            if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
+                            {
+                                result = -9999f;
+                            }
+                        }
+                    }
+                    break;
+                }
+            case "FlameSurge_Ability":
+                {
+                    int hitCount = 0;
+                    DirectedAOEPattern.Direction direction = GetDirection(tile, target);
+                    _flamePattern.SetDirection(direction);
+                    List<CombatGridTile> aoe = _flamePattern.CalculateTilesToEffect(target);
+                    foreach (var hit in aoe)
+                    {
+                        Character occupant = hit.GetOccupantCharacter();
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
+                        {
+                            StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                            bool isEnemy = occupant.GetFaction() != _controlledFaction;
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+
+                            if (!isEnemy)
+                            {
+                                result -= 75f;
+                            }
+
+                            if (isEnemy)
+                            {
+                                hitCount++;
+                                result += 30f;
+
+                                if (occupantPERCENTHP < 0.2f)
+                                {
+                                    result += 999f;
+                                }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
+                                {
+                                    result += Random.Range(0f, 20f);
+                                }
+                            }
+                        }
+                    }
+                    if (hitCount > 1) result += 50f;
+                    if (hitCount > 2) result += 50f;
+                    if (hitCount == 0) result -= 100f;
+                    break;
+                }
+            case "LightningStorm_Ability":
+                {
+                    int hitCount = 0;
+                    List<CombatGridTile> aoe = DiamondPattern(target, 2);
+                    foreach (var hit in aoe)
+                    {
+                        Character occupant = hit.GetOccupantCharacter();
+                        if (occupant != null && occupant.GetCurrentHealth() > 0)
+                        {
+                            StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
+                            bool isEnemy = occupant.GetFaction() != _controlledFaction;
+                            float occupantPERCENTHP = occupant.GetMaxHealth() == 0 ? 1f : occupant.GetCurrentHealth() / occupant.GetMaxHealth();
+
+                            if (!isEnemy)
+                            {
+                                result -= 75f;
+                            }
+
+                            if (isEnemy)
+                            {
+                                hitCount++;
+                                result += 30f;
+
+                                if (occupantPERCENTHP < 0.2f)
+                                {
+                                    result += 999f;
+                                }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
+                                {
+                                    result += Random.Range(0f, 20f);
+                                }
+                            }
+                        }
+                    }
+                    if (hitCount > 1) result += 50f;
+                    if (hitCount > 2) result += 50f;
+                    if (hitCount == 0) result -= 100f;
+                    break;
+                }
+            case "Emberwake_Ability":
+                {
+                    if (!mySEM.ContainsStatusEffect<Emberwake>())
+                    {
+                        result += 50f;
+
+                        foreach (var cooldownCheck in _character.GetAvailableAbilities())
+                        {
+                            if (cooldownCheck is LightningStorm_Ability && !_character.IsAbilityCooldownActive(cooldownCheck))
+                            {
+                                result += 100f;
+                            }
+
+                            if (cooldownCheck is FlameSurge_Ability && !_character.IsAbilityCooldownActive(cooldownCheck))
+                            {
+                                result += 100f;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        result -= 999f;
+                    }
+                    break;
+                }
+        }
+
+        return result;
     }
 
-    private void UseAbility(Ability ability, CombatGridTile target)
+    private DirectedAOEPattern.Direction GetDirection(CombatGridTile from, CombatGridTile to)
     {
-        if (!_currentCharacter.CanUseAbility || ability == null)
+        Vector2Int delta = to.GetTileIndex() - from.GetTileIndex();
+        if (delta == Vector2Int.up) return DirectedAOEPattern.Direction.Up;
+        if (delta == Vector2Int.down) return DirectedAOEPattern.Direction.Down;
+        if (delta == Vector2Int.left) return DirectedAOEPattern.Direction.Left;
+        if (delta == Vector2Int.right) return DirectedAOEPattern.Direction.Right;
+        return DirectedAOEPattern.Direction.None;
+    }
+
+    private List<CombatGridTile> DiamondPattern(CombatGridTile targetTile, int radius)
+    {
+        List<CombatGridTile> result = new();
+        Vector2 centerIndex = targetTile.GetTileIndex();
+
+        for (int x = -radius; x <= radius; x++)
         {
-            return;
+            for (int y = -radius; y <= radius; y++)
+            {
+                if (Mathf.Abs(x) + Mathf.Abs(y) <= radius)
+                {
+                    int checkX = (int)centerIndex.x + x;
+                    int checkY = (int)centerIndex.y + y;
+
+                    if (checkX < 0 || checkX >= CombatGrid._instance.GetGridWidth()) continue;
+                    if (checkY < 0 || checkY >= CombatGrid._instance.GetGridHeight()) continue;
+
+                    var tile = CombatManager._instance.GetTileComponent(checkX, checkY);
+                    if (tile != null)
+                        result.Add(tile);
+                }
+            }
         }
 
-        _currentAbilityHandler.SetPendingAbility(ability);
-        _currentAbilityHandler.CalculateAbilityRange();
-        _currentAbilityHandler.UseAbility(ability, target);
+        return result;
+    }
+
+    private AIAction SelectAction(Dictionary<AIAction, float> dictionary)
+    {
+        AIAction result = null;
+
+        var topActions = dictionary
+            .OrderByDescending(key => key.Value)
+            .Take(TOP_N_ACTIONS)
+            .ToList();
+
+        if (topActions.Count == 0)
+        {
+            Debug.LogError($"AIController.cs | SelectAction NO ACTIONS FOUND!");
+            result = new AIAction { movement = _character.GetCurrentTileComponent() };
+        }
+        else
+        {
+            result = topActions[Random.Range(0, topActions.Count)].Key;
+        }
+
+        return result;
+    }
+
+    private void PerformAbilityCast(AIAction action)
+    {
+        AbilityHandler abilityHandler = _character.GetAbilityHandler();
+        if (abilityHandler != null)
+        {
+            abilityHandler.SetPendingAbility(action.ability);
+            abilityHandler.CalculateAbilityRange();
+            abilityHandler.UseAbility(action.ability, action.target);
+        }
     }
 
     private void EndTurn()
     {
-        //DebugLog.JLWLog($"EnemyAI.cs | {_currentCharacter.name}'s turn ended!");
-
-        _currentCharacter = null;
-        _currentTile = null;
-        _currentClass = CharacterClass.None;
-        _currentAbilityHandler = null;
-        _currentAbilities = new();
-        _currentMoveRange = 0;
-        _movePath = new();
-        _scoredActions = new();
-        _chosenAction = new();
-
+        //Debug.LogError($"AIController.cs | {_character.name} turn ended!");
+        _character = null;
+        _allies = new();
+        _enemies = new();
         AIEndTurn.Invoke();
     }
 
-    private void PrintAIAction(AIAction action) // Action must be scored first
+    private bool IsDead()
     {
-        if (!_scoredActions.ContainsKey(action))
-        {
-            Debug.LogError($"EnemyAI.cs | Can't print unscored AIActions!");
-            return;
-        }
-
-        string chosenAbility = action.ability != null ? action.ability.name : "None";
-        string chosenTarget = action.target != null ? action.target.GetTileIndex().ToString() : "None";
-        DebugLog.JLWLog($"AI | Move {_currentCharacter.name} to: {action.movement.GetTileIndex()}, Ability: {chosenAbility}, Target: {chosenTarget}, ActionScore: {_scoredActions[action]}.");
+        return _character == null || _character.GetCurrentHealth() <= 0;
     }
 }

@@ -16,23 +16,36 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: e7d2c4ccaf4933b47b734c7e029b2498, type: 3}
   _range: 1
   _cooldown: 2
-  _description: "Throw knives in a line, dealing (60% + (10% \xD7 current hand size)
-    \xD7 Damage) Physical damage. Every character hit has a 60% chance to gain 3
-    stacks of Poison."
+  _description: "Jump and throw knives in a line, dealing {damage} ((<b>80%</b> +
+    (<b>5%</b> \xD7 current hand size)) \xD7 Damage) {physical_damage}Physical damage{/physical_damage},
+    scaling with amount of {card}Cards{/card} in hand.\\n\\nALL character's hit have
+    a <b>60%</b> chance to gain 3 stacks of <link=\"Poison\">{poison}<u>Poison</u>{/poison}</link>."
   _abilityTag: 10
-  _type: 0
+  _type: 1
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
   _targetType: 0
-  _castingEffect: {fileID: 0}
-  _hitEffect: {fileID: 0}
+  _abilityVFXSequence: {fileID: 11400000, guid: a4329796338788b43aa982cf62e543bc,
+    type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0.5
+  _castingAnimationTime: 0.68
+  _castingFXTime: 0.05
   _fromCastToHitTime: 0
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
+  <AudioEvent>k__BackingField:
+    Guid:
+      Data1: 1521587343
+      Data2: 1323368853
+      Data3: 873354165
+      Data4: 1987483317
+    Path: event:/Sound Design/Diegetic/Characters/Rouge/abilities/throwingknives
   _pattern: {fileID: 11400000, guid: 563544cd6ba3c45459964c4950b1f39b, type: 2}
   _validTargets: 2
-  _damageMultiplier: 0.6
+  _abilityAOEVFXSequence: {fileID: 11400000, guid: dde9dbf1ce5a41941befec5c69f78105,
+    type: 2}
+  _damageMultiplier: 0.8
   _chanceToApplyPoison: 0.6
-  _handSizeDamageMultiplier: 0.1
+  _handSizeDamageMultiplier: 0.05
   _poisonStacks: 3
+  _enemyHandSize: 4

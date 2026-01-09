@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class Giantblood : Trait
 {
-    private int _maxHealth;
-    
-    public override void OnApply()
+    public override void ModifyDerivedStats(ref float hpFactor, ref float damageFactor)
     {
         var data = Data as DamageModifyingData;
 
@@ -13,6 +11,7 @@ public class Giantblood : Trait
             return;
         }
         
-        Character.SetBaseHealthPoints(Mathf.RoundToInt(_maxHealth * data.DamageModifier));
+        var modifier = 1f + data.DamageModifierPercent / 100f;
+        hpFactor *= modifier;
     }
 }

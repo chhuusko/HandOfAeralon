@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Giantblood
   Icon: {fileID: 21300000, guid: 759d2db469762114a91216bb2268dffe, type: 3}
-  Description: Gain +25% Max Health
+  Description: Gain <b>+15%</b> Max {health}Health{/health}
   Type: 3
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: efef8fa74a220a04a9343d618d82ea11, type: 3}
+  IsDispellable: 0
+  SkipFirstTick: 0
+  _typeName: Giantblood, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 1
-  DamageModifier: 1.25
+  DamageModifierPercent: 15

@@ -8,13 +8,11 @@ public class Stunned : StatusEffect
 
     public override void OnApply()
     {
-        Character.CanMove = false;
-        Character.CanUseAbility = false;
+        Character.IsStunned = true;
     }
 
     public override void OnExpire()
     {
-        Character.CanMove = true;
-        Character.CanUseAbility = true;
+        Character.IsStunned = false;
     }
 }

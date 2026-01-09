@@ -17,6 +17,9 @@ MonoBehaviour:
   Description: Reflect any debuff onto inflictor once per combat
   Type: 3
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: f4e4638de28335544b3baa15e3edd5c3, type: 3}
+  IsDispellable: 0
+  SkipFirstTick: 0
+  _typeName: ReflectedAffliction, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
   Class: 4
   IsPositive: 1

@@ -45,25 +45,52 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
         AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun, died);
     }
 
+    protected override void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        if (targetTile == null) return;
+
+        Character affectedCharacter = targetTile.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        affectedCharacter.PreviewHealthChange(-damage);
+    }
+
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
         // Get base damage.
-        int baseDamage = castingCharacter.GetBaseDamage();
+        int baseDamage = castingCharacter.Data.DerivedDamage;
         var statusEffectsManager = affectedCharacter.GetComponent<StatusEffectManager>();
         if (statusEffectsManager == null) return 0;
 
         // If character is slowed, deal more damage.
         bool targetIsSlowed = statusEffectsManager.GetStatusEffect<Slowed>() != null;
 
-        int damage = targetIsSlowed ? (int)(baseDamage * _damageMultiplier) : (int)(baseDamage * _slowedTargetDamageMultiplier);
+        float damage = targetIsSlowed ? (baseDamage * _slowedTargetDamageMultiplier) : (baseDamage * _damageMultiplier);
 
-        damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
-        damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
-        return damage;
+        damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         //
+    }
+
+    public override int GetDamage()
+    {
+        float damage = GetCharacterCaster().Data.DerivedDamage * _damageMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
+    }
+
+    public override int GetSecondDamage()
+    {
+        float damage = GetCharacterCaster().Data.DerivedDamage * _slowedTargetDamageMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 }

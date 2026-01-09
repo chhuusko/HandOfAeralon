@@ -16,17 +16,29 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 2d6f43c3195243d4480fcd7ba019c03a, type: 3}
   _range: 1
   _cooldown: 1
-  _description: "Deal (100% \xD7 Damage) Physical damage. If the target is below
-    50% Health, deal (160% \xD7 Damage) damage instead and draw 1 card."
+  _description: "Jump and strike target with a heavy blow, dealing {damage} (<b>90%</b>
+    \xD7 Damage) {physical_damage}Physical damage{/physical_damage}.\\n\\nIf the
+    target is below <b>50%</b> {health}Health{/health}, deal {damage} (<b>160%</b>
+    \xD7 Damage) damage instead and draw <b>1</b> {card}Card{/card}."
   _abilityTag: 5
-  _type: 0
+  _type: 1
   _rangeCalculation: {fileID: 11400000, guid: b26a232b16ceee045899106d2759f853, type: 2}
   _targetType: 3
-  _castingEffect: {fileID: 0}
-  _hitEffect: {fileID: 0}
+  _abilityVFXSequence: {fileID: 11400000, guid: 3a56e7106814f4345973413bdf0e4355,
+    type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 2.29166
-  _fromCastToHitTime: 0
+  _castingAnimationTime: 0
+  _castingFXTime: 0
+  _fromCastToHitTime: 2.1
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
-  _damageMultiplier: 1.6
+  <AudioEvent>k__BackingField:
+    Guid:
+      Data1: -227850147
+      Data2: 1239209245
+      Data3: -1225922651
+      Data4: 1657002151
+    Path: event:/Sound Design/Diegetic/Characters/Barbarian/abilities/skullspliter
+  _damageMultiplier: 1.1
+  _extraDamageMultiplier: 1.6

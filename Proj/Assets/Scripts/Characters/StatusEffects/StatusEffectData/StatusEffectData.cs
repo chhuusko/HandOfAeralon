@@ -9,10 +9,13 @@ public class StatusEffectData : ScriptableObject
     [Header("General Info")]
     public string Name;
     public Sprite Icon;
-    public string Description;
+    [TextArea(5, 10)] public string Description;
     public StatusEffectType Type;
     public bool IsPermanent;
-    public MonoScript Script;
+    public bool IsDispellable;
+    public bool SkipFirstTick;
+
+    [SerializeField, HideInInspector] protected string _typeName;
     
     [Header("Traits")]
     public CharacterClass Class;
@@ -23,12 +26,12 @@ public class StatusEffectData : ScriptableObject
     /// Used when we don't know beforehand which status effect to create.
     /// </summary>
     /// <param name="duration">The amount of turns the status effect lasts.</param>
-    /// <returns></returns>
+    /// <returns>The created status effect.</returns>
     public StatusEffect CreateInstance(int duration)
     {
-        var type = Script.GetClass();
+        var type = GetEffectType();
 
-        if (!typeof(StatusEffect).IsAssignableFrom(type))
+        if (type == null || !typeof(StatusEffect).IsAssignableFrom(type))
         {
             return null;
         }
@@ -43,13 +46,22 @@ public class StatusEffectData : ScriptableObject
     /// <returns>The created status effect.</returns>
     public StatusEffect CreateInstance()
     {
-        var type = Script.GetClass();
+        var type = GetEffectType();
 
-        if (!typeof(StatusEffect).IsAssignableFrom(type))
+        if (type == null || !typeof(StatusEffect).IsAssignableFrom(type))
         {
             return null;
         }
         
         return (StatusEffect)System.Activator.CreateInstance(type);
+    }
+
+    /// <summary>
+    /// Get the type of status effect associated with this data.
+    /// </summary>
+    /// <returns>Type of status effect.</returns>
+    public System.Type GetEffectType()
+    {
+        return System.Type.GetType(_typeName);
     }
 }

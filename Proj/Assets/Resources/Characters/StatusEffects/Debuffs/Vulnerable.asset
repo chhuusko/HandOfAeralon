@@ -14,10 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Vulnerable
   Icon: {fileID: 21300000, guid: 8c796b88996acf74ab07a4d14a42adc5, type: 3}
-  Description: Character takes 50% more Damage
+  Description: Character takes <b>50%</b> more damage (does not affect {burn}Burn{/burn}
+    or {poison}Poison{/poison})
   Type: 1
   IsPermanent: 0
-  Script: {fileID: 11500000, guid: bb54e79bd1bdec14392eba32e87a555d, type: 3}
+  IsDispellable: 1
+  SkipFirstTick: 1
+  _typeName: Vulnerable, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
-  DamageModifier: 1.5
+  DamageModifierPercent: 50

@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf6383c0305810c4cbb86136a8d14596, type: 3}
+  m_Name: SkullSplitterVFXSequence
+  m_EditorClassIdentifier: 
+  _castFX: {fileID: 0}
+  _travelFX: {fileID: 0}
+  _biggerImpactScale: 2
+  _offsetDistance: 0
+  _airDistance: 0
+  _rotationOffset: {x: 0, y: 0, z: 0}
+  _doCastCameraShake: 0
+  _castShakeDuration: 2.1
+  _castShakeMagnitude: 0.4
+  _castShakeFrequency: 200
+  _castShakeFade:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 2.4907093
+      value: -0.0053108335
+      inSlope: 0.0050868285
+      outSlope: 0.0050868285
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 2.7586844
+      value: -0.00394769
+      inSlope: -0.052876297
+      outSlope: -0.052876297
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 2.8648646
+      value: 0.99851364
+      inSlope: 0.00012767954
+      outSlope: 0.00012767954
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.9148758
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 3.1706462
+      value: 0.9981072
+      inSlope: -0.00066907745
+      outSlope: -0.00066907745
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 3.5360298
+      value: 0.0014899969
+      inSlope: -0.10914823
+      outSlope: -0.10914823
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.7205868
+    - serializedVersion: 3
+      time: 4.982092
+      value: 0.008281534
+      inSlope: 0.011189259
+      outSlope: 0.011189259
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.645405
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _impactFX: {fileID: 6599937267235368920, guid: 99e034c5bd5feff4ca1e814bc59c5e95,
+    type: 3}
+  _impactAirDistance: 0
+  _impactRotationOffset: {x: 0, y: 0, z: 0}
+  _doImpactCameraShake: 1
+  _impactShakeDuration: 0.5
+  _impactShakeMagnitude: 0.65
+  _impactShakeFrequency: 200
+  _impactShakeFade:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0026916265
+      value: 0.9977709
+      inSlope: -1.3055013
+      outSlope: -1.3055013
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.1375
+    - serializedVersion: 3
+      time: 1.0039663
+      value: -0.09626973
+      inSlope: -0.9712415
+      outSlope: -0.9712415
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.11250002
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

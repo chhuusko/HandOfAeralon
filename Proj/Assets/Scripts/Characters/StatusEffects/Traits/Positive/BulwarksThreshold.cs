@@ -4,7 +4,7 @@ public class BulwarksThreshold : Trait
 {
     private bool _effectApplied;
 
-    public override void OnCombatStarted()
+    public override void ResetCombatState()
     {
         _effectApplied = false;
     }
@@ -24,7 +24,8 @@ public class BulwarksThreshold : Trait
         }
         
         // Cast to avoid loss of fraction.
-        if ((float)Character.GetCurrentHealth() / Character.GetMaxHealth() < data.Threshold)
+        float healthPercent = (float)Character.GetCurrentHealth() / Character.GetMaxHealth();
+        if (healthPercent < data.ThresholdPercent / 100f)
         {
             _effectApplied = true;
             Character.GetStatusEffectManager().AddStatusEffect(new Fortified(data.TurnAmount));

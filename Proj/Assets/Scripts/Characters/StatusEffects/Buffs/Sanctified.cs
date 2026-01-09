@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Sanctified : StatusEffect
@@ -5,13 +6,25 @@ public class Sanctified : StatusEffect
     public Sanctified(int duration) : base(duration)
     {
     }
-    
-    public override void ModifyIncomingDamage(ref float damage, Ability ability)
+
+    public override bool BeforeStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
     {
-        if (damage > 0f)
+        if (statusEffect == null || statusEffect.Data == null)
         {
-            damage = 0f;
-            Manager.RemoveStatusEffect(this);
+            return true;
         }
+        
+        // Sanctified disallows receiving debuffs.
+        return statusEffect.Data.Type is not StatusEffectType.Debuff;
+    }
+
+    public override void ModifyIncomingDamage(ref float damage, ref float combinedModifier, Ability ability)
+    {
+        damage = 0f;
+    }
+
+    public override void OnTakeDamage()
+    {
+        ShouldExpire = true;
     }
 }

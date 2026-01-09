@@ -28,13 +28,26 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
         bool died = affectedCharacter.TakeDamage(damage);
 
         StatusEffect poison = null;
-        if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
+        if(Random.value <= _applyPoisonChance && affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
             if (castingCharacter.GetFaction() == Faction.Friendly && statusEffectManager.ContainsStatusEffect<Poison>()){
                 CardHandManager.GetInstance().AddCardFromDeck();
             }
-            statusEffectManager.AddStatusEffect(poison = new Poison(_posionStacksToApply), castingCharacter);
+            statusEffectManager.AddStatusEffect(poison = new Poison(castingCharacter, _posionStacksToApply), castingCharacter);
         }
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, poison, died);
+    }
+
+    protected override void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        if (targetTile == null) return;
+
+        Character affectedCharacter = targetTile.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        affectedCharacter.PreviewHealthChange(-damage);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
@@ -48,17 +61,24 @@ public class SandfangStrike_SingleTarget : SingleTargetAbility
         // 7. Enemy Buffs / Debuffs
 
      
-        int damage = castingCharacter.GetBaseDamage();
-        damage = (int)(damage * _damageMultiplier);
+        float damage = castingCharacter.Data.DerivedDamage;
+        damage = damage * _damageMultiplier;
 
 
-        damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
-        damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
-        return damage;
+        damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Spawn and direct VFX to target location.
+    }
+
+    public override int GetDamage()
+    {
+        float damage = GetCharacterCaster().Data.DerivedDamage * _damageMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 }

@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Conduit Of Power
   Icon: {fileID: 21300000, guid: cc6e28ee61a304948ad2e705cf27af99, type: 3}
-  Description: When Cards are targeted and played on this character it gains +10%
-    damage. Lasts until end of combat
+  Description: When {card}Cards{/card} are targeted and played on this character
+    it gains +<b>10%</b> damage. Lasts until end of combat
   Type: 0
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: f65730bf17b379e49acb8171b59b040c, type: 3}
+  IsDispellable: 1
+  SkipFirstTick: 1
+  _typeName: ConduitOfPower, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
-  DamageModifier: 0.1
+  DamageModifierPercent: 10

@@ -11,7 +11,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
+
 
 
 [System.Serializable]
@@ -78,7 +78,7 @@ public class CombatManager : MonoBehaviour
     [Header("Combat State")]
     [SerializeField] private CombatState _debugCurrentState;
     [SerializeReference] private CombatStateBase _currentCombatState;
-   
+
 
     private Dictionary<CharacterData, Character> _dataToCharacterDict;
 
@@ -91,6 +91,10 @@ public class CombatManager : MonoBehaviour
     [Header("Abilities")]
     [SerializeField] private List<ClassAbilities> _classAbilities;
     private Dictionary<CharacterClass, List<Ability>> _classAbilitiesDictionary;
+
+    [Header("Enemy base stats")]
+    public int enemyMana = 6;
+    public int enemyManaSpent = 2;
 
     public UnityEvent TurnStart = new();
 
@@ -106,7 +110,7 @@ public class CombatManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
         _classAbilitiesDictionary = new Dictionary<CharacterClass, List<Ability>>();
         foreach (var pair in _classAbilities)
         {
@@ -138,22 +142,26 @@ public class CombatManager : MonoBehaviour
         _selectorCube.transform.position = pos;
         _selectorCube.SetActive(false);
 
-        ChangeCombatState(new CombatStateLoadLevel());        
+        ChangeCombatState(new CombatStateLoadLevel());
     }
 
     void Update()
     {
         if (Time.timeScale <= 0.0f)
             return;
-        if(_currentCombatState != null)
+        if (_currentCombatState != null)
         {
             _currentCombatState?.Update();
             Character activeCharacter = _combatTurnOrder.GetActiveCharacter();
             if (activeCharacter)
             {
+                InitiativeHoverSphere hoverSphere = _selectorOverHead.GetComponent<InitiativeHoverSphere>();
+                _selectorOverHead?.SetActive(true);
                 Vector3 selectorOverHeadPosition = activeCharacter.transform.position + (Vector3.up * 3.0f);
-                SetSelectorOverHeadPosition(selectorOverHeadPosition);
-                UpdateSelectorOverHeadPosition();
+                hoverSphere.SetPosition(selectorOverHeadPosition);
+                hoverSphere.SetHoverStartPosition(selectorOverHeadPosition);
+                hoverSphere.SetHoverSpherePosition(selectorOverHeadPosition);
+                hoverSphere.UpdatePosition();
             }
         }
 
@@ -163,14 +171,25 @@ public class CombatManager : MonoBehaviour
         {
             _currentSelectedCharacter = _selector.GetSelectedCharacter();
         }
-        
-
-        if (_currentSelectedCharacter != null && _selectorCube != null)
+        else
         {
-            _selectorCube.SetActive(true);
-            Vector3 pos = _currentSelectedCharacter.gameObject.transform.position;
-            pos.y = _selectorCube.transform.localScale.y / 2.0f;
-            _selectorCube.transform.position= pos;
+            _currentSelectedCharacter = null;
+        }
+
+
+        if (_currentSelectedCharacter != null)
+        {
+            if (_selectorCube != null)
+            {
+                _selectorCube.SetActive(true);
+                Vector3 pos = _currentSelectedCharacter.gameObject.transform.position;
+                pos.y = _selectorCube.transform.localScale.y / 2.0f;
+                _selectorCube.transform.position = pos;
+            }
+        }
+        else
+        {
+            _selectorCube.SetActive(false);
         }
     }
 
@@ -198,7 +217,7 @@ public class CombatManager : MonoBehaviour
 
     public CombatCamera GetCombatCamera() { return _combatCamera; }
     public GameObject GetSelectorOverHead() { return _selectorOverHead; }
-    
+
     public Selector GetCombatSelector() { return _selector; }
     public EnemyAI GetEnemyAI() { return _enemyAI; }
     public CombatTurnOrder GetCombatTurnOrder() { return _combatTurnOrder; }
@@ -215,47 +234,28 @@ public class CombatManager : MonoBehaviour
 
         List<CombatGridTile> deployTiles = CombatGrid._instance.GetAllDeployTiles();
 
+        CombatGridTile[] offGridTiles = CombatGrid._instance.GetOffGridTiles();
+
         // NOTE (Calle): only placing heroes on the first deploytiles in the list.
         int deployTileIndex = 0;
-        foreach(CharacterData data in characterDataList)
+        foreach (CharacterData data in characterDataList)
         {
-            Character playerHero = CombatGrid._instance.SpawnCharacter(data, 
-                                                                       deployTiles[deployTileIndex++].GetTilePosition(),
+            Character playerHero = CombatGrid._instance.SpawnCharacter(data,
+                                                                       deployTiles[deployTileIndex].GetTilePosition(),
                                                                        Quaternion.Euler(0.0f, 90.0f, 0.0f));
             playerHero.Initialize(data);
 
             _dataToCharacterDict.Add(data, playerHero);
+
+            //playerHero.gameObject.transform.position = new Vector3(-1, deployTileIndex++, 0);
+            playerHero.gameObject.transform.position = offGridTiles[deployTileIndex++].GetTilePosition();
         }
-    }
-
-    public void SetSelectorOverHeadPosition(Vector3 pos)
-    {
-        _selectorOverHead.SetActive(true);
-        _selectorOverHeadStartPos = pos;
-        _selectorOverHead.transform.position = pos;
-    }
-
-    [SerializeField] private float _selectorOverHeadBounceSpeed;
-    [SerializeField] private float _selectorOverHeadBounceInterval;
-    public void UpdateSelectorOverHeadPosition()
-    {
-        
-        float py = _selectorOverHeadStartPos.y + Mathf.Sin(Time.time * _selectorOverHeadBounceSpeed) * _selectorOverHeadBounceInterval;
-        
-        _selectorOverHead.transform.position = new Vector3(_selectorOverHeadStartPos.x, py, _selectorOverHeadStartPos.z);
-    }
-    public void HideSelectorOverhead()
-    {
-        _selectorOverHead.SetActive(false);
     }
 
     public void SetSelectorOverHeadColor(Color color)
     {
-        MeshRenderer rend = _selectorOverHead.GetComponent<MeshRenderer>();
-        if(rend != null)
-        {
-                rend.material.SetColor("_BaseColor", color); 
-        }
+        InitiativeHoverSphere hoverSphere = _selectorOverHead.GetComponent<InitiativeHoverSphere>();
+        hoverSphere.SetHoverOverheadColor(color);
     }
 
     /// <summary>
@@ -267,23 +267,6 @@ public class CombatManager : MonoBehaviour
     {
         return _classAbilitiesDictionary.TryGetValue(characterClass, out var abilities) ? abilities : new List<Ability>();
     }
-
-    //public GameObject GetNextTurnCharacter()
-    //{
-    //    int highestInitiative = Int32.MinValue;
-    //    GameObject nextCharacter = null;
-    //    foreach (var g in CombatGrid._instance.GetAllCharacters())
-    //    {
-    //        int initiative = g.GetComponent<Character>().GetInitiative();
-    //        if (initiative > highestInitiative)
-    //        {
-    //            highestInitiative = initiative;
-    //            nextCharacter = g;
-    //        }
-    //    }
-    //
-    //    return nextCharacter;
-    //}
 
     public CombatGridTile GetTileComponent(int x, int y)
     {

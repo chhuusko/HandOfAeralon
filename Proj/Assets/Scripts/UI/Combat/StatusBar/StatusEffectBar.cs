@@ -18,7 +18,8 @@ public class StatusEffectBar : MonoBehaviour
 
     private void OnDisable()
     {
-        
+        CombatEventManager.OnStatusEffectAppliedToCharacter -= UpdateStatusEffectsBar;
+        CombatEventManager.OnStatusEffectExpiredOnCharacter -= RemoveStatusEffectBarElement;
     }
 
     private void UpdateStatusEffectsBar(Character caster, Character characterSubject, StatusEffect statusEffect)
@@ -40,7 +41,7 @@ public class StatusEffectBar : MonoBehaviour
         
         statusEffectBarElement.SetSprite(statusEffect.Data.Icon);
         statusEffectBarElement.SetTitle(statusEffect.Data.name);
-        statusEffectBarElement.SetDescription(statusEffect.Data.Description);
+        statusEffectBarElement.SetDescription(GameTextFormatter.LabeledDescription(statusEffect.Data.Description));
         _statusEffectBarElements.Add(statusEffectBarElement);
      
      
@@ -51,6 +52,8 @@ public class StatusEffectBar : MonoBehaviour
         if (characterSubject != _ownerCharacter)
             return;
 
+        Debug.Log("Removing status effect bar element");
+        
         foreach (StatusEffectBarElement statusEffect in _statusEffectBarElements)
         {
             if(statusEffect.name.Equals(status.Data.name))

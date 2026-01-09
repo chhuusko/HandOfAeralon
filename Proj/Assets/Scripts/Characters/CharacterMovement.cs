@@ -1,15 +1,26 @@
+// Joel Larsson Wendt || jola6902
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CharacterMovement : MonoBehaviour
 {
+    public UnityEvent<int> MovementCostPreview;
+    public UnityEvent OnMovementPreviewStopped;
+    public event Action OnCharacterStoppedMoving;
+
     private Character _character;
     private List<CombatGridTile> _tilesInRange = new();
     private List<CombatGridTile> _pathPreview = new();
     private bool _bIsMoving = false;
     private CombatGridTile _lastPreviewPathTile = null;
+    private Animator _animator;
+
+    private Color _movementRangeColor = Color.green;
 
     void Start()
     {
@@ -18,6 +29,19 @@ public class CharacterMovement : MonoBehaviour
         {
             Debug.LogError($"CharacterMovement.cs | _character NOT FOUND!");
         }
+
+        _animator = GetComponent<Animator>();
+        if (_animator == null)
+        {
+            Debug.LogError($"CharacterMovement.cs | _animator NOT FOUND!");
+        }
+
+        _character.OnMovementPointsChanged += ReDrawMoveRange;
+    }
+
+    void Update()
+    {
+        _animator.SetBool("IsMoving", _bIsMoving);
     }
 
     public bool IsMoving()
@@ -27,8 +51,10 @@ public class CharacterMovement : MonoBehaviour
 
     public void DrawMoveRange()
     {
+        if (IsDead()) return;
+
         GameObject currentTile = _character.GetCurrentTileComponent().gameObject;
-        if (_character.GetMovementPoints() <= 0 || !_character.CanMove)
+        if (_character.GetMovementPoints() <= 0 || !_character.CanMove || _character.IsStunned)
         {
             //DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} can't move!");
             _tilesInRange = new();
@@ -36,11 +62,15 @@ public class CharacterMovement : MonoBehaviour
         }
 
         //DebugLog.JLWLog($"CharacterMovement.cs | {_character.name} move range drawn.");
-        _tilesInRange = GridExplorer._instance.GetTilesInRange(currentTile, _character.GetMovementPoints(), true)
+        _tilesInRange = GridExplorer._instance.GetReachableTilesWithMovement(currentTile, _character.GetMovementPoints())
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
         .ToList();
-        Selector._instance.SetColorOfTiles(_tilesInRange, Color.green);
+        
+        if (_character.GetFaction() == Faction.Friendly)
+        {
+            Selector._instance.SetColorOfTiles(_tilesInRange, _movementRangeColor);
+        }
     }
 
     public void ForgetMoveRange()
@@ -48,12 +78,28 @@ public class CharacterMovement : MonoBehaviour
         _tilesInRange = new();
     }
 
+    private void ReDrawMoveRange(int a = 0, int b = 0)
+    {
+        if (IsDead() || _bIsMoving) return;
+
+        DrawMoveRange();
+    }
+
+    public IEnumerator DrawMoveRangeDelayed()
+    {
+        yield return new WaitForSeconds(1f);
+        ReDrawMoveRange();
+    }
+
     public void PreviewPath(CombatGridTile tile)
     {
+        if (IsDead() || !_character.CanMove || _character.IsStunned) return;
+
         if (_bIsMoving || tile == _character.GetCurrentTileComponent() || tile == null || !_tilesInRange.Contains(tile) || CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() != Faction.Friendly)
         {
             _lastPreviewPathTile = null;
             GridExplorer._instance.ClearPathDrawing();
+            OnMovementPreviewStopped.Invoke();
             return;
         }
 
@@ -69,14 +115,19 @@ public class CharacterMovement : MonoBehaviour
         currentTile = _character.GetCurrentTileComponent().gameObject;
 
         //DebugLog.JLWLog($"CharacterMovement::PreviewPath() called A*");
-        _pathPreview = GridExplorer._instance.FindPathAStar(currentTile, tile.gameObject)
+        _pathPreview = GridExplorer._instance.FindPathAStar(currentTile, tile.gameObject, true, _tilesInRange)
         .Select(obj => obj.GetComponent<CombatGridTile>())
         .Where(ch => ch != null)
         .ToList();
+
+        int cost = CalculateMovementCost(_pathPreview);
+        MovementCostPreview.Invoke(cost);
     }
 
     public bool ConfirmPath(CombatGridTile tile)
     {
+        if (IsDead() || !_character.CanMove || _character.IsStunned) return false;
+
         if (_bIsMoving || tile == _character.GetCurrentTileComponent() || _pathPreview == null || _pathPreview.Count == 0)
         {
             //DebugLog.JLWLog($"CharacterMovement.cs | _pathPreview IS EMPTY!");
@@ -102,6 +153,8 @@ public class CharacterMovement : MonoBehaviour
 
     public void ForceCustomPath(List<CombatGridTile> path)
     {
+        if (IsDead() || !_character.CanMove || _character.IsStunned) return;
+
         if (path == null || path.Count == 0)
         {
             DebugLog.JLWLog($"CharacterMovement.cs | path IS EMPTY!");
@@ -113,16 +166,14 @@ public class CharacterMovement : MonoBehaviour
 
     private IEnumerator Move(List<CombatGridTile> path)
     {
+        if (IsDead() || !_character.CanMove || _character.IsStunned) yield break;
+
         _bIsMoving = true;
-        CombatEventManager.InvokeOnCharacterMove(_bIsMoving);
+        Debug.LogWarning($"{_character.name} _isMoving = true");
+        CombatEventManager.InvokeOnCharacterMove(_character, _bIsMoving);
+        Selector._instance.InvokeCharacterActionStarted();
         GridExplorer._instance.ClearPathDrawing();
         float moveSpeed = 4f; // M�ste matcha animationerna
-
-        Animator animator = null;
-        if (_character.TryGetComponent<Animator>(out animator))
-        {
-            animator.SetBool("IsMoving", true);
-        }
 
         foreach (var step in path)
         {
@@ -153,18 +204,18 @@ public class CharacterMovement : MonoBehaviour
         }
 
         _bIsMoving = false;
-        CombatEventManager.InvokeOnCharacterMove(_bIsMoving);
-
-        if (animator != null)
-        {
-            animator.SetBool("IsMoving", false);
-        }
+        Debug.LogWarning($"{_character.name} _isMoving = false");
+        OnCharacterStoppedMoving?.Invoke();
+        CombatEventManager.InvokeOnCharacterMove(_character, _bIsMoving);
+        Selector._instance.InvokeCharacterActionStopped();
 
         DrawMoveRange();
     }
 
     private int CalculateMovementCost(List<CombatGridTile> path)
     {
+        if (IsDead() || !_character.CanMove || _character.IsStunned) return 0;
+
         int result = 0;
 
         for (int i = 1; i < path.Count; i++)
@@ -179,4 +230,25 @@ public class CharacterMovement : MonoBehaviour
 
         return result;
     }
+
+    private bool IsDead()
+    {
+        bool bIsDead = _character == null || _character.GetCurrentHealth() <= 0;
+
+        if (bIsDead)
+        {
+            _tilesInRange = new();
+            _pathPreview = new();
+            _bIsMoving = false;
+            _lastPreviewPathTile = null;
+        }
+
+        return bIsDead;
+    }
+
+    public void SetMovementRangeColor(Color color)
+    {
+        _movementRangeColor = color;
+    }
+
 }

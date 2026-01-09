@@ -3,68 +3,124 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class CardUI : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] TextMeshProUGUI _title, _description, _mana;
-    [SerializeField] Image _frame, _image;
-    [SerializeField] List<InfoPanel> _infoPanels;
-    [SerializeField] List<GameObject> _infoPanelInScene;
-    [SerializeField] Transform _pivotPoint;
-    GameObject _infoPanelPrefab;
-    private bool isHover;
+    [SerializeField] Image _base, _frame, _image;
+    [SerializeField] GameObject _glow;
+
+    private Card _card;
+
+    InfoPanelHandler _infoHandler;
     private void Awake()
     {
-        _infoPanelPrefab = Resources.Load<GameObject>("UI/InfoPanel");
+    
+        _infoHandler = gameObject.GetComponent<InfoPanelHandler>();
     }
-    public void OnPointerEnter(PointerEventData eventData)
+    private void OnEnable()
     {
-        isHover = true;
-        foreach (InfoPanel info in _infoPanels)
-        {
-            _infoPanelInScene.Add(Instantiate(_infoPanelPrefab, _pivotPoint.position, Quaternion.identity, CanvasManager.Instance().OverlayCanvas.transform));
-            _infoPanelInScene.Last<GameObject>().GetComponent<InfoPanelUI>().SetUpUIElements(info);
-            StartCoroutine(FollowParent());
-        }
-
+        CardHandManager.onManaChange += UpdateGlow;
+    }
+    private void OnDisable()
+    {
+        CardHandManager.onManaChange -= UpdateGlow;
     }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        isHover = false;
-        foreach (GameObject go in _infoPanelInScene)
-        {
-            Destroy(go);
-        }
-        _infoPanelInScene.Clear();
-    }
-    IEnumerator FollowParent()
-    {
-        while (isHover)
-        {
-            foreach(GameObject GO in _infoPanelInScene)
-            {
-                GO.transform.position = _pivotPoint.position;
-            }
-            yield return new WaitForSeconds(0.01f);
-        }
-        
-    }
-    public void SetInfoPanel(List<InfoPanel> newInfoPanels)
-    {
-        _infoPanels = newInfoPanels;
-    }
     public void SetUpUIElements(Card card)
     {
+        _card = card;
         _title.text = card.title;
-        _description.text = card.description;
-        _mana.text = "" + card.Getcost();
+        _description.text = GameTextFormatter.LabeledDescription(card.description);
+        _mana.text = "" + card.GetCost();
         _image.sprite = card.icon;
-        SetInfoPanel(card.info);
+        _frame.color = card.GetRarityColor((int)card.rarity);
+        _base.color = card.GetRarityColor((int)card.rarity);
+        if (_infoHandler != null)
+        {
+            _infoHandler.SetInfoPanel(card.info);
+        }
+
+        UpdateGlow();
     }
-    
+    public void SetUpUIElements(Card card, bool showInfoPanels)
+    {
+        _card = card;
+        _title.text = card.title;
+        _description.text = GameTextFormatter.LabeledDescription(card.description);
+        _mana.text = "" + card.GetCost();
+        _image.sprite = card.icon;
+        _frame.color = card.GetRarityColor((int)card.rarity);
+        _base.color = card.GetRarityColor((int)card.rarity);
+        if (_infoHandler != null)
+        {
+            _infoHandler.SetInfoPanel(card.info);
+        }
+        // for zoomedcard
+        _infoHandler.SetShowInfoPanel(showInfoPanels);
+        UpdateGlow();
+    }
+    public void UpdateText()
+    {
+   
+    }
+    private void UpdateGlow()
+    {
+        if (_glow)
+        {
+            //_glow.SetActive(CanAfford());
+        }
+        SetCardManaText();
+    }
+    private void UpdateGlow(int i)
+    {
+        UpdateGlow();
+    }
+    private bool CanAfford()
+    {
+        
+        if (CardHandManager.GetInstance())
+        {
+            if (CardHandManager.GetInstance().GetMana() >= _card.GetCost())
+            {
+                return true;
+            } 
+        }
+        return false;
+    }
+    private void SetCardManaText()
+    {
+        if (CardHandManager.GetInstance() == null)
+        {
+            _mana.text = "" + _card.GetCost();
+            return;
+        }
+        if (CanAfford())
+        {
+            if (_card.GetIsTemp())
+            {
+                _mana.text = "<color=green>" + _card.GetCost() + "</color>";
+            }
+            else
+            {
+                _mana.text = "" + _card.GetCost();
+            }
+        }
+        else
+        {
+            _mana.text = "<color=red>" + _card.GetCost() + "</color>";
+        }
+        
+        
+    }
+    public Card GetCard()
+    {
+        return _card;
+    }
+
 }

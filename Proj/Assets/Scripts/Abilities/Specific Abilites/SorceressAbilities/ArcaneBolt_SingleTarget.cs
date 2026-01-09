@@ -6,7 +6,6 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
     [Header("- Ability Specific values -")]
     [SerializeField] private float _damageMultiplier = 0.4f;
     [SerializeField] private float _manaDamageMultiplier = 0.1f;
-    [SerializeField] private int _enemyManaAmount = 6;
 
     [Header("- Emberwake Effects -")]
     [SerializeField] private int _emberwakeBurnAmount = 2;
@@ -36,6 +35,19 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, burn, died);
     }
 
+    protected override void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        if (targetTile == null) return;
+
+        Character affectedCharacter = targetTile.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        affectedCharacter.PreviewHealthChange(-damage);
+    }
+
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
         // 1. Your Base Damage(Can also be applied by traits or cards.)
@@ -46,21 +58,32 @@ public class ArcaneBolt_SingleTarget : SingleTargetAbility
         // 6. EnemyTraits
         // 7. Enemy Buffs / Debuffs
 
-        int baseDamage = castingCharacter.GetBaseDamage();
-        int mana = castingCharacter.GetFaction() == Faction.Friendly ? CardHandManager.GetInstance().GetMana() : _enemyManaAmount;
+        int baseDamage = castingCharacter.Data.DerivedDamage;
+        int mana = castingCharacter.GetFaction() == Faction.Friendly ? CardHandManager.GetInstance().GetMana() : CombatManager._instance.enemyMana;
 
         float totalMultiplier = _damageMultiplier + (_manaDamageMultiplier * mana);
-        int damage = (int)(baseDamage * totalMultiplier);
+        float damage = baseDamage * totalMultiplier;
 
 
-        damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
-        damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
+        damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
 
-        return damage;
+        return Mathf.RoundToInt(damage);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Spawn and direct VFX to target location.
+    }
+
+    public override int GetDamage()
+    {
+        int baseDamage = GetCharacterCaster().Data.DerivedDamage;
+        int mana = CardHandManager.GetInstance().GetMana();
+
+        float totalMultiplier = _damageMultiplier + (_manaDamageMultiplier * mana);
+        float damage = baseDamage * totalMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 }

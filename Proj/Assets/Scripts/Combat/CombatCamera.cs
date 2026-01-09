@@ -39,7 +39,6 @@ public class CombatCamera : MonoBehaviour
         [SerializeField] private float _maxTilt;
         [SerializeField] private float _scroll;
 
-
         public void UpdateZoomScroll()
         {
             float scroll = -Input.GetAxis("Mouse ScrollWheel");
@@ -57,7 +56,7 @@ public class CombatCamera : MonoBehaviour
     };
 
     [SerializeField] private PlayableDirector _timelineDirector;
-    [SerializeField] private bool bIntroCinematicDone;
+    [SerializeField] private bool _bIntroCinematicDone;
     [SerializeField] CameraBounds _cameraBounds;
     [SerializeField] CameraZoomController _cameraZoomController;
     [SerializeField] Vector3 _lastMousePosition;
@@ -66,28 +65,42 @@ public class CombatCamera : MonoBehaviour
     [SerializeField] private float _mouseMoveScreenLimitX, _mouseMoveScreenLimitY;
     [SerializeField] private float _moveSpeed;
 
+    private bool _mouseIsHoveringUI;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        bIntroCinematicDone = false;
-        _timelineDirector.stopped += OnTimelineStopped;
+        _bIntroCinematicDone = false;
+        _timelineDirector.stopped         += OnTimelineStopped;
+        CombatEventManager.OnIsHoveringUI += SetIsMouseHoveringUI;
+    }
+
+    private void OnDisable()
+    {
+        _timelineDirector.stopped         -= OnTimelineStopped;
+        CombatEventManager.OnIsHoveringUI -= SetIsMouseHoveringUI;
     }
 
     void OnDestroy()
     {
-        _timelineDirector.stopped -= OnTimelineStopped;
+        //_timelineDirector.stopped -= OnTimelineStopped;
     }
 
     void Update()
     {
         Move();
-        ZoomCamera();
+
+        if(!_mouseIsHoveringUI)
+            ZoomCamera();
     }
 
     private void Move()
     {
         Vector3 cameraMovement = Vector3.zero;
 
+
+        // NOTE (Calle): UnComment if we want to be able to move screen with cursor out of screen bounds.
+        /*
         if (Input.GetKey(KeyCode.D) || Input.mousePosition.x > Screen.width - _mouseMoveScreenLimitX)
             cameraMovement += Vector3.right;
         if (Input.GetKey(KeyCode.A) || Input.mousePosition.x < _mouseMoveScreenLimitX)
@@ -96,8 +109,16 @@ public class CombatCamera : MonoBehaviour
             cameraMovement += Vector3.forward;
         if (Input.GetKey(KeyCode.S) || Input.mousePosition.y < _mouseMoveScreenLimitY)
             cameraMovement += Vector3.back;
+        */
 
-
+        if (Input.GetKey(KeyCode.D))
+            cameraMovement += Vector3.right;
+        if (Input.GetKey(KeyCode.A))
+            cameraMovement += Vector3.left;
+        if (Input.GetKey(KeyCode.W))
+            cameraMovement += Vector3.forward;
+        if (Input.GetKey(KeyCode.S))
+            cameraMovement += Vector3.back;
 
         // NOTE (Calle): Moving camera with scroll button pressed
         if (Input.GetMouseButtonDown(2))
@@ -136,11 +157,11 @@ public class CombatCamera : MonoBehaviour
     private void InterruptIntroCinematic()
     {
         CutSceneManager.GetInstance().HideCutsceneCanvas();
-        bIntroCinematicDone = true;
+        _bIntroCinematicDone = true;
         _timelineDirector.Stop();
     }
-
-    public bool IsIntroCinematicDone() { return bIntroCinematicDone; }
+    private void SetIsMouseHoveringUI(bool isMouseHoveringUI) { _mouseIsHoveringUI = isMouseHoveringUI; }
+    public bool IsIntroCinematicDone() { return _bIntroCinematicDone; }
     public void PlayIntroCinematic()
     {
         _timelineDirector.Play();

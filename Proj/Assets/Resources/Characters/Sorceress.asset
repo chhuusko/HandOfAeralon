@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Sorceress
   m_EditorClassIdentifier: 
   characterClass: 1
-  minHealthPoints: 20
-  maxHealthPoints: 22
-  minDamage: 8
-  maxDamage: 10
+  minHealthPoints: 100
+  maxHealthPoints: 110
+  minDamage: 40
+  maxDamage: 45
   minInitiative: 6
   maxInitiative: 7
   minMovementPoints: 3
@@ -26,4 +26,65 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9d0659673dcbe654e8a4e3ebc0eb7815, type: 2}
   - {fileID: 11400000, guid: ba8bb7e1e03a9104eaf82b2f10b70868, type: 2}
   - {fileID: 11400000, guid: 9343061b801cb7841bed571274cfb07c, type: 2}
+  availableNames:
+  - Aeralis
+  - Volyra
+  - Calith
+  - Vireya
+  - Nyxara
+  - Selene
+  - Ilyth
+  - Kaelira
+  - Luxira
+  - Thessia
+  - Liora
+  - Azaryn
+  - Frostine
+  - Valka
+  - Elyra
+  - Soriel
+  - Pyrrha
+  - Maelis
+  - Kyrra
+  - Zephra
+  - Ignara
+  - Sylpha
+  - Vireth
+  - Auriel
+  - Cindrya
+  - Thalassa
+  - Storma
+  - Elaria
+  - Crysa
+  - Veloryx
+  - Cyrilla
+  - Lysithea
+  - Arcanis
+  - Zorynth
+  - Arcana
+  - Caeryn
+  - Voltara
+  - Astryx
+  - Neritha
+  - Heliora
+  - Emyra
+  - Fylis
+  - Zyra
+  - Ivara
+  - Solira
+  - Myxen
+  - Astra
+  - Kelyra
+  - Pyra
+  - Vexa
+  - Lunara
+  - Cryth
+  - Zelra
+  - Orith
+  - Sypha
+  - Ixyra
+  - Thyra
+  - Vaela
+  - Nixis
+  - Elzra
   classImage: {fileID: 21300000, guid: 3a1b48ba3eb2be64683dfdf63f7178d1, type: 3}

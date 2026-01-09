@@ -15,6 +15,11 @@ public class Emberwake : StatusEffect
 
     public override void OnBurnApplied()
     {
+        if (_effectApplied)
+        {
+            return;
+        }
+        
         var data = Data as ChanceModifyingData;
 
         if (!data)
@@ -24,9 +29,20 @@ public class Emberwake : StatusEffect
         
         var cards = CardHandManager.GetInstance().GetCardsInHand();
 
-        var card = cards[UnityEngine.Random.Range(0, cards.Count)];
+        if (cards.Count == 0)
+        {
+            return;
+        }
         
-        card.GetCard().TempModifyCost((int)-data.Modifier);
+        var card = cards[UnityEngine.Random.Range(0, cards.Count)];
+
+        if (!card)
+        {
+            return;
+        }
+        
+        card.GetCard().TempModifyCost(-data.Modifier);
+        _effectApplied = true;
     }
 
     public override void ModifyBurnApplicationChance(ref float chance)
@@ -38,6 +54,7 @@ public class Emberwake : StatusEffect
             return;
         }
 
-        chance *= data.Chance;
+        var modifier = 1f + data.ChancePercent / 100f;
+        chance *= modifier;
     }
 }

@@ -36,6 +36,10 @@ public class DesertsGrasp_Ability : RoundAOEAbility
         if (!canCast) return null;
 
         // Calculate which tiles to effect.
+        if (_pattern is RoundAOEPattern pattern)
+        {
+            pattern.SetRadius(_radius);
+        }
         var list = _pattern.CalculateTilesToEffect(targetTile);
 
         return list;
@@ -83,27 +87,61 @@ public class DesertsGrasp_Ability : RoundAOEAbility
 
         StatusEffect poison = null;
 
+        if (_abilityAOEVFXSequence != null)
+        {
+            VFXData data = new VFXData
+            {
+                Caster = GetCharacterCaster(),
+                OriginPosition = casterTile.transform.position,
+                TargetTile = tileToEffect,
+                TargetPosition = tileToEffect.transform.position,
+                Direction = (tileToEffect.transform.position - casterTile.transform.position).normalized,
+            };
+            data.Caster.StartCoroutine(_abilityAOEVFXSequence.RunSequence(data)
+            );
+        }
+
         if (Random.value < _chanceToApplyPoison)
         {
             if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
             {
-                statusEffectManager.AddStatusEffect(poison = new Poison(_poisonStacks), castingCharacter);
+                statusEffectManager.AddStatusEffect(poison = new Poison(castingCharacter, _poisonStacks), castingCharacter);
                 _enemiesPoisoned++;
             }
         }
         AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, poison, died);
     }
 
+    protected override void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        if (targetTile == null) return;
+
+        Character affectedCharacter = targetTile.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        affectedCharacter.PreviewHealthChange(-damage);
+    }
+
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
-        int damage = (int)(castingCharacter.GetBaseDamage() * _damageMultiplier);
-        damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
-        damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
-        return damage;
+        float damage = castingCharacter.Data.DerivedDamage * _damageMultiplier;
+        damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         //
+    }
+
+    public override int GetDamage()
+    {
+        float damage = GetCharacterCaster().Data.DerivedDamage * _damageMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 }

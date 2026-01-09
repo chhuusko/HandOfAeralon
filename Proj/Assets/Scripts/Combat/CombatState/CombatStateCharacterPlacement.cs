@@ -24,6 +24,8 @@ public class CombatStateCharacterPlacement : CombatStateBase
         base.Exit();
         CombatUI.Instance.OnStartCombatButtonPressed -= StartTakeTurns;
         CombatEventManager.InvokeExitCombatStatePlaceCharacter();
+        CombatGrid._instance.HideOffGridTiles();
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.StartCombat, Vector3.zero);
     }
 
     public override void Update()
@@ -36,13 +38,15 @@ public class CombatStateCharacterPlacement : CombatStateBase
 
             CombatGridTile unoccupiedDeployTile = _selector.GetUnoccupiedDeployTileClicked();
             Character selectedCharacter = _selector.GetSelectedCharacter();
-
-            if (selectedCharacter)
+            
+            if (selectedCharacter && selectedCharacter.GetFaction() == Faction.Friendly)
             {
                 if (unoccupiedDeployTile)
                 {
                     Vector2Int tileIndex = unoccupiedDeployTile.GetTileIndex();
                     Vector3 tilePosition = unoccupiedDeployTile.GetTilePosition();
+                    
+                    CombatGrid._instance.ClearOffGridOccupant(selectedCharacter.gameObject);
 
                     if (CombatGrid._instance.ContainsCharacter(selectedCharacter.gameObject))
                     {
@@ -61,6 +65,10 @@ public class CombatStateCharacterPlacement : CombatStateBase
                                                                                             Quaternion.identity);
                         CombatGrid._instance.SpawnCharacter(characterData);
                     }
+                    
+                    unoccupiedDeployTile.SetOccupant(selectedCharacter.gameObject);
+                    
+                    CombatEventManager.InvokeOnCharacterPlaced();
                 }
                 else
                 {
@@ -72,6 +80,6 @@ public class CombatStateCharacterPlacement : CombatStateBase
 
     private void StartTakeTurns()
     {
-        CombatManager._instance.ChangeCombatState(new CombatStateTakeTurn());
+      CombatManager._instance.ChangeCombatState(new CombatStateTakeTurn());
     }
 }

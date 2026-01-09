@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -16,6 +18,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private GameObject _spawnedParticle;
     private RectTransform _rect;
     Vector3 _startPosition, _hoverEndPosition;
+    CombatGridTile gridTile;
     float _hoverDistance = 120f;
     private bool _isDragging;
 
@@ -72,8 +75,21 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
             if (Physics.Raycast(ray, out hit))
             {
-                _spawnedParticle.transform.position = hit.point;
                 
+                _spawnedParticle.transform.position = hit.point;
+                StopAllHealthPreview();
+                if (_containedCard.type == CardType.Target)
+                {
+                    Character target = GetValidTarget();
+                    if (target != null)
+                    {
+                        _containedCard.ShowDamagePreview(target);
+                    }
+                }
+                else
+                {
+                    _containedCard.ShowDamagePreview();
+                }
             }
         }
     }
@@ -90,24 +106,44 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         if (_isDragging)
         {
             _isDragging = false;
+            StopAllHealthPreview();
             CardHandManager.GetInstance().Dragged(false);
+            
             if (_containedCard.type == CardType.Target)
             {
-                CombatGridTile grid;
-                if (grid = Selector._instance.GetTileUnderMouse())
+                if (gridTile = Selector._instance.GetTileUnderMouse())
                 {
-                    if (!grid.GetOccupantCharacter())
+                    if (!gridTile.GetOccupantCharacter())
                     {
                         CancelUse();
                         return;
                     }
                     else
                     {
-                        Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
-                        Destroy(_spawnedParticle);
-                        CardHandManager.GetInstance().CharacterTarget(grid.GetOccupantCharacter());
-                        CardHandManager.GetInstance().CardTargetCharacter(_containedCard, grid.GetOccupantCharacter());
-                        _containedCard.PlayCardOnTarget(grid.GetOccupantCharacter());
+                        if (isEnemyTargetStealth(gridTile.GetOccupantCharacter()))
+                        {
+                            CancelUse();
+                            return;
+                        }
+                        else
+                        {
+                            if (HandleCardConditions(gridTile.GetOccupantCharacter()))
+                            {
+                                Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
+                                Destroy(_spawnedParticle);
+                                CardHandManager.GetInstance().CharacterTarget(gridTile.GetOccupantCharacter());
+                                CardHandManager.GetInstance().CardTargetCharacter(_containedCard, gridTile.GetOccupantCharacter());
+                                CardHandManager.GetInstance().ChangeMana(-_containedCard.GetCost());
+                                _containedCard.PlayCardOnTarget(gridTile.GetOccupantCharacter());
+                            }
+                            else
+                            {
+                                CancelUse();
+                                return;
+                            }
+                            
+                        }
+                        
                     }
                 }
                 else
@@ -118,21 +154,23 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             }
             else
             {
-                
+                CardHandManager.GetInstance().ChangeMana(-_containedCard.GetCost());
                 _containedCard.PlayCard();
                 
                 
             }
             Destroy(Instantiate(_particleDrop, _spawnedParticle.transform.position, Quaternion.identity), 2f);
             Destroy(_spawnedParticle);
+             
+            
+            CardHandManager.GetInstance().RemoveCardFromHand(this);
             _containedCard.AfterCardPlay();
-            CardHandManager.GetInstance().ChangeMana(-_containedCard.Getcost());
-            CardHandManager.GetInstance().RemoveCardFromHand(this);   
         }
     }
 
     private void CancelUse()
     {
+        StopAllHealthPreview();
         CardHandManager.GetInstance().Dragged(false);
         Destroy(_spawnedParticle);
         _isDragging = false;
@@ -140,7 +178,6 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        //StartCoroutine(OnHover(true));
         CardHandManager.GetInstance().ShowHighlightedCard(this, transform.position);
         CardHandManager.GetInstance().Hovered(true);
         setVisible(false);
@@ -148,12 +185,11 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     private bool CanAfford()
     {
-        return CardHandManager.GetInstance().GetMana() >= _containedCard.Getcost();
+        return CardHandManager.GetInstance().GetMana() >= _containedCard.GetCost();
     }
     private bool CanPlay()
     {
         if (CombatManager._instance.GetCombatState() == CombatState.PlaceCharacters) return false;
-
         return (CombatManager._instance.GetCombatTurnOrder().GetCurrentTurn() == CombatTurn.PlayerTurn);
             
         
@@ -202,5 +238,67 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             GetComponent<CanvasGroup>().alpha = 0;
         }
         
+    }
+    public bool HandleCardConditions(Character character)
+    {
+        List<TargetCondition> conditions = _containedCard.targetConditions;
+
+        if (conditions.Count == 0) return true;
+        
+        foreach(TargetCondition condition in conditions) {
+            switch (condition)
+            {
+                case TargetCondition.Ally:
+                    if (character.GetFaction() != Faction.Friendly) return false;
+                    break;
+                case TargetCondition.Enemy:
+                    if (character.GetFaction() != Faction.Enemy) return false;
+                    break;
+                case TargetCondition.NotActive:
+                    if (character == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter()) return false;
+                    break;
+
+            }
+        }
+
+        return true;
+        
+    }
+    private bool isEnemyTargetStealth(Character character)
+    {
+        return (character.GetFaction() == Faction.Enemy && character.GetStatusEffectManager().ContainsStatusEffect<Stealth>());
+    }
+    private Character GetValidTarget()
+    {
+        if (gridTile = Selector._instance.GetTileUnderMouse())
+        {
+            if (!gridTile.GetOccupantCharacter())
+            {
+                return null;
+            }
+            else
+            {
+                if (isEnemyTargetStealth(gridTile.GetOccupantCharacter()))
+                {
+                    return null;
+                }
+                else
+                {
+                    if (HandleCardConditions(gridTile.GetOccupantCharacter()))
+                    {
+                        return gridTile.GetOccupantCharacter();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    private void StopAllHealthPreview()
+    {
+        List<Character>characters = CombatGrid._instance.GetAllCharacterScripts();
+        foreach (Character character in characters)
+        {
+            character.StopPreviewingHealthChange();
+        }
     }
 }

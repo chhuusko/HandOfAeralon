@@ -7,7 +7,7 @@ public class Weakened : StatusEffect
     {
     }
 
-    public override void ModifyOutgoingDamage(ref float damage, Ability ability)
+    public override void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
         var data = Data as DamageModifyingData;
 
@@ -16,6 +16,7 @@ public class Weakened : StatusEffect
             return;
         }
         
-        damage /= data.DamageModifier;
+        var modifier = data.DamageModifierPercent / 100f;
+        combinedModifier += modifier;
     }
 }

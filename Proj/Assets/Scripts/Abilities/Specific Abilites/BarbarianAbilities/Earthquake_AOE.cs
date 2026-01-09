@@ -1,4 +1,6 @@
+using Newtonsoft.Json.Bson;
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
@@ -24,33 +26,55 @@ public class Earthquake_AOE : DirectedAOEAbility
 
     private int slowedEnemyCounter;
 
-    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
+
+    public override IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
     {
-        // Works like the base version of GetTilesToEffect but only returns the list when valid target is hovered. 
-        // Also removes caster tile as target. 
+        Character caster = casterTile.GetOccupantCharacter();
+        if (caster == null) Debug.LogError("CasterTile has no character!");
 
-        if (targetTile == null)
-            return null;
+        caster.Animator.SetBool("AbilityOngoing", true);
 
-        // Get caster
-        Character caster = GetAbilityHandler().GetCharacterCaster();
-        if (caster == null)
-            return null;
+        // Should not be able to move after performing ability.
+        caster.CanMove = false;
 
-        // Check if ability can be cast on target tile.
-        bool canCast = caster.GetAbilityHandler().CanCastAbility(this, targetTile);
-        if (!canCast) return null;
-
-        // Calculate which tiles to effect.
-        var list = _pattern.CalculateTilesToEffect(targetTile);
-
-        // Remove caster tile. Unnecessary if pattern already removes caster.
-        if (caster.GetCurrentTileComponent())
+        // Rotate towards target if the target is not the caster's tile.
+        if (casterTile != targetTile)
         {
-            list.Remove(caster.GetCurrentTileComponent());
+            caster.RotateTowards(targetTile.transform, GetCastingRotationTime());
         }
 
-        return list;
+        if (caster.TryGetComponent<Animator>(out var animator))
+        {
+            animator.SetTrigger(GetAbilityName());
+        }
+
+        AudioManager.Instance.PlayOneShot(AudioEvent, caster.transform.position);
+
+        PlayCustomEarthquakeVFX(casterTile, targetTile);
+
+        if (GetAbilityVFXSequence() != null)
+        {
+            VFXData data = new VFXData
+            {
+                Caster = caster,
+                OriginPosition = casterTile.transform.position,
+                TargetTile = targetTile,
+                TargetPosition = targetTile.transform.position,
+                Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
+                CastingAnimationDuration = GetCastingAnimationTime(),
+                CastingFXDuration = GetCastingTime(),
+                TravelFXDuration = GetFromCastToHitTime(),
+                ImpactFXDuration = GetImpactTime()
+            };
+            yield return caster.StartCoroutine(GetAbilityVFXSequence().RunSequence(data)
+            );
+        }
+
+        RunAbility(casterTile, targetTile);
+        Selector._instance.InvokeCharacterActionStopped();
+        yield return new WaitForSeconds(3);
+
+        caster.Animator.SetBool("AbilityOngoing", false);
     }
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
@@ -104,6 +128,7 @@ public class Earthquake_AOE : DirectedAOEAbility
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         bool died = affectedCharacter.TakeDamage(damage);
 
+
         StatusEffect slow = null;
 
         if (Random.value < _slowCharacterHitChance)
@@ -122,14 +147,63 @@ public class Earthquake_AOE : DirectedAOEAbility
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
-        int damage = (int)(castingCharacter.GetBaseDamage() * _damageMultiplier);
-        damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
-        damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
-        return damage;
+        float damage = castingCharacter.Data.DerivedDamage * _damageMultiplier;
+        damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
+    }
+
+    protected override void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        if (targetTile == null) return;
+
+        Character affectedCharacter = targetTile.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        affectedCharacter.PreviewHealthChange(-damage);
+    }
+
+    private void PlayCustomEarthquakeVFX(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        var directedAOEPattern = _pattern as DirectedAOEPattern;
+
+        directedAOEPattern.SetDirection(CalculateDirection(casterTile, targetTile));
+        directedAOEPattern.SetCasterTile(casterTile);
+
+        List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
+        foreach (CombatGridTile tile in tilesToEffect)
+        {
+            if (tile != null)
+            {
+                if (_abilityAOEVFXSequence != null)
+                {
+                    VFXData data = new VFXData
+                    {
+                        Caster = GetCharacterCaster(),
+                        OriginPosition = casterTile.transform.position,
+                        TargetTile = tile,
+                        TargetPosition = tile.transform.position,
+                        Direction = (tile.transform.position - casterTile.transform.position).normalized,
+                    };
+                    data.Caster.StartCoroutine(_abilityAOEVFXSequence.RunSequence(data)
+                    );
+                }
+            }
+        }
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         //
+    }
+
+    public override int GetDamage()
+    {
+        float damage = GetCharacterCaster().Data.DerivedDamage * _damageMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 }

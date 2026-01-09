@@ -14,10 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Withering Recovery
   Icon: {fileID: 21300000, guid: 71e9e99a5716268449af9f6841e07da8, type: 3}
-  Description: Healing received is reduced by 25%
+  Description: '{heal}Healing{/heal} received is reduced by <b>25%</b>'
   Type: 3
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: b1d116a26c5fd1241aa502aa08cdfbb5, type: 3}
+  IsDispellable: 0
+  SkipFirstTick: 0
+  _typeName: WitheringRecovery, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
   Class: 4
   IsPositive: 0
-  DamageModifier: 1.25
+  DamageModifierPercent: 25

@@ -8,11 +8,27 @@ public class FlameMark : Card
     {
         if (character != null)
         {
-            character.GetStatusEffectManager().AddStatusEffect(new Burn(null, 2));
+            
             if (character.GetStatusEffectManager().ContainsStatusEffect<Burn>())
             {
-                character.TakeDamage(15);
+                
+                character.TakeDamage(GetDamage(character));
             }
+            character.GetStatusEffectManager().AddStatusEffect(new Burn(2));
+        }
+    }
+    public override int GetDamage(Character character)
+    {
+        int damage = 70;
+        return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
+    }
+    public override void ShowDamagePreview(Character character)
+    {
+        if (character == null) return;
+        
+        if (character.GetStatusEffectManager().ContainsStatusEffect<Burn>())
+        {
+            character.PreviewHealthChange(-GetDamage(character));
         }
     }
 }

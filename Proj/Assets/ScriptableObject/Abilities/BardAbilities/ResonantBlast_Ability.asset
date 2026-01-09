@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70034da990aeb23408ec64078e65843b, type: 3}
+  m_Name: ResonantBlast_Ability
+  m_EditorClassIdentifier: 
+  _abilityName: Resonant Blast
+  _icon: {fileID: 21300000, guid: a7eb268ed3a39ab499ec34ceec713f50, type: 3}
+  _range: 6
+  _cooldown: 1
+  _description: "Deal {damage} (<b>70%</b> \xD7 Damage) {elemental_damage}Elemental
+    damage{/elemental_damage} to all enemies in the area.\\n\\nEnemies with a Debuff
+    take {damage} (<b>100%</b> \xD7 Damage) damage instead.\\n\\nIf at least one
+    enemy is hit, {heal}heal{/heal} the Bard for <b>10%</b> of their maximum {health}Health{/health},
+    plus <b>2.5%</b> for each additional enemy hit (up to <b>20%</b>). "
+  _abilityTag: 10
+  _type: 6
+  _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
+  _targetType: 0
+  _abilityVFXSequence: {fileID: 11400000, guid: bf1271d579334c84c82d3bbb7840b7b6,
+    type: 2}
+  _castingSound: {fileID: 0}
+  _hitSound: {fileID: 0}
+  _castingAnimationTime: 0
+  _castingFXTime: 0
+  _fromCastToHitTime: 0
+  _impactVFXTime: 2.65
+  _castingRotationTime: 0.3
+  <AudioEvent>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
+  _validTargets: 5
+  _abilityAOEVFXSequence: {fileID: 0}
+  _radius: 2
+  _damageMultiplier: 0.7
+  _damageMultiplierDebuffed: 1
+  _procentBaseHeal: 0.1
+  _procentPerExtraEnemyHit: 0.025
+  _maxHealProcent: 0.2

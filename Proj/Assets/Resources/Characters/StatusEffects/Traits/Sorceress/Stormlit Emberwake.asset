@@ -14,10 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Stormlit Emberwake
   Icon: {fileID: 21300000, guid: 4d73fc1baca0e3744831ca28fdd5a3d5, type: 3}
-  Description: Emberwake also grants +10% chance to Stun for 1 turn
+  Description: '{ability}Emberwake{/ability} also grants <b>+20%</b> chance to {non_damaging}Stun{/non_damaging}
+    for <b>1</b> turn'
   Type: 3
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: bf94f2085ca2fd64bbff8f5946b81351, type: 3}
+  IsDispellable: 0
+  SkipFirstTick: 0
+  _typeName: StormlitEmberwake, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
   Class: 1
   IsPositive: 1
-  DamageModifier: 1.1
+  DamageModifierPercent: 20

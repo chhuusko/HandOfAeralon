@@ -9,34 +9,69 @@ public abstract class StatusEffect
     [SerializeField] private int _duration;
     public int Duration => _duration;
     
-    protected Character Character { get; private set; }
-    protected StatusEffectManager Manager { get; private set; }
-    
     [SerializeField] private StatusEffectData _data;
     public StatusEffectData Data => _data;
     
-    public void SetDuration(int duration) => _duration = duration;
+    public bool ShouldExpire;
+    public bool IsReflected;
+    
+    protected Character Character { get; private set; }
+    protected StatusEffectManager Manager { get; private set; }
+
+    private bool _skipNextTick;
     
     protected StatusEffect(int duration = 3)
     {
         _duration = duration;
 
         _data = StatusEffectDataRegistry.GetDataForType(GetType());
+
+        if (!_data)
+        {
+            Debug.LogError($"{GetType()} has no status effect data");
+        }
+
+        if (string.IsNullOrEmpty(Data.Name))
+        {
+            Debug.LogError($"{GetType()} has no status effect name");
+        }
         
         _name = Data.Name;
     }
 
-    public void Initialize(Character character, StatusEffectManager manager)
+    public void Setup(Character character, StatusEffectManager manager)
     {
         Character = character;
         Manager = manager;
+    }
+
+    public virtual void Initialize()
+    {
+        // If the status effect is applied out of turn, it should not tick down at start of next turn.
+        _skipNextTick = Character != CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
+        if (_data && !_data.SkipFirstTick)
+        {
+            _skipNextTick = false;
+        }
         
         OnApply();
     }
 
+    public void Cleanup()
+    {
+        
+    }
+    
+    public string GetColorCodedDescription()
+    {
+        return GameTextFormatter.LabeledDescription(_data.Description);
+    }
+    
+    public void SetDuration(int duration) => _duration = duration;
+
     public virtual void IncreaseDuration(int amount = 1)
     {
-        _duration = Mathf.Max(Duration, amount);
+        _duration += amount;
     }
 
     public void DecreaseDuration(int amount = 1)
@@ -58,10 +93,21 @@ public abstract class StatusEffect
         {
             return true;
         }
+
+        if (_skipNextTick)
+        {
+            _skipNextTick = false;
+            return true;
+        }
+        
         return --_duration > 0;
     }
     
     // Virtual methods. Overriden and implemented in subclasses as needed.
+    public virtual bool BeforeStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
+    {
+        return true;
+    }
     public virtual void OnApply() {}
     public virtual void OnExpire() {}
     public virtual void OnTurnStart() {}
@@ -70,11 +116,16 @@ public abstract class StatusEffect
     public virtual void OnTargetedByCard() {}
     public virtual void OnBurnApplied() {}
     public virtual void OnCombatEnded() {}
-    public virtual void ModifyIncomingDamage(ref float damage, Ability ability) {}
-    public virtual void ModifyOutgoingDamage(ref float damage, Ability ability) {}
-    public virtual void ModifyIncomingHeal(ref float heal, Ability ability) {}
-    public virtual void ModifyOutgoingHeal(ref float heal, Ability ability) {}
-    public virtual void ModifyBurnDamage(ref int damage) {}
+    public virtual void OnTakeDamage() {}
+    public virtual void OnAbilityUsed(AbilityExecutionData abilityData) {}
+    public virtual void ModifyIncomingDamage(ref float damage, ref float combinedModifier, Ability ability) {}
+    public virtual void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability) {}
+    public virtual void ModifyIncomingHeal(ref float heal, ref float combinedModifier, Ability ability) {}
+    public virtual void ModifyOutgoingHeal(ref float heal, ref float combinedModifier, Ability ability) {}
+    public virtual void ModifyOutgoingBurnDamage(ref float damage) {}
+    public virtual void ModifyIncomingBurnDamage(ref float damage) {}
+    public virtual void ModifyOutgoingPoisonDamage(ref float damage) {}
+    public virtual void ModifyIncomingPoisonDamage(ref float damage) {}
     public virtual void ModifyBurnApplicationChance(ref float chance) {}
     public virtual void ModifyStunApplicationChance(ref float chance) {}
 }

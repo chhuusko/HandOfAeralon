@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Barbarian
   m_EditorClassIdentifier: 
   characterClass: 0
-  minHealthPoints: 36
-  maxHealthPoints: 40
-  minDamage: 8
-  maxDamage: 9
+  minHealthPoints: 180
+  maxHealthPoints: 200
+  minDamage: 45
+  maxDamage: 50
   minInitiative: 5
   maxInitiative: 6
   minMovementPoints: 4
@@ -26,4 +26,65 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c3b3899fe166b5b40a3216854a608cb5, type: 2}
   - {fileID: 11400000, guid: aa055924495c52a4ab08cbc393e29a17, type: 2}
   - {fileID: 11400000, guid: d378d1fbd3ba1b84eb9f2a6e1cf15560, type: 2}
-  classImage: {fileID: 21300000, guid: 4c438b9b7f2174044949b1584b40594c, type: 3}
+  availableNames:
+  - Kragan
+  - Thorn
+  - Raukar
+  - Morg
+  - Varric
+  - Hroth
+  - Balen
+  - Skorn
+  - Uldar
+  - Rok
+  - Targ
+  - Fenrik
+  - Grath
+  - Borun
+  - Keth
+  - Jorak
+  - Woln
+  - Drawen
+  - Halvor
+  - Brakk
+  - Drakth
+  - Ulmar
+  - Korrin
+  - Thryg
+  - Baelor
+  - Sketh
+  - Rorik
+  - Gundar
+  - Vark
+  - Thalen
+  - Mokran
+  - Brundir
+  - Kargun
+  - Othrik
+  - Velk
+  - Dornak
+  - Hask
+  - Torven
+  - Grimal
+  - Wyrk
+  - Ragthor
+  - Skarn
+  - Brokth
+  - Thorgun
+  - Urmok
+  - Krogan
+  - Varnok
+  - Ashdrak
+  - Dregan
+  - Hrokan
+  - Fennak
+  - Raskor
+  - Gorrak
+  - Thokan
+  - Bralgor
+  - Kurnak
+  - Morgrin
+  - Yngrak
+  - Skorvik
+  - Uldrek
+  classImage: {fileID: 21300000, guid: 08684dc239180624ba5059a87ddf2f29, type: 3}

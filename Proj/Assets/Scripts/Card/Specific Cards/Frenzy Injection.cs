@@ -9,11 +9,17 @@ public class FrenzyInjection : Card
 
         if (character != null)
         {
-            character.TakeDamage(3);
+            
+            character.TakeDamage(GetDamage(character));
             character.GetStatusEffectManager().AddStatusEffect(new Enraged(2));
         }
     }
 
-    // Update is called once per frame
+    public override int GetDamage(Character character)
+    {
+        int damage = 25;
+        return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
+        
+    }
    
 }

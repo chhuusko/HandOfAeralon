@@ -39,14 +39,16 @@ public class BuyableCard : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public void SetCard(Card card)
     {
         _card = card;
-        _price = (int)(card.rarity+1)*50;
-        _priceText.text = "<color=yellow>50</color><voffset=12><space=15><sprite name=\"UI_icon_59\"/>";
+        _price = 50;
+        _priceText.text = "<color=yellow>"+ _price +"</color><voffset=12><space=15><sprite name=\"UI_icon_59\"/>";
         GetComponent<CardUI>().SetUpUIElements(card);
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!canAfford()) return;
-        _isHeldDown = true;
+        if (Shop.CanAfford(_price)){
+            _isHeldDown = true;
+        }
+
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -61,10 +63,6 @@ public class BuyableCard : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private void Bought()
     {
         GlobalGameManager.GetInstance().GetGameData().cardList.Add(_card);
-        Shop.GetInstance().ChangeCoins(-_price);
-    }
-    private bool canAfford()
-    {
-        return GlobalGameManager.GetInstance().GetGameData().coins >= _price;
+        Shop.GetInstance().Bought(_price);
     }
 }

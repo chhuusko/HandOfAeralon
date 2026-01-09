@@ -9,15 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b991492d39e8d2446a0d7666f7170f5a, type: 3}
+  m_Script: {fileID: 11500000, guid: 0dd8f9f34bbfe2e40a2c17b5cfe751b6, type: 3}
   m_Name: Stealth
   m_EditorClassIdentifier: 
   Name: Stealth
   Icon: {fileID: 21300000, guid: 742585b77af2fe348968ebc1f20e7278, type: 3}
-  Description: Character is untargetable, deals 25% more damage and has 1 additional
-    Movement Point until they deal or take damage
+  Description: Character is untargetable, deals <b>25%</b> more damage and has <b>1</b>
+    additional Movement Point until they deal or take damage
   Type: 0
   IsPermanent: 0
-  Script: {fileID: 11500000, guid: 96831a5177b987b42a6750db45ba77dd, type: 3}
+  IsDispellable: 1
+  SkipFirstTick: 1
+  _typeName: Stealth, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
+  DamageModifierPercent: 25
+  MovementPointModifier: 1

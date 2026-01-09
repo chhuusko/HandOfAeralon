@@ -47,8 +47,8 @@ MonoBehaviour:
   AIEndTurn:
     m_PersistentCalls:
       m_Calls: []
-  _barbData: {fileID: 11400000, guid: 379db16b03291a04c8f6aa4262adf05f, type: 2}
-  _rogueData: {fileID: 11400000, guid: fc96843e5aaf46f4b8f16561c40bde52, type: 2}
-  _sorcData: {fileID: 11400000, guid: c91f57a064803f447a57de754b74d82d, type: 2}
-  _bardData: {fileID: 11400000, guid: e8d14e2fc1a8ad842ad4d20b7eb74775, type: 2}
   _controlledFaction: 1
+  _linePattern: {fileID: 11400000, guid: 563544cd6ba3c45459964c4950b1f39b, type: 2}
+  _flamePattern: {fileID: 11400000, guid: 6fd1d109070e26c4780d7665f10fcfe0, type: 2}
+  _housePattern: {fileID: 11400000, guid: 129687a3acdf70e4cba2536129786496, type: 2}
+  _trisquarePattern: {fileID: 11400000, guid: 3d1a5d34020f2914ab668a0552d0687c, type: 2}

@@ -9,14 +9,32 @@ public class SanguineOffering : Card
         
         if (character != null && character.GetFaction() == Faction.Friendly)
         {
-            character.TakeDamage(10);
+            character.TakeDamage(character.GetDamage());
         }
         List<Character> friendlyList = CombatGrid._instance.GetCharacterScriptsByFaction(Faction.Friendly);
         foreach (Character friendly in friendlyList)
         {
             if (friendly.GetFaction() == Faction.Friendly && friendly != character)
             {
-                friendly.Heal(10);
+                friendly.Heal(50);
+            }
+        }
+    }
+    public override int GetDamage(Character character)
+    {
+        int damage = 50;
+        return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
+    }
+    public override void ShowDamagePreview(Character character)
+    {
+        base.ShowDamagePreview(character);
+
+        List<Character> friendlyList = CombatGrid._instance.GetCharacterScriptsByFaction(Faction.Friendly);
+        foreach (Character friendly in friendlyList)
+        {
+            if (friendly.GetFaction() == Faction.Friendly && friendly != character)
+            {
+                friendly.PreviewHealthChange(50);
             }
         }
     }

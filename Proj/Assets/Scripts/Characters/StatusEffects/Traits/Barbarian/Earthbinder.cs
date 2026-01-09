@@ -2,20 +2,27 @@ using UnityEngine;
 
 public class Earthbinder : Trait
 {
-    public override void OnStatusEffectApplied(Character caster, StatusEffect statusEffect)
+    public override bool BeforeStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
     {
-        if (statusEffect is not Slowed)
+        if (target != Character)
         {
-            return;
+            return true;
+        }
+        
+        if (statusEffect is not Slowed or Weakened)
+        {
+            return true;
         }
 
         var data = Data as IntModifierData;
 
         if (!data)
         {
-            return;
+            return true;
         }
         
         statusEffect.IncreaseDuration(data.Modifier);
+        
+        return true;
     }
 }

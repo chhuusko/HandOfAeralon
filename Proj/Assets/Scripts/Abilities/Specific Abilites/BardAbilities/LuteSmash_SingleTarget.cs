@@ -15,7 +15,7 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
 
     // Description
 
-    // Deal(170% × Damage) Physical damage.
+    // Deal(170% ï¿½ Damage) Physical damage.
     // Has a 35% chance to Stun the target for 1 turn.
     // Gain 2 Mana if the target gets Stunned by this ability.
     // After using Lute Smash, only Lute Smash and Dissonant Chord can be used for the rest of combat.
@@ -33,12 +33,12 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         bool died = affectedCharacter.TakeDamage(damage);
 
-        affectedCharacter.Data.SetActiveAbilities(abilitiesAvailablePostLuteSmash); 
+        castingCharacter.Data.SetActiveAbilities(abilitiesAvailablePostLuteSmash); 
 
         StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
         if (statusEffectManager == null) return;
 
-        StatusEffect stun = statusEffectManager.TryApplyStun(affectedCharacter, 0, _stunDuration);
+        StatusEffect stun = statusEffectManager.TryApplyStun(affectedCharacter, _applyStunChance, _stunDuration);
 
         if (stun != null && castingCharacter.GetFaction() == Faction.Friendly)
         {
@@ -47,20 +47,36 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
 
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun, died);
     }
+    protected override void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        if (targetTile == null) return;
+
+        Character affectedCharacter = targetTile.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        affectedCharacter.PreviewHealthChange(-damage);
+    }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
-        int damage = castingCharacter.GetBaseDamage();
-        damage = (int)(damage * _damageMultiplier);
-
-
-        damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
-        damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
-        return damage;
+        float damage = GetCharacterCaster().Data.DerivedDamage * _damageMultiplier;
+        damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Spawn and direct VFX to target location.
+    }
+
+    public override int GetDamage()
+    {
+        float damage = GetCharacterCaster().Data.DerivedDamage * _damageMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 }

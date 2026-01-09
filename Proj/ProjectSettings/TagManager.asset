@@ -8,6 +8,8 @@ TagManager:
   - Character
   - DeleteCharacterBrush
   - EnemyAI
+  - DollyCamera
+  - CharacterCamera
   layers:
   - Default
   - TransparentFX
@@ -26,7 +28,7 @@ TagManager:
   - PostProcessWorld
   - Enemy
   - WorldUI
-  - 
+  - Node
   - 
   - 
   - 

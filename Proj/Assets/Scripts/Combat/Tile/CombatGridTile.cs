@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -6,7 +7,6 @@ public class CombatGridTile : MonoBehaviour
 {
     [SerializeField] private CombatGridTileData _tileData;
     [SerializeField] private GameObject _occupant;
-
     public CombatGridTile(CombatGridTileData tileData)
     {
         _tileData = new CombatGridTileData(tileData.GetTileType(), 
@@ -44,10 +44,18 @@ public class CombatGridTile : MonoBehaviour
     public void SetTileColor(Color color)
     {
         MeshRenderer meshRend = GetComponent<MeshRenderer>();
-        if(meshRend != null)
+        if (meshRend == null) return;
+
+        var mats = meshRend.materials;
+        for (int i = 0; i < mats.Length; i++)
         {
-            meshRend.material.SetColor("_TileColor", color);
+            if (mats[i].HasProperty("_TileColor"))
+            {
+                mats[i].SetColor("_TileColor", color);
+            }
         }
+
+        meshRend.materials = mats;
     }
 
     public Character GetOccupantCharacter()
@@ -77,13 +85,23 @@ public class CombatGridTile : MonoBehaviour
                     {
                         StatusEffectManager statusEffectManager = character.GetComponent<StatusEffectManager>();
                         statusEffectManager.AddStatusEffect(new Poison(3));
+
+                        Vector3 positionToSpawnAt = other.gameObject.transform.position;
+                        positionToSpawnAt.y += 2f;
+                        ParticleSpawnerManager.GetInstance().SpawnPoisonExplosion(positionToSpawnAt);
+                        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.EnterPoisonTile, transform.position);
                     } break;
 
                 case TileType.Lava:
                     {
-                        character.TakeDamage(4);
+                        character.TakeDamage(20);
                         StatusEffectManager statusEffectManager = character.GetComponent<StatusEffectManager>();
                         statusEffectManager.AddStatusEffect(new Burn(character, 1));
+                        
+                        Vector3 positionToSpawnAt = other.gameObject.transform.position;
+                        positionToSpawnAt.y += 2f;
+                        ParticleSpawnerManager.GetInstance().SpawnLavaExplosion(positionToSpawnAt);
+                        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.EnterLavaTile, transform.position);
                     } break;
             }
             

@@ -1,21 +1,14 @@
 using UnityEngine;
 using TMPro;
+using FMODUnity;
 
 public class CombatVictoryScreenMenu : MonoBehaviour
 {
     [SerializeField] private TMP_Text _title;
     [SerializeField] private TMP_Text _info;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        CombatEventManager.OnEnterCombatStateEndCombat += SetScreenData;
-    }
-
-    private void OnDisable()
-    {
-        CombatEventManager.OnEnterCombatStateEndCombat -= SetScreenData;
-    }
+    [SerializeField] private GameObject _goToShopButton;
+    [SerializeField] private GameObject _mainMenuButton;
+    [SerializeField] private TMP_Text _mainMenuButtonText;
 
     public void SetTitle(string title)
     {
@@ -25,7 +18,7 @@ public class CombatVictoryScreenMenu : MonoBehaviour
     public void SetScreenData(bool playerWon)
     {
         if (playerWon)
-        {
+        { 
             SetWinScreen();
         }
         else
@@ -34,15 +27,34 @@ public class CombatVictoryScreenMenu : MonoBehaviour
         }
     }
 
-    private void SetWinScreen()
+    public void SetWinScreen()
     {
-        _title.text = "You Win!";
-        _info.text = "Coins gained: " + 200;
+        _goToShopButton.SetActive(true);
+        _title.text = "Battle Won!";
+        string summaryInfo = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins() + "\n"
+                             + "Total enemies killed: " + GlobalGameManager.GetInstance().GetTotalEnemiesKilled() + "\n"
+                             + "Total heroes lost: " + GlobalGameManager.GetInstance().GetTotalHeroesLost() + "\n"
+                             + "Total battles won: " + GlobalGameManager.GetInstance().GetTotalBattlesWon();
+        _info.text = summaryInfo;
+        _mainMenuButtonText.text = "Quit Game";
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PlayerVictory, transform.position);
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.GoldGainAfterCombat, transform.position);
     }
 
-    private void SetLoseScreen()
+    public void SetLoseScreen()
     {
-        _title.text = "You Lose!";
-        _info.text = "";
+        _goToShopButton.SetActive(false);
+        _title.text = "Battle Lost!";
+        string summaryInfo = "Total enemies killed: " + GlobalGameManager.GetInstance().GetTotalEnemiesKilled() + "\n"
+                             + "Total heroes lost: " + GlobalGameManager.GetInstance().GetTotalHeroesLost() + "\n"
+                             + "Total battles won: " + GlobalGameManager.GetInstance().GetTotalBattlesWon();
+        _info.text = summaryInfo;
+        _mainMenuButtonText.text = "Quit Game";
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PlayerDefeated, transform.position);
+    }
+
+    public void PlayOneShotButtonClick()
+    {
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick, transform.position);
     }
 }

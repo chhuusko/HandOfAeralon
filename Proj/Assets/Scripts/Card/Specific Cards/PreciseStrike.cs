@@ -8,11 +8,19 @@ public class PreciseStrike : Card
     {
         if (character != null)
         {
-            character.TakeDamage(10);
+            
+            character.TakeDamage(GetDamage(character));
             if (character.GetCurrentHealth() <= 0)
             {
                 CardHandManager.GetInstance().ChangeMana(2);
             }
         }
+        
+    }
+    public override int GetDamage(Character character)
+    {
+        int damage = 50;
+        return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
+        
     }
 }

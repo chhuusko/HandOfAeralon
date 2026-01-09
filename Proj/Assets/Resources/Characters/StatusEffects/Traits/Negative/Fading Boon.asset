@@ -14,10 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Fading Boon
   Icon: {fileID: 21300000, guid: 7f190abb257a7ea4daa6bd19c258086b, type: 3}
-  Description: First Buff received each combat has 50% less duration (rounded down)
+  Description: First Buff received each combat has <b>50%</b> less duration (rounded
+    down)
   Type: 3
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: 4fdbd2963ce42cd4b98d5be342dae272, type: 3}
+  IsDispellable: 0
+  SkipFirstTick: 0
+  _typeName: FadingBoon, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0
-  DamageModifier: 2
+  DamageModifierPercent: 50

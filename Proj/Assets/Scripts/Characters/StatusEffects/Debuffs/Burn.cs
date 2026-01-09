@@ -4,6 +4,11 @@ using UnityEngine;
 public class Burn : StatusEffect
 {
     private Character _source;
+
+    public Burn(int duration = 3) : base(duration)
+    {
+        
+    }
     
     public Burn(Character source, int duration = 3) : base(duration)
     {
@@ -23,16 +28,19 @@ public class Burn : StatusEffect
     public override void OnTurnStart()
     {
         var data = Data as DamageData;
-
         if (!data)
         {
             return;
         }
         
-        var baseDamage = data.Damage;
-        var finalDamage = (_source != null) ? _source.GetStatusEffectManager().ApplyBurnDamageModifiers(baseDamage)
-            : baseDamage;
+        float damage = data.Damage;
+        if (_source != null)
+        {
+            damage = _source.GetStatusEffectManager().ModifyOutgoingBurnDamage(damage);
+        }
+        damage = Character.GetStatusEffectManager().ModifyIncomingBurnDamage(damage);
 
-        Character.TakeDamage(finalDamage);
+        Character.TakeDamage(Mathf.RoundToInt(damage));
+        CombatEventManager.InvokeOnStatusEffectDamageDealt(Character, this, Mathf.RoundToInt(damage));
     }
 }

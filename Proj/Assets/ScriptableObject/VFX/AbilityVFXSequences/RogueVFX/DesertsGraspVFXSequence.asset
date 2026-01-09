@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf6383c0305810c4cbb86136a8d14596, type: 3}
+  m_Name: DesertsGraspVFXSequence
+  m_EditorClassIdentifier: 
+  _castFX: {fileID: 3819699066996041917, guid: 96f3f180e352ada4faf65781522d6622, type: 3}
+  _travelFX: {fileID: 0}
+  _biggerImpactScale: 0
+  _offsetDistance: 0
+  _airDistance: 0.8
+  _rotationOffset: {x: 0, y: 0, z: 170}
+  _doCastCameraShake: 1
+  _castShakeDuration: 0.2
+  _castShakeMagnitude: 0.05
+  _castShakeFrequency: 200
+  _castShakeFade:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.00018310547
+      inSlope: 7.807222
+      outSlope: 7.807222
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.12775818
+      value: 0.9976195
+      inSlope: 0.000954456
+      outSlope: 0.000954456
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.42857146
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6153995
+      value: 0.9996835
+      inSlope: 0.010924198
+      outSlope: 0.010924198
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.52130085
+    - serializedVersion: 3
+      time: 0.9958191
+      value: 0.00017929077
+      inSlope: -2.627373
+      outSlope: -2.627373
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _impactFX: {fileID: 0}
+  _impactAirDistance: 0
+  _impactRotationOffset: {x: 0, y: 0, z: 0}
+  _doImpactCameraShake: 0
+  _impactShakeDuration: 1.5
+  _impactShakeMagnitude: 0.1
+  _impactShakeFrequency: 200
+  _impactShakeFade:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

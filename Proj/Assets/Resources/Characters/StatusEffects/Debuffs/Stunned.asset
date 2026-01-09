@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Stunned
   Icon: {fileID: 21300000, guid: fcb2cd3d5861bb743b5f28ed97eac14b, type: 3}
-  Description: Character is unable to move or use abilities
+  Description: Character is unable to move or use Abilities
   Type: 1
   IsPermanent: 0
-  Script: {fileID: 11500000, guid: c1beb51058ac1f34c8b1bc795ab6ca62, type: 3}
+  IsDispellable: 1
+  SkipFirstTick: 1
+  _typeName: Stunned, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 0

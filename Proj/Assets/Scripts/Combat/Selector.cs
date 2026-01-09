@@ -1,7 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TextCore.Text;
 
 public enum SelectorState
 {
@@ -21,10 +24,18 @@ public class Selector : MonoBehaviour
     [SerializeField] private CharacterActionType _pendingCharacterActionType = CharacterActionType.Null;
     [SerializeField] private Character _selectedCharacter;
     [SerializeField] private bool _bDebugSelector = true;
+
+    [SerializeField] private Color _abilityRangeColor;
+    [SerializeField] private Color _movementRangeColor;
+    [SerializeField] private Color _hitTilesRangeColor;
+
     private CharacterMovement _characterMovement;
 
     public event Action<Character> OnCharacterSelected;
     public event Action OnCharacterDeselected;
+    public event Action OnCharacterActionStarted;
+    public event Action OnCharacterActionStopped;
+
 
     public enum CharacterActionType
     {
@@ -52,12 +63,21 @@ public class Selector : MonoBehaviour
         CombatEventManager.OnExitCombatStateTakeTurn += HandleCombatStateTakeTurn;
         CombatEventManager.OnEnterCombatStateTakeTurn += HandleEnterCombatStateTakeTurn;
 
+        StartCoroutine(DelayedStart());
     }
+
 
     void Update()
     {
         HandleTileClick();
-        HandleTileHover();
+        HandleTileHover(); 
+    }
+
+    private IEnumerator DelayedStart()
+    {
+        yield return new WaitUntil(() => CombatGrid._instance.IsCombatGridLoaded());
+        SetStandrardColors();
+        AutoSelectFirstCharacter();
     }
 
     private void HandleEnterCombatStateTakeTurn(Character character)
@@ -183,6 +203,7 @@ public class Selector : MonoBehaviour
 
             if (handler == null || handler.GetPendingAbility() == null) return;
             handler.PreviewTargetTiles(hoveredTile);
+            handler.PreviewAbility(handler.GetPendingAbility(), hoveredTile);
         }
     }
 
@@ -321,14 +342,15 @@ public class Selector : MonoBehaviour
     {
         DeselectCharacter();
 
-        // Return if character is not friendly.
-        if (character.GetFaction() != Faction.Friendly) return;
-
-        bool bIsCharactersTurn = character == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
-
         // Update selected character and show it's related UI.
         _selectedCharacter = character;
         ShowCharacterUI(character);
+        _currentState = SelectorState.CharacterSelected;
+
+        // Check to see if character is friendly before checking to activate movement.
+        if (character.GetFaction() != Faction.Friendly) return;
+
+        bool bIsCharactersTurn = character == CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
 
         // If it's the characters turn, activate logic.
         if (bIsCharactersTurn)
@@ -342,6 +364,7 @@ public class Selector : MonoBehaviour
             {
                 //DebugLog.JLWLog($"Selector.cs | Drawing move range for {character.name}");
                 _characterMovement.DrawMoveRange();
+                StartCoroutine(_characterMovement.DrawMoveRangeDelayed());
             }
 
             if (_bDebugSelector)
@@ -350,8 +373,6 @@ public class Selector : MonoBehaviour
             }
             return;
         }
-        // Else, just change the selector state.
-        _currentState = SelectorState.CharacterSelected;
     }
 
     /// <summary>
@@ -359,7 +380,7 @@ public class Selector : MonoBehaviour
     /// Hides character UI, stops ability previews, resets tile colors and updates selector state  
     /// based on the current combat state.
     /// </summary>
-    private void DeselectCharacter()
+    public void DeselectCharacter()
     {
         OnCharacterDeselected?.Invoke();
 
@@ -413,7 +434,7 @@ public class Selector : MonoBehaviour
             _currentState = SelectorState.ActionTypeSelected;
             abilityHandler.SetPendingAbility(ability);
             abilityHandler.CalculateAbilityRange();
-            SetColorOfTiles(abilityHandler.GetTilesInRange(), Color.green);
+            SetColorOfTiles(abilityHandler.GetTilesInRange(), _abilityRangeColor);
         }
     }
 
@@ -470,21 +491,21 @@ public class Selector : MonoBehaviour
     private void HandleMovement(CombatGridTile tile)
     {
         _characterMovement.ConfirmPath(tile);
+
         ResetColorAllTiles();
         // MG was here.
         Character character = tile.GetOccupantCharacter();
         if (character == null) return;
-        if (character.GetFaction() == Faction.Friendly)
-        {
-            SelectCharacter(character);
-            return;
-        }
-        // Hade varit nice om ConfirmPath kunde returna true eller false om den faktiskt lockar in en rutt och börjar gå.
+        SelectCharacter(character);
+        // Hade varit nice om ConfirmPath kunde returna true eller false om den faktiskt lockar in en rutt och bï¿½rjar gï¿½.
     }
 
     private void HandleAbilityCast(CombatGridTile tile)
     {
+        if (!_selectedCharacter.CanUseAbility || _selectedCharacter.IsStunned) return;
+
         bool success = _selectedCharacter.GetComponentInParent<AbilityHandler>().UseAbility(_selectedCharacter.GetAbilityHandler().GetPendingAbility(), tile);
+
         _selectedCharacter?.GetAbilityHandler()?.SetPendingAbility(null);
         _pendingCharacterActionType = CharacterActionType.Null;
         ResetColorAllTiles();
@@ -524,6 +545,56 @@ public class Selector : MonoBehaviour
         }
         SetColorOfTiles(tiles, Color.white);
     }
+
+    private void SetStandrardColors()
+    {
+        var listOfAllCharacters = CombatGrid._instance.GetAllCharacters();
+
+        foreach(var c in listOfAllCharacters)
+        {
+            AbilityHandler ab = c.GetComponent<AbilityHandler>();
+            CharacterMovement cm = c.GetComponent<CharacterMovement>();
+
+            if(ab != null)
+            {
+                ab.SetAbilityRangeColor(_abilityRangeColor);
+                ab.SetHitTilesRangeColor(_hitTilesRangeColor);
+            }
+
+            if(cm != null)
+            {
+                cm.SetMovementRangeColor(_movementRangeColor);
+            }
+        }
+    }
+
+    private void AutoSelectFirstCharacter()
+    {
+        CombatTurnOrder turnOrder = CombatManager._instance.GetCombatTurnOrder();
+        if (turnOrder != null)
+        {
+            var characters = CombatGrid._instance.GetAllCharacterScripts();
+            Character active = turnOrder.GetActiveCharacter();
+            if (active != null && active.GetFaction() == Faction.Friendly)
+            {
+                _selectedCharacter = active;
+                Character selectedCharacter = active;
+                ShowCharacterUI(active);
+                return;
+            }
+
+            foreach (Character character in characters)
+            {
+                if (character.GetFaction() == Faction.Friendly)
+                {
+                    _selectedCharacter = character;
+                    ShowCharacterUI(character);
+                    return;
+                }
+            }
+        }
+    }
+
     private void DebugPossibleStartErrors()
     {
         if (Camera.main == null)
@@ -534,6 +605,15 @@ public class Selector : MonoBehaviour
         {
             Debug.LogError("No EventSystem in scene!"); return;
         }
+    }
+
+    public void InvokeCharacterActionStarted()
+    {
+        OnCharacterActionStarted?.Invoke();
+    }
+    public void InvokeCharacterActionStopped()
+    {
+        OnCharacterActionStopped?.Invoke();
     }
 
     public SelectorState GetCurrentState() { return _currentState; }

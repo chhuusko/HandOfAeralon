@@ -26,48 +26,6 @@ public class FlameSurge_Ability : DirectedAOEAbility
 
     private int burnedEnemiesCounter;
 
-    public override List<CombatGridTile> GetTilesToEffect(CombatGridTile targetTile)
-    {
-        // Works like the base version of GetTilesToEffect but only returns the list when valid target is hovered. 
-        // Also removes caster tile as target. 
-
-        if (targetTile == null)
-            return null;
-
-        // Get caster
-        Character caster = GetAbilityHandler().GetCharacterCaster();
-        if (caster == null) return null;
-
-        // Check if ability can be cast on target tile.
-        bool canCast = caster.GetAbilityHandler().CanCastAbility(this, targetTile);
-        if (!canCast) return null;
-
-        var tile = caster.GetCurrentTileComponent();
-
-        if (tile == null) return null;
-
-        var directedAOEPattern = _pattern as DirectedAOEPattern;
-
-        if (directedAOEPattern == null)
-        {
-            Debug.LogError("Pattern is not a DirectedAOEPattern");
-            return null;
-        }
-
-        directedAOEPattern.SetDirection(CalculateDirection(tile, targetTile));
-
-        // Calculate which tiles to effect.
-        var list = _pattern.CalculateTilesToEffect(targetTile);
-
-        // Remove caster tile. Unnecessary if pattern already removes caster.
-        if (caster.GetCurrentTileComponent())
-        {
-            list.Remove(caster.GetCurrentTileComponent());
-        }
-
-        return list;
-    }
-
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         // Calculate all tiles around within pattern and apply effect to all of them.
@@ -133,17 +91,36 @@ public class FlameSurge_Ability : DirectedAOEAbility
 
         AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, burn, died);
     }
+    protected override void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        if (targetTile == null) return;
+
+        Character affectedCharacter = targetTile.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        affectedCharacter.PreviewHealthChange(-damage);
+    }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
-        int damage = (int)(castingCharacter.GetBaseDamage() * _damageMultiplier);
-        damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
-        damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
-        return damage;
+        float damage = castingCharacter.Data.DerivedDamage * _damageMultiplier;
+        damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         //
+    }
+
+    public override int GetDamage()
+    {
+        float damage = GetCharacterCaster().Data.DerivedDamage * _damageMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 }

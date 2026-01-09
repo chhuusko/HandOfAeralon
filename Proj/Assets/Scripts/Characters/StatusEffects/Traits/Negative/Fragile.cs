@@ -4,7 +4,7 @@ public class Fragile : Trait
 {
     private bool _effectApplied;
 
-    public override void OnCombatStarted()
+    public override void ResetCombatState()
     {
         _effectApplied = false;
     }
@@ -23,7 +23,8 @@ public class Fragile : Trait
             return;
         }
 
-        if (Character.GetCurrentHealth() >= data.Threshold)
+        float healthPercent = (float)Character.GetCurrentHealth() / Character.GetMaxHealth();
+        if (healthPercent >= data.ThresholdPercent / 100f)
         {
             return;
         }

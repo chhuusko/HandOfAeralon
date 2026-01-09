@@ -10,8 +10,9 @@ public class PurewatersTouch : Card
         //TODO Needs to know what effect is debuff. needs a list of effekts
         if (character != null && character.GetFaction() == Faction.Friendly)
         {
-            List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffects());
+            List<StatusEffect> statuses = new List<StatusEffect>(character.GetStatusEffectManager().GetAllEffectsSnapshot());
             List<StatusEffect> debuffs = new List<StatusEffect>();
+
             foreach (StatusEffect status in statuses)
             {
                 if (status.Data.Type == StatusEffectType.Debuff)
@@ -21,10 +22,10 @@ public class PurewatersTouch : Card
             }
             if (debuffs.Count > 0)
             {
-                debuffs.RemoveAt(Random.Range(0, debuffs.Count));
+                character.GetStatusEffectManager().RemoveStatusEffect(debuffs[Random.Range(0, debuffs.Count)]);
                 CardHandManager.GetInstance().ChangeMana(2);
             }
-            character.Heal(15);
+            character.Heal(70);
         }
     }
 }

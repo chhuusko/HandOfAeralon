@@ -6,12 +6,18 @@ using UnityEngine;
 public class BattleRhythm : Card
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] private int damageIncrease = 25;
     public override void PlayCardOnTarget(Character character)
     {
 
         if (character != null)
         {
-            character.TakeDamage(CardHandManager.GetInstance().GetCardsPlayedThisTurn() * 5);
+            character.TakeDamage(GetDamage(character));
         }
+    }
+    public override int GetDamage(Character character)
+    {
+        int damage = CardHandManager.GetInstance().GetCardsPlayedThisTurn() * damageIncrease;
+        return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
     }
 }

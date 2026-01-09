@@ -12,11 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6329211d7d49199418e6661c30ed5423, type: 3}
   m_Name: Life And Death
   m_EditorClassIdentifier: 
-  type: 0
-  rarity: 0
-  title: 
-  description: 
-  cost: 0
-  icon: {fileID: 0}
+  type: 1
+  targetFaction: 1
+  rarity: 2
+  title: Life & Death
+  description: Deal {card_damage}damage{/card_damage} to target enemy equal to <b>25%</b>
+    of their max {health}Health{/health} and {heal}heal{/heal} the ally with the
+    highest <b>%</b> missing {health}Health{/health} for the same amount
+  cost: 3
+  icon: {fileID: 21300000, guid: 14773e8d51115364dbf0088d062028bb, type: 3}
   CardTemplate: {fileID: 0}
   info: []
+  tags: 
+  targetConditions: 02000000

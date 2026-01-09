@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [System.Serializable]
-public class CombatTooltipCharacterLayout : MonoBehaviour
+public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private enum CharacterStatKey
     {
@@ -40,7 +41,7 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
     // Status Effects Tooltip
     [SerializeField] private GameObject _statusEffectParent;
     [SerializeField] private GameObject _statusEffectPrefab;
-    [SerializeField] private List<GameObject> _statusEffects; // Number of status effects is dynamic so convenient with a list
+    [SerializeField] private List<GameObject> _statusEffects = new List<GameObject>(); // Number of status effects is dynamic so convenient with a list
 
 
     private void Start()
@@ -215,13 +216,13 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
             TooltipTraitElement traitElementScript = _traitElements[i].GetComponent<TooltipTraitElement>();
             traitElementScript.SetTraitIcon(trait.Data.Icon);
             traitElementScript.SetTraitTitle(trait.Data.name);
-            traitElementScript.SetTraitDescription(trait.Data.Description);
+            traitElementScript.SetTraitDescription(trait.GetColorCodedDescription());
         }
     }
 
     private void UpdateCharacterStatusEffects(Character character)  
     {
-        IReadOnlyList<StatusEffect> statusEffects = character.GetStatusEffectManager().GetAllStatusEffects();
+        IReadOnlyList<StatusEffect> statusEffects = character.GetStatusEffectManager().GetAllStatusEffectsSnapshot();
 
         // NOTE (Calle): If a character has no statuseffects, destroy and remove all effects and clear the 
         // list.
@@ -232,9 +233,39 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
                 Destroy(statusEffect);
             }
             _statusEffects.Clear();
+            return;
         }
 
-        foreach (StatusEffect statusEffect in statusEffects) 
+        List<GameObject> toRemove = new();
+
+        // NOTE (Calle): Remove status effects which came from the previus characte and the current doesn't have
+        foreach (GameObject previousRegistererdEffect in _statusEffects)
+        {
+            string previousName = previousRegistererdEffect.name;
+
+            bool didExist = false;
+            foreach(StatusEffect statusEffect in statusEffects)
+            {
+                if(previousName.Equals(statusEffect.Name))
+                {
+                    didExist = true;   
+                    break;
+                }
+            }
+
+            if(!didExist)
+            {
+                toRemove.Add(previousRegistererdEffect);
+            }
+        }
+
+        foreach(GameObject effectToRemove in toRemove)
+        {
+            _statusEffects.Remove(effectToRemove);
+            Destroy(effectToRemove);
+        }
+
+            foreach (StatusEffect statusEffect in statusEffects) 
         {
             // NOTE (Calle): First check if the status effect exist, in that case, just set effect data on
             // each UI element.
@@ -261,7 +292,7 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
             
             elementScript.SetIcon(statusEffect.Data.Icon);
             elementScript.SetTitle(statusEffect.Data.name);
-            elementScript.SetDescription(statusEffect.Data.Description);
+            elementScript.SetDescription(statusEffect.GetColorCodedDescription());
             elementScript.SetTurns(statusEffect.Duration);
         }
 
@@ -271,12 +302,24 @@ public class CombatTooltipCharacterLayout : MonoBehaviour
     {
         RebuildCharacterStatTooltip(character.GetComponent<Character>());
     }
+
     private void UpdateTooltipOnDamage(int damage, Character character)
     {
         RebuildCharacterStatTooltip(character);
     }
+
     public void ShowCharacterTooltip()
     {
 
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        CombatEventManager.InvokeOnIsHoveringUI(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        CombatEventManager.InvokeOnIsHoveringUI(false);
     }
 }

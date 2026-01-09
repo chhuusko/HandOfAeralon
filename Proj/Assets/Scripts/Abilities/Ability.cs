@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -10,7 +11,7 @@ public abstract class Ability : ScriptableObject
     [SerializeField] private Sprite _icon;
     [SerializeField] private int _range;
     [SerializeField] private int _cooldown;
-    [SerializeField] private string _description;
+    [SerializeField, TextArea(5, 10)] private string _description;
 
     [Header("- Tags -")]
     [SerializeField] private AbilityTag _abilityTag;
@@ -25,8 +26,9 @@ public abstract class Ability : ScriptableObject
     [Header("- Visuals & Audio - ")]
     [SerializeField] private AbilityVFXSequence _abilityVFXSequence;
     [SerializeField] private AudioClip _castingSound, _hitSound;
-    [SerializeField] private float _castingTime, _fromCastToHitTime;
+    [SerializeField] private float _castingAnimationTime, _castingFXTime, _fromCastToHitTime, _impactVFXTime;
     [SerializeField] private float _castingRotationTime = 0.3f;
+    [field: SerializeField] public EventReference AudioEvent { get; private set; }
 
     private AbilityHandler _abilityHandler;
     private Character _characterCaster;
@@ -57,14 +59,16 @@ public abstract class Ability : ScriptableObject
         SingleTarget = 1 << 2,
         AOE = 1 << 3
     }
+    [System.Flags]
     public enum Type
     {
-        Physical,
-        Elemental,
-        Heal,
-        Buff,
-        Debuff,
-        Movement
+        None = 0,
+        Physical = 1 << 0,
+        Elemental = 1 << 1,
+        Heal = 1 << 2,
+        Buff = 1 << 3,
+        Debuff = 1 << 4,
+        Movement = 1 << 5
     }
 
     public enum ValidTargetOccupant
@@ -79,14 +83,17 @@ public abstract class Ability : ScriptableObject
     public abstract List<CombatGridTile> GetTilesToEffect(CombatGridTile tile);
     protected abstract void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile);
 
+
     public string GetAbilityName() => _abilityName;
     public Sprite GetIcon() => _icon;
     public float GetRange() => _range;
     public int GetCooldown() => _cooldown;
     public string GetDescription() => _description;
     public float GetCastingRotationTime() => _castingRotationTime;
-    public float GetCastingTime() => _castingTime;  
+    public float GetCastingAnimationTime() => _castingAnimationTime;
+    public float GetCastingTime() => _castingFXTime;
     public float GetFromCastToHitTime() => _fromCastToHitTime;
+    public float GetImpactTime() => _impactVFXTime;
     public void SetCooldown(int cooldown)
     {
         _cooldown = cooldown;
@@ -99,26 +106,31 @@ public abstract class Ability : ScriptableObject
     {
         return _rangeCalculation.CalculateTilesInRange(casterTile, _range);
     }
-    
+
     public Type GetAbilityType() => _type;
 
     public virtual IEnumerator StartAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
     {
+
         Character caster = casterTile.GetOccupantCharacter();
         if (caster == null) Debug.LogError("CasterTile has no character!");
 
+        caster.Animator.SetBool("AbilityOngoing", true);
+
         // Should not be able to move after performing ability.
-        ResetMovementPoints(caster);
+        caster.CanMove = false;
 
         // Rotate towards target if the target is not the caster's tile.
-        if(casterTile != targetTile)
+        if (casterTile != targetTile)
         {
             caster.RotateTowards(targetTile.transform, _castingRotationTime);
         }
 
-        if (caster.TryGetComponent<Animator>(out var animator)){
+        if (caster.TryGetComponent<Animator>(out var animator))
+        {
             animator.SetTrigger(_abilityName);
         }
+        AudioManager.Instance.PlayOneShot(AudioEvent, caster.transform.position);
 
         if (_abilityVFXSequence != null)
         {
@@ -129,21 +141,47 @@ public abstract class Ability : ScriptableObject
                 TargetTile = targetTile,
                 TargetPosition = targetTile.transform.position,
                 Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
-
-                CastingFXDuration = _castingTime,
-                TravelFXDuration = _fromCastToHitTime
+                CastingAnimationDuration = _castingAnimationTime,
+                CastingFXDuration = _castingFXTime,
+                TravelFXDuration = _fromCastToHitTime,
+                ImpactFXDuration = _impactVFXTime
             };
-            caster.StartCoroutine(_abilityVFXSequence.RunSequence(data)
+            yield return caster.StartCoroutine(_abilityVFXSequence.RunSequence(data)
             );
         }
 
-        yield return new WaitForSeconds(_castingTime + _fromCastToHitTime);
         RunAbility(casterTile, targetTile);
+
+        Selector._instance.InvokeCharacterActionStopped();
+
+        yield return new WaitForSeconds(3);
+        caster.Animator.SetBool("AbilityOngoing", false);
     }
     protected void ResetMovementPoints(Character character)
     {
         character.SetCurrentMovementPoints(0);
     }
     protected abstract void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile);
+
+    public virtual void PreviewAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Ability preview is overridden in subclasses if ability actually changes HP.
+        return;
+    }
+    protected virtual void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Preview effect on tile is overridden in subclasses if ability actually changes HP.
+        return;
+    }
+
+    public virtual int GetDamage()
+    {
+        return 0;
+    }
+
+    public virtual int GetSecondDamage()
+    {
+        return 0;
+    }
 }
 

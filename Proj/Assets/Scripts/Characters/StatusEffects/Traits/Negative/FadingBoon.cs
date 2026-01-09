@@ -4,30 +4,34 @@ public class FadingBoon : Trait
 {
     private bool _effectApplied;
 
-    public override void OnCombatStarted()
+    public override void ResetCombatState()
     {
         _effectApplied = false;
     }
 
-    public override void OnStatusEffectApplied(Character caster, StatusEffect statusEffect)
+    public override bool BeforeStatusEffectApplied(Character caster, Character target, StatusEffect statusEffect)
     {
-        if (_effectApplied)
+        if (target != Character)
         {
-            return;
+            return true;
+        }
+        
+        // Trait applies only to buffs.
+        if (_effectApplied || statusEffect.Data.Type is not StatusEffectType.Buff)
+        {
+            return true;
         }
 
         var data = Data as DamageModifyingData;
-
         if (!data)
         {
-            return;
+            return true;
         }
         
         _effectApplied = true;
-        statusEffect.SetDuration(Mathf.FloorToInt(statusEffect.Duration / data.DamageModifier));
-        if (statusEffect.Duration <= 0)
-        {
-            Manager.RemoveStatusEffect(statusEffect);
-        }
+        
+        var newDuration = Mathf.FloorToInt(statusEffect.Duration * (data.DamageModifierPercent / 100f));
+        statusEffect.SetDuration(newDuration);
+        return newDuration > 0;
     }
 }

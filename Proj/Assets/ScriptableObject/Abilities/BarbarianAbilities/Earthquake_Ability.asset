@@ -16,22 +16,35 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 130df84cf9f38a04797a3b5afc6b0683, type: 3}
   _range: 1
   _cooldown: 2
-  _description: "Slam the ground, dealing (90% \xD7 Damage) Physical damage to all
-    characters in the area. Every character hit has a 60% chance to become Slowed
-    for 2 turns. Gain 1 Mana if at least two enemies become Slowed."
+  _description: "Slam the ground, dealing {damage} (<b>90%</b> \xD7 Damage) {physical_damage}Physical
+    damage{/physical_damage} to ALL characters in the area.\\n\\nEvery character
+    hit has a <b>60%</b> chance to become <link=\"Slowed\">{non_damaging}<u>Slowed</u>{/non_damaging}</link>
+    for <b>2</b> turns.\\n\\nGain <b>1</b> {mana}Mana{/mana} if at least two enemies
+    become <link=\"Slowed\">{non_damaging}<u>Slowed</u>{/non_damaging}</link>."
   _abilityTag: 9
-  _type: 0
+  _type: 1
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}
   _targetType: 0
-  _castingEffect: {fileID: 0}
-  _hitEffect: {fileID: 0}
+  _abilityVFXSequence: {fileID: 11400000, guid: b6f8a18d4da6d3b459e8feaf10a414da,
+    type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 1
-  _fromCastToHitTime: 0
+  _castingAnimationTime: 0.5
+  _castingFXTime: 0
+  _fromCastToHitTime: 0.3
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
+  <AudioEvent>k__BackingField:
+    Guid:
+      Data1: -830186623
+      Data2: 1223884925
+      Data3: 818018176
+      Data4: -2001889012
+    Path: event:/Sound Design/Diegetic/Characters/Barbarian/abilities/earthquake
   _pattern: {fileID: 11400000, guid: 129687a3acdf70e4cba2536129786496, type: 2}
   _validTargets: 0
+  _abilityAOEVFXSequence: {fileID: 11400000, guid: cb02ca87659aade4abcc987073de4f8c,
+    type: 2}
   _damageMultiplier: 0.9
   _slowCharacterHitChance: 0.6
   _slowDuration: 2

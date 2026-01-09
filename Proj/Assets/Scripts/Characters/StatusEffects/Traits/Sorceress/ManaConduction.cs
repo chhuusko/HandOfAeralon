@@ -4,6 +4,11 @@ public class ManaConduction : Trait
 {
     private int _manaUsed;
 
+    public override void ResetCombatState()
+    {
+        _manaUsed = 0;
+    }
+
     public override void OnTurnStart()
     {
         _manaUsed = 0;
@@ -11,10 +16,10 @@ public class ManaConduction : Trait
 
     public override void OnCardPlayed(Card card)
     {
-        _manaUsed += card.Getcost();
+        _manaUsed += card.GetCost();
     }
 
-    public override void ModifyOutgoingDamage(ref float damage, Ability ability)
+    public override void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
         if (ability is not ArcaneBolt_SingleTarget)
         {
@@ -22,12 +27,16 @@ public class ManaConduction : Trait
         }
         
         var data = Data as DamageModifyingData;
-
         if (!data)
         {
             return;
         }
 
-        damage *= (_manaUsed * data.DamageModifier);
+        if (Character.GetFaction() == Faction.Enemy)
+        {
+            _manaUsed = CombatManager._instance.enemyMana;
+        }
+        var modifier = data.DamageModifierPercent / 100f;
+        combinedModifier += (_manaUsed * modifier);
     }
 }

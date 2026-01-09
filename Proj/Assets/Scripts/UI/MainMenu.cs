@@ -5,7 +5,11 @@ public class MainMenu : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] private CanvasGroup mainMenu, saveMenu;
     [SerializeField] private GameObject[] saveSlot;
-
+    private void Awake()
+    {
+        Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 0;
+    }
     public void GoToSaveMenu()
     {
         mainMenu.alpha = 0;

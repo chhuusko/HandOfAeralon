@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class CrescendoSmash : Trait
 {
-    private float _totalDamageModifier = 1;
+    private float _totalDamageModifier;
 
-    public override void OnCombatStarted()
+    public override void ResetCombatState()
     {
-        _totalDamageModifier = 1;
+        _totalDamageModifier = 0f;
     }
 
-    public override void ModifyOutgoingDamage(ref float damage, Ability ability)
+    public override void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
         if (ability is not LuteSmash_SingleTarget)
         {
@@ -17,14 +17,28 @@ public class CrescendoSmash : Trait
         }
 
         var data = Data as DamageModifyingData;
-
         if (!data)
         {
             return;
         }
         
-        damage *= _totalDamageModifier;
+        var modifier = _totalDamageModifier / 100f;
+        combinedModifier += modifier;
+    }
+
+    public override void OnAbilityUsed(AbilityExecutionData abilityData)
+    {
+        if (abilityData.Ability is not LuteSmash_SingleTarget)
+        {
+            return;
+        }
+
+        var data = Data as DamageModifyingData;
+        if (!data)
+        {
+            return;
+        }
         
-        _totalDamageModifier += data.DamageModifier;
+        _totalDamageModifier += data.DamageModifierPercent;
     }
 }

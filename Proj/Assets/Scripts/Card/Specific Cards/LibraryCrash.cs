@@ -7,10 +7,21 @@ public class LibraryCrash : Card
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void PlayCardOnTarget(Character character)
     {
-        int damage = 22 - CardHandManager.GetInstance().GetDeck().Count;
+        
         if (character != null)
         {
-            character.TakeDamage(damage);
+            character.TakeDamage(GetDamage(character));
+            
         }
+    }
+    public override int GetDamage(Character character)
+    {
+        int damage = 50;
+        if (CardHandManager.GetInstance().GetDeck().Count < CardHandManager.GetInstance().GetDiscardPile().Count)
+        {
+            damage = 125;
+        }
+        return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
+        
     }
 }

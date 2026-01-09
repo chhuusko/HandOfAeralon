@@ -13,10 +13,14 @@ MonoBehaviour:
   m_Name: Recall Memory
   m_EditorClassIdentifier: 
   type: 0
-  rarity: 0
-  title: 
-  description: 
-  cost: 0
-  icon: {fileID: 0}
+  targetFaction: 0
+  rarity: 1
+  title: Recall Memory
+  description: Choose a {card}Card{/card} from your discard pile and add it to your
+    hand
+  cost: 3
+  icon: {fileID: 21300000, guid: 5af20a879b07cc74c92c85cd7b76e953, type: 3}
   CardTemplate: {fileID: 0}
   info: []
+  tags: 
+  targetConditions: 

@@ -14,7 +14,13 @@ public class LightningStorm_Ability : RoundAOEAbility
     [Header("- Emberwake Effects -")]
     [SerializeField] private int _burnDuration = 1;
 
-    bool enemyStunned;
+    private int _enemiesStunned;
+
+    // Description
+
+    // Call down a lightning storm that deals(70% × Damage) Elemental damage to all characters in a large area.
+    // Every character hit has a 25% chance to gain Stunned for 1 turn.
+
 
     public override void RunAbility(CombatGridTile casterTile, CombatGridTile targetTile)
     {
@@ -25,7 +31,7 @@ public class LightningStorm_Ability : RoundAOEAbility
         }
         List<CombatGridTile> tilesToEffect = _pattern.CalculateTilesToEffect(targetTile);
 
-        enemyStunned = false;
+        _enemiesStunned = 0;
 
         foreach (CombatGridTile tile in tilesToEffect)
         {
@@ -39,7 +45,7 @@ public class LightningStorm_Ability : RoundAOEAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null || (castingCharacter.GetFaction() != Faction.Friendly)) return;
 
-        if (enemyStunned)
+        if (_enemiesStunned >= _stunnedEnemiesTilBonus)
         {
             CardHandManager.GetInstance().AddCardFromDeck();
         }
@@ -64,23 +70,42 @@ public class LightningStorm_Ability : RoundAOEAbility
         StatusEffect burn = statusEffectManager.TryApplyBurn(affectedCharacter, 0, _burnDuration);
 
         AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun, died);
-        AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, burn, died);
+    }
+
+    protected override void PreviewEffectOnTile(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        if (targetTile == null) return;
+
+        Character affectedCharacter = targetTile.GetOccupantCharacter();
+        if (affectedCharacter == null) return;
+        Character castingCharacter = casterTile.GetOccupantCharacter();
+        if (castingCharacter == null) return;
+
+        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        affectedCharacter.PreviewHealthChange(-damage);
     }
 
     private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
     {
         // Get base damage.
-        int baseDamage = castingCharacter.GetBaseDamage();
+        int baseDamage = castingCharacter.Data.DerivedDamage;
 
-        int damage = (int) (baseDamage * _damageMultiplier);
+        float damage = baseDamage * _damageMultiplier;
 
-        damage = (int)castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
-        damage = (int)affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
-        return damage;
+        damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        damage = affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 
     protected override void InitiateParticles(CombatGridTile casterTile, CombatGridTile targetTile)
     {
         //
+    }
+
+    public override int GetDamage()
+    {
+        float damage = GetCharacterCaster().Data.DerivedDamage * _damageMultiplier;
+        damage = GetCharacterCaster().GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
+        return Mathf.RoundToInt(damage);
     }
 }

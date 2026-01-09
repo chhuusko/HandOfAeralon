@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "VeilOfDust_Ability", menuName = "Scriptable Objects/Abilities/Rogue/Veil Of Dust")]
@@ -8,6 +7,7 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
     [Header("- Ability Specific values -")]
     [SerializeField] private int _buffsRemovedTilBonus = 1;
     [SerializeField] private int _stealthDuration = 3;
+    [SerializeField] private int _hasteDuration = 3;
     [SerializeField] private int _manaGain = 1;
 
     // Description
@@ -23,6 +23,8 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
         Character caster = casterTile.GetOccupantCharacter();
         if (caster == null) Debug.LogError("CasterTile has no character!");
 
+        caster.Animator.SetBool("AbilityOngoing", true);
+
         // Rotate towards target if the target is not the caster's tile.
         if (casterTile != targetTile)
         {
@@ -33,13 +35,36 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
         {
             animator.SetTrigger(GetAbilityName());
         }
-        // Play Animation.
-        // Play casting sound.
-        yield return new WaitForSeconds(GetCastingTime());
-        InitiateParticles(casterTile, targetTile);
+
+        AudioManager.Instance.PlayOneShot(AudioEvent, caster.transform.position);
+
+        if (GetAbilityVFXSequence() != null)
+        {
+            VFXData data = new VFXData
+            {
+                Caster = caster,
+                OriginPosition = casterTile.transform.position,
+                TargetTile = targetTile,
+                TargetPosition = targetTile.transform.position,
+                Direction = (targetTile.transform.position - casterTile.transform.position).normalized,
+                CastingAnimationDuration = GetCastingAnimationTime(),
+                CastingFXDuration = GetCastingTime(),
+                TravelFXDuration = GetFromCastToHitTime(),
+                ImpactFXDuration = GetImpactTime(),
+            };
+            yield return caster.StartCoroutine(GetAbilityVFXSequence().RunSequence(data)
+            );
+        }
         // Play hit sound.
-        yield return new WaitForSeconds(GetFromCastToHitTime());
+
         RunAbility(casterTile, targetTile);
+
+        yield return new WaitForEndOfFrame();
+        Selector._instance.SelectCharacterFromUI(caster);
+
+        Selector._instance.InvokeCharacterActionStopped();
+        yield return new WaitForSeconds(3);
+        caster.Animator.SetBool("AbilityOngoing", false);
     }
 
     protected override void ApplyEffectOnTile(CombatGridTile casterTile, CombatGridTile tileToEffect)
@@ -59,7 +84,9 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
         StatusEffect stealth;
         statusEffectManager.AddStatusEffect(stealth = new Stealth(_stealthDuration));
 
-        if (effectsRemoved > 0 && castingCharacter.GetFaction() == Faction.Friendly)
+        statusEffectManager.AddStatusEffect(new Haste(_hasteDuration));
+
+        if (effectsRemoved >= _buffsRemovedTilBonus && castingCharacter.GetFaction() == Faction.Friendly)
         {
             CardHandManager.GetInstance().ChangeMana(_manaGain);
         }

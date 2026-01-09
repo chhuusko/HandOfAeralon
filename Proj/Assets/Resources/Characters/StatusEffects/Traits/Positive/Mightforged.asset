@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Mightforged
   Icon: {fileID: 21300000, guid: fc407fe7bddd6fb4997de40eedb3c2e6, type: 3}
-  Description: Gain +25% Damage
+  Description: Gain <b>+15%</b> Damage
   Type: 3
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: 072728a9222917447a9d9c785540c4ec, type: 3}
+  IsDispellable: 0
+  SkipFirstTick: 0
+  _typeName: Mightforged, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 4
   IsPositive: 1
-  DamageModifier: 1.25
+  DamageModifierPercent: 15

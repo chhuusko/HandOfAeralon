@@ -12,25 +12,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad9f937a4d409d442bb94d47179b7c2c, type: 3}
   m_Name: SongOfRenewal_Ability
   m_EditorClassIdentifier: 
-  _abilityName: SongOfRenewal
+  _abilityName: Song of Renewal
   _icon: {fileID: 21300000, guid: 0c3bb867d3de52f43ae0e7a74de316d0, type: 3}
   _range: 6
   _cooldown: 1
-  _description: "Restore 25% of a target ally\u2019s max Health, and 10% to all allies
-    in the area. Draw 1 card if the main target was below 50% Health."
+  _description: "Play a healing melody, restoring <b>25%</b> of a target ally\u2019s
+    max {health}Health{/health}, and <b>10%</b> of each other ally\u2019s max {health}Health{/health}
+    in the area.\\n\\nDraw <b>1</b> {card}Card{/card} if the main target was below
+    <b>50%</b> {health}Health{/health}.  "
   _abilityTag: 10
-  _type: 2
+  _type: 4
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
   _targetType: 0
   _abilityVFXSequence: {fileID: 11400000, guid: 94c3c53ce92a8504cbfa2d5e9df9f706,
     type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0.5
-  _fromCastToHitTime: 1.5
+  _castingAnimationTime: 0
+  _castingFXTime: 0
+  _fromCastToHitTime: 1
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
+  <AudioEvent>k__BackingField:
+    Guid:
+      Data1: -81143711
+      Data2: 1087728517
+      Data3: -820802888
+      Data4: 1315537343
+    Path: event:/Sound Design/Diegetic/Characters/Bard/abilities/songofrenewal
   _pattern: {fileID: 11400000, guid: 13ce26b2fb853994d90d87c5ff1a6079, type: 2}
-  _validTargets: 3
+  _validTargets: 4
+  _abilityAOEVFXSequence: {fileID: 0}
   _radius: 3
   _maxHealthHealMain: 0.25
-  _maxHealthHealArea: 0.1
+  _maxHealthHealArea: 0.15
+  _maxHealthSelfDamage: 0.1

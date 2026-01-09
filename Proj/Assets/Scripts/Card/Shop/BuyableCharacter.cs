@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
     private CharacterData _characterData;
 
@@ -11,10 +11,11 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private bool _isHeldDown;
     private float _sellTime = 2f;
     private float _timeHeld = 0;
-    private int price = 200;
-    [SerializeField] Image _fillImage;
-    [SerializeField] GameObject _aboveText;
-    [SerializeField] TextMeshProUGUI _priceText;
+    private int price = 100;
+    [SerializeField] private Image portrait;
+    [SerializeField] private Image _fillImage;
+    [SerializeField] private GameObject _aboveText;
+    [SerializeField] private TextMeshProUGUI _priceText;
     private void Awake()
     {
         _fillImage.fillAmount = 0;
@@ -36,7 +37,7 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     }
     public void SetCharacter(CharacterData characterData)
     {
-        GetComponent<Image>().sprite = characterData.ClassData.classImage;
+        portrait.sprite = characterData.ClassData.classImage;
         _characterData = characterData;
     }
     public void OnPointerDown(PointerEventData eventData)
@@ -56,7 +57,7 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     {
         GlobalGameManager.GetInstance().GetGameData().heroDataList.Add(_characterData);
         Shop.GetInstance().LoadParty();
-        Shop.GetInstance().ChangeCoins(-10);
+        Shop.GetInstance().Bought(price);
     }
     private bool CanAfford()
     {
@@ -65,5 +66,12 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private bool RoomInParty()
     {
         return GlobalGameManager.GetInstance().GetGameData().heroDataList.Count < 4;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        
+        ShopCharacterTooltip.GetInstance().ShowCanvas();
+        ShopCharacterTooltip.GetInstance().UpdateTooltip(_characterData);
     }
 }

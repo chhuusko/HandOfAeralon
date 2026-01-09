@@ -7,7 +7,7 @@ public class Fortified : StatusEffect
     {
     }
 
-    public override void ModifyIncomingDamage(ref float damage, Ability ability)
+    public override void ModifyIncomingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
         var data = Data as DamageModifyingData;
 
@@ -16,6 +16,7 @@ public class Fortified : StatusEffect
             return;
         }
         
-        damage /= data.DamageModifier;
+        var modifier = data.DamageModifierPercent / 100f;
+        combinedModifier -= modifier;
     }
 }

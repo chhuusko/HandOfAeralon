@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using FMODUnity;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum Faction { Friendly, Enemy }
@@ -9,10 +11,15 @@ public enum Faction { Friendly, Enemy }
 [System.Serializable]
 public class CharacterData
 {
+    public event Action OnDerivedStatsChanged;
+    public event Action<int> OnBaseMovementPointsChanged;
+    
     [Header("Data")]
+    [SerializeField] private string _name;
     [SerializeField] private ClassData _classData;
     [SerializeField] private CharacterClass _characterClass;
     [SerializeField] private Faction _faction;
+    public string Name => _name;
     public ClassData ClassData => _classData;
     public CharacterClass CharacterClass => _characterClass;
     public Faction Faction => _faction;
@@ -27,29 +34,46 @@ public class CharacterData
     public int BaseDamage => _baseDamage;
     public int BaseMovementPoints => _baseMovementPoints;
     
+    [Header("Derived Stats")]
+    [SerializeField] private int _derivedHealthPoints;
+    [SerializeField] private int _derivedDamage;
+    public int DerivedHealthPoints => _derivedHealthPoints;
+    public int DerivedDamage => _derivedDamage;
+    
     [Header("Current stats")]
-    [SerializeField] private int _currentHealthPoints;
+    // Normalized health (0-1).
+    [SerializeField] private float _currentHealthPoints01;
     [SerializeField] private List<Ability> _abilities;
-    public int CurrentHealthPoints => _currentHealthPoints;
+    [SerializeField] private List<Ability> _activeAbilities;
+    public float CurrentHealthPoints01 => _currentHealthPoints01;
+    public int CurrentHealthPoints => Mathf.RoundToInt(_derivedHealthPoints * _currentHealthPoints01);
+    
+    [Header("Abilities")]
     public IReadOnlyList<Ability> Abilities => _abilities;
-    public List<Ability> ActiveAbilities { get; set; }
+    public List<Ability> ActiveAbilities => _activeAbilities;
     
     [Header("Status Effects")]
     private TraitManager _traitManager = new();
     public TraitManager TraitManager => _traitManager;
 
+    private bool _healthInitialized;
+
     public CharacterData(ClassData classData, Faction faction, bool generateTraits)
     {
         _classData = classData;
         _faction = faction;
-        
-        InitializeClassData();
-        InitializeTraits();
+
+        if (_classData)
+        {
+            _characterClass = ClassData.characterClass;
+        }
         
         if (generateTraits)
         {
             GenerateTraits();
         }
+        
+        InitializeClassData();
     }
     
     /// <summary>
@@ -65,15 +89,43 @@ public class CharacterData
         if (_faction == Faction.Friendly)
         {
             // Set values from class data.
-            _currentHealthPoints = _baseHealthPoints = UnityEngine.Random.Range(ClassData.minHealthPoints, ClassData.maxHealthPoints + 1);
+            _baseHealthPoints = UnityEngine.Random.Range(ClassData.minHealthPoints, ClassData.maxHealthPoints + 1);
             _baseInitiative =  UnityEngine.Random.Range(ClassData.minInitiative, ClassData.maxInitiative + 1);
             _baseDamage = UnityEngine.Random.Range(ClassData.minDamage, ClassData.maxDamage + 1);
             _baseMovementPoints = UnityEngine.Random.Range(ClassData.minMovementPoints, ClassData.maxMovementPoints + 1);
         }
         
-        _characterClass = ClassData.characterClass;
+        CalculateDerivedStats(1, 1, false);
+        _currentHealthPoints01 = 1f;
+        _healthInitialized = true;
+        
         _abilities = ClassData.abilities;
-        ActiveAbilities = _abilities;
+        _activeAbilities = new List<Ability>(_abilities);
+    }
+
+    public void InitializeFromJSON(Faction faction, int baseHP, int baseDamage, int baseInitiative,
+        int baseMovementPoints, int currentHP, List<Ability> abilities = null)
+    {
+        _faction = faction;
+
+        _baseHealthPoints = baseHP;
+        _baseDamage = baseDamage;
+        _baseInitiative = baseInitiative;
+        _baseMovementPoints = baseMovementPoints;
+
+        _abilities = _classData.abilities;
+        _activeAbilities = new List<Ability>(_abilities);
+
+        SetDerivedHealthPoints(1f, false);
+        SetDerivedDamage(_baseDamage);
+
+        float savedPercent = (_derivedHealthPoints > 0) ? (float)currentHP / _derivedHealthPoints : 0f;
+        savedPercent = Mathf.Clamp01(savedPercent);
+        
+        GenerateTraits();
+
+        _currentHealthPoints01 = savedPercent;
+        _healthInitialized = true;
     }
 
     public void InitializeTraits()
@@ -82,24 +134,131 @@ public class CharacterData
         {
             _traitManager = new TraitManager();
         }
+
+        _traitManager.CharacterData = this;
     }
     
-    private void GenerateTraits()
+    public void GenerateTraits()
     {
+        InitializeTraits();
+        
         _traitManager.GenerateTraits(this);
     }
+
+    public void SetName(string name)
+    {
+        _name = name;
+    }
+
+    public void CalculateDerivedStats(float factor)
+    {
+        CalculateDerivedStats(factor, factor);
+    }
+
+    public void CalculateDerivedStats(float hpFactor, float damageFactor, bool preserveCurrentHP = true)
+    {
+        _traitManager?.ModifyDerivedStats(ref hpFactor, ref damageFactor);
+        
+        SetDerivedHealthPoints(hpFactor, preserveCurrentHP);
+        SetDerivedDamage(Mathf.RoundToInt(_baseDamage * damageFactor));
+        
+        OnDerivedStatsChanged?.Invoke();
+    }
+
+    public void InitializeCurrentHealthFromSave(int currentHealth)
+    {
+        _currentHealthPoints01 = Mathf.Clamp01((float)currentHealth / _derivedHealthPoints);
+        _healthInitialized = true;
+    }
+    
+    public void SetBaseHealthPoints(int health) => _baseHealthPoints = Mathf.Max(health, 1);
+    public void SetBaseDamage(int damage) => _baseDamage = Mathf.Max(damage, 1);
 
     public void SetClassData(ClassData classData) => _classData = classData;
     public void SetCharacterClass(CharacterClass characterClass) => _characterClass = characterClass;
     public void SetFaction(Faction faction) => _faction = faction;
-    public void SetBaseHealthPoints(int health) => _baseHealthPoints = Mathf.Max(1, health);
     public void SetBaseInitiative(int initiative) => _baseInitiative = Mathf.Max(1, initiative);
-    public void SetBaseDamage(int damage) => _baseDamage = Mathf.Max(1, damage);
-    public void SetBaseMovementPoints(int movementPoints) => _baseMovementPoints = Mathf.Max(movementPoints, 1);
-    public void SetCurrentHealthPoints(int health) => _currentHealthPoints = Mathf.Max(health, 0);
-    public void Heal(int amount) => SetCurrentHealthPoints(Mathf.Min(CurrentHealthPoints + amount, _baseHealthPoints));
+    
+    public void SetDerivedHealthPoints(float hpFactor, bool preserveCurrentHP = true)
+    {
+        int oldDerived = _derivedHealthPoints;
+        int newDerived = Mathf.Max(1, Mathf.RoundToInt(_baseHealthPoints * hpFactor));
+    
+        // If derived health hasn't changed, don't recalculate current health
+        if (newDerived == oldDerived && _healthInitialized)
+        {
+            return;
+        }
+        
+        int oldCurrentAbsolute = Mathf.RoundToInt(_currentHealthPoints01 * oldDerived);
+        
+        _derivedHealthPoints = newDerived;
+
+        if (_healthInitialized)
+        {
+            if (preserveCurrentHP && oldDerived > 0)
+            {
+                _currentHealthPoints01 = Mathf.Clamp01((float)oldCurrentAbsolute / newDerived);
+            }
+            else
+            {
+                _currentHealthPoints01 = 1f;
+            }
+        }
+        else
+        {
+            _currentHealthPoints01 = 1f;
+            _healthInitialized = true;
+        }
+    }
+
+    public void SetDerivedDamage(int damage) => _derivedDamage = Mathf.Max(1, damage);
+    
+    public void SetBaseMovementPoints(int movementPoints)
+    {
+        _baseMovementPoints = Mathf.Max(movementPoints, 1);
+        OnBaseMovementPointsChanged?.Invoke(_baseMovementPoints);
+    }
+    
+    public void IncreaseBaseMovementPoints(int movementPoints = 1)
+    {
+        _baseMovementPoints = Math.Max(_baseMovementPoints + movementPoints, 1);
+        OnBaseMovementPointsChanged?.Invoke(_baseMovementPoints);
+    }
+    
+    public void DecreaseBaseMovementPoints(int movementPoints = 1)
+    {
+        _baseMovementPoints = Math.Max(_baseMovementPoints - movementPoints, 1);
+        OnBaseMovementPointsChanged?.Invoke(_baseMovementPoints);
+    }
+
+    public void SetCurrentHealthPoints(int health)
+    {
+        if (_derivedHealthPoints <= 0)
+        {
+            return;
+        }
+        
+        _currentHealthPoints01 = Mathf.Clamp01((float)health / _derivedHealthPoints);
+    }
+
+    public void Heal(int amount)
+    {
+        float heal01 = (float)amount / _derivedHealthPoints;
+        _currentHealthPoints01 = Mathf.Clamp01(_currentHealthPoints01 + heal01);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        float dmg01 = (float)damage / _derivedHealthPoints;
+        _currentHealthPoints01 = Mathf.Max(0f, _currentHealthPoints01 - dmg01);
+    }
+
     public void SetAbilities(List<Ability> abilities) => _abilities = new List<Ability>(abilities);
-    public void SetActiveAbilities(List<Ability> abilities) => ActiveAbilities = abilities;
+    public void SetActiveAbilities(List<Ability> abilities)
+    {
+        _activeAbilities = abilities;
+    }
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -107,13 +266,17 @@ public class Character : MonoBehaviour
 {
     [SerializeField] private Renderer _factionIndicator; // JLW
 
-    public event Action<int> OnHealthChanged;
+    public event Action<int, int> OnHealthChanged;
     public event Action<int, GameObject> OnTakeDamage;
     public event Action<int, GameObject> OnWasHealed;
+    public event Action<int, int> OnMovementPointsChanged;
 
+    public const float DEATH_COOLDOWN = 4.5f;
 
-    public const int MOVEMENT_POINTS = 5;
-    public const float DEATH_COOLDOWN = 2.5f;
+    [Header("ID")] 
+    public static int NextID = 1;
+    [SerializeField] private int _characterID;
+    public int CharacterID => _characterID;
     
     [Header("Current stats")]
     [SerializeField] private int _currentInitiative;
@@ -125,9 +288,11 @@ public class Character : MonoBehaviour
     private Dictionary<Ability, int> _currentCooldowns = new();
 
     [Header("State")] 
-    public bool CanMove { get; set; } = true;
-    public bool CanUseAbility { get; set; } = true;
-    public bool IsTargetable { get; set; } = true;
+    public bool CanMove = true;
+    public bool IsStunned;
+    public bool CanUseAbility = true;
+    public bool IsTargetable = true;
+    private bool isDying;
 
     [Header("Status effects")]
     private StatusEffectManager _statusEffectManager;
@@ -137,12 +302,15 @@ public class Character : MonoBehaviour
     [SerializeField] private GameObject _weaponMesh;
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
+    [SerializeField] private Animator _animator;
+    public Animator Animator => _animator;
     public CharacterData Data => _data;
 
     private void OnEnable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateAbilityCooldowns;
         CombatEventManager.OnEnterCombatStateTakeTurn += ResetCanAttack;
+        CombatEventManager.OnEnterCombatStateEndCombat += ResetAbilities;
         
         PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
         if(damagePopupTextManager != null)
@@ -164,7 +332,12 @@ public class Character : MonoBehaviour
         
         // Enemies aren't created via character data, so traits have to be created at start.
         _statusEffectManager.SetTraitManager(_data?.TraitManager);
-        _data?.InitializeTraits();
+
+        if (_data != null)
+        {
+            _data.InitializeTraits();
+            _data.OnBaseMovementPointsChanged += OnBaseMovementPointsChanged;
+        }
 
         if (!TryGetComponent(out _abilityHandler))
         {
@@ -187,24 +360,33 @@ public class Character : MonoBehaviour
         var mat = _factionIndicator.material;
         mat.SetColor("_Color", c);
     }
-
-
-    private void OnDisable()
+    
+    /// <summary>
+    /// Generates a new friendly character.
+    /// </summary>
+    /// <param name="data">The character data to generate from.</param>
+    public void Initialize(CharacterData data)
     {
-        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= ResetCanAttack;
-
-        PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
-        if (damagePopupTextManager != null)
+        _characterID = NextID++;
+        _data = data;
+        _data.OnDerivedStatsChanged += DerivedStatsChanged; 
+        
+        if (_data.ClassData == null)
         {
-            damagePopupTextManager.UnBindEventOnTakeDamage(this);
-            damagePopupTextManager.UnBindEventOnWasHealed(this);
+            return;
         }
+            
+        // Set values from class data.
+        _currentInitiative = _data.BaseInitiative;
+        _currentDamage = _data.DerivedDamage;
+        _currentMovementPoints = _data.BaseMovementPoints;
+        
+        SetMeshLayers(_bodyMesh);
+        SetMeshLayers(_weaponMesh);
 
-        CombatTooltipManager combatTooltipManager = CombatTooltipManager.GetInstance();
-        if (combatTooltipManager != null)
+        if(data.CharacterClass == CharacterClass.Bard)
         {
-            combatTooltipManager.GetCharacterLayout().UnBindEventEventOnTakeDamage(this);
+            data.SetActiveAbilities(data.Abilities.ToList());
         }
     }
 
@@ -233,10 +415,14 @@ public class Character : MonoBehaviour
     public Faction GetFaction() => _data.Faction;
     
     // Base stats.
-    public int GetMaxHealth() => _data.BaseHealthPoints;
+    public int GetBaseHealth() => Data.BaseHealthPoints;
+    public int GetBaseDamage() => Data.BaseDamage;
     public int GetBaseInitiative() => _data.BaseInitiative;
-    public int GetBaseDamage() => _data.BaseDamage;
     public int GetBaseMovementPoints() => _data.BaseMovementPoints;
+    
+    // Derived stats.
+    public int GetMaxHealth() => _data.DerivedHealthPoints;
+    public int GetDerivedDamage() => _data.DerivedDamage;
     
     // Current stats.
     public int GetCurrentHealth() => _data.CurrentHealthPoints;
@@ -258,10 +444,30 @@ public class Character : MonoBehaviour
     // Base stats.
     public void SetCharacterClass(CharacterClass characterClass) => _data.SetCharacterClass(characterClass);
     public void SetFaction(Faction faction) => _data.SetFaction(faction);
-    public void SetBaseHealthPoints(int healthPoints) => _data.SetBaseHealthPoints(healthPoints);
-    public void SetBaseInitiative(int initiative) => _data.SetBaseInitiative(initiative);
-    public void SetBaseDamage(int damage) => _data.SetBaseDamage(damage);
-    public void SetBaseMovementPoints(int movementPoints) => _data.SetBaseMovementPoints(movementPoints);
+    public void SetBaseInitiative(int initiative)
+    {
+        _data.SetBaseInitiative(initiative);
+        CombatEventManager.InvokeOnCharacterInitiativeChanged();
+    }
+    
+    public void SetBaseMovementPoints(int movementPoints)
+    {
+        _data.SetBaseMovementPoints(movementPoints);
+        OnMovementPointsChanged?.Invoke(_currentMovementPoints, _data.BaseMovementPoints);
+    }
+
+    private void OnBaseMovementPointsChanged(int newBase)
+    {
+        OnMovementPointsChanged?.Invoke(_currentMovementPoints, _data.BaseMovementPoints);
+    }
+
+    public void SetDerivedHealthPoints(int newMax, float hpFactor)
+    {
+        _data.SetDerivedHealthPoints(hpFactor);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
+    }
+
+    public void SetDerivedDamage(int damage) => _data.SetDerivedDamage(damage);
     
     // Misc.
     public GameObject GetBodyMesh() => _bodyMesh;
@@ -273,11 +479,7 @@ public class Character : MonoBehaviour
     public void SetCurrentHealthPoints(int healthPoints)
     {
         _data.SetCurrentHealthPoints(healthPoints);
-        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
-        if (_data.CurrentHealthPoints <= 0)
-        {
-            StartCoroutine(RemoveCharacter());
-        }
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
     }
 
     public void IncreaseCurrentHealthPoints(int amount = 1) => 
@@ -287,8 +489,11 @@ public class Character : MonoBehaviour
         SetCurrentHealthPoints(_data.CurrentHealthPoints - amount);
 
     // Initiative.
-    public void SetCurrentInitiative(int initiative) => 
+    public void SetCurrentInitiative(int initiative)
+    {
         _currentInitiative = Mathf.Max(initiative, 0);
+        CombatEventManager.InvokeOnCharacterInitiativeChanged();
+    }
     
     public void IncreaseCurrentInitiative(int amount = 1) => 
         SetCurrentInitiative(_currentInitiative + amount);
@@ -307,12 +512,18 @@ public class Character : MonoBehaviour
         SetCurrentDamage(_currentDamage - amount);
     
     // Movement points.
-    public void SetCurrentMovementPoints(int movementPoints) =>
+    public void SetCurrentMovementPoints(int movementPoints)
+    {
         _currentMovementPoints = Mathf.Max(movementPoints, 0);
-    
-    public void ResetCurrentMovementPoints() =>
+        OnMovementPointsChanged?.Invoke(_currentMovementPoints, _data.BaseMovementPoints);
+    }
+
+    public void ResetCurrentMovementPoints()
+    {
         _currentMovementPoints = GetBaseMovementPoints();
-    
+        OnMovementPointsChanged?.Invoke(_currentMovementPoints, _data.BaseMovementPoints);
+    }
+
     public void IncreaseCurrentMovementPoints(int amount = 1) =>
         SetCurrentMovementPoints(_currentMovementPoints + amount);
     
@@ -320,6 +531,11 @@ public class Character : MonoBehaviour
         SetCurrentMovementPoints(_currentMovementPoints - amount);
     
     public void SetCurrentTileIndex(Vector2Int tileIndex) => _currentTileIndex = tileIndex;
+
+    private void DerivedStatsChanged()
+    {
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
+    }
 
     public void StartAbilityCooldown(Ability ability)
     {
@@ -332,6 +548,14 @@ public class Character : MonoBehaviour
     private void ResetCanAttack(Character c)
     {
         CanUseAbility = true;
+    }
+
+    private void ResetAbilities(bool playerWon)
+    {
+        _currentCooldowns = new Dictionary<Ability, int>();
+        
+        // Reset which abilities are active.
+        _data.SetActiveAbilities(new List<Ability>(_data.Abilities));
     }
 
     private void UpdateAbilityCooldowns(Character c)
@@ -369,26 +593,14 @@ public class Character : MonoBehaviour
         return _currentCooldowns.GetValueOrDefault(ability, 0);
     }
 
-    /// <summary>
-    /// Generates a new friendly character.
-    /// </summary>
-    /// <param name="data">The character data to generate from.</param>
-    public void Initialize(CharacterData data)
+    public void ChangeCooldown(Ability ability, int amount)
     {
-        _data = data;
-        
-        if (_data.ClassData == null)
+        if (!_currentCooldowns.ContainsKey(ability))
         {
             return;
         }
-            
-        // Set values from class data.
-        _currentInitiative = _data.BaseInitiative;
-        _currentDamage = _data.BaseDamage;
-        _currentMovementPoints = _data.BaseMovementPoints;
         
-        SetMeshLayers(_bodyMesh);
-        SetMeshLayers(_weaponMesh);
+        _currentCooldowns[ability] += amount;
     }
 
     private void SetMeshLayers(GameObject mesh)
@@ -403,12 +615,12 @@ public class Character : MonoBehaviour
         if (GetFaction() == Faction.Friendly) 
         {
             mesh.layer = LayerMask.NameToLayer("Friendly");
-            layerMask = 1 << 2;
+            layerMask = (1 << 0) | (1 << 2);
         }
         else
         {
             mesh.layer = LayerMask.NameToLayer("Enemy");
-            layerMask = 1 << 7;
+            layerMask = (1 << 0) | (1 << 7);
         }
         
         SkinnedMeshRenderer smr = mesh.GetComponent<SkinnedMeshRenderer>();
@@ -439,25 +651,50 @@ public class Character : MonoBehaviour
     /// <returns>Whether the character died.</returns>
     public bool TakeDamage(int damage)
     {
-        _data.SetCurrentHealthPoints(_data.CurrentHealthPoints - damage);
-        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
+        float oldHealth = GetCurrentHealth();
+        
+        _data.TakeDamage(damage);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
         OnTakeDamage?.Invoke(damage, gameObject);
+        
+        float newHealth = GetCurrentHealth();
 
         Debug.Log($"{name} took {damage} damage! Remaining health: {GetCurrentHealth()}");
         
-        if (_data.CurrentHealthPoints <= 0)
+        if (_data.CurrentHealthPoints01 <= 0.001f && !isDying)
         {
+            isDying = true;
+            PlayDamageSound(true, newHealth / oldHealth);
             StartCoroutine(RemoveCharacter());
             return true;
         }
-        
-        Animator animator = null;
-        if (TryGetComponent<Animator>(out animator))
+
+        if (_animator != null)
         {
-            animator.SetTrigger("TakeDamage");
+            _animator.SetTrigger("TakeDamage");
         }
 
+        PlayDamageSound(false, newHealth / oldHealth);
         return false;
+    }
+
+    public void PreviewHealthChange(int health)
+    {
+        HealthBar healthbar = CharacterFrameManager._instance.GetHealthBarFrom(this);
+
+        if (healthbar == null) return;
+
+        healthbar.ShowPreviewDamage(health);
+        DebugLog.MGLog("Health differens that healthbar should preview is: " + health);
+    }
+
+    public void StopPreviewingHealthChange()
+    {
+        HealthBar healthbar = CharacterFrameManager._instance.GetHealthBarFrom(this);
+
+        if (healthbar == null) return;
+
+        healthbar.HidePreview();
     }
 
     public bool TakeDamage(int damage, Character source)
@@ -469,19 +706,46 @@ public class Character : MonoBehaviour
         
         return TakeDamage(damage);
     }
+
+    private void PlayDamageSound(bool died, float damageScale)
+    {
+        EventReference sound = default;
+        switch (GetCharacterClass())
+        {
+            case CharacterClass.Barbarian:
+                sound = died ? FMODEvents.Instance.BarbarianDeath : FMODEvents.Instance.BarbarianTakeDamage;
+                break;
+            case CharacterClass.Rogue:
+                sound = died ? FMODEvents.Instance.RogueDeath : FMODEvents.Instance.RogueTakeDamage;
+                break;
+            case CharacterClass.Bard:
+                sound = died ? FMODEvents.Instance.BardDeath : FMODEvents.Instance.BardTakeDamage;
+                break;
+            case CharacterClass.Sorceress:
+                sound = died ? FMODEvents.Instance.SorceressDeath : FMODEvents.Instance.SorceressTakeDamage;
+                break;
+        }
+
+        if (sound.IsNull)
+        {
+            return;
+        }
+        
+        AudioManager.Instance.PlayParameterizedOneShot(sound, transform.position, FMODEvents.Instance.DamageParameter, damageScale);
+    }
      
     private IEnumerator RemoveCharacter()
     {
+
+        Selector._instance.DeselectCharacter();
+
         CombatEventManager.InvokeOnCharacterDeath(this);
 
         float deathCooldown = DEATH_COOLDOWN;
         
-        Animator animator = null;
-        if (TryGetComponent<Animator>(out animator))
+        if (_animator != null)
         {
-            animator.SetTrigger("Death");
-            AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            deathCooldown = animatorStateInfo.length;
+            _animator.SetTrigger("Death");
         }
 
         yield return new WaitForSeconds(deathCooldown);
@@ -491,9 +755,9 @@ public class Character : MonoBehaviour
     public void Heal(int healAmount)
     {
         _data.Heal(healAmount);
-        OnHealthChanged?.Invoke(_data.CurrentHealthPoints);
+        OnHealthChanged?.Invoke(_data.CurrentHealthPoints, _data.DerivedHealthPoints);
         OnWasHealed?.Invoke(healAmount, gameObject);
-        Debug.Log($"Healing {healAmount} health. New health: {GetCurrentHealth()}");
+        AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Healed, transform.position);
     }
     
     public bool IsMoving()
@@ -521,6 +785,24 @@ public class Character : MonoBehaviour
         StartCoroutine(RotateCoroutine(targetRot, duration));
     }
 
+    public void ShowPreviewVFX()
+    {
+        var vfxPlayer = GetComponent<CharacterVFXPlayer>();
+        if (vfxPlayer != null)
+        {
+            vfxPlayer.ShowPreview();
+        }
+    }
+
+    public void HidePreviewVFX()
+    {
+        var vfxPlayer = GetComponent<CharacterVFXPlayer>();
+        if (vfxPlayer != null)
+        {
+            vfxPlayer.HidePreview();
+        }
+    }
+
     private IEnumerator RotateCoroutine(Quaternion targetRot, float duration)
     {
         Quaternion startRot = transform.rotation;
@@ -533,12 +815,42 @@ public class Character : MonoBehaviour
             yield return null;
         }
     }
+    
+    private void OnDisable()
+    {
+        CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateAbilityCooldowns;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= ResetCanAttack;
+        CombatEventManager.OnEnterCombatStateEndCombat -= ResetAbilities;
+
+        PopupTextManager damagePopupTextManager = PopupTextManager.GetInstance();
+        if (damagePopupTextManager != null)
+        {
+            damagePopupTextManager.UnBindEventOnTakeDamage(this);
+            damagePopupTextManager.UnBindEventOnWasHealed(this);
+        }
+
+        CombatTooltipManager combatTooltipManager = CombatTooltipManager.GetInstance();
+        if (combatTooltipManager != null)
+        {
+            combatTooltipManager.GetCharacterLayout().UnBindEventEventOnTakeDamage(this);
+        }
+
+        if (_data != null)
+        {
+            _data.OnDerivedStatsChanged -= DerivedStatsChanged; 
+        }
+    }
 
     void OnDestroy()
     {
         if (CharacterFrameManager._instance != null)
         {
             CharacterFrameManager._instance.Unregister(this);
+        }
+        
+        if (_data != null)
+        {
+            _data.OnBaseMovementPointsChanged -= OnBaseMovementPointsChanged;
         }
     }
 }

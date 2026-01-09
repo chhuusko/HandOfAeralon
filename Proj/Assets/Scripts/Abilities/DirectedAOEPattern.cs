@@ -1,11 +1,10 @@
-using UnityEditor.Build;
 using UnityEngine;
 
 public abstract class DirectedAOEPattern : AOEPattern
 {
     public enum Direction
     {
-        Up, Down, Left, Right
+        Up, Down, Left, Right, None
     }
 
     protected Direction _direction;

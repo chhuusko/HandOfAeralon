@@ -14,12 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Bulwark's Threshold
   Icon: {fileID: 21300000, guid: 3d8845f204d1e364a8ed5f8d63510723, type: 3}
-  Description: First time you fall below 50% HP each combat, become Fortified for
-    2 turns
+  Description: First time you fall below <b>50%</b> {health}Health{/health} each
+    combat, become {non_damaging}Fortified{/non_damaging} for <b>2</b> turns
   Type: 3
   IsPermanent: 1
-  Script: {fileID: 11500000, guid: 81c1505581e4cdb43a60dd13dcd471c6, type: 3}
+  IsDispellable: 0
+  SkipFirstTick: 0
+  _typeName: BulwarksThreshold, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
   Class: 4
   IsPositive: 1
-  Threshold: 0.5
+  ThresholdPercent: 50
   TurnAmount: 2

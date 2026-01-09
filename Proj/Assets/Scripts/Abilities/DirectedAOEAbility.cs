@@ -32,6 +32,7 @@ public abstract class DirectedAOEAbility : AOEAbility
         }
 
         directedAOEPattern.SetDirection(CalculateDirection(tile, targetTile));
+        directedAOEPattern.SetCasterTile(tile);
 
         // Calculate which tiles to effect.
         var list = _pattern.CalculateTilesToEffect(targetTile);
@@ -70,6 +71,39 @@ public abstract class DirectedAOEAbility : AOEAbility
                 if (!IsValidTargetForAbility(casterTile, tile)) continue;
 
                 ApplyEffectOnTile(casterTile, tile);
+            }
+        }
+    }
+
+    public override void PreviewAbilityEffects(CombatGridTile casterTile, CombatGridTile targetTile)
+    {
+        // Calculate all tiles around within pattern and apply effect to all of them.
+
+        var directedAOEPattern = _pattern as DirectedAOEPattern;
+
+        if (directedAOEPattern == null)
+        {
+            Debug.LogError("Pattern is not a DirectedAOEPattern");
+            return;
+        }
+
+        directedAOEPattern.SetDirection(CalculateDirection(casterTile, targetTile));
+        directedAOEPattern.SetCasterTile(casterTile);
+
+        List<CombatGridTile> tilesToEffect = directedAOEPattern.CalculateTilesToEffect(targetTile);
+
+        foreach (CombatGridTile tile in tilesToEffect)
+        {
+            if (tile != null)
+            {
+                // Don't apply effect on tiles with invalid targets.
+                if (!IsValidTargetForAbility(casterTile, tile)) continue;
+
+                PreviewEffectOnTile(casterTile, tile);
+                var character = tile.GetOccupantCharacter();
+                if (character == null) continue;
+                character.ShowPreviewVFX();
+                GetAbilityHandler().AddPreviewedCharacter(character);
             }
         }
     }

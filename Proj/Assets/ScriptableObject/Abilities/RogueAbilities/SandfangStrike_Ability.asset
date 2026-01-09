@@ -16,19 +16,31 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 7250f903b6576774fbca4f0b980d27ad, type: 3}
   _range: 1
   _cooldown: 1
-  _description: "Deal (130% \xD7 Damage) Physical damage. Has an 80% chance to apply
-    3 stacks of Poison to the target. If the target already had Poison, draw 1 card."
+  _description: "Slash the target with a venom-laced blade, dealing {damage} (<b>110%</b>
+    \xD7 Damage) {physical_damage}Physical damage{/physical_damage}.\\n\\nHas an
+    <b>80%</b> chance to apply <b>3</b> stacks of <link=\"Poison\">{poison}<u>Poison</u>{/poison}</link>
+    to the target.\\n\\nIf the target already had <link=\"Poison\">{poison}<u>Poison</u>{/poison}</link>,
+    draw <b>1</b> {card}Card{/card}. "
   _abilityTag: 5
-  _type: 0
+  _type: 1
   _rangeCalculation: {fileID: 11400000, guid: b26a232b16ceee045899106d2759f853, type: 2}
   _targetType: 3
-  _castingEffect: {fileID: 0}
-  _hitEffect: {fileID: 0}
+  _abilityVFXSequence: {fileID: 11400000, guid: e073597d7b966a544b99322d738425a4,
+    type: 2}
   _castingSound: {fileID: 0}
   _hitSound: {fileID: 0}
-  _castingTime: 0
-  _fromCastToHitTime: 0
+  _castingAnimationTime: 0.5
+  _castingFXTime: 0
+  _fromCastToHitTime: 0.1
+  _impactVFXTime: 0
   _castingRotationTime: 0.3
-  _damageMultiplier: 1.3
+  <AudioEvent>k__BackingField:
+    Guid:
+      Data1: 130650818
+      Data2: 1166679658
+      Data3: -2039860820
+      Data4: -56693624
+    Path: event:/Sound Design/Diegetic/Characters/Rouge/abilities/sandfangstrike
+  _damageMultiplier: 1.1
   _applyPoisonChance: 0.8
   _posionStacksToApply: 3

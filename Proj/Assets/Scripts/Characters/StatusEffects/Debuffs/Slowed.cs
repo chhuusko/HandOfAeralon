@@ -15,6 +15,8 @@ public class Slowed : StatusEffect
             return;
         }
         
+        Character.Data.DecreaseBaseMovementPoints(data.MovementPoints);
+        Character.SetBaseInitiative(Character.GetBaseInitiative() - data.Initiative);
         Character.DecreaseCurrentMovementPoints(data.MovementPoints);
         Character.DecreaseCurrentInitiative(data.Initiative);
     }
@@ -28,6 +30,8 @@ public class Slowed : StatusEffect
             return;
         }
         
+        Character.Data.IncreaseBaseMovementPoints(data.MovementPoints);
+        Character.SetBaseInitiative(Character.GetBaseInitiative() + data.Initiative);
         Character.IncreaseCurrentMovementPoints(data.MovementPoints);
         Character.IncreaseCurrentInitiative(data.Initiative);
     }
