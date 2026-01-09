@@ -206,7 +206,7 @@ public class EnemyAI : MonoBehaviour
                 }
 
                 float sorcModifier = 5f;
-                if (_character.GetCharacterClass() == CharacterClass.Sorceress)
+                if (_character.GetCharacterClass() == CharacterClass.Sorceress || _character.GetCharacterClass() == CharacterClass.Bard)
                 {
                     if (GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), closestEnemy.GetCurrentTileIndex()) > _character.GetMovementPoints() + 6)
                     {
@@ -602,17 +602,19 @@ public class EnemyAI : MonoBehaviour
 
                                 if (occupantPERCENTHP < 0.75f)
                                 {
-                                    result += 10f;
+                                    result += 15f;
 
                                     if (occupantPERCENTHP < 0.5f)
                                     {
-                                        result += 10f;
+                                        result += 20f;
                                     }
                                 }
                             }
                         }
                     }
                     if (hitCount == 0) result -= 100f;
+                    float myPERCENTHP = _character.GetMaxHealth() == 0 ? 1f : _character.GetCurrentHealth() / _character.GetMaxHealth();
+                    if (myPERCENTHP < 0.33f) result -= 300;
                     break;
                 }
             case "DissonantChord_Ability":
