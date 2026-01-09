@@ -289,7 +289,7 @@ public class StatusEffectManager : MonoBehaviour
         var modifier = 1f;
         foreach (var statusEffect in GetAllEffectsSnapshot())
         {
-            statusEffect.ModifyIncomingDamage(ref modifier, ref damage, ability);
+            statusEffect.ModifyIncomingDamage(ref damage, ref modifier, ability);
         }
         
         // Calculate final damage with combined multipler.
