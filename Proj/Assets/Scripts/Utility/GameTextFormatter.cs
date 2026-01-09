@@ -97,7 +97,7 @@ public static class GameTextFormatter
                 desc,
                 first,
                 damageToken.Length,
-                TextMarkupExtensions.Colorize(ability.GetDamage().ToString(), physicalDamageColor)
+                TextMarkupExtensions.Bold(ability.GetDamage().ToString())
             );
         }
 
@@ -109,7 +109,7 @@ public static class GameTextFormatter
                 desc,
                 second,
                 damageToken.Length,
-                TextMarkupExtensions.Colorize(ability.GetSecondDamage().ToString(), physicalDamageColor)
+                TextMarkupExtensions.Bold(ability.GetSecondDamage().ToString())
             );
         }
 

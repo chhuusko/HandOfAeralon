@@ -18,10 +18,10 @@ MonoBehaviour:
   _cooldown: 2
   _description: "Send primal energy through the ground, dealing {damage} (<b>100%</b>
     \xD7 Damage) {elemental_damage}Elemental damage{/elemental_damage}.\\n\\nIf the
-    target is <link=\"Slowed\">{non_damaging}Slowed{/non_damaging}</link>, deal {damage}
-    (<b>150%</b> \xD7 Damage) instead.\\n\\nEvery character hit has a <b>30%</b>
-    chance to become <link=\"Stunned\">{non_damaging}Stunned{/non_damaging}</link>
-    for <b>1</b> turn.\\n\\nDraw <b>1</b> {card}Card{/card} per enemy <link=\"Stunned\">{non_damaging}Stunned{/non_damaging}</link>
+    target is <link=\"Slowed\">{non_damaging}<u>Slowed</u>{/non_damaging}</link>,
+    deal {damage} (<b>150%</b> \xD7 Damage) instead.\\n\\nEvery character hit has
+    a <b>30%</b> chance to become <link=\"Stunned\">{non_damaging}<u>Stunned</u>{/non_damaging}</link>
+    for <b>1</b> turn.\\n\\nDraw <b>1</b> {card}Card{/card} per enemy <link=\"Stunned\">{non_damaging}<u>Stunned</u>{/non_damaging}</link>
     by this ability."
   _abilityTag: 9
   _type: 1

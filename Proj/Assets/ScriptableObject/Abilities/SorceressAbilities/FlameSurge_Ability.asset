@@ -18,9 +18,9 @@ MonoBehaviour:
   _cooldown: 2
   _description: "Unleash a burst of fire, dealing {damage} (<b>85%</b> \xD7 Damage)
     {elemental_damage}Elemental damage{/elemental_damage} to ALL characters in area.\\n\\nEvery
-    character hit has a <b>50%</b> chance to gain <link=\"Burn\">{burn}Burn{/burn}</link>
+    character hit has a <b>50%</b> chance to gain <link=\"Burn\">{burn}<u>Burn</u>{/burn}</link>
     for <b>2</b> turns.\\n\\nGain <b>1</b> {mana}Mana{/mana} if at least two enemies
-    become <link=\"Burn\">{burn}Burned{/burn}</link>. "
+    become <link=\"Burn\">{burn}<u>Burned</u>{/burn}</link>. "
   _abilityTag: 9
   _type: 2
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}

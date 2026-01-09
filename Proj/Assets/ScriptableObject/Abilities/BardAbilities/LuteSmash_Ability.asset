@@ -17,11 +17,11 @@ MonoBehaviour:
   _range: 1
   _cooldown: 1
   _description: 'Deal {damage} {physical_damage]Physical damage{/physical_damage}.\n\nHas
-    a <b>35%</b> chance to <link="Stunned">{non_damaging}Stun{/non_damaging}</link>
+    a <b>35%</b> chance to <link="Stunned">{non_damaging}<u>Stun</u>{/non_damaging}</link>
     the target for <b>1</b> turn.\n\nGain <b>2</b> {mana}Mana{/mana} if the target
-    gets <link="Stunned">{non_damaging}Stunned{/non_damaging}</link> by this ability.\n\nAfter
-    using {ability}Lute Smash{/ability}, only {ability}Lute Smash{/ability} and {ability}Dissonant
-    Chord{/ability} can be used for the rest of combat.  '
+    gets <link="Stunned">{non_damaging}<u>Stunned</u>{/non_damaging}</link> by this
+    ability.\n\nAfter using {ability}Lute Smash{/ability}, only {ability}Lute Smash{/ability}
+    and {ability}Dissonant Chord{/ability} can be used for the rest of combat.  '
   _abilityTag: 5
   _type: 0
   _rangeCalculation: {fileID: 11400000, guid: b26a232b16ceee045899106d2759f853, type: 2}

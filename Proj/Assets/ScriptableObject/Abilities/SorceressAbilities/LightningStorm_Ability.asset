@@ -18,7 +18,7 @@ MonoBehaviour:
   _cooldown: 2
   _description: "Call down a lightning storm, deals {damage} (<b>75%</b> \xD7 Damage)
     {elemental_damage}Elemental damage{/elemental_damage} to ALL characters in a
-    large area.\\n\\nEvery character hit has a <b>15%</b> chance to gain <link=\"Stunned\">{non_damaging}Stunned{/non_damaging}</link>
+    large area.\\n\\nEvery character hit has a <b>15%</b> chance to gain <link=\"Stunned\">{non_damaging}<u>Stunned</u>{/non_damaging}</link>
     for <b>1</b> turn."
   _abilityTag: 10
   _type: 2

@@ -18,9 +18,9 @@ MonoBehaviour:
   _cooldown: 2
   _description: "Slam the ground, dealing {damage} (<b>90%</b> \xD7 Damage) {physical_damage}Physical
     damage{/physical_damage} to ALL characters in the area.\\n\\nEvery character
-    hit has a <b>60%</b> chance to become <link=\"Slowed\">{non_damaging}Slowed{/non_damaging}</link>
+    hit has a <b>60%</b> chance to become <link=\"Slowed\">{non_damaging}<u>Slowed</u>{/non_damaging}</link>
     for <b>2</b> turns.\\n\\nGain <b>1</b> {mana}Mana{/mana} if at least two enemies
-    become <link=\"Slowed\">{non_damaging}Slowed{/non_damaging}</link>."
+    become <link=\"Slowed\">{non_damaging}<u>Slowed</u>{/non_damaging}</link>."
   _abilityTag: 9
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}

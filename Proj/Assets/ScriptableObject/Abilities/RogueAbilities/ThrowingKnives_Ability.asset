@@ -19,7 +19,7 @@ MonoBehaviour:
   _description: "Jump and throw knives in a line, dealing {damage} ((<b>80%</b> +
     (<b>5%</b> \xD7 current hand size)) \xD7 Damage) {physical_damage}Physical damage{/physical_damage},
     scaling with amount of {card}Cards{/card} in hand.\\n\\nALL character's hit have
-    a <b>60%</b> chance to gain 3 stacks of <link=\"Poison\">{poison}Poison{/poison}</link>."
+    a <b>60%</b> chance to gain 3 stacks of <link=\"Poison\">{poison}<u>Poison</u>{/poison}</link>."
   _abilityTag: 10
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}

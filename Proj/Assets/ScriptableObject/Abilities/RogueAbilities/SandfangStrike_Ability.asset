@@ -18,8 +18,8 @@ MonoBehaviour:
   _cooldown: 1
   _description: "Slash the target with a venom-laced blade, dealing {damage} (<b>110%</b>
     \xD7 Damage) {physical_damage}Physical damage{/physical_damage}.\\n\\nHas an
-    <b>80%</b> chance to apply <b>3</b> stacks of <link=\"Poison\">{poison}Poison{/poison}</link>
-    to the target.\\n\\nIf the target already had <link=\"Poison\">{poison}Poison{/poison}</link>,
+    <b>80%</b> chance to apply <b>3</b> stacks of <link=\"Poison\">{poison}<u>Poison</u>{/poison}</link>
+    to the target.\\n\\nIf the target already had <link=\"Poison\">{poison}<u>Poison</u>{/poison}</link>,
     draw <b>1</b> {card}Card{/card}. "
   _abilityTag: 5
   _type: 1

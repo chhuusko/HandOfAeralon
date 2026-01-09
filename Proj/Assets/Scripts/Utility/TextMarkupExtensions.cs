@@ -9,6 +9,7 @@ public static class TextMarkupExtensions
         Colored = 1 << 0,
         Bold = 1 << 1,
         Italic = 1 << 2,
+        Underline = 1 << 3
     }
 
     /// <summary>
@@ -35,6 +36,11 @@ public static class TextMarkupExtensions
         {
             text = Italic(text);
         }
+
+        if (style.HasFlag(TextStyle.Underline))
+        {
+            text = Underline(text);
+        }
         
         return text;
     }
@@ -52,5 +58,10 @@ public static class TextMarkupExtensions
     public static string Italic(string text)
     {
         return $"<i>{text}</i>";
+    }
+    
+    public static string Underline(string text)
+    {
+        return $"<u>{text}</u>";
     }
 }
