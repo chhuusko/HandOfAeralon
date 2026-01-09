@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Fragile
   Icon: {fileID: 21300000, guid: 99a6de8053902374c8cf27d3493d321b, type: 3}
-  Description: First time you fall below <b>50%</b> Health each combat, become {non_damaging}Vulnerable{/non_damaging}
-    for <b>2</b> turns
+  Description: First time you fall below <b>50%</b> {health}Health{/health} each
+    combat, become {non_damaging}Vulnerable{/non_damaging} for <b>2</b> turns
   Type: 3
   IsPermanent: 1
   IsDispellable: 0

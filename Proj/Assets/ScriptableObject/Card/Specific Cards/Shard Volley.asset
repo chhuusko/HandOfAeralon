@@ -17,7 +17,7 @@ MonoBehaviour:
   rarity: 1
   title: Shard Volley
   description: Deal <b>70</b> {card_damage}damage{/card_damage} plus <b>10</b> for
-    each {card}card{/card} played this turn, randomly split among enemies
+    each {card}Card{/card} played this turn, randomly split among enemies
   cost: 3
   icon: {fileID: 21300000, guid: b14a977667d3f844cbbd3c50a0889848, type: 3}
   CardTemplate: {fileID: 0}

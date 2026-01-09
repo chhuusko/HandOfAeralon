@@ -17,8 +17,8 @@ MonoBehaviour:
   rarity: 2
   title: Life & Death
   description: Deal {card_damage}damage{/card_damage} to target enemy equal to <b>25%</b>
-    of their max {health}health{/health} and {heal}heal{/heal} the ally with the
-    highest <b>%</b> missing {health}health{/health} for the same amount
+    of their max {health}Health{/health} and {heal}heal{/heal} the ally with the
+    highest <b>%</b> missing {health}Health{/health} for the same amount
   cost: 3
   icon: {fileID: 21300000, guid: 14773e8d51115364dbf0088d062028bb, type: 3}
   CardTemplate: {fileID: 0}
