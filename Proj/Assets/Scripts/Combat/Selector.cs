@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TextCore.Text;
 
 public enum SelectorState
 {
@@ -76,6 +77,7 @@ public class Selector : MonoBehaviour
     {
         yield return new WaitUntil(() => CombatGrid._instance.IsCombatGridLoaded());
         SetStandrardColors();
+        AutoSelectFirstCharacter();
     }
 
     private void HandleEnterCombatStateTakeTurn(Character character)
@@ -564,6 +566,34 @@ public class Selector : MonoBehaviour
             }
         }
     }
+
+    private void AutoSelectFirstCharacter()
+    {
+        CombatTurnOrder turnOrder = CombatManager._instance.GetCombatTurnOrder();
+        if (turnOrder != null)
+        {
+            var characters = CombatGrid._instance.GetAllCharacterScripts();
+            Character active = turnOrder.GetActiveCharacter();
+            if (active != null && active.GetFaction() == Faction.Friendly)
+            {
+                _selectedCharacter = active;
+                Character selectedCharacter = active;
+                ShowCharacterUI(active);
+                return;
+            }
+
+            foreach (Character character in characters)
+            {
+                if (character.GetFaction() == Faction.Friendly)
+                {
+                    _selectedCharacter = character;
+                    ShowCharacterUI(character);
+                    return;
+                }
+            }
+        }
+    }
+
     private void DebugPossibleStartErrors()
     {
         if (Camera.main == null)
