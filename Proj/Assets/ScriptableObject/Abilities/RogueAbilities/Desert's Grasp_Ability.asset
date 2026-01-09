@@ -18,8 +18,8 @@ MonoBehaviour:
   _cooldown: 2
   _description: "Spin and slash with your blades, dealing {damage} (90% \xD7 Damage)
     {physical_damage} to ALL adjacent characters.\\n\\nEvery character hit has a
-    70% chance to gain 3 stacks of {poison}.\\n\\nGain 1 {mana} if at least two enemies
-    become Poisoned."
+    70% chance to gain 3 stacks of <link=\"Poison\">{poison}</link>.\\n\\nGain 1
+    {mana} if at least two enemies become <link=\"Poison\">Poisoned</link>."
   _abilityTag: 9
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}

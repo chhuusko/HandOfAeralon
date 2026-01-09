@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ResonantRecovery : Trait
 {
-    public override void ModifyOutgoingDamage(ref float damage, Ability ability)
+    public override void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
         if (ability is not ResonantBlastAOE)
         {
@@ -16,8 +16,8 @@ public class ResonantRecovery : Trait
             return;
         }
         
-        var modifier = 1f + data.DamageModifierPercent / 100f;
-        damage *= modifier;
+        var modifier = data.DamageModifierPercent / 100f;
+        combinedModifier += modifier;
     }
 
     public override void OnAbilityUsed(AbilityExecutionData abilityData)

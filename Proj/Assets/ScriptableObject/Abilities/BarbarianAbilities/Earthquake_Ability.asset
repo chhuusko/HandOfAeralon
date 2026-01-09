@@ -18,7 +18,8 @@ MonoBehaviour:
   _cooldown: 2
   _description: "Slam the ground, dealing {damage} (90% \xD7 Damage) {physical_damage}
     to ALL characters in the area.\\n\\nEvery character hit has a 60% chance to become
-    Slowed for 2 turns.\\n\\nGain 1 {mana} if at least two enemies become Slowed."
+    <link=\"Slowed\">Slowed</link> for 2 turns.\\n\\nGain 1 {mana} if at least two
+    enemies become <link=\"Slowed\">Slowed</link>."
   _abilityTag: 9
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}

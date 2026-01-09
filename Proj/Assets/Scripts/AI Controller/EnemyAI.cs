@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 public class EnemyAI : MonoBehaviour
 {
-    private const int TOP_N_ACTIONS = 3;
+    private const int TOP_N_ACTIONS = 2;
     private const float TURN_START_WAIT_TIME = 1f;
     private const float TURN_END_WAIT_TIME = 2.5f;
 
@@ -206,11 +206,11 @@ public class EnemyAI : MonoBehaviour
                 }
 
                 float sorcModifier = 5f;
-                if (_character.GetCharacterClass() == CharacterClass.Sorceress)
+                if (_character.GetCharacterClass() == CharacterClass.Sorceress || _character.GetCharacterClass() == CharacterClass.Bard)
                 {
                     if (GridExplorer._instance.ManhattanDistance(_character.GetCurrentTileIndex(), closestEnemy.GetCurrentTileIndex()) > _character.GetMovementPoints() + 6)
                     {
-                        sorcModifier = -20f;
+                        sorcModifier = -60f;
                     }
 
                     /*
@@ -229,7 +229,7 @@ public class EnemyAI : MonoBehaviour
                 switch (_character.GetCharacterClass())
                 {
                     case CharacterClass.Barbarian:  moveScore -= enemyDistance * 20f; break;
-                    case CharacterClass.Bard:       moveScore += enemyDistance * 5f; break;
+                    case CharacterClass.Bard:       moveScore += enemyDistance * sorcModifier; break;
                     case CharacterClass.Rogue:      moveScore -= enemyDistance * 20f; break;
                     case CharacterClass.Sorceress:  moveScore += enemyDistance * sorcModifier; break;
                 }
@@ -278,9 +278,9 @@ public class EnemyAI : MonoBehaviour
                         switch (_character.GetCharacterClass())
                         {
                             case CharacterClass.Barbarian:  moveScore -= 50f / myPERCENTHP; break;
-                            case CharacterClass.Bard:       moveScore -= 50f / myPERCENTHP; break;
-                            case CharacterClass.Rogue:      moveScore -= 75f / myPERCENTHP; break;
-                            case CharacterClass.Sorceress:  moveScore -= 50f / myPERCENTHP; break;
+                            case CharacterClass.Bard:       moveScore -= 100f / myPERCENTHP; break;
+                            case CharacterClass.Rogue:      moveScore -= 100f / myPERCENTHP; break;
+                            case CharacterClass.Sorceress:  moveScore -= 100f / myPERCENTHP; break;
                         }
 
                         if (myPERCENTHP < 0.2f) moveScore -= 100;
@@ -602,17 +602,19 @@ public class EnemyAI : MonoBehaviour
 
                                 if (occupantPERCENTHP < 0.75f)
                                 {
-                                    result += 10f;
+                                    result += 15f;
 
                                     if (occupantPERCENTHP < 0.5f)
                                     {
-                                        result += 10f;
+                                        result += 20f;
                                     }
                                 }
                             }
                         }
                     }
                     if (hitCount == 0) result -= 100f;
+                    float myPERCENTHP = _character.GetMaxHealth() == 0 ? 1f : _character.GetCurrentHealth() / _character.GetMaxHealth();
+                    if (myPERCENTHP < 0.33f) result -= 300;
                     break;
                 }
             case "DissonantChord_Ability":

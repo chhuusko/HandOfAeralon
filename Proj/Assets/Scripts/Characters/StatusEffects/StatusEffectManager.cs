@@ -205,6 +205,9 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Removes all status effects that should expire.
+    /// </summary>
     private void HandleExpiration()
     {
         foreach (var statusEffect in GetAllEffectsSnapshot())
@@ -263,19 +266,6 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
 
-    public void OnBurnApplied(Character c)
-    {
-        if (c != _character)
-        {
-            return;
-        }
-
-        foreach (var statusEffect in GetAllEffectsSnapshot())
-        {
-            statusEffect.OnBurnApplied();
-        }
-    }
-
     private void OnCombatEnded(bool playerWon)
     {
         foreach (var trait in _traitManager.GetAllTraits())
@@ -293,13 +283,18 @@ public class StatusEffectManager : MonoBehaviour
         if (!_character)
         {
             return damage;
-        } 
-        
-        foreach (var statusEffect in GetAllEffectsSnapshot())
-        {
-            statusEffect.ModifyIncomingDamage(ref damage, ability);
         }
 
+        // Starts at 1, no change in damage.
+        var modifier = 1f;
+        foreach (var statusEffect in GetAllEffectsSnapshot())
+        {
+            statusEffect.ModifyIncomingDamage(ref modifier, ref damage, ability);
+        }
+        
+        // Calculate final damage with combined multipler.
+        damage *= Mathf.Max(modifier, 0f);
+        
         HandleExpiration();
         
         return damage;
@@ -310,12 +305,14 @@ public class StatusEffectManager : MonoBehaviour
         if (!_character)
         {
             return damage;
-        } 
-        
+        }
+
+        var modifier = 1f;
         foreach (var statusEffect in GetAllEffectsSnapshot())
         {
-            statusEffect.ModifyOutgoingDamage(ref damage, ability);
+            statusEffect.ModifyOutgoingDamage(ref damage, ref modifier, ability);
         }
+        damage *= Mathf.Max(modifier, 0f);
         
         HandleExpiration();
         
@@ -329,10 +326,13 @@ public class StatusEffectManager : MonoBehaviour
             return heal;
         } 
         
+        var modifier = 1f;
         foreach (var statusEffect in GetAllEffectsSnapshot())
         {
-            statusEffect.ModifyIncomingHeal(ref heal, ability);
+            statusEffect.ModifyIncomingHeal(ref heal, ref modifier, ability);
         }
+        heal *= Mathf.Max(modifier, 0f);
+        
         return heal;
     }
     
@@ -341,12 +341,14 @@ public class StatusEffectManager : MonoBehaviour
         if (!_character)
         {
             return heal;
-        } 
-        
+        }
+
+        var modifier = 1f;
         foreach (var statusEffect in GetAllEffectsSnapshot())
         {
-            statusEffect.ModifyOutgoingHeal(ref heal, ability);
+            statusEffect.ModifyOutgoingHeal(ref heal, ref modifier, ability);
         }
+        heal *= Mathf.Max(modifier, 0f);
 
         return heal;
     }
@@ -399,7 +401,19 @@ public class StatusEffectManager : MonoBehaviour
         return damage;
     }
     
-    // Status effects.
+    public void OnBurnApplied(Character c)
+    {
+        if (c != _character)
+        {
+            return;
+        }
+
+        foreach (var statusEffect in GetAllEffectsSnapshot())
+        {
+            statusEffect.OnBurnApplied();
+        }
+    }
+    
     /// <summary>
     /// Tries applying the burn to the target, with chance influenced by all this character's modifiers.
     /// </summary>
@@ -442,7 +456,7 @@ public class StatusEffectManager : MonoBehaviour
         return null;
     }
     
-    private float ApplyBurnApplicationChanceModifiers(ref float baseChance)
+    private void ApplyBurnApplicationChanceModifiers(ref float baseChance)
     {
         float chance = baseChance;
 
@@ -450,11 +464,9 @@ public class StatusEffectManager : MonoBehaviour
         {
             statusEffect.ModifyBurnApplicationChance(ref chance);
         }
-        
-        return chance;
     }
 
-    private float ApplyStunApplicationChanceModifiers(ref float baseChance)
+    private void ApplyStunApplicationChanceModifiers(ref float baseChance)
     {
         float chance = baseChance;
 
@@ -462,8 +474,6 @@ public class StatusEffectManager : MonoBehaviour
         {
             statusEffect.ModifyStunApplicationChance(ref chance);
         }
-
-        return chance;
     }
     
     private void OnAbilityUsed(AbilityExecutionData abilityData)

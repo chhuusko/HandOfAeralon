@@ -44,9 +44,14 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
     {
         Selector._instance.OnCharacterDeselected += Hide;
         _rectTransform = GetComponent<RectTransform>();
-        if(_hideOnStart)
-            Hide(); 
-       // _sliderSpeed = PlayerSettingsManager.GetInstance().GetHoverLockSpeed();
+        if (_hideOnStart)
+            Hide();
+        else
+            _sliderSpeed = 0f;
+
+
+
+        // _sliderSpeed = PlayerSettingsManager.GetInstance().GetHoverLockSpeed();
         SetSliderValue(_sliderSpeed);
         SetHoverLockSpeed(_sliderSpeed);
 
@@ -89,11 +94,22 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
         // Hover enter
         if (currentLinkIndex != -1 && currentLinkIndex != _lastLinkIndex)
         {
+            if(_subHoverTooltipObject != null)
+                Destroy(_subHoverTooltipObject);
+
             _lastLinkIndex = currentLinkIndex;
             TMP_LinkInfo linkInfo = _description.textInfo.linkInfo[currentLinkIndex];
             Debug.Log("Hover over link: " + linkInfo.GetLinkID());
+
+
             Burn burn = new Burn();
             StatusEffectData data = StatusEffectDataRegistry.GetDataForType(burn.GetType());
+
+            string name = StatusEffectDataRegistry.DataPerName[linkInfo.GetLinkID()].Name;
+
+            string desc = GameTextFormatter.LabeledDescription(
+                StatusEffectDataRegistry.DataPerName[linkInfo.GetLinkID()].Description
+                );
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                                                                     _tooltipCanvas.transform as RectTransform,
@@ -109,12 +125,12 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
             // and hence, gets destroyed.
             _subHoverTooltipObject = Instantiate(_hoverTooltipPrefab, localPoint, Quaternion.identity, _tooltipCanvas.transform);
 
-            _subHoverTooltipObject.GetComponent<CombatHoverTooltip>().Show(data.Name, data.Description, localPoint);
+            _subHoverTooltipObject.GetComponent<CombatHoverTooltip>().Show(name, desc, localPoint);
             _subHoverTooltipObject.GetComponent<CombatHoverTooltip>()._hideOnStart = false;
             RectTransform tooltipRect = _subHoverTooltipObject.GetComponent<RectTransform>();
             
             tooltipRect.anchoredPosition = localPoint; // local X/Y
-            tooltipRect.localPosition = new Vector3(tooltipRect.localPosition.x + 600f, tooltipRect.localPosition.y, 0f); // force Z = 0
+            tooltipRect.localPosition = new Vector3(tooltipRect.localPosition.x + 300f, tooltipRect.localPosition.y, 0f); // force Z = 0
         }
 
         // Hover exit
@@ -287,6 +303,7 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
     {
         _slider.value = value;
     }
+
 
 
     private void DEBUGLogRayCastHits()

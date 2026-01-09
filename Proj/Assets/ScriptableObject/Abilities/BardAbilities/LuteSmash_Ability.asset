@@ -16,10 +16,10 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 51cf1edb81f22c4448e7bb7ba1222df1, type: 3}
   _range: 1
   _cooldown: 1
-  _description: 'Deal {damage} Physical damage.\n\nHas a 35% chance to Stun the target
-    for 1 turn.\n\nGain 2 {mana} if the target gets Stunned by this ability.\n\nAfter
-    using Lute Smash, only Lute Smash and Dissonant Chord can be used for the rest
-    of combat.  '
+  _description: 'Deal {damage} Physical damage.\n\nHas a 35% chance to <link="Stunned">Stun</link>
+    the target for 1 turn.\n\nGain 2 {mana} if the target gets <link="Stunned">Stunned</link>
+    by this ability.\n\nAfter using Lute Smash, only Lute Smash and Dissonant Chord
+    can be used for the rest of combat.  '
   _abilityTag: 5
   _type: 0
   _rangeCalculation: {fileID: 11400000, guid: b26a232b16ceee045899106d2759f853, type: 2}

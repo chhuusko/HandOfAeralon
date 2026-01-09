@@ -26,7 +26,7 @@ public class EchoesOfRestoration : Trait
         _healModifier += modifier;
     }
     
-    public override void ModifyOutgoingHeal(ref float heal, Ability ability)
+    public override void ModifyOutgoingHeal(ref float heal, ref float combinedModifier, Ability ability)
     {
         if (ability is not SongOfRenewalAOE)
         {
@@ -38,7 +38,7 @@ public class EchoesOfRestoration : Trait
             return;
         }
         
-        heal *= 1f + _healModifier;
+        combinedModifier += _healModifier;
         _healModifier = 0f;
     }
 }

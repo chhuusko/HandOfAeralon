@@ -124,14 +124,16 @@ public class Tutorial : MonoBehaviour
 
             switch(index)
             {
-                case 0: NextPopupDelayed(); break; // Turn Order
-                case 1: break; // Deploy Your Party
-                case 2: break; // Movement Points
-                case 3: break; // Abilities ...
-                case 4: NextPopupDelayed(); break; // Combat Log
-                case 5: NextPopupDelayed(); break; // Mana, Cards & Deck
-                case 6: break; // Traits & Status
-                case 7: break; // The Shop ...
+                case 0: NextPopupDelayed(); break; // Introduction
+                case 1: NextPopupDelayed(); break; // Camera
+                case 2: NextPopupDelayed(); break; // Turn Order
+                case 3: break; // Deploy Your Party
+                case 4: break; // Movement Points
+                case 5: break; // Abilities ...
+                case 6: NextPopupDelayed(); break; // Combat Log
+                case 7: NextPopupDelayed(); break; // Mana, Cards & Deck
+                case 8: break; // Traits & Status
+                case 9: break; // The Shop ...
             }
         }
     }
@@ -164,8 +166,8 @@ public class Tutorial : MonoBehaviour
         characters[0].GetComponent<CharacterMovement>().OnCharacterStoppedMoving += ShowAbilitiesPopup;
 
         CombatUI.Instance.OnStartCombatButtonPressed -= ShowMovementPointsPopup;
-        _currentPopup = 2;
-        StartCoroutine(ShowPopupDelayed(_currentPopup));
+        _currentPopup = 4;
+        ShowPopup(_currentPopup);
     }
 
     private void ShowAbilitiesPopup()
@@ -173,7 +175,7 @@ public class Tutorial : MonoBehaviour
         List<GameObject> characters = CombatGrid._instance.GetAllFriendlyCharacters();
         characters[0].GetComponent<CharacterMovement>().OnCharacterStoppedMoving -= ShowAbilitiesPopup;
 
-        _currentPopup = 3;
+        _currentPopup = 5;
         StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 
@@ -185,14 +187,14 @@ public class Tutorial : MonoBehaviour
             combatLog.OnCombatLogUpdate -= ShowCombatLogPopup;
         }
 
-        _currentPopup = 4;
+        _currentPopup = 6;
         StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 
     private void ShowShopPopup()
     {
         CombatMenuManager.GetInstance().OnGoToShopButtonPressed -= ShowShopPopup;
-        _currentPopup = 7;
+        _currentPopup = 9;
         StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 }

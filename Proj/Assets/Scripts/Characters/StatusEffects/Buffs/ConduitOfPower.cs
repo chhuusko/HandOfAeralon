@@ -16,10 +16,10 @@ public class ConduitOfPower : StatusEffect
         _combinedDamageModifier += data.DamageModifierPercent;
     }
 
-    public override void ModifyOutgoingDamage(ref float damage, Ability ability)
+    public override void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability)
     {
-        var modifier = 1f + _combinedDamageModifier / 100f;
-        damage *= modifier;
+        var modifier = _combinedDamageModifier / 100f;
+        combinedModifier += modifier;
     }
 
     public override void OnCombatEnded()
