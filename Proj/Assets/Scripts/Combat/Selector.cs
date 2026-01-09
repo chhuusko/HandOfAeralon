@@ -364,6 +364,7 @@ public class Selector : MonoBehaviour
             {
                 //DebugLog.JLWLog($"Selector.cs | Drawing move range for {character.name}");
                 _characterMovement.DrawMoveRange();
+                StartCoroutine(_characterMovement.DrawMoveRangeDelayed());
             }
 
             if (_bDebugSelector)
