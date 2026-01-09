@@ -12,6 +12,14 @@ public class TutorialPopup : MonoBehaviour
     private int _currentPage = 0;
     private bool _bSeenAll = false;
 
+    void Start()
+    {
+        foreach (var page in _pages)
+        {
+            page.text = GameTextFormatter.LabeledDescription(page.text);
+        }
+    }
+
     public void ShowPage(int page)
     {
         if (page >= 0 && page < _pages.Length)

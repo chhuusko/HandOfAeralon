@@ -18,7 +18,7 @@ MonoBehaviour:
   _cooldown: 2
   _description: "Call down a lightning storm, deals {damage} (75% \xD7 Damage) {elemental_damage}
     to ALL characters in a large area.\\n\\nEvery character hit has a 15% chance
-    to gain Stunned for 1 turn."
+    to gain <link=\"Stunned\">Stunned</link> for 1 turn."
   _abilityTag: 10
   _type: 2
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}

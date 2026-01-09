@@ -98,6 +98,9 @@ public class CombatCamera : MonoBehaviour
     {
         Vector3 cameraMovement = Vector3.zero;
 
+
+        // NOTE (Calle): UnComment if we want to be able to move screen with cursor out of screen bounds.
+        /*
         if (Input.GetKey(KeyCode.D) || Input.mousePosition.x > Screen.width - _mouseMoveScreenLimitX)
             cameraMovement += Vector3.right;
         if (Input.GetKey(KeyCode.A) || Input.mousePosition.x < _mouseMoveScreenLimitX)
@@ -106,8 +109,16 @@ public class CombatCamera : MonoBehaviour
             cameraMovement += Vector3.forward;
         if (Input.GetKey(KeyCode.S) || Input.mousePosition.y < _mouseMoveScreenLimitY)
             cameraMovement += Vector3.back;
+        */
 
-
+        if (Input.GetKey(KeyCode.D))
+            cameraMovement += Vector3.right;
+        if (Input.GetKey(KeyCode.A))
+            cameraMovement += Vector3.left;
+        if (Input.GetKey(KeyCode.W))
+            cameraMovement += Vector3.forward;
+        if (Input.GetKey(KeyCode.S))
+            cameraMovement += Vector3.back;
 
         // NOTE (Calle): Moving camera with scroll button pressed
         if (Input.GetMouseButtonDown(2))
