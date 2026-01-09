@@ -35,6 +35,8 @@ public class CharacterMovement : MonoBehaviour
         {
             Debug.LogError($"CharacterMovement.cs | _animator NOT FOUND!");
         }
+
+        _character.OnMovementPointsChanged += ReDrawMoveRange;
     }
 
     void Update()
@@ -74,6 +76,19 @@ public class CharacterMovement : MonoBehaviour
     public void ForgetMoveRange()
     {
         _tilesInRange = new();
+    }
+
+    private void ReDrawMoveRange(int a = 0, int b = 0)
+    {
+        if (IsDead() || _bIsMoving) return;
+
+        DrawMoveRange();
+    }
+
+    public IEnumerator DrawMoveRangeDelayed()
+    {
+        yield return new WaitForSeconds(1f);
+        ReDrawMoveRange();
     }
 
     public void PreviewPath(CombatGridTile tile)
