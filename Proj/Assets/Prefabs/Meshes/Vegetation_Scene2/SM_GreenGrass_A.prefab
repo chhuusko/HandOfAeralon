@@ -81,7 +81,17 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a15ad3c2ac204864a90904d0921ffc3b,
         type: 3}
       propertyPath: m_Name
-      value: M_GreenGrass_A
+      value: SM_GreenGrass_A
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742473837712756890, guid: a15ad3c2ac204864a90904d0921ffc3b,
+        type: 3}
+      propertyPath: m_LODs.Array.data[1].screenRelativeHeight
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742473837712756890, guid: a15ad3c2ac204864a90904d0921ffc3b,
+        type: 3}
+      propertyPath: m_LODs.Array.data[2].screenRelativeHeight
+      value: 0.05
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
