@@ -6,7 +6,7 @@ public static class GameTextFormatter
 {
     /*
      * The regex pattern here says:
-     * 1) Match any word character repeated.
+     * 1) Match any word character repeated times.
      * 2) Any character except newline matched as few times as possible.
      * 3) Same as the first group but with a slash added.
      */

@@ -16,10 +16,11 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: a5896da35bdf5ad4f98b0133ccea1aef, type: 3}
   _range: 1
   _cooldown: 2
-  _description: "Unleash a burst of fire, dealing {damage} (85% \xD7 Damage) {elemental_damage}
-    to ALL characters in area.\\n\\nEvery character hit has a 50% chance to gain
-    <link=\"Burn\">{burn}</link> for 2 turns.\\n\\nGain 1 {mana} if at least two
-    enemies become <link=\"Burn\">Burned</link>. "
+  _description: "Unleash a burst of fire, dealing {damage} (<b>85%</b> \xD7 Damage)
+    {elemental_damage}Elemental damage{/elemental_damage} to ALL characters in area.\\n\\nEvery
+    character hit has a <b>50%</b> chance to gain <link=\"Burn\">{burn}Burn{/burn}</link>
+    for <b>2</b> turns.\\n\\nGain <b>1</b> {mana}Mana{/mana} if at least two enemies
+    become <link=\"Burn\">{burn}Burned{/burn}</link>. "
   _abilityTag: 9
   _type: 2
   _rangeCalculation: {fileID: 11400000, guid: 40610a08478ca2b42bd802b95e47e39a, type: 2}

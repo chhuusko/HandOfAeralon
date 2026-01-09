@@ -16,10 +16,10 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 2daeff1426025cf4eb6d075fb79f5fbd, type: 3}
   _range: 0
   _cooldown: 2
-  _description: "Spin and slash with your blades, dealing {damage} (90% \xD7 Damage)
-    {physical_damage} to ALL adjacent characters.\\n\\nEvery character hit has a
-    70% chance to gain 3 stacks of <link=\"Poison\">{poison}</link>.\\n\\nGain 1
-    {mana} if at least two enemies become <link=\"Poison\">Poisoned</link>."
+  _description: "Spin and slash with your blades, dealing {damage} (<b>90%</b> \xD7
+    Damage) {physical_damage}Physical damage{/physical_damage} to ALL adjacent characters.\\n\\nEvery
+    character hit has a <b>70%</b> chance to gain <b>3</b> stacks of <link=\"Poison\">{poison}Poison{/poison}</link>.\\n\\nGain
+    <b>1</b> {mana}Mana{/mana} if at least two enemies become <link=\"Poison\">{poison}Poisoned{/poison}</link>."
   _abilityTag: 9
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}

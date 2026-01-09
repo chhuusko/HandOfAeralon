@@ -16,10 +16,11 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 7250f903b6576774fbca4f0b980d27ad, type: 3}
   _range: 1
   _cooldown: 1
-  _description: "Slash the target with a venom-laced blade, dealing {damage} (110%
-    \xD7 Damage) {physical_damage}.\\n\\nHas an 80% chance to apply 3 stacks of <link=\"Poison\">{poison}</link>
-    to the target.\\n\\nIf the target already had <link=\"Poison\">{poison}</link>,
-    draw 1 {card}. "
+  _description: "Slash the target with a venom-laced blade, dealing {damage} (<b>110%</b>
+    \xD7 Damage) {physical_damage}Physical damage{/physical_damage}.\\n\\nHas an
+    <b>80%</b> chance to apply <b>3</b> stacks of <link=\"Poison\">{poison}Poison{/poison}</link>
+    to the target.\\n\\nIf the target already had <link=\"Poison\">{poison}Poison{/poison}</link>,
+    draw <b>1</b> {card}Card{/card}. "
   _abilityTag: 5
   _type: 1
   _rangeCalculation: {fileID: 11400000, guid: b26a232b16ceee045899106d2759f853, type: 2}

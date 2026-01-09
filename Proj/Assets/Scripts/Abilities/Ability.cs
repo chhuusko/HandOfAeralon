@@ -11,7 +11,7 @@ public abstract class Ability : ScriptableObject
     [SerializeField] private Sprite _icon;
     [SerializeField] private int _range;
     [SerializeField] private int _cooldown;
-    [SerializeField] private string _description;
+    [SerializeField, TextArea(5, 10)] private string _description;
 
     [Header("- Tags -")]
     [SerializeField] private AbilityTag _abilityTag;

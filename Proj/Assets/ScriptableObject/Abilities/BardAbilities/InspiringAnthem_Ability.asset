@@ -17,8 +17,8 @@ MonoBehaviour:
   _range: 6
   _cooldown: 3
   _description: Perform an uplifting anthem, granting all allies in the target area
-    <link="Haste">Haste</link> for 3 turns.\n\nGain 1 {mana} if at least three allies
-    gain <link="Haste">Haste</link>.
+    <link="Haste">{non_damaging}Haste{/non_damaging}</link> for <b>3</b> turns.\n\nGain
+    <b>1</b> {mana}Mana{/mana} if at least three allies gain <link="Haste">{non_damaging}Haste{/non_damaging}</link>.
   _abilityTag: 10
   _type: 8
   _rangeCalculation: {fileID: 11400000, guid: b23c158d380542744af45e411fa51d56, type: 2}
