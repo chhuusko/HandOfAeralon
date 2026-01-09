@@ -73,7 +73,7 @@ public class CardUI : MonoBehaviour
     {
         if (_glow)
         {
-            _glow.SetActive(CanAfford());
+            //_glow.SetActive(CanAfford());
         }
         SetCardManaText();
     }
