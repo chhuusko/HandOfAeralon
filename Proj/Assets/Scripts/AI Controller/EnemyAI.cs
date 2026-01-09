@@ -735,28 +735,11 @@ public class EnemyAI : MonoBehaviour
                 {
                     result += 50f;
                     int hitCount = 0;
-                    Vector2Int[] directions = new Vector2Int[]
-                        {
-                        new Vector2Int(1, 1),
-                        new Vector2Int(-1, 1),
-                        new Vector2Int(1, -1),
-                        new Vector2Int(-1, -1),
 
-                        new Vector2Int(1, 0),
-                        new Vector2Int(0, 1),
-                        new Vector2Int(-1, 0),
-                        new Vector2Int(0, -1)
-                        };
-
-                    foreach (var dir in directions)
+                    List<CombatGridTile> aoe = DiamondPattern(target, 2);
+                    foreach (var hit in aoe)
                     {
-                        GameObject obj = CombatGrid._instance.GetTileAtCoord(target.GetTileIndex().x + dir.x, target.GetTileIndex().y + dir.y);
-                        CombatGridTile hit = null;
-                        Character occupant = null;
-                        if (obj != null && obj.TryGetComponent<CombatGridTile>(out hit))
-                        {
-                            occupant = hit.GetOccupantCharacter();
-                        }
+                        Character occupant = hit.GetOccupantCharacter();
                         if (occupant != null && occupant.GetCurrentHealth() > 0)
                         {
                             StatusEffectManager occupantSEM = occupant.GetStatusEffectManager();
