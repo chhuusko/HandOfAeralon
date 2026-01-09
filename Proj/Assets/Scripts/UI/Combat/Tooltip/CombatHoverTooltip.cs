@@ -98,12 +98,8 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
                 Destroy(_subHoverTooltipObject);
 
             _lastLinkIndex = currentLinkIndex;
+
             TMP_LinkInfo linkInfo = _description.textInfo.linkInfo[currentLinkIndex];
-            Debug.Log("Hover over link: " + linkInfo.GetLinkID());
-
-
-            Burn burn = new Burn();
-            StatusEffectData data = StatusEffectDataRegistry.GetDataForType(burn.GetType());
 
             string name = StatusEffectDataRegistry.DataPerName[linkInfo.GetLinkID()].Name;
 
