@@ -106,7 +106,10 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
             StatusEffectData data = StatusEffectDataRegistry.GetDataForType(burn.GetType());
 
             string name = StatusEffectDataRegistry.DataPerName[linkInfo.GetLinkID()].Name;
-            string desc = StatusEffectDataRegistry.DataPerName[linkInfo.GetLinkID()].Description;
+
+            string desc = GameTextFormatter.LabeledDescription(
+                StatusEffectDataRegistry.DataPerName[linkInfo.GetLinkID()].Description
+                );
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                                                                     _tooltipCanvas.transform as RectTransform,
