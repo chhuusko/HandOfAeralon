@@ -1,16 +1,35 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class TutorialPopup : MonoBehaviour
 {
+    [System.Serializable]
+    public class KeyValuePair
+    {
+        public int key;
+        public VideoClip value;
+    }
+
     [SerializeField] private TMP_Text[] _pages;
     [SerializeField] private TMP_Text[] _titles;
+    [SerializeField] private Image[] _images;
     [SerializeField] private TMP_Text _counter;
     [SerializeField] private Button _previousButton, _nextButton, _closeButton;
     [SerializeField] private Image _closeButtonBG;
+    [SerializeField] private List<KeyValuePair> _videoDictionaryAsList;
     private int _currentPage = 0;
     private bool _bSeenAll = false;
+    private Dictionary<int, VideoClip> _videoClips;
+
+    private void Awake()
+    {
+        _videoClips = new Dictionary<int, VideoClip>();
+        foreach (var kv in _videoDictionaryAsList)
+            _videoClips[kv.key] = kv.value;
+    }
 
     void Start()
     {
@@ -28,12 +47,19 @@ public class TutorialPopup : MonoBehaviour
             {
                 _pages[i].alpha = 0f;
                 _titles[i].alpha = 0f;
+                _images[i].color = new Color(1f, 1f, 1f, 0f);
             }
 
             _pages[page].alpha = 1f;
             _titles[page].alpha = 1f;
+            _images[page].color = new Color(1f, 1f, 1f, 1f);
             _currentPage = page;
             UpdateCounter();
+
+            if (_videoClips.ContainsKey(_currentPage))
+            {
+                Tutorial.Instance.PlayVideo(_videoClips[_currentPage]);
+            }
         }
         else
         {

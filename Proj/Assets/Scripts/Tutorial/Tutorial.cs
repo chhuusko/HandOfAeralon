@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class Tutorial : MonoBehaviour
 {
@@ -26,6 +27,9 @@ public class Tutorial : MonoBehaviour
 
     [SerializeField] private TutorialPopup[] _popups;
     [SerializeField] private Image _blocker;
+    [SerializeField] private RawImage _rawImage;
+    [SerializeField] private RenderTexture _videoRT;
+    [SerializeField] private VideoPlayer _videoPlayer;
 
     private Canvas _canvas;
     private int _currentPopup = 0;
@@ -196,5 +200,22 @@ public class Tutorial : MonoBehaviour
         CombatMenuManager.GetInstance().OnGoToShopButtonPressed -= ShowShopPopup;
         _currentPopup = 9;
         StartCoroutine(ShowPopupDelayed(_currentPopup));
+    }
+
+    public void PlayVideo(VideoClip clip)
+    {
+        if (clip == null) return;
+
+        _videoPlayer.clip = clip;
+
+        _videoPlayer.Stop();
+        _videoPlayer.Prepare();
+        _videoPlayer.prepareCompleted += PlayPreparedVideo;
+    }
+
+    private void PlayPreparedVideo(VideoPlayer vp)
+    {
+        vp.prepareCompleted -= PlayPreparedVideo;
+        vp.Play();
     }
 }
