@@ -9,6 +9,7 @@ public class Windsprint : Card
         if (character != null)
         {
             character.GetStatusEffectManager().AddStatusEffect(new Haste(2));
+            character.gameObject.GetComponent<CharacterMovement>().DrawMoveRange();
         }
     }
 }
