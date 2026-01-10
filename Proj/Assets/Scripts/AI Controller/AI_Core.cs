@@ -1,69 +1,86 @@
-// Joel Larsson Wendt || jola6902
+// Joel Larsson Wendt | jola6902
 
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class AI_Core : MonoBehaviour
+public class AI_Core
 {
-    // Singleton pattern
-    private static AI_Core Instance;
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
-
-    public static AI_Core GetInstance()
-    {
-        return Instance;
-    }
-    // End of singleton pattern
-
-    public UnityEvent AIEndTurn;
-
-    [SerializeField] private Faction _controlledFaction = Faction.Enemy;
+    private AI_Searcher _searcher;
+    private AI_Evaluator _evaluator;
+    private AI_Executor _executor;
+    private Faction _faction;
 
     private Character _currentCharacter = null;
 
-    private void OnEnable()
+    public static AI_Core BuildAICore(Faction faction)
     {
+        DebugLog.JLWLog("AI_Core built.");
+
+        GameObject monobehaviour = new GameObject("AI_Executor");
+        AI_Executor executor = monobehaviour.AddComponent<AI_Executor>();
+
+        AI_Core result = new AI_Core(
+            new AI_Searcher(),
+            new AI_Evaluator(),
+            executor,
+            faction
+        );
+
+        return result;
+    }
+
+    public static void PrintAction(AI_Action action)
+    {
+        string movement = action.Movement != null ? action.Movement.GetTileIndex().ToString() : "N/A";
+        string ability = action.Ability != null ? action.Ability.name : "N/A";
+        string target = action.Target != null ? action.Target.GetTileIndex().ToString() : "N/A";
+
+        Debug.Log($"AI_Core.cs | Move to: {movement}, cast: {ability}, at: {target}, score: {action.Score}");
+    }
+
+    public AI_Core(
+        AI_Searcher searcher,
+        AI_Evaluator evaluator,
+        AI_Executor executor,
+        Faction faction)
+    {
+        _searcher = searcher;
+        _evaluator = evaluator;
+        _executor = executor;
+        _faction = faction;
+
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
     }
 
-    private void OnDisable()
+    public UnityEngine.Events.UnityEvent GetAIEndTurnEvent()
     {
-        CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
+        return _executor.AIEndTurn;
     }
 
-    private void OnTurnStart(Character character)
+    public void OnTurnStart(Character character)
     {
         if (TurnStartedProperly())
         {
+            DebugLog.JLWLog("Turn started properly.");
             Run();
         }
     }
 
     private bool TurnStartedProperly()
     {
-        _currentCharacter = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
+        _currentCharacter = CombatManager._instance
+            .GetCombatTurnOrder()
+            .GetActiveCharacter();
 
-        if (_currentCharacter == null || _currentCharacter.GetFaction() != _controlledFaction)
+        if (_currentCharacter == null || _currentCharacter.GetFaction() != _faction)
         {
             return false;
         }
 
         if (_currentCharacter.IsStunned)
         {
-            //Debug.Log($"AI_Core.cs | {_currentCharacter.name} was Stunned and will pass their turn.");
-            EndTurn();
+            Debug.Log($"AI_Core.cs | {_currentCharacter.name} was Stunned and will pass their turn.");
+            _executor.EndTurn();
             return false;
         }
 
@@ -73,15 +90,8 @@ public class AI_Core : MonoBehaviour
     private void Run()
     {
         AI_Context context = new AI_Context(_currentCharacter);
-        List<AI_Action> actions = AI_Searcher.GetInstance().GetPossibleActions(context);
-        AI_Action best = AI_Evaluator.GetInstance().Evaluate(context, actions);
-        AI_Executor.GetInstance().PerformAction(context, best);
-    }
-
-    public void EndTurn()
-    {
-        //Debug.Log($"AI_Core.cs | {_currentCharacter.name}'s turn ended!");
-        _currentCharacter = null;
-        AIEndTurn.Invoke();
+        List<AI_Action> actions = _searcher.GetPossibleActions(context);
+        AI_Action best = _evaluator.Evaluate(context, actions);
+        _executor.PerformAction(context, best);
     }
 }

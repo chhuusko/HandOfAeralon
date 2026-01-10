@@ -1,4 +1,4 @@
-// Joel Larsson Wendt || jola6902
+// Joel Larsson Wendt | jola6902
 
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +19,10 @@ public class AI_Context
     public AI_Context(Character character)
     {
         Self = character;
-        PercentHP = character.GetMaxHealth() == 0 ? 1f : character.GetCurrentHealth() / character.GetMaxHealth();
+        PercentHP = character.GetMaxHealth() == 0
+            ? 1f
+            : character.GetCurrentHealth() / character.GetMaxHealth();
+
         Faction = character.GetFaction();
         Enemies = GetEnemies();
         Allies = GetAllies();
@@ -31,9 +34,10 @@ public class AI_Context
 
     private List<Character> GetEnemies()
     {
-        List<GameObject> result = Faction == Faction.Enemy
-            ? CombatGrid._instance.GetAllFriendlyCharacters()
-            : CombatGrid._instance.GetAllEnemyCharacters();
+        List<GameObject> result =
+            Faction == Faction.Enemy
+                ? CombatGrid._instance.GetAllFriendlyCharacters()
+                : CombatGrid._instance.GetAllEnemyCharacters();
 
         return result
             .Select(go => go.GetComponent<Character>())
@@ -43,9 +47,10 @@ public class AI_Context
 
     private List<Character> GetAllies()
     {
-        List<GameObject> result = Faction == Faction.Enemy
-            ? CombatGrid._instance.GetAllEnemyCharacters()
-            : CombatGrid._instance.GetAllFriendlyCharacters();
+        List<GameObject> result =
+            Faction == Faction.Enemy
+                ? CombatGrid._instance.GetAllEnemyCharacters()
+                : CombatGrid._instance.GetAllFriendlyCharacters();
 
         return result
             .Select(go => go.GetComponent<Character>())
@@ -56,13 +61,15 @@ public class AI_Context
     private List<CombatGridTile> GetReachableTiles(Character character)
     {
         var result = GridExplorer._instance
-            .GetReachableTilesWithMovement(Self.GetCurrentTileComponent().gameObject, Self.GetMovementPoints())
+            .GetReachableTilesWithMovement(
+                Self.GetCurrentTileComponent().gameObject,
+                Self.GetMovementPoints()
+            )
             .Select(obj => obj.GetComponent<CombatGridTile>())
             .Where(cgt => cgt != null)
             .ToList();
 
         result.Add(Self.GetCurrentTileComponent());
-
         return result;
     }
 
@@ -72,14 +79,14 @@ public class AI_Context
 
         foreach (var ability in character.GetAvailableAbilities())
         {
-            if (!character.IsAbilityCooldownActive(ability))
+            if (!character.IsAbilityCooldownActive(ability)
+                || character.GetCurrentCooldown(ability) <= 1)
             {
                 result.Add(ability);
             }
         }
 
-        //Debug.Log($"AI_Context.cs | Found {result.Count} abilities ready to use!");
-
+        Debug.Log($"AI_Context.cs | Found {result.Count} abilities ready to use!");
         return result;
     }
 }
