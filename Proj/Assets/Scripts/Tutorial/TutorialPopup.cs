@@ -39,7 +39,7 @@ public class TutorialPopup : MonoBehaviour
         }
     }
 
-    public void ShowPage(int page)
+    public void ShowPage(int page, bool playVideo = true)
     {
         if (page >= 0 && page < _pages.Length)
         {
@@ -56,7 +56,7 @@ public class TutorialPopup : MonoBehaviour
             _currentPage = page;
             UpdateCounter();
 
-            if (_videoClips.ContainsKey(_currentPage))
+            if (playVideo && _videoClips.ContainsKey(_currentPage))
             {
                 Tutorial.Instance.PlayVideo(_videoClips[_currentPage]);
             }
@@ -101,7 +101,7 @@ public class TutorialPopup : MonoBehaviour
     {
         _currentPage = 0;
         UpdateCounter();
-        ShowPage(_currentPage);
+        ShowPage(_currentPage, false);
     }
 
     private void UpdateCounter()

@@ -67,7 +67,7 @@ public class CharacterMovement : MonoBehaviour
         .Where(ch => ch != null)
         .ToList();
         
-        if (_character.GetFaction() == Faction.Friendly)
+        if (_character.GetFaction() == Faction.Friendly && Selector._instance != null)
         {
             Selector._instance.SetColorOfTiles(_tilesInRange, _movementRangeColor);
         }
