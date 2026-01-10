@@ -52,7 +52,12 @@ public class TutorialPopup : MonoBehaviour
 
             _pages[page].alpha = 1f;
             _titles[page].alpha = 1f;
-            _images[page].color = new Color(1f, 1f, 1f, 1f);
+
+            if (_images[page].sprite == null)
+                _images[page].color = new Color(1, 1, 1, 0);
+            else
+                _images[page].color = Color.white;
+
             _currentPage = page;
             UpdateCounter();
 
