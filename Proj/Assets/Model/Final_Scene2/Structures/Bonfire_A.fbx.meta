@@ -3,7 +3,17 @@ guid: bef35866a3e0c66488cb47f00fe7c3f2
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MasterRuins
+    second: {fileID: 2100000, guid: b847e6f8977db1a438a702f4f09e55cc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MasterRuins_Cobble
+    second: {fileID: 2100000, guid: b847e6f8977db1a438a702f4f09e55cc, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

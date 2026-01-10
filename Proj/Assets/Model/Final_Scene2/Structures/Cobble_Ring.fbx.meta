@@ -3,7 +3,12 @@ guid: 847b3ae617ac8764f98feab03b04c904
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Master_Ruins
+    second: {fileID: 2100000, guid: b847e6f8977db1a438a702f4f09e55cc, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
