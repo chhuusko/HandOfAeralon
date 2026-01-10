@@ -91,6 +91,7 @@ public class Tutorial : MonoBehaviour
             _popups[i].gameObject.SetActive(false);
         }
 
+        _rawImage.enabled = false;
         _blocker.gameObject.SetActive(false);
     }
 
@@ -209,6 +210,7 @@ public class Tutorial : MonoBehaviour
         _videoPlayer.clip = clip;
 
         _videoPlayer.Stop();
+        _rawImage.enabled = true;
         _videoPlayer.Prepare();
         _videoPlayer.prepareCompleted += PlayPreparedVideo;
     }
