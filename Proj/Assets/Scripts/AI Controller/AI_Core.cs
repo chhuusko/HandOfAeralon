@@ -18,6 +18,7 @@ public class AI_Core
 
         GameObject monobehaviour = new GameObject("AI_Executor");
         AI_Executor executor = monobehaviour.AddComponent<AI_Executor>();
+        //GameObject.DontDestroyOnLoad(monobehaviour);
 
         AI_Core result = new AI_Core(
             new AI_Searcher(),
