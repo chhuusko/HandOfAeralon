@@ -12,8 +12,12 @@ public class CombatOptionsMenu : MonoBehaviour
 
     private void Start()
     {
-        //SetHoverLockSliderValue(PlayerSettingsManager.GetInstance().GetHoverLockSpeed());
-        //SetMasterVolumeSliderValue(PlayerSettingsManager.GetInstance().GetMasterVolume());
+        if(PlayerSettingsManager.GetInstance())
+        {
+            SetHoverLockSliderValue(PlayerSettingsManager.GetInstance().GetHoverLockSpeed());
+            SetMasterVolumeSliderValue(PlayerSettingsManager.GetInstance().GetMasterVolume());
+        }
+        ;
     }
 
     public void SetHoverLockSliderValue(float value)

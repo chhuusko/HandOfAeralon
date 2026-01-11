@@ -45,13 +45,18 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
         Selector._instance.OnCharacterDeselected += Hide;
         _rectTransform = GetComponent<RectTransform>();
         if (_hideOnStart)
+        {
+            if(PlayerSettingsManager.GetInstance())
+                _sliderSpeed = PlayerSettingsManager.GetInstance().GetHoverLockSpeed();
+
             Hide();
+        }   
         else
             _sliderSpeed = 0f;
 
 
 
-        // _sliderSpeed = PlayerSettingsManager.GetInstance().GetHoverLockSpeed();
+
         SetSliderValue(_sliderSpeed);
         SetHoverLockSpeed(_sliderSpeed);
 
@@ -264,7 +269,10 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
     // 0.1 = the hover lock will lock superquick
     private void SetMappedSliderSpeed(float speed)
     {
-        _sliderSpeed = 0.1f * speed;
+        float maxSpeed = 0.1f;
+        float minSpeed = 0.01f;
+
+        _sliderSpeed = maxSpeed * speed;
 
         // NOTE (Calle): The save setting value should not be mapped, 1 is 1 in saved settings
         //PlayerSettingsManager.GetInstance().SetHoverLockSpeed(speed); 
@@ -276,6 +284,10 @@ public class CombatHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerE
         }
         else
         {
+            _sliderSpeed = maxSpeed - _sliderSpeed;
+            if (_sliderSpeed <= minSpeed)
+                _sliderSpeed = minSpeed;
+
             SetHoverLock(true);
             _slider.gameObject.SetActive(true);
         }

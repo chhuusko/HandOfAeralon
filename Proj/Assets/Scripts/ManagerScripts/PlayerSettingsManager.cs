@@ -44,6 +44,7 @@ public class PlayerSettingsManager : MonoBehaviour
     { 
         return _masterVolume; 
     }
+
     public void SetMasterVolume(float masterVolume) 
     { 
         _masterVolume = masterVolume; 
