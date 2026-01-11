@@ -4665,6 +4665,19 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8521765745603833929, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: "Between combats, you may manage your party here.\r\nYou can:\r\n \u2022
+        Recruit new characters\r\n \u2022 Sell existing ones\r\n \u2022 {heal}Heal{/heal}
+        your party, you will get a free {heal}heal{/heal} now to try it out\r\n \u2022
+        Inspect characters in detail via the Info Panel\r\nCharacters offered in
+        the shop are <font-weight=800><color=#FFFFFF>generated with some randomness</color></font-weight>,
+        meaning their <font-weight=800><color=#FFFFFF>stats and traits may vary</color></font-weight>.
+        Keep an eye out for characters whose stats and traits best fit your current
+        strategy. Striving to have a full party of characters as soon as possible
+        is recommended."
+      objectReference: {fileID: 0}
     - target: {fileID: 8565945816878202409, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
