@@ -17,6 +17,6 @@ public class Weakened : StatusEffect
         }
         
         var modifier = data.DamageModifierPercent / 100f;
-        combinedModifier += modifier;
+        combinedModifier -= modifier;
     }
 }
