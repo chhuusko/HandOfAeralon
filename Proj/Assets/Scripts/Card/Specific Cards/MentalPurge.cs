@@ -4,13 +4,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Mental Purge", menuName = "Item/Card Data/Mental Purge", order = 1)]
 public class MentalPurge : Card
 {
-    public override void PlayCard()
+    public override void AfterCardPlay()
     {
         CardHandManager cardHandManager = CardHandManager.GetInstance();
         List<CardContainer> cards = cardHandManager.GetCardsInHand();
-        int count = cards.Count-1;
+        int count = cards.Count;
 
-        if (count > 1)
+        if (count >= 1)
         {
             foreach (CardContainer card in cards)
             {
