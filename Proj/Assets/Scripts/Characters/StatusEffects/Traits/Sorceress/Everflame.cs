@@ -4,13 +4,12 @@ public class Everflame : Trait
 {
     public override void ModifyOutgoingBurnDamage(ref float damage)
     {
-        var data = Data as DamageModifyingData;
-
+        var data = Data as IntModifierData;
         if (!data)
         {
             return;
         }
 
-        damage += data.DamageModifierPercent / 100f;
+        damage += data.Modifier;
     }
 }

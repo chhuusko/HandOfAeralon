@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aea5427431fc81d4ba36f7f7ae4cafe5, type: 3}
+  m_Script: {fileID: 11500000, guid: 78623034bb1bd0047ad14caca51bc2f2, type: 3}
   m_Name: Everflame
   m_EditorClassIdentifier: 
   Name: Everflame
   Icon: {fileID: 21300000, guid: 14773e8d51115364dbf0088d062028bb, type: 3}
-  Description: '{burn}Burn{/burn} applied by you deal <b>+1</b> additional damage
+  Description: '{burn}Burn{/burn} applied by you deal <b>+10</b> additional damage
     per turn'
   Type: 3
   IsPermanent: 1
@@ -23,4 +23,4 @@ MonoBehaviour:
   _typeName: Everflame, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Class: 1
   IsPositive: 1
-  DamageModifierPercent: 100
+  Modifier: 10
