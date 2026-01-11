@@ -1349,6 +1349,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5888925986568419451, guid: 2735cd7749f79404caa4e6ea6b692acd,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -600
+      objectReference: {fileID: 0}
     - target: {fileID: 6044650996911990963, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1963,7 +1968,7 @@ PrefabInstance:
     - target: {fileID: 9127183573721612193, guid: 2735cd7749f79404caa4e6ea6b692acd,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -568.99994
+      value: -569
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2880,6 +2885,25 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 138471043612582498, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 138471043612582498, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 187673725096014526, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: "The Combat Log records what happens in the battle, including <font-weight=800><color=#FFFFFF>effects
+        applied</color></font-weight> to characters, {physical_damage}damage dealt{/physical_damage},
+        {heal}healing done{/heal}, {card}cards used{/card}, and character <font-weight=800><color=#FFFFFF>deaths</color></font-weight>.\\n\r\nClicking
+        <font-weight=800><color=#FFFFFF>(M1)</color></font-weight> on a character\u2019s
+        name in the log will immediately selects that character on the battlefield."
+      objectReference: {fileID: 0}
     - target: {fileID: 215927754732561091, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -2919,6 +2943,52 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 305413311022433172, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: 'Welcome to <font-weight=800><color=#FFFFFF>Hand of Aeralon</color></font-weight>,
+        a <font-weight=800><color=#FFFFFF>turn-based tactical RPG</color></font-weight>
+        with <font-weight=800><color=#FFFFFF>card- and party-driven combat</color></font-weight>.
+        \n
+
+        You play as <font-weight=800><color=#FFFFFF>Archmage Aeralon</color></font-weight>,
+        an unseen ruler bound by secrecy. Unable to act directly, you command a party
+        of heroes on grid-based battlefields and influence combat through powerful
+        arcane {card}Cards{/card}. \n
+
+        Nimurath is under siege by the <font-weight=800><color=#FFFFFF>Nere</color></font-weight>,
+        empowered by <font-weight=800><color=#FFFFFF>Magor, God of Chaos</color></font-weight>.
+        To stop his return, you must guide your heroes through a series of increasingly
+        dangerous encounters. \n
+
+        Each battle is part of a larger run. Heroes
+        can die permanently, resources are limited, and enemies grow stronger. Victory
+        demands smart positioning, careful planning, and decisive use of {ability}abilities{/ability}
+        and {card}cards{/card}. \n
+
+        This tutorial will teach you the fundamentals.
+        Every decision matters.
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 341947027987992416, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: 'Before combat begins, you must place your heroes on the battlefield.
+        Click <font-weight=800><color=#FFFFFF>(M1)</color></font-weight> on a character
+        to select them, then click <font-weight=800><color=#FFFFFF>(M1)</color></font-weight>
+        on any green starting tile to place them. \n
+
+        Positioning matters.
+        Frontline fighters should protect vulnerable allies, while ranged heroes
+        benefit from distance and clear lines of sight. You may freely reposition
+        characters during this phase. There is no penalty for experimentation.\n
+
+        When
+        all characters are placed and you are satisfied with your formation, press
+        <font-weight=800><color=#FFFFFF>Spacebar</color></font-weight> or click <font-weight=800><color=#FFFFFF>Start
+        Combat</color></font-weight> to begin.'
       objectReference: {fileID: 0}
     - target: {fileID: 373449785749162704, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -3005,6 +3075,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 591879341974506062, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 591879341974506062, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 900
+      objectReference: {fileID: 0}
+    - target: {fileID: 591879341974506062, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -52.5
+      objectReference: {fileID: 0}
     - target: {fileID: 682487716556093674, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3034,6 +3119,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 705009455584610929, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 705009455584610929, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 425
       objectReference: {fileID: 0}
     - target: {fileID: 705009455584610929, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -3117,6 +3212,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 925371480789966557, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 925371480789966557, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -3185,6 +3285,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1270495637250982857, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1288432807871337388, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3204,6 +3309,42 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1302144082303315155, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1441340756562220977, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: 'Hovering over an {ability}ability{/ability} opens its tooltip, displaying
+        detailed information. If you hover over a tooltip <font-weight=800><color=#FFFFFF>long
+        enough</color></font-weight>, it will <font-weight=800><color=#FFFFFF>lock
+        in place</color></font-weight>, allowing you to move the cursor freely and
+        inspect additional details without the tooltip disappearing. The hover time
+        required to lock a tooltip can be <font-weight=800><color=#FFFFFF>adjusted
+        in the Settings Menu</color></font-weight>. \n
+
+        Highlighted <font-weight=800><color=#FFFFFF>keywords</color></font-weight>
+        inside tooltips can be hovered over to reveal deeper explanations of mechanics
+        such as Buffs, Debuffs, or special rules. Mastering keywords is essential
+        for understanding more complex interactions. \n
+
+        {physical_damage}Damage{/physical_damage}
+        values shown in {ability}abilities{/ability} can also be hovered over to
+        see the full {physical_damage}damage{/physical_damage} calculation, including
+        modifiers from stats, traits, and active effects. '
+      objectReference: {fileID: 0}
+    - target: {fileID: 1467067411037760469, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 1467067411037760469, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 85
       objectReference: {fileID: 0}
     - target: {fileID: 1485893188745179443, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -3237,6 +3378,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1500623856838262234, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500623856838262234, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -3245,6 +3391,16 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1552789541101506787, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1582047392963175156, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1723593089575072962, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3277,6 +3433,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1724545208234680255, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1724545208234680255, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -3285,6 +3446,23 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1725330892835322785, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: 'Combat proceeds according to the <font-weight=800><color=#FFFFFF>Turn
+        Order Panel</color></font-weight> shown on the screen. Units act from left
+        to right based on their Initiative stat. Higher <font-weight=800><color=#FFFFFF>Initiative</color></font-weight>
+        means <font-weight=800><color=#FFFFFF>acting earlier</color></font-weight>
+        in the round. If two or more units have the same Initiative, their order
+        is decided by a <font-weight=800><color=#FFFFFF>coin flip</color></font-weight>
+        at the start of the round. \n
+
+        The <font-weight=800><color=#FFFFFF>currently
+        active character</color></font-weight> is displayed in a <font-weight=800><color=#FFFFFF>separate
+        box to the left</color></font-weight> of the Turn Order Panel, making it
+        clear whose turn it is at all times. You can click any unit in the turn order
+        to select that character. Your Barbarian will take the first turn. '
+      objectReference: {fileID: 0}
     - target: {fileID: 1741656935267957166, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3294,6 +3472,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1741656935267957166, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 1741656935267957166, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -3324,6 +3507,39 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1788940844840018203, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: "{ability}Abilities{/ability} are a character\u2019s primary tools in
+        combat. A character may use one {ability}ability{/ability} per turn. \\n\r\nA
+        character can only <font-weight=800><color=#FFFFFF>move before</color></font-weight>
+        using an {ability}ability{/ability}, unless the {ability}ability{/ability}
+        explicitly states otherwise. \\n\r\nEach class has four unique {ability}abilities{/ability},
+        defining their role on the battlefield. \\n\r\n{ability}Abilities{/ability}
+        may:\r\n \u2022 Deal {physical_damage}damage{/physical_damage} or {heal}heal{/heal}\r\n
+        \u2022 Affect a single target or characters in a larger area\r\n \u2022 Apply
+        or remove buffs or debuffs"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1799171863185649526, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1800783429887333963, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1800783429887333963, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 900
+      objectReference: {fileID: 0}
+    - target: {fileID: 1800783429887333963, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -50
       objectReference: {fileID: 0}
     - target: {fileID: 1906599180873573090, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -3425,6 +3641,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2608866663599006433, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2735010191016148191, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3505,6 +3726,47 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2963621174888852597, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2988272326836394537, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 2988272326836394537, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2988272326836394537, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997696002174014169, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997696002174014169, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 3102037978806972859, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: "Combat is viewed through a <font-weight=800><color=#FFFFFF>3D strategic
+        camera</color></font-weight> designed to clearly communicate unit positions,
+        threats, and terrain without unnecessary complexity. \\n \nYou can move the
+        camera to survey the battlefield using WASD or holding down Mouse Scroll
+        Wheel. \\n\nAdjust your view by <font-weight=800><color=#FFFFFF>scrolling
+        the Mouse Scroll Wheel</color></font-weight> to zoom in and out within a
+        limited range."
+      objectReference: {fileID: 0}
     - target: {fileID: 3179081332232367679, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3557,6 +3819,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3268581224718363814, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3268581224718363814, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -3565,6 +3832,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3285976058074232428, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3311431707504272087, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3574,6 +3846,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3311431707504272087, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3311431707504272087, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 360
       objectReference: {fileID: 0}
     - target: {fileID: 3311431707504272087, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -3597,6 +3879,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3317458023686891061, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3317458023686891061, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -3604,6 +3891,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3329677314537918268, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -160
+      objectReference: {fileID: 0}
+    - target: {fileID: 3329677314537918268, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 115
       objectReference: {fileID: 0}
     - target: {fileID: 3366861379601033740, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -3645,6 +3942,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3511019140885055024, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: "{card}Cards{/card} have powerful effects and may be played during any
+        ally\u2019s turn. To use a {card}card{/card}, <font-weight=800><color=#FFFFFF>drag
+        it from your hand onto the battlefield</color></font-weight>. If the {card}card{/card}
+        is <font-weight=800><color=#FFFFFF>targetable</color></font-weight>, you
+        may place it on <font-weight=800><color=#FFFFFF>any valid tile</color></font-weight>,
+        depending on its effect, to choose where its effect is applied. \\n\r\n{card}Cards{/card}
+        deal {physical_damage}damage{/physical_damage} that <font-weight=800><color=#FFFFFF>is
+        neither</color></font-weight> {physical_damage}Physical{/physical_damage}
+        <font-weight=800><color=#FFFFFF>or</color></font-weight> {elemental_damage}Elemental{/elemental_damage},
+        so it is <font-weight=800><color=#FFFFFF>unaffected by effects that increase
+        or reduce those</color></font-weight> {physical_damage}damage types{/physical_damage}.
+        \\n\r\nYou draw <font-weight=800><color=#FFFFFF>1</color></font-weight> {card}card{/card}
+        <font-weight=800><color=#FFFFFF>at the start of every 4 ally character\u2019s
+        turns</color></font-weight>, marked in the <font-weight=800><color=#FFFFFF>Turn
+        Order Panel</color></font-weight>. Your hand has a <font-weight=800><color=#FFFFFF>maximum
+        size of 10</color></font-weight> {card}cards{/card}."
+      objectReference: {fileID: 0}
     - target: {fileID: 3589777466187575188, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3664,6 +3981,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3638794725154847365, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 3638794725154847365, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 85
       objectReference: {fileID: 0}
     - target: {fileID: 3645363051318155892, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -3705,6 +4032,23 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3699915845686244086, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: "This is the <font-weight=800><color=#FFFFFF>Info Panel</color></font-weight>,
+        here you\u2019ll find the character\u2019s name, class, traits, stats and
+        all status effects currently affecting them.\\n\r\nEvery character has:\r\n
+        \u2022 <font-weight=800><color=#FFFFFF>One positive trait</color></font-weight>\r\n
+        \u2022 <font-weight=800><color=#FFFFFF>One negative trait</color></font-weight>\\n\r\nTraits
+        can modify stats, alter {ability}ability{/ability} behavior, or introduce
+        conditional effects.\\n\r\nClass-specific traits are more rare and often
+        more powerful positive traits, shaping unique playstyles.\r\n"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3787342098017550497, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3815094426105344806, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3744,6 +4088,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3950955381376318580, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -160
+      objectReference: {fileID: 0}
+    - target: {fileID: 3950955381376318580, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 115
+      objectReference: {fileID: 0}
+    - target: {fileID: 4043827164095177266, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4077733326348947769, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -3785,6 +4144,41 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4160092345197012523, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -160
+      objectReference: {fileID: 0}
+    - target: {fileID: 4160092345197012523, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 115
+      objectReference: {fileID: 0}
+    - target: {fileID: 4238210509275999559, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4383207298323791331, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -160
+      objectReference: {fileID: 0}
+    - target: {fileID: 4383207298323791331, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 115
+      objectReference: {fileID: 0}
+    - target: {fileID: 4402103191218358458, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -160
+      objectReference: {fileID: 0}
+    - target: {fileID: 4402103191218358458, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 115
+      objectReference: {fileID: 0}
     - target: {fileID: 4493759420907492337, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3794,6 +4188,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493759420907492337, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493759420907492337, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 4493759420907492337, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -3814,6 +4218,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4513629692976276967, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 4513629692976276967, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -3845,6 +4254,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4818966926257357387, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4893534748651677111, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3854,6 +4268,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4893534748651677111, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 4893534748651677111, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 4893534748651677111, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -3884,6 +4308,28 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984218298821186459, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: 'The shop offers {card}individual cards{/card}, as well as {card}card
+        packs{/card}.\n
+
+        {card}Card packs{/card} allow you to <font-weight=800><color=#FFFFFF>select
+        two</color></font-weight> {card}cards{/card} from a <font-weight=800><color=#FFFFFF>set
+        of five</color></font-weight>, offering strategic choice mixed with randomness.\n
+
+        You
+        may also pay to <font-weight=800><color=#FFFFFF>refresh the shop</color></font-weight>.
+        Refreshing fully <font-weight=800><color=#FFFFFF>restocks</color></font-weight>
+        the shop, replacing all current offerings, including any items you have already
+        purchase, with a <font-weight=800><color=#FFFFFF>new random selection</color></font-weight>
+        of characters, {card}cards{/card}, and packs.'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5598635108160110048, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5658137387569154337, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -3945,6 +4391,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5685227787314656555, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 5685227787314656555, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 750
+      objectReference: {fileID: 0}
+    - target: {fileID: 5685227787314656555, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 75
+      objectReference: {fileID: 0}
     - target: {fileID: 5695273315601753706, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3985,6 +4446,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5829654751983952208, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 5829654751983952208, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1150
+      objectReference: {fileID: 0}
+    - target: {fileID: 5829654751983952208, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5890099526872903074, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3994,6 +4470,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5890099526872903074, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5890099526872903074, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 5890099526872903074, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -4025,6 +4511,36 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5957812869479454462, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6091804442902322146, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 6091804442902322146, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 6115335458813743403, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6224294951922892267, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242557137160156358, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6332664222774827459, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -4045,6 +4561,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6661864820470867208, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 6661864820470867208, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6661864820470867208, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 6665003501275966140, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -4064,6 +4595,39 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6696134697553108713, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: "When selecting an {ability}ability{/ability} using <font-weight=800><color=#FFFFFF>M1</color></font-weight>,
+        <font-weight=800><color=#FFFFFF>valid tiles</color></font-weight> for the
+        {ability}ability{/ability} are highlighted on the battlefield in <font-weight=800><color=#FFFFFF>orange</color></font-weight>.
+        Hovering over one of these tiles previews the result of the {ability}ability{/ability}
+        before committing. \\n\r\nTiles that the {ability}ability{/ability} will
+        <font-weight=800><color=#FFFFFF>affect</color></font-weight> are highlighted
+        in <font-weight=800><color=#FFFFFF>red</color></font-weight>, clearly showing
+        the area of impact. Any characters that would be <font-weight=800><color=#FFFFFF>affected</color></font-weight>
+        by the {ability}ability{/ability} display a <font-weight=800><color=#FFFFFF>yellow
+        effect indicator beneath them</color></font-weight>, allowing you to quickly
+        see who will be hit, {heal}healed{/heal}, or influenced. \\n\r\nWhile hovering,
+        expected {physical_damage}damage{/physical_damage} is previewed directly
+        on the enemy\u2019s {heal}health bar{/heal}, including all current modifiers.
+        Use this preview to plan ahead; especially when positioning, chaining {ability}abilities{/ability}
+        and {card}cards{/card}, or to swiftly tell if an attack might finish off
+        an enemy. \\n \r\nAt any point during targeting or preview, press <font-weight=800><color=#FFFFFF>M2</color></font-weight>
+        to cancel the selection and preview. Some {ability}abilities{/ability} have
+        specific patterns, ranges, or restrictions that require careful planning
+        to get the most out of them."
+      objectReference: {fileID: 0}
+    - target: {fileID: 6696966142362161904, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -160
+      objectReference: {fileID: 0}
+    - target: {fileID: 6696966142362161904, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 115
       objectReference: {fileID: 0}
     - target: {fileID: 6734332945044537340, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -4157,6 +4721,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7032320480187677132, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7032320480187677132, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -4185,6 +4754,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7140002288299209109, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7145777096697813430, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -4217,6 +4791,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7172596903784674799, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7172596903784674799, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 7172596903784674799, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -4245,6 +4829,32 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7225615984868537155, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225615984868537155, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 7296483785123092559, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: 'The <font-weight=800><color=#FFFFFF>Deck</color></font-weight> button
+        allows you to <font-weight=800><color=#FFFFFF>view all</color></font-weight>
+        {card}cards{/card} currently in your deck.\n
+
+        You may pay gold to
+        permanently {card}remove cards{/card} you no longer want. The <font-weight=800><color=#FFFFFF>cost
+        increases</color></font-weight> each time you remove a {card}card{/card}
+        during the same shop visit.\n
+
+        Removing unwanted {card}cards{/card}
+        can <font-weight=800><color=#FFFFFF>help focus your deck</color></font-weight>,
+        making it easier to draw the {card}cards{/card} that best fit your strategy.'
+      objectReference: {fileID: 0}
     - target: {fileID: 7509779328719498953, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -4254,6 +4864,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7509779328719498953, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7509779328719498953, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -4277,6 +4892,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7517754215542655524, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7517754215542655524, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 7517754215542655524, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -4285,6 +4910,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7586182789072865982, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 7586182789072865982, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 7586182789072865982, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 35
+      objectReference: {fileID: 0}
     - target: {fileID: 7589866901337787480, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -4305,6 +4945,16 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7627199220251409056, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 7627199220251409056, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 85
+      objectReference: {fileID: 0}
     - target: {fileID: 7694361796609306352, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -4324,6 +4974,25 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724061823634548232, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: "Your deck represents all {card}cards{/card} available to you during
+        a run. In combat, the deck is divided into two piles:\r\n \u2022 <font-weight=800><color=#FFFFFF>Draw
+        Pile</color></font-weight>: where {card}cards{/card} are drawn from\r\n \u2022
+        <font-weight=800><color=#FFFFFF>Discard Pile</color></font-weight>: where
+        played or {card}discarded cards{/card} go \\n\r\nYou can <font-weight=800><color=#FFFFFF>click
+        (M1)</color></font-weight> on the <font-weight=800><color=#FFFFFF>Draw Pile</color></font-weight>
+        or <font-weight=800><color=#FFFFFF>Discard Pile</color></font-weight> at
+        any time to view the {card}cards{/card} currently inside them. The {card}cards{/card}
+        shown in the {card}Draw Pile{/card} are displayed in a <font-weight=800><color=#FFFFFF>random
+        order</color></font-weight> and do <font-weight=800><color=#FFFFFF>not</color></font-weight>
+        reflect the order in which they will be drawn. \\n\r\nEach pile displays
+        a <font-weight=800><color=#FFFFFF>number</color></font-weight>, indicating
+        how many {card}cards{/card} it currently contains. When the {card}Draw Pile{/card}
+        is empty, the {card}Discard Pile{/card} is <font-weight=800><color=#FFFFFF>shuffled</color></font-weight>
+        back into the {card}Draw Pile{/card}."
       objectReference: {fileID: 0}
     - target: {fileID: 7758122125724538353, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -4365,6 +5034,16 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7782583809181540838, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 7782583809181540838, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 85
+      objectReference: {fileID: 0}
     - target: {fileID: 7805796782859653791, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -4384,6 +5063,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7827679337868902855, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 7827679337868902855, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 850
+      objectReference: {fileID: 0}
+    - target: {fileID: 7827679337868902855, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 7909587126995553996, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -4445,6 +5139,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7942029933654836563, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 7942029933654836563, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 7953212361247490638, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -160
+      objectReference: {fileID: 0}
+    - target: {fileID: 7953212361247490638, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 115
+      objectReference: {fileID: 0}
     - target: {fileID: 7954128658563732809, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -4464,6 +5178,28 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7955334824256816620, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: "On their turn, a character may move across the battlefield using <font-weight=800><color=#FFFFFF>Movement
+        Points (MP)</color></font-weight>. At the start of their next turn, the character\u2019s
+        MP is reset to its maximum. When the active reach using their <font-weight=800><color=#FFFFFF>remaining
+        MP</color></font-weight>. \\n\r\nMoving costs MP based on distance and direction:\r\n
+        \u2022 Moving <font-weight=800><color=#FFFFFF>one tile</color></font-weight>
+        costs <font-weight=800><color=#FFFFFF>1 MP</color></font-weight>\r\n \u2022
+        Moving <font-weight=800><color=#FFFFFF>diagonally</color></font-weight> costs
+        <font-weight=800><color=#FFFFFF>2 MP</color></font-weight> \\n\r\nSelect
+        a character with <font-weight=800><color=#FFFFFF>M1</color></font-weight>,
+        you may press <font-weight=800><color=#FFFFFF>M2</color></font-weight> to
+        cancel the selection. While a character is selected, <font-weight=800><color=#FFFFFF>green
+        tiles</color></font-weight> appear on the grid, showing all tiles that character
+        can move to. With a character selected, click <font-weight=800><color=#FFFFFF>(M1)</color></font-weight>
+        on any highlighted tile to move. An <font-weight=800><color=#FFFFFF>MP indicator</color></font-weight>
+        is displayed beside the {ability}Ability Panel{/ability}, showing the character\u2019s
+        <font-weight=800><color=#FFFFFF>current MP and maximum MP</color></font-weight>
+        at all times, as well as previewing the cost of moving to the currently hovered
+        tile."
       objectReference: {fileID: 0}
     - target: {fileID: 8018280590579341559, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -4497,6 +5233,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8039098405427981085, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8039098405427981085, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -4517,6 +5258,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8049258030403959372, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8049258030403959372, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 510
+      objectReference: {fileID: 0}
+    - target: {fileID: 8049258030403959372, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -4537,6 +5288,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8163620639415404035, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8163620639415404035, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -4544,6 +5300,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277036766230583884, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277036766230583884, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 850
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277036766230583884, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -12
       objectReference: {fileID: 0}
     - target: {fileID: 8301883030277864246, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -4645,6 +5416,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8315282216052339187, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8354215205962996039, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 8354215205962996039, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368449174424745891, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8390526183274754593, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -4668,11 +5459,11 @@ PrefabInstance:
     - target: {fileID: 8521765745603833929, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_text
-      value: "Between combats, you may manage your party here.\r\nYou can:\r\n \u2022
-        Recruit new characters\r\n \u2022 Sell existing ones\r\n \u2022 {heal}Heal{/heal}
+      value: "Between combats, you may manage your party here.\\n\r\nYou can:\r\n
+        \u2022 Recruit new characters\r\n \u2022 Sell existing ones\r\n \u2022 {heal}Heal{/heal}
         your party, you will get a free {heal}heal{/heal} now to try it out\r\n \u2022
-        Inspect characters in detail via the Info Panel\r\nCharacters offered in
-        the shop are <font-weight=800><color=#FFFFFF>generated with some randomness</color></font-weight>,
+        Inspect characters in detail via the Info Panel\\n\r\nCharacters offered
+        in the shop are <font-weight=800><color=#FFFFFF>generated with some randomness</color></font-weight>,
         meaning their <font-weight=800><color=#FFFFFF>stats and traits may vary</color></font-weight>.
         Keep an eye out for characters whose stats and traits best fit your current
         strategy. Striving to have a full party of characters as soon as possible
@@ -4690,6 +5481,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8565945816878202409, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8565945816878202409, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -4718,6 +5514,31 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8669125574181473061, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -160
+      objectReference: {fileID: 0}
+    - target: {fileID: 8669125574181473061, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 115
+      objectReference: {fileID: 0}
+    - target: {fileID: 8681021747604378872, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8759597134825851943, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -160
+      objectReference: {fileID: 0}
+    - target: {fileID: 8759597134825851943, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 115
+      objectReference: {fileID: 0}
     - target: {fileID: 8782055556367790051, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -4738,6 +5559,16 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8876881566751704598, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -160
+      objectReference: {fileID: 0}
+    - target: {fileID: 8876881566751704598, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 115
+      objectReference: {fileID: 0}
     - target: {fileID: 8914862036436307877, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -4757,6 +5588,33 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8968194249616649006, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: "{mana}Mana{/mana} is a shared resource used to play {card}Cards{/card}
+        during combat. {mana}Mana{/mana} is gained passively at the start of <font-weight=800><color=#FFFFFF>every
+        ally character\u2019s turn</color></font-weight>, and can also be generated
+        by {ability}abilities{/ability} or {card}card{/card} effects.\\n\r\nPlaying
+        a {card}card{/card} consumes {mana}Mana{/mana}. If you lack sufficient {mana}Mana{/mana},
+        the {card}card{/card} cannot be used. The {mana}Mana cost{/mana} shown on
+        a {card}card{/card} provides immediate feedback:\r\n \u2022 If the cost is
+        shown in <font-weight=800><color=#FFFFFF>red</color></font-weight>, you <font-weight=800><color=#FFFFFF>cannot
+        afford</color></font-weight> to play the {card}card{/card}.\r\n \u2022 If
+        the cost is shown in <font-weight=800><color=#FFFFFF>green</color></font-weight>,
+        the {card}card\u2019s cost{/card} has been <font-weight=800><color=#FFFFFF>reduced</color></font-weight>
+        by the effect of other {card}cards{/card}, {ability}abilities{/ability},
+        or traits."
+      objectReference: {fileID: 0}
+    - target: {fileID: 9005101940830884847, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 9005101940830884847, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 9076038718756892581, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
