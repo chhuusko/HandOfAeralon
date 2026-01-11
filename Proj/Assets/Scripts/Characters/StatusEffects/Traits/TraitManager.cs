@@ -33,9 +33,7 @@ public class TraitManager
             return true;
         }
 
-        CharacterData.CalculateDerivedStats(CharacterData.Faction == Faction.Friendly
-            ? LevelManager.GetInstance().statIncrease
-            : LevelManager.GetInstance().enemyStatIncrease);
+        CharacterData.RecalculateStatusModifiers();
         return true;
     }
 
@@ -53,9 +51,7 @@ public class TraitManager
         
         bool removed = _statusEffects.Remove(statusEffect);
         
-        CharacterData.CalculateDerivedStats(CharacterData.Faction == Faction.Friendly
-            ? LevelManager.GetInstance().statIncrease
-            : LevelManager.GetInstance().enemyStatIncrease);
+        CharacterData.RecalculateStatusModifiers();
         
         return removed;
     }
@@ -84,9 +80,7 @@ public class TraitManager
             _statusEffects.Remove(statusEffect);
         }
         
-        CharacterData.CalculateDerivedStats(CharacterData.Faction == Faction.Friendly
-            ? LevelManager.GetInstance().statIncrease
-            : LevelManager.GetInstance().enemyStatIncrease);
+        CharacterData.RecalculateStatusModifiers();
         
         return amount;
     }
