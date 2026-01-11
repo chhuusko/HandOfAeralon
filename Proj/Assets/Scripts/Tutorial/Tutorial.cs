@@ -75,6 +75,12 @@ public class Tutorial : MonoBehaviour
             Tooltipper._instance.HideTooltip();
             _popups[popup].gameObject.SetActive(true);
             _currentPopup = popup;
+
+            CombatCamera[] camera = FindObjectsByType<CombatCamera>(FindObjectsSortMode.None);
+            if (camera[0] != null)
+            {
+                camera[0].FreezeCamera = true;
+            }
         }
         else
         {
@@ -93,6 +99,12 @@ public class Tutorial : MonoBehaviour
 
         _rawImage.enabled = false;
         _blocker.gameObject.SetActive(false);
+
+        CombatCamera[] camera = FindObjectsByType<CombatCamera>(FindObjectsSortMode.None);
+        if (camera[0] != null)
+        {
+            camera[0].FreezeCamera = false;
+        }
     }
 
     public void NextPopup()

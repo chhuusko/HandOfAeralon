@@ -102,6 +102,12 @@ public class EnemyAI : MonoBehaviour
 
         yield return new WaitForSeconds(TURN_START_WAIT_TIME);
 
+        if (IsDead())
+        {
+            EndTurn();
+            yield break;
+        }
+
         List<CombatGridTile> moveRange = FindMoveRange();
         //Debug.LogError($"EnemyAI.cs | moveRange: {moveRange.Count}");
         Dictionary<AIAction, float> scoredActions = EvaluatePossibleActions(moveRange);
@@ -144,7 +150,7 @@ public class EnemyAI : MonoBehaviour
         if (!IsDead() && _character.CanUseAbility && chosenAction.ability != null && chosenAction.target != null)
         {
             //Debug.LogError($"EnemyAI.cs | {_character.name} tries to cast {chosenAction.ability.name}!");
-            PerformAbilityCast(chosenAction);
+            StartCoroutine(PerformAbilityCast(chosenAction));
         }
 
         yield return new WaitForSeconds(TURN_END_WAIT_TIME);
@@ -1061,8 +1067,12 @@ public class EnemyAI : MonoBehaviour
         return result;
     }
 
-    private void PerformAbilityCast(AIAction action)
+    private IEnumerator PerformAbilityCast(AIAction action)
     {
+        yield return new WaitForSeconds(0.5f);
+
+        if (IsDead()) yield break;
+
         AbilityHandler abilityHandler = _character.GetAbilityHandler();
         if (abilityHandler != null)
         {

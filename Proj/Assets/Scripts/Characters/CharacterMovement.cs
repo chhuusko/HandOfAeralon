@@ -52,6 +52,8 @@ public class CharacterMovement : MonoBehaviour
     public void DrawMoveRange()
     {
         if (IsDead()) return;
+        if (CombatManager._instance != null && CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter() != _character) return;
+        if (Selector._instance != null && Selector._instance.GetSelectedCharacter() != _character) return;
 
         GameObject currentTile = _character.GetCurrentTileComponent().gameObject;
         if (_character.GetMovementPoints() <= 0 || !_character.CanMove || _character.IsStunned)
@@ -85,7 +87,12 @@ public class CharacterMovement : MonoBehaviour
         DrawMoveRange();
     }
 
-    public IEnumerator DrawMoveRangeDelayed()
+    public void DrawMoveRangeDelayed()
+    {
+        StartCoroutine(ReDrawMoveRangeDelayed());
+    }
+
+    private IEnumerator ReDrawMoveRangeDelayed()
     {
         yield return new WaitForSeconds(1f);
         ReDrawMoveRange();

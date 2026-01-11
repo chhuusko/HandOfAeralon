@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Playables;
+using UnityEngine.Rendering;
 
 public class CombatCamera : MonoBehaviour
 {
@@ -55,6 +56,8 @@ public class CombatCamera : MonoBehaviour
         
     };
 
+    public bool FreezeCamera = false;
+
     [SerializeField] private PlayableDirector _timelineDirector;
     [SerializeField] private bool _bIntroCinematicDone;
     [SerializeField] CameraBounds _cameraBounds;
@@ -88,6 +91,8 @@ public class CombatCamera : MonoBehaviour
 
     void Update()
     {
+        if (FreezeCamera) return;
+
         Move();
 
         if(!_mouseIsHoveringUI)
