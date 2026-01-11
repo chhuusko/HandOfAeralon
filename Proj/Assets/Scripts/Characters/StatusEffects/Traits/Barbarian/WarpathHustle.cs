@@ -29,8 +29,8 @@ public class WarpathHustle : Trait
         Character.Data.IncreaseBaseMovementPoints(movementPoints);
         Character.IncreaseCurrentMovementPoints(movementPoints);
         
-        _totalDamageModifier = Mathf.Min(1f + _enemiesDamaged * (data.DamageModifierPercent / 100f), 
-            1f + data.DamageModifierCapacity / 100f);
+        _totalDamageModifier = Mathf.Min(_enemiesDamaged * (data.DamageModifierPercent / 100f), 
+             + data.DamageModifierCapacity / 100f);
         
         _enemiesDamaged = 0;
     }
