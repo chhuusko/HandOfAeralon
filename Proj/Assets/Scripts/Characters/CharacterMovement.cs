@@ -85,7 +85,12 @@ public class CharacterMovement : MonoBehaviour
         DrawMoveRange();
     }
 
-    public IEnumerator DrawMoveRangeDelayed()
+    public void DrawMoveRangeDelayed()
+    {
+        StartCoroutine(ReDrawMoveRangeDelayed());
+    }
+
+    private IEnumerator ReDrawMoveRangeDelayed()
     {
         yield return new WaitForSeconds(1f);
         ReDrawMoveRange();
