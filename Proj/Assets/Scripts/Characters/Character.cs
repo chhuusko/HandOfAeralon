@@ -45,6 +45,8 @@ public class CharacterData
     [SerializeField] private float _currentHealthPoints01;
     [SerializeField] private List<Ability> _abilities;
     [SerializeField] private List<Ability> _activeAbilities;
+    [SerializeField] private float _levelHpFactor = 1f;
+    [SerializeField] private float _levelDamageFactor = 1f;
     public float CurrentHealthPoints01 => _currentHealthPoints01;
     public int CurrentHealthPoints => Mathf.RoundToInt(_derivedHealthPoints * _currentHealthPoints01);
     
@@ -112,6 +114,8 @@ public class CharacterData
         _baseDamage = baseDamage;
         _baseInitiative = baseInitiative;
         _baseMovementPoints = baseMovementPoints;
+        _levelHpFactor = 1f;
+        _levelDamageFactor = 1f;
 
         _abilities = _classData.abilities;
         _activeAbilities = new List<Ability>(_abilities);
@@ -150,9 +154,16 @@ public class CharacterData
         _name = name;
     }
 
-    public void CalculateDerivedStats(float factor)
+    public void RecalculateLevelScaling(float factor)
     {
-        CalculateDerivedStats(factor, factor);
+        _levelHpFactor = factor;
+        _levelDamageFactor = factor;
+        CalculateDerivedStats(_levelHpFactor, _levelDamageFactor, true);
+    }
+
+    public void RecalculateStatusModifiers()
+    {
+        CalculateDerivedStats(_levelHpFactor, _levelDamageFactor, true);
     }
 
     public void CalculateDerivedStats(float hpFactor, float damageFactor, bool preserveCurrentHP = true)

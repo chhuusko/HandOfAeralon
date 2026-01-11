@@ -101,20 +101,20 @@ public class LevelManager : ScriptableObject
     {
         if (_level % statIncreaseInterval == 0)
         {
+            statlevel = _level / statIncreaseInterval;
+            statIncrease = 1 + (statIncreaseFactor * (statlevel));
+            
             foreach (CharacterData character in GlobalGameManager.GetInstance().GetGameData().heroDataList)
             {
-                statlevel = _level / statIncreaseInterval;
-                statIncrease = 1 + (statIncreaseFactor * (statlevel));
-
                 /// REMOVE THIS LATER
-                
-                int lostHealth = character.DerivedHealthPoints - character.CurrentHealthPoints;
-                character.CalculateDerivedStats(statIncrease);
-                character.SetCurrentHealthPoints(character.DerivedHealthPoints-lostHealth);
+
+                float currentHpRatio = character.CurrentHealthPoints01;
+                character.RecalculateLevelScaling(statIncrease);
+                character.SetCurrentHealthPoints(Mathf.RoundToInt(character.DerivedHealthPoints * currentHpRatio));
 
                // Debug.Log("deriveddamage: " + character.DerivedDamage + " base damage: " + character.BaseDamage); 
-               return true;
             }
+            return true;
         }
         return false;
         /*
