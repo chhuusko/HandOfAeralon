@@ -6,6 +6,7 @@ public class MentalPurge : Card
 {
     public override void AfterCardPlay()
     {
+        base.AfterCardPlay();
         CardHandManager cardHandManager = CardHandManager.GetInstance();
         List<CardContainer> cards = cardHandManager.GetCardsInHand();
         int count = cards.Count;
