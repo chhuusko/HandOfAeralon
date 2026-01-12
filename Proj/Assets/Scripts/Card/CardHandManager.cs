@@ -149,6 +149,7 @@ public class CardHandManager : MonoBehaviour
             AddCardFromDeck();
         }
         AddSpaceing();
+        UpdatePileTexts();
     }
     public CardContainer AddCardFromDeck()
     {

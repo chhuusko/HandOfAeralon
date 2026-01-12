@@ -180,8 +180,8 @@ public class GlobalGameManager : ScriptableObject
     {
         _currentGame = new GameData();
         _currentGame.saveSlot = slot;
-        _currentGame.seed = 67;
-        LevelManager.GetInstance().GenerateMap(_currentGame.seed);
+        //_currentGame.seed = 67;
+        //LevelManager.GetInstance().GenerateMap(_currentGame.seed);
         GenerateParty();
         _currentGame.cardList = new List<Card>(_deckPreset.GetCards());
         _currentGame.coins = startCoins;
