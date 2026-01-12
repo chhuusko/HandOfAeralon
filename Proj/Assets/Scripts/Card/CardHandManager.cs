@@ -109,7 +109,7 @@ public class CardHandManager : MonoBehaviour
 
     private void OnEnable()
     {
-        CombatEventManager.OnCombatTurnChange += TurnChanged;
+        CombatEventManager.OnEnterCombatStateTakeTurn += TurnChanged;
 
         onCardTargetCharacter += TurnEffects;
 
@@ -118,7 +118,7 @@ public class CardHandManager : MonoBehaviour
     }
     private void OnDisable()
     {
-        CombatEventManager.OnCombatTurnChange -= TurnChanged;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= TurnChanged;
 
         onCardTargetCharacter -= TurnEffects;
 
@@ -259,15 +259,16 @@ public class CardHandManager : MonoBehaviour
     {
         return _cardsInHand;
     }
-    private void TurnChanged(CombatTurn t)
+    private void TurnChanged(Character c)
     {
 
-        if(t == CombatTurn.PlayerTurn)
+        if(c.GetFaction() == Faction.Friendly)
         {
-            Debug.Log("PlayerTurn");
+            
             _cardsPlayedThisTurn = 0;
-
             tempTurnsTillCard--;
+            Debug.Log("PlayerTurn. turns till Card: " + tempTurnsTillCard);
+
             if (tempTurnsTillCard <= 0)
             {
                 tempTurnsTillCard = turnsTillCard;
