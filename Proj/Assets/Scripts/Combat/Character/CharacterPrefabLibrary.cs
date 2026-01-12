@@ -7,7 +7,7 @@ public class CharacterPrefabEntry
 {
     public CharacterClass _classType;
     public GameObject _prefab;
-    //public List<GameObject> _prefabList; // NOTE (Calle): For multiple models
+    public List<GameObject> _prefabList; // NOTE (Calle): For multiple models
 }
 
 [CreateAssetMenu(fileName = "CharacterPrefabLibrary", menuName = "Resources/Character Prefab Library")]
@@ -15,7 +15,7 @@ public class CharacterPrefabLibrary : ScriptableObject
 {
     public List<CharacterPrefabEntry> _characterPrefabs;
 
-    //private Dictionary<CharacterClass, List<GameObject>> _dictionary; // Note (Calle): For Multiple Models
+    private Dictionary<CharacterClass, List<GameObject>> _dictionaryMultiple; // Note (Calle): For Multiple Models
     private Dictionary<CharacterClass, GameObject> _dictionary;
 
     public GameObject GetPrefab(CharacterClass classType)
@@ -35,7 +35,7 @@ public class CharacterPrefabLibrary : ScriptableObject
         // TODO (Calle): Loop over the list based on secondary model identification! :D
         //foreach(GameObject character in _dictionary[classType])
         //{
-        //    if(character.GetComponent<Character>().GetGender() == _dictionary[])
+        //    if(character.GetComponent<Character>().GetFaction() == _dictionary[])
         //}
 
         if(_dictionary == null)
@@ -52,5 +52,39 @@ public class CharacterPrefabLibrary : ScriptableObject
         //return characterListOfClass[0];
 
         return _dictionary[classType];
+    }
+
+    public GameObject GetPrefab(CharacterClass classType, Faction faction)
+    {
+        // NOTE (Calle): Use this if there are more different models to load based on BodyType or something else besides ClassType
+        if (_dictionaryMultiple == null)
+        {
+            _dictionaryMultiple = new Dictionary<CharacterClass, List<GameObject>>();
+            foreach (CharacterPrefabEntry entry in _characterPrefabs)
+            {
+                if(!_dictionaryMultiple.ContainsKey(entry._classType))
+                {
+                    _dictionaryMultiple.Add(entry._classType, new List<GameObject>());
+                    foreach (GameObject prefab in entry._prefabList)
+                    {
+                        if (!_dictionaryMultiple[entry._classType].Contains(prefab))
+                            _dictionaryMultiple[entry._classType].Add(prefab);
+                    }
+                }
+                else
+                {
+                    _dictionaryMultiple[entry._classType].Add(entry._prefabList[0]);
+                }
+            }
+        }
+
+        // TODO (Calle): Loop over the list based on secondary model identification! :D
+        foreach(GameObject character in _dictionaryMultiple[classType])
+        {
+            if (character.GetComponent<Character>().GetFaction() == faction)
+                return character;
+        }
+
+        return null;
     }
 }
