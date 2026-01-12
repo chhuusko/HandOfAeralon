@@ -7,6 +7,7 @@ public class ArcaneWindfall : Card
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void AfterCardPlay()
     {
+        base.AfterCardPlay();
         for (int i = 0; i < 3; i++)
         {
             List<Card> _unlockedCards = CardsUnlocked.GetInstance().GetCardsByRarity(CardRarity.Uncommon);

@@ -6,6 +6,7 @@ public class FleetingInsight : Card
 {
     public override void AfterCardPlay()
     {
+        base.AfterCardPlay();
         for (int i = 0; i < 3; i++)
         {
             List<Card> _unlockedCards = CardsUnlocked.GetInstance().GetCardsByRarity(CardRarity.Common);
