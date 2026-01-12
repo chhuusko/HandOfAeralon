@@ -29,7 +29,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BardIdle
+  m_Name: SorcIdle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -126,7 +126,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BardDeath
+  m_Name: SorcDeath
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -206,7 +206,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BardRuncycle
+  m_Name: SorcRuncycle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -310,10 +310,7 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: TakeDamage
-    m_EventTreshold: 0
+  m_Conditions: []
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7243777293502992533}
   m_Solo: 0
@@ -588,7 +585,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 1827226128182048838, guid: ec35374bd2b43174cbf51beef6052347,
+  m_Motion: {fileID: 1827226128182048838, guid: dd8d4c3953e9fee4ba83bce7f171327f,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
@@ -772,7 +769,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 1827226128182048838, guid: ec35374bd2b43174cbf51beef6052347,
+  m_Motion: {fileID: 1827226128182048838, guid: ffdf343e1f7e1dc4bbfc2d15b5c434e6,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 

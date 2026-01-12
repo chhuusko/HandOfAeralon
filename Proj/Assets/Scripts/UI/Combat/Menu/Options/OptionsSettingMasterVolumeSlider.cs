@@ -27,6 +27,6 @@ public class OptionsSettingMasterVolumeSlider : MonoBehaviour
 
     private void OnValueChanged(float value)
     {
-        //AudioManager.Instance?.SetMasterVolume(value);
+        AudioManager.Instance?.SetMasterVolume(value);
     }
 }
