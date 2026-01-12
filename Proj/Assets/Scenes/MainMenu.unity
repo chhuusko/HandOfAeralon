@@ -1479,7 +1479,7 @@ MonoBehaviour:
   m_text: START GAME
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9874f9c8d38903e499aa5139a008d96d, type: 2}
-  m_sharedMaterial: {fileID: 3094104753569673064, guid: 9874f9c8d38903e499aa5139a008d96d,
+  m_sharedMaterial: {fileID: 1564895059797498564, guid: 9874f9c8d38903e499aa5139a008d96d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2506,6 +2506,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6123813652874307725, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: _masterVolume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6123813652874307725, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: _hoverLockSpeed
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8131860488906627594, guid: 883f3c1d0e569204baa02e6740cf7b9f,
         type: 3}
