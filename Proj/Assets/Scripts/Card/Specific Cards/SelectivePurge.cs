@@ -16,8 +16,16 @@ public class SelectivePurge : Card
             }
             
         }
-
-        CardSelectHandler._instance.Setup(this, cardsInHand, 1);
+        
+        if (cardsInHand.Count > 0)
+        {
+            CardSelectHandler._instance.Setup(this, cardsInHand, 1);
+        }
+        else
+        {
+            CardHandManager.GetInstance().AddCardFromDeck(2);
+        }
+        
 
     }
     public override void CardSelect(Card selectedCard)

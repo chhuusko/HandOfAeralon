@@ -15,7 +15,10 @@ public class ArcaneEchoform : Card
             }
 
         }
-        CardSelectHandler._instance.Setup(this, cardsInHand, 1);
+        if (cardsInHand.Count > 0)
+        {
+            CardSelectHandler._instance.Setup(this, cardsInHand, 1);
+        }
     }
     public override void CardSelect(Card selectedCard)
     {
