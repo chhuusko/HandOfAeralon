@@ -109,7 +109,15 @@ public class CombatTurnOrder
         _charactersToDisplay.AddRange(_charactersInExecutedTurnOrder);
 
         _turnCountCurrent = _charactersInExecutedTurnOrder.Count;
-        UpdateCurrentTurnType();
+
+        if (_activeCharacter.GetFaction() == Faction.Friendly)
+        {
+            SetCurrentTurn(CombatTurn.PlayerTurn);
+        
+        }
+        else
+            SetCurrentTurn(CombatTurn.EnemyTurn);
+        
         GetFullRoundMarkerPosition();
 
         CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay, _nextRound);
@@ -157,6 +165,20 @@ public class CombatTurnOrder
             _updateRoundMarker = true;
         
         CombatEventManager.InvokeOnTurnOrderChanged(_charactersToDisplay, _nextRound);
+    }
+
+    private void SetDrawCardMarker()
+    {
+        if(_activeCharacter)
+        {
+            if(_activeCharacter.GetFaction() == Faction.Enemy)
+            {
+                foreach(Character c in _charactersToDisplay)
+                {
+
+                }
+            }
+        }
     }
 
     private void RebuildTurnOrder()
@@ -256,7 +278,10 @@ public class CombatTurnOrder
     {
         return _activeCharacter;
     }
-
+    public Character GetPrevActiveCharacter()
+    {
+        return _prevActiveCharacter;
+    }
     public CombatTurn GetCurrentTurn()
     {
         return _currentTurn;
@@ -266,7 +291,10 @@ public class CombatTurnOrder
     {
         return _turnCountCurrent;
     }
-
+    public int GetPlayerTurnCount()
+    {
+        return _playerTurnCount;
+    }
     public int GetTurnCountFullRound()
     {
         return _turnCountFullRound;
@@ -280,6 +308,21 @@ public class CombatTurnOrder
     public List<Character> GetCharactersInTurnOrder()
     {
         return _charactersInTurnOrder;
+    }
+
+    private int NumFriendlysInDisplayList()
+    {
+        int result = 0;
+        foreach (Character c in _charactersToDisplay)
+        {
+            if (c.GetFaction() == Faction.Friendly)
+            {
+                if (result++ == 4)
+                    return result;
+            }
+        }
+
+        return result;
     }
 
     public bool IsFriendlyInPendingOrder()
@@ -311,17 +354,25 @@ public class CombatTurnOrder
         bool result = (_currentRound % 4) == 0;
         return result;
     }
+    public bool IsNextFriendlyTurnDrawCard()
+    {
+        return ((_playerTurnCount + 1) % 4) == 0;
+    }
 
     public void UpdateCurrentTurnType()
     {
+        if(_prevActiveCharacter)
+        {
+            if (_prevActiveCharacter.GetFaction() == Faction.Friendly)
+            {
+               
+            }
+        }
+
         if (_activeCharacter.GetFaction() == Faction.Friendly)
         {
-            SetCurrentTurn(CombatTurn.PlayerTurn);
             _playerTurnCount++;
-            if(_playerTurnCount == _playerTurnCountToGetCard)
-            {
-                _playerTurnCount = 0;
-            }
+            SetCurrentTurn(CombatTurn.PlayerTurn);
         }
         else
             SetCurrentTurn(CombatTurn.EnemyTurn);
@@ -339,7 +390,6 @@ public class CombatTurnOrder
         {
             return false;
         }
-
         _combatStarted = true;
 
         return true;

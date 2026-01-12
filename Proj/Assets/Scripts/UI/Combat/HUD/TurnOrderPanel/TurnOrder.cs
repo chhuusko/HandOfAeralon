@@ -61,10 +61,13 @@ public class TurnOrder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             Destroy(_turnOrderPanel.transform.GetChild(i).gameObject);
         }
 
-        int turnOrderIndex = 0;
-        bool getCardMarkerDisplayed = false;
 
         CombatTurnOrder combatTurnOrder = CombatManager._instance.GetCombatTurnOrder();
+        int turnOrderIndex = 0;
+        int friendlySeen = 0;
+        int numFriendlysInToDisplayCard = 4 - (combatTurnOrder.GetPlayerTurnCount() % 4);
+        bool getCardMarkerDisplayed = false;
+
         // Create portraits for current turn order.
         foreach (Character c in characters)
         {
@@ -78,26 +81,45 @@ public class TurnOrder : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
             if (c.GetFaction() == Faction.Friendly)
             {
-                if (combatTurnOrder.IsNextRoundGetCard() && !getCardMarkerDisplayed)
+                if (combatTurnOrder.GetPlayerTurnCount() == 4 &&
+                    combatTurnOrder.GetPrevActiveCharacter().GetFaction() == Faction.Friendly)
                 {
-                    if (turnOrderIndex > combatTurnOrder.GetFullRoundMarkerPosition())
+
+                }
+                else
+                {
+                    friendlySeen++;
+                    if (friendlySeen == numFriendlysInToDisplayCard)
                     {
                         GameObject getCardMarkerObject = Instantiate(_getCardMarkerPrefab, _turnOrderPanel.transform);
                         _getCardMarker = getCardMarkerObject.GetComponent<GetCardMarker>();
                         getCardMarkerDisplayed = true;
                     }
                 }
-                else if(combatTurnOrder.IsGetCardRound()             && 
-                        !getCardMarkerDisplayed                      && 
-                        combatTurnOrder.IsFriendlyInPendingOrder()   && 
-                        !combatTurnOrder.IsFriendlyInExecutedOrder() &&
-                        combatTurnOrder.GetActiveCharacter().GetFaction() != Faction.Friendly)
-                {
-                    GameObject getCardMarkerObject = Instantiate(_getCardMarkerPrefab, _turnOrderPanel.transform);
-                    _getCardMarker = getCardMarkerObject.GetComponent<GetCardMarker>();
-                    getCardMarkerDisplayed = true;
-                }
             }
+
+            //if (c.GetFaction() == Faction.Friendly)
+            //{
+            //    if (combatTurnOrder.IsNextRoundGetCard() && !getCardMarkerDisplayed)
+            //    {
+            //        if (turnOrderIndex > combatTurnOrder.GetFullRoundMarkerPosition())
+            //        {
+            //            GameObject getCardMarkerObject = Instantiate(_getCardMarkerPrefab, _turnOrderPanel.transform);
+            //            _getCardMarker = getCardMarkerObject.GetComponent<GetCardMarker>();
+            //            getCardMarkerDisplayed = true;
+            //        }
+            //    }
+            //    else if(combatTurnOrder.IsGetCardRound()             && 
+            //            !getCardMarkerDisplayed                      && 
+            //            combatTurnOrder.IsFriendlyInPendingOrder()   && 
+            //            !combatTurnOrder.IsFriendlyInExecutedOrder() &&
+            //            combatTurnOrder.GetActiveCharacter().GetFaction() != Faction.Friendly)
+            //    {
+            //        GameObject getCardMarkerObject = Instantiate(_getCardMarkerPrefab, _turnOrderPanel.transform);
+            //        _getCardMarker = getCardMarkerObject.GetComponent<GetCardMarker>();
+            //        getCardMarkerDisplayed = true;
+            //    }
+            //}
 
             PortraitButton pb = CombatUI.Instance.CreateCharacterPortrait(c, _turnOrderPanel.transform);
             CombatUI.Instance._characterPortraits.TryAdd(pb.Character, pb);
