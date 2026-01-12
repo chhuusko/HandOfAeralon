@@ -77,7 +77,7 @@ public class Tutorial : MonoBehaviour
             _currentPopup = popup;
 
             CombatCamera[] camera = FindObjectsByType<CombatCamera>(FindObjectsSortMode.None);
-            if (camera[0] != null)
+            if (camera.Any() && camera[0] != null)
             {
                 camera[0].FreezeCamera = true;
             }
@@ -101,7 +101,7 @@ public class Tutorial : MonoBehaviour
         _blocker.gameObject.SetActive(false);
 
         CombatCamera[] camera = FindObjectsByType<CombatCamera>(FindObjectsSortMode.None);
-        if (camera[0] != null)
+        if (camera.Any() && camera[0] != null)
         {
             camera[0].FreezeCamera = false;
         }
