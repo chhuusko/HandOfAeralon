@@ -69,6 +69,8 @@ public class StatusEffectDataEditor : Editor
        {
            EditorGUILayout.HelpBox("StatusEffectTypeName field not found!", MessageType.Error);
        }
+       
+       serializedObject.ApplyModifiedProperties();
     }
 
     private int GetCurrentTypeIndex(string typeName)
