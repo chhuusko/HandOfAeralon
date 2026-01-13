@@ -20,9 +20,9 @@ public class ResonantRecovery : Trait
         combinedModifier += modifier;
     }
 
-    public override void OnAbilityDataCreated(AbilityExecutionData abilityData)
+    public override void OnAbilityCast(Character character, Ability ability)
     {
-        if (abilityData.Ability is not ResonantBlastAOE)
+        if (ability is not ResonantBlastAOE)
         {
             return;
         }

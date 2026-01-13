@@ -10,7 +10,6 @@ public class AssassinsReprieve : Trait
         }
 
         var data = Data as FloatModifierData;
-
         if (!data)
         {
             return;

@@ -26,9 +26,9 @@ public class CrescendoSmash : Trait
         combinedModifier += modifier;
     }
 
-    public override void OnAbilityDataCreated(AbilityExecutionData abilityData)
+    public override void OnAbilityCast(Character character, Ability ability)
     {
-        if (abilityData.Ability is not LuteSmash_SingleTarget)
+        if (ability is not LuteSmash_SingleTarget)
         {
             return;
         }
