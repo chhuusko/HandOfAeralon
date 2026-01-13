@@ -3329,12 +3329,7 @@ PrefabInstance:
         Highlighted <font-weight=800><color=#FFFFFF>keywords</color></font-weight>
         inside tooltips can be hovered over to reveal deeper explanations of mechanics
         such as Buffs, Debuffs, or special rules. Mastering keywords is essential
-        for understanding more complex interactions. \n
-
-        {physical_damage}Damage{/physical_damage}
-        values shown in {ability}abilities{/ability} can also be hovered over to
-        see the full {physical_damage}damage{/physical_damage} calculation, including
-        modifiers from stats, traits, and active effects. '
+        for understanding more complex interactions. '
       objectReference: {fileID: 0}
     - target: {fileID: 1467067411037760469, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -4043,6 +4038,30 @@ PrefabInstance:
         can modify stats, alter {ability}ability{/ability} behavior, or introduce
         conditional effects.\\n\r\nClass-specific traits are more rare and often
         more powerful positive traits, shaping unique playstyles.\r\n"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3710907245535460356, guid: 2256ce73421755a45912b2f2e87e9884,
+        type: 3}
+      propertyPath: m_text
+      value: "Here you can also view a character\u2019s full stat breakdown, including
+        {heal}Health{/heal}, {physical_damage}Damage{/physical_damage}, <font-weight=800><color=#FFFFFF>Initiative</color></font-weight>,
+        and <font-weight=800><color=#FFFFFF>Movement Points (MP)</color></font-weight>;
+        which can all be <font-weight=800><color=#FFFFFF>modified</color></font-weight>
+        by <font-weight=800><color=#FFFFFF>traits</color></font-weight> and <font-weight=800><color=#FFFFFF>status
+        effects</color></font-weight>.\\n\r\n{heal}Health{/heal} determines how much
+        {physical_damage}damage{/physical_damage} a character can take. If a character\u2019s
+        {heal}Health{/heal} reaches <font-weight=800><color=#FFFFFF>0</color></font-weight>,
+        they are <font-weight=800><color=#FFFFFF>permanently dead</color></font-weight>.
+        {heal}Health{/heal} can be restored through {ability}abilities{/ability},
+        {card}cards{/card}, or in the shop.\\n\r\n{physical_damage}Damage{/physical_damage}
+        represents the character\u2019s base {physical_damage}damage{/physical_damage}
+        value. {ability}Ability{/ability} {physical_damage}damage{/physical_damage}
+        multipliers scale from this stat. \\n\r\n<font-weight=800><color=#FFFFFF>Initiative</color></font-weight>
+        determines <font-weight=800><color=#FFFFFF>turn order</color></font-weight>
+        each round; characters act from <font-weight=800><color=#FFFFFF>highest to
+        lowest</color></font-weight>, and the order <font-weight=800><color=#FFFFFF>updates</color></font-weight>
+        if <font-weight=800><color=#FFFFFF>Initiative changes</color></font-weight>
+        during combat.\\n\r\n<font-weight=800><color=#FFFFFF>Movement Points (MP)</color></font-weight>
+        determine how many tiles a character can move during their turn."
       objectReference: {fileID: 0}
     - target: {fileID: 3787342098017550497, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
@@ -5459,15 +5478,15 @@ PrefabInstance:
     - target: {fileID: 8521765745603833929, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
       propertyPath: m_text
-      value: "Between combats, you may manage your party here.\\n\r\nYou can:\r\n
-        \u2022 Recruit new characters\r\n \u2022 Sell existing ones\r\n \u2022 {heal}Heal{/heal}
-        your party, you will get a free {heal}heal{/heal} now to try it out\r\n \u2022
-        Inspect characters in detail via the Info Panel\\n\r\nCharacters offered
-        in the shop are <font-weight=800><color=#FFFFFF>generated with some randomness</color></font-weight>,
-        meaning their <font-weight=800><color=#FFFFFF>stats and traits may vary</color></font-weight>.
-        Keep an eye out for characters whose stats and traits best fit your current
-        strategy. Striving to have a full party of characters as soon as possible
-        is recommended."
+      value: "This is the Shop, between combats, you may manage your party here.\\n\r\nYou
+        can:\r\n \u2022 Recruit new characters\r\n \u2022 Sell existing ones\r\n
+        \u2022 {heal}Heal{/heal} your party, you will get a free {heal}heal{/heal}
+        now to try it out\r\n \u2022 Inspect characters in detail via the Info Panel\\n\r\nCharacters
+        offered in the shop are <font-weight=800><color=#FFFFFF>generated with some
+        randomness</color></font-weight>, meaning their <font-weight=800><color=#FFFFFF>stats
+        and traits may vary</color></font-weight>. Keep an eye out for characters
+        whose stats and traits best fit your current strategy. Striving to have a
+        full party of characters as soon as possible is recommended."
       objectReference: {fileID: 0}
     - target: {fileID: 8565945816878202409, guid: 2256ce73421755a45912b2f2e87e9884,
         type: 3}
