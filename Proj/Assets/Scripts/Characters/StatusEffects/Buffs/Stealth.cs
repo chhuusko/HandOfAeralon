@@ -49,7 +49,7 @@ public class Stealth : StatusEffect
         combinedModifier += modifier;
     }
 
-    public override void OnAbilityUsed(AbilityExecutionData abilityData)
+    public override void OnAbilityDataCreated(AbilityExecutionData abilityData)
     {
         if (abilityData.Damage > 0)
         {

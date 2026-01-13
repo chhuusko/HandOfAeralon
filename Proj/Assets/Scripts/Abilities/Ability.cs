@@ -153,6 +153,7 @@ public abstract class Ability : ScriptableObject
         RunAbility(casterTile, targetTile);
 
         Selector._instance.InvokeCharacterActionStopped();
+        CombatEventManager.InvokeAfterAbilityCast(caster, this);
 
         yield return new WaitForSeconds(3);
         caster.Animator.SetBool("AbilityOngoing", false);

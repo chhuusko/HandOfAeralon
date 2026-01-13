@@ -62,6 +62,7 @@ public abstract class RoundAOEAbility : AOEAbility
 
         RunAbility(casterTile, targetTile);
         Selector._instance.InvokeCharacterActionStopped();
+        CombatEventManager.InvokeAfterAbilityCast(caster, this);
         yield return new WaitForSeconds(3);
 
         caster.Animator.SetBool("AbilityOngoing", false);

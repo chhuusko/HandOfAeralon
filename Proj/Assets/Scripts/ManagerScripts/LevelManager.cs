@@ -19,7 +19,6 @@ public class LevelManager : ScriptableObject
     private string[] _combatList;
     private string[] _generatedList;
     private int _level = 0;
-    //private int _gameLevels = 10;
     private int _difficulty = 0;
 
     private int statlevel;
@@ -37,6 +36,7 @@ public class LevelManager : ScriptableObject
 
     List<string> easyList, mediumList, hardList;
 
+    private int maxGameLevel = 12;
     public static LevelManager GetInstance()
     {
         if (_instance == null)
@@ -178,17 +178,21 @@ public class LevelManager : ScriptableObject
 
             Application.targetFrameRate = menuFPSCap;
             QualitySettings.vSyncCount = 0;
-            if (_level+1 > 12)
-            {
-                RestartGame();
-            }
-            else
-            {
-                SceneManager.LoadScene("ShopScene");
-            }
+            
+            
+            SceneManager.LoadScene("ShopScene");
+            
             
 
         }
+    }
+    public bool IsGameWon()
+    {
+        if (_level+1 > maxGameLevel)
+        {
+            return true;
+        }
+        return false;
     }
     private void LoadScene(List<string> sceneList)
     {
