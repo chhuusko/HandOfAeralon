@@ -145,7 +145,7 @@ MonoBehaviour:
   m_text: Skip tutorial
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9874f9c8d38903e499aa5139a008d96d, type: 2}
-  m_sharedMaterial: {fileID: 3094104753569673064, guid: 9874f9c8d38903e499aa5139a008d96d,
+  m_sharedMaterial: {fileID: 1564895059797498564, guid: 9874f9c8d38903e499aa5139a008d96d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -241,8 +241,8 @@ RectTransform:
   m_GameObject: {fileID: 7828035589740612082}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 794511720715833412}
   m_Father: {fileID: 0}

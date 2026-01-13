@@ -10,7 +10,7 @@ public class AudioManager : MonoBehaviour
     
     private List<EventInstance> events;
 
-    private VCA masterVCA;
+    private Bus masterBus;
     
     private void Awake()
     {
@@ -29,15 +29,14 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        //masterVCA = RuntimeManager.GetVCA("vca:/Master");
-        //// 🔍 DEBUG
-        //FMOD.RESULT result = masterVCA.getVolume(out float volume);
-        //Debug.Log($"VCA getVolume result: {result}, volume: {volume}");
+        masterBus = RuntimeManager.GetBus("bus:/");
+        masterBus.getVolume(out float volume);
+        Debug.Log($"Master Bus volume: {volume}");
     }
 
     public void SetMasterVolume(float volume)
     {   
-        masterVCA.setVolume(volume);
+        masterBus.setVolume(volume);
     }
     public void PlayOneShot(EventReference sound, Vector3 position)
     {

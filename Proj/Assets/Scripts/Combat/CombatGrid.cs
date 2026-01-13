@@ -439,7 +439,8 @@ public class CombatGrid : MonoBehaviour
         CharacterClass characterClass = characterData.GetCharacterClass();
 
         // Instantiate prefab
-        GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterClass);
+        //GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterClass);
+        GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterClass, faction);
         GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, rotation);
         Character characterScript = characterObject.GetComponent<Character>();
 
