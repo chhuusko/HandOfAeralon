@@ -34,6 +34,7 @@ public class InputHandler : MonoBehaviour
     private void EndTurn(InputAction.CallbackContext context)
     {
         CombatUI.Instance.EndTurn();
+        CombatUI.Instance.StartCombat();
     }
     
 
