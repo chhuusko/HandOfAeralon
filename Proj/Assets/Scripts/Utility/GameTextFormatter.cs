@@ -182,6 +182,25 @@ public static class GameTextFormatter
             $"<link=\"{character.CharacterID}\"><u>{factionName} {className}</link></u>", color);
     }
 
+    public static string CharacterColoredLabel(Character character)
+    {
+        if (character == null)
+        {
+            Debug.LogWarning("Character is null");
+            return string.Empty;
+        }
+        
+        Color color = ColorDatabase.Instance.GetCharacterColor(character);
+
+        if (character.GetFaction() == Faction.Friendly)
+        {
+            return TextMarkupExtensions.Colorize(character.Data.Name, color);
+        }
+        string factionName = character.GetFaction().ToString();
+        string className = character.GetCharacterClass().ToString();
+        return TextMarkupExtensions.Colorize($"{factionName} {className}", color);
+    }
+
     /// <summary>
     /// Creates a colored label for the given status effect.
     /// </summary>

@@ -117,7 +117,8 @@ public abstract class StatusEffect
     public virtual void OnBurnApplied() {}
     public virtual void OnCombatEnded() {}
     public virtual void OnTakeDamage() {}
-    public virtual void OnAbilityUsed(AbilityExecutionData abilityData) {}
+    public virtual void OnAbilityDataCreated(AbilityExecutionData abilityData) {}
+    public virtual void OnAbilityCast(Character character, Ability ability) {}
     public virtual void ModifyIncomingDamage(ref float damage, ref float combinedModifier, Ability ability) {}
     public virtual void ModifyOutgoingDamage(ref float damage, ref float combinedModifier, Ability ability) {}
     public virtual void ModifyIncomingHeal(ref float heal, ref float combinedModifier, Ability ability) {}

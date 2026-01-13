@@ -53,7 +53,7 @@ public class AbilityHandler : MonoBehaviour
         Selector._instance.InvokeCharacterActionStarted();
 
         _characterCaster.CanUseAbility = false;
-        CombatEventManager.InvokeOnAbilityCast();
+        CombatEventManager.InvokeBeforeAbilityCast();
         StartCoroutine(ability.StartAbilityEffects(_casterTile, targetTile));
         _characterCaster.StartAbilityCooldown(ability);
         return true;
@@ -100,7 +100,7 @@ public class AbilityHandler : MonoBehaviour
 
     /// <summary>
     /// Calculates all tiles that the pending ability can target from the caster's position.
-    /// Fetches tiles from the ability’s range calculation and filters out untargetable tiles.
+    /// Fetches tiles from the abilityï¿½s range calculation and filters out untargetable tiles.
     /// Saves the result into _tilesInRange.
     /// </summary>
     public void CalculateAbilityRange(CombatGridTile specificTile = null)
@@ -138,7 +138,7 @@ public class AbilityHandler : MonoBehaviour
 
     /// <summary>
     /// Helper wrapper that asks the ability to compute which tiles are in range
-    /// from the caster’s tile using its RangeCalculation.
+    /// from the casterï¿½s tile using its RangeCalculation.
     /// </summary>
     private List<CombatGridTile> GetAvailableTargets(Ability ability)
     {

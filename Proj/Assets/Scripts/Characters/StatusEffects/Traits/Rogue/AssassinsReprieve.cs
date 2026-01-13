@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AssassinsReprieve : Trait
 {
-    public override void OnAbilityUsed(AbilityExecutionData abilityData)
+    public override void OnAbilityDataCreated(AbilityExecutionData abilityData)
     {
         if (!abilityData.CharacterDied || abilityData.Caster != Character)
         {

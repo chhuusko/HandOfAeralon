@@ -39,7 +39,8 @@ public static class CombatEventManager
 
     public static event Action<AbilityExecutionData> OnAbilityDataCreated;
 
-    public static event Action OnAbilityCast;
+    public static event Action BeforeAbilityCast;
+    public static event Action<Character, Ability> AfterAbilityCast;
     
     public static event Action<Character, bool> OnCharacterMove;
 
@@ -113,8 +114,11 @@ public static class CombatEventManager
     public static void InvokeOnAbilityDataCreated(AbilityExecutionData result)
        => OnAbilityDataCreated?.Invoke(result);
 
-    public static void InvokeOnAbilityCast()
-       => OnAbilityCast?.Invoke();
+    public static void InvokeBeforeAbilityCast()
+       => BeforeAbilityCast?.Invoke();
+    
+    public static void InvokeAfterAbilityCast(Character character, Ability ability)
+        => AfterAbilityCast?.Invoke(character, ability);
     
     public static void InvokeOnCharacterMove(Character character, bool isMoving)
         => OnCharacterMove?.Invoke(character, isMoving);

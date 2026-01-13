@@ -40,7 +40,7 @@ public class WarpathHustle : Trait
         Character.Data.SetBaseMovementPoints(_originalMovementPoints);
     }
 
-    public override void OnAbilityUsed(AbilityExecutionData abilityData)
+    public override void OnAbilityDataCreated(AbilityExecutionData abilityData)
     {
         if (abilityData.Damage <= 0 || abilityData.Target?.GetFaction() == Character.GetFaction())
         {

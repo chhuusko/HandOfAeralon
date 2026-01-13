@@ -16,10 +16,10 @@ public class AbilityUI : MonoBehaviour
 
     private void OnEnable()
     {
-        CombatEventManager.OnAbilityCast += UpdateAbilityButton;
+        CombatEventManager.BeforeAbilityCast += UpdateAbilityButton;
         CombatEventManager.OnCharacterMove += CharacterMoving;
         CombatEventManager.OnEnterCombatStatePlaceCharacter += LoadAbilities;
-        CombatEventManager.OnAbilityCast += DeactivateBorder;
+        CombatEventManager.BeforeAbilityCast += DeactivateBorder;
 
         StartCoroutine(WaitForSelector());
     }
@@ -245,10 +245,10 @@ public class AbilityUI : MonoBehaviour
 
     private void OnDisable()
     {
-        CombatEventManager.OnAbilityCast -= UpdateAbilityButton;
+        CombatEventManager.BeforeAbilityCast -= UpdateAbilityButton;
         CombatEventManager.OnCharacterMove -= CharacterMoving;
         CombatEventManager.OnEnterCombatStatePlaceCharacter -= LoadAbilities;
-        CombatEventManager.OnAbilityCast -= DeactivateBorder;
+        CombatEventManager.BeforeAbilityCast -= DeactivateBorder;
         Selector._instance.OnCharacterDeselected -= DeactivateBorder;
 
         foreach (var abilityButton in _abilityButtons)
