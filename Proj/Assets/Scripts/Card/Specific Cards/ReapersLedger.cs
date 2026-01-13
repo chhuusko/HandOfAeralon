@@ -23,4 +23,9 @@ public class ReapersLedger : Card
         return Mathf.RoundToInt(character.GetStatusEffectManager().ModifyIncomingDamage(damage, null));
 
     }
+    public override string GetDescription()
+    {
+        int damage = baseDamage + (GlobalGameManager.GetInstance().GetGameData().reapersLedgerKills * damageIncrease);
+        return description.Replace("{damage}", ""+damage);
+    }
 }

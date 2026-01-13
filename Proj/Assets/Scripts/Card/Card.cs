@@ -123,5 +123,9 @@ public class Card : ScriptableObject
     {
 
     }
+    public virtual string GetDescription()
+    {
+        return description;
+    }
 }
 
