@@ -3461,6 +3461,12 @@ PrefabInstance:
       propertyPath: _factionIndicator
       value: 
       objectReference: {fileID: 5417636238834597196}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
+      propertyPath: _stunnedVFXPrefab
+      value: 
+      objectReference: {fileID: 5489575563907619933, guid: 2b8dbda4508b152499b375b38438760d,
+        type: 3}
     - target: {fileID: 5632698098917217084, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
         type: 3}
       propertyPath: m_Name

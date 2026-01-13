@@ -155,7 +155,7 @@ public static class GameTextFormatter
             return string.Empty;
         }
         
-        Color color = ColorDatabase.Instance.GetCharacterColor(character);
+        Color color = ColorDatabase.Instance.GetCharacterColor(character.Data);
         string name = $"<link=\"{character.CharacterID}\"><u>{character.Data.Name}</link></u>";
         
         return TextMarkupExtensions.Colorize(name, color);
@@ -174,7 +174,7 @@ public static class GameTextFormatter
             return string.Empty;
         }
         
-        Color color = ColorDatabase.Instance.GetCharacterColor(character);
+        Color color = ColorDatabase.Instance.GetCharacterColor(character.Data);
         string factionName = $"{character.GetFaction().ToString()}";
         string className = $"{character.GetCharacterClass().ToString()}";
         
@@ -182,22 +182,22 @@ public static class GameTextFormatter
             $"<link=\"{character.CharacterID}\"><u>{factionName} {className}</link></u>", color);
     }
 
-    public static string CharacterColoredLabel(Character character)
+    public static string CharacterColoredLabel(CharacterData data)
     {
-        if (character == null)
+        if (data == null)
         {
             Debug.LogWarning("Character is null");
             return string.Empty;
         }
         
-        Color color = ColorDatabase.Instance.GetCharacterColor(character);
+        Color color = ColorDatabase.Instance.GetCharacterColor(data);
 
-        if (character.GetFaction() == Faction.Friendly)
+        if (data.Faction == Faction.Friendly)
         {
-            return TextMarkupExtensions.Colorize(character.Data.Name, color);
+            return TextMarkupExtensions.Colorize(data.Name, color);
         }
-        string factionName = character.GetFaction().ToString();
-        string className = character.GetCharacterClass().ToString();
+        string factionName = data.Faction.ToString();
+        string className = data.CharacterClass.ToString();
         return TextMarkupExtensions.Colorize($"{factionName} {className}", color);
     }
     public static string CharacterColoredLabel(CharacterData data, string text)
