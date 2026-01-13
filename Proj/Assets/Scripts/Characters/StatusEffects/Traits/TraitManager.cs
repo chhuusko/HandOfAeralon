@@ -23,7 +23,8 @@ public class TraitManager
         
         if (existing != null)
         {
-            existing.IncreaseDuration(statusEffect.Duration);
+            int longestDuration = statusEffect.Duration > existing.Duration ? statusEffect.Duration : existing.Duration;
+            existing.SetDuration(longestDuration);
             return false;
         }
         _statusEffects.Add(statusEffect);
