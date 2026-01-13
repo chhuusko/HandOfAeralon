@@ -99,8 +99,8 @@ public class ShopCharacterTooltip : MonoBehaviour
         ClassData classData = character.ClassData;
         Sprite sprite = classData.classImage;
         _characterIcon.sprite = sprite;
-        _characterClassName.text = classData.name;
-        _characterName.text = character.Name;
+        _characterClassName.text = GameTextFormatter.CharacterColoredLabel(character, classData.name);
+        _characterName.text = GameTextFormatter.CharacterColoredLabel(character, character.Name);
     }
 
     private void UpdateCharacterTraits(CharacterData character)

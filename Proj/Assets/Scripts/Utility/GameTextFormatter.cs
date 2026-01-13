@@ -200,6 +200,16 @@ public static class GameTextFormatter
         string className = character.GetCharacterClass().ToString();
         return TextMarkupExtensions.Colorize($"{factionName} {className}", color);
     }
+    public static string CharacterColoredLabel(CharacterData data, string text)
+    {
+        if (data == null)
+        {
+            Debug.LogWarning("Character is null");
+            return string.Empty;
+        }
+        Color color = ColorDatabase.Instance.GetCharacterColor(data);
+        return TextMarkupExtensions.Colorize(text , color);
+    }
 
     /// <summary>
     /// Creates a colored label for the given status effect.
