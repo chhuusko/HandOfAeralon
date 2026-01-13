@@ -112,22 +112,12 @@ public class CardHandManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn += TurnChanged;
 
         onCardTargetCharacter += TurnEffects;
-
-        _controller.Enable();
-        _controller.Developer.SkipLevel.performed += SkipLevel;
     }
     private void OnDisable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= TurnChanged;
 
         onCardTargetCharacter -= TurnEffects;
-
-        _controller.Disable();
-        _controller.Developer.SkipLevel.performed -= SkipLevel;
-    }
-    private void SkipLevel(InputAction.CallbackContext context)
-    {
-        LevelManager.GetInstance().StartNextLevel();
     }
     public void drawHand()
     {
