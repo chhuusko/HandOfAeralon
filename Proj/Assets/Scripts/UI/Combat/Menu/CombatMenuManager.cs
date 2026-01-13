@@ -189,7 +189,10 @@ public class CombatMenuManager : MonoBehaviour
 
         if (playerWon)
         {
-            victoryScreen.SetWinScreen();
+            if(LevelManager.GetInstance().IsGameWon())
+                victoryScreen.SetGameWonScreen();
+            else
+                victoryScreen.SetWinScreen();
         }
         else
         {

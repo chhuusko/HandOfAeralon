@@ -41,6 +41,15 @@ public class CombatVictoryScreenMenu : MonoBehaviour
         AudioManager.Instance.PlayOneShot(FMODEvents.Instance.GoldGainAfterCombat, transform.position);
     }
 
+    public void SetGameWonScreen()
+    {
+        _goToShopButton.SetActive(false);
+        _title.text = "Congratulations!";
+        _info.text = "You have managed to defeat all the forces of Magor, well done!\n\n" +
+                     "Now you can rest assured that the world will be safe and secure for future generations to come!";
+        _mainMenuButtonText.text = "Quit Game";
+    }
+
     public void SetLoseScreen()
     {
         _goToShopButton.SetActive(false);
