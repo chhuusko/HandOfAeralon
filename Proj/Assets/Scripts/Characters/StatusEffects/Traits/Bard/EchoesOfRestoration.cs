@@ -9,7 +9,7 @@ public class EchoesOfRestoration : Trait
         _healModifier = 0f;
     }
 
-    public override void OnAbilityUsed(AbilityExecutionData abilityData)
+    public override void OnAbilityDataCreated(AbilityExecutionData abilityData)
     {
         if (abilityData.Ability is not ResonantBlastAOE)
         {

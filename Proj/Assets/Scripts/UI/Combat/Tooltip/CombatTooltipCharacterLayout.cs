@@ -54,7 +54,8 @@ public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler,
         // getting a status effect applied, otherwise it will be update when selecting the one it was applied to.
         CombatEventManager.OnStatusEffectAppliedToCharacter += UpdateSelectedCharacter;
         CombatEventManager.OnStatusEffectExpiredOnCharacter += RemoveStatusEffectOnSelectedCharacter;
-        CombatEventManager.OnStatusEffectDurationChanged += UpdateSelectedCharacter;
+        CombatEventManager.OnStatusEffectDurationChanged    += UpdateSelectedCharacter;
+        CombatEventManager.OnCharacterMove                  += UpdateTooltip;
 
         _animator = GetComponent<Animator>();
 
@@ -73,6 +74,7 @@ public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler,
         CombatEventManager.OnStatusEffectAppliedToCharacter -= UpdateSelectedCharacter;
         CombatEventManager.OnStatusEffectExpiredOnCharacter -= RemoveStatusEffectOnSelectedCharacter;
         CombatEventManager.OnStatusEffectDurationChanged    -= UpdateSelectedCharacter;
+        CombatEventManager.OnCharacterMove                  -= UpdateTooltip;
     }
 
     public void BindEventEventOnTakeDamage(Character character)
@@ -92,10 +94,10 @@ public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler,
         _characterStatValues.Insert((int)CharacterStatKey.CurrentDamage, "");
         _characterStatValues.Insert((int)CharacterStatKey.CurrentMovementPoints, "\n");
 
-        _characterStatValues.Insert((int)CharacterStatKey.BaseHealth, "");
-        _characterStatValues.Insert((int)CharacterStatKey.BaseInitiative, "");
-        _characterStatValues.Insert((int)CharacterStatKey.BaseDamage, "");
-        _characterStatValues.Insert((int)CharacterStatKey.BaseMovementPoints, "");
+        //_characterStatValues.Insert((int)CharacterStatKey.BaseHealth, "");
+        //_characterStatValues.Insert((int)CharacterStatKey.BaseInitiative, "");
+        //_characterStatValues.Insert((int)CharacterStatKey.BaseDamage, "");
+        //_characterStatValues.Insert((int)CharacterStatKey.BaseMovementPoints, "");
 
         _characterStatValueFieldTMP.text = "";
 
@@ -108,15 +110,25 @@ public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler,
     public void RebuildCharacterStatTooltip(Character character)
     {
 
-        _characterStatValues[(int)CharacterStatKey.CurrentHealth]          = $"{character.GetCurrentHealth()}";
-        _characterStatValues[(int)CharacterStatKey.CurrentInitiative]      = $"{character.GetInitiative()}";
-        _characterStatValues[(int)CharacterStatKey.CurrentDamage]          = $"{character.GetDamage()}";
-        _characterStatValues[(int)CharacterStatKey.CurrentMovementPoints]  = $"{character.GetMovementPoints()}\n";            
+        _characterStatValues[(int)CharacterStatKey.CurrentHealth] = $"{character.GetCurrentHealth()}/{character.GetMaxHealth()}";
+        _characterStatValues[(int)CharacterStatKey.CurrentInitiative] = $"{character.GetInitiative()}";
+        _characterStatValues[(int)CharacterStatKey.CurrentDamage] = $"{character.GetDamage()}";
+        _characterStatValues[(int)CharacterStatKey.CurrentMovementPoints] = $"{character.GetMovementPoints()}/{character.GetBaseMovementPoints()}\n";
 
-        _characterStatValues[(int)CharacterStatKey.BaseHealth]             = $"{character.GetMaxHealth()}";
-        _characterStatValues[(int)CharacterStatKey.BaseInitiative]         = $"{character.GetBaseInitiative()}";
-        _characterStatValues[(int)CharacterStatKey.BaseDamage]             = $"{character.GetBaseDamage()}";
-        _characterStatValues[(int)CharacterStatKey.BaseMovementPoints]     = $"{character.GetBaseMovementPoints()}";
+        //_characterStatValues[(int)CharacterStatKey.BaseHealth] = $"{character.GetMaxHealth()}";
+        //_characterStatValues[(int)CharacterStatKey.BaseInitiative] = $"{character.GetBaseInitiative()}";
+        //_characterStatValues[(int)CharacterStatKey.BaseDamage] = $"{character.GetBaseDamage()}";
+        //_characterStatValues[(int)CharacterStatKey.BaseMovementPoints] = $"{character.GetBaseMovementPoints()}";
+
+        //_characterStatValues[(int)CharacterStatKey.CurrentHealth]          = $"{character.GetCurrentHealth()}}";
+        //_characterStatValues[(int)CharacterStatKey.CurrentInitiative]      = $"{character.GetInitiative()}";
+        //_characterStatValues[(int)CharacterStatKey.CurrentDamage]          = $"{character.GetDamage()}";
+        //_characterStatValues[(int)CharacterStatKey.CurrentMovementPoints]  = $"{character.GetMovementPoints()}\n";            
+        //
+        //_characterStatValues[(int)CharacterStatKey.BaseHealth]             = $"{character.GetMaxHealth()}";
+        //_characterStatValues[(int)CharacterStatKey.BaseInitiative]         = $"{character.GetBaseInitiative()}";
+        //_characterStatValues[(int)CharacterStatKey.BaseDamage]             = $"{character.GetBaseDamage()}";
+        //_characterStatValues[(int)CharacterStatKey.BaseMovementPoints]     = $"{character.GetBaseMovementPoints()}";
 
         string stats = "";
         foreach (string value in _characterStatValues)
@@ -156,6 +168,8 @@ public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler,
         }
     }
     
+
+
     private void UpdateSelectedCharacter(Character characterSubject, StatusEffect statusEffect)
     {
         Character selectedCharacter = Selector._instance.GetSelectedCharacter();
@@ -184,13 +198,21 @@ public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler,
         UpdateCharacterTraits(character);
         UpdateCharacterStatusEffects(character);
     }
+    private void UpdateTooltip(Character character, bool isMoving)
+    {
+        _layout.SetActive(true);
+        UpdateCharacterHeaderInfo(character);
+        RebuildCharacterStatTooltip(character);
+        UpdateCharacterTraits(character);
+        UpdateCharacterStatusEffects(character);
+    }
 
     private void UpdateCharacterHeaderInfo(Character character)
     {
         ClassData classData = character.GetClassData();
         Sprite sprite = classData.classImage;
         _characterIcon.sprite = sprite;
-        _characterClassName.text = classData.name;
+        _characterClassName.text = GameTextFormatter.CharacterColoredLabel(character);
     }
 
     private void UpdateCharacterTraits(Character character)
