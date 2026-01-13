@@ -360,7 +360,12 @@ public class Character : MonoBehaviour
     private void Start()
     {
         UpdateFactionIndicator();
-        _animator.Play("WarriorIdle", 0, UnityEngine.Random.value);
+        if (Data.CharacterClass == CharacterClass.Barbarian)        _animator.Play("WarriorIdle", 0, UnityEngine.Random.value);
+        else if (Data.CharacterClass == CharacterClass.Rogue)       _animator.Play("RogueIdle", 0, UnityEngine.Random.value);
+        else if (Data.CharacterClass == CharacterClass.Bard)        _animator.Play("BardIdle", 0, UnityEngine.Random.value);
+        else if (Data.CharacterClass == CharacterClass.Sorceress)   _animator.Play("SorceressIdle", 0, UnityEngine.Random.value);
+        
+        
     }
 
     private void UpdateFactionIndicator()
