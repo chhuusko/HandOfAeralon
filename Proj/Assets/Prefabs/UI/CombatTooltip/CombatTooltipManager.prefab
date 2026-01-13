@@ -403,8 +403,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Current Health:\nCurrent Initiative: \nCurrent Damage:\nCurrent MovementPoints:
-    \n\nMax Health:\nMax Initiative: \nMax Damage:\nMax MovementPoints: "
+  m_text: "Health:\nBase nitiative: \nBase Damage:\nMovementPoints: "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6bd24cd4d3d515d48bd7ad1def33fa09, type: 2}
   m_sharedMaterial: {fileID: -5814162066966551001, guid: 6bd24cd4d3d515d48bd7ad1def33fa09,
@@ -1859,8 +1858,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7385472561311656255}
   m_HandleRect: {fileID: 4142872978523023068}
   m_Direction: 2
-  m_Value: 1.0000005
-  m_Size: 0.79460937
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2193,7 +2192,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 460, y: 290}
+  m_SizeDelta: {x: 460, y: 132.83}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4277064651932006117
 MonoBehaviour:
@@ -3070,16 +3069,7 @@ MonoBehaviour:
 
     10
 
-    1
-
-
-    1
-
-    10
-
-    100
-
-    1000'
+    1'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6bd24cd4d3d515d48bd7ad1def33fa09, type: 2}
   m_sharedMaterial: {fileID: -5814162066966551001, guid: 6bd24cd4d3d515d48bd7ad1def33fa09,
