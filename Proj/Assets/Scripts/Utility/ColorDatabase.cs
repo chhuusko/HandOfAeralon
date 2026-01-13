@@ -49,22 +49,22 @@ public class ColorDatabase : ScriptableObject
     /// <summary>
     /// Gets the UI color representing a character.
     /// </summary>
-    /// <param name="c">The character to get a color for.</param>
+    /// <param name="data">The character to get a color for.</param>
     /// <returns>The characters corresponding color.</returns>
-    public Color GetCharacterColor(Character c)
+    public Color GetCharacterColor(CharacterData data)
     {
-        if (c == null)
+        if (data == null)
         {
-            Debug.LogError($"{c} is null");
+            Debug.LogError($"{data} is null");
             return Color.white;
         }
 
-        if (c.GetFaction() == Faction.Enemy)
+        if (data.Faction == Faction.Enemy)
         {
             return EnemyColor;
         }
 
-        return c.GetCharacterClass() switch
+        return data.CharacterClass switch
         {
             CharacterClass.Barbarian => BarbarianColor,
             CharacterClass.Bard => BardColor,

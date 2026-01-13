@@ -9,7 +9,7 @@ using UnityEngine.Events;
 public class EnemyAI : MonoBehaviour
 {
     private const int TOP_N_ACTIONS = 2;
-    private const float TURN_START_WAIT_TIME = 1f;
+    private const float TURN_START_WAIT_TIME = 0.8f;
     private const float TURN_END_WAIT_TIME = 2.5f;
 
     private class AIAction
@@ -92,6 +92,8 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator AIBehaviour()
     {
+        yield return new WaitForSeconds(0.2f);
+
         if (_character.IsStunned)
         {
             DebugLog.JLWLog($"{_character.name} was Stunned and will pass their turn!");
@@ -370,6 +372,8 @@ public class EnemyAI : MonoBehaviour
         float min = float.MaxValue;
         foreach (var character in characters)
         {
+            if (character == null || character.GetCurrentHealth() == 0) continue;
+
             float distance = Vector3.Distance(_character.transform.position, character.transform.position);
             if (distance < min && character != _character)
             {
