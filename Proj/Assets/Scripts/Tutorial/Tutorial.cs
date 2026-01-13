@@ -193,7 +193,7 @@ public class Tutorial : MonoBehaviour
         characters[0].GetComponent<CharacterMovement>().OnCharacterStoppedMoving -= ShowAbilitiesPopup;
 
         _currentPopup = 5;
-        StartCoroutine(ShowPopupDelayed(_currentPopup));
+        ShowPopup(_currentPopup);
     }
 
     private void ShowCombatLogPopup()
