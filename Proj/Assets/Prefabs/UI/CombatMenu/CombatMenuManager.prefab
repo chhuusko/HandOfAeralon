@@ -996,7 +996,7 @@ PrefabInstance:
     - target: {fileID: 5319836478897208854, guid: 55dfab2e08cec8249ac6c8fd9224614a,
         type: 3}
       propertyPath: m_Size
-      value: 0.9999999
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5480397066056211639, guid: 55dfab2e08cec8249ac6c8fd9224614a,
         type: 3}
@@ -2192,6 +2192,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8812684874948000595, guid: 59135147591c6c74982c86a9a002c10d,
+        type: 3}
+      propertyPath: m_text
+      value: 'You manage to defeat all the forces of Magor, well done!
+
+
+        Now
+        you can rest assured that the world will be safe and secure for future generations
+        to come!'
       objectReference: {fileID: 0}
     - target: {fileID: 9071326566950084287, guid: 59135147591c6c74982c86a9a002c10d,
         type: 3}
