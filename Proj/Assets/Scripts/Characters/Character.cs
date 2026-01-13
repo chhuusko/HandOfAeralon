@@ -360,6 +360,7 @@ public class Character : MonoBehaviour
     private void Start()
     {
         UpdateFactionIndicator();
+        _animator.Play("WarriorIdle", 0, UnityEngine.Random.value);
     }
 
     private void UpdateFactionIndicator()
