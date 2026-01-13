@@ -29,6 +29,7 @@ public class Selector : MonoBehaviour
     [SerializeField] private Color _movementRangeColor;
     [SerializeField] private Color _hitTilesRangeColor;
 
+    public bool MovementActionPending = false;
     private CharacterMovement _characterMovement;
 
     public event Action<Character> OnCharacterSelected;
@@ -363,6 +364,7 @@ public class Selector : MonoBehaviour
             if (_characterMovement != null)
             {
                 //DebugLog.JLWLog($"Selector.cs | Drawing move range for {character.name}");
+                MovementActionPending = true;
                 _characterMovement.DrawMoveRange();
                 _characterMovement.DrawMoveRangeDelayed();
             }
@@ -392,7 +394,8 @@ public class Selector : MonoBehaviour
         _selectedCharacter = null;
         _characterMovement = null;
         _pendingCharacterActionType = CharacterActionType.Null;
-        
+        MovementActionPending = false;
+
 
         if (_currentState == SelectorState.PlacingCharacters)
         {
@@ -428,6 +431,7 @@ public class Selector : MonoBehaviour
     {
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
+            MovementActionPending = false;
             _characterMovement.ForgetMoveRange();
             ResetColorAllTiles();
             _pendingCharacterActionType = CharacterActionType.AbilityCasting;

@@ -372,7 +372,7 @@ public class EnemyAI : MonoBehaviour
         float min = float.MaxValue;
         foreach (var character in characters)
         {
-            if (IsDead(character)) continue;
+            if (character == null || character.GetCurrentHealth() == 0) continue;
 
             float distance = Vector3.Distance(_character.transform.position, character.transform.position);
             if (distance < min && character != _character)
@@ -1095,9 +1095,8 @@ public class EnemyAI : MonoBehaviour
         AIEndTurn.Invoke();
     }
 
-    private bool IsDead(Character character = null)
+    private bool IsDead()
     {
-        if (character = null) return _character == null || _character.GetCurrentHealth() <= 0;
-        else return character == null || character.GetCurrentHealth() <= 0;
+        return _character == null || _character.GetCurrentHealth() <= 0;
     }
 }
