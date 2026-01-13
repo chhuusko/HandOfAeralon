@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EmpoweringAnthem : Trait
 {
-    public override void OnAbilityUsed(AbilityExecutionData abilityData)
+    public override void OnAbilityDataCreated(AbilityExecutionData abilityData)
     {
         if (abilityData.Ability is not InspiringAnthem_AOE)
         {

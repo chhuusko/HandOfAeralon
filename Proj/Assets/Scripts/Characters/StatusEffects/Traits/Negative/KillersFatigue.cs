@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class KillersFatigue : Trait
 {
-    public override void OnAbilityUsed(AbilityExecutionData abilityData)
+    public override void OnAbilityDataCreated(AbilityExecutionData abilityData)
     {
         if (!abilityData.CharacterDied)
         {

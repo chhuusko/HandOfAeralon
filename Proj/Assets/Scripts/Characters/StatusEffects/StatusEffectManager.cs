@@ -15,7 +15,8 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn += OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateDuration;
         CombatEventManager.OnEnterCombatStateEndTurn += OnTurnEnd;
-        CombatEventManager.OnAbilityDataCreated += OnAbilityUsed;
+        CombatEventManager.OnAbilityDataCreated += OnAbilityDataCreated;
+        CombatEventManager.AfterAbilityCast += AfterAbilityCast;
         CombatEventManager.OnEnterCombatStateEndCombat += OnCombatEnded;
         CombatEventManager.OnStatusEffectAppliedToCharacter += OnStatusEffectApplied;
         CombatEventManager.OnStatusEffectExpiredOnCharacter += OnStatusEffectRemovedFromAny;
@@ -476,7 +477,7 @@ public class StatusEffectManager : MonoBehaviour
         }
     }
     
-    private void OnAbilityUsed(AbilityExecutionData abilityData)
+    private void OnAbilityDataCreated(AbilityExecutionData abilityData)
     {
         if (!_character)
         {
@@ -490,7 +491,22 @@ public class StatusEffectManager : MonoBehaviour
         
         foreach (var statusEffect in GetAllEffectsSnapshot())
         {
-            statusEffect.OnAbilityUsed(abilityData);
+            statusEffect.OnAbilityDataCreated(abilityData);
+        }
+        
+        HandleExpiration();
+    }
+
+    private void AfterAbilityCast(Character character, Ability ability)
+    {
+        if (!_character || character != _character)
+        {
+            return;
+        }
+
+        foreach (var statusEffect in GetAllEffectsSnapshot())
+        {
+            statusEffect.OnAbilityCast(character, ability);
         }
         
         HandleExpiration();
@@ -602,7 +618,7 @@ public class StatusEffectManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateTakeTurn -= OnTurnStart;
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateDuration;
         CombatEventManager.OnEnterCombatStateEndTurn -= OnTurnEnd;
-        CombatEventManager.OnAbilityDataCreated -= OnAbilityUsed;
+        CombatEventManager.OnAbilityDataCreated -= OnAbilityDataCreated;
         CombatEventManager.OnEnterCombatStateEndCombat -= OnCombatEnded;
         CombatEventManager.OnStatusEffectAppliedToCharacter -= OnStatusEffectApplied;
         CombatEventManager.OnStatusEffectExpiredOnCharacter -= OnStatusEffectRemovedFromAny;

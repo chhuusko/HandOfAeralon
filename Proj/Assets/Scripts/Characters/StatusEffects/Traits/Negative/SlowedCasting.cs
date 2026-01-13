@@ -9,7 +9,7 @@ public class SlowedCasting : Trait
         _effectApplied = false;
     }
 
-    public override void OnAbilityUsed(AbilityExecutionData abilityData)
+    public override void OnAbilityDataCreated(AbilityExecutionData abilityData)
     {
         if (_effectApplied)
         {
