@@ -8,8 +8,7 @@ public class ShopCharacterTooltip : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private enum ShopCharacterStatKey
     {
-        CurrentHealth,
-        MaxHealth,
+        Health,
         CurrentDamage,
         CurrentInitiative,
         CurrentMovementPoints
@@ -46,8 +45,7 @@ public class ShopCharacterTooltip : MonoBehaviour
     }
     public void InitializeCharacterStats()
     {
-        _characterStatValues.Insert((int)ShopCharacterStatKey.CurrentHealth, "");
-        _characterStatValues.Insert((int)ShopCharacterStatKey.MaxHealth, "");
+        _characterStatValues.Insert((int)ShopCharacterStatKey.Health, "");
         _characterStatValues.Insert((int)ShopCharacterStatKey.CurrentDamage, "");
         _characterStatValues.Insert((int)ShopCharacterStatKey.CurrentInitiative, "");
         _characterStatValues.Insert((int)ShopCharacterStatKey.CurrentMovementPoints, "");
@@ -62,8 +60,7 @@ public class ShopCharacterTooltip : MonoBehaviour
 
     public void RebuildCharacterStatTooltip(CharacterData character)
     {
-        _characterStatValues[(int)ShopCharacterStatKey.CurrentHealth] = $"{character.CurrentHealthPoints}";
-        _characterStatValues[(int)ShopCharacterStatKey.MaxHealth] = $"{character.DerivedHealthPoints}";
+        _characterStatValues[(int)ShopCharacterStatKey.Health] = $"{character.CurrentHealthPoints} / {character.DerivedHealthPoints}";
         _characterStatValues[(int)ShopCharacterStatKey.CurrentDamage] = $"{character.DerivedDamage}";
         _characterStatValues[(int)ShopCharacterStatKey.CurrentInitiative] = $"{character.BaseInitiative}";
         _characterStatValues[(int)ShopCharacterStatKey.CurrentMovementPoints] = $"{character.BaseMovementPoints}";
