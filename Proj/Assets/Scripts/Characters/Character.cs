@@ -314,6 +314,8 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
     [SerializeField] private Animator _animator;
+    public GameObject _stunnedVFXPrefab;
+    private GameObject _stunnedVFX;
     public Animator Animator => _animator;
     public CharacterData Data => _data;
 
@@ -869,5 +871,25 @@ public class Character : MonoBehaviour
         {
             _data.OnBaseMovementPointsChanged -= OnBaseMovementPointsChanged;
         }
+    }
+
+    public void SpawnStunnedEffect()
+    {
+        _stunnedVFX = Instantiate(_stunnedVFXPrefab, transform);
+        Vector3 pos = _stunnedVFX.transform.position;
+        if(Data.CharacterClass == CharacterClass.Sorceress || Data.CharacterClass == CharacterClass.Bard)
+            pos.y = 1.9f;
+        else
+            pos.y = 1.6f;
+
+
+        _stunnedVFX.transform.position = pos;
+        _stunnedVFX.transform.localScale = Vector3.one * 0.1f;
+    }
+
+    public void DestroyStunnedEffect()
+    {
+        Destroy(_stunnedVFX);
+        _stunnedVFX = null;
     }
 }

@@ -3751,6 +3751,12 @@ PrefabInstance:
       objectReference: {fileID: 1077111507322812580}
     - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
         type: 3}
+      propertyPath: _stunnedVFXPrefab
+      value: 
+      objectReference: {fileID: 5489575563907619933, guid: 2b8dbda4508b152499b375b38438760d,
+        type: 3}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
       propertyPath: _data._characterClass
       value: 3
       objectReference: {fileID: 0}
