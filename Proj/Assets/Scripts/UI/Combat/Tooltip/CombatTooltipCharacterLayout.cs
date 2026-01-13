@@ -212,7 +212,7 @@ public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler,
         ClassData classData = character.GetClassData();
         Sprite sprite = classData.classImage;
         _characterIcon.sprite = sprite;
-        _characterClassName.text = classData.name;
+        _characterClassName.text = GameTextFormatter.CharacterColoredLabel(character);
     }
 
     private void UpdateCharacterTraits(Character character)
