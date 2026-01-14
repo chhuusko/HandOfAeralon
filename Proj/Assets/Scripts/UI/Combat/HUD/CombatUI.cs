@@ -58,10 +58,16 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Color _inactiveColor;
     [SerializeField] private Color _enemyActiveColor;
     [SerializeField] private Color _enemyInactiveColor;
+    [SerializeField] private Color _buttonInteractableColor;
+    [SerializeField] private Color _buttonUninteractableColor;
+    
+    [Header("Buttons")]
+    [SerializeField] private Button _startCombatButton;
+    [SerializeField] private Image _startCombatButtonBorder;
+    [SerializeField] private Button _endTurnButton;
+    [SerializeField] private Image _endTurnButtonBorder;
     
     [Header("Misc")]
-    [SerializeField] private Button _startCombatButton;
-    [SerializeField] private Button _endTurnButton;
     [SerializeField] private GameObject _partyPanelText;
     public bool bCombatStarted { get; private set; }
     public Dictionary<Character, PortraitButton> _characterPortraits = new();
@@ -87,11 +93,10 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnExitCombatStatePlaceCharacter += PlaceCharactersEnded;
         CombatEventManager.OnEnterCombatStateTakeTurn += StartTurn;
         CombatEventManager.OnEnterCombatStateTakeTurn += UpdateActivePortrait;
-        CombatEventManager.OnEnterCombatStateTakeTurn += DisableEndTurnButtonBorder;
-        CombatEventManager.OnCharacterDeath += UpdateCharacterPortraits;
+        CombatEventManager.OnEnterCombatStateTakeTurn += DisableEndTurnButtonFocus;
         CombatEventManager.OnCharacterPlaced += SetStartCombatButton;
-        CombatEventManager.OnAbilityDataCreated += EnableEndTurnButtonBorder;
-        CombatEventManager.OnCharacterMove += EnableEndTurnButtonBorder;
+        CombatEventManager.OnAbilityDataCreated += EnableEndTurnButtonFocus;
+        CombatEventManager.OnCharacterMove += EnableEndTurnButtonFocus;
 
         StartCoroutine(WaitForSelector());
     }
@@ -116,20 +121,23 @@ public class CombatUI : MonoBehaviour
     /// </summary>
     private void SetStartCombatButton()
     {
-        if (!CombatGrid._instance.AllCharactersPlaced())
+        if (!CombatGrid._instance.AllCharactersPlaced() || !_startCombatButton)
         {
             return;
         }
      
         _startCombatButton.interactable = true;
-        _startCombatButton.transform.Find("Focus").gameObject.SetActive(true);
+        _startCombatButton.transform.Find("Focus")?.gameObject.SetActive(true);
+        _startCombatButtonBorder.color = _buttonInteractableColor;
     }
 
     public void StartCombat()
     {
         if (!CombatGrid._instance.AllCharactersPlaced())
+        {
             return;
-
+        }
+        
         OnStartCombatButtonPressed?.Invoke();
         
         _startCombatButton.interactable = false;
@@ -145,50 +153,6 @@ public class CombatUI : MonoBehaviour
     private void SetSelectedCharacter(Character character)
     {
         SelectedCharacter = character;
-    }
-
-    private void EnableEndTurnButtonBorder(Character character, bool isMoving)
-    {
-        EnableEndTurnButtonBorder(character);
-    }
-    
-    private void EnableEndTurnButtonBorder(AbilityExecutionData data)
-    {
-        if (!data.Caster)
-        {
-            return;
-        }
-        
-        EnableEndTurnButtonBorder(data.Caster);
-    }
-
-    private void EnableEndTurnButtonBorder(Character character)
-    {
-        // Check if character can still act.
-        if (character.GetFaction() == Faction.Enemy || character.CanUseAbility)
-        {
-            return;
-        }
-        
-        // Rogues need to expend all movement points.
-        if (character.GetCharacterClass() == CharacterClass.Rogue && character.GetMovementPoints() == 0)
-        {
-            SetEndTurnButtonBorder(true);
-        }
-        else if (!character.CanMove)
-        {
-            SetEndTurnButtonBorder(true);
-        }
-    }
-
-    private void DisableEndTurnButtonBorder(Character character)
-    {
-        SetEndTurnButtonBorder(false);
-    }
-
-    private void SetEndTurnButtonBorder(bool active)
-    {
-        _endTurnButton.transform.Find("Focus").gameObject.SetActive(active);
     }
 
     public void EndTurn()
@@ -212,7 +176,6 @@ public class CombatUI : MonoBehaviour
     private void PlaceCharacterStarted()
     {
         Character c = CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter();
-        // UpdateCharacterPortraits();
         UpdateActivePortrait(c);
         UpdatePortraitColors(c);
         
@@ -285,23 +248,71 @@ public class CombatUI : MonoBehaviour
         SelectedCharacter = null;
         _abilityScript.ClearAbilityButtons();
     }
+    
+    private void EnableEndTurnButtonFocus(Character character, bool isMoving)
+    {
+        EnableEndTurnButtonFocus(character);
+    }
+    
+    private void EnableEndTurnButtonFocus(AbilityExecutionData data)
+    {
+        if (!data.Caster)
+        {
+            return;
+        }
+        
+        EnableEndTurnButtonFocus(data.Caster);
+    }
+
+    private void EnableEndTurnButtonFocus(Character character)
+    {
+        // Check if character can still act.
+        if (character.GetFaction() == Faction.Enemy || character.CanUseAbility)
+        {
+            return;
+        }
+        
+        // Rogues need to expend all movement points.
+        if (character.GetCharacterClass() == CharacterClass.Rogue && character.GetMovementPoints() == 0)
+        {
+            SetEndTurnButtonFocus(true);
+        }
+        else if (!character.CanMove)
+        {
+            SetEndTurnButtonFocus(true);
+        }
+    }
+
+    private void DisableEndTurnButtonFocus(Character character)
+    {
+        SetEndTurnButtonFocus(false);
+    }
+
+    private void SetEndTurnButtonFocus(bool active)
+    {
+        _endTurnButton?.transform.Find("Focus")?.gameObject.SetActive(active);
+    }
 
     private void SetEndTurnButtonInteractable()
     {
-        if (CurrentTurnCharacter && CurrentTurnCharacter.GetFaction() == Faction.Friendly)
+        if (!_endTurnButton || !_endTurnButtonBorder ||
+            !CurrentTurnCharacter || CurrentTurnCharacter.GetFaction() != Faction.Friendly)
         {
-            _endTurnButton.interactable = true;
+            return;
         }
+        _endTurnButton.interactable = true;
+        _endTurnButtonBorder.color = _buttonInteractableColor;
     }
 
     private void SetEndTurnButtonUninteractable()
     {
+        if (!_endTurnButton || !_endTurnButtonBorder)
+        {
+            return;
+        }
+        
         _endTurnButton.interactable = false;
-    }
-
-    private void UpdateCharacterPortraits(Character character)
-    {
-        // UpdateCharacterPortraits();
+        _endTurnButtonBorder.color = _buttonUninteractableColor;
     }
     
     /// <summary>
@@ -372,11 +383,10 @@ public class CombatUI : MonoBehaviour
         CombatEventManager.OnExitCombatStatePlaceCharacter -= PlaceCharactersEnded;
         CombatEventManager.OnEnterCombatStateTakeTurn -= StartTurn;
         CombatEventManager.OnEnterCombatStateTakeTurn -= UpdateActivePortrait;
-        CombatEventManager.OnEnterCombatStateTakeTurn -= DisableEndTurnButtonBorder;
-        CombatEventManager.OnCharacterDeath -= UpdateCharacterPortraits;
+        CombatEventManager.OnEnterCombatStateTakeTurn -= DisableEndTurnButtonFocus;
         CombatEventManager.OnCharacterPlaced -= SetStartCombatButton;
-        CombatEventManager.OnAbilityDataCreated -= EnableEndTurnButtonBorder;
-        CombatEventManager.OnCharacterMove -= EnableEndTurnButtonBorder;
+        CombatEventManager.OnAbilityDataCreated -= EnableEndTurnButtonFocus;
+        CombatEventManager.OnCharacterMove -= EnableEndTurnButtonFocus;
         
         Selector._instance.OnCharacterSelected -= SetSelectedCharacter;
         Selector._instance.OnCharacterSelected -= _abilityScript.LoadAbilities;
