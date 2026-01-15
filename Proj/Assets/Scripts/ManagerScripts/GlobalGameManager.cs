@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 
 public struct GameData
 {
-    public DateTime startTime;
+    public float startTime;
     public int saveSlot;
     public int seed;
     public int level; 
@@ -186,7 +186,7 @@ public class GlobalGameManager : ScriptableObject
     /// </summary>
     private void GetTemp(int slot)
     {
-        DateTime startTime = DateTime.UtcNow;
+        _currentGame.startTime = Time.unscaledTime;
         _currentGame = new GameData();
         _currentGame.saveSlot = slot;
         //_currentGame.seed = 67;
@@ -234,6 +234,17 @@ public class GlobalGameManager : ScriptableObject
     {
         _currentGame.reapersLedgerKills += change;
     }
+    public string getTimeText()
+    {
+
+        float span = (Time.unscaledTime - _currentGame.startTime);
+        int hours = (int)(span / 3600);
+        int minutes = (int)((span % 3600) / 60);
+        int seconds = (int)(span % 60);
+
+        return $"{hours:00}:{minutes:00}:{seconds:00}";
+    }
+
 }
 
 
