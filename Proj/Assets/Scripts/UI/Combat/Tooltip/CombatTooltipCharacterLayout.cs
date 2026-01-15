@@ -190,7 +190,7 @@ public class CombatTooltipCharacterLayout : MonoBehaviour, IPointerEnterHandler,
     private void UpdateCharacterHeaderInfo(Character character)
     {
         ClassData classData = character.GetClassData();
-        Sprite sprite = classData.friendlyImage;
+        Sprite sprite = character.GetFaction() == Faction.Friendly ? classData.friendlyImage : classData.enemyImage;
         _characterIcon.sprite = sprite;
         _characterClassName.text = GameTextFormatter.CharacterColoredLabel(character.Data);
     }
