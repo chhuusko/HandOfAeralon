@@ -33,6 +33,7 @@ public class Tutorial : MonoBehaviour
 
     private Canvas _canvas;
     private int _currentPopup = 0;
+    private bool _traitsAndStatusReady = false;
 
     void Start()
     {
@@ -44,7 +45,11 @@ public class Tutorial : MonoBehaviour
         }
 
         CombatUI.Instance.OnStartCombatButtonPressed += ShowMovementPointsPopup;
+        CombatUI.Instance.OnStartCombatButtonPressed += ShowTurnOrderPopup;
         CombatMenuManager.GetInstance().OnGoToShopButtonPressed += ShowShopPopup;
+        Selector._instance.OnSelectPlacementCharacterFromTile += ShowDeployPopup;
+        Selector._instance.OnPreviewAbilityRange += ShowAbilitiesPopup;
+        CardHandManager.onHover += ShowCardsPopup;
 
         HidePopups();
         
@@ -58,6 +63,11 @@ public class Tutorial : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         ShowPopup(popup);
+
+        if (popup == 6) // Combat Log
+        {
+            _traitsAndStatusReady = true;
+        }
     }
 
     public void ShowPopup(int popup)
@@ -141,14 +151,14 @@ public class Tutorial : MonoBehaviour
 
             switch(index)
             {
-                case 0: NextPopupDelayed(); break; // Introduction
-                case 1: NextPopupDelayed(); break; // Camera
-                case 2: NextPopupDelayed(); break; // Turn Order
+                case 0: NextPopup(); break; // Introduction
+                case 1: break; // Camera
+                case 2: break; // Turn Order
                 case 3: break; // Deploy Your Party
                 case 4: break; // Movement Points
                 case 5: break; // Abilities ...
-                case 6: NextPopupDelayed(); break; // Combat Log
-                case 7: NextPopupDelayed(); break; // Mana, Cards & Deck
+                case 6: break; // Combat Log
+                case 7: break; // Mana, Cards & Deck
                 case 8: break; // Traits & Status
                 case 9: break; // The Shop ...
             }
@@ -168,6 +178,8 @@ public class Tutorial : MonoBehaviour
             yield return null;
         }
 
+        Selector._instance.DeselectCharacter();
+
         CombatLog combatLog = FindFirstObjectByType<CombatLog>();
         if (combatLog != null)
         {
@@ -177,23 +189,44 @@ public class Tutorial : MonoBehaviour
         StartCoroutine(ShowPopupDelayed(0));
     }
 
+    private void ShowTurnOrderPopup()
+    {
+        if (GlobalGameManager.GetInstance().GetTotalBattlesWon() > 0)
+        {
+            CombatEventManager.OnCharacterPlaced -= ShowTurnOrderPopup;
+            _currentPopup = 2;
+            StartCoroutine(ShowPopupDelayed(_currentPopup));
+        }
+    }
+
+    private void ShowDeployPopup()
+    {
+        Selector._instance.OnSelectPlacementCharacterFromTile -= ShowDeployPopup;
+        _currentPopup = 3;
+        StartCoroutine(ShowPopupDelayed(_currentPopup));
+    }
+
     private void ShowMovementPointsPopup()
     {
-        List<GameObject> characters = CombatGrid._instance.GetAllFriendlyCharacters();
-        characters[0].GetComponent<CharacterMovement>().OnCharacterStoppedMoving += ShowAbilitiesPopup;
-
         CombatUI.Instance.OnStartCombatButtonPressed -= ShowMovementPointsPopup;
         _currentPopup = 4;
-        ShowPopup(_currentPopup);
+        StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 
     private void ShowAbilitiesPopup()
     {
-        List<GameObject> characters = CombatGrid._instance.GetAllFriendlyCharacters();
-        characters[0].GetComponent<CharacterMovement>().OnCharacterStoppedMoving -= ShowAbilitiesPopup;
-
+        Selector._instance.OnPreviewAbilityRange -= ShowAbilitiesPopup;
         _currentPopup = 5;
         ShowPopup(_currentPopup);
+    }
+
+    public void ShowTraitsAndStatusPopup()
+    {
+        if (!_traitsAndStatusReady) return;
+
+        _traitsAndStatusReady = false;
+        _currentPopup = 8;
+        StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 
     private void ShowCombatLogPopup()
@@ -205,6 +238,13 @@ public class Tutorial : MonoBehaviour
         }
 
         _currentPopup = 6;
+        StartCoroutine(ShowPopupDelayed(_currentPopup));
+    }
+
+    private void ShowCardsPopup(bool b)
+    {
+        CardHandManager.onHover -= ShowCardsPopup;
+        _currentPopup = 7;
         StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 
