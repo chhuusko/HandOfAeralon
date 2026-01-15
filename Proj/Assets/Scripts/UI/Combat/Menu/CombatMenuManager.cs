@@ -61,6 +61,10 @@ public class CombatMenuManager : MonoBehaviour
         CombatEventManager.OnEnterCombatStateEndCombat += OpenVictoryMenuScreen;
         CombatEventManager.OnEnterCombatStatePlaceCharacter += PostProcessingOFF;
 
+        HideVictroyScreenLayout();
+        HideOptionsLayout();
+        HideInGameLayout();
+
     }
 
     public static CombatMenuManager GetInstance() { return _instance; }
@@ -74,6 +78,9 @@ public class CombatMenuManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
+            if (IsVictroyScreenActive())
+                return;
+
             if (_combatMenuCanvas.enabled)
             {
                 if(_optionsLayout.activeSelf)
@@ -224,6 +231,11 @@ public class CombatMenuManager : MonoBehaviour
     private void HideVictroyScreenLayout()
     {
         _victoryScreenLayout.SetActive(false);
+    }
+    
+    public bool IsVictroyScreenActive()
+    {
+        return _victoryScreenLayout.activeSelf;
     }
 
     private void TurnOFFPostProcessingCombatCanvases()

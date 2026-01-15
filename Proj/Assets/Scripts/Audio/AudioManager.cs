@@ -31,9 +31,14 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        masterBus = RuntimeManager.GetBus("bus:/");
-        musicBus = RuntimeManager.GetBus("bus:/Music");
-        sfxBus = RuntimeManager.GetBus("bus:/SoundEffect");
+        if(RuntimeManager.GetBus("bus:/").isValid())
+            masterBus = RuntimeManager.GetBus("bus:/");
+
+        if(RuntimeManager.GetBus("bus:/Music").isValid())
+            musicBus = RuntimeManager.GetBus("bus:/Music");
+        
+        if (RuntimeManager.GetBus("bus:/Music").isValid())
+            sfxBus = RuntimeManager.GetBus("bus:/SoundEffect");
     }
 
     public void SetMasterVolume(float volume)
