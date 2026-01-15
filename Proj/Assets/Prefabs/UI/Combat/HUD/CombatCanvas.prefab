@@ -1691,8 +1691,12 @@ MonoBehaviour:
   _inactiveColor: {r: 1, g: 1, b: 1, a: 0.5019608}
   _enemyActiveColor: {r: 1, g: 0.44, b: 0.44, a: 1}
   _enemyInactiveColor: {r: 1, g: 0.44, b: 0.44, a: 0.5019608}
+  _buttonInteractableColor: {r: 1, g: 1, b: 1, a: 1}
+  _buttonUninteractableColor: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 0.8235294}
   _startCombatButton: {fileID: 5180242821507393611}
+  _startCombatButtonBorder: {fileID: 3828918717992616503}
   _endTurnButton: {fileID: 2218570836146977361}
+  _endTurnButtonBorder: {fileID: 1682369284652322847}
   _partyPanelText: {fileID: 4657868902917339552}
 --- !u!1 &4657868902917339552
 GameObject:
@@ -2636,7 +2640,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 0.8235294}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
