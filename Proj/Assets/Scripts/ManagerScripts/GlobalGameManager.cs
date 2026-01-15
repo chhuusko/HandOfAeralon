@@ -234,7 +234,7 @@ public class GlobalGameManager : ScriptableObject
     {
         _currentGame.reapersLedgerKills += change;
     }
-    public string getTimeText()
+    public string GetTimeText()
     {
 
         float span = (Time.unscaledTime - _currentGame.startTime);
