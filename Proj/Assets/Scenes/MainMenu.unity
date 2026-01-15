@@ -2509,8 +2509,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6123813652874307725, guid: 883f3c1d0e569204baa02e6740cf7b9f,
         type: 3}
+      propertyPath: _sfxVolume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6123813652874307725, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: _musicVolume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6123813652874307725, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
       propertyPath: _masterVolume
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6123813652874307725, guid: 883f3c1d0e569204baa02e6740cf7b9f,
         type: 3}
