@@ -16,10 +16,10 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: a7eb268ed3a39ab499ec34ceec713f50, type: 3}
   _range: 6
   _cooldown: 1
-  _description: "Deal {damage} (<b>70%</b> \xD7 Damage) {elemental_damage}Elemental
+  _description: "Deal {damage} (<b>60%</b> \xD7 Damage) {elemental_damage}Elemental
     damage{/elemental_damage} to all enemies in the area.\\n\\nEnemies with a Debuff
-    take {damage} (<b>100%</b> \xD7 Damage) damage instead.\\n\\nIf at least one
-    enemy is hit, {heal}heal{/heal} the Bard for <b>10%</b> of their maximum {health}Health{/health},
+    take {damage} (<b>90%</b> \xD7 Damage) damage instead.\\n\\nIf at least one enemy
+    is hit, {heal}heal{/heal} the Bard for <b>10%</b> of their maximum {health}Health{/health},
     plus <b>2.5%</b> for each additional enemy hit (up to <b>20%</b>). "
   _abilityTag: 10
   _type: 6
@@ -45,8 +45,8 @@ MonoBehaviour:
   _validTargets: 5
   _abilityAOEVFXSequence: {fileID: 0}
   _radius: 2
-  _damageMultiplier: 0.7
-  _damageMultiplierDebuffed: 1
+  _damageMultiplier: 0.6
+  _damageMultiplierDebuffed: 0.9
   _procentBaseHeal: 0.1
   _procentPerExtraEnemyHit: 0.025
   _maxHealProcent: 0.2
