@@ -467,6 +467,11 @@ public class EnemyAI : MonoBehaviour
                                 {
                                     result += 100f;
                                 }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
+                                {
+                                    result = -150f;
+                                }
                             }
                         }
                     }
@@ -503,6 +508,11 @@ public class EnemyAI : MonoBehaviour
                                 if (occupantPERCENTHP < 0.2f)
                                 {
                                     result += 100f;
+                                }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
+                                {
+                                    result = -150f;
                                 }
                             }
                         }
@@ -683,22 +693,22 @@ public class EnemyAI : MonoBehaviour
                             if (isEnemy)
                             {
                                 hitCount++;
-                                result += 30f;
+                                result += 10f;
 
                                 if (occupantPERCENTHP < 0.2f)
                                 {
                                     result += 999f;
                                 }
 
-                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
                                 {
-                                    result += Random.Range(0f, 20f);
+                                    result = -150f;
                                 }
                             }
                         }
                     }
-                    if (hitCount > 1) result += 50f;
-                    if (hitCount > 2) result += 50f;
+                    if (hitCount > 1) result += 20f;
+                    if (hitCount > 2) result += 30f;
                     if (hitCount == 0) result -= 100f;
                     float myPERCENTHP = _character.GetMaxHealth() == 0 ? 1f : _character.GetCurrentHealth() / _character.GetMaxHealth();
                     if (myPERCENTHP > 0.9f) result -= 100f;
@@ -793,6 +803,11 @@ public class EnemyAI : MonoBehaviour
                                 {
                                     result += 50f;
                                 }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
+                                {
+                                    result = -150f;
+                                }
                             }
                         }
                     }
@@ -848,6 +863,11 @@ public class EnemyAI : MonoBehaviour
                                 if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
                                 {
                                     result += 50f;
+                                }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
+                                {
+                                    result = -150f;
                                 }
                             }
                         }
@@ -940,6 +960,11 @@ public class EnemyAI : MonoBehaviour
                                 {
                                     result += Random.Range(0f, 20f);
                                 }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
+                                {
+                                    result = -150f;
+                                }
                             }
                         }
                     }
@@ -979,6 +1004,11 @@ public class EnemyAI : MonoBehaviour
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
                                 {
                                     result += Random.Range(0f, 20f);
+                                }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
+                                {
+                                    result = -150f;
                                 }
                             }
                         }
