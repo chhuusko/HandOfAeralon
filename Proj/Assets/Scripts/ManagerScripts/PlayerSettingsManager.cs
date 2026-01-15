@@ -10,6 +10,8 @@ public class PlayerSettingsManager : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private float _masterVolume;
+    [SerializeField] private float _musicVolume;
+    [SerializeField] private float _sfxVolume;
 
     private void Awake()
     {
@@ -45,8 +47,28 @@ public class PlayerSettingsManager : MonoBehaviour
         return _masterVolume; 
     }
 
-    public void SetMasterVolume(float masterVolume) 
+    public void SetMasterVolume(float volume) 
     { 
-        _masterVolume = masterVolume; 
+        _masterVolume = volume; 
     }
+    public float GetMusicVolume()
+    {
+        return _musicVolume;
+    }
+
+    public void SetMusicVolume(float volume)
+    {
+        _musicVolume = volume;
+    }
+    public float GetSFXVolume()
+    {
+        return _sfxVolume;
+    }
+
+    public void SetSFXVolume(float volume)
+    {
+        _sfxVolume = volume;
+    }
+
+
 }

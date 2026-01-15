@@ -3,30 +3,30 @@ using UnityEngine.UI;
 
 public class OptionsSettingMasterVolumeSlider : MonoBehaviour
 {
-    private Slider _masterVolumeSlider;
+    private Slider _slider;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private void Awake()
     {
-        _masterVolumeSlider = GetComponent<Slider>();
+        _slider = GetComponent<Slider>();
     }
 
     void Start()
     {
-        if(_masterVolumeSlider)
+        if(_slider)
         {
-            _masterVolumeSlider.onValueChanged.AddListener(OnValueChanged);
+            _slider.onValueChanged.AddListener(OnValueChanged);
         }
     }
 
     private void OnDestroy()
     {
-        _masterVolumeSlider.onValueChanged.RemoveListener(OnValueChanged);
+        _slider.onValueChanged.RemoveListener(OnValueChanged);
     }
 
     private void OnValueChanged(float value)
     {
-        AudioManager.Instance?.SetMasterVolume(value);
+        //AudioManager.Instance?.SetMasterVolume(value);
     }
 }
