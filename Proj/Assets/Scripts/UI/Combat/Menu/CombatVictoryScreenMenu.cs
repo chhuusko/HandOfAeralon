@@ -49,7 +49,7 @@ public class CombatVictoryScreenMenu : MonoBehaviour
         string victoryMessage = "You have managed to defeat all the forces of Magor, well done!\n\n" +
                      "Now you can rest assured that the world will be safe and secure for future generations to come!\n\n";
 
-        string summaryInfo = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins() + "\n"
+        string summaryInfo = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins(false) + "\n"
                              + "Total enemies killed: " + GlobalGameManager.GetInstance().GetTotalEnemiesKilled() + "\n"
                              + "Total heroes lost: " + GlobalGameManager.GetInstance().GetTotalHeroesLost() + "\n"
                              + "Total battles won: " + GlobalGameManager.GetInstance().GetTotalBattlesWon();
