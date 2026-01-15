@@ -755,8 +755,9 @@ public class Character : MonoBehaviour
      
     private IEnumerator RemoveCharacter()
     {
-
         Selector._instance.DeselectCharacter();
+        CombatGrid._instance?.GetTileAtCoord(_currentTileIndex.x, _currentTileIndex.y)
+            ?.GetComponent<CombatGridTile>()?.SetOccupant(null);
 
         CombatEventManager.InvokeOnCharacterDeath(this);
 

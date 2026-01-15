@@ -3,7 +3,12 @@ guid: a669c79529900654fbc2d08e0da5d66f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LP_Boulder_1_Group58829Mat
+    second: {fileID: 2100000, guid: 18c45de45bc749846b676d7fb53002e7, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -55,6 +55,11 @@ public class CharacterMovement : MonoBehaviour
         if (CombatManager._instance != null && CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter() != _character) return;
         if (Selector._instance != null && Selector._instance.GetSelectedCharacter() != _character) return;
 
+        if (Selector._instance != null)
+        {
+            if (!Selector._instance.MovementActionPending) return;
+        }
+
         GameObject currentTile = _character.GetCurrentTileComponent().gameObject;
         if (_character.GetMovementPoints() <= 0 || !_character.CanMove || _character.IsStunned)
         {
@@ -101,6 +106,11 @@ public class CharacterMovement : MonoBehaviour
     public void PreviewPath(CombatGridTile tile)
     {
         if (IsDead() || !_character.CanMove || _character.IsStunned) return;
+
+        if (Selector._instance != null)
+        {
+            if (!Selector._instance.MovementActionPending) return;
+        }
 
         if (_bIsMoving || tile == _character.GetCurrentTileComponent() || tile == null || !_tilesInRange.Contains(tile) || CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() != Faction.Friendly)
         {
