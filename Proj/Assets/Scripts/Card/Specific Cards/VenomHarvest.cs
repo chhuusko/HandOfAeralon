@@ -22,7 +22,14 @@ public class VenomHarvest : Card
 
             for (int i = poison.Duration; i > 0; i--)
             {
-                totalDamage += i;
+                var data = poison.Data as IntCapData;
+                if (!data)
+                {
+                    return 0;
+                }
+
+                var damage = data.Damage;
+                totalDamage += i*damage;
             }
         }
         return Mathf.RoundToInt(2 * character.GetStatusEffectManager().ModifyIncomingDamage(totalDamage, null));
