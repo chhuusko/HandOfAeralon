@@ -201,7 +201,7 @@ public class CardHandManager : MonoBehaviour
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
 
-        if (!cardContainer.GetCard().tags.Contains(CardTag.Etherial))
+        if (!cardContainer.GetCard().tags.Contains(CardTag.Ephemeral))
         {
             _cardsInDiscardPile.Add(cardContainer.GetCard());
         }
@@ -275,7 +275,7 @@ public class CardHandManager : MonoBehaviour
         List<CardContainer> removeList = new List<CardContainer>();
         for (int i = 0; i < _cardsInHand.Count; i++)
         {
-            if (_cardsInHand[i].GetCard().tags.Contains(CardTag.Etherial))
+            if (_cardsInHand[i].GetCard().tags.Contains(CardTag.Ephemeral))
             {
                 removeList.Add(_cardsInHand[i]);
             }

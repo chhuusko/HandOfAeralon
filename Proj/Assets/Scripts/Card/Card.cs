@@ -15,7 +15,7 @@ public enum TargetCondition
 }
 public enum CardTag
 {
-    Etherial,
+    Ephemeral,
     Exhaust
 }
 public enum CardRarity
