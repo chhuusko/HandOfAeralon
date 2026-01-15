@@ -37,7 +37,7 @@ public class BuyableCharacter : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     }
     public void SetCharacter(CharacterData characterData)
     {
-        portrait.sprite = characterData.ClassData.classImage;
+        portrait.sprite = characterData.ClassData.friendlyImage;
         _characterData = characterData;
     }
     public void OnPointerDown(PointerEventData eventData)
