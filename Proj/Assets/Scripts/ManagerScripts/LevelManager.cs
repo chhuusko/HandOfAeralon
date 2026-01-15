@@ -85,7 +85,7 @@ public class LevelManager : ScriptableObject
     }
     public void StartNextLevel() 
     {
-        Debug.Log(GlobalGameManager.GetInstance().getTimeText());
+        Debug.Log(GlobalGameManager.GetInstance().GetTimeText());
         TieredRandomLevel();
     }
     private void StaticLevel()
