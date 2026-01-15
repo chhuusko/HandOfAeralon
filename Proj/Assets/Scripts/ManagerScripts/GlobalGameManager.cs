@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Unity.VisualScripting;
@@ -7,6 +8,7 @@ using UnityEngine.UIElements;
 
 public struct GameData
 {
+    public float startTime;
     public int saveSlot;
     public int seed;
     public int level; 
@@ -26,18 +28,21 @@ public struct GameData
 [CreateAssetMenu(fileName = "GlobalGameManager", menuName = "Manager/GlobalGameManager")]
 public class GlobalGameManager : ScriptableObject
 {
-    [SerializeField] private DeckPreset _deckPreset;
+    
     [SerializeField] private CharacterPrefabLibrary _characterLibrary;
     [SerializeField] private ClassDatabase _classDatabase;
-    [SerializeField, Range(0, 100)] private float classTraitChancePercent;
+    
     private static GlobalGameManager _instance;
     private GameData _currentGame;
+
+    //Presets
+    [SerializeField] private DeckPreset _deckPreset;
+    [SerializeField, Range(0, 100)] private float classTraitChancePercent;
     [SerializeField] private int startCoins = 100;
     [SerializeField] private int baseCoinReward = 200;
     [SerializeField] private int CoinRewardIncreasePerLevel = 50;
-
-
     [SerializeField] private bool startWithFullParty;
+
     public float ClassTraitChancePercent => classTraitChancePercent;
     public static GlobalGameManager GetInstance()
     {
@@ -55,15 +60,18 @@ public class GlobalGameManager : ScriptableObject
     {
         CombatEventManager.OnCharacterDeath -= RemoveCharacter;
     }
-    public int GetCombatCoins()
+    public int GetCombatCoins(bool modifyPlayerCoins)
     {
         int level = LevelManager.GetInstance().Getlevel();
 
         int increaseSteps = level / 3;
 
         int combatCoins = baseCoinReward + (CoinRewardIncreasePerLevel * increaseSteps);
-        _currentGame.coins += combatCoins;
-
+        if (modifyPlayerCoins)
+        {
+            _currentGame.coins += combatCoins;
+        }
+        Debug.Log(_currentGame.coins);
         return combatCoins;
     }
 
@@ -178,6 +186,7 @@ public class GlobalGameManager : ScriptableObject
     /// </summary>
     private void GetTemp(int slot)
     {
+        _currentGame.startTime = Time.unscaledTime;
         _currentGame = new GameData();
         _currentGame.saveSlot = slot;
         //_currentGame.seed = 67;
@@ -225,6 +234,17 @@ public class GlobalGameManager : ScriptableObject
     {
         _currentGame.reapersLedgerKills += change;
     }
+    public string getTimeText()
+    {
+
+        float span = (Time.unscaledTime - _currentGame.startTime);
+        int hours = (int)(span / 3600);
+        int minutes = (int)((span % 3600) / 60);
+        int seconds = (int)(span % 60);
+
+        return $"{hours:00}:{minutes:00}:{seconds:00}";
+    }
+
 }
 
 
