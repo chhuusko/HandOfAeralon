@@ -1687,10 +1687,8 @@ MonoBehaviour:
   _deckButton: {fileID: 9082217781877423237}
   _discardPileButton: {fileID: 2664291079622857572}
   _manaPanel: {fileID: 6945307628639911213}
-  _activeColor: {r: 1, g: 1, b: 1, a: 1}
-  _inactiveColor: {r: 1, g: 1, b: 1, a: 0.5019608}
-  _enemyActiveColor: {r: 1, g: 0.44, b: 0.44, a: 1}
-  _enemyInactiveColor: {r: 1, g: 0.44, b: 0.44, a: 0.5019608}
+  _portraitActiveColor: {r: 1, g: 1, b: 1, a: 1}
+  _portraitInactiveColor: {r: 0.8287852, g: 1, b: 0, a: 0.5882353}
   _buttonInteractableColor: {r: 1, g: 1, b: 1, a: 1}
   _buttonUninteractableColor: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 0.8235294}
   _startCombatButton: {fileID: 5180242821507393611}
@@ -3889,8 +3887,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _portrait: {fileID: 5436997534344647171}
   _portraitButton: {fileID: 4347582611147732135}
-  _friendlyColor: {r: 1, g: 1, b: 1, a: 1}
-  _enemyColor: {r: 1, g: 0.43921572, b: 0.43921572, a: 1}
 --- !u!114 &4347582611147732135 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7741533659791628048, guid: e0604acf35576954bb8b49405d849ce8,

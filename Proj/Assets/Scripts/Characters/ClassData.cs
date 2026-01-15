@@ -25,5 +25,6 @@ public class ClassData : ScriptableObject
     public string[] availableNames;
 
     [Header("Misc")]
-    public Sprite classImage;
+    public Sprite friendlyImage;
+    public Sprite enemyImage;
 }

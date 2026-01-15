@@ -97,7 +97,7 @@ public class ShopCharacterTooltip : MonoBehaviour
     private void UpdateCharacterHeaderInfo(CharacterData character)
     {
         ClassData classData = character.ClassData;
-        Sprite sprite = classData.classImage;
+        Sprite sprite = classData.friendlyImage;
         _characterIcon.sprite = sprite;
         _characterClassName.text = GameTextFormatter.CharacterColoredLabel(character, classData.name);
         _characterName.text = GameTextFormatter.CharacterColoredLabel(character, character.Name);
