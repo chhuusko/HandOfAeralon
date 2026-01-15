@@ -85,12 +85,11 @@ public class LevelManager : ScriptableObject
     }
     public void StartNextLevel() 
     {
+        Debug.Log(GlobalGameManager.GetInstance().getTimeText());
         TieredRandomLevel();
     }
     private void StaticLevel()
     {
-        
-        Debug.Log(_level + " level");
         if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
         {
             if (_level >= easyCombatList.Count) _level = 0;
@@ -196,6 +195,7 @@ public class LevelManager : ScriptableObject
             }
             else
             {
+                GlobalGameManager.GetInstance().GetCombatCoins(true);
                 SceneManager.LoadScene("ShopScene");
             }
                 
