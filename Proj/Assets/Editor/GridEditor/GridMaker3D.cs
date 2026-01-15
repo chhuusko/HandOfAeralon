@@ -235,14 +235,15 @@ public class GridMaker3D : EditorWindow
             false
         ) as TilePrefabLibrary;
 
-        _bPrevFocusMode = IsInFocusDrawMode();
+        _bPrevFocusMode         = IsInFocusDrawMode();
         _bInFocusMode           = EditorGUILayout.Toggle(new GUIContent("Focus Toggle for Draw", "Use \"Ctrl + f\" to toggle on/off"), _bInFocusMode);
+        
         if (!_bPrevFocusMode && IsInFocusDrawMode())
             DisplaySceneNoteForDrawMode("Draw Mode: On");
         else if(_bPrevFocusMode && !IsInFocusDrawMode())
             DisplaySceneNoteForDrawMode("Draw Mode: Off");
 
-        _bDrawPreviewGrid = EditorGUILayout.Toggle("Draw Grid Lines", _bDrawPreviewGrid);
+        _bDrawPreviewGrid       = EditorGUILayout.Toggle("Draw Grid Lines", _bDrawPreviewGrid);
         _drawMode               = GUILayout.SelectionGrid(_drawMode, new[] { "Draw Tiles", "Draw Characters" }, 1);
         _combatGridWidth        = EditorGUILayout.IntSlider("CombatGrid Width", _combatGridWidth, 0, 30);
         _combatGridHeight       = EditorGUILayout.IntSlider("CombatGrid Height", _combatGridHeight, 0, 30);
@@ -1307,7 +1308,7 @@ public class GridMaker3D : EditorWindow
         parent = GenerateParentRootObject(_strRootObjectForCharacters);
         foreach(CombatGridCharacterData characterData in combatGridSaveData._characterData)
         {
-            GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass());
+            GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterData.GetCharacterClass(), characterData.GetFaction());
 
             DebugLog.CJLog($"Loading character: {characterPrefab.name}");
 
