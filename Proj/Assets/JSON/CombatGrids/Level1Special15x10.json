@@ -782,7 +782,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 0,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 6,
                 "y": 2
@@ -800,7 +800,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 0,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 7,
                 "y": 2
@@ -818,7 +818,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 0,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 8,
                 "y": 2
@@ -1016,7 +1016,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 3,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 5,
                 "y": 3
@@ -1088,7 +1088,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 3,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 9,
                 "y": 3
@@ -1304,7 +1304,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 3,
             "_tileIndex": {
                 "x": 7,
                 "y": 4
@@ -1520,7 +1520,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 3,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 5,
                 "y": 5
@@ -1592,7 +1592,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 3,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 9,
                 "y": 5
@@ -1790,7 +1790,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 0,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 6,
                 "y": 6
@@ -1808,7 +1808,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 0,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 7,
                 "y": 6
@@ -1826,7 +1826,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 0,
+            "_tileType": 1,
             "_tileIndex": {
                 "x": 8,
                 "y": 6
@@ -2672,7 +2672,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 0,
             "_tileIndex": {
                 "x": 13,
                 "y": 9
@@ -2690,7 +2690,7 @@
             "_bWalkable": true
         },
         {
-            "_tileType": 1,
+            "_tileType": 0,
             "_tileIndex": {
                 "x": 14,
                 "y": 9
@@ -2708,5 +2708,70 @@
             "_bWalkable": true
         }
     ],
-    "_characterData": []
+    "_characterData": [
+        {
+            "_characterClass": 0,
+            "_faction": 1,
+            "_position": {
+                "x": 27.0,
+                "y": 0.0,
+                "z": 9.0
+            },
+            "_size": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "_rotation": {
+                "x": 0.0,
+                "y": -0.7071068286895752,
+                "z": 0.0,
+                "w": 0.7071068286895752
+            },
+            "_baseHealthPoints": 750,
+            "_baseSpeed": 9,
+            "_baseDamage": 155,
+            "_baseMovementPoints": 5,
+            "_currentHealthPoints": 750,
+            "_currentSpeed": 9,
+            "_currentDamage": 155,
+            "_currentMovementPoints": 5,
+            "_currentTileIndex": {
+                "x": 13,
+                "y": 4
+            }
+        },
+        {
+            "_characterClass": 1,
+            "_faction": 1,
+            "_position": {
+                "x": 29.0,
+                "y": 0.0,
+                "z": 11.0
+            },
+            "_size": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "_rotation": {
+                "x": 0.0,
+                "y": -0.7071068286895752,
+                "z": 0.0,
+                "w": 0.7071068286895752
+            },
+            "_baseHealthPoints": 400,
+            "_baseSpeed": 9,
+            "_baseDamage": 180,
+            "_baseMovementPoints": 5,
+            "_currentHealthPoints": 400,
+            "_currentSpeed": 9,
+            "_currentDamage": 180,
+            "_currentMovementPoints": 5,
+            "_currentTileIndex": {
+                "x": 14,
+                "y": 5
+            }
+        }
+    ]
 }
