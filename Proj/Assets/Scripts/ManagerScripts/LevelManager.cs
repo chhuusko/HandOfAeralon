@@ -196,6 +196,7 @@ public class LevelManager : ScriptableObject
             }
             else
             {
+                GlobalGameManager.GetInstance().GetCombatCoins(true);
                 SceneManager.LoadScene("ShopScene");
             }
                 
