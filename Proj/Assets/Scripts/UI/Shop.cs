@@ -143,7 +143,7 @@ public class Shop : MonoBehaviour
 
     private void UpdateNextCombatText()
     {
-        _nextCombatText.text = $"Go to Level {GlobalGameManager.GetInstance().GetTotalBattlesWon() + 1}";
+        _nextCombatText.text = $"Go to Level {LevelManager.GetInstance().Getlevel() +1}";
     }
 
     public Card GetRandomUnlockedCard()

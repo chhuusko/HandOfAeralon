@@ -54,10 +54,8 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private GameObject _manaPanel;
     
     [Header("Colors")]
-    [SerializeField] private Color _activeColor;
-    [SerializeField] private Color _inactiveColor;
-    [SerializeField] private Color _enemyActiveColor;
-    [SerializeField] private Color _enemyInactiveColor;
+    [SerializeField] private Color _portraitActiveColor;
+    [SerializeField] private Color _portraitInactiveColor;
     [SerializeField] private Color _buttonInteractableColor;
     [SerializeField] private Color _buttonUninteractableColor;
     
@@ -325,12 +323,8 @@ public class CombatUI : MonoBehaviour
     {
         Button button = Instantiate(_characterPortraitButtonPrefab, parent);
         
-        button.image.sprite = c.GetClassData().classImage;
-
-        if (c.GetFaction() == Faction.Enemy)
-        {
-            button.image.color = _enemyActiveColor;
-        }
+        button.image.sprite = c.GetFaction() == Faction.Friendly ? 
+            c.GetClassData().friendlyImage : c.GetClassData().enemyImage;
         
         PortraitButton pb = button.GetComponent<PortraitButton>();
         pb.Character = c;
@@ -343,7 +337,7 @@ public class CombatUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates colors for all current portraits to show faction and if the character is selected.
+    /// Updates colors for all current portraits to show if the character is selected.
     /// </summary>
     /// <param name="character">The currently selected character.</param>
     private void UpdatePortraitColors(Character character)
@@ -352,15 +346,13 @@ public class CombatUI : MonoBehaviour
         {
             return;
         }
-        bool friendly = character.GetFaction() == Faction.Friendly;
         _characterPortraits.TryGetValue(character, out var button);
 
         if (!button)
         {
             return;
         }
-        
-        button.GetComponent<Image>().color = friendly ? _activeColor : _enemyActiveColor;
+        button.GetComponent<Image>().color = _portraitActiveColor;
     }
 
     private void UpdateManaText(int mana)
