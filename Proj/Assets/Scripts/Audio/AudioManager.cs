@@ -38,15 +38,18 @@ public class AudioManager : MonoBehaviour
 
     public void SetMasterVolume(float volume)
     {
-        masterBus.setVolume(volume);
+        if (masterBus.isValid())
+            masterBus.setVolume(volume);
     }
     public void SetMusicVolume(float volume)
     {
-        musicBus.setVolume(volume);
+        if (musicBus.isValid())
+            musicBus.setVolume(volume);
     }
     public void SetSFXVolume(float volume)
     {
-        sfxBus.setVolume(volume);
+        if(sfxBus.isValid())
+            sfxBus.setVolume(volume);
     }
     public void PlayOneShot(EventReference sound, Vector3 position)
     {
