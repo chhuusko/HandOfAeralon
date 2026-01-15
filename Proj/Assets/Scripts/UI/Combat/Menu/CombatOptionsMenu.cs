@@ -21,7 +21,7 @@ public class CombatOptionsMenu : MonoBehaviour
             SetHoverLockSliderValue(PlayerSettingsManager.GetInstance().GetHoverLockSpeed());
             SetMasterVolumeSliderValue(PlayerSettingsManager.GetInstance().GetMasterVolume());
             SetMusicVolumeSliderValue(PlayerSettingsManager.GetInstance().GetMusicVolume());
-            SetVFXVolumeSliderValue(PlayerSettingsManager.GetInstance().GetSFXVolume());
+            //SetVFXVolumeSliderValue(PlayerSettingsManager.GetInstance().GetSFXVolume());
         }
     }
 
