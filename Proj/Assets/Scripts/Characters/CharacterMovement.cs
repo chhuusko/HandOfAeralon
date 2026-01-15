@@ -107,9 +107,18 @@ public class CharacterMovement : MonoBehaviour
     {
         if (IsDead() || !_character.CanMove || _character.IsStunned) return;
 
-        if (Selector._instance != null)
+        if (Selector._instance != null && !Selector._instance.MovementActionPending)
         {
-            if (!Selector._instance.MovementActionPending) return;
+            _lastPreviewPathTile = null;
+            GridExplorer._instance.ClearPathDrawing();
+            return;
+        }
+
+        if (CombatManager._instance != null && CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter() != _character)
+        {
+            _lastPreviewPathTile = null;
+            GridExplorer._instance.ClearPathDrawing();
+            return;
         }
 
         if (_bIsMoving || tile == _character.GetCurrentTileComponent() || tile == null || !_tilesInRange.Contains(tile) || CombatManager._instance.GetCombatTurnOrder().GetActiveCharacter().GetFaction() != Faction.Friendly)
