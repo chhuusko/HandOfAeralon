@@ -63,11 +63,11 @@ public class Card : ScriptableObject
     }
     public virtual void PlayCard()
     {
-        //n�r den spelas
+        //card play anywhere
     }
     public virtual void PlayCardOnTarget(Character character)
     {
-        //n�r den spelas p� en target
+        //card play on target
         PlayCard();
     }
     public virtual void CardSelect(Card selectedCard)
@@ -76,9 +76,13 @@ public class Card : ScriptableObject
     }
     public virtual void AfterCardPlay()
     {
+        ResetCost();
+        CardHandManager.GetInstance().CardUsed(this);
+    }
+    public void ResetCost()
+    {
         tempCost = cost;
         isTempCost = false;
-        CardHandManager.GetInstance().CardUsed(this);
     }
     public T Clone<T>() where T : ScriptableObject
     {

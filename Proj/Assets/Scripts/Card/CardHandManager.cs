@@ -65,8 +65,8 @@ public class CardHandManager : MonoBehaviour
     [SerializeField] CardSelectViewUI cardSelect;
 
     // event
-    public static Action<Card> onCardUse;
     public static Action<int> onManaChange;
+    public static Action<Card> onCardUse;
     public static Action<Character> onTargetCharacter;
     public static Action<Character, Card> onCardTargetCharacter;
     public static Action<bool> onDrag;
@@ -76,13 +76,12 @@ public class CardHandManager : MonoBehaviour
     public void ManaChanged(){ onManaChange?.Invoke(_mana); }
     public void Dragged(bool isDragEnter) { onDrag?.Invoke(isDragEnter); }
     public void Hovered(bool isHoverEnter) { onHover?.Invoke(isHoverEnter); }
+    public void CharacterTarget(Character targetCharacter) { onTargetCharacter?.Invoke(targetCharacter); }
+    public void CardTargetCharacter(Card usedCard, Character target) { onCardTargetCharacter?.Invoke(target, usedCard); }
     public void CardUsed(Card usedCard) 
     { 
         onCardUse?.Invoke(usedCard); 
         AudioManager.Instance.PlayOneShot(playSound, transform.position); 
-    }
-    public void CharacterTarget(Character targetCharacter) { onTargetCharacter?.Invoke(targetCharacter); }
-    public void CardTargetCharacter(Card usedCard, Character target) { onCardTargetCharacter?.Invoke(target, usedCard); 
     }
     private void Awake()
     {
@@ -110,13 +109,11 @@ public class CardHandManager : MonoBehaviour
     private void OnEnable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn += TurnChanged;
-
         onCardTargetCharacter += TurnEffects;
     }
     private void OnDisable()
     {
         CombatEventManager.OnEnterCombatStateTakeTurn -= TurnChanged;
-
         onCardTargetCharacter -= TurnEffects;
     }
     public void drawHand()
@@ -147,7 +144,6 @@ public class CardHandManager : MonoBehaviour
         {
             if(_cardsInDiscardPile.Count > 0)
             {
-                //Add discard to draw pile
                 AudioManager.Instance.PlayOneShot(deckShuffleSound, transform.position);
                 _cardsInDeck = new List<Card>(_cardsInDiscardPile);
                 _cardsInDiscardPile.Clear();
@@ -340,7 +336,7 @@ public class CardHandManager : MonoBehaviour
             effect.Effect(character, card);
         }
     }
-    public void UpdatePileTexts()
+    private void UpdatePileTexts()
     {
         _deckText.text = "Draw Pile (" + _cardsInDeck.Count + ")";
         _discardText.text = "Discard (" + _cardsInDiscardPile.Count + ")";

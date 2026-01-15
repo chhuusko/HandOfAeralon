@@ -17,7 +17,9 @@ public class MentalPurge : Card
             {
                 if (!card.GetCard().tags.Contains(CardTag.Etherial))
                 {
+                    card.GetCard().ResetCost();
                     cardHandManager.GetDiscardPile().Add(card.GetCard());
+                    
                 }
                 Destroy(card.gameObject);
             }
