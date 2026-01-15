@@ -9,7 +9,8 @@ public class VenomHarvest : Card
         if (character != null)
         {
             character.TakeDamage(GetDamage(character));
-            character.GetStatusEffectManager().RemoveStatusEffect(new Poison(1));
+            StatusEffect poision = character.GetStatusEffectManager().GetStatusEffect<Poison>();
+            character.GetStatusEffectManager().RemoveStatusEffect(poision);
         }
         
     }
