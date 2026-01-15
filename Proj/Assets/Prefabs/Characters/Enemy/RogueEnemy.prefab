@@ -3149,6 +3149,37 @@ Transform:
   - {fileID: 8698934765806271326}
   m_Father: {fileID: 3583689862748469052}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8593470470120989567
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6986965048824468841}
+  m_Layer: 3
+  m_Name: HealthBarPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6986965048824468841
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8593470470120989567}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.68, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4465894360394929941}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8621325206112751413
 GameObject:
   m_ObjectHideFlags: 0
@@ -3443,6 +3474,11 @@ PrefabInstance:
       objectReference: {fileID: 29473716227979301}
     - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
         type: 3}
+      propertyPath: _headBone
+      value: 
+      objectReference: {fileID: 6986965048824468841}
+    - target: {fileID: 5375635547301200709, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
       propertyPath: _weaponMesh
       value: 
       objectReference: {fileID: 1572142224660807021}
@@ -3487,6 +3523,10 @@ PrefabInstance:
     - {fileID: 5503383749563910009, guid: b03a88dfaf98bac44a29fdf5e627b1fe, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4999151439911242118, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
+        type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 6986965048824468841}
     - targetCorrespondingSourceObject: {fileID: 4999151439911242118, guid: b03a88dfaf98bac44a29fdf5e627b1fe,
         type: 3}
       insertIndex: -1

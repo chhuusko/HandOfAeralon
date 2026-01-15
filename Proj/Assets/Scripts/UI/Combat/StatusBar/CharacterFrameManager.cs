@@ -67,6 +67,14 @@ public class CharacterFrameManager : MonoBehaviour
             if (character == null) continue;
 
             barRect.position = character.transform.position + (_offset * 1f);
+            float x = character.transform.position.x;
+            float y = character.GetHealthBarPoint().y;
+            float z = character.transform.position.z;
+
+            Vector3 pos = new Vector3(x, y, z);
+
+            barRect.position = pos + (_offset * 1f);
+
             barRect.forward = Camera.main.transform.forward;
         }
     }

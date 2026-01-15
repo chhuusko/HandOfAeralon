@@ -314,6 +314,8 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
     [SerializeField] private Animator _animator;
+    [SerializeField] private Transform _headBone;
+    private Vector3 _healthBarPoint;
     public GameObject _stunnedVFXPrefab;
     private GameObject _stunnedVFX;
     public Animator Animator => _animator;
@@ -361,6 +363,8 @@ public class Character : MonoBehaviour
 
     private void Start()
     {
+        _healthBarPoint = _headBone.position;
+
         UpdateFactionIndicator();
         if (Data.CharacterClass == CharacterClass.Barbarian)        _animator.Play("WarriorIdle", 0, UnityEngine.Random.value);
         else if (Data.CharacterClass == CharacterClass.Rogue)       _animator.Play("RogueIdle", 0, UnityEngine.Random.value);
@@ -893,4 +897,7 @@ public class Character : MonoBehaviour
         Destroy(_stunnedVFX);
         _stunnedVFX = null;
     }
+
+    public Transform GetHeadBoneTransform() { return _headBone; }
+    public Vector3 GetHealthBarPoint() { return _healthBarPoint; }
 }
