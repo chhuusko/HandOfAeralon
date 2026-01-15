@@ -31,7 +31,7 @@ public class CombatVictoryScreenMenu : MonoBehaviour
     {
         _goToShopButton.SetActive(true);
         _title.text = "Battle Won!";
-        string summaryInfo = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins() + "\n"
+        string summaryInfo = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins(false) + "\n"
                              + "Total enemies killed: " + GlobalGameManager.GetInstance().GetTotalEnemiesKilled() + "\n"
                              + "Total heroes lost: " + GlobalGameManager.GetInstance().GetTotalHeroesLost() + "\n"
                              + "Total battles won: " + GlobalGameManager.GetInstance().GetTotalBattlesWon();
