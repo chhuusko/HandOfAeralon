@@ -85,6 +85,7 @@ public class StatusEffectManager : MonoBehaviour
         {
             statusEffect.Initialize();
             CombatEventManager.InvokeOnStatusEffectAppliedToCharacter(caster, _character, statusEffect);
+            Tutorial.Instance.ShowTraitsAndStatusPopup(); // Shoehorning by JLW
         }
     }
 

@@ -12,6 +12,8 @@ public class EnemyAI : MonoBehaviour
     private const float TURN_START_WAIT_TIME = 0.8f;
     private const float TURN_END_WAIT_TIME = 2.5f;
 
+    private float _turnEndWaitTimeDynamic;
+
     private class AIAction
     {
         public CombatGridTile movement;
@@ -110,6 +112,8 @@ public class EnemyAI : MonoBehaviour
             yield break;
         }
 
+        _turnEndWaitTimeDynamic = TURN_END_WAIT_TIME;
+
         List<CombatGridTile> moveRange = FindMoveRange();
         //Debug.LogError($"EnemyAI.cs | moveRange: {moveRange.Count}");
         Dictionary<AIAction, float> scoredActions = EvaluatePossibleActions(moveRange);
@@ -155,7 +159,7 @@ public class EnemyAI : MonoBehaviour
             StartCoroutine(PerformAbilityCast(chosenAction));
         }
 
-        yield return new WaitForSeconds(TURN_END_WAIT_TIME);
+        yield return new WaitForSeconds(_turnEndWaitTimeDynamic);
         EndTurn();
     }
 
@@ -538,6 +542,8 @@ public class EnemyAI : MonoBehaviour
             // Bard
             case "InspiringAnthem_Ability":
                 {
+                    _turnEndWaitTimeDynamic += 1f;
+
                     int hitCount = 0;
                     List<CombatGridTile> aoe = DiamondPattern(target, 2);
                     foreach (var hit in aoe)

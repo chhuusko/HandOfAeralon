@@ -36,6 +36,8 @@ public class Selector : MonoBehaviour
     public event Action OnCharacterDeselected;
     public event Action OnCharacterActionStarted;
     public event Action OnCharacterActionStopped;
+    public event Action OnSelectPlacementCharacterFromTile;
+    public event Action OnPreviewAbilityRange;
 
 
     public enum CharacterActionType
@@ -302,6 +304,7 @@ public class Selector : MonoBehaviour
         {
             _selectedCharacter = tile.GetOccupantCharacter();
             ShowCharacterUI(character);
+            OnSelectPlacementCharacterFromTile?.Invoke();
         }
     }
 
@@ -427,10 +430,12 @@ public class Selector : MonoBehaviour
         // Activates character UI without options since the character can't perform actions at the moment.
         OnCharacterSelected?.Invoke(character);
     }
-    public void PreviewAbilityRange(Ability ability)
+    public void 
+        PreviewAbilityRange(Ability ability)
     {
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
+            OnPreviewAbilityRange?.Invoke();
             MovementActionPending = false;
             _characterMovement.ForgetMoveRange();
             ResetColorAllTiles();
