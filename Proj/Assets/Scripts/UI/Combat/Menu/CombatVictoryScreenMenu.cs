@@ -45,8 +45,16 @@ public class CombatVictoryScreenMenu : MonoBehaviour
     {
         _goToShopButton.SetActive(false);
         _title.text = "Congratulations!";
-        _info.text = "You have managed to defeat all the forces of Magor, well done!\n\n" +
-                     "Now you can rest assured that the world will be safe and secure for future generations to come!";
+
+        string victoryMessage = "You have managed to defeat all the forces of Magor, well done!\n\n" +
+                     "Now you can rest assured that the world will be safe and secure for future generations to come!\n\n";
+
+        string summaryInfo = "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins() + "\n"
+                             + "Total enemies killed: " + GlobalGameManager.GetInstance().GetTotalEnemiesKilled() + "\n"
+                             + "Total heroes lost: " + GlobalGameManager.GetInstance().GetTotalHeroesLost() + "\n"
+                             + "Total battles won: " + GlobalGameManager.GetInstance().GetTotalBattlesWon();
+
+        _info.text = victoryMessage + summaryInfo;
         _mainMenuButtonText.text = "Quit Game";
     }
 
