@@ -83,10 +83,11 @@ public class CombatVictoryScreenMenu : MonoBehaviour
     private string GetSummaryInfo()
     {
         return  "Level: " + SceneManager.GetActiveScene().name + "\n" +
-                "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins() + "\n" + 
+                "Coins gained: " + GlobalGameManager.GetInstance().GetCombatCoins(false) + "\n" + 
                 "Total enemies killed: " + GlobalGameManager.GetInstance().GetTotalEnemiesKilled() + "\n" +
                 "Total heroes lost: " + GlobalGameManager.GetInstance().GetTotalHeroesLost() + "\n" +
-                "Total battles won: " + GlobalGameManager.GetInstance().GetTotalBattlesWon();
+                "Total battles won: " + GlobalGameManager.GetInstance().GetTotalBattlesWon() + "\n" +
+                "Time: " + GlobalGameManager.GetInstance().GetTimeText();
     }
 
 
