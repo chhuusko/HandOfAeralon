@@ -26,6 +26,7 @@ public class LevelManager : ScriptableObject
     private int _level = 0;
     private int _difficulty = 0;
     private int statlevel;
+    private float levelStartTime;
 
     //Presets
     [SerializeField] private int mapScalingInterval = 3;
@@ -286,5 +287,14 @@ public class LevelManager : ScriptableObject
     public int GetStatLevel()
     {
         return statlevel;
+    }
+    public string LevelTimeElapsed()
+    {
+        float LevelTimeSpan = (Time.unscaledTime - levelStartTime);
+        int hours = (int)(LevelTimeSpan / 3600);
+        int minutes = (int)((LevelTimeSpan % 3600) / 60);
+        int seconds = (int)(LevelTimeSpan % 60);
+
+        return $"{hours:00}:{minutes:00}:{seconds:00}";
     }
 }
