@@ -193,12 +193,12 @@ public class CardHandManager : MonoBehaviour
     {
 
     }
-    public void RemoveCardFromHand(CardContainer cardContainer)
+    public void RemoveCardFromHand(CardContainer cardContainer, bool isCardPlayed)
     {
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
 
-        if (cardContainer.GetCard().tags.Contains(CardTag.Ephemeral) || cardContainer.GetCard().tags.Contains(CardTag.Exhaust)){}
+        if (cardContainer.GetCard().tags.Contains(CardTag.Ephemeral) || (isCardPlayed && cardContainer.GetCard().tags.Contains(CardTag.Exhaust))){}
         else
         {
             _cardsInDiscardPile.Add(cardContainer.GetCard());
@@ -279,7 +279,7 @@ public class CardHandManager : MonoBehaviour
         }
         foreach (CardContainer card in removeList)
         {
-            RemoveCardFromHand(card);
+            RemoveCardFromHand(card, false);
         }
     }
     public int GetCardsPlayedThisTurn()

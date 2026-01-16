@@ -163,7 +163,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             Destroy(_spawnedParticle);
              
             
-            CardHandManager.GetInstance().RemoveCardFromHand(this);
+            CardHandManager.GetInstance().RemoveCardFromHand(this, true);
             
             _containedCard.AfterCardPlay();
         }
