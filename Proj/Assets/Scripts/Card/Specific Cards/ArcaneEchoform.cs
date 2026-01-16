@@ -24,7 +24,11 @@ public class ArcaneEchoform : Card
     {
         CardHandManager cardHandManager = CardHandManager.GetInstance();
         Card newCard = Instantiate(selectedCard);
-        newCard.TempSetCost(selectedCard.GetCost());
+        if (selectedCard.GetIsTemp())
+        {
+            newCard.TempSetCost(selectedCard.GetCost());
+        }
+        
         newCard.tags.Add(CardTag.Exhaust);
         cardHandManager.AddCardToHand(newCard);
 
