@@ -537,6 +537,7 @@ public class EnemyAI : MonoBehaviour
                             {
                                 if (occupantSEM != null && !occupantSEM.ContainsStatusEffect<Slowed>())
                                 {
+                                    result += 30;
                                     hitCount++;
                                 }
                             }
