@@ -35,6 +35,7 @@ public class Tutorial : MonoBehaviour
     private int _currentPopup = 0;
     private bool _traitsAndStatusReady = false;
     private bool _popupOccupied = false;
+    private bool[] _popupSeen;
 
     void Start()
     {
@@ -45,12 +46,15 @@ public class Tutorial : MonoBehaviour
             Debug.LogError("Tutorial.cs | Canvas not found!");
         }
 
+        _popupSeen = new bool[_popups.Length];
+
         CombatUI.Instance.OnStartCombatButtonPressed += ShowMovementPointsPopup;
         CombatMenuManager.GetInstance().OnGoToShopButtonPressed += ShowShopPopup;
         Selector._instance.OnSelectPlacementCharacterFromTile += ShowDeployPopup;
         Selector._instance.OnPreviewAbilityRange += ShowAbilitiesPopup;
         CardHandManager.onHover += ShowCardsPopup;
         CombatEventManager.OnCharacterPlaced += ShowTurnOrderPopup;
+        CombatEventManager.OnExitCombatStateIntroCinematic += ShowMissedPopups;
 
         HidePopups();
         
@@ -102,6 +106,8 @@ public class Tutorial : MonoBehaviour
         {
             _traitsAndStatusReady = true;
         }
+
+        _popupSeen[popup] = true;
     }
 
     public void HidePopups()
@@ -281,6 +287,29 @@ public class Tutorial : MonoBehaviour
         CombatMenuManager.GetInstance().OnGoToShopButtonPressed -= ShowShopPopup;
         _currentPopup = 9;
         StartCoroutine(ShowPopupDelayed(_currentPopup));
+    }
+
+    private void ShowMissedPopups()
+    {
+        if (GlobalGameManager.GetInstance().GetTotalBattlesWon() > 1)
+        {
+            CombatEventManager.OnExitCombatStateIntroCinematic -= ShowMissedPopups;
+            StartCoroutine(MissedPopups());
+        }
+    }
+
+    private IEnumerator MissedPopups()
+    {
+        for (int i = 0; i < _popupSeen.Length; i++)
+        {
+            if (_popupSeen[i] == false)
+            {
+                _popupSeen[i] = true;
+                ShowPopup(i);
+                yield return null;
+                yield return new WaitWhile(() => _popupOccupied);
+            }
+        }
     }
 
     public void PlayVideo(VideoClip clip)
