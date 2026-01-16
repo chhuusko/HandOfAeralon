@@ -46,11 +46,11 @@ public class Tutorial : MonoBehaviour
         }
 
         CombatUI.Instance.OnStartCombatButtonPressed += ShowMovementPointsPopup;
-        CombatUI.Instance.OnStartCombatButtonPressed += ShowTurnOrderPopup;
         CombatMenuManager.GetInstance().OnGoToShopButtonPressed += ShowShopPopup;
         Selector._instance.OnSelectPlacementCharacterFromTile += ShowDeployPopup;
         Selector._instance.OnPreviewAbilityRange += ShowAbilitiesPopup;
         CardHandManager.onHover += ShowCardsPopup;
+        CombatEventManager.OnCharacterPlaced += ShowTurnOrderPopup;
 
         HidePopups();
         
@@ -66,11 +66,6 @@ public class Tutorial : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         ShowPopup(popup);
-
-        if (popup == 6) // Combat Log
-        {
-            _traitsAndStatusReady = true;
-        }
     }
 
     public void ShowPopup(int popup)
@@ -101,6 +96,11 @@ public class Tutorial : MonoBehaviour
         {
             Debug.LogError($"ShowPopup({popup}) INDEX OUT OF BOUNDS for {name}.");
             HidePopups();
+        }
+
+        if (popup == 6) // Combat Log
+        {
+            _traitsAndStatusReady = true;
         }
     }
 
@@ -271,7 +271,7 @@ public class Tutorial : MonoBehaviour
 
         CardHandManager.onHover -= ShowCardsPopup;
         _currentPopup = 7;
-        StartCoroutine(ShowPopupDelayed(_currentPopup));
+        ShowPopup(_currentPopup);
     }
 
     private void ShowShopPopup()
