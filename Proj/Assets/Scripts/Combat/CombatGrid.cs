@@ -445,13 +445,13 @@ public class CombatGrid : MonoBehaviour
 
         if(LevelManager.GetInstance().IsLastLevel())
         {
-            float randScale = Random.Range(1.6f, 1.8f);
+            float randScale = Random.Range(1.3f, 1.4f);
             Vector3 scale = new Vector3(randScale, randScale, randScale);
             characterObject.transform.localScale = scale;
         }
         else
         {
-            float randScale = Random.Range(1f, 1.5f);
+            float randScale = Random.Range(1f, 1.1f);
             Vector3 scale = new Vector3(randScale, randScale, randScale);
             characterObject.transform.localScale = scale;
 
