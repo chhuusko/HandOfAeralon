@@ -12,10 +12,10 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private float _waitEaseDuration = 0.5f;
 
     [SerializeField] private Image _previewHealthFill;
-    [SerializeField] private Color _startColor, _endColor;
+    [SerializeField] private Color _startColor, _damageColor, _healColor;
     [SerializeField] private float _fadeDuration, _waitPreviewFadeDuration;
 
-
+    Color _endColor;
 
 
     private Character _character;
@@ -34,6 +34,7 @@ public class HealthBar : MonoBehaviour
         _easeHealthSlider.value = c.GetCurrentHealth();
         _previewHealthSlider.value = c.GetCurrentHealth();
         c.OnHealthChanged += HandleHealthChanged;
+        _endColor = _damageColor;
     }
 
     private void OnDisable()
@@ -128,11 +129,13 @@ public class HealthBar : MonoBehaviour
 
         if (previewHealthDifference < 0)
         {
+            _endColor = _damageColor;
             _previewHealthSlider.value = current;   
             _mainHealthslider.value = previewHP;
         }
         else
         {
+            _endColor = _healColor;
             _previewHealthSlider.value = previewHP;
         }
     }
@@ -155,6 +158,7 @@ public class HealthBar : MonoBehaviour
 
     private IEnumerator PreviewColorPulse()
     {
+        
         while (true)
         {
             // Fade in

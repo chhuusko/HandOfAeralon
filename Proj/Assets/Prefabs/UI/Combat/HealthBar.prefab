@@ -618,7 +618,8 @@ MonoBehaviour:
   _waitEaseDuration: 0.5
   _previewHealthFill: {fileID: 2500175486471050557}
   _startColor: {r: 0.990566, g: 0.9680067, b: 0.5093005, a: 1}
-  _endColor: {r: 1, g: 0.6236605, b: 0, a: 1}
+  _damageColor: {r: 1, g: 0.25258887, b: 0.23113209, a: 1}
+  _healColor: {r: 0, g: 1, b: 0.19758415, a: 1}
   _fadeDuration: 0.5
   _waitPreviewFadeDuration: 0.25
 --- !u!1 &8075635495839296639
