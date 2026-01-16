@@ -442,6 +442,21 @@ public class CombatGrid : MonoBehaviour
         //GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterClass);
         GameObject characterPrefab = _characterPrefabLibrary.GetPrefab(characterClass, faction);
         GameObject characterObject = Object.Instantiate(characterPrefab, instancePos, rotation);
+
+        if(LevelManager.GetInstance().IsLastLevel())
+        {
+            float randScale = Random.Range(1.6f, 1.8f);
+            Vector3 scale = new Vector3(randScale, randScale, randScale);
+            characterObject.transform.localScale = scale;
+        }
+        else
+        {
+            float randScale = Random.Range(1f, 1.5f);
+            Vector3 scale = new Vector3(randScale, randScale, randScale);
+            characterObject.transform.localScale = scale;
+
+        }
+
         Character characterScript = characterObject.GetComponent<Character>();
 
         // Initialize CharacterData directly from JSON

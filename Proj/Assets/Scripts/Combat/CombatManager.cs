@@ -157,7 +157,18 @@ public class CombatManager : MonoBehaviour
             {
                 InitiativeHoverSphere hoverSphere = _selectorOverHead.GetComponent<InitiativeHoverSphere>();
                 _selectorOverHead?.SetActive(true);
+                
+                Vector3 characterHealthBarPos = activeCharacter.GetHealthBarPoint();
                 Vector3 selectorOverHeadPosition = activeCharacter.transform.position + (Vector3.up * 3.0f);
+                
+                float x = selectorOverHeadPosition.x;
+                float z = selectorOverHeadPosition.z;
+                float y = characterHealthBarPos.y + 1.2f;
+
+                Vector3 pos = new Vector3(x, y, z);
+
+                selectorOverHeadPosition = pos;
+
                 hoverSphere.SetPosition(selectorOverHeadPosition);
                 hoverSphere.SetHoverStartPosition(selectorOverHeadPosition);
                 hoverSphere.SetHoverSpherePosition(selectorOverHeadPosition);
