@@ -12,7 +12,7 @@ public class AudioManager : MonoBehaviour
 
     private Bus masterBus;
     private Bus musicBus;
-    private Bus sfxBus;
+    //private Bus sfxBus;
 
     private void Awake()
     {
@@ -51,11 +51,11 @@ public class AudioManager : MonoBehaviour
         if (musicBus.isValid())
             musicBus.setVolume(volume);
     }
-    public void SetSFXVolume(float volume)
-    {
-        if(sfxBus.isValid())
-            sfxBus.setVolume(volume);
-    }
+    //public void SetSFXVolume(float volume)
+    //{
+    //    if(sfxBus.isValid())
+    //        sfxBus.setVolume(volume);
+    //}
     public void PlayOneShot(EventReference sound, Vector3 position)
     {
         RuntimeManager.PlayOneShot(sound, position);

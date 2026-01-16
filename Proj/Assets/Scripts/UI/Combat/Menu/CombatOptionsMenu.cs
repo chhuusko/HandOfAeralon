@@ -43,12 +43,12 @@ public class CombatOptionsMenu : MonoBehaviour
         PlayerSettingsManager.GetInstance().SetMusicVolume(value);
         AudioManager.Instance?.SetMusicVolume(value);
     }
-    public void SetVFXVolumeSliderValue(float value)
-    {
-        SetSliderValueAndText(_sfxVolumeSlider, _settingSFXVolume, value);
-        PlayerSettingsManager.GetInstance().SetSFXVolume(value);
-        AudioManager.Instance?.SetSFXVolume(value);
-    }
+    //public void SetVFXVolumeSliderValue(float value)
+    //{
+    //    SetSliderValueAndText(_sfxVolumeSlider, _settingSFXVolume, value);
+    //    PlayerSettingsManager.GetInstance().SetSFXVolume(value);
+    //    AudioManager.Instance?.SetSFXVolume(value);
+    //}
 
     public void SetValueText(TMP_Text tmpText, float value)
     {
