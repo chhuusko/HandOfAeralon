@@ -22,8 +22,11 @@ public class Skullsplitter_Ability : SingleTargetAbility
         if (affectedCharacter == null) return;
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null) return;
-        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        int damage = CalculateDamage(castingCharacter, affectedCharacter, false);
         bool died = affectedCharacter.TakeDamage(damage);
+
+        
+
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, null, died);
     }
 
@@ -36,11 +39,11 @@ public class Skullsplitter_Ability : SingleTargetAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null) return;
 
-        int damage = CalculateDamage(castingCharacter, affectedCharacter);
+        int damage = CalculateDamage(castingCharacter, affectedCharacter, true);
         affectedCharacter.PreviewHealthChange(-damage);
     }
 
-    private int CalculateDamage(Character castingCharacter, Character affectedCharacter)
+    private int CalculateDamage(Character castingCharacter, Character affectedCharacter, bool bInPreview)
     {
         // 1. Your Base Damage(Kan �kas med traits och eller kort.)
         // 2. Ability damage.
@@ -53,8 +56,22 @@ public class Skullsplitter_Ability : SingleTargetAbility
         //1.
         int baseDamage = castingCharacter.Data.DerivedDamage;
 
+        float damage;
+
         //2.
-        float damage = affectedCharacter.GetCurrentHealth() < (0.5 * affectedCharacter.Data.DerivedHealthPoints) ? baseDamage * _extraDamageMultiplier : baseDamage * _damageMultiplier;
+        if(affectedCharacter.Data.CurrentHealthPoints < (0.5 * affectedCharacter.Data.DerivedHealthPoints))
+        {
+            damage = baseDamage * _extraDamageMultiplier;
+
+            if (!bInPreview && castingCharacter.GetFaction() == Faction.Friendly)
+            {
+                CardHandManager.GetInstance().AddCardFromDeck();
+            }
+        }
+        else
+        {
+            damage = baseDamage * _damageMultiplier;
+        }
 
         damage = castingCharacter.GetStatusEffectManager().ModifyOutgoingDamage(damage, this);
         damage = affectedCharacter.GetStatusEffectManager().ModifyIncomingDamage(damage, this);
