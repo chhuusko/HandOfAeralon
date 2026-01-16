@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -212,6 +213,10 @@ public class LevelManager : ScriptableObject
             return true;
         }
         return false;
+    }
+    public bool IsLastLevel()
+    {
+        return (SceneManager.GetActiveScene().name == bossLevel);
     }
     private void LoadScene(List<string> sceneList)
     {
