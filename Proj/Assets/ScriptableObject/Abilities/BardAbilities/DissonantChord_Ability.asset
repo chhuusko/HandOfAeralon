@@ -17,7 +17,7 @@ MonoBehaviour:
   _range: 6
   _cooldown: 3
   _description: "Strike a harsh chord, removing all buffs from enemies in the area.\\n\\nDeal
-    {damage} ((<b>90%</b> + (<b>10%</b> \xD7 amount of buffs removed) (up to <b>140%</b>)
+    {damage} ((<b>80%</b> + (<b>10%</b> \xD7 amount of buffs removed) (up to <b>130%</b>)
     \xD7 Damage) {elemental_damage}Elemental damage{/elemental_damage}, scaling with
     amount of buffs removed.\\n\\nDraw <b>1</b> {card}Card{/card} if at least two
     buffs are removed from enemies. "
@@ -46,6 +46,6 @@ MonoBehaviour:
   _abilityAOEVFXSequence: {fileID: 0}
   _radius: 2
   _enemiesDebuffedTilBonus: 2
-  _damageMultiplier: 0.9
+  _damageMultiplier: 0.8
   _damagePerBuffMultiplier: 0.1
-  _maxDamageMultiplier: 1.4
+  _maxDamageMultiplier: 1.3

@@ -34,6 +34,7 @@ public class Tutorial : MonoBehaviour
     private Canvas _canvas;
     private int _currentPopup = 0;
     private bool _traitsAndStatusReady = false;
+    private bool _popupOccupied = false;
 
     void Start()
     {
@@ -61,6 +62,8 @@ public class Tutorial : MonoBehaviour
 
     public IEnumerator ShowPopupDelayed(int popup)
     {
+        _popupOccupied = true;
+
         yield return new WaitForSeconds(1f);
         ShowPopup(popup);
 
@@ -73,6 +76,8 @@ public class Tutorial : MonoBehaviour
     public void ShowPopup(int popup)
     {
         if (SkipTutorial) return;
+
+        _popupOccupied = true;
 
         if (popup >= 0 && popup < _popups.Length)
         {
@@ -115,22 +120,30 @@ public class Tutorial : MonoBehaviour
         {
             camera[0].FreezeCamera = false;
         }
+
+        _popupOccupied = false;
     }
 
     public void NextPopup()
     {
+        _popupOccupied = true;
+
         _currentPopup++;
         ShowPopup(_currentPopup);
     }
 
     public void NextPopupDelayed()
     {
+        _popupOccupied = true;
+
         _currentPopup++;
         StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 
     public void PreviousPopup()
     {
+        _popupOccupied = true;
+
         _currentPopup--;
         ShowPopup(_currentPopup);
     }
@@ -191,6 +204,8 @@ public class Tutorial : MonoBehaviour
 
     private void ShowTurnOrderPopup()
     {
+        if (_popupOccupied) return;
+
         if (GlobalGameManager.GetInstance().GetTotalBattlesWon() > 0)
         {
             CombatEventManager.OnCharacterPlaced -= ShowTurnOrderPopup;
@@ -201,6 +216,8 @@ public class Tutorial : MonoBehaviour
 
     private void ShowDeployPopup()
     {
+        if (_popupOccupied) return;
+
         Selector._instance.OnSelectPlacementCharacterFromTile -= ShowDeployPopup;
         _currentPopup = 3;
         StartCoroutine(ShowPopupDelayed(_currentPopup));
@@ -208,6 +225,8 @@ public class Tutorial : MonoBehaviour
 
     private void ShowMovementPointsPopup()
     {
+        if (_popupOccupied) return;
+
         CombatUI.Instance.OnStartCombatButtonPressed -= ShowMovementPointsPopup;
         _currentPopup = 4;
         StartCoroutine(ShowPopupDelayed(_currentPopup));
@@ -215,6 +234,8 @@ public class Tutorial : MonoBehaviour
 
     private void ShowAbilitiesPopup()
     {
+        if (_popupOccupied) return;
+
         Selector._instance.OnPreviewAbilityRange -= ShowAbilitiesPopup;
         _currentPopup = 5;
         ShowPopup(_currentPopup);
@@ -222,6 +243,7 @@ public class Tutorial : MonoBehaviour
 
     public void ShowTraitsAndStatusPopup()
     {
+        if (_popupOccupied) return;
         if (!_traitsAndStatusReady) return;
 
         _traitsAndStatusReady = false;
@@ -231,6 +253,8 @@ public class Tutorial : MonoBehaviour
 
     private void ShowCombatLogPopup()
     {
+        if (_popupOccupied) return;
+
         CombatLog combatLog = FindFirstObjectByType<CombatLog>();
         if (combatLog != null)
         {
@@ -243,6 +267,8 @@ public class Tutorial : MonoBehaviour
 
     private void ShowCardsPopup(bool b)
     {
+        if (_popupOccupied) return;
+
         CardHandManager.onHover -= ShowCardsPopup;
         _currentPopup = 7;
         StartCoroutine(ShowPopupDelayed(_currentPopup));
@@ -250,6 +276,8 @@ public class Tutorial : MonoBehaviour
 
     private void ShowShopPopup()
     {
+        if (_popupOccupied) return;
+
         CombatMenuManager.GetInstance().OnGoToShopButtonPressed -= ShowShopPopup;
         _currentPopup = 9;
         StartCoroutine(ShowPopupDelayed(_currentPopup));

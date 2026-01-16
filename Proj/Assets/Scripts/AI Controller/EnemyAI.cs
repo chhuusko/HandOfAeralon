@@ -552,7 +552,7 @@ public class EnemyAI : MonoBehaviour
             // Bard
             case "InspiringAnthem_Ability":
                 {
-                    _turnEndWaitTimeDynamic += 1f;
+                    _turnEndWaitTimeDynamic = 4f;
 
                     int hitCount = 0;
                     List<CombatGridTile> aoe = DiamondPattern(target, 2);
