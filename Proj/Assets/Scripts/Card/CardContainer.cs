@@ -164,6 +164,7 @@ public class CardContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
              
             
             CardHandManager.GetInstance().RemoveCardFromHand(this);
+            
             _containedCard.AfterCardPlay();
         }
     }

@@ -199,7 +199,8 @@ public class CardHandManager : MonoBehaviour
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
 
-        if (!cardContainer.GetCard().tags.Contains(CardTag.Ephemeral))
+        if (cardContainer.GetCard().tags.Contains(CardTag.Ephemeral) || cardContainer.GetCard().tags.Contains(CardTag.Exhaust)){}
+        else
         {
             _cardsInDiscardPile.Add(cardContainer.GetCard());
         }
