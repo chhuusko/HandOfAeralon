@@ -99,7 +99,7 @@ public class SongOfRenewalAOE : RoundAOEAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null) return;
 
-        int healAmount = CalculateHealAmount(castingCharacter, affectedCharacter, false);
+        int healAmount = CalculateHealAmount(castingCharacter, affectedCharacter, false, false);
 
         int totalHealth = healAmount + affectedCharacter.Data.CurrentHealthPoints;
         if (totalHealth >= affectedCharacter.Data.DerivedHealthPoints)
@@ -121,7 +121,7 @@ public class SongOfRenewalAOE : RoundAOEAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null) return;
 
-        int healAmount = CalculateHealAmount(castingCharacter, affectedCharacter, true);
+        int healAmount = CalculateHealAmount(castingCharacter, affectedCharacter, true, false);
 
         int totalHealth = healAmount + affectedCharacter.Data.CurrentHealthPoints;
         if(totalHealth >= affectedCharacter.Data.DerivedHealthPoints)
@@ -143,7 +143,7 @@ public class SongOfRenewalAOE : RoundAOEAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null) return;
 
-        int healAmount = CalculateHealAmount(castingCharacter, affectedCharacter, bIsMainTarget);
+        int healAmount = CalculateHealAmount(castingCharacter, affectedCharacter, bIsMainTarget, true);
 
         int totalHealth = healAmount + affectedCharacter.Data.CurrentHealthPoints;
         if (totalHealth >= affectedCharacter.Data.DerivedHealthPoints)
@@ -155,7 +155,7 @@ public class SongOfRenewalAOE : RoundAOEAbility
         affectedCharacter.PreviewHealthChange(healAmount);
     }
 
-    private int CalculateHealAmount(Character castingCharacter, Character affectedCharacter, bool bIsMainTarget)
+    private int CalculateHealAmount(Character castingCharacter, Character affectedCharacter, bool bIsMainTarget, bool bInPreivew)
     {
         // 1. Character health
         // 2. Ability Heal
@@ -170,10 +170,10 @@ public class SongOfRenewalAOE : RoundAOEAbility
         float healMultiplier = bIsMainTarget ? _maxHealthHealMain : _maxHealthHealArea;
         float healAmount = (affectedCharacter.Data.DerivedHealthPoints * healMultiplier);
 
-        if (bIsMainTarget)
+        if (bIsMainTarget && !bInPreivew)
         {
             // Draw an extra card from your deck if main target was below 50% health and casting Character is a not an enemy.
-            if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.Data.DerivedHealthPoints <  affectedCharacter.Data.DerivedHealthPoints * 0.5f)
+            if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.Data.CurrentHealthPoints <  affectedCharacter.Data.DerivedHealthPoints * 0.5f)
             {
                 CardHandManager.GetInstance().AddCardFromDeck();
             }
