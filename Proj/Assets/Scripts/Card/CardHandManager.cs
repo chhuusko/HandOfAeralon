@@ -79,7 +79,8 @@ public class CardHandManager : MonoBehaviour
     public void CharacterTarget(Character targetCharacter) { onTargetCharacter?.Invoke(targetCharacter); }
     public void CardTargetCharacter(Card usedCard, Character target) { onCardTargetCharacter?.Invoke(target, usedCard); }
     public void CardUsed(Card usedCard) 
-    { 
+    {
+        _cardsPlayedThisTurn++;
         onCardUse?.Invoke(usedCard); 
         AudioManager.Instance.PlayOneShot(playSound, transform.position); 
     }
@@ -206,7 +207,6 @@ public class CardHandManager : MonoBehaviour
             _cardsInDiscardPile.Add(cardContainer.GetCard());
         }
 
-        _cardsPlayedThisTurn++;
         AddSpaceing();
         UpdatePileTexts();
         AudioManager.Instance.PlayOneShot(discardSound, transform.position);
