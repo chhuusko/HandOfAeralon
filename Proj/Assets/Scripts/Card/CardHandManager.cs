@@ -86,13 +86,20 @@ public class CardHandManager : MonoBehaviour
     }
     private void Awake()
     {
+        Debug.Log("AWAKEBEING CALLED");
         turnsTillCard = tempTurnsTillCard;
         _horizontalLayoutGroup = _Hand.gameObject.GetComponent<HorizontalLayoutGroup>();
         _controller = new InputController();
         _instance = this;
         if (GlobalGameManager.GetInstance() != null)
         {
-            _cardsInDeck = new List<Card>(GlobalGameManager.GetInstance().GetGameData().cardList);
+            _cardsInDeck = new List<Card>();
+            foreach (Card card in GlobalGameManager.GetInstance().GetGameData().cardList)
+            {
+                Card clone = Instantiate(card);
+                _cardsInDeck.Add(clone);
+
+            }
         }
         else
         {
@@ -101,8 +108,10 @@ public class CardHandManager : MonoBehaviour
             {
                 Card clone = Instantiate(card);
                 _cardsInDeck.Add(clone);
+                
             }
         }
+
         drawHand();
         UpdatePileTexts();
     }
