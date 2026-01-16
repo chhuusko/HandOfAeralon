@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   targetFaction: 0
-  rarity: 0
+  rarity: 2
   title: Soul Exchange
-  description: Destroy the acting ally to destroy target non-boss enemy
+  description: Destroy the acting ally to destroy target enemy
   cost: 5
   icon: {fileID: 21300000, guid: 6bf07ebc5677a114c9110086d48a832b, type: 3}
   CardTemplate: {fileID: 0}
