@@ -90,19 +90,15 @@ public class CardHandManager : MonoBehaviour
         _horizontalLayoutGroup = _Hand.gameObject.GetComponent<HorizontalLayoutGroup>();
         _controller = new InputController();
         _instance = this;
-        if (GlobalGameManager.GetInstance() != null)
+        _cardsInDeck = new List<Card>();
+        foreach (Card card in GlobalGameManager.GetInstance().GetGameData().cardList)
         {
-            _cardsInDeck = new List<Card>(GlobalGameManager.GetInstance().GetGameData().cardList);
+            Card clone = Instantiate(card);
+            _cardsInDeck.Add(clone);
+
         }
-        else
-        {
-            _cardsInDeck = new List<Card>(_deckPreset.GetCards().Count);
-            foreach (Card card in _deckPreset.GetCards())
-            {
-                Card clone = Instantiate(card);
-                _cardsInDeck.Add(clone);
-            }
-        }
+        
+
         drawHand();
         UpdatePileTexts();
     }
@@ -197,12 +193,13 @@ public class CardHandManager : MonoBehaviour
     {
 
     }
-    public void RemoveCardFromHand(CardContainer cardContainer)
+    public void RemoveCardFromHand(CardContainer cardContainer, bool isCardPlayed)
     {
         _cardsInHand.Remove(cardContainer);
         Destroy(cardContainer.gameObject);
 
-        if (!cardContainer.GetCard().tags.Contains(CardTag.Ephemeral))
+        if (cardContainer.GetCard().tags.Contains(CardTag.Ephemeral) || (isCardPlayed && cardContainer.GetCard().tags.Contains(CardTag.Exhaust))){}
+        else
         {
             _cardsInDiscardPile.Add(cardContainer.GetCard());
         }
@@ -282,7 +279,7 @@ public class CardHandManager : MonoBehaviour
         }
         foreach (CardContainer card in removeList)
         {
-            RemoveCardFromHand(card);
+            RemoveCardFromHand(card, false);
         }
     }
     public int GetCardsPlayedThisTurn()
