@@ -33,6 +33,9 @@ public class Tutorial : MonoBehaviour
 
     private Canvas _canvas;
     private int _currentPopup = 0;
+    private bool _traitsAndStatusReady = false;
+    private bool _popupOccupied = false;
+    private bool[] _popupSeen;
 
     void Start()
     {
@@ -43,8 +46,15 @@ public class Tutorial : MonoBehaviour
             Debug.LogError("Tutorial.cs | Canvas not found!");
         }
 
+        _popupSeen = new bool[_popups.Length];
+
         CombatUI.Instance.OnStartCombatButtonPressed += ShowMovementPointsPopup;
         CombatMenuManager.GetInstance().OnGoToShopButtonPressed += ShowShopPopup;
+        Selector._instance.OnSelectPlacementCharacterFromTile += ShowDeployPopup;
+        Selector._instance.OnPreviewAbilityRange += ShowAbilitiesPopup;
+        CardHandManager.onHover += ShowCardsPopup;
+        CombatEventManager.OnCharacterPlaced += ShowTurnOrderPopup;
+        CombatEventManager.OnExitCombatStateIntroCinematic += ShowMissedPopups;
 
         HidePopups();
         
@@ -56,6 +66,8 @@ public class Tutorial : MonoBehaviour
 
     public IEnumerator ShowPopupDelayed(int popup)
     {
+        _popupOccupied = true;
+
         yield return new WaitForSeconds(1f);
         ShowPopup(popup);
     }
@@ -63,6 +75,8 @@ public class Tutorial : MonoBehaviour
     public void ShowPopup(int popup)
     {
         if (SkipTutorial) return;
+
+        _popupOccupied = true;
 
         if (popup >= 0 && popup < _popups.Length)
         {
@@ -87,6 +101,13 @@ public class Tutorial : MonoBehaviour
             Debug.LogError($"ShowPopup({popup}) INDEX OUT OF BOUNDS for {name}.");
             HidePopups();
         }
+
+        if (popup == 6) // Combat Log
+        {
+            _traitsAndStatusReady = true;
+        }
+
+        _popupSeen[popup] = true;
     }
 
     public void HidePopups()
@@ -105,22 +126,30 @@ public class Tutorial : MonoBehaviour
         {
             camera[0].FreezeCamera = false;
         }
+
+        _popupOccupied = false;
     }
 
     public void NextPopup()
     {
+        _popupOccupied = true;
+
         _currentPopup++;
         ShowPopup(_currentPopup);
     }
 
     public void NextPopupDelayed()
     {
+        _popupOccupied = true;
+
         _currentPopup++;
         StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 
     public void PreviousPopup()
     {
+        _popupOccupied = true;
+
         _currentPopup--;
         ShowPopup(_currentPopup);
     }
@@ -141,14 +170,14 @@ public class Tutorial : MonoBehaviour
 
             switch(index)
             {
-                case 0: NextPopupDelayed(); break; // Introduction
-                case 1: NextPopupDelayed(); break; // Camera
-                case 2: NextPopupDelayed(); break; // Turn Order
+                case 0: NextPopup(); break; // Introduction
+                case 1: break; // Camera
+                case 2: break; // Turn Order
                 case 3: break; // Deploy Your Party
                 case 4: break; // Movement Points
                 case 5: break; // Abilities ...
-                case 6: NextPopupDelayed(); break; // Combat Log
-                case 7: NextPopupDelayed(); break; // Mana, Cards & Deck
+                case 6: break; // Combat Log
+                case 7: break; // Mana, Cards & Deck
                 case 8: break; // Traits & Status
                 case 9: break; // The Shop ...
             }
@@ -168,6 +197,8 @@ public class Tutorial : MonoBehaviour
             yield return null;
         }
 
+        Selector._instance.DeselectCharacter();
+
         CombatLog combatLog = FindFirstObjectByType<CombatLog>();
         if (combatLog != null)
         {
@@ -177,27 +208,59 @@ public class Tutorial : MonoBehaviour
         StartCoroutine(ShowPopupDelayed(0));
     }
 
+    private void ShowTurnOrderPopup()
+    {
+        if (_popupOccupied) return;
+
+        if (GlobalGameManager.GetInstance().GetTotalBattlesWon() > 0)
+        {
+            CombatEventManager.OnCharacterPlaced -= ShowTurnOrderPopup;
+            _currentPopup = 2;
+            StartCoroutine(ShowPopupDelayed(_currentPopup));
+        }
+    }
+
+    private void ShowDeployPopup()
+    {
+        if (_popupOccupied) return;
+
+        Selector._instance.OnSelectPlacementCharacterFromTile -= ShowDeployPopup;
+        _currentPopup = 3;
+        StartCoroutine(ShowPopupDelayed(_currentPopup));
+    }
+
     private void ShowMovementPointsPopup()
     {
-        List<GameObject> characters = CombatGrid._instance.GetAllFriendlyCharacters();
-        characters[0].GetComponent<CharacterMovement>().OnCharacterStoppedMoving += ShowAbilitiesPopup;
+        if (_popupOccupied) return;
 
         CombatUI.Instance.OnStartCombatButtonPressed -= ShowMovementPointsPopup;
         _currentPopup = 4;
-        ShowPopup(_currentPopup);
+        StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 
     private void ShowAbilitiesPopup()
     {
-        List<GameObject> characters = CombatGrid._instance.GetAllFriendlyCharacters();
-        characters[0].GetComponent<CharacterMovement>().OnCharacterStoppedMoving -= ShowAbilitiesPopup;
+        if (_popupOccupied) return;
 
+        Selector._instance.OnPreviewAbilityRange -= ShowAbilitiesPopup;
         _currentPopup = 5;
+        ShowPopup(_currentPopup);
+    }
+
+    public void ShowTraitsAndStatusPopup()
+    {
+        if (_popupOccupied) return;
+        if (!_traitsAndStatusReady) return;
+
+        _traitsAndStatusReady = false;
+        _currentPopup = 8;
         StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 
     private void ShowCombatLogPopup()
     {
+        if (_popupOccupied) return;
+
         CombatLog combatLog = FindFirstObjectByType<CombatLog>();
         if (combatLog != null)
         {
@@ -208,11 +271,45 @@ public class Tutorial : MonoBehaviour
         StartCoroutine(ShowPopupDelayed(_currentPopup));
     }
 
+    private void ShowCardsPopup(bool b)
+    {
+        if (_popupOccupied) return;
+
+        CardHandManager.onHover -= ShowCardsPopup;
+        _currentPopup = 7;
+        ShowPopup(_currentPopup);
+    }
+
     private void ShowShopPopup()
     {
+        if (_popupOccupied) return;
+
         CombatMenuManager.GetInstance().OnGoToShopButtonPressed -= ShowShopPopup;
         _currentPopup = 9;
         StartCoroutine(ShowPopupDelayed(_currentPopup));
+    }
+
+    private void ShowMissedPopups()
+    {
+        if (GlobalGameManager.GetInstance().GetTotalBattlesWon() > 1)
+        {
+            CombatEventManager.OnExitCombatStateIntroCinematic -= ShowMissedPopups;
+            StartCoroutine(MissedPopups());
+        }
+    }
+
+    private IEnumerator MissedPopups()
+    {
+        for (int i = 0; i < _popupSeen.Length; i++)
+        {
+            if (_popupSeen[i] == false)
+            {
+                _popupSeen[i] = true;
+                ShowPopup(i);
+                yield return null;
+                yield return new WaitWhile(() => _popupOccupied);
+            }
+        }
     }
 
     public void PlayVideo(VideoClip clip)

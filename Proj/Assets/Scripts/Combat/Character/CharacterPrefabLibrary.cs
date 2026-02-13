@@ -21,23 +21,6 @@ public class CharacterPrefabLibrary : ScriptableObject
     public GameObject GetPrefab(CharacterClass classType)
     {
 
-        // NOTE (Calle): Use this if there are more different models to load based on BodyType or something else besides ClassType
-        //if (_dictionary == null)
-        //{
-        //    _dictionary = new Dictionary<CharacterClass, List<GameObject>>();
-        //    foreach (CharacterPrefabEntry entry in _characterPrefabs)
-        //    {
-        //        List<GameObject> list = _dictionary[entry._classType];
-        //        list.Add(entry._prefabList[0]);
-        //    }
-        //}
-
-        // TODO (Calle): Loop over the list based on secondary model identification! :D
-        //foreach(GameObject character in _dictionary[classType])
-        //{
-        //    if(character.GetComponent<Character>().GetFaction() == _dictionary[])
-        //}
-
         if(_dictionary == null)
         {
             _dictionary = new Dictionary<CharacterClass, GameObject>();
@@ -46,10 +29,6 @@ public class CharacterPrefabLibrary : ScriptableObject
                 _dictionary[characterEntry._classType] = characterEntry._prefab;
             }
         }
-
-        // NOTE (Calle): For multiple models
-        //GameObject characterListOfClass = _dictionary[classType];
-        //return characterListOfClass[0];
 
         return _dictionary[classType];
     }

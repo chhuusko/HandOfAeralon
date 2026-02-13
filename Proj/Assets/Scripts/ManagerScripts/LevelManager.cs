@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,20 +9,27 @@ using UnityEngine.TextCore.Text;
 [CreateAssetMenu(fileName = "LevelManager", menuName = "Manager/LevelManager")]
 public class LevelManager : ScriptableObject
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private static LevelManager _instance;
+
+    //levels
     [SerializeField] private List<string> tutorialCombatList;
     [SerializeField] private List<string> easyCombatList;
     [SerializeField] private List<string> mediumCombatList;
     [SerializeField] private List<string> hardCombatList;
+    [SerializeField] private string bossLevel;
 
-    [SerializeField] private int mapScalingInterval = 3;
-    private static LevelManager _instance;
+    //Incase seeded creation
     private string[] _combatList;
     private string[] _generatedList;
+
+    //Internal 
     private int _level = 0;
     private int _difficulty = 0;
-
     private int statlevel;
+    private float levelStartTime;
+
+    //Presets
+    [SerializeField] private int mapScalingInterval = 3;
     [SerializeField] private float statIncreaseFactor = 1.2f;
     [SerializeField] public int statIncreaseInterval = 3;
     public float statIncrease { get; private set; }
@@ -30,11 +38,14 @@ public class LevelManager : ScriptableObject
     [SerializeField] public int enemyStatIncreaseInterval = 1;
     public float enemyStatIncrease { get; private set; }
 
+    //other
     private int menuFPSCap = 60;
     private CombatGrid _combatGrid;
     private bool _isTutorialCompleted;
 
+    //No repeat list
     List<string> easyList, mediumList, hardList;
+    string boss;
 
     private int maxGameLevel = 12;
     public static LevelManager GetInstance()
@@ -59,6 +70,7 @@ public class LevelManager : ScriptableObject
         easyList = new List<string>(easyCombatList);
         mediumList = new List<string>(mediumCombatList);
         hardList = new List<string>(hardCombatList);
+        boss = new string(bossLevel);
     }
     private void Awake()
     {
@@ -75,12 +87,12 @@ public class LevelManager : ScriptableObject
     }
     public void StartNextLevel() 
     {
+        Debug.Log(GlobalGameManager.GetInstance().GetTimeText());
+        GlobalGameManager.GetInstance().SetTotalBattlesWon(_level);
         TieredRandomLevel();
     }
     private void StaticLevel()
     {
-        
-        Debug.Log(_level + " level");
         if (SceneManager.GetActiveScene().name == "ShopScene" || _level == 0)
         {
             if (_level >= easyCombatList.Count) _level = 0;
@@ -160,7 +172,8 @@ public class LevelManager : ScriptableObject
                         LoadScene(hardList);
                         break;
                     default:
-                        RestartGame();
+                        SceneManager.LoadScene(boss);
+                        boss = null;
                         break;
                 }
             }
@@ -175,12 +188,20 @@ public class LevelManager : ScriptableObject
             {
                 IncreaseStat();
             }
-
+            
             Application.targetFrameRate = menuFPSCap;
             QualitySettings.vSyncCount = 0;
             
-            
-            SceneManager.LoadScene("ShopScene");
+            if (boss == null)
+            {
+                RestartGame();
+            }
+            else
+            {
+                GlobalGameManager.GetInstance().GetCombatCoins(true);
+                SceneManager.LoadScene("ShopScene");
+            }
+                
             
             
 
@@ -188,11 +209,15 @@ public class LevelManager : ScriptableObject
     }
     public bool IsGameWon()
     {
-        if (_level+1 > maxGameLevel)
+        if (boss == null)
         {
             return true;
         }
         return false;
+    }
+    public bool IsLastLevel()
+    {
+        return (SceneManager.GetActiveScene().name == bossLevel);
     }
     private void LoadScene(List<string> sceneList)
     {
@@ -262,5 +287,14 @@ public class LevelManager : ScriptableObject
     public int GetStatLevel()
     {
         return statlevel;
+    }
+    public string LevelTimeElapsed()
+    {
+        float LevelTimeSpan = (Time.unscaledTime - levelStartTime);
+        int hours = (int)(LevelTimeSpan / 3600);
+        int minutes = (int)((LevelTimeSpan % 3600) / 60);
+        int seconds = (int)(LevelTimeSpan % 60);
+
+        return $"{hours:00}:{minutes:00}:{seconds:00}";
     }
 }

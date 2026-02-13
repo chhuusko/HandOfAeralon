@@ -9,8 +9,10 @@ using UnityEngine.Events;
 public class EnemyAI : MonoBehaviour
 {
     private const int TOP_N_ACTIONS = 2;
-    private const float TURN_START_WAIT_TIME = 1f;
+    private const float TURN_START_WAIT_TIME = 0.8f;
     private const float TURN_END_WAIT_TIME = 2.5f;
+
+    private float _turnEndWaitTimeDynamic;
 
     private class AIAction
     {
@@ -92,6 +94,8 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator AIBehaviour()
     {
+        yield return new WaitForSeconds(0.2f);
+
         if (_character.IsStunned)
         {
             DebugLog.JLWLog($"{_character.name} was Stunned and will pass their turn!");
@@ -107,6 +111,8 @@ public class EnemyAI : MonoBehaviour
             EndTurn();
             yield break;
         }
+
+        _turnEndWaitTimeDynamic = TURN_END_WAIT_TIME;
 
         List<CombatGridTile> moveRange = FindMoveRange();
         //Debug.LogError($"EnemyAI.cs | moveRange: {moveRange.Count}");
@@ -153,7 +159,7 @@ public class EnemyAI : MonoBehaviour
             StartCoroutine(PerformAbilityCast(chosenAction));
         }
 
-        yield return new WaitForSeconds(TURN_END_WAIT_TIME);
+        yield return new WaitForSeconds(_turnEndWaitTimeDynamic);
         EndTurn();
     }
 
@@ -370,6 +376,8 @@ public class EnemyAI : MonoBehaviour
         float min = float.MaxValue;
         foreach (var character in characters)
         {
+            if (character == null || character.GetCurrentHealth() == 0) continue;
+
             float distance = Vector3.Distance(_character.transform.position, character.transform.position);
             if (distance < min && character != _character)
             {
@@ -459,6 +467,11 @@ public class EnemyAI : MonoBehaviour
                                 {
                                     result += 100f;
                                 }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
+                                {
+                                    result = -150f;
+                                }
                             }
                         }
                     }
@@ -496,6 +509,11 @@ public class EnemyAI : MonoBehaviour
                                 {
                                     result += 100f;
                                 }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
+                                {
+                                    result = -150f;
+                                }
                             }
                         }
                     }
@@ -519,6 +537,7 @@ public class EnemyAI : MonoBehaviour
                             {
                                 if (occupantSEM != null && !occupantSEM.ContainsStatusEffect<Slowed>())
                                 {
+                                    result += 30;
                                     hitCount++;
                                 }
                             }
@@ -534,6 +553,8 @@ public class EnemyAI : MonoBehaviour
             // Bard
             case "InspiringAnthem_Ability":
                 {
+                    _turnEndWaitTimeDynamic = 4.3f;
+
                     int hitCount = 0;
                     List<CombatGridTile> aoe = DiamondPattern(target, 2);
                     foreach (var hit in aoe)
@@ -673,22 +694,22 @@ public class EnemyAI : MonoBehaviour
                             if (isEnemy)
                             {
                                 hitCount++;
-                                result += 30f;
+                                result += 10f;
 
                                 if (occupantPERCENTHP < 0.2f)
                                 {
                                     result += 999f;
                                 }
 
-                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
                                 {
-                                    result += Random.Range(0f, 20f);
+                                    result = -150f;
                                 }
                             }
                         }
                     }
-                    if (hitCount > 1) result += 50f;
-                    if (hitCount > 2) result += 50f;
+                    if (hitCount > 1) result += 20f;
+                    if (hitCount > 2) result += 30f;
                     if (hitCount == 0) result -= 100f;
                     float myPERCENTHP = _character.GetMaxHealth() == 0 ? 1f : _character.GetCurrentHealth() / _character.GetMaxHealth();
                     if (myPERCENTHP > 0.9f) result -= 100f;
@@ -783,6 +804,11 @@ public class EnemyAI : MonoBehaviour
                                 {
                                     result += 50f;
                                 }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
+                                {
+                                    result = -150f;
+                                }
                             }
                         }
                     }
@@ -838,6 +864,11 @@ public class EnemyAI : MonoBehaviour
                                 if (occupant.GetCharacterClass() == CharacterClass.Bard || occupant.GetCharacterClass() == CharacterClass.Sorceress)
                                 {
                                     result += 50f;
+                                }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
+                                {
+                                    result = -150f;
                                 }
                             }
                         }
@@ -930,6 +961,11 @@ public class EnemyAI : MonoBehaviour
                                 {
                                     result += Random.Range(0f, 20f);
                                 }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
+                                {
+                                    result = -150f;
+                                }
                             }
                         }
                     }
@@ -969,6 +1005,11 @@ public class EnemyAI : MonoBehaviour
                                 if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>())
                                 {
                                     result += Random.Range(0f, 20f);
+                                }
+
+                                if (occupantSEM != null && occupantSEM.ContainsStatusEffect<Stealth>() && Random.Range(0f, 1f) > 0.5f)
+                                {
+                                    result = -150f;
                                 }
                             }
                         }

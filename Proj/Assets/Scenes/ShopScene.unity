@@ -7122,6 +7122,31 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2570328684585838021, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: EventReference.Path
+      value: event:/Sound Design/Diegetic/Ambience/Ruins
+      objectReference: {fileID: 0}
+    - target: {fileID: 2570328684585838021, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: EventReference.Guid.Data1
+      value: 1956674946
+      objectReference: {fileID: 0}
+    - target: {fileID: 2570328684585838021, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: EventReference.Guid.Data2
+      value: 1120725836
+      objectReference: {fileID: 0}
+    - target: {fileID: 2570328684585838021, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: EventReference.Guid.Data3
+      value: 1785676709
+      objectReference: {fileID: 0}
+    - target: {fileID: 2570328684585838021, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
+        type: 3}
+      propertyPath: EventReference.Guid.Data4
+      value: -1743519353
+      objectReference: {fileID: 0}
     - target: {fileID: 2970675957040427403, guid: a04d8f38e229d1b46b8a8d4c1d9c12e4,
         type: 3}
       propertyPath: m_LocalPosition.x

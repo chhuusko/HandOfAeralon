@@ -293,7 +293,14 @@ PlayerSettings:
   AndroidAppBundleSizeToValidate: 150
   AndroidReportGooglePlayAppDependencies: 1
   androidSymbolsSizeThreshold: 800
-  m_BuildTargetIcons: []
+  m_BuildTargetIcons:
+  - m_BuildTarget: 
+    m_Icons:
+    - serializedVersion: 2
+      m_Icon: {fileID: 2800000, guid: 405a652d1f9eef342859010c38d25e44, type: 3}
+      m_Width: 128
+      m_Height: 128
+      m_Kind: 0
   m_BuildTargetPlatformIcons:
   - m_BuildTarget: iPhone
     m_Icons:
@@ -957,11 +964,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 2b88dd65-0e2f-402a-97be-7fc629d59ffb
+  cloudProjectId: 1d39c933-5834-4c77-b02a-8b7311f38086
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Proj
-  organizationId: joelsky02
+  projectName: Hand of Aeralon
+  organizationId: carlhenrik
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

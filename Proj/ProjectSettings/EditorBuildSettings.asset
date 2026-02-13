@@ -8,21 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 989858d3f0041a14fbcf5a13a58653da
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/GameMap.unity
     guid: c1188d00b10b00e4592128b9835cc1f2
   - enabled: 1
     path: Assets/Scenes/ShopScene.unity
     guid: 47629128577221f4d9bd381ee4e21d51
-  - enabled: 0
-    path: Assets/Scenes/Graveyard12x8.unity
-    guid: 7c412f155496a7e469a6278ad0b4a8eb
-  - enabled: 0
-    path: Assets/Scenes/Graveyard11x9.unity
-    guid: 58d605d35e810e84f87c690d030be16a
-  - enabled: 0
-    path: Assets/Scenes/Graveyard10x9.unity
-    guid: 2457c1250c00d254a91cd44ccec9b064
   - enabled: 1
     path: Assets/Scenes/Tutorial1.unity
     guid: 37a10f2341b2b4440b4558deaa712cf1
@@ -48,34 +39,37 @@ EditorBuildSettings:
     path: Assets/Scenes/Level1Easy13x8.unity
     guid: 2edf72b385a5a914bb4fd3b69f2e83a7
   - enabled: 1
-    path: Assets/Scenes/Level1Hard10x10.unity
-    guid: 49fff1a48432d6b439a66c89a1ce6bff
+    path: Assets/Scenes/Level2Hard10x10.unity
+    guid: 60ac0f967aece1f49ba531cd4f012f17
   - enabled: 1
-    path: Assets/Scenes/Level1Hard11x9.unity
-    guid: 17ede865ab42bbd43a0d3d5b34f6388a
+    path: Assets/Scenes/Level2Hard11x9.unity
+    guid: 5729e81eaa4ff0544b1ccac52712a0f7
   - enabled: 1
-    path: Assets/Scenes/Level1Hard12x8.unity
-    guid: e9b81a7629ea94541a5b93f6b3293e64
+    path: Assets/Scenes/Level2Hard12x8.unity
+    guid: 211ae76735ea8a1429794e59898fc0ba
   - enabled: 1
-    path: Assets/Scenes/Level1Hard12x9.unity
-    guid: 75c4589ddc10a0748b12b9ac07d6befb
+    path: Assets/Scenes/Level2Hard12x9.unity
+    guid: 8f808b63dc7a5054c8771514dabf4d75
   - enabled: 1
-    path: Assets/Scenes/Level1Hard12x10.unity
-    guid: 35a8cc83fdb01384d9b76a613603ff20
+    path: Assets/Scenes/Level2Hard12x10.unity
+    guid: 0796716e486b0274ab1b8733adf1ef89
   - enabled: 1
-    path: Assets/Scenes/Level1Medium9x8.unity
-    guid: 51c0ca4f0a837234ea6baea495f992e9
+    path: Assets/Scenes/Level2Medium9x8.unity
+    guid: 9999800a20ac48142bc3a6ea44e0102e
   - enabled: 1
-    path: Assets/Scenes/Level1Medium10x8.unity
-    guid: f8fbc263f02c6264995ab7e2c0943f2c
+    path: Assets/Scenes/Level2Medium10x8.unity
+    guid: a3ddb1aafdd581941995ef303165adc2
   - enabled: 1
-    path: Assets/Scenes/Level1Medium10x9.unity
-    guid: 2c44d6a60598a1f4683107516f6ffa2a
+    path: Assets/Scenes/Level2Medium10x9.unity
+    guid: 0f503612661604546bc7ca4b42d35893
   - enabled: 1
-    path: Assets/Scenes/Level1Medium10x10.unity
-    guid: e9315a57981c0054ba0f0473fa9cd263
+    path: Assets/Scenes/Level2Medium10x10.unity
+    guid: ebd111e1bd0ef4c4ba43f35166c1da9b
   - enabled: 1
-    path: Assets/Scenes/Level1Medium11x8.unity
-    guid: b15bcf0421a99e042967691bf903fb76
+    path: Assets/Scenes/Level2Medium11x8.unity
+    guid: 779e608055157be4eb38fceede2f3239
+  - enabled: 1
+    path: Assets/Scenes/Level2LastFight.unity
+    guid: 2e8d2b29d40bf74429f300fa9bb27043
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

@@ -15,9 +15,11 @@ public class MentalPurge : Card
         {
             foreach (CardContainer card in cards)
             {
-                if (!card.GetCard().tags.Contains(CardTag.Etherial))
+                if (!card.GetCard().tags.Contains(CardTag.Ephemeral))
                 {
+                    card.GetCard().ResetCost();
                     cardHandManager.GetDiscardPile().Add(card.GetCard());
+                    
                 }
                 Destroy(card.gameObject);
             }

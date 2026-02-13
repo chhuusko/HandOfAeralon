@@ -54,6 +54,10 @@ public class Shop : MonoBehaviour
     }
     private void Awake()
     {
+        if (GlobalGameManager.GetInstance().GetTotalBattlesWon() <= 1)
+        {
+            _healPrice = 0;
+        }
         _removeCardText.text = "Balance <color=yellow>" + GlobalGameManager.GetInstance().GetGameData().coins + "</color><voffset=20><space=40><sprite name=\"UI_icon_59\">";
         _refreshText.text = "Refresh <color=Yellow>"+_refreshPrice+"</color><voffset=15><space=20><sprite name=\"UI_icon_59\">";
         _healText.text = "Heal Party (50%)\r\n<color=Yellow>"+ _healPrice+ "</color><voffset=15><space=20><sprite name=\"UI_icon_59\">";
@@ -139,7 +143,7 @@ public class Shop : MonoBehaviour
 
     private void UpdateNextCombatText()
     {
-        _nextCombatText.text = $"Go to Level {GlobalGameManager.GetInstance().GetTotalBattlesWon() + 1}";
+        _nextCombatText.text = $"Go to Level {LevelManager.GetInstance().Getlevel() +1}";
     }
 
     public Card GetRandomUnlockedCard()

@@ -23,15 +23,18 @@ MonoBehaviour:
   - Level1Easy12x10
   - Level1Easy13x8
   mediumCombatList:
-  - Level1Medium10x8
-  - Level1Medium10x9
-  - Level1Medium11x8
+  - Level2Medium9x8
+  - Level2Medium10x8
+  - Level2Medium10x9
+  - Level2Medium10x10
+  - Level2Medium11x8
   hardCombatList:
-  - Level1Hard10x10
-  - Level1Hard11x9
-  - Level1Hard12x8
-  - Level1Hard12x9
-  - Level1Hard12x10
+  - Level2Hard10x10
+  - Level2Hard11x9
+  - Level2Hard12x8
+  - Level2Hard12x9
+  - Level2Hard12x10
+  bossLevel: Level2LastFight
   mapScalingInterval: 3
   statIncreaseFactor: 0.2
   statIncreaseInterval: 3

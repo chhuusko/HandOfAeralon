@@ -29,12 +29,15 @@ public class Selector : MonoBehaviour
     [SerializeField] private Color _movementRangeColor;
     [SerializeField] private Color _hitTilesRangeColor;
 
+    public bool MovementActionPending = false;
     private CharacterMovement _characterMovement;
 
     public event Action<Character> OnCharacterSelected;
     public event Action OnCharacterDeselected;
     public event Action OnCharacterActionStarted;
     public event Action OnCharacterActionStopped;
+    public event Action OnSelectPlacementCharacterFromTile;
+    public event Action OnPreviewAbilityRange;
 
 
     public enum CharacterActionType
@@ -301,6 +304,7 @@ public class Selector : MonoBehaviour
         {
             _selectedCharacter = tile.GetOccupantCharacter();
             ShowCharacterUI(character);
+            OnSelectPlacementCharacterFromTile?.Invoke();
         }
     }
 
@@ -363,6 +367,7 @@ public class Selector : MonoBehaviour
             if (_characterMovement != null)
             {
                 //DebugLog.JLWLog($"Selector.cs | Drawing move range for {character.name}");
+                MovementActionPending = true;
                 _characterMovement.DrawMoveRange();
                 _characterMovement.DrawMoveRangeDelayed();
             }
@@ -392,7 +397,8 @@ public class Selector : MonoBehaviour
         _selectedCharacter = null;
         _characterMovement = null;
         _pendingCharacterActionType = CharacterActionType.Null;
-        
+        MovementActionPending = false;
+
 
         if (_currentState == SelectorState.PlacingCharacters)
         {
@@ -424,10 +430,13 @@ public class Selector : MonoBehaviour
         // Activates character UI without options since the character can't perform actions at the moment.
         OnCharacterSelected?.Invoke(character);
     }
-    public void PreviewAbilityRange(Ability ability)
+    public void 
+        PreviewAbilityRange(Ability ability)
     {
         if (_selectedCharacter != null && _selectedCharacter.TryGetComponent<AbilityHandler>(out var abilityHandler))
         {
+            OnPreviewAbilityRange?.Invoke();
+            MovementActionPending = false;
             _characterMovement.ForgetMoveRange();
             ResetColorAllTiles();
             _pendingCharacterActionType = CharacterActionType.AbilityCasting;

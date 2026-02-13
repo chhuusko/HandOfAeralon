@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Battleborn Momentum
   Icon: {fileID: 21300000, guid: 08a6c2d1203e24b4eb3a679f704d4380, type: 3}
-  Description: After using <b>3</b> abilities in a combat, gain {non_damaging}Empowered{/non_damaging}
+  Description: After using <b>1</b> ability in a combat, gain {non_damaging}Empowered{/non_damaging}
     for <b>3</b> turns
   Type: 3
   IsPermanent: 1
@@ -24,5 +24,5 @@ MonoBehaviour:
     PublicKeyToken=null
   Class: 4
   IsPositive: 1
-  Threshold: 3
+  Threshold: 1
   TurnAmount: 3

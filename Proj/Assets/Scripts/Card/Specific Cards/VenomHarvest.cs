@@ -9,7 +9,8 @@ public class VenomHarvest : Card
         if (character != null)
         {
             character.TakeDamage(GetDamage(character));
-            character.GetStatusEffectManager().RemoveStatusEffect(new Poison(1));
+            StatusEffect poision = character.GetStatusEffectManager().GetStatusEffect<Poison>();
+            character.GetStatusEffectManager().RemoveStatusEffect(poision);
         }
         
     }
@@ -22,7 +23,14 @@ public class VenomHarvest : Card
 
             for (int i = poison.Duration; i > 0; i--)
             {
-                totalDamage += i;
+                var data = poison.Data as IntCapData;
+                if (!data)
+                {
+                    return 0;
+                }
+
+                var damage = data.Damage;
+                totalDamage += i*damage;
             }
         }
         return Mathf.RoundToInt(2 * character.GetStatusEffectManager().ModifyIncomingDamage(totalDamage, null));

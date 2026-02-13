@@ -13,7 +13,7 @@ public class FleetingInsight : Card
             {
                 Card clone = Instantiate(_unlockedCards[Random.Range(0, _unlockedCards.Count - 1)]);
                 clone.TempSetCost(0);
-                clone.tags.Add(CardTag.Etherial);
+                clone.tags.Add(CardTag.Ephemeral);
                 CardHandManager.GetInstance().AddCardToHand(clone);
             }
         }

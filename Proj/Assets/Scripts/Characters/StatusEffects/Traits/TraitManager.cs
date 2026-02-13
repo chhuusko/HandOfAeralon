@@ -23,7 +23,14 @@ public class TraitManager
         
         if (existing != null)
         {
-            existing.IncreaseDuration(statusEffect.Duration);
+            if (statusEffect is Burn or Poison)
+            {
+                existing.IncreaseDuration(statusEffect.Duration);
+                return false;
+            }
+            
+            int longestDuration = statusEffect.Duration > existing.Duration ? statusEffect.Duration : existing.Duration;
+            existing.SetDuration(longestDuration);
             return false;
         }
         _statusEffects.Add(statusEffect);

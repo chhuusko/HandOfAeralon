@@ -2509,8 +2509,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6123813652874307725, guid: 883f3c1d0e569204baa02e6740cf7b9f,
         type: 3}
+      propertyPath: _sfxVolume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6123813652874307725, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
+      propertyPath: _musicVolume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6123813652874307725, guid: 883f3c1d0e569204baa02e6740cf7b9f,
+        type: 3}
       propertyPath: _masterVolume
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6123813652874307725, guid: 883f3c1d0e569204baa02e6740cf7b9f,
         type: 3}
@@ -2824,8 +2834,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 399396034}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: GoToSaveMenu
-        m_Mode: 1
+        m_MethodName: SelectGameSlot
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

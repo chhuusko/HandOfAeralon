@@ -15,7 +15,7 @@ public class PartyMemberUI : MonoBehaviour, IPointerClickHandler
     public void SetUIElements(CharacterData characterData)
     {
         _characterData = characterData;
-        _image.sprite = characterData.ClassData.classImage;
+        _image.sprite = characterData.ClassData.friendlyImage;
         _healthFill.fillAmount = 1f-((float)characterData.CurrentHealthPoints/ (float)characterData.DerivedHealthPoints);
         _healthText.text = "Health " + characterData.CurrentHealthPoints + "/" + characterData.DerivedHealthPoints + "<voffset=12.5> <space=3> <sprite name=\"UI_icon_104\">";
         _sellText.text = "Sell " + _sellPrice + "<voffset=12.5> <space=3> <sprite name=\"UI_icon_59\">";

@@ -39,7 +39,7 @@ public class SelectivePurge : Card
         {
             if (card.GetCard() == selectedCard)
             {
-                CardHandManager.GetInstance().RemoveCardFromHand(card);
+                CardHandManager.GetInstance().RemoveCardFromHand(card, false);
                 return;
             }
         }

@@ -11,7 +11,9 @@ public class AudioManager : MonoBehaviour
     private List<EventInstance> events;
 
     private Bus masterBus;
-    
+    private Bus musicBus;
+    //private Bus sfxBus;
+
     private void Awake()
     {
         if (Instance == null)
@@ -29,15 +31,31 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        masterBus = RuntimeManager.GetBus("bus:/");
-        masterBus.getVolume(out float volume);
-        Debug.Log($"Master Bus volume: {volume}");
+        if(RuntimeManager.GetBus("bus:/").isValid())
+            masterBus = RuntimeManager.GetBus("bus:/");
+
+        if(RuntimeManager.GetBus("bus:/Music").isValid())
+            musicBus = RuntimeManager.GetBus("bus:/Music");
+        
+        //if (RuntimeManager.GetBus("bus:/Music").isValid())
+        //    sfxBus = RuntimeManager.GetBus("bus:/SoundEffect");
     }
 
     public void SetMasterVolume(float volume)
-    {   
-        masterBus.setVolume(volume);
+    {
+        if (masterBus.isValid())
+            masterBus.setVolume(volume);
     }
+    public void SetMusicVolume(float volume)
+    {
+        if (musicBus.isValid())
+            musicBus.setVolume(volume);
+    }
+    //public void SetSFXVolume(float volume)
+    //{
+    //    if(sfxBus.isValid())
+    //        sfxBus.setVolume(volume);
+    //}
     public void PlayOneShot(EventReference sound, Vector3 position)
     {
         RuntimeManager.PlayOneShot(sound, position);

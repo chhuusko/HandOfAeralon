@@ -314,6 +314,10 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterData _data;
     [SerializeField] private Vector2Int _currentTileIndex;
     [SerializeField] private Animator _animator;
+    [SerializeField] private Transform _headBone;
+    private Vector3 _healthBarPoint;
+    public GameObject _stunnedVFXPrefab;
+    private GameObject _stunnedVFX;
     public Animator Animator => _animator;
     public CharacterData Data => _data;
 
@@ -359,7 +363,15 @@ public class Character : MonoBehaviour
 
     private void Start()
     {
+        _healthBarPoint = _headBone.position;
+
         UpdateFactionIndicator();
+        if (Data.CharacterClass == CharacterClass.Barbarian)        _animator.Play("WarriorIdle", 0, UnityEngine.Random.value);
+        else if (Data.CharacterClass == CharacterClass.Rogue)       _animator.Play("RogueIdle", 0, UnityEngine.Random.value);
+        else if (Data.CharacterClass == CharacterClass.Bard)        _animator.Play("BardIdle", 0, UnityEngine.Random.value);
+        else if (Data.CharacterClass == CharacterClass.Sorceress)   _animator.Play("SorceressIdle", 0, UnityEngine.Random.value);
+        
+        
     }
 
     private void UpdateFactionIndicator()
@@ -747,8 +759,9 @@ public class Character : MonoBehaviour
      
     private IEnumerator RemoveCharacter()
     {
-
         Selector._instance.DeselectCharacter();
+        CombatGrid._instance?.GetTileAtCoord(_currentTileIndex.x, _currentTileIndex.y)
+            ?.GetComponent<CombatGridTile>()?.SetOccupant(null);
 
         CombatEventManager.InvokeOnCharacterDeath(this);
 
@@ -864,4 +877,27 @@ public class Character : MonoBehaviour
             _data.OnBaseMovementPointsChanged -= OnBaseMovementPointsChanged;
         }
     }
+
+    public void SpawnStunnedEffect()
+    {
+        _stunnedVFX = Instantiate(_stunnedVFXPrefab, transform);
+        Vector3 pos = _stunnedVFX.transform.position;
+        if(Data.CharacterClass == CharacterClass.Sorceress || Data.CharacterClass == CharacterClass.Bard)
+            pos.y = 1.9f;
+        else
+            pos.y = 1.6f;
+
+
+        _stunnedVFX.transform.position = pos;
+        _stunnedVFX.transform.localScale = Vector3.one * 0.1f;
+    }
+
+    public void DestroyStunnedEffect()
+    {
+        Destroy(_stunnedVFX);
+        _stunnedVFX = null;
+    }
+
+    public Transform GetHeadBoneTransform() { return _headBone; }
+    public Vector3 GetHealthBarPoint() { return _healthBarPoint; }
 }
