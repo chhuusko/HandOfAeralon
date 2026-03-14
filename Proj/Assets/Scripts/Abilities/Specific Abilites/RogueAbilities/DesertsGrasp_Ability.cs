@@ -103,7 +103,7 @@ public class DesertsGrasp_Ability : RoundAOEAbility
 
         if (Random.value < _chanceToApplyPoison)
         {
-            if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
+            if (affectedCharacter.TryGetComponent<StatusEffectSystem>(out var statusEffectManager))
             {
                 statusEffectManager.AddStatusEffect(poison = new Poison(castingCharacter, _poisonStacks), castingCharacter);
                 _enemiesPoisoned++;

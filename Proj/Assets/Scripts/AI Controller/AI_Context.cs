@@ -14,7 +14,7 @@ public class AI_Context
     public List<CombatGridTile> ReachableTiles { get; private set; }
     public AbilityHandler AbilityHandler { get; private set; }
     public List<Ability> AvailableAbilities { get; private set; }
-    public StatusEffectManager StatusEffectManager { get; private set; }
+    public StatusEffectSystem StatusEffectSystem { get; private set; }
 
     public AI_Context(Character character)
     {
@@ -29,7 +29,7 @@ public class AI_Context
         ReachableTiles = GetReachableTiles(character);
         AbilityHandler = character.GetAbilityHandler();
         AvailableAbilities = GetAvailableAbilities(character);
-        StatusEffectManager = character.GetStatusEffectManager();
+        StatusEffectSystem = character.GetStatusEffectManager();
     }
 
     private List<Character> GetEnemies()

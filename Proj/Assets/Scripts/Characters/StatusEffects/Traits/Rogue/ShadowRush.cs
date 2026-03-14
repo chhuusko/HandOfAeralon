@@ -36,7 +36,7 @@ public class ShadowRush : Trait
             return;
         }
 
-        Manager.AddStatusEffect(new Haste(data.Modifier));
-        Manager.AddStatusEffect(new Empowered(data.Modifier));
+        System.AddStatusEffect(new Haste(data.Modifier));
+        System.AddStatusEffect(new Empowered(data.Modifier));
     }
 }

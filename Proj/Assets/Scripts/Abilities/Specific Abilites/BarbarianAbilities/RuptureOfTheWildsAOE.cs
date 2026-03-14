@@ -32,10 +32,10 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
         bool died = affectedCharacter.TakeDamage(damage);
 
 
-        StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
-        if (statusEffectManager == null) return;
+        StatusEffectSystem statusEffectSystem = castingCharacter.GetComponent<StatusEffectSystem>();
+        if (statusEffectSystem == null) return;
 
-        StatusEffect stun = statusEffectManager.TryApplyStun(affectedCharacter, _stunCharacterHitChance, _stunDuration);
+        StatusEffect stun = statusEffectSystem.TryApplyStun(affectedCharacter, _stunCharacterHitChance, _stunDuration);
 
         if (stun != null && castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)
         {
@@ -62,7 +62,7 @@ public class RuptureOfTheWildsAOE : DirectedAOEAbility
     {
         // Get base damage.
         int baseDamage = castingCharacter.Data.DerivedDamage;
-        var statusEffectsManager = affectedCharacter.GetComponent<StatusEffectManager>();
+        var statusEffectsManager = affectedCharacter.GetComponent<StatusEffectSystem>();
         if (statusEffectsManager == null) return 0;
 
         // If character is slowed, deal more damage.

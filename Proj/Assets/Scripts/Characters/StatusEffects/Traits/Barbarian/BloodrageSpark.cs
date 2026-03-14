@@ -24,7 +24,7 @@ public class BloodrageSpark : Trait
         }
         
         _effectApplied = true;
-        Manager.AddStatusEffect(new Empowered(data.Modifier));
-        Manager.AddStatusEffect(new Fortified(data.Modifier));
+        System.AddStatusEffect(new Empowered(data.Modifier));
+        System.AddStatusEffect(new Fortified(data.Modifier));
     }
 }

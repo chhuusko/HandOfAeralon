@@ -133,9 +133,9 @@ public class ResonantBlastAOE : RoundAOEAbility
 
         bool characterHasDebuff = false;
 
-        StatusEffectManager statusEffectManager = affectedCharacter.GetComponent<StatusEffectManager>();
-        if (statusEffectManager == null) return 0;
-        var effects = statusEffectManager.GetAllStatusEffectsSnapshot();
+        StatusEffectSystem statusEffectSystem = affectedCharacter.GetComponent<StatusEffectSystem>();
+        if (statusEffectSystem == null) return 0;
+        var effects = statusEffectSystem.GetAllStatusEffectsSnapshot();
         foreach (var effect in effects)
         {
             if (effect.Data.Type == StatusEffectType.Debuff)

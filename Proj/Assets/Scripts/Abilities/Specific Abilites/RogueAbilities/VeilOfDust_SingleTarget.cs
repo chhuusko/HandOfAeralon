@@ -77,15 +77,15 @@ public class VeilOfDust_SingleTarget : SingleTargetAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null) return;
 
-        StatusEffectManager statusEffectManager = affectedCharacter.GetStatusEffectManager();
-        if (statusEffectManager == null) return;
+        StatusEffectSystem statusEffectSystem = affectedCharacter.GetStatusEffectManager();
+        if (statusEffectSystem == null) return;
 
-        int effectsRemoved = statusEffectManager.ClearStatusEffects(StatusEffectType.Debuff);
+        int effectsRemoved = statusEffectSystem.ClearStatusEffects(StatusEffectType.Debuff);
 
         StatusEffect stealth;
-        statusEffectManager.AddStatusEffect(stealth = new Stealth(_stealthDuration));
+        statusEffectSystem.AddStatusEffect(stealth = new Stealth(_stealthDuration));
 
-        statusEffectManager.AddStatusEffect(new Haste(_hasteDuration));
+        statusEffectSystem.AddStatusEffect(new Haste(_hasteDuration));
 
         if (effectsRemoved >= _buffsRemovedTilBonus && castingCharacter.GetFaction() == Faction.Friendly)
         {

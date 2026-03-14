@@ -55,7 +55,7 @@ public class InspiringAnthem_AOE : RoundAOEAbility
         if (castingCharacter == null) return;
 
         StatusEffect haste = null;
-        if(affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager)){
+        if(affectedCharacter.TryGetComponent<StatusEffectSystem>(out var statusEffectManager)){
            statusEffectManager.AddStatusEffect(haste = new Haste(_hasteStacks), castingCharacter);
         }
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, haste, false);

@@ -16,6 +16,6 @@ public class KillersFatigue : Trait
             return;
         }
         
-        Manager.AddStatusEffect(new Slowed(data.Modifier));
+        System.AddStatusEffect(new Slowed(data.Modifier));
     }
 }

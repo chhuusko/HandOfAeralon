@@ -35,10 +35,10 @@ public class LuteSmash_SingleTarget : SingleTargetAbility
 
         castingCharacter.Data.SetActiveAbilities(abilitiesAvailablePostLuteSmash); 
 
-        StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
-        if (statusEffectManager == null) return;
+        StatusEffectSystem statusEffectSystem = castingCharacter.GetComponent<StatusEffectSystem>();
+        if (statusEffectSystem == null) return;
 
-        StatusEffect stun = statusEffectManager.TryApplyStun(affectedCharacter, _applyStunChance, _stunDuration);
+        StatusEffect stun = statusEffectSystem.TryApplyStun(affectedCharacter, _applyStunChance, _stunDuration);
 
         if (stun != null && castingCharacter.GetFaction() == Faction.Friendly)
         {

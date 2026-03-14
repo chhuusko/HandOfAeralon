@@ -63,14 +63,14 @@ public class CombatStateTakeTurn : CombatStateBase
         {
             case TileType.Poison:
                 {
-                    StatusEffectManager statusEffectManager = activeCharacter.GetComponent<StatusEffectManager>();
-                    statusEffectManager.AddStatusEffect(new Poison(3));
+                    StatusEffectSystem statusEffectSystem = activeCharacter.GetComponent<StatusEffectSystem>();
+                    statusEffectSystem.AddStatusEffect(new Poison(3));
                 }
                 break;
             case TileType.Lava:
                 {
-                    StatusEffectManager statusEffectManager = activeCharacter.GetComponent<StatusEffectManager>();
-                    statusEffectManager.AddStatusEffect(new Burn(activeCharacter, 1));
+                    StatusEffectSystem statusEffectSystem = activeCharacter.GetComponent<StatusEffectSystem>();
+                    statusEffectSystem.AddStatusEffect(new Burn(activeCharacter, 1));
                 }
                 break;
         }

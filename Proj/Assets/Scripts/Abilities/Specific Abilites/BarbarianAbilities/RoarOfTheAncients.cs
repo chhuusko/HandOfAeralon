@@ -82,21 +82,21 @@ public class RoarOfTheAncients : RoundAOEAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null) return;
 
-        StatusEffectManager statusEffectManager = affectedCharacter.GetComponent<StatusEffectManager>();
+        StatusEffectSystem statusEffectSystem = affectedCharacter.GetComponent<StatusEffectSystem>();
 
-        if (statusEffectManager == null) return;
+        if (statusEffectSystem == null) return;
 
         StatusEffect slow = new Slowed(_slowDuration);
 
         if (Random.value < _chanceToApplyWeakened)
         {
             StatusEffect weakened = new Weakened(_weakenedDuration);
-            statusEffectManager.AddStatusEffect(weakened, castingCharacter);
+            statusEffectSystem.AddStatusEffect(weakened, castingCharacter);
             AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, weakened, false);
 
             _enemiesWeakened++;
         }
-        statusEffectManager.AddStatusEffect(slow, castingCharacter);
+        statusEffectSystem.AddStatusEffect(slow, castingCharacter);
         AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, slow, false);
     }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public class TraitManager
+public class StatusEffectCollection
 {
     [NonSerialized] public CharacterData CharacterData;
     

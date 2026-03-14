@@ -22,7 +22,7 @@ public class Burn : StatusEffect
 
     public override void OnApply()
     {
-        Manager.OnBurnApplied(Character);
+        System.OnBurnApplied(Character);
     }
 
     public override void OnTurnStart()

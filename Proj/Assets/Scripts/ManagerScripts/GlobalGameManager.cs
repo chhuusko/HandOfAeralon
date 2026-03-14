@@ -15,7 +15,7 @@ public struct GameData
     public int coins;
 
     public List<CharacterData> heroDataList;
-    public List<TraitManager> traitManagerDataList;
+    public List<StatusEffectCollection> traitManagerDataList;
     public List<Card> cardList;
 
     // misc

@@ -18,7 +18,7 @@ public class LightningStorm_Ability : RoundAOEAbility
 
     // Description
 
-    // Call down a lightning storm that deals(70% × Damage) Elemental damage to all characters in a large area.
+    // Call down a lightning storm that deals(70% ï¿½ Damage) Elemental damage to all characters in a large area.
     // Every character hit has a 25% chance to gain Stunned for 1 turn.
 
 
@@ -63,11 +63,11 @@ public class LightningStorm_Ability : RoundAOEAbility
         int damage = CalculateDamage(castingCharacter, affectedCharacter);
         bool died = affectedCharacter.TakeDamage(damage);
 
-        StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
-        if (statusEffectManager == null) return;
+        StatusEffectSystem statusEffectSystem = castingCharacter.GetComponent<StatusEffectSystem>();
+        if (statusEffectSystem == null) return;
 
-        StatusEffect stun = statusEffectManager.TryApplyStun(affectedCharacter, _stunCharacterHitChance, _stunDuration);
-        StatusEffect burn = statusEffectManager.TryApplyBurn(affectedCharacter, 0, _burnDuration);
+        StatusEffect stun = statusEffectSystem.TryApplyStun(affectedCharacter, _stunCharacterHitChance, _stunDuration);
+        StatusEffect burn = statusEffectSystem.TryApplyBurn(affectedCharacter, 0, _burnDuration);
 
         AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, damage, 0, stun, died);
     }

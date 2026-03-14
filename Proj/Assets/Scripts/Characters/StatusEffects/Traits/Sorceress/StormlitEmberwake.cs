@@ -4,7 +4,7 @@ public class StormlitEmberwake : Trait
 {
     public override void ModifyStunApplicationChance(ref float chance)
     {
-        if (!Manager.ContainsStatusEffect<Emberwake>())
+        if (!System.ContainsStatusEffect<Emberwake>())
         {
             return;
         }

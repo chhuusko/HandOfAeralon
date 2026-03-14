@@ -11,14 +11,14 @@ public class UnyieldingTremor : Trait
 
         Tremor tremor;
 
-        if (Manager.ContainsStatusEffect<Tremor>())
+        if (System.ContainsStatusEffect<Tremor>())
         {
-            tremor = (Tremor)Manager.GetStatusEffect<Tremor>();
+            tremor = (Tremor)System.GetStatusEffect<Tremor>();
         }
         else
         {
             tremor = new Tremor(1);
-            Manager.AddStatusEffect(tremor);
+            System.AddStatusEffect(tremor);
         }
 
         tremor.IncreaseStacks();

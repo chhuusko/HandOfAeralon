@@ -39,6 +39,6 @@ public class BattlebornMomentum : Trait
         if (++_abilitiesUsed < data.Threshold || _effectApplied) return;
         _abilitiesUsed = 0;
         _effectApplied = true;
-        Manager.AddStatusEffect(new Empowered(data.TurnAmount));
+        System.AddStatusEffect(new Empowered(data.TurnAmount));
     }
 }

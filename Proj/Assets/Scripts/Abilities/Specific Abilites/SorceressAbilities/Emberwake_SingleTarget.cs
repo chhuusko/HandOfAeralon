@@ -20,11 +20,11 @@ public class Emberwake_Singletarget : SingleTargetAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null) return;
 
-        StatusEffectManager statusEffectManager = castingCharacter.GetComponent<StatusEffectManager>();
-        if (statusEffectManager == null) return;
+        StatusEffectSystem statusEffectSystem = castingCharacter.GetComponent<StatusEffectSystem>();
+        if (statusEffectSystem == null) return;
 
         StatusEffect emberwake;
-        statusEffectManager.AddStatusEffect(emberwake = new Emberwake(_emberwakeDuration));
+        statusEffectSystem.AddStatusEffect(emberwake = new Emberwake(_emberwakeDuration));
 
         AbilityExecutionData executionData = AbilityExecutionData.Create(this, castingCharacter, affectedCharacter, tileToEffect, 0, 0, emberwake, false);
     }

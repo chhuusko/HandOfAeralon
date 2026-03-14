@@ -24,6 +24,6 @@ public class ConduitOfPower : StatusEffect
 
     public override void OnCombatEnded()
     {
-        Manager.RemoveStatusEffect(this);
+        System.RemoveStatusEffect(this);
     }
 }

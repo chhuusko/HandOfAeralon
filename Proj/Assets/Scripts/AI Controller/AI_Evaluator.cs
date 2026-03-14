@@ -213,7 +213,7 @@ public class AI_Evaluator
         public Character Character { get; }
         public bool IsEnemy { get; }
         public float PercentHP { get; }
-        public StatusEffectManager StatusEffectManager { get; }
+        public StatusEffectSystem StatusEffectSystem { get; }
         public bool Exists => Character != null && PercentHP > 0f;
 
         public OccupantData(Character self, Character occupant)
@@ -227,20 +227,20 @@ public class AI_Evaluator
                     Character.GetMaxHealth() == 0
                         ? 1f
                         : Character.GetCurrentHealth() / Character.GetMaxHealth();
-                StatusEffectManager = Character.GetStatusEffectManager();
+                StatusEffectSystem = Character.GetStatusEffectManager();
             }
             else
             {
                 IsEnemy = false;
                 PercentHP = 1f;
-                StatusEffectManager = null;
+                StatusEffectSystem = null;
             }
         }
 
         public bool HasStatusEffect<T>() where T : StatusEffect
         {
-            return StatusEffectManager != null &&
-                   StatusEffectManager.ContainsStatusEffect<T>();
+            return StatusEffectSystem != null &&
+                   StatusEffectSystem.ContainsStatusEffect<T>();
         }
     }
 
@@ -665,7 +665,7 @@ public class AI_Evaluator
         float result = 0f;
         int hitCount = 0;
 
-        if (!context.StatusEffectManager.ContainsStatusEffect<Stealth>())
+        if (!context.StatusEffectSystem.ContainsStatusEffect<Stealth>())
         {
             if (Random.Range(0f, 1f) > PROACTIVE_STEALTH_CHANCE)
             {
@@ -673,11 +673,11 @@ public class AI_Evaluator
                 result += 30f;
             }
 
-            if (context.StatusEffectManager.ContainsStatusEffect<Poison>() ||
-                context.StatusEffectManager.ContainsStatusEffect<Burn>() ||
-                context.StatusEffectManager.ContainsStatusEffect<Aftershock>() ||
-                context.StatusEffectManager.ContainsStatusEffect<Weakened>() ||
-                context.StatusEffectManager.ContainsStatusEffect<Slowed>())
+            if (context.StatusEffectSystem.ContainsStatusEffect<Poison>() ||
+                context.StatusEffectSystem.ContainsStatusEffect<Burn>() ||
+                context.StatusEffectSystem.ContainsStatusEffect<Aftershock>() ||
+                context.StatusEffectSystem.ContainsStatusEffect<Weakened>() ||
+                context.StatusEffectSystem.ContainsStatusEffect<Slowed>())
             {
                 hitCount++;
                 result += 30f;
@@ -803,7 +803,7 @@ public class AI_Evaluator
     {
         float result = 0f;
 
-        if (!context.StatusEffectManager.ContainsStatusEffect<Emberwake>())
+        if (!context.StatusEffectSystem.ContainsStatusEffect<Emberwake>())
         {
             result += USE_ABILITY_BONUS;
 

@@ -32,7 +32,7 @@ public abstract class RoundAOEAbility : AOEAbility
 
         int aoeDelta = 0;
 
-        if (caster.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
+        if (caster.TryGetComponent<StatusEffectSystem>(out var statusEffectManager))
         {
             int baseRadius = _radius;
             int finalRadius = statusEffectManager.ApplyAoEModifiers(ref baseRadius);
@@ -133,7 +133,7 @@ public abstract class RoundAOEAbility : AOEAbility
     protected void SetAbilityRadius(int radius, ref RoundAOEPattern pattern)
     {
         int baseRadius = radius;
-        if (GetCharacterCaster().TryGetComponent<StatusEffectManager>(out var statusEffectManager))
+        if (GetCharacterCaster().TryGetComponent<StatusEffectSystem>(out var statusEffectManager))
         {
             int finalRadius = statusEffectManager.ApplyAoEModifiers(ref baseRadius);
             pattern.SetRadius(finalRadius);

@@ -55,8 +55,8 @@ public class CharacterData
     public List<Ability> ActiveAbilities => _activeAbilities;
     
     [Header("Status Effects")]
-    private TraitManager _traitManager = new();
-    public TraitManager TraitManager => _traitManager;
+    private StatusEffectCollection _statusEffectCollection = new();
+    public StatusEffectCollection StatusEffectCollection => _statusEffectCollection;
 
     private bool _healthInitialized;
 
@@ -134,19 +134,19 @@ public class CharacterData
 
     public void InitializeTraits()
     {
-        if (_traitManager == null)
+        if (_statusEffectCollection == null)
         {
-            _traitManager = new TraitManager();
+            _statusEffectCollection = new StatusEffectCollection();
         }
 
-        _traitManager.CharacterData = this;
+        _statusEffectCollection.CharacterData = this;
     }
     
     public void GenerateTraits()
     {
         InitializeTraits();
         
-        _traitManager.GenerateTraits(this);
+        _statusEffectCollection.GenerateTraits(this);
     }
 
     public void SetName(string name)
@@ -168,7 +168,7 @@ public class CharacterData
 
     public void CalculateDerivedStats(float hpFactor, float damageFactor, bool preserveCurrentHP = true)
     {
-        _traitManager?.ModifyDerivedStats(ref hpFactor, ref damageFactor);
+        _statusEffectCollection?.ModifyDerivedStats(ref hpFactor, ref damageFactor);
         
         SetDerivedHealthPoints(hpFactor, preserveCurrentHP);
         SetDerivedDamage(Mathf.RoundToInt(_baseDamage * damageFactor));
@@ -306,7 +306,7 @@ public class Character : MonoBehaviour
     private bool isDying;
 
     [Header("Status effects")]
-    private StatusEffectManager _statusEffectManager;
+    private StatusEffectSystem _statusEffectSystem;
 
     [Header("Misc")] 
     [SerializeField] private GameObject _bodyMesh;
@@ -343,10 +343,10 @@ public class Character : MonoBehaviour
 
     private void Awake()
     {
-        _statusEffectManager = GetComponent<StatusEffectManager>();
+        _statusEffectSystem = GetComponent<StatusEffectSystem>();
         
         // Enemies aren't created via character data, so traits have to be created at start.
-        _statusEffectManager.SetTraitManager(_data?.TraitManager);
+        _statusEffectSystem.SetTraitManager(_data?.StatusEffectCollection);
 
         if (_data != null)
         {
@@ -461,8 +461,8 @@ public class Character : MonoBehaviour
     public IReadOnlyList<Ability> GetAvailableAbilities() => _data.Abilities;
 
     // Status Effects.
-    public StatusEffectManager GetStatusEffectManager() => _statusEffectManager;
-    public TraitManager GetTraitManager() => _data.TraitManager;
+    public StatusEffectSystem GetStatusEffectManager() => _statusEffectSystem;
+    public StatusEffectCollection GetTraitManager() => _data.StatusEffectCollection;
 
     // Base stats.
     public void SetCharacterClass(CharacterClass characterClass) => _data.SetCharacterClass(characterClass);

@@ -83,7 +83,7 @@ public class DissonantChordAOE : RoundAOEAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null) return;
 
-        if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
+        if (affectedCharacter.TryGetComponent<StatusEffectSystem>(out var statusEffectManager))
         {
             int buffsCleared = statusEffectManager.ClearStatusEffects(StatusEffectType.Buff);
 
@@ -103,7 +103,7 @@ public class DissonantChordAOE : RoundAOEAbility
         Character castingCharacter = casterTile.GetOccupantCharacter();
         if (castingCharacter == null) return;
 
-        if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
+        if (affectedCharacter.TryGetComponent<StatusEffectSystem>(out var statusEffectManager))
         {
             int buffsCleared = statusEffectManager.GetAmountOfType(StatusEffectType.Buff);
 

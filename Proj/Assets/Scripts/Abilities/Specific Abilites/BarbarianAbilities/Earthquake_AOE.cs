@@ -134,7 +134,7 @@ public class Earthquake_AOE : DirectedAOEAbility
 
         if (Random.value < _slowCharacterHitChance)
         {
-            if (affectedCharacter.TryGetComponent<StatusEffectManager>(out var statusEffectManager))
+            if (affectedCharacter.TryGetComponent<StatusEffectSystem>(out var statusEffectManager))
             {
                 statusEffectManager.AddStatusEffect(slow = new Slowed(_slowDuration), castingCharacter);
                 if (castingCharacter.GetFaction() == Faction.Friendly && affectedCharacter.GetFaction() == Faction.Enemy)

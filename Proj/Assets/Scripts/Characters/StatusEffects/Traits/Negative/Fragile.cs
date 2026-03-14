@@ -29,6 +29,6 @@ public class Fragile : Trait
             return;
         }
         _effectApplied = true;
-        Manager.AddStatusEffect(new Vulnerable(data.TurnAmount));
+        System.AddStatusEffect(new Vulnerable(data.TurnAmount));
     }
 }

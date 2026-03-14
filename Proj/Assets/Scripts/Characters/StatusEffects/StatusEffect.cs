@@ -16,7 +16,7 @@ public abstract class StatusEffect
     public bool IsReflected;
     
     protected Character Character { get; private set; }
-    protected StatusEffectManager Manager { get; private set; }
+    protected StatusEffectSystem System { get; private set; }
 
     private bool _skipNextTick;
     
@@ -39,10 +39,10 @@ public abstract class StatusEffect
         _name = Data.Name;
     }
 
-    public void Setup(Character character, StatusEffectManager manager)
+    public void Setup(Character character, StatusEffectSystem system)
     {
         Character = character;
-        Manager = manager;
+        System = system;
     }
 
     public virtual void Initialize()
@@ -79,7 +79,7 @@ public abstract class StatusEffect
         _duration -= amount;
         if (Duration <= 0)
         {
-            Manager.RemoveStatusEffect(this);
+            System.RemoveStatusEffect(this);
         }
     }
 

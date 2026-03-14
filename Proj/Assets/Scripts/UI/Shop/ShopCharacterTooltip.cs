@@ -107,7 +107,7 @@ public class ShopCharacterTooltip : MonoBehaviour
     {
         // NOTE (Calle): Each character can only have 2 traits, so if a character already has traits, don't add more i.e return.
 
-        IReadOnlyList<Trait> traits = character.TraitManager.GetAllTraits();
+        IReadOnlyList<Trait> traits = character.StatusEffectCollection.GetAllTraits();
 
         foreach (GameObject trait in _traitElements)
         {

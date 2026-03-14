@@ -16,7 +16,7 @@ public class AssassinsReprieve : Trait
         }
 
         // Remove all debuffs on this character.
-        Manager.ClearStatusEffects(StatusEffectType.Debuff);
+        System.ClearStatusEffects(StatusEffectType.Debuff);
 
         var modifier = data.ModifierPercent / 100f;
         Character.Heal(Mathf.RoundToInt(Character.GetBaseHealth() * modifier));
